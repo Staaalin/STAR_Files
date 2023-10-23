@@ -585,7 +585,7 @@ private:
 	TEfficiency *hTOFEff_2D[9];
 
 	// PSY Declare
-	TTree hadronTree;
+	TTree *hadronTree;
 	int CrefMult,CgrefMult,evtID,runID;
 	vector<int> PDG;
 	vector<float> px,py,pz,InvarentMass;
