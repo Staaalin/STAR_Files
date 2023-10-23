@@ -449,18 +449,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	SetupKFParticle();
 	if (InterfaceCantProcessEvent) return;
-	vector<int> PDG;
-	vector<float> px,py,pz,InvarentMass;
-	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);
-	int CrefMult,CgrefMult;
+	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvarentMass.resize(0);
 
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		const KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle]; 
-		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
+		int upQ;// if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
 		int eLambda = -(upQ-1)/2; // 0 if Lambda, 1 if AntiLambda
 
 		SetDaughterTrackPointers(iKFParticle);
-		if (ProtonTrackIndex == -99999 || PionTrackIndex == -99999) continue; if(!ProtonTrack) continue; if(!PionTrack) continue;
+		// if (ProtonTrackIndex == -99999 || PionTrackIndex == -99999) continue; if(!ProtonTrack) continue; if(!PionTrack) continue;
 
 		double dmass = -999; // just a placeholder
 		TLorentzVector p4Pair, p4Proton; // just a placeholder
