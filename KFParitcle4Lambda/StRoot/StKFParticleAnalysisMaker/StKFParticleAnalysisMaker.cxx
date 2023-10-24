@@ -1061,8 +1061,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// } // End loop over sideband Omega
 			// fill_nomega_sideband = true;
 		}
-		hadronTree->Fill();
+		
 	}
+	hadronTree->Fill();
 
 	// for(int j=0; j<KFParticleLambdaDecayPair.size(); j++) {
 	// 	int i = KFParticleLambdaDecayPair[j].get_idxProton();
