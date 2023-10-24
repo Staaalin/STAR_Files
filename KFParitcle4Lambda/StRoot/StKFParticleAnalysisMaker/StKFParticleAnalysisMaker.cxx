@@ -496,7 +496,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	std::vector<int> track_index;
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) 
 	{
-    	StPicoTrack *track = mPicoDst->track(iTrack);
+    	StPicoTrack *track = (StPicoTrack*)mPicoDst->track(iTrack);
     	if (! track)            continue;
     	if (! track->charge())  continue;
     	if (  track->nHitsFit() < 15) continue;
@@ -524,7 +524,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// EP
 		bool isGoodAsso = true;
 		// isGoodAsso &= track->isPrimary();
-		isGoodAsso &= pT_asso_lo < pt && pt < pT_asso_hi;
+		isGoodAsso = isGoodAsso && ( pT_asso_lo < pt && pt < pT_asso_hi);
 		// if (isGoodAsso)
 		// {
 		// // fill phi shift for asso
