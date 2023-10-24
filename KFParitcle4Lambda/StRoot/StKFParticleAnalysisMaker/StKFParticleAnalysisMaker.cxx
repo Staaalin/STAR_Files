@@ -418,7 +418,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	mRefMultCorr->initEvent(refMult,VertexZ,mEvent->ZDCx());
 	double refmultWght = mRefMultCorr->getWeight();
 	double refmultCorr = mRefMultCorr->getRefMultCorr() ;
-	int centrality     = mRefMultCorr->getCentralityBin9();  // 0 - 8  be careful !!!!!!!! 
+	int     centrality = mRefMultCorr->getCentralityBin9();  // 0 - 8  be careful !!!!!!!! 
 	//double mWght    = 1;
 	//double mult_corr= refMult;
 	//int centrality  = findCentrality(mult_corr)-1;  // 0-8 
