@@ -41,9 +41,9 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	gSystem->Load("StPicoDstMaker");
 	//gSystem->Load("StEpdUtil");
 	gSystem->Load("StEpdUtil.so");
-	//gSystem->Load("StLambdaDecayPair");
-	gSystem->Load("StKFParticleAnalysisMaker");
-	//gSystem->Load("KFParticle");
+	// gSystem->Load("StLambdaDecayPair");
+	// gSystem->Load("StKFParticleAnalysisMaker");
+	// gSystem->Load("KFParticle");
 
 	StKFParticleAnalysisMaker *anaMaker = new StKFParticleAnalysisMaker("ana", outputFile);
 	anaMaker->setRunEnergyAndListDir(run,energy,ListDir);            
