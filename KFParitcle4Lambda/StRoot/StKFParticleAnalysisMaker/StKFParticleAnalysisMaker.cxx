@@ -197,15 +197,16 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	//////////////////////////////
     int buffer_size = 5000000;
     hadronTree = new TTree("hadronTree", "Tree_STAR");
-    hadronTree->Branch("refMult"       ,&CrefMult         ,"refMult/I"                       );
-    hadronTree->Branch("grefMult"      ,&CgrefMult        ,"grefMult/I"                      );
-    hadronTree->Branch("EventID"       ,&evtID            ,"EventID/I"                       );
-    hadronTree->Branch("RunID"         ,&runID            ,"RunID/I"                         );
-    hadronTree->Branch("PDG"           ,&PDG              ,"PDG[buffer_size]/I"              );
-    hadronTree->Branch("mix_px"        ,&px               ,"mix_px[buffer_size]/F"           );
-    hadronTree->Branch("mix_py"        ,&py               ,"mix_py[buffer_size]/F"           );
-    hadronTree->Branch("mix_pz"        ,&pz               ,"mix_pz[buffer_size]/F"           );
-    hadronTree->Branch("InvarentMass"  ,&InvarentMass     ,"InvarentMass[buffer_size]/F"     );
+    hadronTree->Branch("buffer_size"       ,&buffer_size         ,"buffer_size/I"                       );
+    hadronTree->Branch("refMult"           ,&CrefMult            ,"refMult/I"                           );
+    hadronTree->Branch("grefMult"          ,&CgrefMult           ,"grefMult/I"                          );
+    hadronTree->Branch("EventID"           ,&evtID               ,"EventID/I"                           );
+    hadronTree->Branch("RunID"             ,&runID               ,"RunID/I"                             );
+    hadronTree->Branch("PDG"               ,&PDG                 ,"PDG[buffer_size]/I"                  );
+    hadronTree->Branch("mix_px"            ,&px                  ,"mix_px[buffer_size]/F"               );
+    hadronTree->Branch("mix_py"            ,&py                  ,"mix_py[buffer_size]/F"               );
+    hadronTree->Branch("mix_pz"            ,&pz                  ,"mix_pz[buffer_size]/F"               );
+    hadronTree->Branch("InvarentMass"      ,&InvarentMass        ,"InvarentMass[buffer_size]/F"         );
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
