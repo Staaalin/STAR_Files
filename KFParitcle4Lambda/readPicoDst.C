@@ -1,5 +1,4 @@
 #include <TSystem>
-// #include "/star/u/svianping/KFParticle4Lambda/StRoot/StKFParticleAnalysisMaker/StKFParticleAnalysisMaker.h"
 //#include "RooFit.h"
 
 class StMaker;
@@ -41,9 +40,10 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	gSystem->Load("StPicoDstMaker");
 	//gSystem->Load("StEpdUtil");
 	gSystem->Load("StEpdUtil.so");
-	// gSystem->Load("StLambdaDecayPair");
-	// gSystem->Load("StKFParticleAnalysisMaker");
-	// gSystem->Load("KFParticle");
+	//gSystem->Load("StdEdxPull_cxx.so");
+	//gSystem->Load("StLambdaDecayPair");
+	//gSystem->Load("StKFParticleAnalysisMaker");
+	//gSystem->Load("KFParticle");
 
 	StKFParticleAnalysisMaker *anaMaker = new StKFParticleAnalysisMaker("ana", outputFile);
 	anaMaker->setRunEnergyAndListDir(run,energy,ListDir);            
@@ -59,17 +59,36 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	StKFParticleInterface::instance()->SetSoftKaonPIDMode();
 	StKFParticleInterface::instance()->SetSoftTofPidMode();
 	StKFParticleInterface::instance()->SetChiPrimaryCut(10);
+	StKFParticleInterface::instance()->SetChiPrimaryCut2D(3); // default >3
+	StKFParticleInterface::instance()->SetChi2Cut2D(10);      // default <10
+	StKFParticleInterface::instance()->SetLCut(1.0); // default >5.0
+	// StKFParticleInterface::instance()->SetLdLCut2D(3); // default >5.0, not sure where it is used
+	// StKFParticleInterface::instance()->SetMaxDistanceBetweenParticlesCut(1.5); // default <1
+	// StKFParticleInterface::instance()->SetLdLCutXiOmega(3); // default >10
+	// StKFParticleInterface::instance()->SetChi2TopoCutXiOmega(10); // default <5
+	// StKFParticleInterface::instance()->SetChi2CutXiOmega(10); // default <6
+
 	//Add decays to the reconstruction list
 	StKFParticleInterface::instance()->AddDecayToReconstructionList( 3122);
 	StKFParticleInterface::instance()->AddDecayToReconstructionList(-3122);
+	StKFParticleInterface::instance()->AddDecayToReconstructionList( 3312);
+	StKFParticleInterface::instance()->AddDecayToReconstructionList(-3312);
 	StKFParticleInterface::instance()->AddDecayToReconstructionList( 3334);
-	StKFParticleInterface::instance()->AddDecayToReconstructionList(  321);
+	StKFParticleInterface::instance()->AddDecayToReconstructionList(-3334);
+	StKFParticleInterface::instance()->AddDecayToReconstructionList( 3324); // add Xi0(1530)->Xi- pi+ (I suppose?)
+	StKFParticleInterface::instance()->AddDecayToReconstructionList(-3324);
+	StKFParticleInterface::instance()->AddDecayToReconstructionList(  310); // add K0s for Omega(2012)->Xi- K0s
+	StKFParticleInterface::instance()->AddDecayToReconstructionList(22);
+	//StKFParticleInterface::instance()->AddDecayToReconstructionList( 333); // test for Ding
 
 	// StPicoDstMaker & chain
 	StPicoDstMaker* maker = (StPicoDstMaker *) StMaker::GetTopChain()->Maker("PicoDst");
 	if (! maker) return;
 	maker->SetStatus("*",1);
 	TChain *tree = maker->chain();
+	// unsigned int found;
+	// tree->SetBranchStatus("EpdHit*",1,&found);
+	// cout << "EpdHit Branch returned found= " << found << endl;
 	Long64_t nentries = tree->GetEntries();
 	if (nentries <= 0) return;
 	Long64_t EventsToRun = TMath::Min(nEvents,nentries);

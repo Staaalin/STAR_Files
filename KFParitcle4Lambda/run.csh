@@ -4,9 +4,9 @@
 set nRun=18
 set mRun=Run${nRun}
 set mEnergy=27.0
-set ListDir=/star/u/svianping/KFParticle4Lambda/datalist/ #TODO the-absolute-path-of-the-datalist-folder
-set MainDir=/star/u/svianping/KFParticle4Lambda/ #TODO the-absolute-path-of-your-current-directory
-set TempDir=/home/tmp/svianping #TODO /home/tmp/your-username
+set ListDir=/star/data01/pwg/xiatong/git/kfparticle/datalist/ #TODO
+set MainDir=/star/data01/pwg/xiatong/git/kfparticle/ #TODO
+set TempDir=/home/tmp/maxwoo/ #TODO
 # inputs
 #set JOBINDEX=$1
 ##set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/$mEnergy.list.`printf "%.6d" ${JOBINDEX}`
@@ -18,7 +18,12 @@ mkdir -p $WorkDir
 cd $WorkDir
 cp -Lr $MainDir/setDEV2.csh .
 cp -Lr $MainDir/lMuDst.C .
+cp -Lr $MainDir/mix . 
 source setDEV2.csh
+cp -Lr $MainDir/cent_EPD_CorrectionInput.root .
+cp -Lr $MainDir/TOFEfficiency.root . 
+cp -Lr $MainDir/TPCShiftInput.root .
+cp -Lr $MainDir/EPDShiftInput.root .
 cp -Lr $MainDir/readPicoDst.C .
 cp -Lr $MainDir/.sl73_x8664_gcc485 .
 
