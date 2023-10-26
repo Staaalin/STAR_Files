@@ -4,9 +4,9 @@
 set nRun=18
 set mRun=Run${nRun}
 set mEnergy=27.0
-set ListDir=the-absolute-path-of-the-datalist-folder #TODO
-set MainDir=the-absolute-path-of-your-current-directory #TODO
-set TempDir=/home/tmp/your-username #TODO
+set ListDir=/star/u/svianping/STAR_Files/KFParticle4Lambda/datalist #TODO
+set MainDir=/star/u/svianping/STAR_Files/KFParticle4Lambda #TODO
+set TempDir=/home/tmp/svianping #TODO
 # inputs
 #set JOBINDEX=$1
 ##set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/$mEnergy.list.`printf "%.6d" ${JOBINDEX}`
