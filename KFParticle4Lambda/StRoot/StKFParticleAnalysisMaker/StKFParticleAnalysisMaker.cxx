@@ -381,7 +381,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	SetupKFParticle();
 	if (InterfaceCantProcessEvent) return;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
-		const KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle]; 
+		const KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+		cout<<"PDG:"<<particle.GetPDG()<<endl; 
 		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
 		int eLambda = -(upQ-1)/2; // 0 if Lambda, 1 if AntiLambda
 
