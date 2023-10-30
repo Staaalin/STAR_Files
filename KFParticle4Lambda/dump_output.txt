@@ -16,7 +16,7 @@ CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
 Type ? for help. Commands must be C++ statements.
 Enclose multiple statements between { }.
 *** Float Point Exception is OFF ***
- *** Start at Date : Mon Oct 30 07:40:49 2023
+ *** Start at Date : Mon Oct 30 07:46:26 2023
 QAInfo:You are using STAR_LEVEL : TFG21g, git = tags/TFG21g,tag:50722f0e0, ROOT_LEVEL : 5.34.39 and node : rcas6013.rcf.bnl.gov with 8 AMD EPYC Processor (with IBPB)
 
 Processing ./readPicoDst.C("./datalist//27.0GeV_Run18/27.0.list.999997",999997,18,27.0,"./datalist/")...
@@ -103,7 +103,7 @@ BFC:INFO  - StFile::AddFile : *** IGNORED *** File ./datalist//27.0GeV_Run18/27.
 
 QA :INFO  - Output root file name 27.0.999997.root
 QA :INFO  - ProcessLine:new StPicoDstMaker(2,"./datalist//27.0GeV_Run18/27.0.list.999997")
-(class StPicoDstMaker*)0x8e70ac0
+(class StPicoDstMaker*)0xa0f5b50
 BFC:INFO  - Using DB flavors: ofl+TFG
 QA :INFO  - QAInfo:StBFChain            built Mar 14 2022 19:11:02 from Tag $Name:  $ $Id: StBFChain.h,v 1.59 2019/11/19 17:26:17 jeromel Exp $ 
 QA :INFO  - QAInfo:StPicoDstMaker       built Jun  9 2021 13:05:13 from Tag $Name:  $ $Id: StPicoDstMaker.h,v 1.30 2021/02/23 17:27:01 gnigmat Exp $ 
@@ -114,7 +114,7 @@ QA :INFO  -  StBFChain::bfc
 QA :INFO  -    StPicoDstMaker::PicoDst
 QA :INFO  -    St_db_Maker::db
 QA :INFO  -    StDetectorDbMaker::detDb
-BFC:INFO  - StBFChain::Init : Time=Mon Oct 30 07:40:52 2023 Cwd=/direct/star+u/svianping/STAR_Files/KFParticle4Lambda
+BFC:INFO  - StBFChain::Init : Time=Mon Oct 30 07:46:29 2023 Cwd=/direct/star+u/svianping/STAR_Files/KFParticle4Lambda
 QA :INFO  - blacklist tpc
 QA :INFO  - blacklist svt
 QA :INFO  - blacklist ssd
@@ -153,7 +153,7 @@ StChain:INFO  - StDbLib: db server found in 3 iterations
 StChain:INFO  - MysqlDb::Connect: Load balancer took 0 ms, will use star-db08.rcf.bnl.gov:3316
 StChain:INFO  - Ssl_cipher = AES128-SHA
 StChain:INFO  - MysqlDb::Connect(host,user,pw,database,port) line=527 Server Connecting: DB=StarDb  Host=star-db08.rcf.bnl.gov:3316
- --> Connection Time=0.0380719 sec    MysqlVersion=5.7.24
+ --> Connection Time=0.0356979 sec    MysqlVersion=5.7.24
 StChain:WARN  - StDbManagerImpl::getDbDomain(domainName) line=1061 Adding New dbDomain= fst
 StChain:WARN  - StDbManagerImpl::getDbDomain(domainName) line=1061 Adding New dbDomain= ftt
 StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table rhicf/rhicfBarPos..rhicfBarPos
@@ -291,7 +291,7 @@ Read evtID : 402477
 Reading refMult : 136
 Read refMult : 136
 
-== Event 10 finish == 0min 0s: 0s/event
+== Event 10 finish == 0min 1s: 0.1s/event
 Reading evtID : 402618
 Read evtID : 402618
 Reading refMult : 239
@@ -357,7 +357,7 @@ Read refMult : 156
 Parsing refMult : 156
 Parsed CrefMult : 156
 
-== Event 20 finish == 0min 0s: 0s/event
+== Event 20 finish == 0min 1s: 0.05s/event
 Reading evtID : 402945
 Read evtID : 402945
 Reading refMult : 13
@@ -455,7 +455,7 @@ Parsed CrefMult : 149
 Parsing refMult : 149
 Parsed CrefMult : 149
 
-== Event 30 finish == 0min 0s: 0s/event
+== Event 30 finish == 0min 1s: 0.0333333s/event
 Reading evtID : 403266
 Read evtID : 403266
 Reading refMult : 4
@@ -963,7 +963,7 @@ Read evtID : 406553
 Reading refMult : 75
 Read refMult : 75
 
-== Event 130 finish == 0min 1s: 0.00769231s/event
+== Event 130 finish == 0min 2s: 0.0153846s/event
 Reading evtID : 406616
 Read evtID : 406616
 Reading refMult : 54
@@ -1011,7 +1011,7 @@ Parsed CrefMult : 137
 Parsing refMult : 137
 Parsed CrefMult : 137
 
-== Event 140 finish == 0min 1s: 0.00714286s/event
+== Event 140 finish == 0min 2s: 0.0142857s/event
 Reading evtID : 406913
 Read evtID : 406913
 Reading refMult : 90
@@ -1081,7 +1081,7 @@ Read evtID : 407327
 Reading refMult : 9
 Read refMult : 9
 
-== Event 150 finish == 0min 1s: 0.00666667s/event
+== Event 150 finish == 0min 2s: 0.0133333s/event
 Reading evtID : 407468
 Read evtID : 407468
 Reading refMult : 44
@@ -1667,7 +1667,7 @@ Parsed CrefMult : 125
 Parsing refMult : 125
 Parsed CrefMult : 125
 
-== Event 250 finish == 0min 2s: 0.008s/event
+== Event 250 finish == 0min 3s: 0.012s/event
 Reading evtID : 410142
 Read evtID : 410142
 Reading refMult : 34
@@ -1721,7 +1721,7 @@ Read evtID : 410380
 Reading refMult : 5
 Read refMult : 5
 
-== Event 260 finish == 0min 2s: 0.00769231s/event
+== Event 260 finish == 0min 3s: 0.0115385s/event
 Reading evtID : 410394
 Read evtID : 410394
 Reading refMult : 29
@@ -1976,17 +1976,17 @@ Parsed CrefMult : 91
 Work done... now its time to close up shop!
 ****************************************** 
 QA :INFO  - =================================================================================
-QA :INFO  - QAInfo:Chain            StBFChain::bfc                  Ast =  4.46        Cpu =  4.02 
-QA :INFO  - QAInfo:Maker StKFParticleAnalysisMaker::ana                  Ast =  2.74(61.5%) Cpu =  2.70(67.2%) 
-QA :INFO  - QAInfo:Maker    StDetectorDbMaker::detDb                Ast =  0.01( 0.3%) Cpu =  0.01( 0.2%) 
-QA :INFO  - QAInfo:Maker          St_db_Maker::db                   Ast =  0.67(15.1%) Cpu =  0.35( 8.7%) 
-QA :INFO  - QAInfo:Maker       StPicoDstMaker::PicoDst              Ast =  1.03(23.1%) Cpu =  0.96(23.9%) 
+QA :INFO  - QAInfo:Chain            StBFChain::bfc                  Ast =  4.14        Cpu =  3.76 
+QA :INFO  - QAInfo:Maker StKFParticleAnalysisMaker::ana                  Ast =  2.53(61.1%) Cpu =  2.49(66.2%) 
+QA :INFO  - QAInfo:Maker    StDetectorDbMaker::detDb                Ast =  0.01( 0.3%) Cpu =  0.03( 0.8%) 
+QA :INFO  - QAInfo:Maker          St_db_Maker::db                   Ast =  0.62(15.0%) Cpu =  0.32( 8.5%) 
+QA :INFO  - QAInfo:Maker       StPicoDstMaker::PicoDst              Ast =  0.98(23.6%) Cpu =  0.92(24.5%) 
 St_db_Maker::Init 
-Real time 0:00:00, CP time 0.090, 3 slices
+Real time 0:00:00, CP time 0.080, 3 slices
       MySQL::Init 
-Real time 0:00:00, CP time 0.220, 2 slices
+Real time 0:00:00, CP time 0.210, 2 slices
 St_db_Maker::Make 
-Real time 0:00:00, CP time 0.440, 869 slices
+Real time 0:00:00, CP time 0.380, 869 slices
       MySQL::Make 
 Real time 0:00:00, CP time 0.000, 570 slices
       MySQL::Data 
@@ -2006,7 +2006,7 @@ StChain:INFO  - --------------------------------------------------
                   St_db_Maker(db)::Clear(279)    0.000000    0.000000    0.000000    0.000000
                   St_db_Maker(db)::Make (280)    0.000000    0.000000    0.000000    0.000000
 ---------------------------------------------------------------------------------------------
-                                   Total(8)   -0.091583    0.001953    0.241211    0.030084
+                                   Total(8)   -0.091583    0.001954    0.241211    0.030084
 =============================================================================================
 BFC:INFO  - StBFChain::Finish :  Closing all writable TFiles   . . . . 
 BFC:INFO  - StBFChain::Finish : file KFParticleQA_999997.root has been closed
@@ -2022,14 +2022,14 @@ Total Size of Data in Tables = 0 kBytes
 
 BFC:INFO  - StDbManagerImpl::printTimeStats() line=1624 
 *************************** DataBase ClockTime Stats *************************** 
-Total Time in DB-API       = 0.540953	 sec
+Total Time in DB-API       = 0.507873	 sec
  --------------------- In aggregate ------------------
- - Prepare Nodes & Servers = 0.540953	 sec --> 100% of total
+ - Prepare Nodes & Servers = 0.507873	 sec --> 100% of total
  - Select & Retrieve data  = 0	 sec --> 0% of total
  --------------- In MySQL C-API (approximate) ---------
- - Connecting to Servers   = 0.038142	 sec --> 7.05088% of total
- - SQL Query Times         = 0.324649	 sec --> 60.0143% of total
- - socket transfer Times   = 0.0795345	 sec --> 14.7027% of total
+ - Connecting to Servers   = 0.0357511	 sec --> 7.03938% of total
+ - SQL Query Times         = 0.311933	 sec --> 61.4196% of total
+ - socket transfer Times   = 0.0680919	 sec --> 13.4073% of total
 ********************************************************************************
 
 
