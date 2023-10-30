@@ -501,6 +501,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	}
 // ======= Lambda loop ends ======= //
 
+	hadronTree->Fill();
 	/////////////////////////////////////////////////////////
 	return kStOK;
 
