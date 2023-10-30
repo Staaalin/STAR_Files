@@ -10,7 +10,8 @@ if(-e $SubXml) rm $SubXml
 touch $SubXml
 
 set nFilePerJob=40
-set nFileTotal=all
+# set nFileTotal=all
+set nFileTotal=10
 
 # print xml file
 echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
