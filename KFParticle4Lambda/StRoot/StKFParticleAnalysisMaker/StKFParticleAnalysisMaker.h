@@ -99,6 +99,11 @@ private:
 	TProfile *hcentRefM ; 
 	TProfile *hcentRefW ; 
 
+	TTree *hadronTree;
+	int buffer_size,CrefMult,CgrefMult,evtID,runID;
+	std::vector<int> PDG;
+	std::vector<float> px,py,pz,InvarentMass;
+
 	/////////////////////////////////////
 	int mStps;  
 
