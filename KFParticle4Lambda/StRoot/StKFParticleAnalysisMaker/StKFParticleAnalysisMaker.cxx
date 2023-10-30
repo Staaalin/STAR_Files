@@ -29,11 +29,20 @@
 #include "MyToolkit.h"
 
 #define pi                 TMath::Pi()
+#define OmegaPdgMass	   1.67245
+//#define OmegaMassSigma     0.0021
 #define LambdaPdgMass      1.11568
 #define ProtonPdgMass      0.938272
 #define PionPdgMass        0.139570
+#define KaonPdgMass		   0.493677
 #define LambdaPdg          3122
+#define XiPdg              3312
+#define phiPdg			   333
+#define OmegaPdg           3334
+#define KaonPdg			   321
 #define ProtonPdg          2212
+#define KsPdg			   310
+#define Xi1530Pdg		   3324
 #define PionPdg           -211
 
 
@@ -400,6 +409,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		const KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
+		if(fabs(particle.GetPDG()) == LambdaPdg || 
+		   fabs(particle.GetPDG()) == OmegaPdg || 
+		   fabs(particle.GetPDG()) == OmegaPdg){
 			CrefMult  = refMult;
 			CgrefMult = grefMult;
 			PDG.push_back(particle.GetPDG());
@@ -414,6 +426,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.push_back(MomentumOfParticle_tb.Y());
 			pz.push_back(MomentumOfParticle_tb.Z());
 			InvarentMass.push_back(particle.GetE());
+		}
 
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
