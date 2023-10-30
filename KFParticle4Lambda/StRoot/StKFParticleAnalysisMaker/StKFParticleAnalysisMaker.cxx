@@ -322,8 +322,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	StPicoEvent* mEvent= (StPicoEvent*) mPicoDst->event(); 
 	if(!mEvent)return kStOK;
 
-	const int  runID    = mEvent->runId();
-	const int  evtID    = mEvent->eventId();
+	runID    = mEvent->runId();
+	evtID    = mEvent->eventId();
 	#ifdef DEBUGGING
 	std::cout << "Reading evtID : " << mEvent->eventId() <<std::endl;
 	std::cout << "Read evtID : " << evtID <<std::endl;
