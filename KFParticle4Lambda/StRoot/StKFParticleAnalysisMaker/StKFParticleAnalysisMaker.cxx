@@ -46,7 +46,7 @@
 #define Xi1530Pdg		   3324
 #define PionPdg           -211
 
-#define DEBUGGING
+// #define DEBUGGING
 
 
 //-----------------------------------------------------------------------------
@@ -531,7 +531,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 	}
 // ======= Lambda loop ends ======= //
 
-	hadronTree->Fill();
+	if (PDG.size()>0){
+		hadronTree->Fill();
+	}
 	/////////////////////////////////////////////////////////
 	return kStOK;
 
