@@ -179,6 +179,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	hcentRefM ->Write();
 	hcentRefW ->Write();
 
+	hadronTree ->Write();
+
 	return;
 }
 
