@@ -22,7 +22,7 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	const Char_t *outputFile = StrOutName.Data();
 
 	Long64_t nEvents = 1000000000;
-	//nEvents = 50000;
+	nEvents = 500;
 
 	//Load all the System libraries
 	gROOT->LoadMacro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
