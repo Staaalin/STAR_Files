@@ -7,6 +7,7 @@
 #include "TH2F.h"
 #include "TH3F.h"
 #include "TFile.h"
+#include "TTree.h"
 #include "TProfile.h"
 #include "TLorentzVector.h"
 #include "TProfile2D.h"
