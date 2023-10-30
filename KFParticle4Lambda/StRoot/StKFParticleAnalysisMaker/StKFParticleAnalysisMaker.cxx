@@ -13,6 +13,7 @@
 #include "TProfile2D.h"
 #include "TProfile3D.h"
 #include "StMessMgr.h"
+#include "TSystem.h"
 #include <algorithm>
 #include <TMath.h>
 
@@ -158,11 +159,11 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
     hadronTree->Branch("grefMult"          ,&CgrefMult           ,"grefMult/I"                          );
     hadronTree->Branch("EventID"           ,&evtID               ,"EventID/I"                           );
     hadronTree->Branch("RunID"             ,&runID               ,"RunID/I"                             );
-    hadronTree->Branch("PDG"               ,&PDG                 ,"PDG/I"                  );
-    hadronTree->Branch("mix_px"            ,&px                  ,"mix_px/F"               );
-    hadronTree->Branch("mix_py"            ,&py                  ,"mix_py/F"               );
-    hadronTree->Branch("mix_pz"            ,&pz                  ,"mix_pz/F"               );
-    hadronTree->Branch("InvarentMass"      ,&InvarentMass        ,"InvarentMass/F"         );
+    hadronTree->Branch("PDG"               ,&PDG                 );
+    hadronTree->Branch("mix_px"            ,&px                  );
+    hadronTree->Branch("mix_py"            ,&py                  );
+    hadronTree->Branch("mix_pz"            ,&pz                  );
+    hadronTree->Branch("InvarentMass"      ,&InvarentMass        );
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
@@ -414,7 +415,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		{
 			CrefMult  = refMult;
 			CgrefMult = grefMult;
-			PDG.push_back(particle.GetPDG());
+			PDG.emplace_back(particle.GetPDG());
 			// helix
 			TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
 			TVector3 PositionOfParticle(particle.GetX(), particle.GetY(), particle.GetZ());
@@ -422,14 +423,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 			StPicoPhysicalHelix heliPositionOfParticle(MomentumOfParticle, PositionOfParticle, magnet*kilogauss, particle.GetQ());
 			double pathlength = heliPositionOfParticle.pathLength(Vertex3D, false);
 			TVector3 MomentumOfParticle_tb = heliPositionOfParticle.momentumAt(pathlength, magnet*kilogauss); 
-			px.push_back(MomentumOfParticle_tb.X());
-			py.push_back(MomentumOfParticle_tb.Y());
-			pz.push_back(MomentumOfParticle_tb.Z());
-			InvarentMass.push_back(OmegaLorentz.M());
+			px.emplace_back(MomentumOfParticle_tb.X());
+			py.emplace_back(MomentumOfParticle_tb.Y());
+			pz.emplace_back(MomentumOfParticle_tb.Z());
+			InvarentMass.emplace_back(OmegaLorentz.M());
 			// cout<<"PDG:"<<particle.GetPDG()<<endl; 
-			cout<<"CrefMult:"<<CrefMult<<endl;
+			
 		}
-
+		cout<<"CrefMult:"<<CrefMult<<endl;
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
 		int eLambda = -(upQ-1)/2; // 0 if Lambda, 1 if AntiLambda
