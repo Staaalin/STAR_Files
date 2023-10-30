@@ -399,12 +399,28 @@ Int_t StKFParticleAnalysisMaker::Make()
 	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvarentMass.resize(0);
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		const KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+
+			CrefMult  = refMult;
+			CgrefMult = grefMult;
+			PDG.push_back(particle.GetPDG());
+			// helix
+			TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
+			TVector3 PositionOfParticle(particle.GetX(), particle.GetY(), particle.GetZ());
+			TLorentzVector OmegaLorentz(MomentumOfParticle, particle.GetE());
+			StPicoPhysicalHelix heliPositionOfParticle(MomentumOfParticle, PositionOfParticle, magnet*kilogauss, particle.GetQ());
+			double pathlength = heliPositionOfParticle.pathLength(Vertex3D, false);
+			TVector3 MomentumOfParticle_tb = heliPositionOfParticle.momentumAt(pathlength, magnet*kilogauss); 
+			px.push_back(MomentumOfParticle_tb.X());
+			py.push_back(MomentumOfParticle_tb.Y());
+			pz.push_back(MomentumOfParticle_tb.Z());
+			InvarentMass.push_back(particle.GetE());
+
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
-		int upQ; // if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
+		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
 		int eLambda = -(upQ-1)/2; // 0 if Lambda, 1 if AntiLambda
 
-		// SetDaughterTrackPointers(iKFParticle);
-		// if (ProtonTrackIndex == -99999 || PionTrackIndex == -99999) continue; if(!ProtonTrack) continue; if(!PionTrack) continue;
+		SetDaughterTrackPointers(iKFParticle);
+		if (ProtonTrackIndex == -99999 || PionTrackIndex == -99999) continue; if(!ProtonTrack) continue; if(!PionTrack) continue;
 
 		double dmass = -999; // just a placeholder
 		TLorentzVector p4Pair, p4Proton; // just a placeholder
