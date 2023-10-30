@@ -426,7 +426,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.push_back(MomentumOfParticle_tb.Y());
 			pz.push_back(MomentumOfParticle_tb.Z());
 			InvarentMass.push_back(OmegaLorentz.M());
-			cout<<"PDG:"<<particle.GetPDG()<<endl; 
+			// cout<<"PDG:"<<particle.GetPDG()<<endl; 
+			cout<<"CrefMult:"<<CrefMult<<endl;
 		}
 
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
