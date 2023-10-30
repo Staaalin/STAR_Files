@@ -409,25 +409,25 @@ Int_t StKFParticleAnalysisMaker::Make()
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		const KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
-		if(fabs(particle.GetPDG()) == LambdaPdg || 
-		   fabs(particle.GetPDG()) == OmegaPdg)
-		{
-			CrefMult  = refMult;
-			CgrefMult = grefMult;
-			PDG.push_back(particle.GetPDG());
-			// helix
-			TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
-			TVector3 PositionOfParticle(particle.GetX(), particle.GetY(), particle.GetZ());
-			TLorentzVector OmegaLorentz(MomentumOfParticle, particle.GetE());
-			StPicoPhysicalHelix heliPositionOfParticle(MomentumOfParticle, PositionOfParticle, magnet*kilogauss, particle.GetQ());
-			double pathlength = heliPositionOfParticle.pathLength(Vertex3D, false);
-			TVector3 MomentumOfParticle_tb = heliPositionOfParticle.momentumAt(pathlength, magnet*kilogauss); 
-			px.push_back(MomentumOfParticle_tb.X());
-			py.push_back(MomentumOfParticle_tb.Y());
-			pz.push_back(MomentumOfParticle_tb.Z());
-			InvarentMass.push_back(particle.GetE());
-			cout<<"PDG:"<<particle.GetPDG()<<endl; 
-		}
+		// if(fabs(particle.GetPDG()) == LambdaPdg || 
+		//    fabs(particle.GetPDG()) == OmegaPdg)
+		// {
+		// 	CrefMult  = refMult;
+		// 	CgrefMult = grefMult;
+		// 	PDG.push_back(particle.GetPDG());
+		// 	// helix
+		// 	TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
+		// 	TVector3 PositionOfParticle(particle.GetX(), particle.GetY(), particle.GetZ());
+		// 	TLorentzVector OmegaLorentz(MomentumOfParticle, particle.GetE());
+		// 	StPicoPhysicalHelix heliPositionOfParticle(MomentumOfParticle, PositionOfParticle, magnet*kilogauss, particle.GetQ());
+		// 	double pathlength = heliPositionOfParticle.pathLength(Vertex3D, false);
+		// 	TVector3 MomentumOfParticle_tb = heliPositionOfParticle.momentumAt(pathlength, magnet*kilogauss); 
+		// 	px.push_back(MomentumOfParticle_tb.X());
+		// 	py.push_back(MomentumOfParticle_tb.Y());
+		// 	pz.push_back(MomentumOfParticle_tb.Z());
+		// 	InvarentMass.push_back(particle.GetE());
+		// 	cout<<"PDG:"<<particle.GetPDG()<<endl; 
+		// }
 
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
