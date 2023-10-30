@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job simulateSubmission ="false" maxFilesPerProcess ="1" fileListSyntax="xrootd">
+<command>/star/u/svianping/STAR_Files/KFParticle4Lambda/run.csh</command>
+<stdout URL="file:/star/u/svianping/STAR_Files/KFParticle4Lambda/log/script_$JOBINDEX.out" />
+<input URL="catalog:star.bnl.gov?production=P19ib,filetype=daq_reco_PicoDst,trgsetupname~27GeV_production_2018,runnumber[]19130060-19268002,sanity=1,tpx=1,storage!=hpss,filename~st_physics" nFiles="1" />
+</job>
