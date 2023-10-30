@@ -21,8 +21,8 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	TString StrOutName = Form("output_%.6d.root", iJob);
 	const Char_t *outputFile = StrOutName.Data();
 
-	Long64_t nEvents = 1000000000;
-	nEvents = 300;
+	Long64_t nEvents = 10000000000;
+	// nEvents = 300;
 
 	//Load all the System libraries
 	gROOT->LoadMacro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
@@ -82,7 +82,7 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 		//if(i%5000==0){cout << endl; cout << "== Event " << i << " start ==" << endl;}
 		chain->Clear();
 		istat = chain->Make(i);
-		if(i%10==0) { // 100
+		if(i%100==0) { // 100
 			cout << endl; 
 			cout << "== Event " << i << " finish == " << flush;
 			time(&time_now);
