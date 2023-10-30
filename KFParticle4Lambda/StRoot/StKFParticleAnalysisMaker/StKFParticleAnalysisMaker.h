@@ -100,7 +100,7 @@ private:
 	TProfile *hcentRefW ; 
 
 	TTree *hadronTree;
-	int buffer_size,CrefMult,CgrefMult,evtID,runID;
+	int buffer_size,CrefMult,CgrefMult;
 	std::vector<int> PDG;
 	std::vector<float> px,py,pz,InvarentMass;
 
