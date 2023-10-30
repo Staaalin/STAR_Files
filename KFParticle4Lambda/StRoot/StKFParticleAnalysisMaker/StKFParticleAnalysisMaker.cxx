@@ -410,8 +410,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		const KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
 		if(fabs(particle.GetPDG()) == LambdaPdg || 
-		   fabs(particle.GetPDG()) == OmegaPdg || 
-		   fabs(particle.GetPDG()) == OmegaPdg){
+		   fabs(particle.GetPDG()) == OmegaPdg)
+		{
 			CrefMult  = refMult;
 			CgrefMult = grefMult;
 			PDG.push_back(particle.GetPDG());
@@ -426,6 +426,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.push_back(MomentumOfParticle_tb.Y());
 			pz.push_back(MomentumOfParticle_tb.Z());
 			InvarentMass.push_back(particle.GetE());
+			cout<<"PDG:"<<particle.GetPDG()<<endl; 
 		}
 
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
