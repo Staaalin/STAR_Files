@@ -46,7 +46,7 @@
 #define Xi1530Pdg		   3324
 #define PionPdg           -211
 
-// #define DEBUGGING
+#define DEBUGGING
 
 
 //-----------------------------------------------------------------------------
@@ -444,7 +444,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 			
 		}
-		cout<<"CrefMult:"<<CrefMult<<endl;
+		// cout<<"CrefMult:"<<CrefMult<<endl;
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
 		int eLambda = -(upQ-1)/2; // 0 if Lambda, 1 if AntiLambda
