@@ -324,12 +324,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	const int  runID    = mEvent->runId();
 	const int  evtID    = mEvent->eventId();
-	#ifndef DEBUGGING
+	#ifdef DEBUGGING
 	std::cout << "Reading evtID : " << mEvent->eventId() <<std::endl;
 	std::cout << "Read evtID : " << evtID <<std::endl;
 	#endif
 	const int  refMult  = mEvent->refMult();
-	#ifndef DEBUGGING
+	#ifdef DEBUGGING
 	std::cout << "Reading refMult : " << mEvent->refMult() <<std::endl;
 	std::cout << "Read refMult : " << refMult <<std::endl;
 	#endif
@@ -424,7 +424,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		   fabs(particle.GetPDG()) == OmegaPdg)
 		{
 			CrefMult  = refMult;
-			#ifndef DEBUGGING
+			#ifdef DEBUGGING
 			std::cout << "Parsing refMult : " << refMult <<std::endl;
 			std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 			#endif
