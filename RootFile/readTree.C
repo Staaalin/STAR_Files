@@ -1,12 +1,12 @@
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
+// #include <sys/types.h>
+// #include <sys/stat.h>
+// #include <dirent.h>
 #include <random>
 #include "math.h"
 #include "string.h"
 #include <vector>
-#ifndef __CINT__
+// #ifndef __CINT__
 #include "TROOT.h"
 #include "TFile.h"
 #include "TGraph.h"
@@ -25,7 +25,7 @@
 #include "TLegend.h"
 #include "TUnixSystem.h"
 #include "TRandom3.h"
-#endif
+// #endif
 #include <iostream>
 #include <map>
 #include <stdio.h>
