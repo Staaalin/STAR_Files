@@ -42,8 +42,8 @@ void readTree()
     Int_t kBinNum = 1000;
     Float_t kmin = 0;
     Float_t kmax = 10;
-	TString ParticleName[] = { "Lambda" , "Lambdab" , "Omega" };
-	int ParticlePDG[]      = {   3122   ,   -3122   ,   3334  };
+	const TString ParticleName[] = { "Lambda" , "Lambdab" , "Omega" };
+	const int ParticlePDG[]      = {   3122   ,   -3122   ,   3334  };
 	int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
 	TH1D *HMass[HSize];
 	for (int i=0;i<HSize;i++){
