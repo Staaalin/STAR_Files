@@ -75,10 +75,10 @@ void readTree()
     hadronTree->SetBranchAddress("refMult",&refMult);
     hadronTree->SetBranchAddress("grefMult",&grefMult);
     hadronTree->SetBranchAddress("PDG",&PDG);
-    hadronTree->SetBranchAddress("px",&px);
-    hadronTree->SetBranchAddress("py",&py);
-    hadronTree->SetBranchAddress("pz",&pz);
-    hadronTree->SetBranchAddress("mass",&InvarentMass);
+    hadronTree->SetBranchAddress("mix_px",&px);
+    hadronTree->SetBranchAddress("mix_py",&py);
+    hadronTree->SetBranchAddress("mix_pz",&pz);
+    hadronTree->SetBranchAddress("InvarentMass",&InvarentMass);
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
