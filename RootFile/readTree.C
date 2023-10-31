@@ -44,7 +44,7 @@ void readTree()
     Float_t kmax = 10;
 	const TString ParticleName[] = { "Lambda" , "Lambdab" , "Omega" };
 	const int ParticlePDG[]      = {   3122   ,   -3122   ,   3334  };
-	int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
+	const int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
 	TH1D *HMass[HSize];
 	for (int i=0;i<HSize;i++){
 		TString HistName1 = "HM";
