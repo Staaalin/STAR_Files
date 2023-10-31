@@ -34,10 +34,10 @@ using namespace std;
 void readTree()
 {
     const Int_t maxMultiplicity = 20000;
-    Int_t refMult,grefMult;
+    Int_t refMult,grefMult,Mult;
     Int_t PDG[maxMultiplicity],evtID[maxMultiplicity],runID[maxMultiplicity];
     Float_t px[maxMultiplicity],py[maxMultiplicity],pz[maxMultiplicity];
-    Float_t mass[maxMultiplicity],energy[maxMultiplicity];
+    Float_t InvarentMass[maxMultiplicity],energy[maxMultiplicity];
 
     Int_t kBinNum = 1000;
     Float_t kmin = 0;
@@ -46,19 +46,22 @@ void readTree()
 	int ParticlePDG[]      = {   3122   ,   -3122   ,   3334  };
 	int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
 	TH1D *HMass[HSize];
-	for (int i=0;i<ParticleName;i++){
+	for (int i=0;i<HSize;i++){
 		TString HistName1 = "HM";
 		TString HistName2 = "The Mass of ";
 		HistName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
 		HMass[i] = new TH1D(HistName1, HistName2, kBinNum, kmin, kmax);
+		
+		HMass[i]->GetXaxis()->SetTitle("Mass [GeV]");
+		HMass[i]->GetYaxis()->SetTitle("Counts");
 	}
 
     //load data  
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
     TChain *hadronTree = new TChain("hadronTree");
-    for(int i=2892;i <= 2991;i++){
+    for(int i=2229;i <= 2230;i++){
         TString filename = midname;
         filename+="00";
         filename+=i;
@@ -67,6 +70,7 @@ void readTree()
         // cout<<filename<<endl;
     }
     
+    hadronTree->SetBranchAddress("Mult",&Mult);
     hadronTree->SetBranchAddress("refMult",&refMult);
     hadronTree->SetBranchAddress("grefMult",&grefMult);
     hadronTree->SetBranchAddress("PDG",&PDG);
@@ -82,51 +86,23 @@ void readTree()
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
 
-		for (int j=0;j<)
+		for (int j=0;j<Mult;j++){
+			for (int k=0;k<HSize;k++){
+				if(PDG[j] == ParticlePDG[k]){
+					HMass[k]->Fill(InvarentMass[j]);
+					break;
+				}
+			}
+		}
 
     }
 
-    TFile *file = new TFile("CheckOutput.root", "RECREATE");
+    TFile *file = new TFile("/star/u/svianping/STAR_Files/KFParticle4Lambda/output/CheckOutput.root", "RECREATE");
 
-    Int_t binNorm[2];
-    binNorm[0] = Ak->FindBin(3);
-    binNorm[1] = Ak->FindBin(4); 
-    Double_t factorN1 = 1.0*Bk->Integral(binNorm[0], binNorm[1]) / Ak->Integral(binNorm[0], binNorm[1]);
-    Ck->Divide(Ak,Bk,1.0,1.0/factorN1);
-    Ck->Sumw2();
 
-    binNorm[0] = Ay->FindBin(3);
-    binNorm[1] = Ay->FindBin(4); 
-    Double_t factorN2 = 1.0*By->Integral(binNorm[0], binNorm[1]) / Ay->Integral(binNorm[0], binNorm[1]);
-    Cy->Divide(Ay,By,1.0,1.0/factorN2);
-    Cy->Sumw2();
-
-    Ak->GetXaxis()->SetTitle("k^{*} [GeV]");
-    Ak->GetYaxis()->SetTitle("Counts");
-    Bk->GetXaxis()->SetTitle("k^{*} [GeV]");
-    Bk->GetYaxis()->SetTitle("Counts");
-    Ck->GetXaxis()->SetTitle("k^{*} [GeV]");
-    Ck->GetYaxis()->SetTitle("C(k^{*})");
-    Ck->SetStats(0);
-
-    Ay->GetXaxis()->SetTitle("#Delta y");
-    Ay->GetYaxis()->SetTitle("Counts");
-    By->GetXaxis()->SetTitle("#Delta y");
-    By->GetYaxis()->SetTitle("Counts");
-    Cy->GetXaxis()->SetTitle("#Delta y");
-    Cy->GetYaxis()->SetTitle("C(#Delta y)");
-    Cy->SetStats(0);
-
-    Ak->Write();
-    Bk->Write();
-    Ck->Write();
-    
-    Ay->Write();
-    By->Write();
-    Cy->Write();
-    MIX_Con->Write();
-    
-
+	for (int i=0;i<HSize;i++){
+		HMass[i]->Write();
+	}
 
     file->Write();
 
