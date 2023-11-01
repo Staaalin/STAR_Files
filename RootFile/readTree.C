@@ -33,11 +33,24 @@ using namespace std;
 
 void readTree()
 {
-    const Int_t maxMultiplicity = 20000;
     Int_t refMult,grefMult,Mult;
-    Int_t PDG[maxMultiplicity],evtID[maxMultiplicity],runID[maxMultiplicity];
-    Float_t px[maxMultiplicity],py[maxMultiplicity],pz[maxMultiplicity];
-    Float_t InvarentMass[maxMultiplicity],energy[maxMultiplicity];
+    std::vector<Int_t>   *PDG             = NULL;
+    std::vector<Int_t>   *evtID           = NULL;
+    std::vector<Int_t>   *runID           = NULL;
+    std::vector<Float_t> *px              = NULL;
+    std::vector<Float_t> *py              = NULL;
+    std::vector<Float_t> *pz              = NULL;
+    std::vector<Float_t> *InvarentMass    = NULL;
+    std::vector<Float_t> *energy          = NULL;
+    
+    TBranch *bPDG             = NULL;
+    TBranch *bevtID           = NULL;
+    TBranch *brunID           = NULL;
+    TBranch *bpx              = NULL;
+    TBranch *bpy              = NULL;
+    TBranch *bpz              = NULL;
+    TBranch *bInvarentMass    = NULL;
+    TBranch *benergy          = NULL;
 
     Int_t kBinNum = 1000;
     Float_t kmin = 0;
@@ -71,14 +84,15 @@ void readTree()
         // cout<<filename<<endl;
     }
     
-    hadronTree->SetBranchAddress("Mult",&Mult);
-    hadronTree->SetBranchAddress("refMult",&refMult);
-    hadronTree->SetBranchAddress("grefMult",&grefMult);
-    hadronTree->SetBranchAddress("PDG",&PDG);
-    hadronTree->SetBranchAddress("mix_px",&px);
-    hadronTree->SetBranchAddress("mix_py",&py);
-    hadronTree->SetBranchAddress("mix_pz",&pz);
-    hadronTree->SetBranchAddress("InvarentMass",&InvarentMass);
+    hadronTree->SetBranchAddress("Mult"          ,&Mult);
+    hadronTree->SetBranchAddress("refMult"       ,&refMult);
+    hadronTree->SetBranchAddress("grefMult"      ,&grefMult);
+    hadronTree->SetBranchAddress("PDG"           ,&PDG          ,&bPDG         );
+    hadronTree->SetBranchAddress("mix_px"        ,&px           ,&bpx          );
+    hadronTree->SetBranchAddress("mix_py"        ,&py           ,&bpy          );
+    hadronTree->SetBranchAddress("mix_pz"        ,&pz           ,&bpz          );
+    hadronTree->SetBranchAddress("InvarentMass"  ,&InvarentMass ,&bInvarentMass);
+    hadronTree->SetBranchAddress("energy"        ,&energy       ,&benergy      );
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
