@@ -33,7 +33,6 @@ using namespace std;
 
 void readTree()
 {
-    Int_t refMult,grefMult,PDGMult;
     std::vector<Int_t>   *PDG             = nullptr;
     std::vector<Int_t>   *evtID           = nullptr;
     std::vector<Int_t>   *runID           = nullptr;
@@ -51,6 +50,8 @@ void readTree()
     TBranch *bpz              = nullptr;
     TBranch *bInvarentMass    = nullptr;
     TBranch *benergy          = nullptr;
+
+    Int_t refMult,grefMult,PDGMult;
 
     Int_t kBinNum = 1000;
     Float_t kmin = 0;
@@ -101,6 +102,9 @@ void readTree()
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
 
+        if (PDGMult != PDG[0].size()){
+            cout<<"Warning! PDGMult = "<<PDGMult<<", but PDG[0].size() = "<<PDG[0].size()<<endl;
+        }
 		for (int j=0;j<PDGMult;j++){
 			for (int k=0;k<HSize;k++){
 				if(PDG->at(j) == ParticlePDG[k]){
