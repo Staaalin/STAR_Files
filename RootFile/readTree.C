@@ -34,23 +34,23 @@ using namespace std;
 void readTree()
 {
     Int_t refMult,grefMult,PDGMult;
-    std::vector<Int_t>   *PDG             = NULL;
-    std::vector<Int_t>   *evtID           = NULL;
-    std::vector<Int_t>   *runID           = NULL;
-    std::vector<Float_t> *px              = NULL;
-    std::vector<Float_t> *py              = NULL;
-    std::vector<Float_t> *pz              = NULL;
-    std::vector<Float_t> *InvarentMass    = NULL;
-    std::vector<Float_t> *energy          = NULL;
+    std::vector<Int_t>   *PDG             = nullptr;
+    std::vector<Int_t>   *evtID           = nullptr;
+    std::vector<Int_t>   *runID           = nullptr;
+    std::vector<Float_t> *px              = nullptr;
+    std::vector<Float_t> *py              = nullptr;
+    std::vector<Float_t> *pz              = nullptr;
+    std::vector<Float_t> *InvarentMass    = nullptr;
+    std::vector<Float_t> *energy          = nullptr;
     
-    TBranch *bPDG             = NULL;
-    TBranch *bevtID           = NULL;
-    TBranch *brunID           = NULL;
-    TBranch *bpx              = NULL;
-    TBranch *bpy              = NULL;
-    TBranch *bpz              = NULL;
-    TBranch *bInvarentMass    = NULL;
-    TBranch *benergy          = NULL;
+    TBranch *bPDG             = nullptr;
+    TBranch *bevtID           = nullptr;
+    TBranch *brunID           = nullptr;
+    TBranch *bpx              = nullptr;
+    TBranch *bpy              = nullptr;
+    TBranch *bpz              = nullptr;
+    TBranch *bInvarentMass    = nullptr;
+    TBranch *benergy          = nullptr;
 
     Int_t kBinNum = 1000;
     Float_t kmin = 0;
@@ -103,8 +103,8 @@ void readTree()
 
 		for (int j=0;j<PDGMult;j++){
 			for (int k=0;k<HSize;k++){
-				if(PDG[j] == ParticlePDG[k]){
-					HMass[k]->Fill(InvarentMass[j]);
+				if(PDG->at(j) == ParticlePDG[k]){
+					HMass[k]->Fill(InvarentMass->at(j));
 					break;
 				}
 			}
