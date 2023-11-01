@@ -157,16 +157,16 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
     buffer_size = 5000000;
     hadronTree = new TTree("hadronTree", "Tree_STAR");
     // hadronTree->Branch("buffer_size"       ,&buffer_size         ,"buffer_size/I"                       );
-    hadronTree->Branch("PDGMult"           ,&PDGMult             ,"PDGMult/I"                           );
-    hadronTree->Branch("refMult"           ,&CrefMult            ,"refMult/I"                           );
-    hadronTree->Branch("grefMult"          ,&CgrefMult           ,"grefMult/I"                          );
-    hadronTree->Branch("EventID"           ,&evtID               ,"EventID/I"                           );
-    hadronTree->Branch("RunID"             ,&runID               ,"RunID/I"                             );
-    hadronTree->Branch("PDG"               ,&PDG                 );
-    hadronTree->Branch("mix_px"            ,&px                  );
-    hadronTree->Branch("mix_py"            ,&py                  );
-    hadronTree->Branch("mix_pz"            ,&pz                  );
-    hadronTree->Branch("InvarentMass"      ,&InvarentMass        );
+    hadronTree->Branch("PDGMult"            ,&PDGMult             ,"PDGMult/I"                           );
+    hadronTree->Branch("refMult"            ,&CrefMult            ,"refMult/I"                           );
+    hadronTree->Branch("grefMult"           ,&CgrefMult           ,"grefMult/I"                          );
+    hadronTree->Branch("EventID"            ,&evtID               ,"EventID/I"                           );
+    hadronTree->Branch("RunID"              ,&runID               ,"RunID/I"                             );
+    hadronTree->Branch("PDG"                ,&PDG                 );
+    hadronTree->Branch("mix_px"             ,&px                  );
+    hadronTree->Branch("mix_py"             ,&py                  );
+    hadronTree->Branch("mix_pz"             ,&pz                  );
+    hadronTree->Branch("InvariantMass"      ,&InvariantMass        );
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
@@ -417,7 +417,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	SetupKFParticle();
 	if (InterfaceCantProcessEvent) return;
-	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvarentMass.resize(0);
+	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvariantMass.resize(0);
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		const KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
@@ -441,7 +441,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			px.emplace_back(MomentumOfParticle_tb.X());
 			py.emplace_back(MomentumOfParticle_tb.Y());
 			pz.emplace_back(MomentumOfParticle_tb.Z());
-			InvarentMass.emplace_back(OmegaLorentz.M());
+			InvariantMass.emplace_back(OmegaLorentz.M());
 			// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 			
 		}

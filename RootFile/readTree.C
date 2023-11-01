@@ -33,7 +33,7 @@ using namespace std;
 
 void readTree()
 {
-    Int_t refMult,grefMult,Mult;
+    Int_t refMult,grefMult,PDGMult;
     std::vector<Int_t>   *PDG             = NULL;
     std::vector<Int_t>   *evtID           = NULL;
     std::vector<Int_t>   *runID           = NULL;
@@ -84,7 +84,7 @@ void readTree()
         // cout<<filename<<endl;
     }
     
-    hadronTree->SetBranchAddress("Mult"          ,&Mult);
+    hadronTree->SetBranchAddress("Mult"          ,&PDGMult);
     hadronTree->SetBranchAddress("refMult"       ,&refMult);
     hadronTree->SetBranchAddress("grefMult"      ,&grefMult);
     hadronTree->SetBranchAddress("PDG"           ,&PDG          ,&bPDG         );
@@ -101,7 +101,7 @@ void readTree()
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
 
-		for (int j=0;j<Mult;j++){
+		for (int j=0;j<PDGMult;j++){
 			for (int k=0;k<HSize;k++){
 				if(PDG[j] == ParticlePDG[k]){
 					HMass[k]->Fill(InvarentMass[j]);
