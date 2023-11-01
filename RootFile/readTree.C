@@ -92,7 +92,7 @@ void readTree()
     hadronTree->SetBranchAddress("mix_py"        ,&py           ,&bpy          );
     hadronTree->SetBranchAddress("mix_pz"        ,&pz           ,&bpz          );
     hadronTree->SetBranchAddress("InvarentMass"  ,&InvarentMass ,&bInvarentMass);
-    hadronTree->SetBranchAddress("energy"        ,&energy       ,&benergy      );
+    // hadronTree->SetBranchAddress("energy"        ,&energy       ,&benergy      );
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
