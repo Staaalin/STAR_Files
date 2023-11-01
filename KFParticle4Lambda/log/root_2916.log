@@ -17,10 +17,10 @@ Enclose multiple statements between { }.
 Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/StarRoot.so" already loaded
 Warning in <StCloseFileOnTerminate::Instantiate>: Asynch signal handler has been created
 *** Float Point Exception is OFF ***
- *** Start at Date : Mon Oct 30 09:25:34 2023
-QAInfo:You are using STAR_LEVEL : TFG21g, git = tags/TFG21g,tag:50722f0e0, ROOT_LEVEL : 5.34.39 and node : spool1575.sdcc.bnl.gov with 96 Intel(R) Xeon(R) Gold 6336Y CPU @ 2.40GHz
+ *** Start at Date : Tue Oct 31 08:14:50 2023
+QAInfo:You are using STAR_LEVEL : TFG21g, git = tags/TFG21g,tag:50722f0e0, ROOT_LEVEL : 5.34.39 and node : spool0222.sdcc.bnl.gov with 32 Intel(R) Xeon(R) CPU E5-2660 0 @ 2.20GHz
 
-Processing ./readPicoDst.C("/tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/E637857A9F121119BB8B586E1AFACED3_2916.local.list",2916,18,27.0,"/star/u/svianping/STAR_Files/KFParticle4Lambda/datalist")...
+Processing ./readPicoDst.C("/tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/1DA9AFED53CA6BF567ED676D014CD071_2916.local.list",2916,18,27.0,"/star/u/svianping/STAR_Files/KFParticle4Lambda/datalist")...
 current job id: 2916
 Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/St_base.so" already loaded
 Warning in <TClass::TClass>: no dictionary for class StStrangeMuDst is available
@@ -102,14 +102,14 @@ QA :INFO  - Library libStDbBroker          [             db] (/gpfs01/star/subsy
 QA :INFO  - Library libSt_db_Maker         [             db] (/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libSt_db_Maker.so)	is loaded
 QA :INFO  - Library libStDetectorDbMaker   [          detDb] (/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStDetectorDbMaker.so)	is loaded
 QA :INFO  - Library libStDbUtilities       [         dbutil] (/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStDbUtilities.so)	is loaded
-QA :INFO  - Library libKFParticlePerformance [       KFPInter] (/home/tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/.sl73_x8664_gcc485/LIB/libKFParticlePerformance.so)	is loaded
-QA :INFO  - Library libStKFParticleAnalysisMaker [       KFPInter] (/home/tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/.sl73_x8664_gcc485/LIB/libStKFParticleAnalysisMaker.so)	is loaded
-QA :INFO  - Input file name = /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/E637857A9F121119BB8B586E1AFACED3_2916.local.list
-BFC:INFO  - StFile::AddFile : *** IGNORED *** File /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/E637857A9F121119BB8B586E1AFACED3_2916.local.list has wrong extention 
+QA :INFO  - Library libKFParticlePerformance [       KFPInter] (/home/tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/.sl73_x8664_gcc485/LIB/libKFParticlePerformance.so)	is loaded
+QA :INFO  - Library libStKFParticleAnalysisMaker [       KFPInter] (/home/tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/.sl73_x8664_gcc485/LIB/libStKFParticleAnalysisMaker.so)	is loaded
+QA :INFO  - Input file name = /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/1DA9AFED53CA6BF567ED676D014CD071_2916.local.list
+BFC:INFO  - StFile::AddFile : *** IGNORED *** File /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/1DA9AFED53CA6BF567ED676D014CD071_2916.local.list has wrong extention 
 
-QA :INFO  - Output root file name E637857A9F121119BB8B586E1AFACED3_2916.local.root
-QA :INFO  - ProcessLine:new StPicoDstMaker(2,"/tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/E637857A9F121119BB8B586E1AFACED3_2916.local.list")
-(class StPicoDstMaker*)0x8d589b0
+QA :INFO  - Output root file name 1DA9AFED53CA6BF567ED676D014CD071_2916.local.root
+QA :INFO  - ProcessLine:new StPicoDstMaker(2,"/tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/1DA9AFED53CA6BF567ED676D014CD071_2916.local.list")
+(class StPicoDstMaker*)0x9047280
 BFC:INFO  - Using DB flavors: ofl+TFG
 QA :INFO  - QAInfo:StBFChain            built Mar 14 2022 19:11:02 from Tag $Name:  $ $Id: StBFChain.h,v 1.59 2019/11/19 17:26:17 jeromel Exp $ 
 QA :INFO  - QAInfo:StPicoDstMaker       built Jun  9 2021 13:05:13 from Tag $Name:  $ $Id: StPicoDstMaker.h,v 1.30 2021/02/23 17:27:01 gnigmat Exp $ 
@@ -122,7 +122,7 @@ QA :INFO  -    St_db_Maker::db
 QA :INFO  -    StDetectorDbMaker::detDb
 Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/StPicoEvent.so" already loaded
 Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/StPicoDstMaker.so" already loaded
-BFC:INFO  - StBFChain::Init : Time=Mon Oct 30 09:25:38 2023 Cwd=/home/tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916
+BFC:INFO  - StBFChain::Init : Time=Tue Oct 31 08:14:56 2023 Cwd=/home/tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916
 QA :INFO  - blacklist tpc
 QA :INFO  - blacklist svt
 QA :INFO  - blacklist ssd
@@ -132,36 +132,36 @@ QA :INFO  - blacklist ist
 QA :INFO  - blacklist fms
 QA :INFO  - blacklist eemc
 StChain:DEBUG - *** Call << StPicoDstMaker:Init() ***
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133032_raw_1500012.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_adc_19133033_raw_2000003.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133033_raw_1500008.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_adc_19133039_raw_3000003.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133039_raw_4000010.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133040_raw_1500011.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_adc_19133043_raw_4000015.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_adc_19133043_raw_2500003.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133043_raw_5000019.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133043_raw_1500012.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133044_raw_4500018.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_adc_19133047_raw_2500015.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133047_raw_3000013.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133047_raw_3500018.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133047_raw_2500014.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_adc_19133048_raw_1500002.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_adc_19133048_raw_1000018.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133048_raw_3000014.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133048_raw_4500016.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133048_raw_2500009.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_adc_19133049_raw_0000001.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133049_raw_1500011.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133053_raw_2000014.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133054_raw_1500015.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133054_raw_3000016.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_adc_19133055_raw_2500004.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133055_raw_5000008.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_adc_19133056_raw_1500004.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133056_raw_5500008.picoDst.root
-StChain:INFO  -  Read in picoDst file /tmp/svianping/E637857A9F121119BB8B586E1AFACED3_2916/INPUTFILES/st_physics_19133058_raw_4500015.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133032_raw_1500012.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_adc_19133033_raw_2000003.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133033_raw_1500008.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_adc_19133039_raw_3000003.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133039_raw_4000010.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133040_raw_1500011.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_adc_19133043_raw_4000015.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_adc_19133043_raw_2500003.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133043_raw_5000019.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133043_raw_1500012.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133044_raw_4500018.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_adc_19133047_raw_2500015.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133047_raw_3000013.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133047_raw_3500018.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133047_raw_2500014.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_adc_19133048_raw_1500002.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_adc_19133048_raw_1000018.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133048_raw_3000014.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133048_raw_4500016.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133048_raw_2500009.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_adc_19133049_raw_0000001.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133049_raw_1500011.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133053_raw_2000014.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133054_raw_1500015.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133054_raw_3000016.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_adc_19133055_raw_2500004.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133055_raw_5000008.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_adc_19133056_raw_1500004.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133056_raw_5500008.picoDst.root
+StChain:INFO  -  Read in picoDst file /tmp/svianping/1DA9AFED53CA6BF567ED676D014CD071_2916/INPUTFILES/st_physics_19133058_raw_4500015.picoDst.root
 StChain:INFO  -  Total 30 files have been read in. 
 StChain:WARN  - setBranchAddress: Branch name ETofHit does not exist!
 StChain:WARN  - setBranchAddress: Branch name ETofPidTraits does not exist!
@@ -190,7 +190,7 @@ StChain:INFO  - StDbLib: db server found in 3 iterations
 StChain:INFO  - MysqlDb::Connect: Load balancer took 0 ms, will use star-db08.rcf.bnl.gov:3316
 StChain:INFO  - Ssl_cipher = AES128-SHA
 StChain:INFO  - MysqlDb::Connect(host,user,pw,database,port) line=527 Server Connecting: DB=StarDb  Host=star-db08.rcf.bnl.gov:3316
- --> Connection Time=0.0665359 sec    MysqlVersion=5.7.24
+ --> Connection Time=0.0364642 sec    MysqlVersion=5.7.24
 StChain:WARN  - StDbManagerImpl::getDbDomain(domainName) line=1061 Adding New dbDomain= fst
 StChain:WARN  - StDbManagerImpl::getDbDomain(domainName) line=1061 Adding New dbDomain= ftt
 StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table rhicf/rhicfBarPos..rhicfBarPos
@@ -288,25 +288,25 @@ StKFParticleAnalysisMaker:INFO  - dEdxParameterization::GetFile : File P10T.root
 	i = 	1	fnBins[i] = 	11	fbinW[i] = 	0.33
 	i = 	2	fnBins[i] = 	51	fbinW[i] = 	0.2
 
-== Event 100 finish == 0min 1s: 0.01s/event
+== Event 100 finish == 0min 2s: 0.02s/event
 
-== Event 200 finish == 0min 2s: 0.01s/event
+== Event 200 finish == 0min 4s: 0.02s/event
 
-== Event 300 finish == 0min 3s: 0.01s/event
+== Event 300 finish == 0min 6s: 0.02s/event
 
-== Event 400 finish == 0min 4s: 0.01s/event
+== Event 400 finish == 0min 7s: 0.0175s/event
 
-== Event 500 finish == 0min 5s: 0.01s/event
+== Event 500 finish == 0min 8s: 0.016s/event
 
-== Event 600 finish == 0min 6s: 0.01s/event
+== Event 600 finish == 0min 10s: 0.0166667s/event
 
-== Event 700 finish == 0min 7s: 0.01s/event
+== Event 700 finish == 0min 11s: 0.0157143s/event
 
-== Event 800 finish == 0min 8s: 0.01s/event
+== Event 800 finish == 0min 12s: 0.015s/event
 
-== Event 900 finish == 0min 9s: 0.01s/event
+== Event 900 finish == 0min 14s: 0.0155556s/event
 
-== Event 1000 finish == 0min 9s: 0.009s/event
+== Event 1000 finish == 0min 15s: 0.015s/event
 
-== Event 1100 finish == 0min 10s: 0.00909091s/event
+== Event 1100 finish == 0min 16s: 0.0145455s/event
 root4star: .sl73_x8664_gcc485/OBJ/StRoot/StChain/StMaker.cxx:943: virtual Int_t StMaker::Make(): Assertion `(ret%10)>=0 && (ret%10)<=kStFatal' failed.

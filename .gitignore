@@ -33,3 +33,5 @@
 *.consign
 
 xml/
+
+*.log
