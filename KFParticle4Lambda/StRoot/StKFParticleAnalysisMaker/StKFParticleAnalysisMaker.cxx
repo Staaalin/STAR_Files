@@ -157,7 +157,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
     buffer_size = 5000000;
     hadronTree = new TTree("hadronTree", "Tree_STAR");
     // hadronTree->Branch("buffer_size"       ,&buffer_size         ,"buffer_size/I"                       );
-    hadronTree->Branch("Mult"              ,&Mult                ,"Mult/I"                              );
+    hadronTree->Branch("PDGMult"           ,&PDGMult             ,"PDGMult/I"                           );
     hadronTree->Branch("refMult"           ,&CrefMult            ,"refMult/I"                           );
     hadronTree->Branch("grefMult"          ,&CgrefMult           ,"grefMult/I"                          );
     hadronTree->Branch("EventID"           ,&evtID               ,"EventID/I"                           );
@@ -533,7 +533,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 // ======= Lambda loop ends ======= //
 
 	if (PDG.size()>0){
-		Mult = PDG.size(); // This is multiplicity of Recorded Particles
+		PDGMult = PDG.size(); // This is multiplicity of Recorded Particles
 		hadronTree->Fill();
 	}
 	/////////////////////////////////////////////////////////
