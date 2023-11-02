@@ -31,7 +31,7 @@
 #include <stdio.h>
 using namespace std;
 
-void readTree()
+void vMass()
 {
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
         std::vector<Int_t>   *PDG             = nullptr;
@@ -94,20 +94,27 @@ void readTree()
     #endif
     Int_t refMult,grefMult,PDGMult;
 
-    Int_t kBinNum = 1000;
+    Int_t kBinNum = 2500;
     Float_t kmin = 0;
-    Float_t kmax = 10;
+    Float_t kmax = 5;
 	const TString ParticleName[] = { "Lambda" , "Lambdab" , "Omega" };
 	const int ParticlePDG[]      = {   3122   ,   -3122   ,   3334  };
-	// const int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
-	const int HSize = 3;
-	TH1D *HMass[HSize];
+    const float FitRange[3][2]   = { {1.0,1.2}, {1.0,1.2} ,{1.6,1.8}};
+	int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
+	// const int HSize = 3;
+	// TH1D *HMass[HSize];
+    std::vector<TH1D *>    HMass[HSize];
+    std::vector<TCanvas *> CMass[HSize];
+    std::vector<TF1 *> Vfit[HSize];
 	for (int i=0;i<HSize;i++){
 		TString HistName1 = "HM";
 		TString HistName2 = "The Mass of ";
+        TString FitName1 = "FN";
 		HistName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
-		HMass[i] = new TH1D(HistName1, HistName2, kBinNum, kmin, kmax);
+        FitName1 += ParticleName[i];
+		HMass.emplace_back(new TH1D(HistName1, HistName2, kBinNum, kmin, kmax));
+		Vfit.emplace_back(new TF1(FitName1, "gaus", FitRange[i][0], FitRange[i][1]));
 		
 		HMass[i]->GetXaxis()->SetTitle("Mass [GeV]");
 		HMass[i]->GetYaxis()->SetTitle("Counts");
@@ -116,33 +123,9 @@ void readTree()
     //load data  
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
-    for(int i=1000;i <= 2991;i++){
+    for(int i=1000;i <= 1050;i++){
         TString filename = midname;
         filename+="00";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=100;i <= 999;i++){
-        TString filename = midname;
-        filename+="000";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=10;i <= 99;i++){
-        TString filename = midname;
-        filename+="0000";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=0;i <= 9;i++){
-        TString filename = midname;
-        filename+="00000";
         filename+=i;
         filename+=".root";
         hadronTree->Add(filename);
@@ -179,6 +162,8 @@ void readTree()
 		}
 
     }
+
+    //
 
     TFile *file = new TFile("/star/u/svianping/STAR_Files/KFParticle4Lambda/output/CheckOutput.root", "RECREATE");
 
