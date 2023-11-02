@@ -33,7 +33,7 @@ using namespace std;
 
 void readTree()
 {
-    if(ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0)){
+    #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
         std::vector<Int_t>   *PDG             = nullptr;
         std::vector<Int_t>   *evtID           = nullptr;
         std::vector<Int_t>   *runID           = nullptr;
@@ -51,45 +51,47 @@ void readTree()
         TBranch *bpz              = nullptr;
         TBranch *bInvarentMass    = nullptr;
         TBranch *benergy          = nullptr;
-    }
-    else if(ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)){
-        std::vector<Int_t>   *PDG             = NULL;
-        std::vector<Int_t>   *evtID           = NULL;
-        std::vector<Int_t>   *runID           = NULL;
-        std::vector<Float_t> *px              = NULL;
-        std::vector<Float_t> *py              = NULL;
-        std::vector<Float_t> *pz              = NULL;
-        std::vector<Float_t> *InvarentMass    = NULL;
-        std::vector<Float_t> *energy          = NULL;
+    
+    #else
+        #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
+            std::vector<Int_t>   *PDG             = NULL;
+            std::vector<Int_t>   *evtID           = NULL;
+            std::vector<Int_t>   *runID           = NULL;
+            std::vector<Float_t> *px              = NULL;
+            std::vector<Float_t> *py              = NULL;
+            std::vector<Float_t> *pz              = NULL;
+            std::vector<Float_t> *InvarentMass    = NULL;
+            std::vector<Float_t> *energy          = NULL;
+            
+            TBranch *bPDG             = NULL;
+            TBranch *bevtID           = NULL;
+            TBranch *brunID           = NULL;
+            TBranch *bpx              = NULL;
+            TBranch *bpy              = NULL;
+            TBranch *bpz              = NULL;
+            TBranch *bInvarentMass    = NULL;
+            TBranch *benergy          = NULL;
         
-        TBranch *bPDG             = NULL;
-        TBranch *bevtID           = NULL;
-        TBranch *brunID           = NULL;
-        TBranch *bpx              = NULL;
-        TBranch *bpy              = NULL;
-        TBranch *bpz              = NULL;
-        TBranch *bInvarentMass    = NULL;
-        TBranch *benergy          = NULL;
-    }
-    else{
-        std::vector<Int_t>   *PDG             = 0;
-        std::vector<Int_t>   *evtID           = 0;
-        std::vector<Int_t>   *runID           = 0;
-        std::vector<Float_t> *px              = 0;
-        std::vector<Float_t> *py              = 0;
-        std::vector<Float_t> *pz              = 0;
-        std::vector<Float_t> *InvarentMass    = 0;
-        std::vector<Float_t> *energy          = 0;
-        
-        TBranch *bPDG             = 0;
-        TBranch *bevtID           = 0;
-        TBranch *brunID           = 0;
-        TBranch *bpx              = 0;
-        TBranch *bpy              = 0;
-        TBranch *bpz              = 0;
-        TBranch *bInvarentMass    = 0;
-        TBranch *benergy          = 0;
-    }
+        #else
+            std::vector<Int_t>   *PDG             = 0;
+            std::vector<Int_t>   *evtID           = 0;
+            std::vector<Int_t>   *runID           = 0;
+            std::vector<Float_t> *px              = 0;
+            std::vector<Float_t> *py              = 0;
+            std::vector<Float_t> *pz              = 0;
+            std::vector<Float_t> *InvarentMass    = 0;
+            std::vector<Float_t> *energy          = 0;
+            
+            TBranch *bPDG             = 0;
+            TBranch *bevtID           = 0;
+            TBranch *brunID           = 0;
+            TBranch *bpx              = 0;
+            TBranch *bpy              = 0;
+            TBranch *bpz              = 0;
+            TBranch *bInvarentMass    = 0;
+            TBranch *benergy          = 0;
+        #endif
+    #endif
     Int_t refMult,grefMult,PDGMult;
 
     Int_t kBinNum = 1000;
