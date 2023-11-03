@@ -94,12 +94,12 @@ void vMass()
     #endif
     Int_t refMult,grefMult,PDGMult;
 
-    Int_t kBinNum = 2500;
-    Float_t kmin = 0;
-    Float_t kmax = 5;
+    Int_t kBinNum = 4000;
+    Float_t kmin = 1;
+    Float_t kmax = 2;
 	const TString ParticleName[] = { "Lambda" , "Lambdab" , "Omega" };
 	const int ParticlePDG[]      = {   3122   ,   -3122   ,   3334  };
-    const float FitRange[3][2]   = { {1.0,1.2}, {1.0,1.2} ,{1.6,1.8}};
+    const float FitRange[3][2]   = { {1.11,1.122}, {1.11,1.122} ,{1.66,1.68}};
 	const int HSize = 3;
     // int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
 	TH1D *HMass[HSize];
@@ -123,7 +123,17 @@ void vMass()
     TChain *hadronTree = new TChain("hadronTree");
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
-    for(int i=1000;i <= 1050;i++){
+    // for(int i=1000;i <= 1050;i++){
+    //     TString filename = midname;
+    //     filename+="00";
+    //     filename+=i;
+    //     filename+=".root";
+    //     hadronTree->Add(filename);
+    //     // cout<<filename<<endl;
+    // }
+    
+
+    for(int i=1000;i <= 2991;i++){
         TString filename = midname;
         filename+="00";
         filename+=i;
@@ -131,7 +141,31 @@ void vMass()
         hadronTree->Add(filename);
         // cout<<filename<<endl;
     }
-    
+    for(int i=100;i <= 999;i++){
+        TString filename = midname;
+        filename+="000";
+        filename+=i;
+        filename+=".root";
+        hadronTree->Add(filename);
+        // cout<<filename<<endl;
+    }
+    for(int i=10;i <= 99;i++){
+        TString filename = midname;
+        filename+="0000";
+        filename+=i;
+        filename+=".root";
+        hadronTree->Add(filename);
+        // cout<<filename<<endl;
+    }
+    for(int i=0;i <= 9;i++){
+        TString filename = midname;
+        filename+="00000";
+        filename+=i;
+        filename+=".root";
+        hadronTree->Add(filename);
+        // cout<<filename<<endl;
+    }
+
     hadronTree->SetBranchAddress("Mult"          ,&PDGMult);
     hadronTree->SetBranchAddress("refMult"       ,&refMult);
     hadronTree->SetBranchAddress("grefMult"      ,&grefMult);
