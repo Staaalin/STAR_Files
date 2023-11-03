@@ -171,11 +171,11 @@ void vMass()
         FitName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
 		CanvasName1 += ParticleName[i];
-		HMass[i]->Write();
-		HMass[i]->Fit(FitName1,"R");
         CMass[i] = new TCanvas(CanvasName1,HistName2,400,300,5000,3000);
         CMass[i]->cd();
+		HMass[i]->Fit(FitName1,"R");
 		HMass[i]->Draw();
+		HMass[i]->Write();
 		CMass[i]->Write();
         CMass[i]->Close();
 	}
