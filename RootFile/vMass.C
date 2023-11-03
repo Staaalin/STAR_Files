@@ -113,7 +113,7 @@ void vMass()
 		HistName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
         FitName1 += ParticleName[i];
-		HMass.emplace_back(new TH1D(HistName1, HistName2, kBinNum, kmin, kmax));
+		HMass->emplace_back(new TH1D(HistName1, HistName2, kBinNum, kmin, kmax));
 		Vfit.emplace_back(new TF1(FitName1, "gaus", FitRange[i][0], FitRange[i][1]));
 		
 		HMass[i]->GetXaxis()->SetTitle("Mass [GeV]");
