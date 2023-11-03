@@ -103,7 +103,6 @@ void vMass()
 	const int HSize = 3;
     // int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
 	TH1D *HMass[HSize];
-    TH1D *HMass[HSize];
     TCanvas *CMass[HSize];
     TF1 *Vfit[HSize];
 	for (int i=0;i<HSize;i++){
