@@ -114,6 +114,7 @@ void readTree()
 	}
 
     //load data  
+    TChain *hadronTree = new TChain("hadronTree");
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
     for(int i=1000;i <= 2991;i++){
