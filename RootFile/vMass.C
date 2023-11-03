@@ -163,6 +163,7 @@ void vMass()
 
     }
 
+    TFile *file = new TFile("/star/u/svianping/STAR_Files/KFParticle4Lambda/output/CheckOutputM.root", "RECREATE");
     // Fit
     for (int i=0;i<HSize;i++){
         TString FitName1 = "FN";
@@ -180,7 +181,6 @@ void vMass()
         CMass[i]->Close();
 	}
 
-    TFile *file = new TFile("/star/u/svianping/STAR_Files/KFParticle4Lambda/output/CheckOutputM.root", "RECREATE");
 
 
 
