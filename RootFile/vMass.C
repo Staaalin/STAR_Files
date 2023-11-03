@@ -166,7 +166,9 @@ void vMass()
 
     // Fit
     for (int i=0;i<HSize;i++){
-		HMass[i]->Fit("fit","R");
+        TString FitName1 = "FN";
+        FitName1 += ParticleName[i];
+		HMass[i]->Fit(FitName1,"R");
         CMass[i] = new TCanvas();
 		HMass[i]->Draw();
 		HMass[i]->Write();
