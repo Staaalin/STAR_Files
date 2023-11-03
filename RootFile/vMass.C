@@ -173,10 +173,11 @@ void vMass()
 		HistName2 += ParticleName[i];
 		CanvasName1 += ParticleName[i];
 		HMass[i]->Fit(FitName1,"R");
-        CMass[i] = new TCanvas(CanvasName1,HistName2);
+        CMass[i] = new TCanvas(CanvasName1,HistName2,400,300);
 		HMass[i]->Draw();
 		HMass[i]->Write();
 		CMass[i]->Write();
+        CMass[i]->Close();
 	}
 
     TFile *file = new TFile("/star/u/svianping/STAR_Files/KFParticle4Lambda/output/CheckOutputM.root", "RECREATE");
