@@ -100,12 +100,12 @@ void vMass()
 	const TString ParticleName[] = { "Lambda" , "Lambdab" , "Omega" };
 	const int ParticlePDG[]      = {   3122   ,   -3122   ,   3334  };
     const float FitRange[3][2]   = { {1.0,1.2}, {1.0,1.2} ,{1.6,1.8}};
-	int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
-	// const int HSize = 3;
-	// TH1D *HMass[HSize];
-    std::vector<TH1D *>    HMass[HSize];
-    std::vector<TCanvas *> CMass[HSize];
-    std::vector<TF1 *> Vfit[HSize];
+	// int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
+	const int HSize = 3;
+	TH1D *HMass[HSize];
+    TH1D *HMass[HSize];
+    TCanvas *CMass[HSize];
+    TF1 *Vfit[HSize];
 	for (int i=0;i<HSize;i++){
 		TString HistName1 = "HM";
 		TString HistName2 = "The Mass of ";
@@ -113,8 +113,8 @@ void vMass()
 		HistName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
         FitName1 += ParticleName[i];
-		HMass->emplace_back(new TH1D(HistName1, HistName2, kBinNum, kmin, kmax));
-		Vfit.emplace_back(new TF1(FitName1, "gaus", FitRange[i][0], FitRange[i][1]));
+		HMass[i] = new TH1D(HistName1, HistName2, kBinNum, kmin, kmax);
+		Vfit[i] = new TF1(FitName1, "gaus", FitRange[i][0], FitRange[i][1]);
 		
 		HMass[i]->GetXaxis()->SetTitle("Mass [GeV]");
 		HMass[i]->GetYaxis()->SetTitle("Counts");
@@ -166,7 +166,7 @@ void vMass()
     // Fit
     for (int i=0;i<HSize;i++){
 		HMass[i]->Fit("fit","R");
-        CMass.emplace_back(new TCanvas());
+        CMass[i] = new TCanvas();
 		HMass[i]->Draw();
 		HMass[i]->Write();
 		CMass[i]->Write();
