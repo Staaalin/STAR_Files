@@ -169,6 +169,7 @@ void vMass()
         CMass.emplace_back(new TCanvas());
 		HMass[i]->Draw();
 		HMass[i]->Write();
+		CMass[i]->Write();
 	}
 
     TFile *file = new TFile("/star/u/svianping/STAR_Files/KFParticle4Lambda/output/CheckOutputM.root", "RECREATE");
