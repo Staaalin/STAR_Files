@@ -100,8 +100,8 @@ void vMass()
 	const TString ParticleName[] = { "Lambda" , "Lambdab" , "Omega" };
 	const int ParticlePDG[]      = {   3122   ,   -3122   ,   3334  };
     const float FitRange[3][2]   = { {1.0,1.2}, {1.0,1.2} ,{1.6,1.8}};
-	// int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
 	const int HSize = 3;
+    // int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
 	TH1D *HMass[HSize];
     TH1D *HMass[HSize];
     TCanvas *CMass[HSize];
@@ -167,9 +167,13 @@ void vMass()
     // Fit
     for (int i=0;i<HSize;i++){
         TString FitName1 = "FN";
+		TString HistName2 = "The Mass of ";
+        TString CanvasName1 = "Canvas-";
         FitName1 += ParticleName[i];
+		HistName2 += ParticleName[i];
+		CanvasName1 += ParticleName[i];
 		HMass[i]->Fit(FitName1,"R");
-        CMass[i] = new TCanvas();
+        CMass[i] = new TCanvas(CanvasName1,HistName2);
 		HMass[i]->Draw();
 		HMass[i]->Write();
 		CMass[i]->Write();
