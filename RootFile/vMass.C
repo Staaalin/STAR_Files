@@ -166,15 +166,14 @@ void vMass()
     // Fit
     for (int i=0;i<HSize;i++){
 		HMass[i]->Fit("fit","R");
-	}
-
-    TFile *file = new TFile("/star/u/svianping/STAR_Files/KFParticle4Lambda/output/CheckOutput.root", "RECREATE");
-
-
-	for (int i=0;i<HSize;i++){
-        CMass->emplace_back
+        CMass.emplace_back(new TCanvas());
+		HMass[i]->Draw();
 		HMass[i]->Write();
 	}
+
+    TFile *file = new TFile("/star/u/svianping/STAR_Files/KFParticle4Lambda/output/CheckOutputM.root", "RECREATE");
+
+
 
     file->Write();
 
