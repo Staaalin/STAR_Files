@@ -9,7 +9,7 @@ set SubXml=sub.xml
 if(-e $SubXml) rm $SubXml
 touch $SubXml
 
-set nFilePerJob=40
+set nFilePerJob=3 #40
 set nFileTotal=all
 
 # print xml file
