@@ -14,6 +14,6 @@ set trgsetupname=27GeV_production_2018
 set outList=run${nRun}List${energy}.list
 if(-e $outList)rm -r $outList
 
-#get_file_list.pl -keys 'runnumber' -delim '/' -cond 'production=P19ib,filetype=daq_reco_PicoDst,trgsetupname=27GeV_production_2018,tpx=1,filename~st_physics,sanity=1,storage!=hpss' -limit 0 > $outList
-get_file_list.pl -keys 'runnumber' -delim '/' -cond "production=$production,filetype=daq_reco_PicoDst,trgsetupname~$trgsetupname,runnumber[]19130060-19268002,sanity=1,tpx=1,storage!=hpss,filename~st_physics" -limit 0 > $outList
+# #get_file_list.pl -keys 'runnumber' -delim '/' -cond 'production=P19ib,filetype=daq_reco_PicoDst,trgsetupname=27GeV_production_2018,tpx=1,filename~st_physics,sanity=1,storage!=hpss' -limit 0 > $outList
+# get_file_list.pl -keys 'runnumber' -delim '/' -cond "production=$production,filetype=daq_reco_PicoDst,trgsetupname~$trgsetupname,runnumber[]19130060-19268002,sanity=1,tpx=1,storage!=hpss,filename~st_physics" -limit 0 > $outList
 
