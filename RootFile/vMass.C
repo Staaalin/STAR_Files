@@ -132,39 +132,47 @@ void vMass()
     //     // cout<<filename<<endl;
     // }
     
+    for(int i=25749;i <= 25848;i++){
+        TString filename = midname;
+        filename+="0";
+        filename+=i;
+        filename+=".root";
+        hadronTree->Add(filename);
+        // cout<<filename<<endl;
+    }
 
-    for(int i=1000;i <= 2991;i++){
-        TString filename = midname;
-        filename+="00";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=100;i <= 999;i++){
-        TString filename = midname;
-        filename+="000";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=10;i <= 99;i++){
-        TString filename = midname;
-        filename+="0000";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=0;i <= 9;i++){
-        TString filename = midname;
-        filename+="00000";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
+    // for(int i=1000;i <= 2991;i++){
+    //     TString filename = midname;
+    //     filename+="00";
+    //     filename+=i;
+    //     filename+=".root";
+    //     hadronTree->Add(filename);
+    //     // cout<<filename<<endl;
+    // }
+    // for(int i=100;i <= 999;i++){
+    //     TString filename = midname;
+    //     filename+="000";
+    //     filename+=i;
+    //     filename+=".root";
+    //     hadronTree->Add(filename);
+    //     // cout<<filename<<endl;
+    // }
+    // for(int i=10;i <= 99;i++){
+    //     TString filename = midname;
+    //     filename+="0000";
+    //     filename+=i;
+    //     filename+=".root";
+    //     hadronTree->Add(filename);
+    //     // cout<<filename<<endl;
+    // }
+    // for(int i=0;i <= 9;i++){
+    //     TString filename = midname;
+    //     filename+="00000";
+    //     filename+=i;
+    //     filename+=".root";
+    //     hadronTree->Add(filename);
+    //     // cout<<filename<<endl;
+    // }
 
     hadronTree->SetBranchAddress("Mult"          ,&PDGMult);
     hadronTree->SetBranchAddress("refMult"       ,&refMult);
