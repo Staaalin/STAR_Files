@@ -174,7 +174,7 @@ void vMass()
     //     // cout<<filename<<endl;
     // }
 
-    hadronTree->SetBranchAddress("Mult"          ,&PDGMult);
+    hadronTree->SetBranchAddress("PDGMult"       ,&PDGMult);
     hadronTree->SetBranchAddress("refMult"       ,&refMult);
     hadronTree->SetBranchAddress("grefMult"      ,&grefMult);
     hadronTree->SetBranchAddress("PDG"           ,&PDG          ,&bPDG         );
