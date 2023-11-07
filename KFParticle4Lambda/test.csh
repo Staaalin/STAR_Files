@@ -15,4 +15,5 @@ echo $mEnergy $nRun
 set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/$mEnergy.list.`printf "%.6d" ${iJob}`
 #set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/test.list
 
-root4star -b -q ./readPicoDst.C\(\"$FILELIST\",$iJob,$nRun,$mEnergy,\"$ListDir\"\)
+# root4star -b -q ./readPicoDst.C\(\"$FILELIST\",$iJob,$nRun,$mEnergy,\"$ListDir\"\)
+/afs/rhic.bnl.gov/star/packages/SL23c/.sl73_gcc485/bin/root4star -b -q ./readPicoDst.C\(\"$FILELIST\",$iJob,$nRun,$mEnergy,\"$ListDir\"\)
