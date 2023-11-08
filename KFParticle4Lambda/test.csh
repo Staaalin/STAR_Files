@@ -1,5 +1,6 @@
 #!/bin/csh
 #starver SL19b
+starver DEV
 
 # inputs
 set iJob=$1
