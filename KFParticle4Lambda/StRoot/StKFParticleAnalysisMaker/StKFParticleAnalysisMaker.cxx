@@ -311,7 +311,7 @@ void StKFParticleAnalysisMaker::Clear(Option_t *opt) {
 //----------------------------------------------------------------------------- 
 Int_t StKFParticleAnalysisMaker::Make() 
 {
-    	PicoDst = StPicoDst::instance(); 		
+	PicoDst = StPicoDst::instance(); 		
 	StPicoDst* mPicoDst = PicoDst;
 	if(!mPicoDst) {
 		LOG_WARN << " No PicoDst! Skip! " << endm;
@@ -458,6 +458,22 @@ Int_t StKFParticleAnalysisMaker::Make()
 		StLambdaDecayPair TmpLambdaDecayPair(p4Pair, p4Proton, ProtonTrackIndex, PionTrackIndex, (eLambda==0), dmass);
 		KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 	} // End loop over KFParticles
+
+	Int_t nTracks = mPicoDst->numberOfTracks();
+	std::vector<int> Particle_tracks; Particle_tracks.resize(0);
+	std::vector<int> track_index;
+	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
+		StPicoTrack *track = mPicoDst->track(iTrack);
+    	if (! track)            continue;
+    	if (! track->charge())  continue;
+    	if (  track->nHitsFit() < 15) continue;
+		if (  track->nHitsDedx() < 15) continue;
+		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
+		//if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
+		if (! track->isPrimary()) continue;
+		track_index.push_back(iTrack);
+	}
+
 // ======= KFParticle end ======= //
 
 // ======= Lambda loop ======= //
