@@ -472,6 +472,24 @@ Int_t StKFParticleAnalysisMaker::Make()
 		//if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
 		if (! track->isPrimary()) continue;
 		track_index.push_back(iTrack);
+
+		// track info
+		float p = track->gMom().Mag();
+		float pt = track->gMom().Perp();
+		float phi = track->gMom().Phi();
+		float eta = track->gMom().Eta();
+		float dcatopv = track->gDCA(Vertex3D).Mag();
+		float nSigmaKaon = track->nSigmaKaon();
+		float nSigmaPion = track->nSigmaPion();
+		float nSigmaProton = track->nSigmaProton();
+		float pt_prim = track->pMom().Perp();
+		float phi_prim = track->pMom().Phi();
+		float eta_prim = track->pMom().Eta();
+
+		bool pion_cut = true;
+		ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
+		if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
+
 	}
 
 // ======= KFParticle end ======= //
