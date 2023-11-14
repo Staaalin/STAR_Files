@@ -486,9 +486,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 		float phi_prim = track->pMom().Phi();
 		float eta_prim = track->pMom().Eta();
 
-		bool pion_cut = true;
+		bool proton_cut = true;
 		ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
 		if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
+		if (proton_cut) {
+			px.emplace_back(track->gMom().X());
+			py.emplace_back(track->gMom().Y());
+			pz.emplace_back(track->gMom().Z());
+		}
 
 	}
 
