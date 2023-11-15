@@ -417,6 +417,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	SetupKFParticle();
 	if (InterfaceCantProcessEvent) return;
+	CrefMult = refMult;CgrefMult = grefMult;
 	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvariantMass.resize(0);
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		const KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
@@ -424,12 +425,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if(fabs(particle.GetPDG()) == LambdaPdg || 
 		   fabs(particle.GetPDG()) == OmegaPdg)
 		{
-			CrefMult  = refMult;
 			#ifdef DEBUGGING
 			std::cout << "Parsing refMult : " << refMult <<std::endl;
 			std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 			#endif
-			CgrefMult = grefMult;
 			PDG.emplace_back(particle.GetPDG());
 			// helix
 			TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
@@ -486,10 +485,36 @@ Int_t StKFParticleAnalysisMaker::Make()
 		float phi_prim = track->pMom().Phi();
 		float eta_prim = track->pMom().Eta();
 
+		bool IfRecordThisTrack = false;
 		bool proton_cut = true;
 		ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
 		if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
 		if (proton_cut) {
+			IfRecordThisTrack = true;
+			if (track->charge() > 0) {PDG.emplace_back( 2212);}
+			else                     {PDG.emplace_back(-2212);}
+			InvariantMass.emplace_back(ProtonPdgMass);
+		}
+		bool kaon_cut = true;
+		PionPID kaon_pid(0., nSigmaPion, pt); // not using zTOF
+		if (!kaon_pid.IsPionSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
+		if (kaon_cut) {
+			IfRecordThisTrack = true;
+			if (track->charge() > 0) {PDG.emplace_back( 211);}
+			else                     {PDG.emplace_back(-211);}
+			InvariantMass.emplace_back(PionPdgMass);
+		}
+		bool kaon_cut = true;
+		KaonPID kaon_pid(0., nSigmaKaon, pt); // not using zTOF
+		if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
+		if (kaon_cut) {
+			IfRecordThisTrack = true;
+			if (track->charge() > 0) {PDG.emplace_back( 321);}
+			else                     {PDG.emplace_back(-321);}
+			InvariantMass.emplace_back(KaonPdgMass);
+		}
+
+		if (IfRecordThisTrack == true) {
 			px.emplace_back(track->gMom().X());
 			py.emplace_back(track->gMom().Y());
 			pz.emplace_back(track->gMom().Z());
