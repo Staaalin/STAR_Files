@@ -102,6 +102,7 @@ void readTree()
 	// const int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
 	const int HSize = 3;
 	TH1D *HMass[HSize];
+	TH1D *HP[HSize];
 	for (int i=0;i<HSize;i++){
 		TString HistName1 = "HM";
 		TString HistName2 = "The Mass of ";
