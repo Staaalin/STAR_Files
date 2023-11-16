@@ -24,6 +24,9 @@
 #include "KFParticleTopoReconstructor.h"
 #include "StKFParticleInterface.h"
 #include "StKFParticlePerformanceInterface.h"
+#include "KaonPID.h"
+#include "ProtonPID.h"
+#include "PionPID.h"
 
 #include "StTrackHelix.h"
 #include "StLambdaDecayPair.h"
