@@ -413,7 +413,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	///////////////
 
 // ======= KFParticle ======= //
-	vector<StLambdaDecayPair> KFParticleLambdaDecayPair;
+	std::vector<StLambdaDecayPair> KFParticleLambdaDecayPair;
+	std::vector<KFParticle> KFParticleVec;
 
 	SetupKFParticle();
 	if (InterfaceCantProcessEvent) return;
@@ -441,6 +442,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.emplace_back(MomentumOfParticle_tb.Y());
 			pz.emplace_back(MomentumOfParticle_tb.Z());
 			InvariantMass.emplace_back(OmegaLorentz.M());
+			KFParticleVec.push_back(particle);
 			// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 			
 		}
@@ -495,10 +497,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 			else                     {PDG.emplace_back(-2212);}
 			InvariantMass.emplace_back(ProtonPdgMass);
 		}
-		bool kaon_cut = true;
-		PionPID kaon_pid(0., nSigmaPion, pt); // not using zTOF
-		if (!kaon_pid.IsPionSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
-		if (kaon_cut) {
+		bool pion_cut = true;
+		PionPID pion_pid(0., nSigmaPion, pt); // not using zTOF
+		if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < pt < 2.0!!!
+		if (pion_cut) {
 			IfRecordThisTrack = true;
 			if (track->charge() > 0) {PDG.emplace_back( 211);}
 			else                     {PDG.emplace_back(-211);}
@@ -507,6 +509,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		bool kaon_cut = true;
 		KaonPID kaon_pid(0., nSigmaKaon, pt); // not using zTOF
 		if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
+		// for (int i = 0; i < KFParticleVec.size(); i++) if (IsKaonOmegaDaughter(KFParticleVec[i], track->id())) kaon_cut = false;
 		if (kaon_cut) {
 			IfRecordThisTrack = true;
 			if (track->charge() > 0) {PDG.emplace_back( 321);}
@@ -671,3 +674,18 @@ void StKFParticleAnalysisMaker::SetDaughterTrackPointers(int iKFParticle){ // Ge
 	}  // iDaughter
 	ProtonTrack = PicoDst->track(ProtonTrackIndex); PionTrack = PicoDst->track(PionTrackIndex);	
 } // void SetDaughterTrackPointers
+
+bool StKFParticleAnalysisMaker::IsKaonOmegaDaughter(KFParticle particle, int kaonTrackId)
+{
+	if (fabs(particle.GetPDG()) != OmegaPdg) return false;
+	for(int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
+	{ 
+		const int daughterId = particle.DaughterIds()[iDaughter]; 
+		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
+		if (fabs(daughter.GetPDG()) != KaonPdg) continue;
+		const int globalTrackId = daughter.DaughterIds()[0];
+		
+		if (globalTrackId == kaonTrackId) return true;
+	}  // iDaughter
+	return false;
+}
