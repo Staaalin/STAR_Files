@@ -491,33 +491,42 @@ Int_t StKFParticleAnalysisMaker::Make()
 		float eta_prim = track->pMom().Eta();
 
 		bool IfRecordThisTrack = false;
-		bool proton_cut = true;
-		ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
-		if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
-		if (proton_cut) {
-			IfRecordThisTrack = true;
-			if (track->charge() > 0) {PDG.emplace_back( 2212);}
-			else                     {PDG.emplace_back(-2212);}
-			InvariantMass.emplace_back(ProtonPdgMass);
+
+		if(!IfRecordThisTrack){
+			bool proton_cut = true;
+			ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
+			if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
+			if (proton_cut) {
+				IfRecordThisTrack = true;
+				if (track->charge() > 0) {PDG.emplace_back( 2212);}
+				else                     {PDG.emplace_back(-2212);}
+				InvariantMass.emplace_back(ProtonPdgMass);
+			}
 		}
-		bool pion_cut = true;
-		PionPID pion_pid(0., nSigmaPion, pt); // not using zTOF
-		if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < pt < 2.0!!!
-		if (pion_cut) {
-			IfRecordThisTrack = true;
-			if (track->charge() > 0) {PDG.emplace_back( 211);}
-			else                     {PDG.emplace_back(-211);}
-			InvariantMass.emplace_back(PionPdgMass);
+
+		if(!IfRecordThisTrack){
+			bool pion_cut = true;
+			PionPID pion_pid(0., nSigmaPion, pt); // not using zTOF
+			if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < pt < 2.0!!!
+			if (pion_cut) {
+				IfRecordThisTrack = true;
+				if (track->charge() > 0) {PDG.emplace_back( 211);}
+				else                     {PDG.emplace_back(-211);}
+				InvariantMass.emplace_back(PionPdgMass);
+			}
 		}
-		bool kaon_cut = true;
-		KaonPID kaon_pid(0., nSigmaKaon, pt); // not using zTOF
-		if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
-		// for (int i = 0; i < KFParticleVec.size(); i++) if (IsKaonOmegaDaughter(KFParticleVec[i], track->id())) kaon_cut = false;
-		if (kaon_cut) {
-			IfRecordThisTrack = true;
-			if (track->charge() > 0) {PDG.emplace_back( 321);}
-			else                     {PDG.emplace_back(-321);}
-			InvariantMass.emplace_back(KaonPdgMass);
+		
+		if(!IfRecordThisTrack){
+			bool kaon_cut = true;
+			KaonPID kaon_pid(0., nSigmaKaon, pt); // not using zTOF
+			if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
+			// for (int i = 0; i < KFParticleVec.size(); i++) if (IsKaonOmegaDaughter(KFParticleVec[i], track->id())) kaon_cut = false;
+			if (kaon_cut) {
+				IfRecordThisTrack = true;
+				if (track->charge() > 0) {PDG.emplace_back( 321);}
+				else                     {PDG.emplace_back(-321);}
+				InvariantMass.emplace_back(KaonPdgMass);
+			}
 		}
 
 		if (IfRecordThisTrack == true) {
