@@ -182,6 +182,7 @@ void readTree()
     cout << "entries number: " << nentries << endl;
     
     //read data
+    int ReadedEntries = 0 , ReadedPercent = 0;
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
 
@@ -205,6 +206,12 @@ void readTree()
 				}
 			}
 		}
+
+        if((i-ReadedEntries)>nentries/20){
+            ReadedEntries+=nentries/20;
+            ReadedPercent+=5;
+            cout<<ReadedPercent<<"%"<<" events finish"<<endl;
+        }
 
     }
 
