@@ -188,7 +188,7 @@ void readTree()
         if (PDGMult != PDG[0].size()){
             cout<<"Warning! PDGMult = "<<PDGMult<<", but PDG[0].size() = "<<PDG[0].size()<<endl;
         }
-		for (int j=0;j<PDGMult;j++){
+		for (int j=0;j<PDG[0].size();j++){
 			for (int k=0;k<HSize;k++){
 				if(PDG->at(j) == ParticlePDG[k]){
                     TLorentzVector p0;
