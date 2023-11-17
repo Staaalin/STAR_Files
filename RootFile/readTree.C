@@ -168,14 +168,14 @@ void readTree()
     // }
     hadronTree->Add("/star/u/svianping/STAR_Files/KFParticle4Lambda/output_999997.root");
     
-    hadronTree->SetBranchAddress("Mult"          ,&PDGMult);
+    hadronTree->SetBranchAddress("PDGMult"       ,&PDGMult);
     hadronTree->SetBranchAddress("refMult"       ,&refMult);
     hadronTree->SetBranchAddress("grefMult"      ,&grefMult);
     hadronTree->SetBranchAddress("PDG"           ,&PDG          ,&bPDG         );
     hadronTree->SetBranchAddress("mix_px"        ,&px           ,&bpx          );
     hadronTree->SetBranchAddress("mix_py"        ,&py           ,&bpy          );
     hadronTree->SetBranchAddress("mix_pz"        ,&pz           ,&bpz          );
-    hadronTree->SetBranchAddress("InvarentMass"  ,&InvarentMass ,&bInvarentMass);
+    hadronTree->SetBranchAddress("InvariantMass"  ,&InvariantMass ,&bInvariantMass);
     // hadronTree->SetBranchAddress("energy"        ,&energy       ,&benergy      );
 
     const Int_t nentries=hadronTree->GetEntries();
@@ -192,10 +192,10 @@ void readTree()
 			for (int k=0;k<HSize;k++){
 				if(PDG->at(j) == ParticlePDG[k]){
                     TLorentzVector p0;
-                    p0.SetPxPyPzE(px->at(j),py->at(j),pz->at(j),pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2) + pow(InvarentMass->at(j),2),0.5));
+                    p0.SetPxPyPzE(px->at(j),py->at(j),pz->at(j),pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2) + pow(InvariantMass->at(j),2),0.5));
                     float rap = p0.Rapidity();
 
-					HMass[k]->Fill(InvarentMass->at(j));
+					HMass[k]->Fill(InvariantMass->at(j));
 					HP[k]->Fill(pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2),0.5));
 					HRapdity[k]->Fill(rap);
 					break;

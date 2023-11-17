@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "readTree.C": "cpp"
+        "readTree.C": "cpp",
+        "vMass.C": "cpp"
     }
 }
