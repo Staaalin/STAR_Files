@@ -194,9 +194,9 @@ void readTree()
 		for (int j=0;j<PDGMult;j++){
 			for (int k=0;k<HSize;k++){
 				if(PDG->at(j) == ParticlePDG[k]){
-                    TLorentzVector p0; cout<<"Line 194 finish"<<endl;
+                    TLorentzVector p0;
                     p0.SetPxPyPzE(px->at(j),py->at(j),pz->at(j),pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2) + pow(InvariantMass->at(j),2),0.5));
-                    float rap = p0.Rapidity();  cout<<"Line 196 finish"<<endl;
+                    float rap = p0.Rapidity();
 
 					HMass[k]->Fill(InvariantMass->at(j));
 					HP[k]->Fill(pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2),0.5));
