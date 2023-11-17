@@ -40,7 +40,7 @@ void readTree()
         std::vector<Float_t> *px              = nullptr;
         std::vector<Float_t> *py              = nullptr;
         std::vector<Float_t> *pz              = nullptr;
-        std::vector<Float_t> *InvarentMass    = nullptr;
+        std::vector<Float_t> *InvariantMass    = nullptr;
         std::vector<Float_t> *energy          = nullptr;
         
         TBranch *bPDG             = nullptr;
@@ -49,7 +49,7 @@ void readTree()
         TBranch *bpx              = nullptr;
         TBranch *bpy              = nullptr;
         TBranch *bpz              = nullptr;
-        TBranch *bInvarentMass    = nullptr;
+        TBranch *bInvariantMass    = nullptr;
         TBranch *benergy          = nullptr;
     
     #else
@@ -60,7 +60,7 @@ void readTree()
             std::vector<Float_t> *px              = NULL;
             std::vector<Float_t> *py              = NULL;
             std::vector<Float_t> *pz              = NULL;
-            std::vector<Float_t> *InvarentMass    = NULL;
+            std::vector<Float_t> *InvariantMass    = NULL;
             std::vector<Float_t> *energy          = NULL;
             
             TBranch *bPDG             = NULL;
@@ -69,7 +69,7 @@ void readTree()
             TBranch *bpx              = NULL;
             TBranch *bpy              = NULL;
             TBranch *bpz              = NULL;
-            TBranch *bInvarentMass    = NULL;
+            TBranch *bInvariantMass    = NULL;
             TBranch *benergy          = NULL;
         
         #else
@@ -79,7 +79,7 @@ void readTree()
             std::vector<Float_t> *px              = 0;
             std::vector<Float_t> *py              = 0;
             std::vector<Float_t> *pz              = 0;
-            std::vector<Float_t> *InvarentMass    = 0;
+            std::vector<Float_t> *InvariantMass    = 0;
             std::vector<Float_t> *energy          = 0;
             
             TBranch *bPDG             = 0;
@@ -88,7 +88,7 @@ void readTree()
             TBranch *bpx              = 0;
             TBranch *bpy              = 0;
             TBranch *bpz              = 0;
-            TBranch *bInvarentMass    = 0;
+            TBranch *bInvariantMass    = 0;
             TBranch *benergy          = 0;
         #endif
     #endif
