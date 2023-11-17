@@ -197,7 +197,7 @@ void readTree()
 
 					HMass[k]->Fill(InvarentMass->at(j));
 					HP[k]->Fill(pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2),0.5));
-					HRapdity[k]->Fill(rap->at(j));
+					HRapdity[k]->Fill(rap);
 					break;
 				}
 			}
