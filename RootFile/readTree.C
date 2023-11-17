@@ -97,59 +97,76 @@ void readTree()
     Int_t kBinNum = 1000;
     Float_t kmin = 0;
     Float_t kmax = 10;
-	const TString ParticleName[] = { "Lambda" , "Lambdab" , "Omega" };
-	const int ParticlePDG[]      = {   3122   ,   -3122   ,   3334  };
+	const TString ParticleName[] = { "Lambda" , "Lambdab" , "Omega"  , "Proton"  , "Protonb" , "Pion" , "Pionb"  , "Kaon" , "Kaonb" };
+	const int ParticlePDG[]      = {   3122   ,   -3122   ,   3334   ,   2212    ,  -2212    ,  211   ,  -211    ,  321   ,  -321   };
 	// const int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
-	const int HSize = 3;
+	const int HSize = 9;
 	TH1D *HMass[HSize];
 	TH1D *HP[HSize];
+	TH1D *HRapdity[HSize];
 	for (int i=0;i<HSize;i++){
 		TString HistName1 = "HM";
 		TString HistName2 = "The Mass of ";
 		HistName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
 		HMass[i] = new TH1D(HistName1, HistName2, kBinNum, kmin, kmax);
-		
 		HMass[i]->GetXaxis()->SetTitle("Mass [GeV]");
 		HMass[i]->GetYaxis()->SetTitle("Counts");
+        
+		TString HistName1 = "HP";
+		TString HistName2 = "The Momuntum of ";
+		HistName1 += ParticleName[i];
+		HistName2 += ParticleName[i];
+		HP[i] = new TH1D(HistName1, HistName2, kBinNum/10, kmin, kmax);
+		HP[i]->GetXaxis()->SetTitle("Momuntum [GeV]");
+		HP[i]->GetYaxis()->SetTitle("Counts");
+        
+		TString HistName1 = "HRapdity";
+		TString HistName2 = "The Rapdity of ";
+		HistName1 += ParticleName[i];
+		HistName2 += ParticleName[i];
+		HRapdity[i] = new TH1D(HistName1, HistName2, 30, -1.5, 1.5);
+		HRapdity[i]->GetXaxis()->SetTitle("y");
+		HRapdity[i]->GetYaxis()->SetTitle("Counts");
 	}
 
     //load data  
     TChain *hadronTree = new TChain("hadronTree");
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
-    for(int i=1000;i <= 2991;i++){
-        TString filename = midname;
-        filename+="00";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=100;i <= 999;i++){
-        TString filename = midname;
-        filename+="000";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=10;i <= 99;i++){
-        TString filename = midname;
-        filename+="0000";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=0;i <= 9;i++){
-        TString filename = midname;
-        filename+="00000";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
+    // for(int i=1000;i <= 2991;i++){
+    //     TString filename = midname;
+    //     filename+="00";
+    //     filename+=i;
+    //     filename+=".root";
+    //     hadronTree->Add(filename);
+    //     // cout<<filename<<endl;
+    // }
+    // for(int i=100;i <= 999;i++){
+    //     TString filename = midname;
+    //     filename+="000";
+    //     filename+=i;
+    //     filename+=".root";
+    //     hadronTree->Add(filename);
+    //     // cout<<filename<<endl;
+    // }
+    // for(int i=10;i <= 99;i++){
+    //     TString filename = midname;
+    //     filename+="0000";
+    //     filename+=i;
+    //     filename+=".root";
+    //     hadronTree->Add(filename);
+    //     // cout<<filename<<endl;
+    // }
+    // for(int i=0;i <= 9;i++){
+    //     TString filename = midname;
+    //     filename+="00000";
+    //     filename+=i;
+    //     filename+=".root";
+    //     hadronTree->Add(filename);
+    //     // cout<<filename<<endl;
+    // }
+    hadronTree->Add("/star/u/svianping/STAR_Files/KFParticle4Lambda/output_999997.root");
     
     hadronTree->SetBranchAddress("Mult"          ,&PDGMult);
     hadronTree->SetBranchAddress("refMult"       ,&refMult);
@@ -174,7 +191,13 @@ void readTree()
 		for (int j=0;j<PDGMult;j++){
 			for (int k=0;k<HSize;k++){
 				if(PDG->at(j) == ParticlePDG[k]){
+                    TLorentzVector p0;
+                    p0.SetPxPyPzE(px->at(j),py->at(j),pz->at(j),pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2) + pow(InvarentMass->at(j),2),0.5));
+                    float rap = p0.Rapidity();
+
 					HMass[k]->Fill(InvarentMass->at(j));
+					HP[k]->Fill(pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2),0.5));
+					HRapdity[k]->Fill(rap->at(j));
 					break;
 				}
 			}
@@ -187,6 +210,8 @@ void readTree()
 
 	for (int i=0;i<HSize;i++){
 		HMass[i]->Write();
+		HP[i]->Write();
+		HRapdity[i]->Write();
 	}
 
     file->Write();
