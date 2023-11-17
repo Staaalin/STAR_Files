@@ -40,7 +40,7 @@ void readTree()
         std::vector<Float_t> *px              = nullptr;
         std::vector<Float_t> *py              = nullptr;
         std::vector<Float_t> *pz              = nullptr;
-        std::vector<Float_t> *InvariantMass    = nullptr;
+        std::vector<Float_t> *InvariantMass   = nullptr;
         std::vector<Float_t> *energy          = nullptr;
         
         TBranch *bPDG             = nullptr;
@@ -49,7 +49,7 @@ void readTree()
         TBranch *bpx              = nullptr;
         TBranch *bpy              = nullptr;
         TBranch *bpz              = nullptr;
-        TBranch *bInvariantMass    = nullptr;
+        TBranch *bInvariantMass   = nullptr;
         TBranch *benergy          = nullptr;
     
     #else
@@ -60,7 +60,7 @@ void readTree()
             std::vector<Float_t> *px              = NULL;
             std::vector<Float_t> *py              = NULL;
             std::vector<Float_t> *pz              = NULL;
-            std::vector<Float_t> *InvariantMass    = NULL;
+            std::vector<Float_t> *InvariantMass   = NULL;
             std::vector<Float_t> *energy          = NULL;
             
             TBranch *bPDG             = NULL;
@@ -69,7 +69,7 @@ void readTree()
             TBranch *bpx              = NULL;
             TBranch *bpy              = NULL;
             TBranch *bpz              = NULL;
-            TBranch *bInvariantMass    = NULL;
+            TBranch *bInvariantMass   = NULL;
             TBranch *benergy          = NULL;
         
         #else
@@ -79,7 +79,7 @@ void readTree()
             std::vector<Float_t> *px              = 0;
             std::vector<Float_t> *py              = 0;
             std::vector<Float_t> *pz              = 0;
-            std::vector<Float_t> *InvariantMass    = 0;
+            std::vector<Float_t> *InvariantMass   = 0;
             std::vector<Float_t> *energy          = 0;
             
             TBranch *bPDG             = 0;
@@ -88,7 +88,7 @@ void readTree()
             TBranch *bpx              = 0;
             TBranch *bpy              = 0;
             TBranch *bpz              = 0;
-            TBranch *bInvariantMass    = 0;
+            TBranch *bInvariantMass   = 0;
             TBranch *benergy          = 0;
         #endif
     #endif
@@ -179,7 +179,7 @@ void readTree()
     // hadronTree->SetBranchAddress("energy"        ,&energy       ,&benergy      );
 
     const Int_t nentries=hadronTree->GetEntries();
-    cout << "file number: " << nentries << endl;
+    cout << "entries number: " << nentries << endl;
     
     //read data
     for (int i=0;i<nentries;i++){
@@ -188,12 +188,12 @@ void readTree()
         if (PDGMult != PDG[0].size()){
             cout<<"Warning! PDGMult = "<<PDGMult<<", but PDG[0].size() = "<<PDG[0].size()<<endl;
         }
-		for (int j=0;j<PDG[0].size();j++){
+		for (int j=0;j<PDGMult;j++){
 			for (int k=0;k<HSize;k++){
 				if(PDG->at(j) == ParticlePDG[k]){
-                    TLorentzVector p0;
+                    TLorentzVector p0; cout<<"Line 194 finish"<<endl;
                     p0.SetPxPyPzE(px->at(j),py->at(j),pz->at(j),pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2) + pow(InvariantMass->at(j),2),0.5));
-                    float rap = p0.Rapidity();
+                    float rap = p0.Rapidity();  cout<<"Line 196 finish"<<endl;
 
 					HMass[k]->Fill(InvariantMass->at(j));
 					HP[k]->Fill(pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2),0.5));
