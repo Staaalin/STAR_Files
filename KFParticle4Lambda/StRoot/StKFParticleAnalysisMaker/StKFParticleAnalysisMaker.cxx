@@ -446,7 +446,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			pz.emplace_back(MomentumOfParticle_tb.Z());
 			InvariantMass.emplace_back(OmegaLorentz.M());
 			KFParticleVec.push_back(particle);
-			// cout<<"PDG:"<<particle.GetPDG()<<endl; 
+			cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
 			
 		}
 		// cout<<"CrefMult:"<<CrefMult<<endl;
