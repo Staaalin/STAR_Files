@@ -419,6 +419,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	std::vector<StLambdaDecayPair> KFParticleLambdaDecayPair;
 	std::vector<KFParticle> KFParticleVec;
 
+	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
+
 	SetupKFParticle();
 	if (InterfaceCantProcessEvent) return;
 	CrefMult = refMult;CgrefMult = grefMult;
@@ -446,7 +448,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			pz.emplace_back(MomentumOfParticle_tb.Z());
 			InvariantMass.emplace_back(OmegaLorentz.M());
 			KFParticleVec.push_back(particle);
-			cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
+			// cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
 			
 		}
 		// cout<<"CrefMult:"<<CrefMult<<endl;
@@ -497,6 +499,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
 			if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
 			if (fabs(nSigmaProton) > 2) proton_cut = false;
+			if (dcatopv > dcatoPV_hi) proton_cut = false;
 			if (proton_cut) {
 				IfRecordThisTrack = true;
 				if (track->charge() > 0) {PDG.emplace_back( 2212);}
@@ -510,6 +513,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			PionPID pion_pid(0., nSigmaPion, pt); // not using zTOF
 			if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < pt < 2.0!!!
 			if (fabs(nSigmaPion) > 2) pion_cut = false;
+			if (dcatopv > dcatoPV_hi) pion_cut = false;
 			if (pion_cut) {
 				IfRecordThisTrack = true;
 				if (track->charge() > 0) {PDG.emplace_back( 211);}
@@ -523,7 +527,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 			KaonPID kaon_pid(0., nSigmaKaon, pt); // not using zTOF
 			if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
 			if (fabs(nSigmaKaon) > 2) kaon_cut = false;
-			// for (int i = 0; i < KFParticleVec.size(); i++) if (IsKaonOmegaDaughter(KFParticleVec[i], track->id())) kaon_cut = false;
+			if (dcatopv > 2.0) kaon_cut = false;
+			for (int i = 0; i < KFParticleVec.size(); i++) if (IsKaonOmegaDaughter(KFParticleVec[i], track->id())) kaon_cut = false;
 			if (kaon_cut) {
 				IfRecordThisTrack = true;
 				if (track->charge() > 0) {PDG.emplace_back( 321);}
