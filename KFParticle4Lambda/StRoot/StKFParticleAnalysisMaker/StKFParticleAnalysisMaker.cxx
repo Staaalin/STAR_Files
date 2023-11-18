@@ -491,8 +491,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		float eta_prim = track->pMom().Eta();
 
 		bool IfRecordThisTrack = false;
-
-		if(!IfRecordThisTrack){
+		if (nSigmaProton < nSigmaKaon && nSigmaProton < nSigmaPion) // More likely be Proton
+		{
 			bool proton_cut = true;
 			ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
 			if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
@@ -503,8 +503,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				InvariantMass.emplace_back(ProtonPdgMass);
 			}
 		}
-
-		if(!IfRecordThisTrack){
+		else if (nSigmaPion < nSigmaKaon && nSigmaPion < nSigmaProton) // More likely be Pion
+		{
 			bool pion_cut = true;
 			PionPID pion_pid(0., nSigmaPion, pt); // not using zTOF
 			if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < pt < 2.0!!!
@@ -515,8 +515,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				InvariantMass.emplace_back(PionPdgMass);
 			}
 		}
-		
-		if(!IfRecordThisTrack){
+		else if (nSigmaKaon < nSigmaPion && nSigmaKaon < nSigmaProton) // More likely be Kaon
+		{
 			bool kaon_cut = true;
 			KaonPID kaon_pid(0., nSigmaKaon, pt); // not using zTOF
 			if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
