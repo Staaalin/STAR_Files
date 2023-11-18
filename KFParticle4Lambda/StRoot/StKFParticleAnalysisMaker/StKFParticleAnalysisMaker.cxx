@@ -491,11 +491,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 		float eta_prim = track->pMom().Eta();
 
 		bool IfRecordThisTrack = false;
-		if (nSigmaProton < nSigmaKaon && nSigmaProton < nSigmaPion) // More likely be Proton
+		if (fabs(nSigmaProton) < fabs(nSigmaKaon) && fabs(nSigmaProton) < fabs(nSigmaPion)) // More likely be Proton
 		{
 			bool proton_cut = true;
 			ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
 			if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
+			if (fabs(nSigmaProton) > 2) proton_cut = false;
 			if (proton_cut) {
 				IfRecordThisTrack = true;
 				if (track->charge() > 0) {PDG.emplace_back( 2212);}
@@ -503,11 +504,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 				InvariantMass.emplace_back(ProtonPdgMass);
 			}
 		}
-		else if (nSigmaPion < nSigmaKaon && nSigmaPion < nSigmaProton) // More likely be Pion
+		else if (fabs(nSigmaPion) < fabs(nSigmaKaon) && fabs(nSigmaPion) < fabs(nSigmaProton)) // More likely be Pion
 		{
 			bool pion_cut = true;
 			PionPID pion_pid(0., nSigmaPion, pt); // not using zTOF
 			if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < pt < 2.0!!!
+			if (fabs(nSigmaPion) > 2) pion_cut = false;
 			if (pion_cut) {
 				IfRecordThisTrack = true;
 				if (track->charge() > 0) {PDG.emplace_back( 211);}
@@ -515,11 +517,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 				InvariantMass.emplace_back(PionPdgMass);
 			}
 		}
-		else if (nSigmaKaon < nSigmaPion && nSigmaKaon < nSigmaProton) // More likely be Kaon
+		else if (fabs(nSigmaKaon) < fabs(nSigmaPion) && fabs(nSigmaKaon) < fabs(nSigmaProton)) // More likely be Kaon
 		{
 			bool kaon_cut = true;
 			KaonPID kaon_pid(0., nSigmaKaon, pt); // not using zTOF
 			if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
+			if (fabs(nSigmaKaon) > 2) kaon_cut = false;
 			// for (int i = 0; i < KFParticleVec.size(); i++) if (IsKaonOmegaDaughter(KFParticleVec[i], track->id())) kaon_cut = false;
 			if (kaon_cut) {
 				IfRecordThisTrack = true;
