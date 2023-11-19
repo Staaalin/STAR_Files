@@ -449,7 +449,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 			InvariantMass.emplace_back(OmegaLorentz.M());
 			KFParticleVec.push_back(particle);
 			// cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
-			cout<<"kilogauss = "<<kilogauss<<endl;
+			// cout<<"kilogauss = "<<kilogauss<<endl;
+			cout<<"MomentumOfParticle_tb.Mag() = "<<MomentumOfParticle_tb.Mag()<<endl;
+			cout<<"MomentumOfParticle.Mag() = "<<MomentumOfParticle.Mag()<<endl;
 			
 		}
 		// cout<<"CrefMult:"<<CrefMult<<endl;
