@@ -426,7 +426,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	CrefMult = refMult;CgrefMult = grefMult;
 	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvariantMass.resize(0);
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
-		const KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
 		if(fabs(particle.GetPDG()) == LambdaPdg || 
 		   fabs(particle.GetPDG()) == OmegaPdg)
