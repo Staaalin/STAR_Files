@@ -481,7 +481,7 @@ Int_t StKFParticleAnalysisMaker::Make()
     	if (  track->nHitsFit() < 15) continue;
 		if (  track->nHitsDedx() < 15) continue;
 		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
-		//if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
+		if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
 		if (! track->isPrimary()) continue;
 		track_index.push_back(iTrack);
 
@@ -498,6 +498,21 @@ Int_t StKFParticleAnalysisMaker::Make()
 		float phi_prim = track->pMom().Phi();
 		float eta_prim = track->pMom().Eta();
 
+		// TOF Info
+		bool hasTOF = false;
+		int tofindex = track->bTofPidTraitsIndex();
+		float m2 = -999.;
+		float beta = -999.;
+		if (tofindex >= 0) 
+		{
+			int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
+			float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
+			// float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
+			// hgbtofYlocal->Fill(BtofYLocal);
+			if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+		}
+
+		// Fill tracks
 		bool IfRecordThisTrack = false;
 		if (fabs(nSigmaProton) < fabs(nSigmaKaon) && fabs(nSigmaProton) < fabs(nSigmaPion)) // More likely be Proton
 		{
