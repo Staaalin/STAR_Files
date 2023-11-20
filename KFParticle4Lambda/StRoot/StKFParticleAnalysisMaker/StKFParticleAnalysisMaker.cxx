@@ -431,14 +431,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
-		if(fabs(particle.GetPDG()) == LambdaPdg || 
-		   fabs(particle.GetPDG()) == OmegaPdg)
-		{
-			#ifdef DEBUGGING
-			std::cout << "Parsing refMult : " << refMult <<std::endl;
-			std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
-			#endif
-			PDG.emplace_back(particle.GetPDG());
+		bool IfHelix = false;
+
+		#ifdef DEBUGGING
+		std::cout << "Parsing refMult : " << refMult <<std::endl;
+		std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
+		#endif
+		PDG.emplace_back(particle.GetPDG());
+
+		if (IfHelix && (particle.GetPDG() == OmegaPdg)) {
 			// helix
 			TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
 			TVector3 PositionOfParticle(particle.GetX(), particle.GetY(), particle.GetZ());
@@ -450,16 +451,18 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.emplace_back(MomentumOfParticle_tb.Y());
 			pz.emplace_back(MomentumOfParticle_tb.Z());
 			InvariantMass.emplace_back(OmegaLorentz.M());
-			KFParticleVec.push_back(particle);
+			// KFParticleVec.push_back(particle);
 			// cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
 			// cout<<"kilogauss = "<<kilogauss<<endl;
 			// cout<<"MomentumOfParticle_tb.Mag() = "<<MomentumOfParticle_tb.Mag()<<endl;
 			// cout<<"MomentumOfParticle.Mag() = "<<MomentumOfParticle.Mag()<<endl;
-			
 		}
 		else
 		{
-			cout<<particle.GetPDG()<<endl;
+			px.emplace_back(particle.GetPx());
+			py.emplace_back(particle.GetPy());
+			pz.emplace_back(particle.GetPz());
+			InvariantMass.emplace_back(particle.GetMass());
 		}
 		// cout<<"CrefMult:"<<CrefMult<<endl;
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
@@ -714,7 +717,7 @@ void StKFParticleAnalysisMaker::SetupKFParticle(){
 void StKFParticleAnalysisMaker::SetDaughterTrackPointers(int iKFParticle){ // Get Daughter Tracks to calculate decay variables manually
 	const KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 	int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else upQ = 0;
-	ProtonTrackIndex = -99999, PionTrackIndex = -99999;
+	ProtonTrackIndex = -99999, PionTrackIndex = -99999, KaonTrackIndex = -99999;
 	for(int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){ 
 		const int daughterId = particle.DaughterIds()[iDaughter]; 
 		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 

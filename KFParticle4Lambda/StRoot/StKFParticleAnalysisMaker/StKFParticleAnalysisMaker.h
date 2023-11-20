@@ -67,7 +67,7 @@ private:
 	void SetDaughterTrackPointers(int iKFParticle);
 	bool IsKaonOmegaDaughter(KFParticle particle, int kaonTrackId);
 	bool InterfaceCantProcessEvent;
-	int ProtonTrackIndex, PionTrackIndex;
+	int ProtonTrackIndex, PionTrackIndex, KaonTrackIndex;
 	vector<int> trackMap;
 	StPicoDst *PicoDst;
 	StPicoTrack *ProtonTrack, *PionTrack;
