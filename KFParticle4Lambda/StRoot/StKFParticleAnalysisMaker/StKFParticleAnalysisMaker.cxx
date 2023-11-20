@@ -457,6 +457,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 			cout<<"MomentumOfParticle.Mag() = "<<MomentumOfParticle.Mag()<<endl;
 			
 		}
+		else
+		{
+			cout<<particle.GetPDG()<<endl;
+		}
 		// cout<<"CrefMult:"<<CrefMult<<endl;
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
