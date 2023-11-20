@@ -725,6 +725,7 @@ void StKFParticleAnalysisMaker::SetDaughterTrackPointers(int iKFParticle){ // Ge
 		int trackIndex = trackMap[globalTrackId];    
 		if (daughter.GetPDG() == upQ*ProtonPdg) ProtonTrackIndex = trackIndex;
 		else if (daughter.GetPDG() == upQ*PionPdg) PionTrackIndex = trackIndex;
+		else if (daughter.GetPDG() == upQ*KaonPdg) KaonTrackIndex = trackIndex;
 	}  // iDaughter
 	ProtonTrack = PicoDst->track(ProtonTrackIndex); PionTrack = PicoDst->track(PionTrackIndex);	
 } // void SetDaughterTrackPointers

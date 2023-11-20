@@ -70,7 +70,7 @@ private:
 	int ProtonTrackIndex, PionTrackIndex, KaonTrackIndex;
 	vector<int> trackMap;
 	StPicoDst *PicoDst;
-	StPicoTrack *ProtonTrack, *PionTrack;
+	StPicoTrack *ProtonTrack, *PionTrack, *KaonTrack;
 	void BookVertexPlots();
 
 	StPicoDstMaker *mPicoDstMaker;
