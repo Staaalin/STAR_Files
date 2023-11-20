@@ -420,6 +420,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 	std::vector<KFParticle> KFParticleVec;
 
 	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
+	float pT_trig_lo = 0.2;
+	float pT_trig_hi = 2.0;
+	float eta_trig_cut = 1.0;
 
 	SetupKFParticle();
 	if (InterfaceCantProcessEvent) return;
@@ -499,6 +502,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (fabs(nSigmaProton) < fabs(nSigmaKaon) && fabs(nSigmaProton) < fabs(nSigmaPion)) // More likely be Proton
 		{
 			bool proton_cut = true;
+			if (pt < pT_trig_lo || pt > pT_trig_hi) proton_cut = false; 
+			if (fabs(eta_prim) > eta_trig_cut) proton_cut = false;
 			ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
 			if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
 			if (fabs(nSigmaProton) > 2) proton_cut = false;
@@ -513,6 +518,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		else if (fabs(nSigmaPion) < fabs(nSigmaKaon) && fabs(nSigmaPion) < fabs(nSigmaProton)) // More likely be Pion
 		{
 			bool pion_cut = true;
+			if (pt < pT_trig_lo || pt > pT_trig_hi) pion_cut = false; // use p < 2
+			if (fabs(eta_prim) > eta_trig_cut) pion_cut = false;
 			PionPID pion_pid(0., nSigmaPion, pt); // not using zTOF
 			if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < pt < 2.0!!!
 			if (fabs(nSigmaPion) > 2) pion_cut = false;
@@ -527,6 +534,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		else if (fabs(nSigmaKaon) < fabs(nSigmaPion) && fabs(nSigmaKaon) < fabs(nSigmaProton)) // More likely be Kaon
 		{
 			bool kaon_cut = true;
+			if (pt < pT_trig_lo || pt > 1.6) kaon_cut = false; // use p < 1.6
+			if (fabs(eta_prim) > eta_trig_cut) kaon_cut = false;
 			KaonPID kaon_pid(0., nSigmaKaon, pt); // not using zTOF
 			if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
 			if (fabs(nSigmaKaon) > 2) kaon_cut = false;
