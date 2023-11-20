@@ -513,7 +513,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
 			// float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
 			// hgbtofYlocal->Fill(BtofYLocal);
-			if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+			// if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
 		}
 
 		// Fill tracks
