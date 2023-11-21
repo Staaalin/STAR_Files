@@ -39,3 +39,4 @@ xml/
 .sl73*
 
 .vscode\**
+KFParticle4Lambda/.sl73_x8664_gcc485/OBJ/StRoot/StKFParticleAnalysisMaker/StKFParticleAnalysisMaker_Cint.cxx
