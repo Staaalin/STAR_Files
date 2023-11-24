@@ -600,7 +600,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (fabs(nSigmaKaon) > 2) kaon_cut = false;
 			if (dcatopv > 2.0) kaon_cut = false;
 			// for (int i = 0; i < OmegaVec.size(); i++) if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) kaon_cut = false;
-			for (int i = 0; i < OmegaVec.size(); i++) if (IsTrackParticleDaughter(OmegaVec[i], track->id())) kaon_cut = false;
+			// for (int i = 0; i < OmegaVec.size(); i++) if (IsTrackParticleDaughter(OmegaVec[i], track->id())) kaon_cut = false;
+			for (int i = 0; i < OmegaVec.size(); i++){ if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) {cout<<"FUCK"<<endl;}};
 			if (kaon_cut) {
 				IfRecordThisTrack = true;
 				if (track->charge() > 0) {PDG.emplace_back( 321);}
