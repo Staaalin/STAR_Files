@@ -519,8 +519,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			ReCons_TrackID.push_back(globalTrackId);
 			StPicoTrack *track = mPicoDst->track(globalTrackId);
 			if (!track) {cout<<"ERROR!"<<endl;continue;}
-			track->setNHitsFit(0);
-			if (track->nHitsFit() != 0){cout<<"FNOIUWBFOWUIB"<<endl;}
+			(mPicoDst->track(globalTrackId))->setNHitsFit(0);
 		}
 	}
 
