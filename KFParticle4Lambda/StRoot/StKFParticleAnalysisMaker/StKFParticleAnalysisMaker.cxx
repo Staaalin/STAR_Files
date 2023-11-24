@@ -517,11 +517,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
 			const int globalTrackId = daughter.DaughterIds()[0];
 			ReCons_TrackID.push_back(globalTrackId);
-			if (!mPicoDst->track(globalTrackId)) {cout<<"ERROR!"<<endl;continue;}
-			(mPicoDst->track(globalTrackId))->setNHitsFit(0);
+			StPicoTrack *track = mPicoDst->track(globalTrackId);
+			if (!track) {cout<<"ERROR!"<<endl;continue;}
+			track->setNHitsFit(0);
 		}
 	}
 
+	// Filling Track
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	std::vector<int> Particle_tracks; Particle_tracks.resize(0);
 	std::vector<int> track_index;
@@ -565,6 +567,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		// Fill tracks
 		bool IfRecordThisTrack = false;
+		for (int i = 0; i < OmegaVec.size(); i++){ if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) {cout<<"FUCK"<<endl;}};
 		if (fabs(nSigmaProton) < fabs(nSigmaKaon) && fabs(nSigmaProton) < fabs(nSigmaPion)) // More likely be Proton
 		{
 			bool proton_cut = true;
@@ -608,7 +611,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (dcatopv > 2.0) kaon_cut = false;
 			// for (int i = 0; i < OmegaVec.size(); i++) if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) kaon_cut = false;
 			// for (int i = 0; i < OmegaVec.size(); i++) if (IsTrackParticleDaughter(OmegaVec[i], track->id())) kaon_cut = false;
-			for (int i = 0; i < OmegaVec.size(); i++){ if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) {cout<<"FUCK"<<endl;}};
 			if (kaon_cut) {
 				IfRecordThisTrack = true;
 				if (track->charge() > 0) {PDG.emplace_back( 321);}
