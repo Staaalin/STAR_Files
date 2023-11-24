@@ -593,6 +593,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				cout<<"globalTrackId = "<<globalTrackId<<endl;
 			}
 			cout<<"Real TrackId = "<<track->id()<<endl;
+			cout<<"track->nHitsFit() = "<<track->nHitsFit()<<endl;
 			cout<<"End Fuck"<<endl;
 		}};
 		if (fabs(nSigmaProton) < fabs(nSigmaKaon) && fabs(nSigmaProton) < fabs(nSigmaPion)) // More likely be Proton
