@@ -516,7 +516,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			const int daughterId = particle.DaughterIds()[iDaughter]; 
 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
 			const int globalTrackId = daughter.DaughterIds()[0];
-			cout<<"globalTrackId = "<<globalTrackId<<endl;
 			ReCons_TrackID.push_back(globalTrackId);
 			if (!mPicoDst->track(globalTrackId)) {cout<<"ERROR!"<<endl;continue;}
 			(mPicoDst->track(globalTrackId))->setNHitsFit(0);
