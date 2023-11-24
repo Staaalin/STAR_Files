@@ -66,7 +66,8 @@ private:
 	void SetupKFParticle();
 	void SetDaughterTrackPointers(int iKFParticle);
 	bool IsKaonOmegaDaughter(KFParticle particle, int kaonTrackId);
-	void StKFParticleAnalysisMaker::SetDaughterTrackHits(KFParticle particle);
+	bool IsTrackParticleDaughter(KFParticle particle, int TrackId);
+	void SetDaughterTrackHits(KFParticle particle);
 	bool InterfaceCantProcessEvent;
 	int ProtonTrackIndex, PionTrackIndex, KaonTrackIndex;
 	vector<int> trackMap;
