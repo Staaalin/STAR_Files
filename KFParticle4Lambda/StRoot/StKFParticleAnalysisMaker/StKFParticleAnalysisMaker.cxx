@@ -523,7 +523,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				if (!track) {cout<<"! track = YES"<<endl;continue;}
 				cout<<"! track = NO"<<endl;
 				cout<<"track->nHitsFit() = "<<track->nHitsFit()<<",   (mPicoDst->track(globalTrackId))->nHitsFit() = "<<(mPicoDst->track(globalTrackId))->nHitsFit()<<endl;
-				cout<<"track->nHitsFit() = "<<track->nHitsFit()<<",   (mPicoDst->track(globalTrackId)).nHitsFit() = "<<(mPicoDst->track(globalTrackId)).nHitsFit()<<endl;
+				// cout<<"track->nHitsFit() = "<<track->nHitsFit()<<",   (mPicoDst->track(globalTrackId)).nHitsFit() = "<<(mPicoDst->track(globalTrackId)).nHitsFit()<<endl;
 				(mPicoDst->track(globalTrackId))->setNHitsFit(0);
 				cout<<"track->nHitsFit() = "<<track->nHitsFit()<<endl:
 				continue;
