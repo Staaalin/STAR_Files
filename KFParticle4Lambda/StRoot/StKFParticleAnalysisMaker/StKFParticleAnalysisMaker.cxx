@@ -571,7 +571,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			cout<<"FUCK !!!"<<endl;
 			if(! track){cout<<"! track = YES"<<endl;}
 			else       {cout<<"! track = NO"<<endl;}
-			if(nHitsFit()<15){cout<<"nHitsFit()<15 = YES"<<endl;}
+			if(track->nHitsFit()<15){cout<<"nHitsFit()<15 = YES"<<endl;}
 			else             {cout<<"nHitsFit()<15 = NO"<<endl;}
 			KFParticle particle = OmegaVec[i];
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
