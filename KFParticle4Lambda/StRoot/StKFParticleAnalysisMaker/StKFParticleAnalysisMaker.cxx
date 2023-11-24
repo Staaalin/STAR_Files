@@ -507,13 +507,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 		KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 	} // End loop over KFParticles
 
-
-	for (int iParticleVec = 0;iParticleVec < ParticleVec.size();iParticleVec++){
-		SetDaughterTrackHits(ParticleVec[iParticleVec]);
-		for (int iTrack = 0;iTrack < ReCons_TrackID.size();iTrack++) {
-			(mPicoDst->track(ReCons_TrackID[iTrack]))->setNHitsFit(0);
-		}
-	}
+	// // HighLight Reconstructed Track
+	// for (int iParticleVec = 0;iParticleVec < ParticleVec.size();iParticleVec++){
+	// 	SetDaughterTrackHits(ParticleVec[iParticleVec]);
+	// 	for (int iTrack = 0;iTrack < ReCons_TrackID.size();iTrack++) {
+	// 		(mPicoDst->track(ReCons_TrackID[iTrack]))->setNHitsFit(0);
+	// 	}
+	// }
 
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	std::vector<int> Particle_tracks; Particle_tracks.resize(0);
