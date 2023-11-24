@@ -525,7 +525,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				cout<<"track->nHitsFit() = "<<track->nHitsFit()<<",   (mPicoDst->track(globalTrackId))->nHitsFit() = "<<(mPicoDst->track(globalTrackId))->nHitsFit()<<endl;
 				// cout<<"track->nHitsFit() = "<<track->nHitsFit()<<",   (mPicoDst->track(globalTrackId)).nHitsFit() = "<<(mPicoDst->track(globalTrackId)).nHitsFit()<<endl;
 				(mPicoDst->track(globalTrackId))->setNHitsFit(0);
-				cout<<"track->nHitsFit() = "<<track->nHitsFit()<<endl:
+				cout<<"track->nHitsFit() = "<<track->nHitsFit()<<endl;
 				continue;
 			}
 			StPicoTrack *track = mPicoDst->track(globalTrackId);
