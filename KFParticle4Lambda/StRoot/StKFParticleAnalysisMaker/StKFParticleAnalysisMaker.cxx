@@ -518,6 +518,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			const int globalTrackId = daughter.DaughterIds()[0];
 			ReCons_TrackID.push_back(globalTrackId);
 			if (globalTrackId == 749) {
+				cout<<"This is event: "<<evtID<<endl;
 				cout<<"Found 749"<<endl;
 				StPicoTrack *track = mPicoDst->track(globalTrackId);
 				if (!track) {cout<<"! track = YES"<<endl;continue;}
@@ -579,6 +580,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// Fill tracks
 		bool IfRecordThisTrack = false;
 		for (int i = 0; i < OmegaVec.size(); i++){ if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) {
+			cout<<"This is event: "<<evtID<<endl;
 			cout<<"FUCK !!!"<<endl;
 			if(! track){cout<<"! track = YES"<<endl;}
 			else       {cout<<"! track = NO"<<endl;}
