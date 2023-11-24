@@ -517,21 +517,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
 			const int globalTrackId = daughter.DaughterIds()[0];
 			ReCons_TrackID.push_back(globalTrackId);
-			if (globalTrackId == 749) {
-				cout<<"This is event: "<<evtID<<endl;
-				cout<<"Found 749"<<endl;
-				StPicoTrack *track = mPicoDst->track(globalTrackId);
-				if (!track) {cout<<"! track = YES"<<endl;continue;}
-				cout<<"! track = NO"<<endl;
-				cout<<"track->nHitsFit() = "<<track->nHitsFit()<<",   (mPicoDst->track(globalTrackId))->nHitsFit() = "<<(mPicoDst->track(globalTrackId))->nHitsFit()<<endl;
-				// cout<<"track->nHitsFit() = "<<track->nHitsFit()<<",   (mPicoDst->track(globalTrackId)).nHitsFit() = "<<(mPicoDst->track(globalTrackId)).nHitsFit()<<endl;
-				(mPicoDst->track(globalTrackId))->setNHitsFit(0);
-				cout<<"track->nHitsFit() = "<<track->nHitsFit()<<",   (mPicoDst->track(globalTrackId))->nHitsFit() = "<<(mPicoDst->track(globalTrackId))->nHitsFit()<<endl;
-				continue;
+
+			for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
+				StPicoTrack *track = mPicoDst->track(iTrack);
+				if (track->id() == globalTrackId){cout<<"track location = "<<iTrack<<" , TrackId = "<<track->id()<<endl;break;}
 			}
-			StPicoTrack *track = mPicoDst->track(globalTrackId);
-			if (!track) {continue;}
-			(mPicoDst->track(globalTrackId))->setNHitsFit(0);
 		}
 	}
 
@@ -579,25 +569,25 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		// Fill tracks
 		bool IfRecordThisTrack = false;
-		for (int i = 0; i < OmegaVec.size(); i++){ if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) {
-			cout<<"This is event: "<<evtID<<endl;
-			cout<<"FUCK !!!"<<endl;
-			if(! track){cout<<"! track = YES"<<endl;}
-			else       {cout<<"! track = NO"<<endl;}
-			if(track->nHitsFit()<15){cout<<"nHitsFit()<15 = YES"<<endl;}
-			else             {cout<<"nHitsFit()<15 = NO"<<endl;}
-			KFParticle particle = OmegaVec[i];
-			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
-			{ 
-				const int daughterId = particle.DaughterIds()[iDaughter]; 
-				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
-				const int globalTrackId = daughter.DaughterIds()[0];
-				cout<<"globalTrackId = "<<globalTrackId<<endl;
-			}
-			cout<<"Real TrackId = "<<track->id()<<endl;
-			cout<<"track->nHitsFit() = "<<track->nHitsFit()<<endl;
-			cout<<"End Fuck"<<endl;
-		}};
+		// for (int i = 0; i < OmegaVec.size(); i++){ if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) {
+		// 	cout<<"This is event: "<<evtID<<endl;
+		// 	cout<<"FUCK !!!"<<endl;
+		// 	if(! track){cout<<"! track = YES"<<endl;}
+		// 	else       {cout<<"! track = NO"<<endl;}
+		// 	if(track->nHitsFit()<15){cout<<"nHitsFit()<15 = YES"<<endl;}
+		// 	else             {cout<<"nHitsFit()<15 = NO"<<endl;}
+		// 	KFParticle particle = OmegaVec[i];
+		// 	for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
+		// 	{ 
+		// 		const int daughterId = particle.DaughterIds()[iDaughter]; 
+		// 		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
+		// 		const int globalTrackId = daughter.DaughterIds()[0];
+		// 		cout<<"globalTrackId = "<<globalTrackId<<endl;
+		// 	}
+		// 	cout<<"Real TrackId = "<<track->id()<<endl;
+		// 	cout<<"track->nHitsFit() = "<<track->nHitsFit()<<endl;
+		// 	cout<<"End Fuck"<<endl;
+		// }};
 		if (fabs(nSigmaProton) < fabs(nSigmaKaon) && fabs(nSigmaProton) < fabs(nSigmaPion)) // More likely be Proton
 		{
 			bool proton_cut = true;
