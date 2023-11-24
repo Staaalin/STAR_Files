@@ -508,12 +508,20 @@ Int_t StKFParticleAnalysisMaker::Make()
 	} // End loop over KFParticles
 
 	// // HighLight Reconstructed Track
-	// for (int iParticleVec = 0;iParticleVec < ParticleVec.size();iParticleVec++){
-	// 	SetDaughterTrackHits(ParticleVec[iParticleVec]);
-	// 	for (int iTrack = 0;iTrack < ReCons_TrackID.size();iTrack++) {
-	// 		(mPicoDst->track(ReCons_TrackID[iTrack]))->setNHitsFit(0);
-	// 	}
-	// }
+	ReCons_TrackID.resize(0);
+	for (int iParticle = 0;iParticle < ParticleVec.size();iParticle++){
+		KFParticle particle = ParticleVec[iParticle];
+		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
+		{ 
+			const int daughterId = particle.DaughterIds()[iDaughter]; 
+			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
+			const int globalTrackId = daughter.DaughterIds()[0];
+			cout<<"globalTrackId = "<<globalTrackId<<endl;
+			ReCons_TrackID.push_back(globalTrackId);
+			if (!mPicoDst->track(globalTrackId)) {cout<<"ERROR!"<endl;}
+			(mPicoDst->track(globalTrackId))->setNHitsFit(0);
+		}
+	}
 
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	std::vector<int> Particle_tracks; Particle_tracks.resize(0);
