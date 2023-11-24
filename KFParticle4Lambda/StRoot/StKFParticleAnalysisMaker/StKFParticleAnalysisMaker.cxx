@@ -518,6 +518,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			const int globalTrackId = daughter.DaughterIds()[0];
 			ReCons_TrackID.push_back(globalTrackId);
 
+			Int_t nTracks = mPicoDst->numberOfTracks();
 			for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 				StPicoTrack *track = mPicoDst->track(iTrack);
 				if (track->id() == globalTrackId){cout<<"track location = "<<iTrack<<" , TrackId = "<<track->id()<<endl;break;}
