@@ -520,6 +520,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			StPicoTrack *track = mPicoDst->track(globalTrackId);
 			if (!track) {cout<<"ERROR!"<<endl;continue;}
 			track->setNHitsFit(0);
+			if (track->nHitsFit() != 0){cout<<"FNOIUWBFOWUIB"<<endl;}
 		}
 	}
 
