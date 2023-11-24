@@ -102,7 +102,7 @@ private:
 
 	TTree *hadronTree;
 	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult;
-	std::vector<int> PDG;
+	std::vector<int> PDG , ReCons_TrackID;
 	std::vector<float> px,py,pz,InvariantMass;
 
 	/////////////////////////////////////

@@ -417,7 +417,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 // ======= KFParticle ======= //
 	std::vector<StLambdaDecayPair> KFParticleLambdaDecayPair;
-	std::vector<KFParticle> KFParticleVec;
+	std::vector<KFParticle> ParticleVec , OmegaVec , LambdaVec;
+	ParticleVec.resize(0);OmegaVec.resize(0);LambdaVec.resize();
 
 	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
 	float pT_trig_lo = 0.2;
@@ -429,18 +430,18 @@ Int_t StKFParticleAnalysisMaker::Make()
 	CrefMult = refMult;CgrefMult = grefMult;
 	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvariantMass.resize(0);
 
-	std::vector<int> Constructed_KFParticle_Vec_index; Constructed_KFParticle_Vec_index.resize(0);
-	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
-		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
-		if ((particle.GetPDG() == OmegaPdg) || 
-			(particle.GetPDG() == LambdaPdg))
-		{
-			for(int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){ 
-				const int daughterId = particle.DaughterIds()[iDaughter]; 
-				Constructed_KFParticle_Vec_index.push_back(daughterId);
-			}  // iDaughter
-		}
-	}
+	// std::vector<int> Constructed_KFParticle_Vec_index; Constructed_KFParticle_Vec_index.resize(0);
+	// for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
+	// 	KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+	// 	if ((particle.GetPDG() == OmegaPdg) || 
+	// 		(particle.GetPDG() == LambdaPdg))
+	// 	{
+	// 		for(int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){ 
+	// 			const int daughterId = particle.DaughterIds()[iDaughter]; 
+	// 			Constructed_KFParticle_Vec_index.push_back(daughterId);
+	// 		}  // iDaughter
+	// 	}
+	// }
 
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
@@ -452,14 +453,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 		std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 		#endif
 
-		bool IfRecordThisParticle = true;
-		for (int Constructed_KFParticle_i = 0;Constructed_KFParticle_i<Constructed_KFParticle_Vec_index.size();Constructed_KFParticle_i++){
-			if(iKFParticle == Constructed_KFParticle_Vec_index[Constructed_KFParticle_i]){
-				IfRecordThisParticle = false;
-			}
-		}
+		// bool IfRecordThisParticle = true;
+		// for (int Constructed_KFParticle_i = 0;Constructed_KFParticle_i<Constructed_KFParticle_Vec_index.size();Constructed_KFParticle_i++){
+		// 	if(iKFParticle == Constructed_KFParticle_Vec_index[Constructed_KFParticle_i]){
+		// 		IfRecordThisParticle = false;
+		// 	}
+		// }
+		// if (IfRecordThisParticle = false){continue;}
 
-		if (IfRecordThisParticle = false){continue;}
+		if ((particle.GetPDG() != OmegaPdg) && (particle.GetPDG() != LambdaPdg)) {continue;}
 
 		PDG.emplace_back(particle.GetPDG());
 
@@ -475,7 +477,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.emplace_back(MomentumOfParticle_tb.Y());
 			pz.emplace_back(MomentumOfParticle_tb.Z());
 			InvariantMass.emplace_back(OmegaLorentz.M());
-			// KFParticleVec.push_back(particle);
+			OmegaVec.push_back(particle);ParticleVec.push_back(particle);
 			// cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
 			// cout<<"kilogauss = "<<kilogauss<<endl;
 			// cout<<"MomentumOfParticle_tb.Mag() = "<<MomentumOfParticle_tb.Mag()<<endl;
@@ -487,6 +489,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.emplace_back(particle.GetPy());
 			pz.emplace_back(particle.GetPz());
 			InvariantMass.emplace_back(particle.GetMass());
+			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);}
+			if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
+			ParticleVec.push_back(particle);
 		}
 		// cout<<"CrefMult:"<<CrefMult<<endl;
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
@@ -503,106 +508,114 @@ Int_t StKFParticleAnalysisMaker::Make()
 	} // End loop over KFParticles
 
 
-	// Int_t nTracks = mPicoDst->numberOfTracks();
-	// std::vector<int> Particle_tracks; Particle_tracks.resize(0);
-	// std::vector<int> track_index;
-	// for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
-	// 	StPicoTrack *track = mPicoDst->track(iTrack);
-    // 	if (! track)            continue;
-    // 	if (! track->charge())  continue;
-    // 	if (  track->nHitsFit() < 15) continue;
-	// 	if (  track->nHitsDedx() < 15) continue;
-	// 	if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
-	// 	if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
-	// 	if (! track->isPrimary()) continue;
-	// 	track_index.push_back(iTrack);
+	for (int iParticleVec = 0;iParticleVec < ParticleVec.size();iParticleVec++){
+		SetDaughterTrackHits(ParticleVec[iParticleVec]);
+		for (int iTrack = 0;iTrack < ReCons_TrackID.size();iTrack++) {
+			(mPicoDst->track(ReCons_TrackID[iTrack]))->setNHitsFit(0);
+		}
+	}
 
-	// 	// track info
-	// 	float p = track->gMom().Mag();
-	// 	float pt = track->gMom().Perp();
-	// 	float phi = track->gMom().Phi();
-	// 	float eta = track->gMom().Eta();
-	// 	float dcatopv = track->gDCA(Vertex3D).Mag();
-	// 	float nSigmaKaon = track->nSigmaKaon();
-	// 	float nSigmaPion = track->nSigmaPion();
-	// 	float nSigmaProton = track->nSigmaProton();
-	// 	float pt_prim = track->pMom().Perp();
-	// 	float phi_prim = track->pMom().Phi();
-	// 	float eta_prim = track->pMom().Eta();
+	Int_t nTracks = mPicoDst->numberOfTracks();
+	std::vector<int> Particle_tracks; Particle_tracks.resize(0);
+	std::vector<int> track_index;
+	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
+		StPicoTrack *track = mPicoDst->track(iTrack);
+    	if (! track)            continue;
+    	if (! track->charge())  continue;
+    	if (  track->nHitsFit() < 15) continue;
+		if (  track->nHitsDedx() < 15) continue;
+		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
+		if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
+		if (! track->isPrimary()) continue;
+		track_index.push_back(iTrack);
 
-	// 	// TOF Info
-	// 	bool hasTOF = false;
-	// 	int tofindex = track->bTofPidTraitsIndex();
-	// 	float m2 = -999.;
-	// 	float beta = -999.;
-	// 	if (tofindex >= 0) 
-	// 	{
-	// 		int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
-	// 		float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
-	// 		// float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
-	// 		// hgbtofYlocal->Fill(BtofYLocal);
-	// 		// if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
-	// 	}
+		// track info
+		float p = track->gMom().Mag();
+		float pt = track->gMom().Perp();
+		float phi = track->gMom().Phi();
+		float eta = track->gMom().Eta();
+		float dcatopv = track->gDCA(Vertex3D).Mag();
+		float nSigmaKaon = track->nSigmaKaon();
+		float nSigmaPion = track->nSigmaPion();
+		float nSigmaProton = track->nSigmaProton();
+		float pt_prim = track->pMom().Perp();
+		float phi_prim = track->pMom().Phi();
+		float eta_prim = track->pMom().Eta();
 
-	// 	// Fill tracks
-	// 	bool IfRecordThisTrack = false;
-	// 	if (fabs(nSigmaProton) < fabs(nSigmaKaon) && fabs(nSigmaProton) < fabs(nSigmaPion)) // More likely be Proton
-	// 	{
-	// 		bool proton_cut = true;
-	// 		if (pt < pT_trig_lo || pt > pT_trig_hi) proton_cut = false; 
-	// 		if (fabs(eta_prim) > eta_trig_cut) proton_cut = false;
-	// 		ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
-	// 		if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
-	// 		if (fabs(nSigmaProton) > 2) proton_cut = false;
-	// 		if (dcatopv > dcatoPV_hi) proton_cut = false;
-	// 		if (proton_cut) {
-	// 			IfRecordThisTrack = true;
-	// 			if (track->charge() > 0) {PDG.emplace_back( 2212);}
-	// 			else                     {PDG.emplace_back(-2212);}
-	// 			InvariantMass.emplace_back(ProtonPdgMass);
-	// 		}
-	// 	}
-	// 	else if (fabs(nSigmaPion) < fabs(nSigmaKaon) && fabs(nSigmaPion) < fabs(nSigmaProton)) // More likely be Pion
-	// 	{
-	// 		bool pion_cut = true;
-	// 		if (pt < pT_trig_lo || pt > pT_trig_hi) pion_cut = false; // use p < 2
-	// 		if (fabs(eta_prim) > eta_trig_cut) pion_cut = false;
-	// 		PionPID pion_pid(0., nSigmaPion, pt); // not using zTOF
-	// 		if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < pt < 2.0!!!
-	// 		if (fabs(nSigmaPion) > 2) pion_cut = false;
-	// 		if (dcatopv > dcatoPV_hi) pion_cut = false;
-	// 		if (pion_cut) {
-	// 			IfRecordThisTrack = true;
-	// 			if (track->charge() > 0) {PDG.emplace_back( 211);}
-	// 			else                     {PDG.emplace_back(-211);}
-	// 			InvariantMass.emplace_back(PionPdgMass);
-	// 		}
-	// 	}
-	// 	else if (fabs(nSigmaKaon) < fabs(nSigmaPion) && fabs(nSigmaKaon) < fabs(nSigmaProton)) // More likely be Kaon
-	// 	{
-	// 		bool kaon_cut = true;
-	// 		if (pt < pT_trig_lo || pt > 1.6) kaon_cut = false; // use p < 1.6
-	// 		if (fabs(eta_prim) > eta_trig_cut) kaon_cut = false;
-	// 		KaonPID kaon_pid(0., nSigmaKaon, pt); // not using zTOF
-	// 		if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
-	// 		if (fabs(nSigmaKaon) > 2) kaon_cut = false;
-	// 		if (dcatopv > 2.0) kaon_cut = false;
-	// 		for (int i = 0; i < KFParticleVec.size(); i++) if (IsKaonOmegaDaughter(KFParticleVec[i], track->id())) kaon_cut = false;
-	// 		if (kaon_cut) {
-	// 			IfRecordThisTrack = true;
-	// 			if (track->charge() > 0) {PDG.emplace_back( 321);}
-	// 			else                     {PDG.emplace_back(-321);}
-	// 			InvariantMass.emplace_back(KaonPdgMass);
-	// 		}
-	// 	}
+		// TOF Info
+		bool hasTOF = false;
+		int tofindex = track->bTofPidTraitsIndex();
+		float m2 = -999.;
+		float beta = -999.;
+		if (tofindex >= 0) 
+		{
+			int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
+			float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
+			// float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
+			// hgbtofYlocal->Fill(BtofYLocal);
+			// if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+		}
 
-	// 	if (IfRecordThisTrack == true) {
-	// 		px.emplace_back(track->gMom().X());
-	// 		py.emplace_back(track->gMom().Y());
-	// 		pz.emplace_back(track->gMom().Z());
-	// 	}
+		// Fill tracks
+		bool IfRecordThisTrack = false;
+		if (fabs(nSigmaProton) < fabs(nSigmaKaon) && fabs(nSigmaProton) < fabs(nSigmaPion)) // More likely be Proton
+		{
+			bool proton_cut = true;
+			if (pt < pT_trig_lo || pt > pT_trig_hi) proton_cut = false; 
+			if (fabs(eta_prim) > eta_trig_cut) proton_cut = false;
+			ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
+			if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
+			if (fabs(nSigmaProton) > 2) proton_cut = false;
+			if (dcatopv > dcatoPV_hi) proton_cut = false;
+			if (proton_cut) {
+				IfRecordThisTrack = true;
+				if (track->charge() > 0) {PDG.emplace_back( 2212);}
+				else                     {PDG.emplace_back(-2212);}
+				InvariantMass.emplace_back(ProtonPdgMass);
+			}
+		}
+		else if (fabs(nSigmaPion) < fabs(nSigmaKaon) && fabs(nSigmaPion) < fabs(nSigmaProton)) // More likely be Pion
+		{
+			bool pion_cut = true;
+			if (pt < pT_trig_lo || pt > pT_trig_hi) pion_cut = false; // use p < 2
+			if (fabs(eta_prim) > eta_trig_cut) pion_cut = false;
+			PionPID pion_pid(0., nSigmaPion, pt); // not using zTOF
+			if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < pt < 2.0!!!
+			if (fabs(nSigmaPion) > 2) pion_cut = false;
+			if (dcatopv > dcatoPV_hi) pion_cut = false;
+			if (pion_cut) {
+				IfRecordThisTrack = true;
+				if (track->charge() > 0) {PDG.emplace_back( 211);}
+				else                     {PDG.emplace_back(-211);}
+				InvariantMass.emplace_back(PionPdgMass);
+			}
+		}
+		else if (fabs(nSigmaKaon) < fabs(nSigmaPion) && fabs(nSigmaKaon) < fabs(nSigmaProton)) // More likely be Kaon
+		{
+			bool kaon_cut = true;
+			if (pt < pT_trig_lo || pt > 1.6) kaon_cut = false; // use p < 1.6
+			if (fabs(eta_prim) > eta_trig_cut) kaon_cut = false;
+			KaonPID kaon_pid(0., nSigmaKaon, pt); // not using zTOF
+			if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
+			if (fabs(nSigmaKaon) > 2) kaon_cut = false;
+			if (dcatopv > 2.0) kaon_cut = false;
+			// for (int i = 0; i < OmegaVec.size(); i++) if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) kaon_cut = false;
+			for (int i = 0; i < OmegaVec.size(); i++) if (IsTrackParticleDaughter(OmegaVec[i], track->id())) kaon_cut = false;
+			if (kaon_cut) {
+				IfRecordThisTrack = true;
+				if (track->charge() > 0) {PDG.emplace_back( 321);}
+				else                     {PDG.emplace_back(-321);}
+				InvariantMass.emplace_back(KaonPdgMass);
+			}
+		}
 
-	// }
+		if (IfRecordThisTrack == true) {
+			px.emplace_back(track->gMom().X());
+			py.emplace_back(track->gMom().Y());
+			pz.emplace_back(track->gMom().Z());
+		}
+
+	}
 
 // ======= KFParticle end ======= //
 
@@ -768,4 +781,29 @@ bool StKFParticleAnalysisMaker::IsKaonOmegaDaughter(KFParticle particle, int kao
 		if (globalTrackId == kaonTrackId) return true;
 	}  // iDaughter
 	return false;
+}
+
+bool StKFParticleAnalysisMaker::IsTrackParticleDaughter(KFParticle particle, int TrackId)
+{
+	for(int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
+	{ 
+		const int daughterId = particle.DaughterIds()[iDaughter]; 
+		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
+		const int globalTrackId = daughter.DaughterIds()[0];
+		
+		if (globalTrackId == TrackId) return true;
+	}  // iDaughter
+	return false;
+}
+
+void StKFParticleAnalysisMaker::SetDaughterTrackHits(KFParticle particle)
+{
+	ReCons_TrackID.resize();
+	for(int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
+	{ 
+		const int daughterId = particle.DaughterIds()[iDaughter]; 
+		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
+		const int globalTrackId = daughter.DaughterIds()[0];
+		ReCons_TrackID.push_back(globalTrackId);
+	}
 }
