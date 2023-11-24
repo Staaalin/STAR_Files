@@ -418,7 +418,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 // ======= KFParticle ======= //
 	std::vector<StLambdaDecayPair> KFParticleLambdaDecayPair;
 	std::vector<KFParticle> ParticleVec , OmegaVec , LambdaVec;
-	ParticleVec.resize(0);OmegaVec.resize(0);LambdaVec.resize();
+	ParticleVec.resize(0);OmegaVec.resize(0);LambdaVec.resize(0);
 
 	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
 	float pT_trig_lo = 0.2;
@@ -799,7 +799,7 @@ bool StKFParticleAnalysisMaker::IsTrackParticleDaughter(KFParticle particle, int
 
 void StKFParticleAnalysisMaker::SetDaughterTrackHits(KFParticle particle)
 {
-	ReCons_TrackID.resize();
+	ReCons_TrackID.resize(0);
 	for(int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
 	{ 
 		const int daughterId = particle.DaughterIds()[iDaughter]; 
