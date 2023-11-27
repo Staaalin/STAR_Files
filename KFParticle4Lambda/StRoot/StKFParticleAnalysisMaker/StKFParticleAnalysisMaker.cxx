@@ -528,7 +528,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// 		break;
 			// 	}
 			// }
-			for (Int_t iTrack = globalTrackId;iTrack >= 0;iTrack--){
+			Int_t iTrackStart = globalTrackId;
+			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1}
+			for (Int_t iTrack = iTrackStart;iTrack >= 0;iTrack--){
 				StPicoTrack *track = mPicoDst->track(iTrack);
 				if (track->id() == globalTrackId){
 					cout<<"track location = "<<iTrack<<" , TrackId = "<<track->id()<<endl;
