@@ -705,8 +705,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// for (int i = 0; i < OmegaVec.size(); i++) if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) kaon_cut = false;
 		// for (int i = 0; i < OmegaVec.size(); i++) if (IsTrackParticleDaughter(OmegaVec[i], track->id())) kaon_cut = false;
 
-		if (proton_cut + pion_cut + kaon_cut == 1) {IfRecordThisTrack == true;QA_IfConfuse.emplace_back(0);}
-		if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack == true;QA_IfConfuse.emplace_back(1);}
+		if (proton_cut + pion_cut + kaon_cut == 1) {IfRecordThisTrack = true;QA_IfConfuse.emplace_back(0);}
+		if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack = true;QA_IfConfuse.emplace_back(1);}
 
 		if (IfRecordThisTrack == true) {
 			px.emplace_back(track->gMom().X());
