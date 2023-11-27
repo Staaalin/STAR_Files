@@ -540,7 +540,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 
 		// Filling QA
-		QA_hasTOF.emplace_back(false);
+		QA_hasTOF.emplace_back(0);
 		QA_dEdx.emplace_back(0.);QA_dcatopv.emplace_back(0.);QA_m2.emplace_back(0.);QA_nSigmaProton.emplace_back(0.);
 		QA_nSigmaPion.emplace_back(0.);QA_nSigmaKaon.emplace_back(0.);QA_zTOF_proton.emplace_back(0.);QA_zTOF_pion.emplace_back(0.);QA_zTOF_kaon.emplace_back(0.);
 		QA_zTOF_kaon.emplace_back(false);
@@ -705,8 +705,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// for (int i = 0; i < OmegaVec.size(); i++) if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) kaon_cut = false;
 		// for (int i = 0; i < OmegaVec.size(); i++) if (IsTrackParticleDaughter(OmegaVec[i], track->id())) kaon_cut = false;
 
-		if (proton_cut + pion_cut + kaon_cut == 1) {IfRecordThisTrack == true;QA_IfConfuse.emplace_back(false);}
-		if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack == true;QA_IfConfuse.emplace_back(true);}
+		if (proton_cut + pion_cut + kaon_cut == 1) {IfRecordThisTrack == true;QA_IfConfuse.emplace_back(0);}
+		if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack == true;QA_IfConfuse.emplace_back(1);}
 
 		if (IfRecordThisTrack == true) {
 			px.emplace_back(track->gMom().X());
@@ -733,12 +733,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 			// Filling QA
 			if (hasTOF) {
-				QA_hasTOF.emplace_back(true);
+				QA_hasTOF.emplace_back(1);
 				QA_zTOF_proton.emplace_back(zTOF_proton);QA_zTOF_pion.emplace_back(zTOF_pion);QA_zTOF_kaon.emplace_back(zTOF_kaon);
 				QA_m2.emplace_back(m2);
 			}
 			else{
-				QA_hasTOF.emplace_back(false);
+				QA_hasTOF.emplace_back(0);
 				QA_zTOF_proton.emplace_back(0.);QA_zTOF_pion.emplace_back(0.);QA_zTOF_kaon.emplace_back(0.);
 				QA_m2.emplace_back(0.);
 			}
