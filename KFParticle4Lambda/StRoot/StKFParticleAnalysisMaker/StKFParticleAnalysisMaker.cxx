@@ -112,6 +112,32 @@ Int_t StKFParticleAnalysisMaker::Init() {
 	Int_t openFileStatus = openFile();
 	if(openFileStatus == kStFatal) return kStFatal;
 
+	dcatoPV_hi = 3.0;
+	// pid boundary
+	pT_lo = 0.2;
+	pT_hi = 2.0;
+	
+	// for EP
+	pT_asso_lo = 0.15;
+	pT_asso_hi = 2.0;
+	pT_trig_lo = 0.2;
+	pT_trig_hi = 2.0;
+	eta_trig_cut = 1.0;
+	
+	// pion cut
+	pion_pT_lo = 0.2;
+	pion_pT_hi = 1.2;
+	pion_pT_TOFth = 0.4;
+	pion_m2_lo = -0.1;
+	pion_m2_hi = 0.1;
+
+	// proton cut
+	proton_pT_lo = 0.3;
+	proton_pT_hi = 1.8;
+	proton_pT_TOFth = 0.6;
+	proton_m2_lo = 0.75;
+	proton_m2_hi = 1.1;
+
 	TFile *f = GetTFile(); // These two lines need to be HERE (though I don't know /why/)- don't throw in another function
 	if(f){f->cd(); BookVertexPlots();}
 
@@ -169,7 +195,20 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
     hadronTree->Branch("mix_px"             ,&px                  );
     hadronTree->Branch("mix_py"             ,&py                  );
     hadronTree->Branch("mix_pz"             ,&pz                  );
-    hadronTree->Branch("InvariantMass"      ,&InvariantMass        );
+    hadronTree->Branch("InvariantMass"      ,&InvariantMass       );
+
+	// Used for QA
+    hadronTree->Branch("dEdx"               ,&QA_dEdx             );
+    hadronTree->Branch("m2"                 ,&QA_m2               );
+    hadronTree->Branch("dcatopv"            ,&QA_dcatopv          );
+    hadronTree->Branch("hasTOF"             ,&QA_hasTOF           );
+    hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton     );
+    hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion       );
+    hadronTree->Branch("nSigmaKaon"         ,&QA_nSigmaKaon       );
+    hadronTree->Branch("zTOF_proton"        ,&QA_zTOF_proton      );
+    hadronTree->Branch("zTOF_pion"          ,&QA_zTOF_pion        );
+    hadronTree->Branch("zTOF_kaon"          ,&QA_zTOF_kaon        );
+	hadronTree->Branch("IfConfuse"          ,&QA_IfConfuse        );
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
@@ -429,6 +468,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 	if (InterfaceCantProcessEvent) return;
 	CrefMult = refMult;CgrefMult = grefMult;
 	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvariantMass.resize(0);
+	// QA
+	QA_dEdx.resize(0);QA_dcatopv.resize(0);QA_m2.resize(0);QA_nSigmaProton.resize(0);
+	QA_nSigmaPion.resize(0);QA_nSigmaKaon.resize(0);QA_zTOF_proton.resize(0);QA_zTOF_pion.resize(0);QA_zTOF_kaon.resize(0);
+	QA_hasTOF.resize(0);QA_IfConfuse.resize(0);
 
 	// std::vector<int> Constructed_KFParticle_Vec_index; Constructed_KFParticle_Vec_index.resize(0);
 	// for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
@@ -495,6 +538,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		// cout<<"CrefMult:"<<CrefMult<<endl;
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
+
+		// Filling QA
+		QA_hasTOF.emplace_back(false);
+		QA_dEdx.emplace_back(0.);QA_dcatopv.emplace_back(0.);QA_m2.emplace_back(0.);QA_nSigmaProton.emplace_back(0.);
+		QA_nSigmaPion.emplace_back(0.);QA_nSigmaKaon.emplace_back(0.);QA_zTOF_proton.emplace_back(0.);QA_zTOF_pion.emplace_back(0.);QA_zTOF_kaon.emplace_back(0.);
+		QA_zTOF_kaon.emplace_back(false);
+
+
 		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
 		int eLambda = -(upQ-1)/2; // 0 if Lambda, 1 if AntiLambda
 
@@ -533,9 +584,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			for (Int_t iTrack = iTrackStart;iTrack >= 0;iTrack--){
 				StPicoTrack *track = mPicoDst->track(iTrack);
 				if (track->id() == globalTrackId){
-					cout<<"track->nHitsFit() = "<<track->nHitsFit()<<endl;
 					(mPicoDst->track(iTrack))->setNHitsFit(0);
-					cout<<"track->nHitsFit() = "<<track->nHitsFit()<<endl;
 					break;
 				}
 			}
@@ -579,9 +628,23 @@ Int_t StKFParticleAnalysisMaker::Make()
 		{
 			int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
 			float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
-			// float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
+			float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
 			// hgbtofYlocal->Fill(BtofYLocal);
-			// if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+			if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+		}
+		StPicoPhysicalHelix helix = track->helix(magnet);
+		TVector3 pkaon = helix.momentum(magnet*kilogauss);
+		if (hasTOF)
+		{
+			beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
+			m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
+
+			// some kaon QA
+			//if (track->nSigmaKaon() >  6) hgptm2_largenSigmaKaon->Fill(track->gMom().Perp(), m2);
+			//if (track->nSigmaKaon() < -6) hgptm2_smallnSigmaKaon->Fill(track->gMom().Perp(), m2);
+			zTOF_proton = 1/beta - sqrt(ProtonPdgMass*ProtonPdgMass/pkaon.Mag2()+1);
+			zTOF_pion   = 1/beta - sqrt(PionPdgMass*PionPdgMass/pkaon.Mag2()+1);
+			zTOF_kaon   = 1/beta - sqrt(KaonPdgMass*KaonPdgMass/pkaon.Mag2()+1);
 		}
 
 		// Fill tracks
@@ -605,61 +668,84 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// 	cout<<"track->nHitsFit() = "<<track->nHitsFit()<<endl;
 		// 	cout<<"End Fuck"<<endl;
 		// }};
-		if (fabs(nSigmaProton) < fabs(nSigmaKaon) && fabs(nSigmaProton) < fabs(nSigmaPion)) // More likely be Proton
-		{
-			bool proton_cut = true;
-			if (pt < pT_trig_lo || pt > pT_trig_hi) proton_cut = false; 
-			if (fabs(eta_prim) > eta_trig_cut) proton_cut = false;
-			ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
-			if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
-			if (fabs(nSigmaProton) > 2) proton_cut = false;
-			if (dcatopv > dcatoPV_hi) proton_cut = false;
-			if (proton_cut) {
-				IfRecordThisTrack = true;
-				if (track->charge() > 0) {PDG.emplace_back( 2212);}
-				else                     {PDG.emplace_back(-2212);}
-				InvariantMass.emplace_back(ProtonPdgMass);
-			}
-		}
-		else if (fabs(nSigmaPion) < fabs(nSigmaKaon) && fabs(nSigmaPion) < fabs(nSigmaProton)) // More likely be Pion
-		{
-			bool pion_cut = true;
-			if (pt < pT_trig_lo || pt > pT_trig_hi) pion_cut = false; // use p < 2
-			if (fabs(eta_prim) > eta_trig_cut) pion_cut = false;
-			PionPID pion_pid(0., nSigmaPion, pt); // not using zTOF
-			if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < pt < 2.0!!!
-			if (fabs(nSigmaPion) > 2) pion_cut = false;
-			if (dcatopv > dcatoPV_hi) pion_cut = false;
-			if (pion_cut) {
-				IfRecordThisTrack = true;
-				if (track->charge() > 0) {PDG.emplace_back( 211);}
-				else                     {PDG.emplace_back(-211);}
-				InvariantMass.emplace_back(PionPdgMass);
-			}
-		}
-		else if (fabs(nSigmaKaon) < fabs(nSigmaPion) && fabs(nSigmaKaon) < fabs(nSigmaProton)) // More likely be Kaon
-		{
-			bool kaon_cut = true;
-			if (pt < pT_trig_lo || pt > 1.6) kaon_cut = false; // use p < 1.6
-			if (fabs(eta_prim) > eta_trig_cut) kaon_cut = false;
-			KaonPID kaon_pid(0., nSigmaKaon, pt); // not using zTOF
-			if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
-			if (fabs(nSigmaKaon) > 2) kaon_cut = false;
-			if (dcatopv > 2.0) kaon_cut = false;
-			// for (int i = 0; i < OmegaVec.size(); i++) if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) kaon_cut = false;
-			// for (int i = 0; i < OmegaVec.size(); i++) if (IsTrackParticleDaughter(OmegaVec[i], track->id())) kaon_cut = false;
-			if (kaon_cut) {
-				IfRecordThisTrack = true;
-				if (track->charge() > 0) {PDG.emplace_back( 321);}
-				else                     {PDG.emplace_back(-321);}
-				InvariantMass.emplace_back(KaonPdgMass);
-			}
-		}
+
+		// Test if Proton
+		bool proton_cut = true;
+		if (fabs(nSigmaProton) > 2) proton_cut = false;
+		if (pt < pT_trig_lo || pt > pT_trig_hi) proton_cut = false; 
+		if (fabs(eta_prim) > eta_trig_cut) proton_cut = false;
+		if (!hasTOF && pt > proton_pT_TOFth) proton_cut = false;
+		if (pt > proton_pT_TOFth && (m2 > proton_m2_hi || m2 < proton_m2_lo)) proton_cut = false;
+		ProtonPID proton_pid(0., nSigmaProton, pt); // not using zTOF
+		if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < pt < 2.0!!!
+		if (dcatopv > dcatoPV_hi) proton_cut = false;
+		
+		// Test if Pion
+		bool pion_cut = true;
+		if (fabs(nSigmaPion) > 2) pion_cut = false;
+		if (pt < pT_trig_lo || pt > pT_trig_hi) pion_cut = false; // use p < 2
+		if (fabs(eta_prim) > eta_trig_cut) pion_cut = false;
+		PionPID pion_pid(0., nSigmaPion, pt); // not using zTOF
+		if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < pt < 2.0!!!
+		if (dcatopv > dcatoPV_hi) pion_cut = false;
+		if (!hasTOF && pt > pion_pT_TOFth) pion_cut = false;
+		if (pt > pion_pT_TOFth && (m2 > pion_m2_hi || m2 < pion_m2_lo)) pion_cut = false;
+
+		// Test if Kaon
+		bool kaon_cut = true;
+		if (fabs(nSigmaKaon) > 2) kaon_cut = false;
+		if (pt < pT_trig_lo || pt > 1.6) kaon_cut = false; // use p < 1.6
+		if (fabs(eta_prim) > eta_trig_cut) kaon_cut = false;
+		if (!hasTOF && pt > 0.4) kaon_cut = false;
+		if (pt > 0.4 && (m2 > 0.34 || m2 < 0.15)) kaon_cut = false;
+		double zTOF = 1/beta - sqrt(KaonPdgMass*KaonPdgMass/pkaon.Mag2()+1);
+		KaonPID kaon_pid(zTOF, nSigmaKaon, pt); // not using zTOF
+		if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < pt < 2.0!!!
+		if (dcatopv > 2.0) kaon_cut = false;
+		// for (int i = 0; i < OmegaVec.size(); i++) if (IsKaonOmegaDaughter(OmegaVec[i], track->id())) kaon_cut = false;
+		// for (int i = 0; i < OmegaVec.size(); i++) if (IsTrackParticleDaughter(OmegaVec[i], track->id())) kaon_cut = false;
+
+		if (proton_cut + pion_cut + kaon_cut == 1) {IfRecordThisTrack == true;QA_IfConfuse.emplace_back(false);}
+		if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack == true;QA_IfConfuse.emplace_back(true);}
 
 		if (IfRecordThisTrack == true) {
 			px.emplace_back(track->gMom().X());
 			py.emplace_back(track->gMom().Y());
 			pz.emplace_back(track->gMom().Z());
+			if      (proton_cut) {
+				IfRecordThisTrack = true;
+				if (track->charge() > 0) {PDG.emplace_back( 2212);}
+				else                     {PDG.emplace_back(-2212);}
+				InvariantMass.emplace_back(ProtonPdgMass);
+			}
+			else if (pion_cut) {
+				IfRecordThisTrack = true;
+				if (track->charge() > 0) {PDG.emplace_back( 211);}
+				else                     {PDG.emplace_back(-211);}
+				InvariantMass.emplace_back(PionPdgMass);
+			}
+			else if (kaon_cut) {
+				IfRecordThisTrack = true;
+				if (track->charge() > 0) {PDG.emplace_back( 321);}
+				else                     {PDG.emplace_back(-321);}
+				InvariantMass.emplace_back(KaonPdgMass);
+			}
+
+			// Filling QA
+			if (hasTOF) {
+				QA_hasTOF.emplace_back(true);
+				QA_zTOF_proton.emplace_back(zTOF_proton);QA_zTOF_pion.emplace_back(zTOF_pion);QA_zTOF_kaon.emplace_back(zTOF_kaon);
+				QA_m2.emplace_back(m2);
+			}
+			else{
+				QA_hasTOF.emplace_back(false);
+				QA_zTOF_proton.emplace_back(0.);QA_zTOF_pion.emplace_back(0.);QA_zTOF_kaon.emplace_back(0.);
+				QA_m2.emplace_back(0.);
+			}
+			QA_nSigmaProton.emplace_back(nSigmaProton);
+			QA_nSigmaPion.emplace_back(nSigmaPion);
+			QA_nSigmaKaon.emplace_back(nSigmaKaon);
+			QA_dEdx.emplace_back(track->dEdx());QA_dcatopv.emplace_back(dcatopv);
 		}
 
 	}

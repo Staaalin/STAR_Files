@@ -78,6 +78,19 @@ private:
 	StPicoDstMaker *mPicoDstMaker;
 	StRefMultCorr *mRefMultCorr;
 
+	// cut params for coalescence
+	float pT_lo, pT_hi;
+	float pT_asso_lo, pT_asso_hi;
+	float pT_trig_lo, pT_trig_hi;
+	float eta_trig_cut;
+	float pion_pT_lo, pion_pT_hi;
+	float proton_pT_lo, proton_pT_hi;
+	float pion_pT_TOFth; // threshold above which TOF becomes required
+	float proton_pT_TOFth;
+	float pion_m2_lo, pion_m2_hi;
+	float proton_m2_lo, proton_m2_hi;
+	float dcatoPV_hi;
+
 	int        mRun;            
 	double     mEnergy;            
 	TString    mListDir;            
@@ -106,6 +119,11 @@ private:
 	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult;
 	std::vector<int> PDG , ReCons_TrackID;
 	std::vector<float> px,py,pz,InvariantMass;
+	double zTOF_proton,zTOF_pion,zTOF_kaon;
+	// Used for QA
+	std::vector<float> QA_dEdx,QA_dcatopv,QA_m2,QA_nSigmaProton,QA_nSigmaPion,QA_nSigmaKaon;
+	std::vector<double> QA_zTOF_proton,QA_zTOF_pion,QA_zTOF_kaon;
+	std::vector<bool> QA_hasTOF,QA_IfConfuse;
 
 	/////////////////////////////////////
 	int mStps;  
