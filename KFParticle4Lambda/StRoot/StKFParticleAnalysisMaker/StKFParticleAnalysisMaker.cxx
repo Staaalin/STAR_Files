@@ -528,7 +528,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// 		break;
 			// 	}
 			// }
-			Int_t iTrackStart = globalTrackId;
+			Int_t iTrackStart = globalTrackId - 1;
 			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
 			for (Int_t iTrack = iTrackStart;iTrack >= 0;iTrack--){
 				StPicoTrack *track = mPicoDst->track(iTrack);
