@@ -51,6 +51,30 @@ void readTree()
         TBranch *bpz              = nullptr;
         TBranch *bInvariantMass   = nullptr;
         TBranch *benergy          = nullptr;
+
+        std::vector<Float_t> *dEdx            = nullptr;
+        std::vector<Float_t> *m2              = nullptr;
+        std::vector<Float_t> *dcatopv         = nullptr;
+        std::vector<Float_t> *hasTOF          = nullptr;
+        std::vector<Float_t> *nSigmaProton    = nullptr;
+        std::vector<Float_t> *nSigmaPion      = nullptr;
+        std::vector<Float_t> *nSigmaKaon      = nullptr;
+        std::vector<double>  *zTOF_proton     = nullptr;
+        std::vector<double>  *zTOF_pion       = nullptr;
+        std::vector<double>  *zTOF_kaon       = nullptr;
+	    std::vector<Float_t> *IfConfuse       = nullptr;
+
+        TBranch *bdEdx            = nullptr;
+        TBranch *bm2              = nullptr;
+        TBranch *bdcatopv         = nullptr;
+        TBranch *bhasTOF          = nullptr;
+        TBranch *bnSigmaProton    = nullptr;
+        TBranch *bnSigmaPion      = nullptr;
+        TBranch *bnSigmaKaon      = nullptr;
+        TBranch *bzTOF_proton     = nullptr;
+        TBranch *bzTOF_pion       = nullptr;
+        TBranch *bzTOF_kaon       = nullptr;
+	    TBranch *bIfConfuse       = nullptr;
     
     #else
         #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
@@ -72,6 +96,30 @@ void readTree()
             TBranch *bInvariantMass   = NULL;
             TBranch *benergy          = NULL;
         
+            std::vector<Float_t> *dEdx            = NULL;
+            std::vector<Float_t> *m2              = NULL;
+            std::vector<Float_t> *dcatopv         = NULL;
+            std::vector<Float_t> *hasTOF          = NULL;
+            std::vector<Float_t> *nSigmaProton    = NULL;
+            std::vector<Float_t> *nSigmaPion      = NULL;
+            std::vector<Float_t> *nSigmaKaon      = NULL;
+            std::vector<double>  *zTOF_proton     = NULL;
+            std::vector<double>  *zTOF_pion       = NULL;
+            std::vector<double>  *zTOF_kaon       = NULL;
+            std::vector<Float_t> *IfConfuse       = NULL;
+
+            TBranch *bdEdx            = NULL;
+            TBranch *bm2              = NULL;
+            TBranch *bdcatopv         = NULL;
+            TBranch *bhasTOF          = NULL;
+            TBranch *bnSigmaProton    = NULL;
+            TBranch *bnSigmaPion      = NULL;
+            TBranch *bnSigmaKaon      = NULL;
+            TBranch *bzTOF_proton     = NULL;
+            TBranch *bzTOF_pion       = NULL;
+            TBranch *bzTOF_kaon       = NULL;
+            TBranch *bIfConfuse       = NULL;
+
         #else
             std::vector<Int_t>   *PDG             = 0;
             std::vector<Int_t>   *evtID           = 0;
@@ -90,6 +138,31 @@ void readTree()
             TBranch *bpz              = 0;
             TBranch *bInvariantMass   = 0;
             TBranch *benergy          = 0;
+
+            std::vector<Float_t> *dEdx            = 0;
+            std::vector<Float_t> *m2              = 0;
+            std::vector<Float_t> *dcatopv         = 0;
+            std::vector<Float_t> *hasTOF          = 0;
+            std::vector<Float_t> *nSigmaProton    = 0;
+            std::vector<Float_t> *nSigmaPion      = 0;
+            std::vector<Float_t> *nSigmaKaon      = 0;
+            std::vector<double>  *zTOF_proton     = 0;
+            std::vector<double>  *zTOF_pion       = 0;
+            std::vector<double>  *zTOF_kaon       = 0;
+            std::vector<Float_t> *IfConfuse       = 0;
+
+            TBranch *bdEdx            = 0;
+            TBranch *bm2              = 0;
+            TBranch *bdcatopv         = 0;
+            TBranch *bhasTOF          = 0;
+            TBranch *bnSigmaProton    = 0;
+            TBranch *bnSigmaPion      = 0;
+            TBranch *bnSigmaKaon      = 0;
+            TBranch *bzTOF_proton     = 0;
+            TBranch *bzTOF_pion       = 0;
+            TBranch *bzTOF_kaon       = 0;
+            TBranch *bIfConfuse       = 0;
+
         #endif
     #endif
     Int_t refMult,grefMult,PDGMult;
@@ -103,7 +176,8 @@ void readTree()
 	const int HSize = 9;
 	TH1D *HMass[HSize];
 	TH1D *HP[HSize];
-	TH1D *HRapdity[HSize];
+	TH1D *HRapidity[HSize];
+	TH2D *H_dEdx_p[HSize];
 	for (int i=0;i<HSize;i++){
 		TString HistName1 = "HM";
 		TString HistName2 = "The Mass of ";
@@ -121,13 +195,21 @@ void readTree()
 		HP[i]->GetXaxis()->SetTitle("Momuntum [GeV]");
 		HP[i]->GetYaxis()->SetTitle("Counts");
         
-		TString HistName1 = "HRapdity";
-		TString HistName2 = "The Rapdity of ";
+		TString HistName1 = "HRapidity";
+		TString HistName2 = "The Rapidity of ";
 		HistName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
-		HRapdity[i] = new TH1D(HistName1, HistName2, 30, -1.5, 1.5);
-		HRapdity[i]->GetXaxis()->SetTitle("y");
-		HRapdity[i]->GetYaxis()->SetTitle("Counts");
+		HRapidity[i] = new TH1D(HistName1, HistName2, 30, -1.5, 1.5);
+		HRapidity[i]->GetXaxis()->SetTitle("y");
+		HRapidity[i]->GetYaxis()->SetTitle("Counts");
+        
+		TString HistName1 = "H_dEdx_p";
+		TString HistName2 = "The dE/dx vs. p of ";
+		HistName1 += ParticleName[i];
+		HistName2 += ParticleName[i];
+		HRapidity[i] = new TH2D(HistName1, HistName2, kBinNum/10, kmin, kmax, 100, 0, 15);
+		HRapidity[i]->GetXaxis()->SetTitle("p [GeV]");
+		HRapidity[i]->GetYaxis()->SetTitle("dE/dx [keV/cm]");
 	}
 
     //load data  
@@ -178,6 +260,19 @@ void readTree()
     hadronTree->SetBranchAddress("InvariantMass"  ,&InvariantMass ,&bInvariantMass);
     // hadronTree->SetBranchAddress("energy"        ,&energy       ,&benergy      );
 
+	// Used for QA
+    hadronTree->SetBranchAddress("dEdx"           ,&dEdx             ,&bdEdx             );
+    hadronTree->SetBranchAddress("m2"             ,&m2               ,&bm2               );
+    hadronTree->SetBranchAddress("dcatopv"        ,&dcatopv          ,&bdcatopv          );
+    hadronTree->SetBranchAddress("hasTOF"         ,&hasTOF           ,&bhasTOF           );
+    hadronTree->SetBranchAddress("nSigmaProton"   ,&nSigmaProton     ,&bnSigmaProton     );
+    hadronTree->SetBranchAddress("nSigmaPion"     ,&nSigmaPion       ,&bnSigmaPion       );
+    hadronTree->SetBranchAddress("nSigmaKaon"     ,&nSigmaKaon       ,&bnSigmaKaon       );
+    hadronTree->SetBranchAddress("zTOF_proton"    ,&zTOF_proton      ,&bzTOF_proton      );
+    hadronTree->SetBranchAddress("zTOF_pion"      ,&zTOF_pion        ,&bzTOF_pion        );
+    hadronTree->SetBranchAddress("zTOF_kaon"      ,&zTOF_kaon        ,&bzTOF_kaon        );
+	hadronTree->SetBranchAddress("IfConfuse"      ,&IfConfuse        ,&bIfConfuse        );
+
     const Int_t nentries=hadronTree->GetEntries();
     cout << "entries number: " << nentries << endl;
     
@@ -201,7 +296,7 @@ void readTree()
 
 					HMass[k]->Fill(InvariantMass->at(j));
 					HP[k]->Fill(pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2),0.5));
-					HRapdity[k]->Fill(rap);
+					HRapidity[k]->Fill(rap);
 					break;
 				}
 			}
@@ -231,7 +326,7 @@ void readTree()
 	for (int i=0;i<HSize;i++){
 		HMass[i]->Write();
 		HP[i]->Write();
-		HRapdity[i]->Write();
+		HRapidity[i]->Write();
 	}
 
     file->Write();
