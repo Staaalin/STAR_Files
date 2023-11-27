@@ -528,13 +528,21 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// 		break;
 			// 	}
 			// }
-			for (Int_t iTrack = track->id(); iTrack >= 0; iTrack--) {
+			for (Int_t iTrack = globalTrackId;iTrack >= 0;iTrack--){
 				StPicoTrack *track = mPicoDst->track(iTrack);
 				if (track->id() == globalTrackId){
 					cout<<"track location = "<<iTrack<<" , TrackId = "<<track->id()<<endl;
 					break;
 				}
 			}
+			for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
+				StPicoTrack *track = mPicoDst->track(iTrack);
+				if (track->id() == globalTrackId){
+					cout<<"track location = "<<iTrack<<" , TrackId = "<<track->id()<<endl;
+					break;
+				}
+			}
+			cout<<"____________________________________"<<endl;
 		}
 	}
 
