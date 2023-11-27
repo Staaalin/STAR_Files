@@ -746,7 +746,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_nSigmaPion.emplace_back(nSigmaPion);
 			QA_nSigmaKaon.emplace_back(nSigmaKaon);
 			QA_dEdx.emplace_back(track->dEdx());QA_dcatopv.emplace_back(dcatopv);
-			cout<<"track->dEdx() = "<<track->dEdx()<<endl;
 		}
 
 	}
