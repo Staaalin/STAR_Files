@@ -543,6 +543,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		QA_hasTOF.emplace_back(0);
 		QA_dEdx.emplace_back(0.);QA_dcatopv.emplace_back(0.);QA_m2.emplace_back(0.);QA_nSigmaProton.emplace_back(0.);
 		QA_nSigmaPion.emplace_back(0.);QA_nSigmaKaon.emplace_back(0.);QA_zTOF_proton.emplace_back(0.);QA_zTOF_pion.emplace_back(0.);QA_zTOF_kaon.emplace_back(0.);
+		QA_IfConfuse.emplace_back(0);
 
 
 		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
