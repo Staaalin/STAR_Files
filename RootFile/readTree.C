@@ -404,9 +404,9 @@ void readTree()
 		HMass[i]->Write();
 		HP[i]->Write();
 		HRapidity[i]->Write();
-	    Hdcatopv->Write();
-	    H_dEdx_p->Write();
-	    H_sigma_TOF->Write();
+	    Hdcatopv[i]->Write();
+	    H_dEdx_p[i]->Write();
+	    H_sigma_TOF[i]->Write();
 	}
 	for (int i=0;i<3;i++){
         HC_sigma_TOF[i]->Write();
