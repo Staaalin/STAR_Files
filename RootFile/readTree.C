@@ -211,9 +211,9 @@ void readTree()
 		TString HistName2 = "The dcatopv of ";
 		HistName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
-		HRapidity[i] = new TH1D(HistName1, HistName2, 30, -1.5, 1.5);
-		HRapidity[i]->GetXaxis()->SetTitle("DCA to PV [cm]");
-		HRapidity[i]->GetYaxis()->SetTitle("Counts");
+		Hdcatopv[i] = new TH1D(HistName1, HistName2, 30, -1.5, 1.5);
+		Hdcatopv[i]->GetXaxis()->SetTitle("DCA to PV [cm]");
+		Hdcatopv[i]->GetYaxis()->SetTitle("Counts");
 
 		TString HistName1 = "H_dEdx_p";
 		TString HistName2 = "The dE/dx vs. p of ";
