@@ -253,18 +253,18 @@ void readTree()
 		TString HistName2 = "The nSigma";
 		HistName2 += ParticleName[i];
         HistName2 += " vs. momentum";
-		H_sigma_TOF[i] = new TH2D(HistName1, HistName2, 400, 0, 5, 400, -2.5, 2.5);
-		H_sigma_TOF[i]->GetXaxis()->SetTitle("p [GeV]");
-		H_sigma_TOF[i]->GetYaxis()->SetTitle("nSigma");
+		H_sigma_p[i] = new TH2D(HistName1, HistName2, 400, 0, 5, 400, -2.5, 2.5);
+		H_sigma_p[i]->GetXaxis()->SetTitle("p [GeV]");
+		H_sigma_p[i]->GetYaxis()->SetTitle("nSigma");
         
 		TString HistName1 = "H_sigma_pT";
 		HistName1 += ParticleName[i];
 		TString HistName2 = "The nSigma";
 		HistName2 += ParticleName[i];
         HistName2 += " vs. pT";
-		H_sigma_TOF[i] = new TH2D(HistName1, HistName2, 400, 0, 5, 400, -2.5, 2.5);
-		H_sigma_TOF[i]->GetXaxis()->SetTitle("pT [GeV]");
-		H_sigma_TOF[i]->GetYaxis()->SetTitle("nSigma");
+		H_sigma_pT[i] = new TH2D(HistName1, HistName2, 400, 0, 3, 400, -2.5, 2.5);
+		H_sigma_pT[i]->GetXaxis()->SetTitle("pT [GeV]");
+		H_sigma_pT[i]->GetYaxis()->SetTitle("nSigma");
 	}
 	const TString ConfusedParticleName[] = {"Proton" , "Pion"  , "Kaon"};
     for (int i=0;i<3;i++) {
