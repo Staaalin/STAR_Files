@@ -178,6 +178,7 @@ void readTree()
 	TH1D *HP[HSize];
 	TH1D *HRapidity[HSize];
 	TH1D *Hdcatopv[HSize];
+	TH1D *HnSigma[HSize];
 	TH2D *H_dEdx_p[HSize];
 	TH2D *H_sigma_TOF[HSize];
     // for confused
@@ -195,7 +196,7 @@ void readTree()
 		TString HistName2 = "The Momuntum of ";
 		HistName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
-		HP[i] = new TH1D(HistName1, HistName2, kBinNum/10, kmin, kmax);
+		HP[i] = new TH1D(HistName1, HistName2, kBinNum/10, kmin, 4);
 		HP[i]->GetXaxis()->SetTitle("Momuntum [GeV]");
 		HP[i]->GetYaxis()->SetTitle("Counts");
         
@@ -211,9 +212,19 @@ void readTree()
 		TString HistName2 = "The dcatopv of ";
 		HistName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
-		Hdcatopv[i] = new TH1D(HistName1, HistName2, 30, -1.5, 1.5);
+		Hdcatopv[i] = new TH1D(HistName1, HistName2, 60, 0, 3);
 		Hdcatopv[i]->GetXaxis()->SetTitle("DCA to PV [cm]");
 		Hdcatopv[i]->GetYaxis()->SetTitle("Counts");
+
+		TString HistName1 = "HnSigma";
+		TString HistName2 = "The nSigma";
+		HistName1 += ParticleName[i];
+		HistName2 += ParticleName[i];
+        HistName2 += " of ";
+		HistName2 += ParticleName[i];
+		HnSigma[i] = new TH1D(HistName1, HistName2, 600, -3, 3);
+		HnSigma[i]->GetXaxis()->SetTitle("nSigma");
+		HnSigma[i]->GetYaxis()->SetTitle("Counts");
 
 		TString HistName1 = "H_dEdx_p";
 		TString HistName2 = "The dE/dx vs. p of ";
@@ -231,7 +242,7 @@ void readTree()
 		HistName2 += ParticleName[i];
         HistName2 += " of ";
 		HistName2 += ParticleName[i];
-		H_sigma_TOF[i] = new TH2D(HistName1, HistName2, 200, -35, 35, 200, -4, 4);
+		H_sigma_TOF[i] = new TH2D(HistName1, HistName2, 400, -3, 3, 400, -5, 5);
 		H_sigma_TOF[i]->GetXaxis()->SetTitle("nSigma");
 		H_sigma_TOF[i]->GetYaxis()->SetTitle("zTOF");
 	}
@@ -340,16 +351,19 @@ void readTree()
                         Hdcatopv[k]->Fill(dcatopv->at(j));
                         H_dEdx_p[k]->Fill(Mag,dEdx->at(j));
                         H_sigma_TOF[k]->Fill(nSigmaProton->at(j),zTOF_proton->at(j));
+                        HnSigma[k]->Fill(nSigmaProton->at(j));
                     }
                     if (fabs(PDG->at(j)) == 211){
                         Hdcatopv[k]->Fill(dcatopv->at(j));
                         H_dEdx_p[k]->Fill(Mag,dEdx->at(j));
                         H_sigma_TOF[k]->Fill(nSigmaPion->at(j),zTOF_pion->at(j));
+                        HnSigma[k]->Fill(nSigmaPion->at(j));
                     }
                     if (fabs(PDG->at(j)) == 321){
                         Hdcatopv[k]->Fill(dcatopv->at(j));
                         H_dEdx_p[k]->Fill(Mag,dEdx->at(j));
                         H_sigma_TOF[k]->Fill(nSigmaKaon->at(j),zTOF_kaon->at(j));
+                        HnSigma[k]->Fill(nSigmaKaon->at(j));
                     }
 					break;
 				}
