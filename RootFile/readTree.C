@@ -449,6 +449,7 @@ void readTree()
 	    H_dEdx_p[i]->Write();
 	    H_sigma_TOF[i]->Write();
 	    H_sigma_p[i]->Write();
+	    H_sigma_pT[i]->Write();
 	}
 	for (int i=0;i<3;i++){
         HC_sigma_TOF[i]->Write();
