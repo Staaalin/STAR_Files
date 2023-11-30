@@ -419,6 +419,7 @@ void readTree()
 		HP[i]->Write();
 		HRapidity[i]->Write();
 	    Hdcatopv[i]->Write();
+        HnSigma[i]->Write();
 	    H_dEdx_p[i]->Write();
 	    H_sigma_TOF[i]->Write();
 	}
