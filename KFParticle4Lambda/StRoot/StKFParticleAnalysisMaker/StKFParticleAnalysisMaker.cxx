@@ -209,6 +209,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
     hadronTree->Branch("zTOF_pion"          ,&QA_zTOF_pion        );
     hadronTree->Branch("zTOF_kaon"          ,&QA_zTOF_kaon        );
 	hadronTree->Branch("IfConfuse"          ,&QA_IfConfuse        );
+	
+	hdEdx_pQ = new TH2D("hdEdx_p","dE/dx vs. p*Q",2000,10,10,2000,0,20);
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
@@ -235,6 +237,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	hcentRefW ->Write();
 
 	hadronTree ->Write();
+
+	hdEdx_pQ->Write();
 
 	return;
 }
@@ -605,6 +609,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
 		if (! track->isPrimary()) continue;
 		track_index.push_back(iTrack);
+
+		hdEdx_pQ->Fill(track->charge()*track->gMom().Mag(),track->dEdx());
 
 		// track info
 		float p = track->gMom().Mag();
