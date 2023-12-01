@@ -610,7 +610,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (! track->isPrimary()) continue;
 		track_index.push_back(iTrack);
 
-		hdEdx_pQ->Fill(track->charge()*track->gMom().Mag(),track->dEdx());
+		hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
 
 		// track info
 		float p = track->gMom().Mag();

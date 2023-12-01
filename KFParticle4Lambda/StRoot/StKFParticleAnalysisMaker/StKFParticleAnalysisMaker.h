@@ -112,6 +112,8 @@ private:
 	TH1F *hcent;
 	TH1F *hcentw;
 
+	TH2D *hdEdx_pQ;
+
 	TProfile *hcentRefM ; 
 	TProfile *hcentRefW ; 
 
