@@ -210,7 +210,17 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
     hadronTree->Branch("zTOF_kaon"          ,&QA_zTOF_kaon        );
 	hadronTree->Branch("IfConfuse"          ,&QA_IfConfuse        );
 	
-	hdEdx_pQ = new TH2D("hdEdx_p","dE/dx vs. p*Q",2000,10,10,2000,0,20);
+	hdEdx_pQ = new TH2D("hdEdx_p_NO_CUT","dE/dx vs. p*Q without cut",2000,10,10,2000,0,20);
+	hdEdx_pQ->GetXaxis()->SetTitle("p*Q [GeV]");
+	hdEdx_pQ->GetYaxis()->SetTitle("dE/dx [keV/cm]");
+	
+	hdEdx_pQ_1cut = new TH2D("hdEdx_p_1_CUT","dE/dx vs. p*Q HITS cut",2000,10,10,2000,0,20);
+	hdEdx_pQ_1cut->GetXaxis()->SetTitle("p*Q [GeV]");
+	hdEdx_pQ_1cut->GetYaxis()->SetTitle("dE/dx [keV/cm]");
+	
+	hdEdx_pQ_2cut = new TH2D("hdEdx_p_2_CUT","dE/dx vs. p*Q HITS & PID cut",2000,10,10,2000,0,20);
+	hdEdx_pQ_2cut->GetXaxis()->SetTitle("p*Q [GeV]");
+	hdEdx_pQ_2cut->GetYaxis()->SetTitle("dE/dx [keV/cm]");
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
@@ -239,6 +249,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	hadronTree ->Write();
 
 	hdEdx_pQ->Write();
+	hdEdx_pQ_1cut->Write();
+	hdEdx_pQ_2cut->Write();
 
 	return;
 }
@@ -601,6 +613,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	std::vector<int> track_index;
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 		StPicoTrack *track = mPicoDst->track(iTrack);
+		hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
     	if (! track)            continue;
     	if (! track->charge())  continue;
     	if (  track->nHitsFit() < 15) continue;
@@ -610,7 +623,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (! track->isPrimary()) continue;
 		track_index.push_back(iTrack);
 
-		hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+		hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
 
 		// track info
 		float p = track->gMom().Mag();
@@ -715,6 +728,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack = true;QA_IfConfuse.emplace_back(1);}
 
 		if (IfRecordThisTrack == true) {
+			hdEdx_pQ_2cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+
 			px.emplace_back(track->gMom().X());
 			py.emplace_back(track->gMom().Y());
 			pz.emplace_back(track->gMom().Z());

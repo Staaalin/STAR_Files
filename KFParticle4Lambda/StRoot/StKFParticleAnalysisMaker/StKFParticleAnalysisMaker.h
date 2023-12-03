@@ -113,6 +113,8 @@ private:
 	TH1F *hcentw;
 
 	TH2D *hdEdx_pQ;
+	TH2D *hdEdx_pQ_1cut;
+	TH2D *hdEdx_pQ_2cut;
 
 	TProfile *hcentRefM ; 
 	TProfile *hcentRefW ; 
