@@ -508,11 +508,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 		// if (IfRecordThisParticle = false){continue;}
 
-		if ((particle.GetPDG() != OmegaPdg) && (particle.GetPDG() != LambdaPdg)) {continue;}
+		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
 
 		PDG.emplace_back(particle.GetPDG());
 
-		if (IfHelix && (particle.GetPDG() == OmegaPdg)) {
+		if (IfHelix && (fabs(particle.GetPDG()) == OmegaPdg)) {
 			// helix
 			TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
 			TVector3 PositionOfParticle(particle.GetX(), particle.GetY(), particle.GetZ());
