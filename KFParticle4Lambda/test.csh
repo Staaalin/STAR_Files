@@ -4,14 +4,14 @@
 # starver SL20a
 
 ## AuAu@27GeV
-# # inputs
-# set iJob=$1
-# # settings
-# set nRun=18
-# set mRun=Run${nRun}
-# set mEnergy=27.0
-# set ListDir=./datalist/
-# set MainDir=`pwd`
+# inputs
+set iJob=$1
+# settings
+set nRun=18
+set mRun=Run${nRun}
+set mEnergy=27.0
+set ListDir=./datalist/
+set MainDir=`pwd`
 
 ## pAu@200GeV or dAu@200GeV
 # # inputs
@@ -24,14 +24,14 @@
 # set MainDir=`pwd`
 
 ## AuAu@200GeV
-# inputs
-set iJob=$1
-# settings
-set nRun=18
-set mRun=Run${nRun}
-set mEnergy=200.0
-set ListDir=./datalist/
-set MainDir=`pwd`
+# # inputs
+# set iJob=$1
+# # settings
+# set nRun=18
+# set mRun=Run${nRun}
+# set mEnergy=200.0
+# set ListDir=./datalist/
+# set MainDir=`pwd`
 
 echo $mEnergy $nRun
 
