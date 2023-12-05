@@ -1,0 +1,688 @@
+200.0 16
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/39     12 March 2018   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/39 (heads/v5-34-00-patches@v5-34-38-1-g507abd2, Dec 13 2022, 17:42:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+*** Float Point Exception is OFF ***
+Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/StarRoot.so" already loaded
+Warning in <StCloseFileOnTerminate::Instantiate>: Asynch signal handler has been created
+ *** Start at Date : Mon Dec  4 22:56:15 2023
+QAInfo:You are using STAR_LEVEL : TFG21g, git = tags/TFG21g,tag:50722f0e0, ROOT_LEVEL : 5.34.39 and node : rcas6013.rcf.bnl.gov with 8 AMD EPYC Processor (with IBPB)
+root4star [0]
+Processing ./readPicoDst.C("./datalist//200.0GeV_Run16/200.0.list.999998",999998,16,200.0,"./datalist/")...
+current job id: 999998
+Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/St_base.so" already loaded
+Warning in <TClass::TClass>: no dictionary for class StStrangeMuDst is available
+Warning in <TClass::TClass>: no dictionary for class StStrangeAssoc is available
+ loading of shared libraries done
+G__catchexception=0
+Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStChain.so" already loaded
+Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStUtilities.so" already loaded
+Load system libraries    + liblog4cxx + libStStarLogger
+Create chain bfc
+QA :INFO  - ==============================================
+QA :INFO  - ============= You are in TFG21g ===============
+QA :INFO  - Requested chain bfc is :    ry2016,RpicoDst,kfpInter,mysql,quiet,nodefault
+QA :INFO  -  Switch On                 mysql by Chain
+QA :INFO  -  Switch On             StBichsel by MuDSTDeps
+QA :INFO  -  Switch On            KFParticle by StEvent
+QA :INFO  -  Switch On                 globT by StEvent
+QA :INFO  -  Switch On                   SCL by StEvent
+QA :INFO  -  Switch On                 sim_T by TbUtil
+QA :INFO  -  Switch On                 tpc_T by TbUtil
+QA :INFO  -  Switch On                TbUtil by StEvent
+QA :INFO  -  Switch On                   Stu by StEvent
+QA :INFO  -  Switch On                 StDbT by dbutil
+QA :INFO  -  Switch On                    db by detDb
+QA :INFO  -  Switch On                 detDb by dbutil
+QA :INFO  -  Switch On                dbutil by StEvent
+QA :INFO  -  Switch On                TRGDef by StEvent
+QA :INFO  -  Switch On               StEvent by MuDSTDeps
+QA :INFO  -  Switch On               TofUtil by MuDSTDeps
+QA :INFO  -  Switch On              BTofUtil by MuDSTDeps
+QA :INFO  -  Switch On                 emc_T by EmcUtil
+QA :INFO  -  Switch On                 geomT by EmcUtil
+QA :INFO  -  Switch On               EmcUtil by MuDSTDeps
+QA :INFO  -  Switch On               PmdUtil by MuDSTDeps
+QA :INFO  -  Switch On             MuDSTDeps by PicoDeps
+QA :INFO  -  Switch On              PicoDeps by RpicoDST
+QA :INFO  -  Switch On              RpicoDST by Chain
+QA :INFO  -  Switch On              KFPInter by Chain
+QA :INFO  -  Switch On             NoDefault by Chain
+QA :INFO  -  Switch On                 quiet by Chain
+QA :INFO  -  Switch On                ry2016 by Chain
+QA :INFO  -  Switch On                   Agi by Default Geometry
+QA :INFO  - ==================                   Agi    is ON   : Alias VmcGeometry to AgiGeometry (gstar original geometry)
+QA :INFO  - ==================            KFParticle    is ON   : Load KFParticle
+QA :INFO  - ==================                 StDbT    is ON   : Load StDb_Tables
+QA :INFO  - ==================                 emc_T    is ON   : Load emc_Tables
+QA :INFO  - ==================                 geomT    is ON   : Load geometry_Tables
+QA :INFO  - ==================                 globT    is ON   : Load global_Tables
+QA :INFO  - ==================                 sim_T    is ON   : Load sim_Tables
+QA :INFO  - ==================                 tpc_T    is ON   : WARNING *** Option is OBSOLETE ***
+QA :INFO  - ==================                 mysql    is ON   : MySQL
+QA :INFO  - ==================                   SCL    is ON   : Load StarClassLibrary
+QA :INFO  - ==================             StBichsel    is ON   : Load Bichsel model for dE/dx
+QA :INFO  - ==================               StEvent    is ON   : Load StEvent
+QA :INFO  - ==================                TbUtil    is ON   : Load StTableUtilities
+QA :INFO  - ==================               TofUtil    is ON   : Load StTofUtil
+QA :INFO  - ==================              BTofUtil    is ON   : Load StBTofUtil
+QA :INFO  - ==================                   Stu    is ON   : Load StEventUtilities
+QA :INFO  - ==================               EmcUtil    is ON   : Load StEmcUtil
+QA :INFO  - ==================               PmdUtil    is ON   : Load StPmdUtil
+QA :INFO  - ==================             MuDSTDeps    is ON   : Load MuDST misc. dependencies (all)
+QA :INFO  - ==================              PicoDeps    is ON   : Load PicoDST dependences
+QA :INFO  - ==================              RpicoDST    is ON   : read PicoDST
+QA :INFO  - ==================                    db    is ON   :
+QA :INFO  - ==================                 detDb    is ON   : Load StDetectorDbMaker library
+QA :INFO  - ==================                dbutil    is ON   : Load StDbUtilities
+QA :INFO  - ==================                TRGDef    is ON   : Load StTriggerData
+QA :INFO  - ==================              KFPInter    is ON   : STAR KFParticle interface
+QA :INFO  - ==================             NoDefault    is ON   : No Default consistency check
+QA :INFO  - ==================                 quiet    is ON   : make chain quiet
+QA :INFO  - ==================                ry2016    is ON   :
+QA :INFO  - Process [First=     1/Last=    -1/Total=    -1] Events
+QA :INFO  - Library libmysqlclient         [          mysql] (/usr/lib64/mysql/libmysqlclient.so)       is loaded
+QA :INFO  - Library libStTpcDb             [        StEvent] (/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStTpcDb.so) is loaded
+QA :INFO  - Library libStBTofUtil          [       BTofUtil] (/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStBTofUtil.so)      is loaded
+QA :INFO  - Library libStPicoEvent         [       PicoDeps] (/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStPicoEvent.so)     is loaded
+QA :INFO  - Library libStPicoDstMaker      [       PicoDeps] (/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStPicoDstMaker.so)  is loaded
+QA :INFO  - Library libStDbBroker          [             db] (/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStDbBroker.so)      is loaded
+QA :INFO  - Library libSt_db_Maker         [             db] (/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libSt_db_Maker.so)     is loaded
+QA :INFO  - Library libStDetectorDbMaker   [          detDb] (/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStDetectorDbMaker.so)       is loaded
+QA :INFO  - Library libStDbUtilities       [         dbutil] (/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStDbUtilities.so)   is loaded
+QA :INFO  - Library libKFParticlePerformance [       KFPInter] (/direct/star+u/svianping/STAR_Files/KFParticle4Lambda/.sl73_x8664_gcc485/LIB/libKFParticlePerformance.so)       is loaded
+QA :INFO  - Library libStKFParticleAnalysisMaker [       KFPInter] (/direct/star+u/svianping/STAR_Files/KFParticle4Lambda/.sl73_x8664_gcc485/LIB/libStKFParticleAnalysisMaker.so)       is loaded
+QA :INFO  - Input file name = ./datalist//200.0GeV_Run16/200.0.list.999998
+BFC:INFO  - StFile::AddFile : *** IGNORED *** File ./datalist//200.0GeV_Run16/200.0.list.999998 has wrong extention
+
+QA :INFO  - Output root file name 200.0.999998.root
+QA :INFO  - ProcessLine:new StPicoDstMaker(2,"./datalist//200.0GeV_Run16/200.0.list.999998")
+(class StPicoDstMaker*)0x83b37a0
+BFC:INFO  - Using DB flavors: ofl+TFG
+QA :INFO  - QAInfo:StBFChain            built Mar 14 2022 19:11:02 from Tag $Name:  $ $Id: StBFChain.h,v 1.59 2019/11/19 17:26:17 jeromel Exp $
+QA :INFO  - QAInfo:StPicoDstMaker       built Jun  9 2021 13:05:13 from Tag $Name:  $ $Id: StPicoDstMaker.h,v 1.30 2021/02/23 17:27:01 gnigmat Exp $
+QA :INFO  - QAInfo:St_db_Maker          built Jun  9 2021 13:53:26 from Tag $Name:  $ $Id: St_db_Maker.h,v 1.46 2015/05/05 21:05:52 dmitry Exp $
+QA :INFO  - QAInfo:StDetectorDbMaker    built Jun  9 2021 11:58:34 from Tag $Name:  $ $Id: StDetectorDbMaker.h,v 1.5 2015/12/23 23:34:09 fisyak Exp $
+QA :INFO  - +++ Setting attribute .gopt. =
+QA :INFO  -  StBFChain::bfc
+QA :INFO  -    StPicoDstMaker::PicoDst
+QA :INFO  -    St_db_Maker::db
+QA :INFO  -    StDetectorDbMaker::detDb
+Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/StPicoEvent.so" already loaded
+Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/StPicoDstMaker.so" already loaded
+BFC:INFO  - StBFChain::Init : Time=Mon Dec  4 22:56:23 2023 Cwd=/direct/star+u/svianping/STAR_Files/KFParticle4Lambda
+QA :INFO  - blacklist tpc
+QA :INFO  - blacklist svt
+QA :INFO  - blacklist ssd
+QA :INFO  - blacklist sst
+QA :INFO  - blacklist pxl
+QA :INFO  - blacklist ist
+QA :INFO  - blacklist fms
+QA :INFO  - blacklist eemc
+StChain:DEBUG - *** Call << StPicoDstMaker:Init() ***
+StChain:INFO  -  Read in picoDst file root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/dAu200_production_2016/ReversedFullField/P17id.SL18f/2016/132/17132063/st_physics_17132063_raw_3500004.picoDst.root
+StChain:INFO  -  Read in picoDst file root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/dAu200_production_2016/ReversedFullField/P17id.SL18f/2016/132/17132063/st_physics_17132063_raw_5000002.picoDst.root
+StChain:INFO  -  Total 2 files have been read in.
+StChain:WARN  - setBranchAddress: Branch name BEmcSmdEHit does not exist!
+StChain:WARN  - setBranchAddress: Branch name BEmcSmdPHit does not exist!
+StChain:WARN  - setBranchAddress: Branch name ETofHit does not exist!
+StChain:WARN  - setBranchAddress: Branch name ETofPidTraits does not exist!
+StChain:WARN  - setBranchAddress: Branch name McVertex does not exist!
+StChain:WARN  - setBranchAddress: Branch name McTrack does not exist!
+StChain:DEBUG - *** Call << St_db_Maker:Init() ***
+StChain:INFO  - St_db_Maker::OpenMySQL : Block domain eemc
+StChain:INFO  - St_db_Maker::OpenMySQL : Block domain fms
+StChain:INFO  - St_db_Maker::OpenMySQL : Block domain ist
+StChain:INFO  - St_db_Maker::OpenMySQL : Block domain pxl
+StChain:INFO  - St_db_Maker::OpenMySQL : Block domain sst
+StChain:INFO  - St_db_Maker::OpenMySQL : Block domain ssd
+StChain:INFO  - St_db_Maker::OpenMySQL : Block domain svt
+StChain:INFO  - St_db_Maker::OpenMySQL : Block domain tpc
+StChain:INFO  - StDbManagerImpl::lookUpServers(): config file name is /gpfs01/star/subsys-tpc/fisyak/STAR/packages/conf/dbLoadBalancerLocalConfig_BNL.xml
+There is no 1  /star/u/svianping/dbServers.xml
+ looking at 2 /gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/StDb/servers/dbServers.xml
+DB OVERRIDE default user with: svianping
+StChain:INFO  - StDbManagerImpl::lookUpServer() line=711
+******** Order of Files searched for dbServers *********
+  3. /gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/StDb/servers/dbServers.xml
+********************************************************
+
+StHyperCacheManager: reading cache config from /gpfs01/star/subsys-tpc/fisyak/STAR/packages/conf/hyperconfig.json
+StChain:INFO  - StDbLib: db server found in 3 iterations
+StChain:INFO  - MysqlDb::Connect: Load balancer took 0 ms, will use star-db08.rcf.bnl.gov:3316
+StChain:INFO  - Ssl_cipher = AES128-SHA
+StChain:INFO  - MysqlDb::Connect(host,user,pw,database,port) line=527 Server Connecting: DB=StarDb  Host=star-db08.rcf.bnl.gov:3316
+ --> Connection Time=0.0362811 sec    MysqlVersion=5.7.24
+StChain:WARN  - StDbManagerImpl::getDbDomain(domainName) line=1061 Adding New dbDomain= fst
+StChain:WARN  - StDbManagerImpl::getDbDomain(domainName) line=1061 Adding New dbDomain= ftt
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table rhicf/rhicfBarPos..rhicfBarPos
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table etof/etofAlign..etofAlign
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table etof/etofModCounter..etofModCounter
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table ftt/fttFobToHV..fttFobToHV
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table ftt/fttFobToStation..fttFobToStation
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table ftt/fttHardwareMap..fttHardwareMap
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table rhicf/rhicfPedestalF..rhicfPedestalF
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table rhicf/rhicfPhotonLeakageIn..rhicfPhotonLeakageIn
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table rhicf/rhicfPhotonLeakageOut..rhicfPhotonLeakageOut
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table rhicf/rhicfNeutronLeakageOut..rhicfNeutronLeakageOut
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table rhicf/rhicfCrossTalk..rhicfCrossTalk
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table fst/fstGain..fstGain
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table fst/fstPedNoise..fstPedNoise
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table fst/fstControl..fstControl
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table fst/fstMapping..fstMapping
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table fst/fstChipConfig..fstChipConfig
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table fst/fstSimPar..fstSimPar
+StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table ftt/fttDataWindows..fttDataWindows
+StChain:DEBUG - *** Call << StDetectorDbMaker:Init() ***
+StChain:DEBUG - *** Call << StKFParticleAnalysisMaker:Init() ***
+output_999998.root
+current job id: 999998
+Run list :./datalist//runList/run16List200.0.list loaded.
+Total    :1 runs.
+badrun list :./datalist//badList/badrun16List200.0.list loaded.
+Total       :0 bad runs.
+1 132 133 1 1
+-----------------------------------------
+------- histograms & tree claimed -------
+-----------------------------------------
+StRefMultCorr::readHeaderFile  [refmult] Correction parameters and centrality definitions have been successfully read.
+read in nBadRun_refmult_2010: 717
+read in nBadRun_refmult_2011: 134
+read in nBadRun_refmult_2017: 24
+read in nBadRun_refmult_2018: 86
+StRefMultCorr::readHeaderFile  [refmult2] Correction parameters and centrality definitions have been successfully read.
+read in nBadRun_refmult_2010: 717
+read in nBadRun_refmult_2011: 134
+read in nBadRun_refmult_2017: 24
+read in nBadRun_refmult_2018: 86
+StRefMultCorr::readHeaderFile  [refmult3] Correction parameters and centrality definitions have been successfully read.
+read in nBadRun_refmult_2010: 717
+read in nBadRun_refmult_2011: 134
+read in nBadRun_refmult_2017: 24
+read in nBadRun_refmult_2018: 86
+StRefMultCorr::readHeaderFile  [grefmult] Correction parameters and centrality definitions have been successfully read.
+read in nBadRun_refmult_2010: 717
+read in nBadRun_refmult_2011: 134
+read in nBadRun_refmult_2017: 24
+read in nBadRun_refmult_2018: 86
+StRefMultCorr::readBadRunsFromHeaderFile  Bad runs for year 2010, 2011, 2017 and 2018 have been read.
+-----------------------------------
+------- user's files loaded -------
+-----------------------------------
+chain->Init();
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to Event
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to Track
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to EmcTrigger
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to MtdTrigger
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to BTowHit
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to BTofHit
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to MtdHit
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to BbcHit
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to EpdHit
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to FmsHit
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to EmcPidTraits
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to BTofPidTraits
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to MtdPidTraits
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to TrackCovMatrix
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to BEmcSmdEHit
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to BEmcSmdPHit
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to ETofHit
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to ETofPidTraits
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to McVertex
+BFC:INFO  - StPicoDstMaker::SetStatus 1 to McTrack
+BFC:WARN  - setBranchAddress: Branch name BEmcSmdEHit does not exist!
+BFC:WARN  - setBranchAddress: Branch name BEmcSmdPHit does not exist!
+BFC:WARN  - setBranchAddress: Branch name ETofHit does not exist!
+BFC:WARN  - setBranchAddress: Branch name ETofPidTraits does not exist!
+BFC:WARN  - setBranchAddress: Branch name McVertex does not exist!
+BFC:WARN  - setBranchAddress: Branch name McTrack does not exist!
+18258 events in chain 18258 will be read.
+StChain:INFO  -  +++ New RunNumber found=-1 (previous = -3)
+StChain:INFO  - *********** Event Info **********************
+StChain:INFO  -         Run:       -1  Event    -1  TimeStamp 20330101.     0  Bunch 0:0
+StChain:INFO  -          EvtSize: 0     InpTrig:    0 OutTrig:    0
+StChain:INFO  - *********************************************
+St_db_Maker:INFO  -  +++ New RunNumber found=17132063 (previous = -3)
+St_db_Maker:INFO  - *********** Event Info **********************
+St_db_Maker:INFO  -     Run:    17132063  Event    11  TimeStamp 20160512. 34239  Bunch 0:0
+St_db_Maker:INFO  -      EvtSize: 0     InpTrig:    0 OutTrig:    0
+St_db_Maker:INFO  - *********************************************
+
+== Event 100 finish == 0min 1s: 0.01s/event
+
+== Event 200 finish == 0min 1s: 0.005s/event
+
+== Event 300 finish == 0min 1s: 0.00333333s/event
+
+== Event 400 finish == 0min 1s: 0.0025s/event
+
+== Event 500 finish == 0min 1s: 0.002s/event
+
+== Event 600 finish == 0min 1s: 0.00166667s/event
+
+== Event 700 finish == 0min 2s: 0.00285714s/event
+
+== Event 800 finish == 0min 2s: 0.0025s/event
+
+== Event 900 finish == 0min 2s: 0.00222222s/event
+
+== Event 1000 finish == 0min 2s: 0.002s/event
+
+== Event 1100 finish == 0min 2s: 0.00181818s/event
+
+== Event 1200 finish == 0min 2s: 0.00166667s/event
+
+== Event 1300 finish == 0min 3s: 0.00230769s/event
+
+== Event 1400 finish == 0min 3s: 0.00214286s/event
+
+== Event 1500 finish == 0min 3s: 0.002s/event
+
+== Event 1600 finish == 0min 3s: 0.001875s/event
+
+== Event 1700 finish == 0min 3s: 0.00176471s/event
+
+== Event 1800 finish == 0min 3s: 0.00166667s/event
+
+== Event 1900 finish == 0min 3s: 0.00157895s/event
+
+== Event 2000 finish == 0min 4s: 0.002s/event
+
+== Event 2100 finish == 0min 4s: 0.00190476s/event
+
+== Event 2200 finish == 0min 4s: 0.00181818s/event
+
+== Event 2300 finish == 0min 4s: 0.00173913s/event
+
+== Event 2400 finish == 0min 4s: 0.00166667s/event
+
+== Event 2500 finish == 0min 4s: 0.0016s/event
+
+== Event 2600 finish == 0min 5s: 0.00192308s/event
+
+== Event 2700 finish == 0min 5s: 0.00185185s/event
+
+== Event 2800 finish == 0min 5s: 0.00178571s/event
+
+== Event 2900 finish == 0min 5s: 0.00172414s/event
+
+== Event 3000 finish == 0min 5s: 0.00166667s/event
+
+== Event 3100 finish == 0min 5s: 0.0016129s/event
+
+== Event 3200 finish == 0min 5s: 0.0015625s/event
+
+== Event 3300 finish == 0min 6s: 0.00181818s/event
+
+== Event 3400 finish == 0min 6s: 0.00176471s/event
+
+== Event 3500 finish == 0min 6s: 0.00171429s/event
+
+== Event 3600 finish == 0min 6s: 0.00166667s/event
+
+== Event 3700 finish == 0min 6s: 0.00162162s/event
+
+== Event 3800 finish == 0min 6s: 0.00157895s/event
+
+== Event 3900 finish == 0min 6s: 0.00153846s/event
+
+== Event 4000 finish == 0min 7s: 0.00175s/event
+
+== Event 4100 finish == 0min 7s: 0.00170732s/event
+
+== Event 4200 finish == 0min 7s: 0.00166667s/event
+
+== Event 4300 finish == 0min 7s: 0.00162791s/event
+
+== Event 4400 finish == 0min 7s: 0.00159091s/event
+
+== Event 4500 finish == 0min 7s: 0.00155556s/event
+
+== Event 4600 finish == 0min 8s: 0.00173913s/event
+
+== Event 4700 finish == 0min 8s: 0.00170213s/event
+
+== Event 4800 finish == 0min 8s: 0.00166667s/event
+
+== Event 4900 finish == 0min 8s: 0.00163265s/event
+
+== Event 5000 finish == 0min 8s: 0.0016s/event
+
+== Event 5100 finish == 0min 8s: 0.00156863s/event
+
+== Event 5200 finish == 0min 9s: 0.00173077s/event
+
+== Event 5300 finish == 0min 9s: 0.00169811s/event
+
+== Event 5400 finish == 0min 9s: 0.00166667s/event
+
+== Event 5500 finish == 0min 9s: 0.00163636s/event
+
+== Event 5600 finish == 0min 9s: 0.00160714s/event
+
+== Event 5700 finish == 0min 9s: 0.00157895s/event
+
+== Event 5800 finish == 0min 9s: 0.00155172s/event
+
+== Event 5900 finish == 0min 10s: 0.00169492s/event
+
+== Event 6000 finish == 0min 10s: 0.00166667s/event
+
+== Event 6100 finish == 0min 10s: 0.00163934s/event
+
+== Event 6200 finish == 0min 10s: 0.0016129s/event
+
+== Event 6300 finish == 0min 10s: 0.0015873s/event
+
+== Event 6400 finish == 0min 10s: 0.0015625s/event
+
+== Event 6500 finish == 0min 11s: 0.00169231s/event
+
+== Event 6600 finish == 0min 11s: 0.00166667s/event
+
+== Event 6700 finish == 0min 11s: 0.00164179s/event
+
+== Event 6800 finish == 0min 11s: 0.00161765s/event
+
+== Event 6900 finish == 0min 11s: 0.0015942s/event
+
+== Event 7000 finish == 0min 11s: 0.00157143s/event
+
+== Event 7100 finish == 0min 11s: 0.0015493s/event
+
+== Event 7200 finish == 0min 12s: 0.00166667s/event
+
+== Event 7300 finish == 0min 12s: 0.00164384s/event
+
+== Event 7400 finish == 0min 12s: 0.00162162s/event
+
+== Event 7500 finish == 0min 12s: 0.0016s/event
+
+== Event 7600 finish == 0min 12s: 0.00157895s/event
+
+== Event 7700 finish == 0min 12s: 0.00155844s/event
+
+== Event 7800 finish == 0min 12s: 0.00153846s/event
+
+== Event 7900 finish == 0min 13s: 0.00164557s/event
+
+== Event 8000 finish == 0min 13s: 0.001625s/event
+
+== Event 8100 finish == 0min 13s: 0.00160494s/event
+
+== Event 8200 finish == 0min 13s: 0.00158537s/event
+
+== Event 8300 finish == 0min 13s: 0.00156627s/event
+
+== Event 8400 finish == 0min 13s: 0.00154762s/event
+
+== Event 8500 finish == 0min 14s: 0.00164706s/event
+
+== Event 8600 finish == 0min 14s: 0.00162791s/event
+
+== Event 8700 finish == 0min 14s: 0.0016092s/event
+
+== Event 8800 finish == 0min 14s: 0.00159091s/event
+
+== Event 8900 finish == 0min 14s: 0.00157303s/event
+
+== Event 9000 finish == 0min 14s: 0.00155556s/event
+
+== Event 9100 finish == 0min 14s: 0.00153846s/event
+
+== Event 9200 finish == 0min 15s: 0.00163043s/event
+
+== Event 9300 finish == 0min 15s: 0.0016129s/event
+
+== Event 9400 finish == 0min 15s: 0.00159574s/event
+
+== Event 9500 finish == 0min 15s: 0.00157895s/event
+
+== Event 9600 finish == 0min 15s: 0.0015625s/event
+
+== Event 9700 finish == 0min 15s: 0.00154639s/event
+
+== Event 9800 finish == 0min 16s: 0.00163265s/event
+
+== Event 9900 finish == 0min 16s: 0.00161616s/event
+
+== Event 10000 finish == 0min 16s: 0.0016s/event
+
+== Event 10100 finish == 0min 16s: 0.00158416s/event
+
+== Event 10200 finish == 0min 16s: 0.00156863s/event
+
+== Event 10300 finish == 0min 16s: 0.0015534s/event
+
+== Event 10400 finish == 0min 17s: 0.00163462s/event
+
+== Event 10500 finish == 0min 17s: 0.00161905s/event
+
+== Event 10600 finish == 0min 17s: 0.00160377s/event
+
+== Event 10700 finish == 0min 17s: 0.00158879s/event
+
+== Event 10800 finish == 0min 17s: 0.00157407s/event
+
+== Event 10900 finish == 0min 17s: 0.00155963s/event
+
+== Event 11000 finish == 0min 17s: 0.00154545s/event
+
+== Event 11100 finish == 0min 18s: 0.00162162s/event
+
+== Event 11200 finish == 0min 18s: 0.00160714s/event
+
+== Event 11300 finish == 0min 18s: 0.00159292s/event
+
+== Event 11400 finish == 0min 18s: 0.00157895s/event
+
+== Event 11500 finish == 0min 18s: 0.00156522s/event
+
+== Event 11600 finish == 0min 18s: 0.00155172s/event
+
+== Event 11700 finish == 0min 18s: 0.00153846s/event
+
+== Event 11800 finish == 0min 19s: 0.00161017s/event
+
+== Event 11900 finish == 0min 19s: 0.00159664s/event
+
+== Event 12000 finish == 0min 19s: 0.00158333s/event
+
+== Event 12100 finish == 0min 19s: 0.00157025s/event
+
+== Event 12200 finish == 0min 19s: 0.00155738s/event
+
+== Event 12300 finish == 0min 19s: 0.00154472s/event
+
+== Event 12400 finish == 0min 20s: 0.0016129s/event
+
+== Event 12500 finish == 0min 20s: 0.0016s/event
+
+== Event 12600 finish == 0min 20s: 0.0015873s/event
+
+== Event 12700 finish == 0min 20s: 0.0015748s/event
+
+== Event 12800 finish == 0min 20s: 0.0015625s/event
+
+== Event 12900 finish == 0min 20s: 0.00155039s/event
+
+== Event 13000 finish == 0min 21s: 0.00161538s/event
+
+== Event 13100 finish == 0min 21s: 0.00160305s/event
+
+== Event 13200 finish == 0min 21s: 0.00159091s/event
+
+== Event 13300 finish == 0min 21s: 0.00157895s/event
+
+== Event 13400 finish == 0min 21s: 0.00156716s/event
+
+== Event 13500 finish == 0min 21s: 0.00155556s/event
+
+== Event 13600 finish == 0min 21s: 0.00154412s/event
+
+== Event 13700 finish == 0min 22s: 0.00160584s/event
+
+== Event 13800 finish == 0min 22s: 0.0015942s/event
+
+== Event 13900 finish == 0min 22s: 0.00158273s/event
+
+== Event 14000 finish == 0min 22s: 0.00157143s/event
+
+== Event 14100 finish == 0min 22s: 0.00156028s/event
+
+== Event 14200 finish == 0min 22s: 0.0015493s/event
+
+== Event 14300 finish == 0min 22s: 0.00153846s/event
+
+== Event 14400 finish == 0min 23s: 0.00159722s/event
+
+== Event 14500 finish == 0min 23s: 0.00158621s/event
+
+== Event 14600 finish == 0min 23s: 0.00157534s/event
+
+== Event 14700 finish == 0min 23s: 0.00156463s/event
+
+== Event 14800 finish == 0min 23s: 0.00155405s/event
+
+== Event 14900 finish == 0min 23s: 0.00154362s/event
+
+== Event 15000 finish == 0min 23s: 0.00153333s/event
+
+== Event 15100 finish == 0min 24s: 0.0015894s/event
+
+== Event 15200 finish == 0min 24s: 0.00157895s/event
+
+== Event 15300 finish == 0min 24s: 0.00156863s/event
+
+== Event 15400 finish == 0min 24s: 0.00155844s/event
+
+== Event 15500 finish == 0min 24s: 0.00154839s/event
+
+== Event 15600 finish == 0min 24s: 0.00153846s/event
+
+== Event 15700 finish == 0min 25s: 0.00159236s/event
+
+== Event 15800 finish == 0min 25s: 0.00158228s/event
+
+== Event 15900 finish == 0min 25s: 0.00157233s/event
+
+== Event 16000 finish == 0min 25s: 0.0015625s/event
+
+== Event 16100 finish == 0min 25s: 0.0015528s/event
+
+== Event 16200 finish == 0min 25s: 0.00154321s/event
+
+== Event 16300 finish == 0min 26s: 0.00159509s/event
+
+== Event 16400 finish == 0min 26s: 0.00158537s/event
+
+== Event 16500 finish == 0min 26s: 0.00157576s/event
+
+== Event 16600 finish == 0min 26s: 0.00156627s/event
+
+== Event 16700 finish == 0min 26s: 0.00155689s/event
+
+== Event 16800 finish == 0min 26s: 0.00154762s/event
+
+== Event 16900 finish == 0min 27s: 0.00159763s/event
+
+== Event 17000 finish == 0min 27s: 0.00158824s/event
+
+== Event 17100 finish == 0min 27s: 0.00157895s/event
+
+== Event 17200 finish == 0min 27s: 0.00156977s/event
+
+== Event 17300 finish == 0min 27s: 0.00156069s/event
+
+== Event 17400 finish == 0min 27s: 0.00155172s/event
+
+== Event 17500 finish == 0min 27s: 0.00154286s/event
+
+== Event 17600 finish == 0min 28s: 0.00159091s/event
+
+== Event 17700 finish == 0min 28s: 0.00158192s/event
+
+== Event 17800 finish == 0min 28s: 0.00157303s/event
+
+== Event 17900 finish == 0min 28s: 0.00156425s/event
+
+== Event 18000 finish == 0min 28s: 0.00155556s/event
+
+== Event 18100 finish == 0min 28s: 0.00154696s/event
+
+== Event 18200 finish == 0min 28s: 0.00153846s/event
+******************************************
+Work done... now its time to close up shop!
+******************************************
+QA :INFO  - =================================================================================
+QA :INFO  - QAInfo:Chain            StBFChain::bfc                  Ast = 29.96        Cpu = 26.86
+QA :INFO  - QAInfo:Maker StKFParticleAnalysisMaker::ana                  Ast =  0.48( 1.6%) Cpu =  0.47( 1.7%)
+QA :INFO  - QAInfo:Maker    StDetectorDbMaker::detDb                Ast =  0.37( 1.2%) Cpu =  0.30( 1.1%)
+QA :INFO  - QAInfo:Maker          St_db_Maker::db                   Ast =  2.74( 9.2%) Cpu =  1.97( 7.3%)
+QA :INFO  - QAInfo:Maker       StPicoDstMaker::PicoDst              Ast = 26.37(88.0%) Cpu = 24.12(89.8%)
+St_db_Maker::Init
+Real time 0:00:00, CP time 0.180, 3 slices
+      MySQL::Init
+Real time 0:00:00, CP time 0.200, 2 slices
+St_db_Maker::Make
+Real time 0:00:02, CP time 1.930, 18827 slices
+      MySQL::Make
+Real time 0:00:00, CP time 0.000, 570 slices
+      MySQL::Data
+Real time 0:00:00, CP time 0.000
+StChain:INFO  - --------------Error Codes-------------------------
+StChain:INFO  -      nStOK   nStWarn    nStEOF    nStErr  nStFatal
+StChain:INFO  -      73032         0         0         0         0
+StChain:INFO  - --------------------------------------------------
+               StMemStat::Summary(calls)        Min        Aver         Max         RMS
+=============================================================================================
+         StDetectorDbMaker(detDb)::Clear(18237)    0.000000    0.000000    0.000000    0.000000
+         StDetectorDbMaker(detDb)::Make (18238)    0.000000    0.000000    0.000000    0.000000
+   StKFParticleAnalysisMaker(ana)::Clear(18237)    0.000000    0.000000    0.000000    0.000000
+   StKFParticleAnalysisMaker(ana)::Make (18238)    0.000000    0.000000    0.000000    0.000000
+          StPicoDstMaker(PicoDst)::Clear(18237)    0.000000    0.000000    0.000000    0.000000
+          StPicoDstMaker(PicoDst)::Make (18238)   -0.167282    0.002045   36.845581    0.272839
+                  St_db_Maker(db)::Clear(18237)   -1.203079   -0.000066    0.000000    0.008909
+                  St_db_Maker(db)::Make (18238)    0.000000    0.000000    0.000122    0.000001
+---------------------------------------------------------------------------------------------
+                                   Total(8)   -1.203079    0.001979   36.845581    0.272984
+=============================================================================================
+BFC:INFO  - StBFChain::Finish :  Closing all writable TFiles   . . . .
+BFC:INFO  - StBFChain::Finish : file KFParticleQA_999998.root has been closed
+BFC:INFO  - StBFChain::Finish : 1 files have been closed
+******************************************
+total number of events  18258
+******************************************
+BFC:INFO  - StDbConfigNodeImpl::printNumberStats() line=458 ******************** Number Stats ********************
+Total Number of Nodes        = 349
+Total Number of Tables       = 586
+Total Size of Data in Tables = 0 kBytes
+******************************************************
+
+BFC:INFO  - StDbManagerImpl::printTimeStats() line=1624
+*************************** DataBase ClockTime Stats ***************************
+Total Time in DB-API       = 0.547182    sec
+ --------------------- In aggregate ------------------
+ - Prepare Nodes & Servers = 0.547182    sec --> 100% of total
+ - Select & Retrieve data  = 0   sec --> 0% of total
+ --------------- In MySQL C-API (approximate) ---------
+ - Connecting to Servers   = 0.0366008   sec --> 6.68897% of total
+ - SQL Query Times         = 0.331744    sec --> 60.6278% of total
+ - socket transfer Times   = 0.0800323   sec --> 14.6263% of total
+********************************************************************************
+
+
+This is the end of ROOT -- Goodbye
