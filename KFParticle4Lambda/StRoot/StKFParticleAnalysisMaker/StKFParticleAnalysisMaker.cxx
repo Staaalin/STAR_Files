@@ -398,7 +398,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	const double magnet = mEvent->bField();
 
-	cout<<"Here OK"<<endl;
+	// cout<<"Here OK"<<endl;
 
 	// if(       (!mEvent->isTrigger(610001))
 	// 		&&(!mEvent->isTrigger(610011))
@@ -409,7 +409,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// )return kStOK; 
 	// if (!mEvent->isTrigger(530003))return kStOK;
 
-	cout<<"Trigger OK"<<endl;
+	// cout<<"Trigger OK"<<endl;
 
 	const TVector3 Vertex3D=mEvent->primaryVertex();
 	const double VertexX = Vertex3D.x(); 
