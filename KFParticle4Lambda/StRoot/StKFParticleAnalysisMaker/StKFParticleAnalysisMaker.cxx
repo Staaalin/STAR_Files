@@ -407,9 +407,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// 		&&(!mEvent->isTrigger(610041))
 	// 		&&(!mEvent->isTrigger(610051))
 	// )return kStOK; 
-	// if (!mEvent->isTrigger(530003))return kStOK;
+	if (!mEvent->isTrigger(530003))return kStOK;
 
-	// cout<<"Trigger OK"<<endl;
+	cout<<"Trigger OK"<<endl;
 
 	const TVector3 Vertex3D=mEvent->primaryVertex();
 	const double VertexX = Vertex3D.x(); 
