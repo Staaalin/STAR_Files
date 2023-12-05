@@ -400,13 +400,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	cout<<"Here OK"<<endl;
 
-	if(               (!mEvent->isTrigger(610001))
-			&&(!mEvent->isTrigger(610011))
-			&&(!mEvent->isTrigger(610021))
-			&&(!mEvent->isTrigger(610031))
-			&&(!mEvent->isTrigger(610041))
-			&&(!mEvent->isTrigger(610051))
-	  )return kStOK; 
+	// if(       (!mEvent->isTrigger(610001))
+	// 		&&(!mEvent->isTrigger(610011))
+	// 		&&(!mEvent->isTrigger(610021))
+	// 		&&(!mEvent->isTrigger(610031))
+	// 		&&(!mEvent->isTrigger(610041))
+	// 		&&(!mEvent->isTrigger(610051))
+	// )return kStOK; 
+	if (!mEvent->isTrigger(530003))return kStOK;
 
 	cout<<"Trigger OK"<<endl;
 
