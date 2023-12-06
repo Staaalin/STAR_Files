@@ -22,7 +22,7 @@ const string mParamStr_gref[nID_gref][nSet_gref] =
 //if you want to add new parameters, please always add after the current parameters, do not insert between them
 //the order of them is important!!!!!!!!!!!!!
 //=======================================================================================
-const Int_t nID_ref1  = 36;//after add N more new group of parameters, need to update nID_ref1 += N
+const Int_t nID_ref1  = 37;//after add N more new group of parameters, need to update nID_ref1 += N
 const Int_t nSet_ref1 = 6;
 const string mParamStr_ref1[nID_ref1][nSet_ref1] = 
 {
@@ -371,6 +371,19 @@ const string mParamStr_ref1[nID_ref1][nSet_ref1] =
 	//Run18 27 GeV, TrigerID = 610051
 	{
 		"2018:27:19145034,19168040:-70,70",
+		"6,9,13,18,25,33,44,57,72,91,113,138,168,204,246,295",
+		"60",
+		"356.836,0.0851663,0.000937826,2.02536e-06,-1.49162e-06,-1.36362e-09,2.67509e-10,0.00",
+		"0.951148,23.6428,11.6323,-23.3533,1.40578e-05,0,0.0144707,-2.14496e-09",
+		"103.606,-0.074"
+	},
+	//--------------------------------------------------------------------------------------------------
+	//Run16 200 GeV dAu
+	//--------------------------------------------------------------------------------------------------
+	//mParameterIndex = 36
+	//Run16 200 GeV, TrigerID = 610051
+	{
+		"2016:200:17139042,17139043:-60,60",
 		"6,9,13,18,25,33,44,57,72,91,113,138,168,204,246,295",
 		"60",
 		"356.836,0.0851663,0.000937826,2.02536e-06,-1.49162e-06,-1.36362e-09,2.67509e-10,0.00",
