@@ -369,6 +369,7 @@ void StKFParticleAnalysisMaker::Clear(Option_t *opt) {
 //----------------------------------------------------------------------------- 
 Int_t StKFParticleAnalysisMaker::Make() 
 {
+	cout<<"Start Make"<<endl;
 	PicoDst = StPicoDst::instance(); 		
 	StPicoDst* mPicoDst = PicoDst;
 	if(!mPicoDst) {
