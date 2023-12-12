@@ -486,10 +486,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 	float pT_trig_hi = 2.0;
 	float eta_trig_cut = 1.0;
 
-	cout<<"In InterfaceCantProcessEvent"<<endl;
+	// cout<<"In InterfaceCantProcessEvent"<<endl;
 	SetupKFParticle();
-	if (InterfaceCantProcessEvent) return;
-	cout<<"InterfaceCantProcessEvent OK"<<endl;
+	// if (InterfaceCantProcessEvent) return;
+	// cout<<"InterfaceCantProcessEvent OK"<<endl;
 	CrefMult = refMult;CgrefMult = grefMult;
 	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvariantMass.resize(0);
 	// QA
@@ -617,7 +617,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	// Filling Track
 	Int_t nTracks = mPicoDst->numberOfTracks();
-	cout<<"nTracks = "<<nTracks<<endl;
 	std::vector<int> Particle_tracks; Particle_tracks.resize(0);
 	std::vector<int> track_index;
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {

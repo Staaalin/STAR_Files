@@ -6,6 +6,7 @@
         "allocator": "cpp",
         "array": "cpp",
         "limits": "cpp",
-        "lMuDst.C": "cpp"
+        "lMuDst.C": "cpp",
+        "MuMcKFP.C": "cpp"
     }
 }
