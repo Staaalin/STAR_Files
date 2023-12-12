@@ -369,7 +369,7 @@ void StKFParticleAnalysisMaker::Clear(Option_t *opt) {
 //----------------------------------------------------------------------------- 
 Int_t StKFParticleAnalysisMaker::Make() 
 {
-	cout<<"Start Make"<<endl;
+	// cout<<"Start Make"<<endl;
 	PicoDst = StPicoDst::instance(); 		
 	StPicoDst* mPicoDst = PicoDst;
 	if(!mPicoDst) {
@@ -410,7 +410,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// )return kStOK; 
 	if (!mEvent->isTrigger(530003))return kStOK;
 
-	cout<<"Trigger OK"<<endl;
+	// cout<<"Trigger OK"<<endl;
 
 	const TVector3 Vertex3D=mEvent->primaryVertex();
 	const double VertexX = Vertex3D.x(); 
