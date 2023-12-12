@@ -615,6 +615,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	// Filling Track
 	Int_t nTracks = mPicoDst->numberOfTracks();
+	cout<<"nTracks = "<<nTracks<<endl;
 	std::vector<int> Particle_tracks; Particle_tracks.resize(0);
 	std::vector<int> track_index;
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
