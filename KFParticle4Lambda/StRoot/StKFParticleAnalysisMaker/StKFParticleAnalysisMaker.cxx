@@ -486,8 +486,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 	float pT_trig_hi = 2.0;
 	float eta_trig_cut = 1.0;
 
+	cout<<"In InterfaceCantProcessEvent"<<endl;
 	SetupKFParticle();
 	if (InterfaceCantProcessEvent) return;
+	cout<<"InterfaceCantProcessEvent OK"<<endl;
 	CrefMult = refMult;CgrefMult = grefMult;
 	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvariantMass.resize(0);
 	// QA
