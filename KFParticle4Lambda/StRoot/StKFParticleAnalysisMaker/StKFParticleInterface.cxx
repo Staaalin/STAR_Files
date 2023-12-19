@@ -718,7 +718,7 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
   fParticlesPdg.resize(nPartSaved);
   fNHftHits.resize(nPartSaved);
   
-  if( fCleanLowPVTrackEvents && ( 10*primaryTrackList.size() < (nUsedTracks - primaryTrackList.size()) ) ) return 0;
+  // if( fCleanLowPVTrackEvents && ( 10*primaryTrackList.size() < (nUsedTracks - primaryTrackList.size()) ) ) return 0;
   
   const Double_t field = picoEvent->bField();  
   SetField(field);
