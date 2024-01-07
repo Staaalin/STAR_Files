@@ -115,6 +115,7 @@ private:
 	TH2D *hdEdx_pQ;
 	TH2D *hdEdx_pQ_1cut;
 	TH2D *hdEdx_pQ_2cut;
+	TH2D *hLN_M;
 
 	TProfile *hcentRefM ; 
 	TProfile *hcentRefW ; 

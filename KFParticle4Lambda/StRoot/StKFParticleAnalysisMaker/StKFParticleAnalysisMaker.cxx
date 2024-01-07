@@ -221,6 +221,10 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hdEdx_pQ_2cut = new TH2D("hdEdx_p_2_CUT","dE/dx vs. p*Q HITS & PID cut",2000,10,10,2000,0,20);
 	hdEdx_pQ_2cut->GetXaxis()->SetTitle("p*Q [GeV]");
 	hdEdx_pQ_2cut->GetYaxis()->SetTitle("dE/dx [keV/cm]");
+	
+	hLN_M = new TH2D("hLN_M","dE/dx vs. p*Q HITS & PID cut",2000,10,10,2000,0,20);
+	hLN_M->GetXaxis()->SetTitle("p*Q [GeV]");
+	hLN_M->GetYaxis()->SetTitle("dE/dx [keV/cm]");
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
