@@ -222,7 +222,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hdEdx_pQ_2cut->GetXaxis()->SetTitle("p*Q [GeV]");
 	hdEdx_pQ_2cut->GetYaxis()->SetTitle("dE/dx [keV/cm]");
 	
-	hLN_M = new TH2D("hLN_M","",400,0,4,300,0,30);
+	hLN_M = new TH2D("hLN_M","",400,0,4,600,0,60);
 	hLN_M->GetXaxis()->SetTitle("Mass [GeV]");
 	hLN_M->GetYaxis()->SetTitle("HM");
 
