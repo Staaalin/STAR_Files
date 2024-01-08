@@ -7,6 +7,7 @@
         "array": "cpp",
         "limits": "cpp",
         "lMuDst.C": "cpp",
-        "MuMcKFP.C": "cpp"
+        "MuMcKFP.C": "cpp",
+        "vector": "cpp"
     }
 }

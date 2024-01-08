@@ -147,6 +147,9 @@ private:
 	void  WriteHistograms();
 
 	bool isGoodObs(double obs);
+	
+	// For Ping Siyuan
+	float H_ProcessEventNum;
 		
 	ClassDef(StKFParticleAnalysisMaker, 1)
 };

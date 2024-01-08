@@ -222,9 +222,9 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hdEdx_pQ_2cut->GetXaxis()->SetTitle("p*Q [GeV]");
 	hdEdx_pQ_2cut->GetYaxis()->SetTitle("dE/dx [keV/cm]");
 	
-	hLN_M = new TH2D("hLN_M","dE/dx vs. p*Q HITS & PID cut",2000,10,10,2000,0,20);
-	hLN_M->GetXaxis()->SetTitle("p*Q [GeV]");
-	hLN_M->GetYaxis()->SetTitle("dE/dx [keV/cm]");
+	hLN_M = new TH2D("hLN_M","",400,0,4,300,0,30);
+	hLN_M->GetXaxis()->SetTitle("Mass [GeV]");
+	hLN_M->GetYaxis()->SetTitle("HM");
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
@@ -255,6 +255,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	hdEdx_pQ->Write();
 	hdEdx_pQ_1cut->Write();
 	hdEdx_pQ_2cut->Write();
+
+	hLN_M->Write();
 
 	return;
 }
@@ -573,6 +575,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		// cout<<"CrefMult:"<<CrefMult<<endl;
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
+
+		hLN_M->Fill(particle.GetMass(),H_ProcessEventNum);
 
 		// Filling QA
 		QA_hasTOF.emplace_back(0);
@@ -907,6 +911,7 @@ void StKFParticleAnalysisMaker::SetupKFParticle(){
 	if (maxGBTrackIndex > 0)  KFParticleInterface->ResizeTrackPidVectors(maxGBTrackIndex+1);
 
 	if ( !KFParticleInterface->ProcessEvent(PicoDst, triggeredTracks) ) InterfaceCantProcessEvent = true; else InterfaceCantProcessEvent = false;
+	H_ProcessEventNum = KFParticleInterface->ProcessEventNum(PicoDst, triggeredTracks);
 
 	trackMap.resize(maxGBTrackIndex+1, -1); //make a map from trackID to track index in global track array
 	for(unsigned int iTrack = 0; iTrack < PicoDst->numberOfTracks(); iTrack++)

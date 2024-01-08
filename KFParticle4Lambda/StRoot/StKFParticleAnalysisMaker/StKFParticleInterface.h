@@ -171,7 +171,13 @@ class StKFParticleInterface: public TObject
   //Event cuts
   bool fCleanLowPVTrackEvents;
   bool fUseHFTTracksOnly;
+  
+  // For Ping Siyuan
+  float ProcessEventNum(StPicoDst* picoDst, std::vector<int>& triggeredTracks);
+  
   ClassDef(StKFParticleInterface,1)
+
+  
 };
 
 #endif //#ifndef StKFParticleInterface_H
