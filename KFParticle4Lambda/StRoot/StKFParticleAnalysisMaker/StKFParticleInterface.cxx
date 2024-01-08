@@ -612,7 +612,8 @@ void StKFParticleInterface::ResizeTrackPidVectors(const int nTracks)
   }
 }
 
-bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& triggeredTracks)
+// bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& triggeredTracks)
+bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& triggeredTracks,float &HM)
 {
   triggeredTracks.resize(0);
   
@@ -719,6 +720,7 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
   fNHftHits.resize(nPartSaved);
   
   // if( fCleanLowPVTrackEvents && ( 10*primaryTrackList.size() < (nUsedTracks - primaryTrackList.size()) ) ) return 0; // Lambda reconstruction check # Default = 10
+  HM = (nUsedTracks - primaryTrackList.size())/(1.0*primaryTrackList.size());
   
   const Double_t field = picoEvent->bField();  
   SetField(field);
@@ -912,116 +914,4 @@ bool StKFParticleInterface::ProcessEvent(StMuDst* muDst, vector<KFMCTrack>& mcTr
   ReconstructParticles();
   
   return 1;
-}
-
-// For Ping Siyuan
-float StKFParticleInterface::ProcessEventNum(StPicoDst* picoDst, std::vector<int>& triggeredTracks)
-{
-  triggeredTracks.resize(0);
-  
-  //read PV from pico Event
-  KFVertex primaryVertex;
-  vector<int> primaryTrackList;
-    
-  StPicoEvent* picoEvent = picoDst->event();
-  if(!picoEvent) return 0;
-  
-  const TVector3 picoPV = picoEvent->primaryVertex();
-  const TVector3 picoPVError = picoEvent->primaryVertexError();
-  
-  KFPVertex primVtx_tmp;
-  primVtx_tmp.SetXYZ(picoPV.x(), picoPV.y(), picoPV.z());
-  double dx = picoPVError.x();
-  double dy = picoPVError.y();
-  double dz = picoPVError.z();
-  primVtx_tmp.SetCovarianceMatrix( dx*dx, 0, dy*dy, 0, 0, dz*dz );
-  primaryVertex = KFVertex(primVtx_tmp);
-//   if(!IsGoodPV(primaryVertex)) return 0;
-  
-  Int_t nGlobalTracks = picoDst->numberOfTracks( );
-  
-  fParticles.resize(nGlobalTracks*7);
-  fNHftHits.resize(nGlobalTracks*7);
-  fParticlesPdg.resize(nGlobalTracks*7);
-  int nPartSaved = 0;
-  int nUsedTracks = 0;
-  
-  for (Int_t iTrack = 0; iTrack < nGlobalTracks; iTrack++) 
-  {
-    StPicoTrack *gTrack = picoDst->track(iTrack);
-    if (! gTrack)            continue;
-    if (! gTrack->charge())  continue;
-    if (  gTrack->nHitsFit() < 15) continue;
-    if (  gTrack->dEdxError() < 0.04 || gTrack->dEdxError() > 0.12 ) continue;
-    const int index = gTrack->id();
-    
-    int nHftHitsInTrack = 0;
-    if(gTrack->hasPxl1Hit()) nHftHitsInTrack++;
-    if(gTrack->hasPxl2Hit()) nHftHitsInTrack++;
-    if(gTrack->hasIstHit()) nHftHitsInTrack++;
-//       if(gTrack->hasSstHit()) nHftHitsInTrack++;
-    if(fCollectTrackHistograms) fTrackHistograms[0]->Fill(nHftHitsInTrack);
-    
-    if(fUseHFTTracksOnly && nHftHitsInTrack < 3) continue;
-    
-    StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(iTrack);
-    const StDcaGeometry dcaG = cov->dcaGeometry();
-    Int_t q = 1; if (gTrack->charge() < 0) q = -1;
-    KFPTrack track;
-    if( !GetTrack(dcaG, track, q, index) ) continue;
-    
-    if(fCollectTrackHistograms)
-    {
-      fTrackHistograms2D[0]->Fill(track.GetP(), gTrack->dEdx());
-      if(q>0) fTrackHistograms2D[1]->Fill(track.GetP(), gTrack->dEdx());
-      else    fTrackHistograms2D[2]->Fill(track.GetP(), gTrack->dEdx());  
-    }
-    
-    double m2tof = -1.e6;
-    bool isTofm2 = false;
-    if(gTrack->bTofPidTraitsIndex() > 0)
-    {
-      const StPicoBTofPidTraits* btofPid = picoDst->btofPidTraits(gTrack->bTofPidTraitsIndex());
-      double betaTof2 = btofPid->btofBeta() * btofPid->btofBeta();
-      if(fabs(betaTof2) > 1.e-6)
-      {
-        m2tof = track.GetP()*track.GetP()*(1./betaTof2 - 1.);
-        isTofm2 = true;
-      }
-      if(fCollectTrackHistograms)
-      {
-        fTrackHistograms2D[3]->Fill(track.GetP(), gTrack->dEdx());
-        fTrackHistograms2D[4]->Fill(track.GetP(), m2tof);
-      }
-    }
-
-    double dEdXPull[7] = { fabs(gTrack->dEdxPull(0.139570, fdEdXMode, 1)),   //0 - pi
-                           fabs(gTrack->dEdxPull(0.493677, fdEdXMode, 1)),   //1 - K
-                           fabs(gTrack->dEdxPull(0.938272, fdEdXMode, 1)),   //2 - p
-                           fabs(gTrack->dEdxPull(1.876124, fdEdXMode, 1)),   //3 - d
-                           fabs(gTrack->dEdxPull(2.809432, fdEdXMode, 1)),   //4 - t
-                           fabs(gTrack->dEdxPull(2.809413, fdEdXMode, 2)),   //5 - He3
-                           fabs(gTrack->dEdxPull(3.728400, fdEdXMode, 2))};  //6 - He4
-    
-    vector<int> totalPDG = GetPID(m2tof, track.GetP(), q, gTrack->dEdx(), dEdXPull, isTofm2, index);
-    
-    int nPartSaved0 = nPartSaved;
-    AddTrackToParticleList(track, nHftHitsInTrack, index, totalPDG, primaryVertex, primaryTrackList, fNHftHits, fParticlesPdg, fParticles, nPartSaved); 
-    
-    if(nPartSaved > nPartSaved0) 
-      triggeredTracks.push_back(iTrack);
-    
-    //fill PID histograms if they are created
-    if(fCollectPIDHistograms) FillPIDHistograms(gTrack, totalPDG, isTofm2, m2tof);
-    
-    nUsedTracks++;
-  }
-  
-  fParticles.resize(nPartSaved);
-  fParticlesPdg.resize(nPartSaved);
-  fNHftHits.resize(nPartSaved);
-  
-  float result = (nUsedTracks - primaryTrackList.size())/(1.0*primaryTrackList.size());
-  
-  return result;
 }

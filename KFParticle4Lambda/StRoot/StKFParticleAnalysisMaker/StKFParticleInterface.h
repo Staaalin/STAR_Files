@@ -67,6 +67,7 @@ class StKFParticleInterface: public TObject
   void SetPrimaryProbCut(float prob);
   
   bool ProcessEvent(StPicoDst* picoDst, std::vector<int>& goodTracks);
+  bool ProcessEvent(StPicoDst* picoDst, std::vector<int>& triggeredTracks,float &HM);
   bool ProcessEvent(StMuDst* muDst, std::vector<KFMCTrack>& mcTracks, std::vector<int>& mcIndices, bool processSignal);
   bool OpenCharmTrigger();
   void OpenCharmTriggerCompression(int nTracksTriggered, int nTracksInEvent, bool triggerDMesons);
@@ -171,9 +172,6 @@ class StKFParticleInterface: public TObject
   //Event cuts
   bool fCleanLowPVTrackEvents;
   bool fUseHFTTracksOnly;
-  
-  // For Ping Siyuan
-  float ProcessEventNum(StPicoDst* picoDst, std::vector<int>& triggeredTracks);
   
   ClassDef(StKFParticleInterface,1)
 
