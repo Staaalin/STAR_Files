@@ -15,6 +15,8 @@ set TempDir=/home/tmp/svianping #TODO
 #set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/test.list
 #set JOBID=ScriptTestSandbox
 
+echo $FILELIST
+
 set WorkDir=${TempDir}/$JOBID
 mkdir -p $WorkDir
 cd $WorkDir
