@@ -10,8 +10,8 @@ set ListDir=/star/u/svianping/STAR_Files/KFParticle4Lambda/datalist #TODO
 set MainDir=/star/u/svianping/STAR_Files/KFParticle4Lambda #TODO
 set TempDir=/home/tmp/svianping #TODO
 # inputs
-set JOBINDEX=$1
-set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/$mEnergy.list.`printf "%.6d" ${JOBINDEX}`
+# set JOBINDEX=$1
+# set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/$mEnergy.list.`printf "%.6d" ${JOBINDEX}`
 #set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/test.list
 #set JOBID=ScriptTestSandbox
 
