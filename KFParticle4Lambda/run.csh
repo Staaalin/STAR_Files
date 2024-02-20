@@ -40,6 +40,7 @@ while( `grep -sc '(ret%10)<=kStFatal' $RootLog` )
 	root4star -b -q ./readPicoDst.C\(\"$FILELIST\",$JOBINDEX,$nRun,$mEnergy,\"$ListDir\"\) >& $RootLog
 end
 
-mv *.log  $MainDir/log/.
+# mv *.log  $MainDir/log/.
+mv *.log  /star/data01/pwg/svianping/log/.
 # mv *.root $MainDir/output/.
 mv *.root /star/data01/pwg/svianping/output/.
