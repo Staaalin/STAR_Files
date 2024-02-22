@@ -10,10 +10,12 @@ set ListDir=/star/u/svianping/STAR_Files/KFParticle4Lambda/datalist #TODO
 set MainDir=/star/u/svianping/STAR_Files/KFParticle4Lambda #TODO
 set TempDir=/home/tmp/svianping #TODO
 # inputs
-#set JOBINDEX=$1
-##set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/$mEnergy.list.`printf "%.6d" ${JOBINDEX}`
+# set JOBINDEX=$1
+# set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/$mEnergy.list.`printf "%.6d" ${JOBINDEX}`
 #set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/test.list
 #set JOBID=ScriptTestSandbox
+
+echo $FILELIST
 
 set WorkDir=${TempDir}/$JOBID
 mkdir -p $WorkDir
@@ -38,6 +40,7 @@ while( `grep -sc '(ret%10)<=kStFatal' $RootLog` )
 	root4star -b -q ./readPicoDst.C\(\"$FILELIST\",$JOBINDEX,$nRun,$mEnergy,\"$ListDir\"\) >& $RootLog
 end
 
-mv *.log  $MainDir/log/.
+# mv *.log  $MainDir/log/.
+mv *.log  /star/data01/pwg/svianping/log/.
 # mv *.root $MainDir/output/.
 mv *.root /star/data01/pwg/svianping/output/.
