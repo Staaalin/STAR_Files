@@ -1,0 +1,13 @@
+Universe         = vanilla
+Notification     = never
+Executable       = /bin/sh
+Arguments        = "-c 'exec /star/u/svianping/STAR_Files/KFParticle4Lambda/schedD667DBD7CEC16F7DF097733DF252153B_0.csh'"
+Output           = /star/u/svianping/STAR_Files/KFParticle4Lambda/log/script_readTree.out
+Log              = /tmp/svianping/schedD667DBD7CEC16F7DF097733DF252153B.condor.log
+Initialdir       = /star/u/svianping/STAR_Files/KFParticle4Lambda
+kill_sig         = SIGINT
+PeriodicRemove   = (NumJobStarts >=1 && JobStatus==1) || (JobStatus == 2 && (CurrentTime - JobCurrentStartDate > (54000)) && ((RemoteUserCpu+RemoteSysCpu)/(CurrentTime-JobCurrentStartDate) < 0.10)) || (((CurrentTime - EnteredCurrentStatus) > (2*24*3600)) && JobStatus == 5) || (JobRunCount >= 1 && JobStatus == 1)
+Accounting_group = group_star.cas
+Priority         = +10
+Queue
+
