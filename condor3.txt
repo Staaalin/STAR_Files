@@ -1,0 +1,22 @@
+
+
+-- Schedd: rcas6013.rcf.bnl.gov : <130.199.48.60:9618?... @ 02/25/24 08:47:39
+ ID          OWNER            SUBMITTED     RUN_TIME ST PRI SIZE    CMD
+10366133.28  svianping       2/25 05:08   0+03:38:54 R  10    977.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_31066.csh
+10366200.64  svianping       2/25 05:47   0+03:00:16 R  10    977.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_24330.csh
+10366210.53  svianping       2/25 05:52   0+00:15:17 H  10   9766.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_23341.csh
+10366214.53  svianping       2/25 05:54   0+00:15:21 H  10   9766.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_22941.csh
+10366221.61  svianping       2/25 05:57   0+02:49:30 R  10    977.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_22233.csh
+10366221.66  svianping       2/25 05:57   0+00:10:28 H  10   4639.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_22228.csh
+10366234.27  svianping       2/25 06:04   0+02:43:23 R  10    977.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_20967.csh
+10366260.13  svianping       2/25 06:15   0+02:31:37 R  10    977.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_18381.csh
+10366276.35  svianping       2/25 06:22   0+00:10:19 H  10   2686.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_16759.csh
+10366328.75  svianping       2/25 06:39   0+00:15:17 H  10  21973.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_11519.csh
+10366346.12  svianping       2/25 06:43   0+00:10:21 H  10  46387.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_9982.csh
+10366356.47  svianping       2/25 06:45   0+02:01:48 R  10    977.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_9147.csh
+10366442.45  svianping       2/25 06:58   0+01:49:04 R  10      3.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/sched4BC28FDF627B1730FC48BA0494656118_849.csh
+
+Total for query: 13 jobs; 0 completed, 0 removed, 0 idle, 7 running, 6 held, 0 suspended 
+Total for svianping: 13 jobs; 0 completed, 0 removed, 0 idle, 7 running, 6 held, 0 suspended 
+Total for all users: 1553 jobs; 0 completed, 0 removed, 0 idle, 56 running, 1497 held, 0 suspended
+
