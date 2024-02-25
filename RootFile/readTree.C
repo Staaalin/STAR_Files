@@ -433,14 +433,14 @@ void readTree()
         //     cout<<ReadedPercent<<"%"<<" events finish"<<endl;
         // }
 
-        if (i % 5 == 0) // Create a status bar that will auto refresh
-        {
-            std::string statusBar;
-            std::cout << i << "th event is read";
-            statusBar.assign((int)((float)i / nentries * 50.), '#');
-            statusBar.resize(50, '.');
-            std::cout << statusBar << "\r ";
-        }
+        // if (i % 5 == 0) // Create a status bar that will auto refresh
+        // {
+        //     std::string statusBar;
+        //     std::cout << i << "th event is read";
+        //     statusBar.assign((int)((float)i / nentries * 50.), '#');
+        //     statusBar.resize(50, '.');
+        //     std::cout << statusBar << "\r ";
+        // }
 
     }
     std::cout<<std::endl;
