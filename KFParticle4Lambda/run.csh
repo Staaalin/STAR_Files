@@ -29,6 +29,8 @@ cp -Lr $MainDir/.sl73_x8664_gcc485 .
 set RootLog=root_${JOBINDEX}.log
 if(-e $RootLog) rm $RootLog
 
+echo $ListDir > /star/data01/pwg/svianping/JobID/id${JOBINDEX}.log
+
 root4star -b -q ./readPicoDst.C\(\"$FILELIST\",$JOBINDEX,$nRun,$mEnergy,\"$ListDir\"\) >& $RootLog
 
 set Iter=0
