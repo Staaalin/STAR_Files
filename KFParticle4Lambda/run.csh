@@ -41,6 +41,6 @@ while( `grep -sc '(ret%10)<=kStFatal' $RootLog` )
 end
 
 # mv *.log  $MainDir/log/.
-mv *.log  /star/data01/pwg/svianping/log/.
+# mv *.log  /star/data01/pwg/svianping/log/.
 # mv *.root $MainDir/output/.
-mv *.root /star/data01/pwg/svianping/output/.
+# mv *.root /star/data01/pwg/svianping/output/.
