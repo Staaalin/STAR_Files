@@ -26,7 +26,7 @@ source setDEV2.csh
 cp -Lr $MainDir/readPicoDst.C .
 cp -Lr $MainDir/.sl73_x8664_gcc485 .
 
-set RootLog=root_${JOBINDEX}.log
+set RootLog=/star/data01/pwg/svianping/log/root_${JOBINDEX}.log
 if(-e $RootLog) rm $RootLog
 
 # echo $ListDir > /star/data01/pwg/svianping/JobID/id${JOBINDEX}.log
