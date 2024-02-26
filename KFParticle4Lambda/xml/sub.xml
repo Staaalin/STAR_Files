@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<job simulateSubmission ="false" maxFilesPerProcess ="3" fileListSyntax="xrootd">
+<job simulateSubmission ="false" maxFilesPerProcess ="2" fileListSyntax="xrootd">
 <command>/star/u/svianping/STAR_Files/KFParticle4Lambda/run.csh</command>
 <stdout URL="file:/star/u/svianping/STAR_Files/KFParticle4Lambda/log/script_$JOBINDEX.out" />
 <input URL="catalog:star.bnl.gov?production=P17id,filetype=daq_reco_PicoDst,trgsetupname~dAu200_production_2016,runnumber[]17132063-17141003,sanity=1,tpx=1,storage!=hpss,filename~st_physics" nFiles="all" />
