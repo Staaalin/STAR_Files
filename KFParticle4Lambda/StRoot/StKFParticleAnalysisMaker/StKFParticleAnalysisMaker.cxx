@@ -1,3 +1,6 @@
+#include <fstream>
+#include <iostream>
+
 #include "StKFParticleAnalysisMaker.h"
 #include "PhysicalConstants.h"
 #include "phys_constants.h"
@@ -404,6 +407,31 @@ Int_t StKFParticleAnalysisMaker::Make()
 	const int tofMatch  = mEvent->nBTOFMatch();
 
 	const double magnet = mEvent->bField();
+
+	int SizeOf_Recorded_runID = Recorded_runID.size();
+	if (SizeOf_Recorded_runID == 0){
+		Recorded_runID.push_back(runID);
+		TString LogName = "/star/data01/pwg/svianping/JobID/id";
+		LogName += mJob;
+		LogName += ".log";
+		ofstream outfile(LogName, ios::out | ios::trunc);
+		outfile << runID << endl;
+		outfile.close();
+	}else{
+		for(int i=0;i<SizeOf_Recorded_runID;i++){
+			if (runID == Recorded_runID[i]) {break;}
+			if (i == SizeOf_Recorded_runID - 1) {
+				Recorded_runID.push_back(runID);
+				TString LogName = "/star/data01/pwg/svianping/JobID/id";
+				LogName += mJob;
+				LogName += ".log";
+				ofstream outfile(LogName, ios::out | ios::app);
+				outfile.seekp(0, ios::end);
+				outfile << runID << endl;
+				outfile.close();
+			}
+		}
+	}
 
 	// cout<<"Here OK"<<endl;
 

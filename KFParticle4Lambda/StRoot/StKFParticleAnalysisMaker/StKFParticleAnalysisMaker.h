@@ -100,6 +100,7 @@ private:
 	double     twoPI;
 
 	int        mJob;
+	std::vector<int> Recorded_runID;
 
 	////////////////
 	TH1F *hNRefMult;
