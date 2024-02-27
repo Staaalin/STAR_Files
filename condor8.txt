@@ -1,0 +1,12 @@
+
+
+-- Schedd: rcas6013.rcf.bnl.gov : <130.199.48.60:9618?... @ 02/26/24 22:36:43
+ ID          OWNER            SUBMITTED     RUN_TIME ST PRI SIZE    CMD
+10368000.81  svianping       2/26 11:00   0+00:55:33 H  10  73243.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/schedA64613DDCA8A2B7CD854C63AC1E4E3F2_46308.csh
+10368016.22  svianping       2/26 11:10   0+00:50:28 H  10  73243.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/schedA64613DDCA8A2B7CD854C63AC1E4E3F2_44767.csh
+10368029.59  svianping       2/26 11:18   0+10:51:50 R  10    977.0 sh -c exec' '/star/u/svianping/STAR_Files/KFParticle4Lambda/xml/schedA64613DDCA8A2B7CD854C63AC1E4E3F2_43430.csh
+
+Total for query: 3 jobs; 0 completed, 0 removed, 0 idle, 1 running, 2 held, 0 suspended 
+Total for svianping: 3 jobs; 0 completed, 0 removed, 0 idle, 1 running, 2 held, 0 suspended 
+Total for all users: 28938 jobs; 0 completed, 0 removed, 26653 idle, 827 running, 1458 held, 0 suspended
+
