@@ -408,32 +408,32 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	const double magnet = mEvent->bField();
 
-	int SizeOf_Recorded_runID = Recorded_runID.size();
-	if (SizeOf_Recorded_runID == 0){
-		Recorded_runID.push_back(runID);
-		TString LogName = "/star/data01/pwg/svianping/JobID/id";
-		LogName += mJob;
-		LogName += ".log";
-		ofstream outfile(LogName, ios::out | ios::trunc);
-		outfile << runID << endl;
-		outfile.close();
-	}else{
-		for(int i=0;i<SizeOf_Recorded_runID;i++){
-			if (runID == Recorded_runID[i]) {break;}
-			if (i == SizeOf_Recorded_runID - 1) {
-				Recorded_runID.push_back(runID);
-				TString LogName = "/star/data01/pwg/svianping/JobID/id";
-				LogName += mJob;
-				LogName += ".log";
-				ofstream outfile(LogName, ios::out | ios::app);
-				outfile.seekp(0, ios::end);
-				outfile << runID << endl;
-				outfile.close();
-			}
-		}
-	}
+	// int SizeOf_Recorded_runID = Recorded_runID.size();
+	// if (SizeOf_Recorded_runID == 0){
+	// 	Recorded_runID.push_back(runID);
+	// 	TString LogName = "/star/data01/pwg/svianping/JobID/id";
+	// 	LogName += mJob;
+	// 	LogName += ".log";
+	// 	ofstream outfile(LogName, ios::out | ios::trunc);
+	// 	outfile << runID << endl;
+	// 	outfile.close();
+	// }else{
+	// 	for(int i=0;i<SizeOf_Recorded_runID;i++){
+	// 		if (runID == Recorded_runID[i]) {break;}
+	// 		if (i == SizeOf_Recorded_runID - 1) {
+	// 			Recorded_runID.push_back(runID);
+	// 			TString LogName = "/star/data01/pwg/svianping/JobID/id";
+	// 			LogName += mJob;
+	// 			LogName += ".log";
+	// 			ofstream outfile(LogName, ios::out | ios::app);
+	// 			outfile.seekp(0, ios::end);
+	// 			outfile << runID << endl;
+	// 			outfile.close();
+	// 		}
+	// 	}
+	// }
 
-	cout<<"Here OK"<<endl;
+	// cout<<"Here OK"<<endl;
 
 	// if(       (!mEvent->isTrigger(610001))
 	// 		&&(!mEvent->isTrigger(610011))
@@ -475,7 +475,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	  &&(!mEvent->isTrigger(61)) //vpd-30
 	  )return kStOK;
 
-	cout<<"Trigger OK"<<endl;
+	// cout<<"Trigger OK"<<endl;
 
 	const TVector3 Vertex3D=mEvent->primaryVertex();
 	const double VertexX = Vertex3D.x(); 

@@ -18,8 +18,10 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	int iJob = jobindex;
 	cout << "current job id: " << iJob << endl;
 
-	TString StrOutName = Form("/star/data01/pwg/svianping/output/output_%.6d.root", iJob);
+	// TString StrOutName = Form("output_%.6d.root", iJob);
+	// TString StrOutName = Form("/star/data01/pwg/svianping/output/output_%.6d.root", iJob);
 	// TString StrOutName = Form("~/STAR_Files/KFParticle4Lambda/output_%.6d.root", iJob);
+	TString StrOutName = "output_"; StrOutName += iJob; StrOutName += ".root";
 	const Char_t *outputFile = StrOutName.Data();
 
 	Long64_t nEvents = 10000000000;
@@ -30,8 +32,10 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	loadSharedLibraries();
 
  	gROOT->LoadMacro("lMuDst.C");
-	TString outputKFParticleQA = Form("/star/data01/pwg/svianping/output/KFParticleQA_%.6d.root", iJob);
+	// TString outputKFParticleQA = Form("KFParticleQA_%.6d.root", iJob);
+	// TString outputKFParticleQA = Form("/star/data01/pwg/svianping/output/KFParticleQA_%.6d.root", iJob);
 	// TString outputKFParticleQA = Form("~/STAR_Files/KFParticle4Lambda/KFParticleQA_%.6d.root", iJob);
+	TString outputKFParticleQA = "KFParticleQA_"; outputKFParticleQA += iJob; outputKFParticleQA += ".root";
 	lMuDst(-1,inputFile,"ry2016,RpicoDst,kfpInter,mysql,quiet,nodefault",outputKFParticleQA.Data());
 
 	//gSystem->AddIncludePath("-lRooFitCore");
