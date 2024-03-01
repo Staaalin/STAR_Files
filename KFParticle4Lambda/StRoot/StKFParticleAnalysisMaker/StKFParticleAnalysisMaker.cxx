@@ -149,12 +149,7 @@ Int_t StKFParticleAnalysisMaker::Init() {
 
 //----------------------------------------------------------------------------- 
 Int_t StKFParticleAnalysisMaker::Finish() {
-	if(Recorded_events == 0){
-		cout<<"No Recorded Events, because Omega and Omegab have"<<Omega_Omegab_Num<<endl;
-	}else{
-		cout<<Recorded_events<<" Events recorded, because Omega and Omegab have"<<Omega_Omegab_Num<<endl;
-	}
-	if(mOutName!="" && Recorded_events != 0) {
+	if(mOutName!="") {
 		TFile *fout = new TFile(mOutName.Data(),"RECREATE");
 		fout->cd();
 		WriteHistograms();
@@ -606,7 +601,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		PDG.emplace_back(particle.GetPDG());
 
 		if (IfHelix && (fabs(particle.GetPDG()) == OmegaPdg)) {
-			Omega_Omegab_Num ++;
 
 			// helix
 			TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
@@ -631,7 +625,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.emplace_back(particle.GetPy());
 			pz.emplace_back(particle.GetPz());
 			InvariantMass.emplace_back(particle.GetMass());
-			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);}
+			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
+			if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
 			if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
 			ParticleVec.push_back(particle);
 		}
@@ -934,7 +929,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		PDGMult = PDG.size(); // This is multiplicity of Recorded Particles
 		if (Omega_Omegab_Num != 0){
 			hadronTree->Fill();
-			Recorded_events++;
 		}
 	}
 	/////////////////////////////////////////////////////////
