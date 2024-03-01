@@ -234,7 +234,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hLN_M->GetXaxis()->SetTitle("Mass [GeV]");
 	hLN_M->GetYaxis()->SetTitle("HM");
 
-	Recorded_events = 0
+	Recorded_events = 0;
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
