@@ -149,7 +149,12 @@ Int_t StKFParticleAnalysisMaker::Init() {
 
 //----------------------------------------------------------------------------- 
 Int_t StKFParticleAnalysisMaker::Finish() {
-	if(mOutName!="") {
+	if(Recorded_events == 0){
+		cout<<"No Recorded Events, because Omega and Omegab have"<<Omega_Omegab_Num<<endl;
+	}else{
+		cout<<Recorded_events<<" Events recorded, because Omega and Omegab have"<<Omega_Omegab_Num<<endl;
+	}
+	if(mOutName!="" && Recorded_events != 0) {
 		TFile *fout = new TFile(mOutName.Data(),"RECREATE");
 		fout->cd();
 		WriteHistograms();
@@ -228,6 +233,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hLN_M = new TH2D("hLN_M","",400,0,4,600,0,60);
 	hLN_M->GetXaxis()->SetTitle("Mass [GeV]");
 	hLN_M->GetYaxis()->SetTitle("HM");
+
+	Recorded_events = 0
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
@@ -575,6 +582,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// 	}
 	// }
 
+	Omega_Omegab_Num = 0;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
@@ -598,6 +606,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		PDG.emplace_back(particle.GetPDG());
 
 		if (IfHelix && (fabs(particle.GetPDG()) == OmegaPdg)) {
+			Omega_Omegab_Num ++;
+
 			// helix
 			TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
 			TVector3 PositionOfParticle(particle.GetX(), particle.GetY(), particle.GetZ());
@@ -922,7 +932,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	if (PDG.size()>0){
 		PDGMult = PDG.size(); // This is multiplicity of Recorded Particles
-		hadronTree->Fill();
+		if (Omega_Omegab_Num != 0){
+			hadronTree->Fill();
+			Recorded_events++;
+		}
 	}
 	/////////////////////////////////////////////////////////
 	return kStOK;
