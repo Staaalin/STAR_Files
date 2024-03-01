@@ -928,6 +928,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	if (PDG.size()>0){
 		PDGMult = PDG.size(); // This is multiplicity of Recorded Particles
 		if (Omega_Omegab_Num != 0){
+			cout<<"Found Omega"<<endl;
 			hadronTree->Fill();
 		}
 	}
