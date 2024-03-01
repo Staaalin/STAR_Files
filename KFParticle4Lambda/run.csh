@@ -31,7 +31,8 @@ if(-e $RootLog) rm $RootLog
 
 # echo $ListDir > /star/data01/pwg/svianping/JobID/id${JOBINDEX}.log
 
-root4star -b -q ./readPicoDst.C\(\"$FILELIST\",$JOBINDEX,$nRun,$mEnergy,\"$ListDir\"\) >& $RootLog
+# root4star -b -q ./readPicoDst.C\(\"$FILELIST\",$JOBINDEX,$nRun,$mEnergy,\"$ListDir\"\) >& $RootLog
+root4star -b -q ./readPicoDst.C\(\"$FILELIST\",$JOBINDEX,$nRun,$mEnergy,\"$ListDir\"\) >& /star/data01/pwg/svianping/log/root_${JOBINDEX}.log
 
 set Iter=0
 while( `grep -sc '(ret%10)<=kStFatal' $RootLog` )
