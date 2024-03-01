@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <job simulateSubmission ="false" maxFilesPerProcess ="2" fileListSyntax="xrootd">
 <command>/star/u/svianping/STAR_Files/KFParticle4Lambda/run.csh</command>
-<stdout URL="file:/star/u/svianping/STAR_Files/KFParticle4Lambda/log/script_$JOBINDEX.out" />
+<stdout URL="file:/star/data01/pwg/svianping/log/script_$JOBINDEX.out" />
 <input URL="catalog:star.bnl.gov?production=P17id,filetype=daq_reco_PicoDst,trgsetupname~dAu200_production_2016,runnumber[]17132063-17141003,sanity=1,tpx=1,storage!=hpss,filename~st_physics" nFiles="all" />
+<output fromScratch="root_$JOBINDEX.log" toURL="file:/star/data01/pwg/svianping/log/" />
+<output fromScratch="output_$JOBINDEX.root" toURL="file:/star/data01/pwg/svianping/output/" />
+<output fromScratch="KFParticleQA_$JOBINDEX.root" toURL="file:/star/data01/pwg/svianping/output/" />
 </job>
