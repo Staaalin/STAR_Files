@@ -285,41 +285,8 @@ void readTree()
     TChain *hadronTree = new TChain("hadronTree");
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
-    for(int i=10000;i <= 33194;i++){
+    for(int i=1;i <= 66389;i++){
         TString filename = midname;
-        filename+="0";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=1000;i <= 9999;i++){
-        TString filename = midname;
-        filename+="00";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=100;i <= 999;i++){
-        TString filename = midname;
-        filename+="000";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=10;i <= 99;i++){
-        TString filename = midname;
-        filename+="0000";
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
-    }
-    for(int i=0;i <= 9;i++){
-        TString filename = midname;
-        filename+="00000";
         filename+=i;
         filename+=".root";
         hadronTree->Add(filename);
@@ -445,7 +412,7 @@ void readTree()
     }
     std::cout<<std::endl;
 
-    TFile *file = new TFile("/star/u/svianping/STAR_Files/KFParticle4Lambda/output/CheckOutput.root", "RECREATE");
+    TFile *file = new TFile("readTree.root", "RECREATE");
 
 
 	for (int i=0;i<HSize;i++){
