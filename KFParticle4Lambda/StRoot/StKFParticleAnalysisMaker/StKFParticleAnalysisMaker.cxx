@@ -614,7 +614,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.emplace_back(MomentumOfParticle_tb.Y());
 			pz.emplace_back(MomentumOfParticle_tb.Z());
 			InvariantMass.emplace_back(OmegaLorentz.M());
-			QA_Decay_Length.emplace_back(particle.GetDecayLength());
+			float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);
+			QA_Decay_Length.emplace_back(DL);
 			OmegaVec.push_back(particle);ParticleVec.push_back(particle);
 			// cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
 			// cout<<"kilogauss = "<<kilogauss<<endl;
@@ -627,7 +628,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.emplace_back(particle.GetPy());
 			pz.emplace_back(particle.GetPz());
 			InvariantMass.emplace_back(particle.GetMass());
-			QA_Decay_Length.emplace_back(particle.GetDecayLength());
+			float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);
+			QA_Decay_Length.emplace_back(DL);
 			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
 			if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
 			if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
