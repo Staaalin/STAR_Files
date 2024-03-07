@@ -212,6 +212,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
     hadronTree->Branch("zTOF_pion"          ,&QA_zTOF_pion        );
     hadronTree->Branch("zTOF_kaon"          ,&QA_zTOF_kaon        );
 	hadronTree->Branch("IfConfuse"          ,&QA_IfConfuse        );
+	hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length     );
 	
 	hdEdx_pQ = new TH2D("hdEdx_p_NO_CUT","dE/dx vs. p*Q without cut",2000,10,10,2000,0,20);
 	hdEdx_pQ->GetXaxis()->SetTitle("p*Q [GeV]");
@@ -562,7 +563,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// QA
 	QA_dEdx.resize(0);QA_dcatopv.resize(0);QA_m2.resize(0);QA_nSigmaProton.resize(0);
 	QA_nSigmaPion.resize(0);QA_nSigmaKaon.resize(0);QA_zTOF_proton.resize(0);QA_zTOF_pion.resize(0);QA_zTOF_kaon.resize(0);
-	QA_hasTOF.resize(0);QA_IfConfuse.resize(0);
+	QA_hasTOF.resize(0);QA_IfConfuse.resize(0);QA_Decay_Length.resize(0);
 
 	// std::vector<int> Constructed_KFParticle_Vec_index; Constructed_KFParticle_Vec_index.resize(0);
 	// for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
@@ -613,6 +614,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.emplace_back(MomentumOfParticle_tb.Y());
 			pz.emplace_back(MomentumOfParticle_tb.Z());
 			InvariantMass.emplace_back(OmegaLorentz.M());
+			QA_Decay_Length,emplace_back(particle.GetDecayLength());
 			OmegaVec.push_back(particle);ParticleVec.push_back(particle);
 			// cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
 			// cout<<"kilogauss = "<<kilogauss<<endl;
@@ -625,6 +627,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.emplace_back(particle.GetPy());
 			pz.emplace_back(particle.GetPz());
 			InvariantMass.emplace_back(particle.GetMass());
+			QA_Decay_Length,emplace_back(particle.GetDecayLength());
 			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
 			if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
 			if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
@@ -847,6 +850,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_nSigmaPion.emplace_back(nSigmaPion);
 			QA_nSigmaKaon.emplace_back(nSigmaKaon);
 			QA_dEdx.emplace_back(track->dEdx());QA_dcatopv.emplace_back(dcatopv);
+			QA_Decay_Length.emplace_back(-1.0);
 		}
 
 	}
