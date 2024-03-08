@@ -331,15 +331,15 @@ Int_t KFParticleBase::GetDecayLength( float &l, float &error ) const
 {
   //* Calculate particle decay length [cm]
   
-  float x = fP[3];cout<<"x = "<<x<<endl;
-  float y = fP[4];cout<<"y = "<<y<<endl;
-  float z = fP[5];cout<<"z = "<<z<<endl;
+  float x = fP[3];
+  float y = fP[4];
+  float z = fP[5];
   float t = fP[7];cout<<"t = "<<t<<endl;
   float x2 = x*x;
   float y2 = y*y;
   float z2 = z*z;
   float p2 = x2+y2+z2;
-  l = t*sqrt(p2);cout<<"l = "<<l<<endl;
+  l = t*sqrt(p2);
   if( p2>1.e-4){
     error = p2*fC[35] + t*t/p2*(x2*fC[9]+y2*fC[14]+z2*fC[20]
 				+ 2*(x*y*fC[13]+x*z*fC[18]+y*z*fC[19]) )
@@ -1098,13 +1098,13 @@ void KFParticleBase::SetProductionVertex( const KFParticleBase &Vtx )
   Bool_t noS = ( fC[35]<=0 ); // no decay length allowed
 
   if( noS ){ 
-    TransportToDecayVertex();
+    TransportToDecayVertex();cout<<"THIS"<<endl;
     fP[7] = 0;
     fC[28] = fC[29] = fC[30] = fC[31] = fC[32] = fC[33] = fC[34] = fC[35] = 0;
   }
   else
   {
-    float dsdr[6] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+    float dsdr[6] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f};cout<<"THAT"<<endl;
     float dS = GetDStoPoint(Vtx.fP, dsdr);
     
     float dsdp[6] = {-dsdr[0], -dsdr[1], -dsdr[2], 0, 0, 0};
