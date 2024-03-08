@@ -1098,13 +1098,13 @@ void KFParticleBase::SetProductionVertex( const KFParticleBase &Vtx )
   Bool_t noS = ( fC[35]<=0 ); // no decay length allowed
 
   if( noS ){ 
-    TransportToDecayVertex();cout<<"THIS"<<endl;
+    TransportToDecayVertex();
     fP[7] = 0;
     fC[28] = fC[29] = fC[30] = fC[31] = fC[32] = fC[33] = fC[34] = fC[35] = 0;
   }
   else
   {
-    float dsdr[6] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f};cout<<"THAT"<<endl;
+    float dsdr[6] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
     float dS = GetDStoPoint(Vtx.fP, dsdr);
     
     float dsdp[6] = {-dsdr[0], -dsdr[1], -dsdr[2], 0, 0, 0};
@@ -1225,7 +1225,7 @@ void KFParticleBase::SetProductionVertex( const KFParticleBase &Vtx )
   else
   {
     float dsdr[6] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
-    fP[7] = GetDStoPoint(decayPoint, dsdr);   
+    fP[7] = GetDStoPoint(decayPoint, dsdr);  cout<<"fP[7] = "<<fP[7]<<endl;
     
     float dsdp[6] = {-dsdr[0], -dsdr[1], -dsdr[2], 0, 0, 0};
 
