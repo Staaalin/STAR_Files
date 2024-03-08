@@ -628,7 +628,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.emplace_back(particle.GetPy());
 			pz.emplace_back(particle.GetPz());
 			InvariantMass.emplace_back(particle.GetMass());
-			float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);cout<<"DL = "<<DL<<endl;
+			float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);cout<<"DL = "<<DL<<", eDL = "<<eDL<<endl;
 			QA_Decay_Length.emplace_back(DL);
 			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
 			if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
