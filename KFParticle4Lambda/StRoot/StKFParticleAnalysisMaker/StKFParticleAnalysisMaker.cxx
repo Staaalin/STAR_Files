@@ -613,7 +613,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			px.emplace_back(MomentumOfParticle_tb.X());
 			py.emplace_back(MomentumOfParticle_tb.Y());
 			pz.emplace_back(MomentumOfParticle_tb.Z());
-			InvariantMass.emplace_back(OmegaLorentz.M());
+			InvariantMass.emplace_back(OmegaLorentz.M());cout<<"particle.GetAtProductionVertex() = "<<particle.GetAtProductionVertex()<<endl;
 			float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);
 			QA_Decay_Length.emplace_back(DL);
 			OmegaVec.push_back(particle);ParticleVec.push_back(particle);
@@ -627,7 +627,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			px.emplace_back(particle.GetPx());
 			py.emplace_back(particle.GetPy());
 			pz.emplace_back(particle.GetPz());
-			InvariantMass.emplace_back(particle.GetMass());
+			InvariantMass.emplace_back(particle.GetMass());cout<<"particle.GetAtProductionVertex() = "<<particle.GetAtProductionVertex()<<endl;
 			float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);cout<<"DL = "<<DL<<", eDL = "<<eDL<<endl;
 			QA_Decay_Length.emplace_back(DL);
 			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}

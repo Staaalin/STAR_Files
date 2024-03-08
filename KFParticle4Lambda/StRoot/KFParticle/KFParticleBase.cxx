@@ -334,7 +334,7 @@ Int_t KFParticleBase::GetDecayLength( float &l, float &error ) const
   float x = fP[3];
   float y = fP[4];
   float z = fP[5];
-  float t = fP[7];cout<<"t = "<<t<<endl;
+  float t = fP[7];
   float x2 = x*x;
   float y2 = y*y;
   float z2 = z*z;
@@ -1225,7 +1225,7 @@ void KFParticleBase::SetProductionVertex( const KFParticleBase &Vtx )
   else
   {
     float dsdr[6] = {0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
-    fP[7] = GetDStoPoint(decayPoint, dsdr);  cout<<"fP[7] = "<<fP[7]<<endl;
+    fP[7] = GetDStoPoint(decayPoint, dsdr);//cout<<"fP[7] = "<<fP[7]<<endl;
     
     float dsdp[6] = {-dsdr[0], -dsdr[1], -dsdr[2], 0, 0, 0};
 
