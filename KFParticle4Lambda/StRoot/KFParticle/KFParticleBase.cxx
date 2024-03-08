@@ -331,10 +331,10 @@ Int_t KFParticleBase::GetDecayLength( float &l, float &error ) const
 {
   //* Calculate particle decay length [cm]
   
-  float x = fP[3];
-  float y = fP[4];
-  float z = fP[5];
-  float t = fP[7];
+  float x = fP[3];cout<<"x = "<<x<<endl;
+  float y = fP[4];cout<<"y = "<<y<<endl;
+  float z = fP[5];cout<<"z = "<<z<<endl;
+  float t = fP[7];cout<<"t = "<<t<<endl;
   float x2 = x*x;
   float y2 = y*y;
   float z2 = z*z;
