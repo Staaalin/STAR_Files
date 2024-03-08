@@ -330,7 +330,7 @@ Int_t KFParticleBase::GetMass( float &m, float &error ) const
 Int_t KFParticleBase::GetDecayLength( float &l, float &error ) const 
 {
   //* Calculate particle decay length [cm]
-  cout<<"THIS"<<endl;
+  
   float x = fP[3];
   float y = fP[4];
   float z = fP[5];
@@ -339,7 +339,7 @@ Int_t KFParticleBase::GetDecayLength( float &l, float &error ) const
   float y2 = y*y;
   float z2 = z*z;
   float p2 = x2+y2+z2;
-  l = t*sqrt(p2);
+  l = t*sqrt(p2);cout<<"l = "<<l<<endl;
   if( p2>1.e-4){
     error = p2*fC[35] + t*t/p2*(x2*fC[9]+y2*fC[14]+z2*fC[20]
 				+ 2*(x*y*fC[13]+x*z*fC[18]+y*z*fC[19]) )
