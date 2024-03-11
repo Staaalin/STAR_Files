@@ -665,7 +665,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			KFParticleSIMD pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
 			tempSIMDParticle.GetDistanceToVertexLine(pv, l, dl);
 			tempSIMDParticle.SetProductionVertex(pv);
-			tempSIMDParticle.GetDecayLength(l, dl);cout<<"SCHEME 2: DecayLength = "<<l[0]<<";  ";if (fabs(v0decaylength/l[0])>1.15 || fabs(v0decaylength/l[0])<0.95){cout<<particle.GetPDG()<<endl;}else{cout<<" "<<endl;}
+			tempSIMDParticle.GetDecayLength(l, dl);cout<<"SCHEME 2: DecayLength = "<<l[0]<<";  ";if (fabs(v0decaylength/l[0])>1.15 || fabs(v0decaylength/l[0])<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
 			QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);
 			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
 			if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
