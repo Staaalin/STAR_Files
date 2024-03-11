@@ -613,7 +613,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			px.emplace_back(MomentumOfParticle_tb.X());
 			py.emplace_back(MomentumOfParticle_tb.Y());
 			pz.emplace_back(MomentumOfParticle_tb.Z());
-			InvariantMass.emplace_back(OmegaLorentz.M());cout<<"particle.GetAtProductionVertex() = "<<particle.GetAtProductionVertex()<<endl;
+			InvariantMass.emplace_back(OmegaLorentz.M());//cout<<"particle.GetAtProductionVertex() = "<<particle.GetAtProductionVertex()<<endl;
 			float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);
 			QA_Decay_Length.emplace_back(DL);
 			OmegaVec.push_back(particle);ParticleVec.push_back(particle);
@@ -631,7 +631,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 			//reconstruction of V0, the parent particle
 			if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
-			StPicoTrack* mTrackI,mTrackK;
+			// StPicoTrack* mTrackI,mTrackK;
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 				const int daughterId = particle.DaughterIds()[iDaughter]; 
 				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
@@ -642,8 +642,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				for (Int_t iTrack = iTrackStart;iTrack >= 0;iTrack--){
 					StPicoTrack *track = mPicoDst->track(iTrack);
 					if (track->id() == globalTrackId){
-						if (iDaughter == 0){mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);}
-						if (iDaughter == 1){mTrackK = (StPicoTrack*)mPicoDst->track(iTrack);}
+						if (iDaughter == 0){StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);}
+						if (iDaughter == 1){StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(iTrack);}
 						break;
 					}
 				}
