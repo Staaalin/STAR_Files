@@ -8,6 +8,8 @@
         "limits": "cpp",
         "lMuDst.C": "cpp",
         "MuMcKFP.C": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "analysis.C": "cpp",
+        "kfpAnalysis.C": "cpp"
     }
 }
