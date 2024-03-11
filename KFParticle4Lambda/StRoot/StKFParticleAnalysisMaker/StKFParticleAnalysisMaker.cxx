@@ -630,7 +630,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			InvariantMass.emplace_back(particle.GetMass());
 
 			//reconstruction of V0, the parent particle
-			if (particle.NDaughters() != 2){cout<<}
+			if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
 			StPicoTrack* mTrackI,mTrackK;
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 				const int daughterId = particle.DaughterIds()[iDaughter]; 
