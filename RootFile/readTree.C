@@ -63,6 +63,7 @@ void readTree()
         std::vector<double>  *zTOF_pion       = nullptr;
         std::vector<double>  *zTOF_kaon       = nullptr;
 	    std::vector<int>     *IfConfuse       = nullptr;
+        std::vector<Float_t> *Decay_Length    = nullptr;
 
         TBranch *bdEdx            = nullptr;
         TBranch *bm2              = nullptr;
@@ -75,6 +76,7 @@ void readTree()
         TBranch *bzTOF_pion       = nullptr;
         TBranch *bzTOF_kaon       = nullptr;
 	    TBranch *bIfConfuse       = nullptr;
+	    TBranch *bDecay_Length    = nullptr;
     
     #else
         #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
@@ -107,6 +109,7 @@ void readTree()
             std::vector<double>  *zTOF_pion       = NULL;
             std::vector<double>  *zTOF_kaon       = NULL;
             std::vector<int>     *IfConfuse       = NULL;
+            std::vector<int>     *Decay_Length    = NULL;
 
             TBranch *bdEdx            = NULL;
             TBranch *bm2              = NULL;
@@ -119,6 +122,7 @@ void readTree()
             TBranch *bzTOF_pion       = NULL;
             TBranch *bzTOF_kaon       = NULL;
             TBranch *bIfConfuse       = NULL;
+            TBranch *bDecay_Length    = NULL;
 
         #else
             std::vector<Int_t>   *PDG             = 0;
@@ -150,6 +154,7 @@ void readTree()
             std::vector<double>  *zTOF_pion       = 0;
             std::vector<double>  *zTOF_kaon       = 0;
             std::vector<int>     *IfConfuse       = 0;
+            std::vector<int>     *Decay_Length    = 0;
 
             TBranch *bdEdx            = 0;
             TBranch *bm2              = 0;
@@ -162,6 +167,7 @@ void readTree()
             TBranch *bzTOF_pion       = 0;
             TBranch *bzTOF_kaon       = 0;
             TBranch *bIfConfuse       = 0;
+            TBranch *bDecay_Length    = 0;
 
         #endif
     #endif
@@ -183,6 +189,7 @@ void readTree()
 	TH2D *H_sigma_TOF[HSize];
 	TH2D *H_sigma_p[HSize];
 	TH2D *H_sigma_pT[HSize];
+	TH2D *H_Mass_DL[HSize];
     // for confused
 	TH2D *HC_sigma_TOF[3];
 	for (int i=0;i<HSize;i++){
@@ -265,6 +272,15 @@ void readTree()
 		H_sigma_pT[i] = new TH2D(HistName1, HistName2, 400, 0, 3, 400, -2.5, 2.5);
 		H_sigma_pT[i]->GetXaxis()->SetTitle("pT [GeV]");
 		H_sigma_pT[i]->GetYaxis()->SetTitle("nSigma");
+        
+		TString HistName1 = "H_Mass_DL";
+		HistName1 += ParticleName[i];
+		TString HistName2 = "The DecayLength";
+		HistName2 += ParticleName[i];
+        HistName2 += " vs. Mass";
+		H_Mass_DL[i] = new TH2D(HistName1, HistName2, kBinNum, kmin, kmax, 400, 0, 50);
+		H_Mass_DL[i]->GetXaxis()->SetTitle("Mass [GeV]");
+		H_Mass_DL[i]->GetYaxis()->SetTitle("DecayLength [cm]");
 	}
 	const TString ConfusedParticleName[] = {"Proton" , "Pion"  , "Kaon"};
     for (int i=0;i<3;i++) {
@@ -316,6 +332,7 @@ void readTree()
     hadronTree->SetBranchAddress("zTOF_pion"      ,&zTOF_pion        ,&bzTOF_pion        );
     hadronTree->SetBranchAddress("zTOF_kaon"      ,&zTOF_kaon        ,&bzTOF_kaon        );
 	hadronTree->SetBranchAddress("IfConfuse"      ,&IfConfuse        ,&bIfConfuse        );
+	hadronTree->SetBranchAddress("Decay_Length"   ,&Decay_Length     ,&bDecay_Length     );
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "entries number: " << nentries << endl;
@@ -342,6 +359,8 @@ void readTree()
 					HMass[k]->Fill(InvariantMass->at(j));
 					HP[k]->Fill(Mag);
 					HRapidity[k]->Fill(rap);
+                    Hdcatopv[k]->Fill(dcatopv->at(j));
+                    H_Mass_DL[k]->Fill(InvariantMass->at(j),Decay_Length->at(j));
                     if (fabs(PDG->at(j)) == 2212){
                         Hdcatopv[k]->Fill(dcatopv->at(j));
                         H_dEdx_p[k]->Fill(Mag,dEdx->at(j));
@@ -425,6 +444,7 @@ void readTree()
 	    H_sigma_TOF[i]->Write();
 	    H_sigma_p[i]->Write();
 	    H_sigma_pT[i]->Write();
+	    H_Mass_DL[i]->Write();
 	}
 	for (int i=0;i<3;i++){
         HC_sigma_TOF[i]->Write();
