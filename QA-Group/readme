@@ -1,0 +1,15 @@
+1.set up the library #this is for 11 GeV
+
+rm -r .sl73_gcc485
+setenv NODEBUG yes
+starver SL23a
+cons
+
+2. Check code:
+root -b -q RunAnalyzer_QA.C++
+
+3. submit to rcf
+submitSchedulerJobs_new.pl P23ia_QA.config
+
+
+
