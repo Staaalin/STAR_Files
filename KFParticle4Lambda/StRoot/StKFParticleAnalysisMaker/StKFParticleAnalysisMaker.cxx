@@ -631,7 +631,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 			//reconstruction of V0, the parent particle
 			if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
-			StPicoTrack mTrackI,mTrackK;
+			int iTrack,kTrack;
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 				const int daughterId = particle.DaughterIds()[iDaughter]; 
 				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
@@ -639,15 +639,17 @@ Int_t StKFParticleAnalysisMaker::Make()
 				Int_t nTracks = mPicoDst->numberOfTracks();
 				Int_t iTrackStart = globalTrackId - 1;
 				if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-				for (Int_t iTrack = iTrackStart;iTrack >= 0;iTrack--){
-					StPicoTrack *track = mPicoDst->track(iTrack);
+				for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+					StPicoTrack *track = mPicoDst->track(jTrack);
 					if (track->id() == globalTrackId){
-						if (iDaughter == 0){mTrackI = mPicoDst->track(iTrack);}
-						if (iDaughter == 1){mTrackK = mPicoDst->track(iTrack);}
+						if (iDaughter == 0){iTrack = jTrack;}
+						if (iDaughter == 1){kTrack = jTrack;}
 						break;
 					}
 				}
 			}
+			StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
+			StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 			TVector3 xv0, op1, op2;
 			double dca1to2 = closestDistance(mTrackI, mTrackK, magnet, Vertex3D, xv0, op1, op2);
 			TVector3 pv0 = op1 + op2;
