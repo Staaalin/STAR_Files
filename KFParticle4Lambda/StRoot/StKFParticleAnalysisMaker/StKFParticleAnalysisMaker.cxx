@@ -203,7 +203,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	// Used for QA
     hadronTree->Branch("dEdx"               ,&QA_dEdx             );
     hadronTree->Branch("m2"                 ,&QA_m2               );
-    hadronTree->Branch("dcatopv"            ,&QA_dcatopv          );
+    hadronTree->Branch("dcatopv"            ,&QA_DCA_V0_PV        );
     hadronTree->Branch("hasTOF"             ,&QA_hasTOF           );
     hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton     );
     hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion       );
@@ -561,7 +561,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	CrefMult = refMult;CgrefMult = grefMult;
 	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvariantMass.resize(0);
 	// QA
-	QA_dEdx.resize(0);QA_dcatopv.resize(0);QA_m2.resize(0);QA_nSigmaProton.resize(0);
+	QA_dEdx.resize(0);QA_DCA_V0_PV.resize(0);QA_m2.resize(0);QA_nSigmaProton.resize(0);
 	QA_nSigmaPion.resize(0);QA_nSigmaKaon.resize(0);QA_zTOF_proton.resize(0);QA_zTOF_pion.resize(0);QA_zTOF_kaon.resize(0);
 	QA_hasTOF.resize(0);QA_IfConfuse.resize(0);QA_Decay_Length.resize(0);
 
@@ -627,9 +627,37 @@ Int_t StKFParticleAnalysisMaker::Make()
 			px.emplace_back(particle.GetPx());
 			py.emplace_back(particle.GetPy());
 			pz.emplace_back(particle.GetPz());
-			InvariantMass.emplace_back(particle.GetMass());cout<<"particle.GetAtProductionVertex() = "<<particle.GetAtProductionVertex()<<endl;
-			float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);cout<<"DL = "<<DL<<", eDL = "<<eDL<<endl;
-			QA_Decay_Length.emplace_back(DL);
+			InvariantMass.emplace_back(particle.GetMass());
+
+			//reconstruction of V0, the parent particle
+			if (particle.NDaughters() != 2){cout<<}
+			StPicoTrack* mTrackI,mTrackK;
+			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+				const int daughterId = particle.DaughterIds()[iDaughter]; 
+				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
+				const int globalTrackId = daughter.DaughterIds()[0];
+				Int_t nTracks = mPicoDst->numberOfTracks();
+				Int_t iTrackStart = globalTrackId - 1;
+				if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+				for (Int_t iTrack = iTrackStart;iTrack >= 0;iTrack--){
+					StPicoTrack *track = mPicoDst->track(iTrack);
+					if (track->id() == globalTrackId){
+						if (iDaughter == 0){mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);}
+						if (iDaughter == 1){mTrackK = (StPicoTrack*)mPicoDst->track(iTrack);}
+						break;
+					}
+				}
+			}
+			TVector3 xv0, op1, op2;
+			double dca1to2 = closestDistance(mTrackI, mTrackK, magnet, Vertex3D, xv0, op1, op2);
+			TVector3 pv0 = op1 + op2;
+			TVector3 xv0toPV = xv0 - Vertex3D;
+			double rdotp = xv0toPV.Dot(pv0);
+			double dcav0toPV = rdotp*rdotp/pv0.Mag2();
+			dcav0toPV = sqrt(xv0toPV.Mag2() - dcav0toPV);
+			double v0decaylength = xv0toPV.Mag();
+			double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();
+			QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);
 			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
 			if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
 			if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
@@ -642,7 +670,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		// Filling QA
 		QA_hasTOF.emplace_back(0);
-		QA_dEdx.emplace_back(0.);QA_dcatopv.emplace_back(0.);QA_m2.emplace_back(0.);QA_nSigmaProton.emplace_back(0.);
+		QA_dEdx.emplace_back(0.);QA_m2.emplace_back(0.);QA_nSigmaProton.emplace_back(0.);
 		QA_nSigmaPion.emplace_back(0.);QA_nSigmaKaon.emplace_back(0.);QA_zTOF_proton.emplace_back(0.);QA_zTOF_pion.emplace_back(0.);QA_zTOF_kaon.emplace_back(0.);
 		QA_IfConfuse.emplace_back(0);
 
@@ -851,7 +879,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_nSigmaProton.emplace_back(nSigmaProton);
 			QA_nSigmaPion.emplace_back(nSigmaPion);
 			QA_nSigmaKaon.emplace_back(nSigmaKaon);
-			QA_dEdx.emplace_back(track->dEdx());QA_dcatopv.emplace_back(dcatopv);
+			QA_dEdx.emplace_back(track->dEdx());QA_DCA_V0_PV.emplace_back(dcatopv);
 			QA_Decay_Length.emplace_back(-1.0);
 		}
 
