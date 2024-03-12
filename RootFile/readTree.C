@@ -190,6 +190,7 @@ void readTree()
 	TH2D *H_sigma_p[HSize];
 	TH2D *H_sigma_pT[HSize];
 	TH2D *H_Mass_DL[HSize];
+	TH2D *H_Mass_dcatopv[HSize];
     // for confused
 	TH2D *HC_sigma_TOF[3];
 	for (int i=0;i<HSize;i++){
@@ -278,9 +279,18 @@ void readTree()
 		TString HistName2 = "The DecayLength";
 		HistName2 += ParticleName[i];
         HistName2 += " vs. Mass";
-		H_Mass_DL[i] = new TH2D(HistName1, HistName2, kBinNum, kmin, kmax, 400, 0, 50);
+		H_Mass_DL[i] = new TH2D(HistName1, HistName2, 5*kBinNum, kmin, kmax, 400, 0, 50);
 		H_Mass_DL[i]->GetXaxis()->SetTitle("Mass [GeV]");
 		H_Mass_DL[i]->GetYaxis()->SetTitle("DecayLength [cm]");
+        
+		TString HistName1 = "H_Mass_dcatopv";
+		HistName1 += ParticleName[i];
+		TString HistName2 = "The DCA to PV";
+		HistName2 += ParticleName[i];
+        HistName2 += " vs. Mass";
+		H_Mass_dcatopv[i] = new TH2D(HistName1, HistName2, 5*kBinNum, kmin, kmax, 400, 0, 50);
+		H_Mass_dcatopv[i]->GetXaxis()->SetTitle("Mass [GeV]");
+		H_Mass_dcatopv[i]->GetYaxis()->SetTitle("DCA2PV [cm]");
 	}
 	const TString ConfusedParticleName[] = {"Proton" , "Pion"  , "Kaon"};
     for (int i=0;i<3;i++) {
@@ -366,7 +376,8 @@ void readTree()
 					HP[k]->Fill(Mag);
 					HRapidity[k]->Fill(rap);
                     Hdcatopv[k]->Fill(dcatopv->at(j));
-                    H_Mass_DL[k]->Fill(InvariantMass->at(j),Decay_Length->at(j));cout<<PDG->at(j)<<"  "<<"InvariantMass = "<<InvariantMass->at(j)<<", Decay_Length = "<<Decay_Length->at(j)<<endl;
+                    H_Mass_DL[k]->Fill(InvariantMass->at(j),Decay_Length->at(j));// cout<<PDG->at(j)<<"  "<<"InvariantMass = "<<InvariantMass->at(j)<<", Decay_Length = "<<Decay_Length->at(j)<<endl;
+                    H_Mass_dcatopv[k]->Fill(InvariantMass->at(j),dcatopv->at(j));
                     if (fabs(PDG->at(j)) == 2212){
                         Hdcatopv[k]->Fill(dcatopv->at(j));
                         H_dEdx_p[k]->Fill(Mag,dEdx->at(j));
@@ -451,6 +462,7 @@ void readTree()
 	    H_sigma_p[i]->Write();
 	    H_sigma_pT[i]->Write();
 	    H_Mass_DL[i]->Write();
+	    H_Mass_dcatopv[i]->Write();
 	}
 	for (int i=0;i<3;i++){
         HC_sigma_TOF[i]->Write();
