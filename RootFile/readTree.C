@@ -299,14 +299,20 @@ void readTree()
 
     //load data  
     TChain *hadronTree = new TChain("hadronTree");
-    TString midname = "/star/data01/pwg/svianping/output/output_";
+    // TString midname = "/star/data01/pwg/svianping/output/output_";
+    TString midname = "/star/u/svianping/STAR_Files/KFParticle4Lambda/output_999998.root";
 
-    for(int i=1;i <= 66389;i++){
-        TString filename = midname;
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<filename<<endl;
+    if (midname != "/star/u/svianping/STAR_Files/KFParticle4Lambda/output_999998.root"){
+        for(int i=1;i <= 66389;i++){
+            TString filename = midname;
+            filename+=i;
+            filename+=".root";
+            hadronTree->Add(filename);
+            // cout<<filename<<endl;
+        }
+    }
+    else{
+        hadronTree->Add(midname);
     }
     // hadronTree->Add("/star/u/svianping/STAR_Files/KFParticle4Lambda/output_999998.root");
     
