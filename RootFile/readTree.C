@@ -109,7 +109,7 @@ void readTree()
             std::vector<double>  *zTOF_pion       = NULL;
             std::vector<double>  *zTOF_kaon       = NULL;
             std::vector<int>     *IfConfuse       = NULL;
-            std::vector<int>     *Decay_Length    = NULL;
+            std::vector<Float_t> *Decay_Length    = NULL;
 
             TBranch *bdEdx            = NULL;
             TBranch *bm2              = NULL;
@@ -154,7 +154,7 @@ void readTree()
             std::vector<double>  *zTOF_pion       = 0;
             std::vector<double>  *zTOF_kaon       = 0;
             std::vector<int>     *IfConfuse       = 0;
-            std::vector<int>     *Decay_Length    = 0;
+            std::vector<Float_t> *Decay_Length    = 0;
 
             TBranch *bdEdx            = 0;
             TBranch *bm2              = 0;
