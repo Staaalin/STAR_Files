@@ -229,6 +229,14 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hLN_M = new TH2D("hLN_M","",400,0,4,600,0,60);
 	hLN_M->GetXaxis()->SetTitle("Mass [GeV]");
 	hLN_M->GetYaxis()->SetTitle("HM");
+	
+	hXY = new TH2D("h_XY","h_ X&Y of PicoDST Tracks",200,0,10,200,0,10);
+	hXY->GetXaxis()->SetTitle("X [cm]");
+	hXY->GetYaxis()->SetTitle("Y [cm]");
+
+	hHXY = new TH2D("h_HXY","h_ X&Y of StHelix",     200,0,10,200,0,10);
+	hHXY->GetXaxis()->SetTitle("X [cm]");
+	hHXY->GetYaxis()->SetTitle("Y [cm]");
 
 	Recorded_events = 0;
 
@@ -243,26 +251,29 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	///////////////////
-	hNRefMult ->Write();  
-	hNRefMultA->Write();  
-	hNRefMultB->Write();  
-	hVertexXY ->Write();  
-	hVertexZ  ->Write();  
-	hVertex2D ->Write();
-	hDiffVz   ->Write();
-	hcent     ->Write();  
-	hcentw    ->Write();  
-
-	hcentRefM ->Write();
-	hcentRefW ->Write();
-
 	hadronTree ->Write();
 
-	hdEdx_pQ->Write();
-	hdEdx_pQ_1cut->Write();
-	hdEdx_pQ_2cut->Write();
+	//-- Used for  test --
+	// hNRefMult ->Write();  
+	// hNRefMultA->Write();  
+	// hNRefMultB->Write();  
+	// hVertexXY ->Write();  
+	// hVertexZ  ->Write();  
+	// hVertex2D ->Write();
+	// hDiffVz   ->Write();
+	// hcent     ->Write();  
+	// hcentw    ->Write();  
 
-	hLN_M->Write();
+	// hcentRefM ->Write();
+	// hcentRefW ->Write();
+
+	// hdEdx_pQ->Write();
+	// hdEdx_pQ_1cut->Write();
+	// hdEdx_pQ_2cut->Write();
+
+	// hLN_M->Write();
+	hXY->Write();
+	hHXY->Write();
 
 	return;
 }
@@ -736,6 +747,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 		StPicoTrack *track = mPicoDst->track(iTrack);
 		hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+		// Helix Test
+		hXY->FIll(track->gMom().X(),track->gMom().Y());
+		StPicoPhysicalHelix helix = track->helix(magnet);
+		hHXY->Fill((helix.origin()).x(),(helix.origin()).y());
     	if (! track)            continue;
     	if (! track->charge())  continue;
     	if (  track->nHitsFit() < 15) continue;
