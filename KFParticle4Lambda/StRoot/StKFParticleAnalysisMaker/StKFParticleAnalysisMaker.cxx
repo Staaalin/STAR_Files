@@ -747,10 +747,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 		StPicoTrack *track = mPicoDst->track(iTrack);
 		hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
-		// Helix Test
-		hXY->Fill(track->gMom().X(),track->gMom().Y());
-		StPicoPhysicalHelix Thelix = track->helix(magnet);
-		hHXY->Fill((Thelix.origin()).x(),(Thelix.origin()).y());
     	if (! track)            continue;
     	if (! track->charge())  continue;
     	if (  track->nHitsFit() < 15) continue;
