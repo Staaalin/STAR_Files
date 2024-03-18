@@ -672,7 +672,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
 			//SCHEME 2:
 			KFParticle tempParticle(particle);
-			double l,dl;
+			float l,dl;
 			KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
 			// tempParticle.GetDistanceToVertexLine(pv, l, dl);
 			tempParticle.SetProductionVertex(pv);
