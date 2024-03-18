@@ -671,12 +671,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 			double v0decaylength = xv0toPV.Mag();
 			double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
 			//SCHEME 2:
-			KFParticleSIMD tempSIMDParticle(particle);
+			KFParticle tempParticle(particle);
 			float_v l,dl;
-			KFParticleSIMD pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
-			tempSIMDParticle.GetDistanceToVertexLine(pv, l, dl);
-			tempSIMDParticle.SetProductionVertex(pv);
-			tempSIMDParticle.GetDecayLength(l, dl);cout<<"SCHEME 2: DecayLength = "<<l[0]<<";  ";if (fabs(v0decaylength/l[0])>1.15 || fabs(v0decaylength/l[0])<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
+			KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
+			tempParticle.GetDistanceToVertexLine(pv, l, dl);
+			tempParticle.SetProductionVertex(pv);
+			tempParticle.GetDecayLength(l, dl);cout<<"SCHEME 2: DecayLength = "<<l[0]<<";  ";if (fabs(v0decaylength/l[0])>1.15 || fabs(v0decaylength/l[0])<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
 			QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);
 			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
 			if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
