@@ -48,6 +48,9 @@ pair<std::vector<float> , std::vector<float>> NMin(float (*func)(float),
     }
     if (VX0_Array.size() == 0 && IfExtend){
         for(int Itr=1;Itr <= 4;Itr++){
+            VX0_Array.resize(0);VY0_Array.resize(0);
+            VX1_Array.resize(0);VY1_Array.resize(0);
+            VX2_Array.resize(0);VY2_Array.resize(0);
             int Size_Of_TX_Array = TX_Array.size();
             TX_Array.resize(2*Size_Of_TX_Array - 1);TY_Array.resize(2*Size_Of_TX_Array - 1);
             for(int Jtr=Size_Of_TX_Array-1;Jtr >= 1;Jtr--){
@@ -103,7 +106,8 @@ pair<std::vector<float> , std::vector<float>> NMin(float (*func)(float),
 
             // Y_Array[0] , Y_Array[1] , Y_Array[2]
             // X_Array[0] , X_Array[1] , X_Array[2]
-            // cout<<"["<<X_Array[0]<<" , "<<X_Array[1]<<" , "<<X_Array[2]<<"]"<<endl;
+            // cout<<"Y_Array = ["<<Y_Array[0]<<" , "<<Y_Array[1]<<" , "<<Y_Array[2]<<"]"<<endl;
+            // cout<<"X_Array = ["<<X_Array[0]<<" , "<<X_Array[1]<<" , "<<X_Array[2]<<"]"<<endl;
             
 
             if (Y_Tem <= Y_Array[1]){
@@ -127,8 +131,7 @@ float TestFunc(float x){
 }
 
 void SyMath(){
-    cout<<"Here"<<endl;
-    pair<std::vector<float> , std::vector<float>>RV = NMin(TestFunc,0.0,21.0,0.001,40,true,10,true);
+    pair<std::vector<float> , std::vector<float>>RV = NMin(TestFunc,0.0,21.0,0.001,40,false,10,false);
     std::cout<<RV.first.size()<<endl;
     if (RV.first.size()!=0){
         for(int i=0;i < RV.first.size();i++){
