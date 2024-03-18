@@ -15,20 +15,13 @@ ROOT 5.34/39 (heads/v5-34-00-patches@v5-34-38-1-g507abd2, Dec 13 2022, 17:42:00 
 CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
 Type ? for help. Commands must be C++ statements.
 Enclose multiple statements between { }.
-Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/StarRoot.so" already loaded
-Warning in <StCloseFileOnTerminate::Instantiate>: Asynch signal handler has been created
 *** Float Point Exception is OFF ***
- *** Start at Date : Mon Mar 11 23:35:02 2024
+ *** Start at Date : Mon Mar 18 11:12:55 2024
 QAInfo:You are using STAR_LEVEL : TFG21g, git = tags/TFG21g,tag:50722f0e0, ROOT_LEVEL : 5.34.39 and node : rcas6013.rcf.bnl.gov with 8 AMD EPYC Processor (with IBPB)
 
 Processing ./readPicoDst.C("./datalist//200.0GeV_Run16/200.0.list.999998",999998,16,200.0,"./datalist/")...
 current job id: 999998
-Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/St_base.so" already loaded
-Warning in <TClass::TClass>: no dictionary for class StStrangeMuDst is available
-Warning in <TClass::TClass>: no dictionary for class StStrangeAssoc is available
  loading of shared libraries done
-Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStChain.so" already loaded
-Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/libStUtilities.so" already loaded
 G__catchexception=0
 Load system libraries	 + liblog4cxx + libStStarLogger
 Create chain bfc
@@ -110,7 +103,7 @@ BFC:INFO  - StFile::AddFile : *** IGNORED *** File ./datalist//200.0GeV_Run16/20
 
 QA :INFO  - Output root file name 200.0.999998.root
 QA :INFO  - ProcessLine:new StPicoDstMaker(2,"./datalist//200.0GeV_Run16/200.0.list.999998")
-(class StPicoDstMaker*)0x9010c20
+(class StPicoDstMaker*)0x9b154c0
 BFC:INFO  - Using DB flavors: ofl+TFG
 QA :INFO  - QAInfo:StBFChain            built Mar 14 2022 19:11:02 from Tag $Name:  $ $Id: StBFChain.h,v 1.59 2019/11/19 17:26:17 jeromel Exp $ 
 QA :INFO  - QAInfo:StPicoDstMaker       built Jun  9 2021 13:05:13 from Tag $Name:  $ $Id: StPicoDstMaker.h,v 1.30 2021/02/23 17:27:01 gnigmat Exp $ 
@@ -121,9 +114,7 @@ QA :INFO  -  StBFChain::bfc
 QA :INFO  -    StPicoDstMaker::PicoDst
 QA :INFO  -    St_db_Maker::db
 QA :INFO  -    StDetectorDbMaker::detDb
-Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/StPicoEvent.so" already loaded
-Note: File "/gpfs01/star/subsys-tpc/fisyak/STAR/packages/TFG21g/.sl73_x8664_gcc485/LIB/StPicoDstMaker.so" already loaded
-BFC:INFO  - StBFChain::Init : Time=Mon Mar 11 23:35:11 2024 Cwd=/direct/star+u/svianping/STAR_Files/KFParticle4Lambda
+BFC:INFO  - StBFChain::Init : Time=Mon Mar 18 11:13:05 2024 Cwd=/direct/star+u/svianping/STAR_Files/KFParticle4Lambda
 QA :INFO  - blacklist tpc
 QA :INFO  - blacklist svt
 QA :INFO  - blacklist ssd
@@ -161,10 +152,10 @@ StChain:INFO  - StDbManagerImpl::lookUpServer() line=711
 
 StHyperCacheManager: reading cache config from /gpfs01/star/subsys-tpc/fisyak/STAR/packages/conf/hyperconfig.json
 StChain:INFO  - StDbLib: db server found in 3 iterations
-StChain:INFO  - MysqlDb::Connect: Load balancer took 0 ms, will use star-db05.rcf.bnl.gov:3316
+StChain:INFO  - MysqlDb::Connect: Load balancer took 0 ms, will use star-db09.rcf.bnl.gov:3316
 StChain:INFO  - Ssl_cipher = AES128-SHA
-StChain:INFO  - MysqlDb::Connect(host,user,pw,database,port) line=527 Server Connecting: DB=StarDb  Host=star-db05.rcf.bnl.gov:3316
- --> Connection Time=0.0427141 sec    MysqlVersion=5.7.24
+StChain:INFO  - MysqlDb::Connect(host,user,pw,database,port) line=527 Server Connecting: DB=StarDb  Host=star-db09.rcf.bnl.gov:3316
+ --> Connection Time=0.035192 sec    MysqlVersion=5.7.24
 StChain:WARN  - StDbManagerImpl::getDbDomain(domainName) line=1061 Adding New dbDomain= fst
 StChain:WARN  - StDbManagerImpl::getDbDomain(domainName) line=1061 Adding New dbDomain= ftt
 StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table rhicf/rhicfBarPos..rhicfBarPos
@@ -337,7 +328,7 @@ SCHEME 1: DecayLength = 7.37567;  SCHEME 2: DecayLength = 60.4066;  3122  1.1820
 SCHEME 1: DecayLength = 0.861426;  SCHEME 2: DecayLength = 32.0795;  -3122  1.50781
 SCHEME 1: DecayLength = 17.9111;  SCHEME 2: DecayLength = 18.0057;   
 SCHEME 1: DecayLength = 7.58465;  SCHEME 2: DecayLength = 7.5473;   
-SCHEME 1: DecayLength = 61.0777;  SCHEME 2: DecayLength = 7.60362;  -3334  2.19509
+SCHEME 1: DecayLength = 61.0777;  SCHEME 2: DecayLength = 7.60361;  -3334  2.19509
 Found Omega
 SCHEME 1: DecayLength = 4.68784;  SCHEME 2: DecayLength = 79.7497;  3122  1.34908
 SCHEME 1: DecayLength = 156.908;  SCHEME 2: DecayLength = 156.767;   
@@ -505,7 +496,7 @@ SCHEME 1: DecayLength = 5.35544;  SCHEME 2: DecayLength = 5.29279;
 SCHEME 1: DecayLength = 1599.15;  SCHEME 2: DecayLength = 5.08086;  3334  2.21697
 Found Omega
 SCHEME 1: DecayLength = 31.0837;  SCHEME 2: DecayLength = 31.0868;   
-SCHEME 1: DecayLength = 84.0942;  SCHEME 2: DecayLength = 83.2279;   
+SCHEME 1: DecayLength = 84.0942;  SCHEME 2: DecayLength = 83.2277;   
 SCHEME 1: DecayLength = 6.26587;  SCHEME 2: DecayLength = 6.14429;   
 SCHEME 1: DecayLength = 7.54027;  SCHEME 2: DecayLength = 7.55316;   
 SCHEME 1: DecayLength = 27.2907;  SCHEME 2: DecayLength = 27.2997;   
@@ -592,7 +583,7 @@ SCHEME 1: DecayLength = 43.5016;  SCHEME 2: DecayLength = 43.4756;
 SCHEME 1: DecayLength = 59.543;  SCHEME 2: DecayLength = 59.5465;   
 SCHEME 1: DecayLength = 162.415;  SCHEME 2: DecayLength = 162.424;   
 SCHEME 1: DecayLength = 8.42865;  SCHEME 2: DecayLength = 23.3794;  3122  1.45679
-SCHEME 1: DecayLength = 7.55798;  SCHEME 2: DecayLength = 7.48029;   
+SCHEME 1: DecayLength = 7.55798;  SCHEME 2: DecayLength = 7.4803;   
 SCHEME 1: DecayLength = 137.64;  SCHEME 2: DecayLength = 137.634;   
 SCHEME 1: DecayLength = 11.0712;  SCHEME 2: DecayLength = 10.9547;   
 SCHEME 1: DecayLength = 12.8033;  SCHEME 2: DecayLength = 12.7282;   
@@ -704,7 +695,7 @@ SCHEME 1: DecayLength = 8.746;  SCHEME 2: DecayLength = 8.75919;
 SCHEME 1: DecayLength = 8.64958;  SCHEME 2: DecayLength = 8.51668;   
 SCHEME 1: DecayLength = 116.994;  SCHEME 2: DecayLength = 184.738;  3122  1.18242
 SCHEME 1: DecayLength = 57.2268;  SCHEME 2: DecayLength = 57.3946;   
-SCHEME 1: DecayLength = 61.7671;  SCHEME 2: DecayLength = 50.7799;  -3122  1.52158
+SCHEME 1: DecayLength = 61.7671;  SCHEME 2: DecayLength = 50.7798;  -3122  1.52158
 SCHEME 1: DecayLength = 133.714;  SCHEME 2: DecayLength = 133.633;   
 SCHEME 1: DecayLength = 5.48161;  SCHEME 2: DecayLength = 5.58091;   
 SCHEME 1: DecayLength = 6.28947;  SCHEME 2: DecayLength = 6.08911;   
@@ -1260,7 +1251,7 @@ SCHEME 1: DecayLength = 186.567;  SCHEME 2: DecayLength = 186.492;
 == Event 1300 finish == 1min 0s: 0.0461538s/event
 SCHEME 1: DecayLength = 113.135;  SCHEME 2: DecayLength = 109.527;   
 SCHEME 1: DecayLength = 39.1664;  SCHEME 2: DecayLength = 39.1486;   
-SCHEME 1: DecayLength = 6.82349;  SCHEME 2: DecayLength = 7.13918;   
+SCHEME 1: DecayLength = 6.82349;  SCHEME 2: DecayLength = 7.13919;   
 SCHEME 1: DecayLength = 23.3262;  SCHEME 2: DecayLength = 23.3265;   
 SCHEME 1: DecayLength = 165.961;  SCHEME 2: DecayLength = 165.559;   
 SCHEME 1: DecayLength = 181.268;  SCHEME 2: DecayLength = 181.207;   
@@ -1287,7 +1278,7 @@ SCHEME 1: DecayLength = 115.558;  SCHEME 2: DecayLength = 118.593;
 SCHEME 1: DecayLength = 11.4718;  SCHEME 2: DecayLength = 11.2621;   
 SCHEME 1: DecayLength = 7.59892;  SCHEME 2: DecayLength = 7.21809;   
 SCHEME 1: DecayLength = 6.2866;  SCHEME 2: DecayLength = 6.24874;   
-SCHEME 1: DecayLength = 8.50083;  SCHEME 2: DecayLength = 2.10795;  3122  1.113
+SCHEME 1: DecayLength = 8.50083;  SCHEME 2: DecayLength = 2.10794;  3122  1.113
 SCHEME 1: DecayLength = 172.538;  SCHEME 2: DecayLength = 172.531;   
 SCHEME 1: DecayLength = 35.3331;  SCHEME 2: DecayLength = 35.331;   
 SCHEME 1: DecayLength = 45.7563;  SCHEME 2: DecayLength = 45.7524;   
@@ -1331,7 +1322,7 @@ SCHEME 1: DecayLength = 129.076;  SCHEME 2: DecayLength = 129.063;
 SCHEME 1: DecayLength = 13.2243;  SCHEME 2: DecayLength = 19.143;  -3122  1.18873
 SCHEME 1: DecayLength = 8.7404;  SCHEME 2: DecayLength = 8.72915;   
 
-== Event 1400 finish == 1min 5s: 0.0464286s/event
+== Event 1400 finish == 1min 4s: 0.0457143s/event
 SCHEME 1: DecayLength = 36.0613;  SCHEME 2: DecayLength = 36.0904;   
 SCHEME 1: DecayLength = 56.0676;  SCHEME 2: DecayLength = 55.9525;   
 SCHEME 1: DecayLength = 9.86083;  SCHEME 2: DecayLength = 9.77353;   
@@ -1404,7 +1395,7 @@ SCHEME 1: DecayLength = 6.07975;  SCHEME 2: DecayLength = 6.05682;
 SCHEME 1: DecayLength = 36.3496;  SCHEME 2: DecayLength = 35.7741;   
 SCHEME 1: DecayLength = 8.7035;  SCHEME 2: DecayLength = 8.71572;   
 
-== Event 1500 finish == 1min 9s: 0.046s/event
+== Event 1500 finish == 1min 8s: 0.0453333s/event
 SCHEME 1: DecayLength = 7.39288;  SCHEME 2: DecayLength = 7.38422;   
 SCHEME 1: DecayLength = 171.857;  SCHEME 2: DecayLength = 171.805;   
 SCHEME 1: DecayLength = 101.979;  SCHEME 2: DecayLength = 101.884;   
@@ -1474,7 +1465,7 @@ SCHEME 1: DecayLength = 43.2244;  SCHEME 2: DecayLength = 43.2394;
 SCHEME 1: DecayLength = 9.2839;  SCHEME 2: DecayLength = 8.90975;   
 SCHEME 1: DecayLength = 167.394;  SCHEME 2: DecayLength = 167.364;   
 
-== Event 1600 finish == 1min 14s: 0.04625s/event
+== Event 1600 finish == 1min 13s: 0.045625s/event
 SCHEME 1: DecayLength = 9.85262;  SCHEME 2: DecayLength = 9.50473;   
 SCHEME 1: DecayLength = 24.3133;  SCHEME 2: DecayLength = 24.3254;   
 SCHEME 1: DecayLength = 169.564;  SCHEME 2: DecayLength = 169.651;   
@@ -1609,11 +1600,11 @@ SCHEME 1: DecayLength = 22.1347;  SCHEME 2: DecayLength = 22.1342;
 SCHEME 1: DecayLength = 164.752;  SCHEME 2: DecayLength = 164.738;   
 SCHEME 1: DecayLength = 11.5178;  SCHEME 2: DecayLength = 11.4724;   
 SCHEME 1: DecayLength = 30.0212;  SCHEME 2: DecayLength = 30.0089;   
-SCHEME 1: DecayLength = 87.4306;  SCHEME 2: DecayLength = 8.04979;  3334  2.40733
+SCHEME 1: DecayLength = 87.4306;  SCHEME 2: DecayLength = 8.0498;  3334  2.40733
 Found Omega
 SCHEME 1: DecayLength = 3.26276;  SCHEME 2: DecayLength = 24.5883;  3122  1.17843
 
-== Event 1800 finish == 1min 23s: 0.0461111s/event
+== Event 1800 finish == 1min 22s: 0.0455556s/event
 SCHEME 1: DecayLength = 45.9546;  SCHEME 2: DecayLength = 45.8692;   
 SCHEME 1: DecayLength = 7.64834;  SCHEME 2: DecayLength = 7.56731;   
 SCHEME 1: DecayLength = 127.241;  SCHEME 2: DecayLength = 127.237;   
@@ -1705,7 +1696,7 @@ SCHEME 1: DecayLength = 114.074;  SCHEME 2: DecayLength = 114.077;
 SCHEME 1: DecayLength = 9.27231;  SCHEME 2: DecayLength = 20.6099;  3122  1.45146
 SCHEME 1: DecayLength = 71.8927;  SCHEME 2: DecayLength = 190.69;  3122  1.15059
 
-== Event 1900 finish == 1min 28s: 0.0463158s/event
+== Event 1900 finish == 1min 27s: 0.0457895s/event
 SCHEME 1: DecayLength = 31.312;  SCHEME 2: DecayLength = 31.3101;   
 SCHEME 1: DecayLength = 50.4378;  SCHEME 2: DecayLength = 50.4313;   
 SCHEME 1: DecayLength = 55.9054;  SCHEME 2: DecayLength = 55.8569;   
@@ -1779,7 +1770,7 @@ SCHEME 1: DecayLength = 67.3563;  SCHEME 2: DecayLength = 56.2165;  3122  1.7751
 SCHEME 1: DecayLength = 98.4442;  SCHEME 2: DecayLength = 98.4687;   
 SCHEME 1: DecayLength = 35.2338;  SCHEME 2: DecayLength = 35.3149;   
 
-== Event 2000 finish == 1min 33s: 0.0465s/event
+== Event 2000 finish == 1min 32s: 0.046s/event
 SCHEME 1: DecayLength = 142.314;  SCHEME 2: DecayLength = 142.149;   
 SCHEME 1: DecayLength = 8.19752;  SCHEME 2: DecayLength = 8.15713;   
 SCHEME 1: DecayLength = 8.19752;  SCHEME 2: DecayLength = 8.15713;   
@@ -1855,7 +1846,7 @@ SCHEME 1: DecayLength = 5.44469;  SCHEME 2: DecayLength = 5.47246;
 SCHEME 1: DecayLength = 5.40165;  SCHEME 2: DecayLength = 4.83001;   
 SCHEME 1: DecayLength = 16.0335;  SCHEME 2: DecayLength = 15.9056;   
 
-== Event 2100 finish == 1min 37s: 0.0461905s/event
+== Event 2100 finish == 1min 36s: 0.0457143s/event
 SCHEME 1: DecayLength = 5.93684;  SCHEME 2: DecayLength = 5.87972;   
 SCHEME 1: DecayLength = 6.2938;  SCHEME 2: DecayLength = 6.11652;   
 SCHEME 1: DecayLength = 5.23988;  SCHEME 2: DecayLength = 5.24416;   
@@ -1940,7 +1931,7 @@ SCHEME 1: DecayLength = 19.1176;  SCHEME 2: DecayLength = 19.192;
 SCHEME 1: DecayLength = 68.2072;  SCHEME 2: DecayLength = -32.4255;  -3122  1.86095
 SCHEME 1: DecayLength = 8.14879;  SCHEME 2: DecayLength = 8.07892;   
 
-== Event 2200 finish == 1min 43s: 0.0468182s/event
+== Event 2200 finish == 1min 41s: 0.0459091s/event
 SCHEME 1: DecayLength = 41.2606;  SCHEME 2: DecayLength = 41.2521;   
 SCHEME 1: DecayLength = 46.3221;  SCHEME 2: DecayLength = 46.4042;   
 SCHEME 1: DecayLength = 159.275;  SCHEME 2: DecayLength = 159.291;   
@@ -2027,7 +2018,7 @@ SCHEME 1: DecayLength = 6.01462;  SCHEME 2: DecayLength = 4.75083;  3122  1.2066
 SCHEME 1: DecayLength = 37.1793;  SCHEME 2: DecayLength = 37.1947;   
 SCHEME 1: DecayLength = 118.02;  SCHEME 2: DecayLength = 118.073;   
 
-== Event 2300 finish == 1min 48s: 0.0469565s/event
+== Event 2300 finish == 1min 46s: 0.046087s/event
 SCHEME 1: DecayLength = 11.7771;  SCHEME 2: DecayLength = 11.6795;   
 SCHEME 1: DecayLength = 30.8443;  SCHEME 2: DecayLength = 30.7517;   
 SCHEME 1: DecayLength = 20.9553;  SCHEME 2: DecayLength = 20.9465;   
@@ -2120,7 +2111,7 @@ SCHEME 1: DecayLength = 6.21109;  SCHEME 2: DecayLength = 6.09796;
 SCHEME 1: DecayLength = 10.9091;  SCHEME 2: DecayLength = 10.8836;   
 SCHEME 1: DecayLength = 61.6334;  SCHEME 2: DecayLength = 61.6707;   
 
-== Event 2400 finish == 1min 52s: 0.0466667s/event
+== Event 2400 finish == 1min 51s: 0.04625s/event
 SCHEME 1: DecayLength = 16.2402;  SCHEME 2: DecayLength = 15.4318;   
 SCHEME 1: DecayLength = 15.5822;  SCHEME 2: DecayLength = 15.6397;   
 SCHEME 1: DecayLength = 29.7325;  SCHEME 2: DecayLength = 29.5724;   
@@ -2203,7 +2194,7 @@ SCHEME 1: DecayLength = 68.5416;  SCHEME 2: DecayLength = 60.9412;
 SCHEME 1: DecayLength = 63.8073;  SCHEME 2: DecayLength = 63.7009;   
 SCHEME 1: DecayLength = 6.15101;  SCHEME 2: DecayLength = 198.673;  3122  1.48528
 
-== Event 2500 finish == 1min 57s: 0.0468s/event
+== Event 2500 finish == 1min 56s: 0.0464s/event
 SCHEME 1: DecayLength = 191.582;  SCHEME 2: DecayLength = 191.582;   
 SCHEME 1: DecayLength = 13.6833;  SCHEME 2: DecayLength = 13.659;   
 SCHEME 1: DecayLength = 9.52644;  SCHEME 2: DecayLength = 9.39504;   
@@ -2270,7 +2261,7 @@ SCHEME 1: DecayLength = 27.804;  SCHEME 2: DecayLength = 23.5481;  3122  2.34377
 SCHEME 1: DecayLength = 135.948;  SCHEME 2: DecayLength = 150.157;  -3122  2.92174
 SCHEME 1: DecayLength = 15.0168;  SCHEME 2: DecayLength = 14.3641;   
 
-== Event 2600 finish == 2min 2s: 0.0469231s/event
+== Event 2600 finish == 2min 0s: 0.0461538s/event
 SCHEME 1: DecayLength = 12.9182;  SCHEME 2: DecayLength = 182.948;  3122  1.1608
 SCHEME 1: DecayLength = 160.889;  SCHEME 2: DecayLength = 160.881;   
 SCHEME 1: DecayLength = 12.3819;  SCHEME 2: DecayLength = 12.3681;   
@@ -2354,7 +2345,7 @@ SCHEME 1: DecayLength = 11.0374;  SCHEME 2: DecayLength = 11.0327;
 SCHEME 1: DecayLength = 83.1255;  SCHEME 2: DecayLength = 83.124;   
 SCHEME 1: DecayLength = 34.8852;  SCHEME 2: DecayLength = 34.9038;   
 
-== Event 2700 finish == 2min 6s: 0.0466667s/event
+== Event 2700 finish == 2min 4s: 0.0459259s/event
 SCHEME 1: DecayLength = 29.9955;  SCHEME 2: DecayLength = 29.6688;   
 SCHEME 1: DecayLength = 20.332;  SCHEME 2: DecayLength = 20.2633;   
 SCHEME 1: DecayLength = 19.8026;  SCHEME 2: DecayLength = 19.8041;   
@@ -2432,7 +2423,7 @@ SCHEME 1: DecayLength = 50.5984;  SCHEME 2: DecayLength = 50.4388;
 SCHEME 1: DecayLength = 7.27507;  SCHEME 2: DecayLength = 7.11427;   
 SCHEME 1: DecayLength = 38.5698;  SCHEME 2: DecayLength = 38.5622;   
 
-== Event 2800 finish == 2min 11s: 0.0467857s/event
+== Event 2800 finish == 2min 9s: 0.0460714s/event
 SCHEME 1: DecayLength = 110.427;  SCHEME 2: DecayLength = 110.426;   
 SCHEME 1: DecayLength = 104.967;  SCHEME 2: DecayLength = 198.371;  3122  1.28513
 SCHEME 1: DecayLength = 13.8993;  SCHEME 2: DecayLength = 13.8585;   
@@ -2483,7 +2474,7 @@ SCHEME 1: DecayLength = 46.4713;  SCHEME 2: DecayLength = 46.5026;
 SCHEME 1: DecayLength = 114.109;  SCHEME 2: DecayLength = 114.145;   
 SCHEME 1: DecayLength = 21.3327;  SCHEME 2: DecayLength = 82.1359;  3122  1.42654
 SCHEME 1: DecayLength = 46.6203;  SCHEME 2: DecayLength = 46.7123;   
-SCHEME 1: DecayLength = 7.95135;  SCHEME 2: DecayLength = 0.0938806;  -3122  2.35887
+SCHEME 1: DecayLength = 7.95135;  SCHEME 2: DecayLength = 0.0938814;  -3122  2.35887
 SCHEME 1: DecayLength = 5.7217;  SCHEME 2: DecayLength = 5.70409;   
 SCHEME 1: DecayLength = 141.211;  SCHEME 2: DecayLength = 141.217;   
 SCHEME 1: DecayLength = 13.5911;  SCHEME 2: DecayLength = 13.5191;   
@@ -2510,7 +2501,7 @@ SCHEME 1: DecayLength = 151.677;  SCHEME 2: DecayLength = 151.624;
 SCHEME 1: DecayLength = 102.724;  SCHEME 2: DecayLength = 100.713;   
 SCHEME 1: DecayLength = 72.8611;  SCHEME 2: DecayLength = 72.8526;   
 
-== Event 2900 finish == 2min 16s: 0.0468966s/event
+== Event 2900 finish == 2min 14s: 0.0462069s/event
 SCHEME 1: DecayLength = 195.689;  SCHEME 2: DecayLength = 195.703;   
 SCHEME 1: DecayLength = 7.0743;  SCHEME 2: DecayLength = 7.07286;   
 SCHEME 1: DecayLength = 87.5983;  SCHEME 2: DecayLength = 87.614;   
@@ -2578,7 +2569,7 @@ SCHEME 1: DecayLength = 6.62404;  SCHEME 2: DecayLength = 6.62857;
 SCHEME 1: DecayLength = 132.162;  SCHEME 2: DecayLength = 131.924;   
 SCHEME 1: DecayLength = 5.96192;  SCHEME 2: DecayLength = 5.92436;   
 
-== Event 3000 finish == 2min 20s: 0.0466667s/event
+== Event 3000 finish == 2min 18s: 0.046s/event
 SCHEME 1: DecayLength = 43.1958;  SCHEME 2: DecayLength = 43.2131;   
 SCHEME 1: DecayLength = 2.0083;  SCHEME 2: DecayLength = 24.4441;  3122  1.66515
 SCHEME 1: DecayLength = 90.8252;  SCHEME 2: DecayLength = 90.8512;   
@@ -2661,7 +2652,7 @@ SCHEME 1: DecayLength = 8.79903;  SCHEME 2: DecayLength = 8.79528;
 SCHEME 1: DecayLength = 43.3228;  SCHEME 2: DecayLength = 43.3368;   
 SCHEME 1: DecayLength = 15.0583;  SCHEME 2: DecayLength = 15.0842;   
 
-== Event 3100 finish == 2min 25s: 0.0467742s/event
+== Event 3100 finish == 2min 23s: 0.046129s/event
 SCHEME 1: DecayLength = 9.34482;  SCHEME 2: DecayLength = 9.34618;   
 SCHEME 1: DecayLength = 51.3699;  SCHEME 2: DecayLength = 51.2943;   
 SCHEME 1: DecayLength = 77.7503;  SCHEME 2: DecayLength = 77.6099;   
@@ -2746,7 +2737,7 @@ SCHEME 1: DecayLength = 5.49073;  SCHEME 2: DecayLength = 5.49544;
 SCHEME 1: DecayLength = 7.06833;  SCHEME 2: DecayLength = 7.02226;   
 SCHEME 1: DecayLength = 11.4263;  SCHEME 2: DecayLength = 11.4229;   
 
-== Event 3200 finish == 2min 30s: 0.046875s/event
+== Event 3200 finish == 2min 27s: 0.0459375s/event
 SCHEME 1: DecayLength = 11.4719;  SCHEME 2: DecayLength = 11.5399;   
 SCHEME 1: DecayLength = 158.827;  SCHEME 2: DecayLength = 158.836;   
 SCHEME 1: DecayLength = 52.269;  SCHEME 2: DecayLength = 52.2428;   
@@ -2835,7 +2826,7 @@ SCHEME 1: DecayLength = 4.00212;  SCHEME 2: DecayLength = 59.6646;  3122  1.8688
 SCHEME 1: DecayLength = 125.98;  SCHEME 2: DecayLength = 125.914;   
 SCHEME 1: DecayLength = 23.9843;  SCHEME 2: DecayLength = 23.9731;   
 
-== Event 3300 finish == 2min 36s: 0.0472727s/event
+== Event 3300 finish == 2min 33s: 0.0463636s/event
 SCHEME 1: DecayLength = 16.2908;  SCHEME 2: DecayLength = 16.2904;   
 SCHEME 1: DecayLength = 16.0399;  SCHEME 2: DecayLength = 16.0182;   
 SCHEME 1: DecayLength = 97.3788;  SCHEME 2: DecayLength = 102.887;  3122  2.0573
@@ -2913,7 +2904,7 @@ SCHEME 1: DecayLength = 52.7462;  SCHEME 2: DecayLength = 52.7661;
 SCHEME 1: DecayLength = 100.068;  SCHEME 2: DecayLength = 100.091;   
 SCHEME 1: DecayLength = 27.2718;  SCHEME 2: DecayLength = 27.3594;   
 
-== Event 3400 finish == 2min 40s: 0.0470588s/event
+== Event 3400 finish == 2min 38s: 0.0464706s/event
 SCHEME 1: DecayLength = 102.475;  SCHEME 2: DecayLength = 30.0507;  3122  1.56185
 SCHEME 1: DecayLength = 11.9687;  SCHEME 2: DecayLength = 11.9576;   
 SCHEME 1: DecayLength = 6.62486;  SCHEME 2: DecayLength = 6.53773;   
@@ -2990,7 +2981,7 @@ SCHEME 1: DecayLength = 37.2746;  SCHEME 2: DecayLength = 37.3253;
 SCHEME 1: DecayLength = 16.1751;  SCHEME 2: DecayLength = 25.9466;  3122  1.50071
 SCHEME 1: DecayLength = 70.4227;  SCHEME 2: DecayLength = 70.4025;   
 
-== Event 3500 finish == 2min 45s: 0.0471429s/event
+== Event 3500 finish == 2min 42s: 0.0462857s/event
 SCHEME 1: DecayLength = 110.234;  SCHEME 2: DecayLength = 110.264;   
 SCHEME 1: DecayLength = 101.131;  SCHEME 2: DecayLength = 93.0164;   
 SCHEME 1: DecayLength = 12.6086;  SCHEME 2: DecayLength = 12.3635;   
@@ -3054,7 +3045,7 @@ SCHEME 1: DecayLength = 13.6899;  SCHEME 2: DecayLength = 42.8158;  3122  2.8763
 SCHEME 1: DecayLength = 86.4898;  SCHEME 2: DecayLength = 86.4618;   
 SCHEME 1: DecayLength = 42.6232;  SCHEME 2: DecayLength = 191.614;  -3122  1.32386
 
-== Event 3600 finish == 2min 49s: 0.0469444s/event
+== Event 3600 finish == 2min 46s: 0.0461111s/event
 SCHEME 1: DecayLength = 13.3261;  SCHEME 2: DecayLength = 13.1669;   
 SCHEME 1: DecayLength = 4.92139;  SCHEME 2: DecayLength = 17.658;  -3122  2.32988
 SCHEME 1: DecayLength = 157.645;  SCHEME 2: DecayLength = 157.639;   
@@ -3146,7 +3137,7 @@ SCHEME 1: DecayLength = 53.2805;  SCHEME 2: DecayLength = 53.2473;
 SCHEME 1: DecayLength = 10.4127;  SCHEME 2: DecayLength = 10.2368;   
 SCHEME 1: DecayLength = 45.8172;  SCHEME 2: DecayLength = 22.092;  3122  1.10628
 
-== Event 3700 finish == 2min 55s: 0.0472973s/event
+== Event 3700 finish == 2min 52s: 0.0464865s/event
 SCHEME 1: DecayLength = 70.4444;  SCHEME 2: DecayLength = 70.447;   
 SCHEME 1: DecayLength = 72.1448;  SCHEME 2: DecayLength = 72.1561;   
 SCHEME 1: DecayLength = 60.4955;  SCHEME 2: DecayLength = 60.5015;   
@@ -3214,7 +3205,7 @@ SCHEME 1: DecayLength = 12.7213;  SCHEME 2: DecayLength = 12.338;
 SCHEME 1: DecayLength = 10.425;  SCHEME 2: DecayLength = 10.4139;   
 SCHEME 1: DecayLength = 5.38008;  SCHEME 2: DecayLength = 0.466303;  3122  1.10213
 
-== Event 3800 finish == 3min 0s: 0.0473684s/event
+== Event 3800 finish == 2min 56s: 0.0463158s/event
 SCHEME 1: DecayLength = 84.4144;  SCHEME 2: DecayLength = 83.2733;   
 SCHEME 1: DecayLength = 28.3049;  SCHEME 2: DecayLength = 28.295;   
 SCHEME 1: DecayLength = 17.2301;  SCHEME 2: DecayLength = 17.2314;   
@@ -3277,7 +3268,7 @@ SCHEME 1: DecayLength = 7.1513;  SCHEME 2: DecayLength = 7.1204;
 SCHEME 1: DecayLength = 135.009;  SCHEME 2: DecayLength = 134.962;   
 SCHEME 1: DecayLength = 5.47106;  SCHEME 2: DecayLength = 5.45929;   
 
-== Event 3900 finish == 3min 4s: 0.0471795s/event
+== Event 3900 finish == 3min 1s: 0.0464103s/event
 SCHEME 1: DecayLength = 169.714;  SCHEME 2: DecayLength = 169.735;   
 SCHEME 1: DecayLength = 12.2549;  SCHEME 2: DecayLength = 26.0341;  3122  1.62016
 SCHEME 1: DecayLength = 67.638;  SCHEME 2: DecayLength = 67.6378;   
@@ -3340,7 +3331,7 @@ SCHEME 1: DecayLength = 110.725;  SCHEME 2: DecayLength = 110.732;
 SCHEME 1: DecayLength = 8.84436;  SCHEME 2: DecayLength = 8.81898;   
 SCHEME 1: DecayLength = 127.145;  SCHEME 2: DecayLength = 127.129;   
 
-== Event 4000 finish == 3min 9s: 0.04725s/event
+== Event 4000 finish == 3min 5s: 0.04625s/event
 SCHEME 1: DecayLength = 86.6695;  SCHEME 2: DecayLength = 86.7203;   
 SCHEME 1: DecayLength = 8.64568;  SCHEME 2: DecayLength = 8.60407;   
 SCHEME 1: DecayLength = 39.975;  SCHEME 2: DecayLength = 40.0102;   
@@ -3419,7 +3410,7 @@ SCHEME 1: DecayLength = 105.691;  SCHEME 2: DecayLength = 105.68;
 SCHEME 1: DecayLength = 5.52594;  SCHEME 2: DecayLength = 5.29672;   
 SCHEME 1: DecayLength = 15.5885;  SCHEME 2: DecayLength = 15.5314;   
 
-== Event 4100 finish == 3min 14s: 0.0473171s/event
+== Event 4100 finish == 3min 10s: 0.0463415s/event
 SCHEME 1: DecayLength = 13.265;  SCHEME 2: DecayLength = 13.2807;   
 SCHEME 1: DecayLength = 50.1618;  SCHEME 2: DecayLength = 50.1836;   
 SCHEME 1: DecayLength = 44.6927;  SCHEME 2: DecayLength = 44.6746;   
@@ -3469,7 +3460,7 @@ SCHEME 1: DecayLength = 35.1501;  SCHEME 2: DecayLength = 35.1517;
 SCHEME 1: DecayLength = 3.14458;  SCHEME 2: DecayLength = 75.0213;  3122  1.20236
 SCHEME 1: DecayLength = 68.2162;  SCHEME 2: DecayLength = 68.2669;   
 
-== Event 4200 finish == 3min 18s: 0.0471429s/event
+== Event 4200 finish == 3min 14s: 0.0461905s/event
 SCHEME 1: DecayLength = 19.5131;  SCHEME 2: DecayLength = 19.5334;   
 SCHEME 1: DecayLength = 66.4545;  SCHEME 2: DecayLength = 65.2386;   
 SCHEME 1: DecayLength = 13.0822;  SCHEME 2: DecayLength = 13.2207;   
@@ -3509,7 +3500,7 @@ SCHEME 1: DecayLength = 25.441;  SCHEME 2: DecayLength = 25.4011;
 SCHEME 1: DecayLength = 27.7895;  SCHEME 2: DecayLength = 27.7963;   
 SCHEME 1: DecayLength = 60.7983;  SCHEME 2: DecayLength = 60.7084;   
 SCHEME 1: DecayLength = 11.4381;  SCHEME 2: DecayLength = 11.4359;   
-SCHEME 1: DecayLength = 5.87091;  SCHEME 2: DecayLength = 0.0337153;  3122  1.31504
+SCHEME 1: DecayLength = 5.87091;  SCHEME 2: DecayLength = 0.0337007;  3122  1.31504
 SCHEME 1: DecayLength = 169.113;  SCHEME 2: DecayLength = 168.903;   
 SCHEME 1: DecayLength = 47.2564;  SCHEME 2: DecayLength = 47.2519;   
 SCHEME 1: DecayLength = 22.94;  SCHEME 2: DecayLength = 22.9537;   
@@ -3534,7 +3525,7 @@ SCHEME 1: DecayLength = 46.6747;  SCHEME 2: DecayLength = 46.609;
 SCHEME 1: DecayLength = 24.2353;  SCHEME 2: DecayLength = 24.2758;   
 SCHEME 1: DecayLength = 7.83067;  SCHEME 2: DecayLength = 7.81598;   
 
-== Event 4300 finish == 3min 22s: 0.0469767s/event
+== Event 4300 finish == 3min 18s: 0.0460465s/event
 SCHEME 1: DecayLength = 18.2812;  SCHEME 2: DecayLength = 33.4796;  3122  1.11691
 SCHEME 1: DecayLength = 106.133;  SCHEME 2: DecayLength = 106.123;   
 SCHEME 1: DecayLength = 46.6001;  SCHEME 2: DecayLength = 46.6037;   
@@ -3619,7 +3610,7 @@ SCHEME 1: DecayLength = 39.0469;  SCHEME 2: DecayLength = 33.9919;
 SCHEME 1: DecayLength = 17.4346;  SCHEME 2: DecayLength = 5.16847;  -3122  1.09672
 SCHEME 1: DecayLength = 39.0469;  SCHEME 2: DecayLength = 33.9919;   
 
-== Event 4400 finish == 3min 27s: 0.0470455s/event
+== Event 4400 finish == 3min 23s: 0.0461364s/event
 SCHEME 1: DecayLength = 56.9196;  SCHEME 2: DecayLength = 56.9524;   
 SCHEME 1: DecayLength = 26.0122;  SCHEME 2: DecayLength = 25.9734;   
 SCHEME 1: DecayLength = 59.2073;  SCHEME 2: DecayLength = 59.208;   
@@ -3679,7 +3670,7 @@ SCHEME 1: DecayLength = 105.471;  SCHEME 2: DecayLength = 105.476;
 SCHEME 1: DecayLength = 5.63657;  SCHEME 2: DecayLength = 17.2424;  3122  1.29656
 SCHEME 1: DecayLength = 5.5989;  SCHEME 2: DecayLength = 5.56282;   
 
-== Event 4500 finish == 3min 32s: 0.0471111s/event
+== Event 4500 finish == 3min 28s: 0.0462222s/event
 SCHEME 1: DecayLength = 48.5893;  SCHEME 2: DecayLength = 48.5894;   
 SCHEME 1: DecayLength = 104.031;  SCHEME 2: DecayLength = 103.577;   
 SCHEME 1: DecayLength = 94.7119;  SCHEME 2: DecayLength = 94.6737;   
@@ -3740,7 +3731,7 @@ SCHEME 1: DecayLength = 48.2957;  SCHEME 2: DecayLength = 48.1426;
 SCHEME 1: DecayLength = 104.597;  SCHEME 2: DecayLength = 104.615;   
 SCHEME 1: DecayLength = 108.938;  SCHEME 2: DecayLength = 90.3151;  -3122  2.18131
 
-== Event 4600 finish == 3min 36s: 0.0469565s/event
+== Event 4600 finish == 3min 32s: 0.046087s/event
 SCHEME 1: DecayLength = 4.36223;  SCHEME 2: DecayLength = 28.0632;  3122  1.28047
 SCHEME 1: DecayLength = 35.5197;  SCHEME 2: DecayLength = 35.5294;   
 SCHEME 1: DecayLength = 13.363;  SCHEME 2: DecayLength = 13.3601;   
@@ -3782,7 +3773,7 @@ SCHEME 1: DecayLength = 57.542;  SCHEME 2: DecayLength = 57.5104;
 SCHEME 1: DecayLength = 7.08728;  SCHEME 2: DecayLength = 7.07126;   
 SCHEME 1: DecayLength = 16.5702;  SCHEME 2: DecayLength = 46.1429;  3122  1.85306
 SCHEME 1: DecayLength = 37.8491;  SCHEME 2: DecayLength = 184.35;  3122  1.304
-SCHEME 1: DecayLength = 6.82636;  SCHEME 2: DecayLength = -1.49172;  3122  1.29406
+SCHEME 1: DecayLength = 6.82636;  SCHEME 2: DecayLength = -1.49173;  3122  1.29406
 SCHEME 1: DecayLength = 79.5476;  SCHEME 2: DecayLength = 79.5682;   
 SCHEME 1: DecayLength = 6.81538;  SCHEME 2: DecayLength = 6.84743;   
 SCHEME 1: DecayLength = 7.55847;  SCHEME 2: DecayLength = 7.55306;   
@@ -3817,7 +3808,7 @@ SCHEME 1: DecayLength = 137.939;  SCHEME 2: DecayLength = 137.964;
 SCHEME 1: DecayLength = 123.217;  SCHEME 2: DecayLength = 123.224;   
 SCHEME 1: DecayLength = 19.1143;  SCHEME 2: DecayLength = 19.1131;   
 
-== Event 4700 finish == 3min 42s: 0.047234s/event
+== Event 4700 finish == 3min 37s: 0.0461702s/event
 SCHEME 1: DecayLength = 90.8162;  SCHEME 2: DecayLength = 90.6596;   
 SCHEME 1: DecayLength = 24.6216;  SCHEME 2: DecayLength = 24.6344;   
 SCHEME 1: DecayLength = 94.6418;  SCHEME 2: DecayLength = 94.6876;   
@@ -3911,7 +3902,7 @@ SCHEME 1: DecayLength = 111.092;  SCHEME 2: DecayLength = 111.052;
 SCHEME 1: DecayLength = 5.75885;  SCHEME 2: DecayLength = 5.5793;   
 SCHEME 1: DecayLength = 5.98501;  SCHEME 2: DecayLength = 6.14715;   
 
-== Event 4800 finish == 3min 46s: 0.0470833s/event
+== Event 4800 finish == 3min 41s: 0.0460417s/event
 SCHEME 1: DecayLength = 0.487352;  SCHEME 2: DecayLength = 40.8549;  -3122  1.66705
 SCHEME 1: DecayLength = 8.33833;  SCHEME 2: DecayLength = 31.7802;  3122  1.15353
 SCHEME 1: DecayLength = 45.0656;  SCHEME 2: DecayLength = 45.0623;   
@@ -3928,7 +3919,7 @@ SCHEME 1: DecayLength = 1.48117;  SCHEME 2: DecayLength = 11.4688;  -3122  1.579
 SCHEME 1: DecayLength = 14.3149;  SCHEME 2: DecayLength = 14.3126;   
 SCHEME 1: DecayLength = 24.3479;  SCHEME 2: DecayLength = 24.3794;   
 SCHEME 1: DecayLength = 69.0579;  SCHEME 2: DecayLength = 69.071;   
-SCHEME 1: DecayLength = 8.02721;  SCHEME 2: DecayLength = 0.66441;  3122  1.74612
+SCHEME 1: DecayLength = 8.02721;  SCHEME 2: DecayLength = 0.664409;  3122  1.74612
 SCHEME 1: DecayLength = 26.5479;  SCHEME 2: DecayLength = 26.5602;   
 SCHEME 1: DecayLength = 107.584;  SCHEME 2: DecayLength = 107.593;   
 SCHEME 1: DecayLength = 134.625;  SCHEME 2: DecayLength = 134.588;   
@@ -4017,7 +4008,7 @@ SCHEME 1: DecayLength = 97.4101;  SCHEME 2: DecayLength = 164.199;  -3122  2.140
 SCHEME 1: DecayLength = 112.539;  SCHEME 2: DecayLength = 112.468;   
 SCHEME 1: DecayLength = 36.0516;  SCHEME 2: DecayLength = 36.0562;   
 
-== Event 4900 finish == 3min 51s: 0.0471429s/event
+== Event 4900 finish == 3min 46s: 0.0461224s/event
 SCHEME 1: DecayLength = 16.1232;  SCHEME 2: DecayLength = 16.1074;   
 SCHEME 1: DecayLength = 58.6257;  SCHEME 2: DecayLength = 58.7629;   
 SCHEME 1: DecayLength = 6.28449;  SCHEME 2: DecayLength = 6.23621;   
@@ -4074,7 +4065,7 @@ SCHEME 1: DecayLength = 47.6542;  SCHEME 2: DecayLength = 188.693;  3122  1.1461
 SCHEME 1: DecayLength = 5.2657;  SCHEME 2: DecayLength = 5.21904;   
 SCHEME 1: DecayLength = 6.35147;  SCHEME 2: DecayLength = 6.22304;   
 
-== Event 5000 finish == 3min 55s: 0.047s/event
+== Event 5000 finish == 3min 51s: 0.0462s/event
 SCHEME 1: DecayLength = 9.25331;  SCHEME 2: DecayLength = 9.26195;   
 SCHEME 1: DecayLength = 18.112;  SCHEME 2: DecayLength = 18.1077;   
 SCHEME 1: DecayLength = 21.7977;  SCHEME 2: DecayLength = 21.786;   
@@ -4140,7 +4131,7 @@ SCHEME 1: DecayLength = 77.4263;  SCHEME 2: DecayLength = 69.5161;
 SCHEME 1: DecayLength = 39.4362;  SCHEME 2: DecayLength = 39.5186;   
 SCHEME 1: DecayLength = 175.964;  SCHEME 2: DecayLength = 175.966;   
 
-== Event 5100 finish == 4min 0s: 0.0470588s/event
+== Event 5100 finish == 3min 55s: 0.0460784s/event
 SCHEME 1: DecayLength = 12.9617;  SCHEME 2: DecayLength = 13.0178;   
 SCHEME 1: DecayLength = 22.4063;  SCHEME 2: DecayLength = 22.3151;   
 SCHEME 1: DecayLength = 105.563;  SCHEME 2: DecayLength = 105.36;   
@@ -4224,10 +4215,10 @@ SCHEME 1: DecayLength = 6.92316;  SCHEME 2: DecayLength = 6.1017;
 SCHEME 1: DecayLength = 32.3858;  SCHEME 2: DecayLength = 32.4079;   
 SCHEME 1: DecayLength = 175.742;  SCHEME 2: DecayLength = 175.684;   
 
-== Event 5200 finish == 4min 5s: 0.0471154s/event
+== Event 5200 finish == 4min 0s: 0.0461538s/event
 SCHEME 1: DecayLength = 43.1815;  SCHEME 2: DecayLength = 42.8185;   
 SCHEME 1: DecayLength = 125.113;  SCHEME 2: DecayLength = 125.1;   
-SCHEME 1: DecayLength = 46.866;  SCHEME 2: DecayLength = 46.8624;   
+SCHEME 1: DecayLength = 46.866;  SCHEME 2: DecayLength = 46.8625;   
 SCHEME 1: DecayLength = 1417.96;  SCHEME 2: DecayLength = 18.9272;  -3122  1.58559
 SCHEME 1: DecayLength = 151.126;  SCHEME 2: DecayLength = 149.964;   
 SCHEME 1: DecayLength = 36.4752;  SCHEME 2: DecayLength = 197.895;  -3122  1.48239
@@ -4235,7 +4226,7 @@ SCHEME 1: DecayLength = 173.634;  SCHEME 2: DecayLength = 173.599;
 SCHEME 1: DecayLength = 124.806;  SCHEME 2: DecayLength = 124.816;   
 SCHEME 1: DecayLength = 8.01709;  SCHEME 2: DecayLength = 7.96765;   
 SCHEME 1: DecayLength = 183.069;  SCHEME 2: DecayLength = -136.689;  -3122  1.10816
-SCHEME 1: DecayLength = 143.184;  SCHEME 2: DecayLength = 46.6161;  3122  2.4508
+SCHEME 1: DecayLength = 143.184;  SCHEME 2: DecayLength = 46.6159;  3122  2.4508
 SCHEME 1: DecayLength = 15.3596;  SCHEME 2: DecayLength = 157.268;  3122  1.17189
 SCHEME 1: DecayLength = 4.88365;  SCHEME 2: DecayLength = 4.98071;   
 SCHEME 1: DecayLength = 69.242;  SCHEME 2: DecayLength = 69.2468;   
@@ -4276,7 +4267,7 @@ SCHEME 1: DecayLength = 3116.16;  SCHEME 2: DecayLength = 8.13252;  3122  1.4869
 SCHEME 1: DecayLength = 5.85982;  SCHEME 2: DecayLength = 6.7929;  -3122  1.17076
 SCHEME 1: DecayLength = 57.3092;  SCHEME 2: DecayLength = 57.2957;   
 
-== Event 5300 finish == 4min 9s: 0.0469811s/event
+== Event 5300 finish == 4min 4s: 0.0460377s/event
 SCHEME 1: DecayLength = 4.84506;  SCHEME 2: DecayLength = 7.93832;  -3122  1.1264
 SCHEME 1: DecayLength = 15.1335;  SCHEME 2: DecayLength = 15.0356;   
 SCHEME 1: DecayLength = 19.4882;  SCHEME 2: DecayLength = 19.5434;   
@@ -4315,7 +4306,7 @@ SCHEME 1: DecayLength = 6.45343;  SCHEME 2: DecayLength = 6.37755;
 SCHEME 1: DecayLength = 24.4716;  SCHEME 2: DecayLength = 24.5622;   
 SCHEME 1: DecayLength = 30.3807;  SCHEME 2: DecayLength = 30.4238;   
 SCHEME 1: DecayLength = 35.5581;  SCHEME 2: DecayLength = -6.86697;  3122  1.12809
-SCHEME 1: DecayLength = 134.185;  SCHEME 2: DecayLength = 83.1124;  3122  1.39481
+SCHEME 1: DecayLength = 134.185;  SCHEME 2: DecayLength = 83.1125;  3122  1.39481
 SCHEME 1: DecayLength = 161.353;  SCHEME 2: DecayLength = 161.202;   
 SCHEME 1: DecayLength = 94.6601;  SCHEME 2: DecayLength = 95.3948;   
 SCHEME 1: DecayLength = 173.11;  SCHEME 2: DecayLength = 171.339;   
@@ -4331,7 +4322,7 @@ SCHEME 1: DecayLength = 43.5435;  SCHEME 2: DecayLength = 43.5425;
 SCHEME 1: DecayLength = 72.1571;  SCHEME 2: DecayLength = 72.1598;   
 SCHEME 1: DecayLength = 46.9728;  SCHEME 2: DecayLength = 46.9787;   
 
-== Event 5400 finish == 4min 13s: 0.0468519s/event
+== Event 5400 finish == 4min 9s: 0.0461111s/event
 SCHEME 1: DecayLength = 27.1037;  SCHEME 2: DecayLength = 27.0927;   
 SCHEME 1: DecayLength = 77.7751;  SCHEME 2: DecayLength = 77.7641;   
 SCHEME 1: DecayLength = 99.095;  SCHEME 2: DecayLength = 99.0907;   
@@ -4397,7 +4388,7 @@ SCHEME 1: DecayLength = 7.95405;  SCHEME 2: DecayLength = 4.76928;  -3122  0
 SCHEME 1: DecayLength = 7.56179;  SCHEME 2: DecayLength = 7.41675;   
 SCHEME 1: DecayLength = 94.9673;  SCHEME 2: DecayLength = 94.9434;   
 
-== Event 5500 finish == 4min 17s: 0.0467273s/event
+== Event 5500 finish == 4min 13s: 0.046s/event
 SCHEME 1: DecayLength = 14.5378;  SCHEME 2: DecayLength = 14.4284;   
 SCHEME 1: DecayLength = 2.5889;  SCHEME 2: DecayLength = 15.2297;  3122  1.41943
 SCHEME 1: DecayLength = 152.096;  SCHEME 2: DecayLength = -90.7478;  3122  1.47665
@@ -4450,11 +4441,11 @@ SCHEME 1: DecayLength = 57.2813;  SCHEME 2: DecayLength = 57.257;
 SCHEME 1: DecayLength = 7.5251;  SCHEME 2: DecayLength = 7.49002;   
 SCHEME 1: DecayLength = 25.3087;  SCHEME 2: DecayLength = 25.2826;   
 SCHEME 1: DecayLength = 41.7706;  SCHEME 2: DecayLength = 33.9369;  3122  1.08953
-SCHEME 1: DecayLength = 6.33275;  SCHEME 2: DecayLength = 0.414808;  3122  1.19952
+SCHEME 1: DecayLength = 6.33275;  SCHEME 2: DecayLength = 0.41482;  3122  1.19952
 SCHEME 1: DecayLength = 12.0615;  SCHEME 2: DecayLength = 12.035;   
 SCHEME 1: DecayLength = 18.0569;  SCHEME 2: DecayLength = 16.9325;   
 
-== Event 5600 finish == 4min 22s: 0.0467857s/event
+== Event 5600 finish == 4min 18s: 0.0460714s/event
 SCHEME 1: DecayLength = 18.8242;  SCHEME 2: DecayLength = 18.8365;   
 SCHEME 1: DecayLength = 103.646;  SCHEME 2: DecayLength = 103.633;   
 SCHEME 1: DecayLength = 2.97318;  SCHEME 2: DecayLength = 27.2788;  3122  1.24111
@@ -4531,7 +4522,7 @@ SCHEME 1: DecayLength = 5.60522;  SCHEME 2: DecayLength = 87.6897;  3122  1.2613
 SCHEME 1: DecayLength = 19.5453;  SCHEME 2: DecayLength = 19.5186;   
 SCHEME 1: DecayLength = 104.16;  SCHEME 2: DecayLength = 104.127;   
 
-== Event 5700 finish == 4min 27s: 0.0468421s/event
+== Event 5700 finish == 4min 23s: 0.0461404s/event
 SCHEME 1: DecayLength = 108.598;  SCHEME 2: DecayLength = 108.554;   
 SCHEME 1: DecayLength = 16.9491;  SCHEME 2: DecayLength = 16.9839;   
 SCHEME 1: DecayLength = 27.077;  SCHEME 2: DecayLength = -0.401231;  3122  1.83572
@@ -4600,7 +4591,7 @@ SCHEME 1: DecayLength = 20.5662;  SCHEME 2: DecayLength = 20.5267;
 SCHEME 1: DecayLength = 19.486;  SCHEME 2: DecayLength = 19.4814;   
 SCHEME 1: DecayLength = 7.99242;  SCHEME 2: DecayLength = 7.88097;   
 
-== Event 5800 finish == 4min 32s: 0.0468966s/event
+== Event 5800 finish == 4min 27s: 0.0460345s/event
 SCHEME 1: DecayLength = 6.63121;  SCHEME 2: DecayLength = 6.60596;   
 SCHEME 1: DecayLength = 79.1304;  SCHEME 2: DecayLength = 79.1367;   
 SCHEME 1: DecayLength = 50.5438;  SCHEME 2: DecayLength = 50.5464;   
@@ -4651,7 +4642,7 @@ SCHEME 1: DecayLength = 414.302;  SCHEME 2: DecayLength = 194.847;  3122  1.1915
 SCHEME 1: DecayLength = 6.66674;  SCHEME 2: DecayLength = 6.62961;   
 SCHEME 1: DecayLength = 2.12169;  SCHEME 2: DecayLength = 29.7087;  3122  1.50755
 SCHEME 1: DecayLength = 11.8928;  SCHEME 2: DecayLength = 11.8552;   
-SCHEME 1: DecayLength = 75.8018;  SCHEME 2: DecayLength = 75.7772;   
+SCHEME 1: DecayLength = 75.8018;  SCHEME 2: DecayLength = 75.7771;   
 SCHEME 1: DecayLength = 14.7421;  SCHEME 2: DecayLength = 14.6223;   
 SCHEME 1: DecayLength = 9.03869;  SCHEME 2: DecayLength = 8.43146;   
 SCHEME 1: DecayLength = 14.3181;  SCHEME 2: DecayLength = 14.0142;   
@@ -4669,7 +4660,7 @@ SCHEME 1: DecayLength = 66.178;  SCHEME 2: DecayLength = 66.1892;
 SCHEME 1: DecayLength = 7.66961;  SCHEME 2: DecayLength = 7.60083;   
 SCHEME 1: DecayLength = 6.54192;  SCHEME 2: DecayLength = 6.60489;   
 
-== Event 5900 finish == 4min 36s: 0.0467797s/event
+== Event 5900 finish == 4min 31s: 0.0459322s/event
 SCHEME 1: DecayLength = 8.95897;  SCHEME 2: DecayLength = 8.92736;   
 SCHEME 1: DecayLength = 38.211;  SCHEME 2: DecayLength = 38.2019;   
 SCHEME 1: DecayLength = 8.66511;  SCHEME 2: DecayLength = 8.37438;   
@@ -4740,7 +4731,7 @@ SCHEME 1: DecayLength = 171.799;  SCHEME 2: DecayLength = 152.714;
 SCHEME 1: DecayLength = 73.648;  SCHEME 2: DecayLength = 73.677;   
 SCHEME 1: DecayLength = 10.3339;  SCHEME 2: DecayLength = 10.3238;   
 
-== Event 6000 finish == 4min 41s: 0.0468333s/event
+== Event 6000 finish == 4min 36s: 0.046s/event
 SCHEME 1: DecayLength = 105.904;  SCHEME 2: DecayLength = -76.0594;  3122  1.87334
 SCHEME 1: DecayLength = 13.9467;  SCHEME 2: DecayLength = 13.8741;   
 SCHEME 1: DecayLength = 10.7283;  SCHEME 2: DecayLength = 10.7191;   
@@ -4808,7 +4799,7 @@ SCHEME 1: DecayLength = 14.8114;  SCHEME 2: DecayLength = 14.836;
 SCHEME 1: DecayLength = 128.41;  SCHEME 2: DecayLength = 128.407;   
 SCHEME 1: DecayLength = 173.74;  SCHEME 2: DecayLength = 173.704;   
 
-== Event 6100 finish == 4min 46s: 0.0468852s/event
+== Event 6100 finish == 4min 42s: 0.0462295s/event
 SCHEME 1: DecayLength = 54.3107;  SCHEME 2: DecayLength = 13.1355;  -3122  0
 SCHEME 1: DecayLength = 88.1823;  SCHEME 2: DecayLength = 88.1799;   
 SCHEME 1: DecayLength = 7.41514;  SCHEME 2: DecayLength = 7.31963;   
@@ -4879,7 +4870,7 @@ SCHEME 1: DecayLength = 55.7793;  SCHEME 2: DecayLength = 55.8485;
 SCHEME 1: DecayLength = 7.4421;  SCHEME 2: DecayLength = 6.90429;   
 SCHEME 1: DecayLength = 5.8907;  SCHEME 2: DecayLength = 5.41017;   
 
-== Event 6200 finish == 4min 50s: 0.0467742s/event
+== Event 6200 finish == 4min 47s: 0.0462903s/event
 SCHEME 1: DecayLength = 7.46716;  SCHEME 2: DecayLength = 7.2963;   
 SCHEME 1: DecayLength = 62.0543;  SCHEME 2: DecayLength = 62.0871;   
 SCHEME 1: DecayLength = 6.06293;  SCHEME 2: DecayLength = 5.76689;   
@@ -4897,7 +4888,7 @@ SCHEME 1: DecayLength = 19.0639;  SCHEME 2: DecayLength = 19.054;
 SCHEME 1: DecayLength = 8.23397;  SCHEME 2: DecayLength = 8.05355;   
 SCHEME 1: DecayLength = 39.4932;  SCHEME 2: DecayLength = 39.4816;   
 SCHEME 1: DecayLength = 156.44;  SCHEME 2: DecayLength = 156.35;   
-SCHEME 1: DecayLength = 86.5051;  SCHEME 2: DecayLength = 86.5982;   
+SCHEME 1: DecayLength = 86.5051;  SCHEME 2: DecayLength = 86.5983;   
 SCHEME 1: DecayLength = 35.2998;  SCHEME 2: DecayLength = 35.2888;   
 SCHEME 1: DecayLength = 7.78556;  SCHEME 2: DecayLength = 7.72562;   
 SCHEME 1: DecayLength = 12.5449;  SCHEME 2: DecayLength = 12.5284;   
@@ -4944,7 +4935,7 @@ SCHEME 1: DecayLength = 17.1044;  SCHEME 2: DecayLength = 17.1012;
 SCHEME 1: DecayLength = 43.5846;  SCHEME 2: DecayLength = 43.5009;   
 SCHEME 1: DecayLength = 6.4977;  SCHEME 2: DecayLength = 6.47263;   
 
-== Event 6300 finish == 4min 55s: 0.0468254s/event
+== Event 6300 finish == 4min 51s: 0.0461905s/event
 SCHEME 1: DecayLength = 36.0074;  SCHEME 2: DecayLength = 35.9298;   
 SCHEME 1: DecayLength = 8.01483;  SCHEME 2: DecayLength = 8.07681;   
 SCHEME 1: DecayLength = 11.6405;  SCHEME 2: DecayLength = 11.6735;   
@@ -4958,7 +4949,7 @@ SCHEME 1: DecayLength = 75.5715;  SCHEME 2: DecayLength = 75.5985;
 SCHEME 1: DecayLength = 32.2725;  SCHEME 2: DecayLength = 32.2685;   
 SCHEME 1: DecayLength = 113.431;  SCHEME 2: DecayLength = 113.442;   
 SCHEME 1: DecayLength = 28.0737;  SCHEME 2: DecayLength = 27.6141;   
-SCHEME 1: DecayLength = 2224.48;  SCHEME 2: DecayLength = 5.22488;  -3334  2.35091
+SCHEME 1: DecayLength = 2224.48;  SCHEME 2: DecayLength = 5.22487;  -3334  2.35091
 Found Omega
 SCHEME 1: DecayLength = 23.1263;  SCHEME 2: DecayLength = 23.1186;   
 SCHEME 1: DecayLength = 162.259;  SCHEME 2: DecayLength = 162.237;   
@@ -5020,7 +5011,7 @@ SCHEME 1: DecayLength = 705.635;  SCHEME 2: DecayLength = 182.865;  -3122  1.195
 SCHEME 1: DecayLength = 1557.01;  SCHEME 2: DecayLength = 98.7253;  3122  2.34987
 SCHEME 1: DecayLength = 17.0897;  SCHEME 2: DecayLength = 17.4439;   
 
-== Event 6400 finish == 5min 0s: 0.046875s/event
+== Event 6400 finish == 4min 57s: 0.0464063s/event
 SCHEME 1: DecayLength = 13.8992;  SCHEME 2: DecayLength = 14.0175;   
 SCHEME 1: DecayLength = 3.59197;  SCHEME 2: DecayLength = 21.8233;  3122  1.41709
 SCHEME 1: DecayLength = 30.296;  SCHEME 2: DecayLength = 30.4042;   
@@ -5101,7 +5092,7 @@ SCHEME 1: DecayLength = 7.9402;  SCHEME 2: DecayLength = 7.95265;
 SCHEME 1: DecayLength = 155.962;  SCHEME 2: DecayLength = 155.972;   
 SCHEME 1: DecayLength = 86.465;  SCHEME 2: DecayLength = 86.4658;   
 
-== Event 6500 finish == 5min 5s: 0.0469231s/event
+== Event 6500 finish == 5min 2s: 0.0464615s/event
 SCHEME 1: DecayLength = 11.4354;  SCHEME 2: DecayLength = 11.3909;   
 SCHEME 1: DecayLength = 19.0209;  SCHEME 2: DecayLength = 19.0392;   
 SCHEME 1: DecayLength = 167.937;  SCHEME 2: DecayLength = 167.917;   
@@ -5143,17 +5134,17 @@ SCHEME 1: DecayLength = 42.4375;  SCHEME 2: DecayLength = -64.5502;  -3122  1.24
 Work done... now its time to close up shop!
 ****************************************** 
 QA :INFO  - =================================================================================
-QA :INFO  - QAInfo:Chain            StBFChain::bfc                  Ast =309.75        Cpu =297.06 
-QA :INFO  - QAInfo:Maker StKFParticleAnalysisMaker::ana                  Ast =280.30(90.5%) Cpu =279.90(94.2%) 
-QA :INFO  - QAInfo:Maker    StDetectorDbMaker::detDb                Ast =  0.23( 0.1%) Cpu =  0.22( 0.1%) 
-QA :INFO  - QAInfo:Maker          St_db_Maker::db                   Ast =  2.32( 0.8%) Cpu =  1.32( 0.4%) 
-QA :INFO  - QAInfo:Maker       StPicoDstMaker::PicoDst              Ast = 26.90( 8.7%) Cpu = 15.62( 5.3%) 
+QA :INFO  - QAInfo:Chain            StBFChain::bfc                  Ast =305.87        Cpu =301.90 
+QA :INFO  - QAInfo:Maker StKFParticleAnalysisMaker::ana                  Ast =285.29(93.3%) Cpu =284.14(94.1%) 
+QA :INFO  - QAInfo:Maker    StDetectorDbMaker::detDb                Ast =  0.32( 0.1%) Cpu =  0.26( 0.1%) 
+QA :INFO  - QAInfo:Maker          St_db_Maker::db                   Ast =  2.45( 0.8%) Cpu =  1.39( 0.5%) 
+QA :INFO  - QAInfo:Maker       StPicoDstMaker::PicoDst              Ast = 17.81( 5.8%) Cpu = 16.11( 5.3%) 
 St_db_Maker::Init 
-Real time 0:00:00, CP time 0.190, 3 slices
+Real time 0:00:00, CP time 0.170, 3 slices
       MySQL::Init 
-Real time 0:00:00, CP time 0.240, 2 slices
+Real time 0:00:00, CP time 0.220, 2 slices
 St_db_Maker::Make 
-Real time 0:00:01, CP time 1.280, 7109 slices
+Real time 0:00:01, CP time 1.240, 7109 slices
       MySQL::Make 
 Real time 0:00:00, CP time 0.000, 570 slices
       MySQL::Data 
@@ -5167,13 +5158,13 @@ StChain:INFO  - --------------------------------------------------
          StDetectorDbMaker(detDb)::Clear(6519)    0.000000    0.000000    0.000000    0.000000
          StDetectorDbMaker(detDb)::Make (6520)    0.000000    0.000000    0.000000    0.000000
    StKFParticleAnalysisMaker(ana)::Clear(6519)    0.000000    0.000000    0.000000    0.000000
-   StKFParticleAnalysisMaker(ana)::Make (6520)   -0.076843    0.001197    0.642075    0.025028
+   StKFParticleAnalysisMaker(ana)::Make (6520)   -0.077118    0.001197    0.642273    0.025032
           StPicoDstMaker(PicoDst)::Clear(6519)    0.000000    0.000000    0.000000    0.000000
-          StPicoDstMaker(PicoDst)::Make (6520)   -0.105972    0.000798    1.728668    0.037018
-                  St_db_Maker(db)::Clear(6519)   -1.203094   -0.000185    0.000000    0.014900
+          StPicoDstMaker(PicoDst)::Make (6520)   -0.106018    0.000798    1.728668    0.037018
+                  St_db_Maker(db)::Clear(6519)   -1.210907   -0.000186    0.000000    0.014996
                   St_db_Maker(db)::Make (6520)    0.000000    0.000000    0.000000    0.000000
 ---------------------------------------------------------------------------------------------
-                                   Total(8)   -1.203094    0.001810    1.728668    0.047103
+                                   Total(8)   -1.210907    0.001809    1.728668    0.047136
 =============================================================================================
 BFC:INFO  - StBFChain::Finish :  Closing all writable TFiles   . . . . 
 BFC:INFO  - StBFChain::Finish : file KFParticleQA_999998.root has been closed
@@ -5189,14 +5180,14 @@ Total Size of Data in Tables = 0 kBytes
 
 BFC:INFO  - StDbManagerImpl::printTimeStats() line=1624 
 *************************** DataBase ClockTime Stats *************************** 
-Total Time in DB-API       = 0.806983	 sec
+Total Time in DB-API       = 0.784306	 sec
  --------------------- In aggregate ------------------
- - Prepare Nodes & Servers = 0.806983	 sec --> 100% of total
+ - Prepare Nodes & Servers = 0.784306	 sec --> 100% of total
  - Select & Retrieve data  = 0	 sec --> 0% of total
  --------------- In MySQL C-API (approximate) ---------
- - Connecting to Servers   = 0.0427852	 sec --> 5.30187% of total
- - SQL Query Times         = 0.553705	 sec --> 68.6141% of total
- - socket transfer Times   = 0.0869572	 sec --> 10.7756% of total
+ - Connecting to Servers   = 0.03529	 sec --> 4.49952% of total
+ - SQL Query Times         = 0.560234	 sec --> 71.4306% of total
+ - socket transfer Times   = 0.0869315	 sec --> 11.0839% of total
 ********************************************************************************
 
 
