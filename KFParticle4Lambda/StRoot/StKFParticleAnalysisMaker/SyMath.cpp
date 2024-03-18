@@ -131,8 +131,8 @@ float TestFunc(float x){
 }
 
 void SyMath(){
-    pair<std::vector<float> , std::vector<float>>RV = NMin(TestFunc,0.0,21.0,0.001,40,false,10,false);
-    std::cout<<RV.first.size()<<endl;
+    pair<std::vector<float> , std::vector<float>>RV = NMin(TestFunc,0.0d,21.0,0.001,40,false,10,false);
+    std::cout<<"FOUND NUMBER OF MIN: "<<RV.first.size()<<endl;
     if (RV.first.size()!=0){
         for(int i=0;i < RV.first.size();i++){
             std::cout<<RV.first[i]<<endl;
