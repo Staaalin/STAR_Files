@@ -48,10 +48,10 @@ void HADDr()
         TFile *fileR = new TFile(filename, "READ");
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
         if (Itr == 0) {
-            Result = h1->Clone();
+            Result = (TH1F*)h1->Clone();
         }
         else{
-            Result += h1->Clone();
+            Result += (TH1F*)h1->Clone();
         }
         fileR->Close();
         Itr++;
