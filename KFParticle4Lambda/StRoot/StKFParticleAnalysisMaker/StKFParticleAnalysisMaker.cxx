@@ -663,7 +663,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
 					StPicoTrack *track = mPicoDst->track(jTrack);
 					if (track->id() == globalTrackId){
-						int TrackPDG = TrackID(track , false);
+						int TrackPDG = TrackID(track , Vertex3D , false);
 						if ((TrackPDG == -2212 || TrackPDG == 211) && particle.GetPDG() == LambdaPdg){cout<<"FUCK!"<<endl;;}
 						if (iDaughter == 0){iTrack = jTrack;}
 						if (iDaughter == 1){kTrack = jTrack;}
@@ -1113,7 +1113,7 @@ void StKFParticleAnalysisMaker::SetDaughterTrackHits(KFParticle particle)
 	}
 }
 
-int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , bool Track_has_tof , float m2 = -999. , float beta = -999.){
+int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , bool Track_has_tof , float m2 = -999. , float beta = -999.){
 
 	float TrackID_pt = track->gMom().Perp();
 	float TrackID_dcatopv = track->gDCA(Vertex3D).Mag();
