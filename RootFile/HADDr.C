@@ -51,7 +51,7 @@ void HADDr()
             Result = (TH1F*)h1->Clone();
         }
         else{
-            Result += (TH1F*)h1->Clone();
+            Result = Result + (TH1F*)h1->Clone();
         }
         fileR->Close();
         Itr++;
