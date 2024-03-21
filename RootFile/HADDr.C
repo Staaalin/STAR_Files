@@ -40,7 +40,7 @@ void HADDr()
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
     int Itr = 0;
-    for(int i=65990;i <= 66389;i++){
+    for(int i=65690;i <= 66389;i++){
         TString filename = midname;
         filename+=i;
         filename+=".root";
