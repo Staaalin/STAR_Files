@@ -54,10 +54,13 @@ void HADDr()
             Result += h1->Clone();
         }
         fileR->Close();
+        Itr++;
+        if (Itr/10 == 0){cout<<Itr<<endl;}
     }
     
     Result->Write();
     file->Write();
+    file->Close();
 
     return;
 }
