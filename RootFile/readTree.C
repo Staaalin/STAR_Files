@@ -388,7 +388,7 @@ void readTree()
                     p0.SetPxPyPzE(px->at(j),py->at(j),pz->at(j),pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2) + pow(InvariantMass->at(j),2),0.5));
                     float rap = p0.Rapidity();
 
-                    cout<<InvariantMass->at(j)<<endl;
+                    cout<<IfBadReconstructed->at(j)<<endl;
                     if (IfBadReconstructed->at(j) == 1){
 					    HMass[k]->Fill(InvariantMass->at(j));
                     }
