@@ -10,6 +10,7 @@
         "MuMcKFP.C": "cpp",
         "vector": "cpp",
         "analysis.C": "cpp",
-        "kfpAnalysis.C": "cpp"
+        "kfpAnalysis.C": "cpp",
+        "HADDr.C": "cpp"
     }
 }
