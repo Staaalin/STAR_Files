@@ -113,6 +113,8 @@ private:
 	TH1F *hDiffVz  ; 
 	TH1F *hcent;
 	TH1F *hcentw;
+	TH1F *H_GOOD_Mass;
+	TH1F *H_BAD_Mass;
 
 	TH2D *hdEdx_pQ;
 	TH2D *hdEdx_pQ_1cut;

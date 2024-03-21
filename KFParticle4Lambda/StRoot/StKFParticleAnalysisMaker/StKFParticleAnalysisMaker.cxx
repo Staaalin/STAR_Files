@@ -244,6 +244,11 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_Chi2->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_Chi2->GetYaxis()->SetTitle("Chi2");
 
+	H_GOOD_Mass = new TH1F("h_Good_Mass","Good Mass of Lambda",1000,0,5);
+	H_BAD_Mass  = new TH1F("h_Bad_Mass" ,"Bad Mass of Lambda" ,1000,0,5);
+	H_GOOD_Mass->GetXaxis()->SetTitle("Mass [GeV]");
+	H_BAD_Mass->GetXaxis()->SetTitle("Mass [GeV]");
+
 	Recorded_events = 0;
 
 	cout << "-----------------------------------------" << endl;
@@ -281,6 +286,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	hXY->Write();
 	hHXY->Write();
 	hHM_Chi2->Write();
+	H_GOOD_Mass->Write();
+	H_BAD_Mass ->Write();
 
 	return;
 }
@@ -663,11 +670,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
 		ParticleVec.push_back(particle);
 
-		if (IfRecordConsPart) {PDG.emplace_back(particle.GetPDG());QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);QA_IfBadReconstructed.emplace_back(0);}
+		if (IfRecordConsPart) {
+			PDG.emplace_back(particle.GetPDG());QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);QA_IfBadReconstructed.emplace_back(0);
+			H_GOOD_Mass->FIll(particle.GetMass());
+		}
 		else{
 			// continue;
 			PDG.emplace_back(particle.GetPDG());QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);
 			QA_IfBadReconstructed.emplace_back(1);
+			H_BAD_Mass->FIll(particle.GetMass());
 		}
 		if (IfHelix && (fabs(particle.GetPDG()) == OmegaPdg)) {
 
