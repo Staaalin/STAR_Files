@@ -674,6 +674,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			KFParticle tempParticle(particle);
 			float l,dl;
 			KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
+			pv += particle;
 			// tempParticle.GetDistanceToVertexLine(pv, l, dl);
 			tempParticle.SetProductionVertex(pv);
 			tempParticle.GetDecayLength(l, dl);cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
