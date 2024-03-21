@@ -213,6 +213,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
     hadronTree->Branch("zTOF_kaon"          ,&QA_zTOF_kaon        );
 	hadronTree->Branch("IfConfuse"          ,&QA_IfConfuse        );
 	hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length     );
+	hadronTree->Branch("Chi2"               ,&QA_Chi2             );
 	
 	hdEdx_pQ = new TH2D("hdEdx_p_NO_CUT","dE/dx vs. p*Q without cut",2000,10,10,2000,0,20);
 	hdEdx_pQ->GetXaxis()->SetTitle("p*Q [GeV]");
@@ -237,6 +238,10 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHXY = new TH2D("h_HXY","h_ X&Y of StHelix",     200,0,10,200,0,10);
 	hHXY->GetXaxis()->SetTitle("X [cm]");
 	hHXY->GetYaxis()->SetTitle("Y [cm]");
+
+	hHM_Chi2 = new TH2D("h_HM_Chi2","Mass vs. CHi2",     500,0,10,200,0,10);
+	hHM_Chi2->GetXaxis()->SetTitle("Mass [GeV]");
+	hHM_Chi2->GetYaxis()->SetTitle("Chi2");
 
 	Recorded_events = 0;
 
@@ -574,7 +579,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// QA
 	QA_dEdx.resize(0);QA_DCA_V0_PV.resize(0);QA_m2.resize(0);QA_nSigmaProton.resize(0);
 	QA_nSigmaPion.resize(0);QA_nSigmaKaon.resize(0);QA_zTOF_proton.resize(0);QA_zTOF_pion.resize(0);QA_zTOF_kaon.resize(0);
-	QA_hasTOF.resize(0);QA_IfConfuse.resize(0);QA_Decay_Length.resize(0);
+	QA_hasTOF.resize(0);QA_IfConfuse.resize(0);QA_Decay_Length.resize(0);QA_Chi2.resize(0);
 
 	// std::vector<int> Constructed_KFParticle_Vec_index; Constructed_KFParticle_Vec_index.resize(0);
 	// for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
@@ -628,6 +633,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 			float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);
 			QA_Decay_Length.emplace_back(DL);
 			OmegaVec.push_back(particle);ParticleVec.push_back(particle);
+			QA_Chi2.emplace_back(particle.GetChi2());
+			hHM_Chi2->Fill(particle.GetMass(),particle.GetChi2());
 			// cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
 			// cout<<"kilogauss = "<<kilogauss<<endl;
 			// cout<<"MomentumOfParticle_tb.Mag() = "<<MomentumOfParticle_tb.Mag()<<endl;
@@ -639,6 +646,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 			py.emplace_back(particle.GetPy());
 			pz.emplace_back(particle.GetPz());
 			InvariantMass.emplace_back(particle.GetMass());
+			QA_Chi2.emplace_back(particle.GetChi2());
+			hHM_Chi2->Fill(particle.GetMass(),particle.GetChi2());
 
 			//SCHEME 1: reconstruction of V0, the parent particle
 			if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
@@ -674,9 +683,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 			KFParticle tempParticle(particle);
 			float l,dl;
 			KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
-			pv += particle;
-			// tempParticle.GetDistanceToVertexLine(pv, l, dl);
+			// pv += particle;
 			tempParticle.SetProductionVertex(pv);
+			tempParticle.GetDistanceToVertexLine(pv, l, dl);
+			cout<<"DistanceToVertexLine = "<<l<<" , dl = "<<dl<<endl;
 			tempParticle.GetDecayLength(l, dl);cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
 			QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);
 			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
@@ -902,6 +912,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_nSigmaKaon.emplace_back(nSigmaKaon);
 			QA_dEdx.emplace_back(track->dEdx());QA_DCA_V0_PV.emplace_back(dcatopv);
 			QA_Decay_Length.emplace_back(-1.0);
+			QA_Chi2.emplace_back(-1.0);
 		}
 
 	}
