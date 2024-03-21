@@ -239,7 +239,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHXY->GetXaxis()->SetTitle("X [cm]");
 	hHXY->GetYaxis()->SetTitle("Y [cm]");
 
-	hHM_Chi2 = new TH2D("h_HM_Chi2","Mass vs. CHi2",     500,0,10,200,0,10);
+	hHM_Chi2 = new TH2D("h_HM_Chi2","Mass vs. CHi2",     1000,0,10,500,0,10);
 	hHM_Chi2->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_Chi2->GetYaxis()->SetTitle("Chi2");
 
