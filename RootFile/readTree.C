@@ -52,31 +52,33 @@ void readTree()
         TBranch *bInvariantMass   = nullptr;
         TBranch *benergy          = nullptr;
 
-        std::vector<Float_t> *dEdx            = nullptr;
-        std::vector<Float_t> *m2              = nullptr;
-        std::vector<Float_t> *dcatopv         = nullptr;
-        std::vector<int>     *hasTOF          = nullptr;
-        std::vector<Float_t> *nSigmaProton    = nullptr;
-        std::vector<Float_t> *nSigmaPion      = nullptr;
-        std::vector<Float_t> *nSigmaKaon      = nullptr;
-        std::vector<double>  *zTOF_proton     = nullptr;
-        std::vector<double>  *zTOF_pion       = nullptr;
-        std::vector<double>  *zTOF_kaon       = nullptr;
-	    std::vector<int>     *IfConfuse       = nullptr;
-        std::vector<double>  *Decay_Length    = nullptr;
+        std::vector<Float_t> *dEdx               = nullptr;
+        std::vector<Float_t> *m2                 = nullptr;
+        std::vector<Float_t> *dcatopv            = nullptr;
+        std::vector<int>     *hasTOF             = nullptr;
+        std::vector<Float_t> *nSigmaProton       = nullptr;
+        std::vector<Float_t> *nSigmaPion         = nullptr;
+        std::vector<Float_t> *nSigmaKaon         = nullptr;
+        std::vector<double>  *zTOF_proton        = nullptr;
+        std::vector<double>  *zTOF_pion          = nullptr;
+        std::vector<double>  *zTOF_kaon          = nullptr;
+	    std::vector<int>     *IfConfuse          = nullptr;
+        std::vector<double>  *Decay_Length       = nullptr;
+	    std::vector<int>     *IfBadReconstructed = nullptr;
 
-        TBranch *bdEdx            = nullptr;
-        TBranch *bm2              = nullptr;
-        TBranch *bdcatopv         = nullptr;
-        TBranch *bhasTOF          = nullptr;
-        TBranch *bnSigmaProton    = nullptr;
-        TBranch *bnSigmaPion      = nullptr;
-        TBranch *bnSigmaKaon      = nullptr;
-        TBranch *bzTOF_proton     = nullptr;
-        TBranch *bzTOF_pion       = nullptr;
-        TBranch *bzTOF_kaon       = nullptr;
-	    TBranch *bIfConfuse       = nullptr;
-	    TBranch *bDecay_Length    = nullptr;
+        TBranch *bdEdx               = nullptr;
+        TBranch *bm2                 = nullptr;
+        TBranch *bdcatopv            = nullptr;
+        TBranch *bhasTOF             = nullptr;
+        TBranch *bnSigmaProton       = nullptr;
+        TBranch *bnSigmaPion         = nullptr;
+        TBranch *bnSigmaKaon         = nullptr;
+        TBranch *bzTOF_proton        = nullptr;
+        TBranch *bzTOF_pion          = nullptr;
+        TBranch *bzTOF_kaon          = nullptr;
+	    TBranch *bIfConfuse          = nullptr;
+	    TBranch *bDecay_Length       = nullptr;
+	    TBranch *bIfBadReconstructed = nullptr;
     
     #else
         #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
@@ -98,31 +100,33 @@ void readTree()
             TBranch *bInvariantMass   = NULL;
             TBranch *benergy          = NULL;
         
-            std::vector<Float_t> *dEdx            = NULL;
-            std::vector<Float_t> *m2              = NULL;
-            std::vector<Float_t> *dcatopv         = NULL;
-            std::vector<int>     *hasTOF          = NULL;
-            std::vector<Float_t> *nSigmaProton    = NULL;
-            std::vector<Float_t> *nSigmaPion      = NULL;
-            std::vector<Float_t> *nSigmaKaon      = NULL;
-            std::vector<double>  *zTOF_proton     = NULL;
-            std::vector<double>  *zTOF_pion       = NULL;
-            std::vector<double>  *zTOF_kaon       = NULL;
-            std::vector<int>     *IfConfuse       = NULL;
-            std::vector<double>  *Decay_Length    = NULL;
+            std::vector<Float_t> *dEdx               = NULL;
+            std::vector<Float_t> *m2                 = NULL;
+            std::vector<Float_t> *dcatopv            = NULL;
+            std::vector<int>     *hasTOF             = NULL;
+            std::vector<Float_t> *nSigmaProton       = NULL;
+            std::vector<Float_t> *nSigmaPion         = NULL;
+            std::vector<Float_t> *nSigmaKaon         = NULL;
+            std::vector<double>  *zTOF_proton        = NULL;
+            std::vector<double>  *zTOF_pion          = NULL;
+            std::vector<double>  *zTOF_kaon          = NULL;
+            std::vector<int>     *IfConfuse          = NULL;
+            std::vector<double>  *Decay_Length       = NULL;
+	        std::vector<int>     *IfBadReconstructed = NULL;
 
-            TBranch *bdEdx            = NULL;
-            TBranch *bm2              = NULL;
-            TBranch *bdcatopv         = NULL;
-            TBranch *bhasTOF          = NULL;
-            TBranch *bnSigmaProton    = NULL;
-            TBranch *bnSigmaPion      = NULL;
-            TBranch *bnSigmaKaon      = NULL;
-            TBranch *bzTOF_proton     = NULL;
-            TBranch *bzTOF_pion       = NULL;
-            TBranch *bzTOF_kaon       = NULL;
-            TBranch *bIfConfuse       = NULL;
-            TBranch *bDecay_Length    = NULL;
+            TBranch *bdEdx               = NULL;
+            TBranch *bm2                 = NULL;
+            TBranch *bdcatopv            = NULL;
+            TBranch *bhasTOF             = NULL;
+            TBranch *bnSigmaProton       = NULL;
+            TBranch *bnSigmaPion         = NULL;
+            TBranch *bnSigmaKaon         = NULL;
+            TBranch *bzTOF_proton        = NULL;
+            TBranch *bzTOF_pion          = NULL;
+            TBranch *bzTOF_kaon          = NULL;
+            TBranch *bIfConfuse          = NULL;
+            TBranch *bDecay_Length       = NULL;
+	        TBranch *bIfBadReconstructed = NULL;
 
         #else
             std::vector<Int_t>   *PDG             = 0;
@@ -143,31 +147,33 @@ void readTree()
             TBranch *bInvariantMass   = 0;
             TBranch *benergy          = 0;
 
-            std::vector<Float_t> *dEdx            = 0;
-            std::vector<Float_t> *m2              = 0;
-            std::vector<Float_t> *dcatopv         = 0;
-            std::vector<int>     *hasTOF          = 0;
-            std::vector<Float_t> *nSigmaProton    = 0;
-            std::vector<Float_t> *nSigmaPion      = 0;
-            std::vector<Float_t> *nSigmaKaon      = 0;
-            std::vector<double>  *zTOF_proton     = 0;
-            std::vector<double>  *zTOF_pion       = 0;
-            std::vector<double>  *zTOF_kaon       = 0;
-            std::vector<int>     *IfConfuse       = 0;
-            std::vector<double>  *Decay_Length    = 0;
+            std::vector<Float_t> *dEdx               = 0;
+            std::vector<Float_t> *m2                 = 0;
+            std::vector<Float_t> *dcatopv            = 0;
+            std::vector<int>     *hasTOF             = 0;
+            std::vector<Float_t> *nSigmaProton       = 0;
+            std::vector<Float_t> *nSigmaPion         = 0;
+            std::vector<Float_t> *nSigmaKaon         = 0;
+            std::vector<double>  *zTOF_proton        = 0;
+            std::vector<double>  *zTOF_pion          = 0;
+            std::vector<double>  *zTOF_kaon          = 0;
+            std::vector<int>     *IfConfuse          = 0;
+            std::vector<double>  *Decay_Length       = 0;
+	        std::vector<int>     *IfBadReconstructed = 0;
 
-            TBranch *bdEdx            = 0;
-            TBranch *bm2              = 0;
-            TBranch *bdcatopv         = 0;
-            TBranch *bhasTOF          = 0;
-            TBranch *bnSigmaProton    = 0;
-            TBranch *bnSigmaPion      = 0;
-            TBranch *bnSigmaKaon      = 0;
-            TBranch *bzTOF_proton     = 0;
-            TBranch *bzTOF_pion       = 0;
-            TBranch *bzTOF_kaon       = 0;
-            TBranch *bIfConfuse       = 0;
-            TBranch *bDecay_Length    = 0;
+            TBranch *bdEdx               = 0;
+            TBranch *bm2                 = 0;
+            TBranch *bdcatopv            = 0;
+            TBranch *bhasTOF             = 0;
+            TBranch *bnSigmaProton       = 0;
+            TBranch *bnSigmaPion         = 0;
+            TBranch *bnSigmaKaon         = 0;
+            TBranch *bzTOF_proton        = 0;
+            TBranch *bzTOF_pion          = 0;
+            TBranch *bzTOF_kaon          = 0;
+            TBranch *bIfConfuse          = 0;
+            TBranch *bDecay_Length       = 0;
+	        TBranch *bIfBadReconstructed = 0;
 
         #endif
     #endif
@@ -181,6 +187,7 @@ void readTree()
 	// const int HSize = sizeof(ParticleName)/sizeof(ParticleName[0]);
 	const int HSize = 10;
 	TH1D *HMass[HSize];
+	TH1D *HBadMass[HSize];
 	TH1D *HP[HSize];
 	TH1D *HRapidity[HSize];
 	TH1D *Hdcatopv[HSize];
@@ -202,6 +209,14 @@ void readTree()
 		HMass[i]->GetXaxis()->SetTitle("Mass [GeV]");
 		HMass[i]->GetYaxis()->SetTitle("Counts");
         
+		TString HistName1 = "HBadM";
+		TString HistName2 = "The Mass of Bad";
+		HistName1 += ParticleName[i];
+		HistName2 += ParticleName[i];
+		HBadMass[i] = new TH1D(HistName1, HistName2, kBinNum, kmin, kmax);
+		HBadMass[i]->GetXaxis()->SetTitle("Mass [GeV]");
+		HBadMass[i]->GetYaxis()->SetTitle("Counts");
+
 		TString HistName1 = "HP";
 		TString HistName2 = "The Momuntum of ";
 		HistName1 += ParticleName[i];
@@ -313,7 +328,7 @@ void readTree()
     TString midname = "/star/u/svianping/STAR_Files/KFParticle4Lambda/output_999998.root";
 
     if (midname != "/star/u/svianping/STAR_Files/KFParticle4Lambda/output_999998.root"){
-        for(int i=1;i <= 66389;i++){
+        for(int i=66090;i <= 66389;i++){
             TString filename = midname;
             filename+=i;
             filename+=".root";
@@ -337,18 +352,19 @@ void readTree()
     // hadronTree->SetBranchAddress("energy"        ,&energy       ,&benergy      );
 
 	// Used for QA
-    hadronTree->SetBranchAddress("dEdx"           ,&dEdx             ,&bdEdx             );
-    hadronTree->SetBranchAddress("m2"             ,&m2               ,&bm2               );
-    hadronTree->SetBranchAddress("dcatopv"        ,&dcatopv          ,&bdcatopv          );
-    hadronTree->SetBranchAddress("hasTOF"         ,&hasTOF           ,&bhasTOF           );
-    hadronTree->SetBranchAddress("nSigmaProton"   ,&nSigmaProton     ,&bnSigmaProton     );
-    hadronTree->SetBranchAddress("nSigmaPion"     ,&nSigmaPion       ,&bnSigmaPion       );
-    hadronTree->SetBranchAddress("nSigmaKaon"     ,&nSigmaKaon       ,&bnSigmaKaon       );
-    hadronTree->SetBranchAddress("zTOF_proton"    ,&zTOF_proton      ,&bzTOF_proton      );
-    hadronTree->SetBranchAddress("zTOF_pion"      ,&zTOF_pion        ,&bzTOF_pion        );
-    hadronTree->SetBranchAddress("zTOF_kaon"      ,&zTOF_kaon        ,&bzTOF_kaon        );
-	hadronTree->SetBranchAddress("IfConfuse"      ,&IfConfuse        ,&bIfConfuse        );
-	hadronTree->SetBranchAddress("Decay_Length"   ,&Decay_Length     ,&bDecay_Length     );
+    hadronTree->SetBranchAddress("dEdx"                 ,&dEdx                   ,&bdEdx                   );
+    hadronTree->SetBranchAddress("m2"                   ,&m2                     ,&bm2                     );
+    hadronTree->SetBranchAddress("dcatopv"              ,&dcatopv                ,&bdcatopv                );
+    hadronTree->SetBranchAddress("hasTOF"               ,&hasTOF                 ,&bhasTOF                 );
+    hadronTree->SetBranchAddress("nSigmaProton"         ,&nSigmaProton           ,&bnSigmaProton           );
+    hadronTree->SetBranchAddress("nSigmaPion"           ,&nSigmaPion             ,&bnSigmaPion             );
+    hadronTree->SetBranchAddress("nSigmaKaon"           ,&nSigmaKaon             ,&bnSigmaKaon             );
+    hadronTree->SetBranchAddress("zTOF_proton"          ,&zTOF_proton            ,&bzTOF_proton            );
+    hadronTree->SetBranchAddress("zTOF_pion"            ,&zTOF_pion              ,&bzTOF_pion              );
+    hadronTree->SetBranchAddress("zTOF_kaon"            ,&zTOF_kaon              ,&bzTOF_kaon              );
+	hadronTree->SetBranchAddress("IfConfuse"            ,&IfConfuse              ,&bIfConfuse              );
+	hadronTree->SetBranchAddress("Decay_Length"         ,&Decay_Length           ,&bDecay_Length           );
+	hadronTree->SetBranchAddress("IfBadReconstructed"   ,&IfBadReconstructed     ,&bIfBadReconstructed     );
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "entries number: " << nentries << endl;
@@ -372,7 +388,12 @@ void readTree()
                     p0.SetPxPyPzE(px->at(j),py->at(j),pz->at(j),pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2) + pow(InvariantMass->at(j),2),0.5));
                     float rap = p0.Rapidity();
 
-					HMass[k]->Fill(InvariantMass->at(j));
+                    if (IfBadReconstructed->at(j) == 1){
+					    HMass[k]->Fill(InvariantMass->at(j));
+                    }
+                    if (IfBadReconstructed->at(j) == 0){
+                        HBadMass[k]->Fill(InvariantMass->at(j));
+                    }
 					HP[k]->Fill(Mag);
 					HRapidity[k]->Fill(rap);
                     Hdcatopv[k]->Fill(dcatopv->at(j));
@@ -453,6 +474,7 @@ void readTree()
 
 	for (int i=0;i<HSize;i++){
 		HMass[i]->Write();
+		HBadMass[i]->Write();
 		HP[i]->Write();
 		HRapidity[i]->Write();
 	    Hdcatopv[i]->Write();
