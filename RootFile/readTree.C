@@ -205,7 +205,7 @@ void readTree()
 		TString HistName2 = "The Mass of ";
 		HistName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
-		HMass[i] = new TH1D(HistName1, HistName2, kBinNum, kmin, kmax);
+		HMass[i] = new TH1D(HistName1, HistName2, kBinNum*10, kmin, kmax);
 		HMass[i]->GetXaxis()->SetTitle("Mass [GeV]");
 		HMass[i]->GetYaxis()->SetTitle("Counts");
         
@@ -213,7 +213,7 @@ void readTree()
 		TString HistName2 = "The Mass of Bad";
 		HistName1 += ParticleName[i];
 		HistName2 += ParticleName[i];
-		HBadMass[i] = new TH1D(HistName1, HistName2, kBinNum, kmin, kmax);
+		HBadMass[i] = new TH1D(HistName1, HistName2, kBinNum*10, kmin, kmax);
 		HBadMass[i]->GetXaxis()->SetTitle("Mass [GeV]");
 		HBadMass[i]->GetYaxis()->SetTitle("Counts");
 
@@ -324,11 +324,11 @@ void readTree()
 
     //load data  
     TChain *hadronTree = new TChain("hadronTree");
-    // TString midname = "/star/data01/pwg/svianping/output/output_";
-    TString midname = "/star/u/svianping/STAR_Files/KFParticle4Lambda/output_999998.root";
+    TString midname = "/star/data01/pwg/svianping/output/output_";
+    // TString midname = "/star/u/svianping/STAR_Files/KFParticle4Lambda/output_999998.root";
 
     if (midname != "/star/u/svianping/STAR_Files/KFParticle4Lambda/output_999998.root"){
-        for(int i=66090;i <= 66389;i++){
+        for(int i=65990;i <= 66389;i++){
             TString filename = midname;
             filename+=i;
             filename+=".root";
