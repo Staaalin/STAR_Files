@@ -390,10 +390,10 @@ void readTree()
 
                     
                     if (IfBadReconstructed->at(j) == 1){
-					    HMass[k]->Fill(InvariantMass->at(j));cout<<IfBadReconstructed->at(j)<<endl;
+					    HMass[k]->Fill(InvariantMass->at(j));cout<<IfBadReconstructed->at(j)<<" , "<<InvariantMass->at(j)<<endl;
                     }
                     if (IfBadReconstructed->at(j) == 0){
-                        HBadMass[k]->Fill(InvariantMass->at(j));cout<<IfBadReconstructed->at(j)<<endl;
+                        HBadMass[k]->Fill(InvariantMass->at(j));cout<<IfBadReconstructed->at(j)<<" , "<<InvariantMass->at(j)<<endl;
                     }
 					HP[k]->Fill(Mag);
 					HRapidity[k]->Fill(rap);
