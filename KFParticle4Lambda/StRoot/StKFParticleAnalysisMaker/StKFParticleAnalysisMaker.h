@@ -133,7 +133,7 @@ private:
 	// Used for QA
 	std::vector<float> QA_dEdx,QA_m2,QA_nSigmaProton,QA_nSigmaPion,QA_nSigmaKaon,QA_Chi2;
 	std::vector<double> QA_zTOF_proton,QA_zTOF_pion,QA_zTOF_kaon,QA_Decay_Length,QA_DCA_V0_PV;
-	std::vector<int> QA_hasTOF,QA_IfConfuse;// Used as bool
+	std::vector<int> QA_hasTOF,QA_IfConfuse,QA_IfBadReconstructed;// Used as bool
 
 	/////////////////////////////////////
 	int mStps;  

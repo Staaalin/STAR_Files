@@ -201,19 +201,20 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
     hadronTree->Branch("InvariantMass"      ,&InvariantMass       );
 
 	// Used for QA
-    hadronTree->Branch("dEdx"               ,&QA_dEdx             );
-    hadronTree->Branch("m2"                 ,&QA_m2               );
-    hadronTree->Branch("dcatopv"            ,&QA_DCA_V0_PV        );
-    hadronTree->Branch("hasTOF"             ,&QA_hasTOF           );
-    hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton     );
-    hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion       );
-    hadronTree->Branch("nSigmaKaon"         ,&QA_nSigmaKaon       );
-    hadronTree->Branch("zTOF_proton"        ,&QA_zTOF_proton      );
-    hadronTree->Branch("zTOF_pion"          ,&QA_zTOF_pion        );
-    hadronTree->Branch("zTOF_kaon"          ,&QA_zTOF_kaon        );
-	hadronTree->Branch("IfConfuse"          ,&QA_IfConfuse        );
-	hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length     );
-	hadronTree->Branch("Chi2"               ,&QA_Chi2             );
+    hadronTree->Branch("dEdx"               ,&QA_dEdx              );
+    hadronTree->Branch("m2"                 ,&QA_m2                );
+    hadronTree->Branch("dcatopv"            ,&QA_DCA_V0_PV         );
+    hadronTree->Branch("hasTOF"             ,&QA_hasTOF            );
+    hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton      );
+    hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion        );
+    hadronTree->Branch("nSigmaKaon"         ,&QA_nSigmaKaon        );
+    hadronTree->Branch("zTOF_proton"        ,&QA_zTOF_proton       );
+    hadronTree->Branch("zTOF_pion"          ,&QA_zTOF_pion         );
+    hadronTree->Branch("zTOF_kaon"          ,&QA_zTOF_kaon         );
+	hadronTree->Branch("IfConfuse"          ,&QA_IfConfuse         );
+	hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length      );
+	hadronTree->Branch("Chi2"               ,&QA_Chi2              );
+	hadronTree->Branch("IfBadReconstructed" ,&QA_IfBadReconstructed);
 	
 	hdEdx_pQ = new TH2D("hdEdx_p_NO_CUT","dE/dx vs. p*Q without cut",2000,10,10,2000,0,20);
 	hdEdx_pQ->GetXaxis()->SetTitle("p*Q [GeV]");
@@ -662,8 +663,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
 		ParticleVec.push_back(particle);
 
-		if (IfRecordConsPart) {PDG.emplace_back(particle.GetPDG());QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);}
-		else{continue;}
+		if (IfRecordConsPart) {PDG.emplace_back(particle.GetPDG());QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);QA_IfBadReconstructed.emplace_back(0);}
+		else{
+			// continue;
+			PDG.emplace_back(particle.GetPDG());QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);
+			QA_IfBadReconstructed.emplace_back(1);
+		}
 		if (IfHelix && (fabs(particle.GetPDG()) == OmegaPdg)) {
 
 			// helix
@@ -916,6 +921,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_dEdx.emplace_back(track->dEdx());QA_DCA_V0_PV.emplace_back(dcatopv);
 			QA_Decay_Length.emplace_back(-1.0);
 			QA_Chi2.emplace_back(-1.0);
+			QA_IfBadReconstructed.emplace_back(-1);
 		}
 
 	}
