@@ -279,6 +279,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hLN_M->Write();
 	hXY->Write();
 	hHXY->Write();
+	hHM_Chi2->Write();
 
 	return;
 }
@@ -685,7 +686,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
 			// pv += particle;
 			tempParticle.SetProductionVertex(pv);
-			tempParticle.GetDistanceToVertexLine(pv, l, dl);
+			// tempParticle.GetDistanceToVertexLine(pv, l, dl);
 			cout<<"DistanceToVertexLine = "<<l<<" , dl = "<<dl<<endl;
 			tempParticle.GetDecayLength(l, dl);cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
 			QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);
