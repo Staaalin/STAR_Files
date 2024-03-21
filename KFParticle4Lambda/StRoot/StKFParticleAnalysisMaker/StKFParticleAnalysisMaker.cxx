@@ -239,7 +239,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHXY->GetXaxis()->SetTitle("X [cm]");
 	hHXY->GetYaxis()->SetTitle("Y [cm]");
 
-	hHM_Chi2 = new TH2D("h_HM_Chi2","Mass vs. CHi2",     1000,0,10,500,0,10);
+	hHM_Chi2 = new TH2D("h_HM_Chi2","Mass vs. Chi2",     1000,0,10,500,0,10);
 	hHM_Chi2->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_Chi2->GetYaxis()->SetTitle("Chi2");
 
@@ -663,6 +663,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
 					StPicoTrack *track = mPicoDst->track(jTrack);
 					if (track->id() == globalTrackId){
+						int TrackPDG = TrackID(track , false);
+						if ((TrackPDG == -2212 || TrackPDG == 211) && particle.GetPDG() == LambdaPdg){cout<<"FUCK!"<<endl;;}
 						if (iDaughter == 0){iTrack = jTrack;}
 						if (iDaughter == 1){kTrack = jTrack;}
 						break;
@@ -686,8 +688,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
 			// pv += particle;
 			tempParticle.SetProductionVertex(pv);
-			// tempParticle.GetDistanceToVertexLine(pv, l, dl);
-			cout<<"DistanceToVertexLine = "<<l<<" , dl = "<<dl<<endl;
 			tempParticle.GetDecayLength(l, dl);cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
 			QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);
 			if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
@@ -1110,5 +1110,73 @@ void StKFParticleAnalysisMaker::SetDaughterTrackHits(KFParticle particle)
 		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
 		const int globalTrackId = daughter.DaughterIds()[0];
 		ReCons_TrackID.push_back(globalTrackId);
+	}
+}
+
+int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , bool Track_has_tof , float m2 = -999. , float beta = -999.){
+
+	float TrackID_pt = track->gMom().Perp();
+	float TrackID_dcatopv = track->gDCA(Vertex3D).Mag();
+	float TrackID_nSigmaKaon = track->nSigmaKaon();
+	float TrackID_nSigmaPion = track->nSigmaPion();
+	float TrackID_nSigmaProton = track->nSigmaProton();
+	float TrackID_eta_prim = track->pMom().Eta();
+
+	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
+	float pT_trig_lo = 0.2;
+	float pT_trig_hi = 2.0;
+	float eta_trig_cut = 1.0;
+	bool hasTOF = false;
+
+	// Test if Proton
+	bool proton_cut = true;
+	if (fabs(TrackID_nSigmaProton) > 2) proton_cut = false;
+	if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) proton_cut = false; 
+	if (fabs(TrackID_eta_prim) > eta_trig_cut) proton_cut = false;
+	if (!hasTOF && TrackID_pt > proton_pT_TOFth) proton_cut = false;
+	if (TrackID_pt > proton_pT_TOFth && (m2 > proton_m2_hi || m2 < proton_m2_lo)) proton_cut = false;
+	ProtonPID proton_pid(0., TrackID_nSigmaProton, TrackID_pt); // not using zTOF
+	if (!proton_pid.IsProtonSimple(2., track->charge())) proton_cut = false; // only 0.2 < TrackID_pt < 2.0!!!
+	if (TrackID_dcatopv > dcatoPV_hi) proton_cut = false;
+	
+	// Test if Pion
+	bool pion_cut = true;
+	if (fabs(TrackID_nSigmaPion) > 2) pion_cut = false;
+	if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) pion_cut = false; // use p < 2
+	if (fabs(TrackID_eta_prim) > eta_trig_cut) pion_cut = false;
+	PionPID pion_pid(0., TrackID_nSigmaPion, TrackID_pt); // not using zTOF
+	if (!pion_pid.IsPionSimple(2., track->charge())) pion_cut = false; // only 0.2 < TrackID_pt < 2.0!!!
+	if (TrackID_dcatopv > dcatoPV_hi) pion_cut = false;
+	if (!hasTOF && TrackID_pt > pion_pT_TOFth) pion_cut = false;
+	if (TrackID_pt > pion_pT_TOFth && (m2 > pion_m2_hi || m2 < pion_m2_lo)) pion_cut = false;
+
+	// Test if Kaon
+	bool kaon_cut = true;
+	if (fabs(TrackID_nSigmaKaon) > 2) kaon_cut = false;
+	if (TrackID_pt < pT_trig_lo || TrackID_pt > 1.6) kaon_cut = false; // use p < 1.6
+	if (fabs(TrackID_eta_prim) > eta_trig_cut) kaon_cut = false;
+	if (!hasTOF && TrackID_pt > 0.4) kaon_cut = false;
+	if (TrackID_pt > 0.4 && (m2 > 0.34 || m2 < 0.15)) kaon_cut = false;
+	double zTOF = 1/beta - sqrt(KaonPdgMass*KaonPdgMass/pkaon.Mag2()+1);
+	KaonPID kaon_pid(zTOF, TrackID_nSigmaKaon, TrackID_pt); // not using zTOF
+	if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < TrackID_pt < 2.0!!!
+	if (TrackID_dcatopv > 2.0) kaon_cut = false;
+
+	if (proton_cut + pion_cut + kaon_cut == 1){
+		if (proton_cut){
+			if (track->charge() > 0) {return  2212;}
+			else                     {return -2212;}
+		}
+		if (pion_cut){
+			if (track->charge() > 0) {return  211;}
+			else                     {return -211;}
+		}
+		if (kaon_cut){
+			if (track->charge() > 0) {return  321;}
+			else                     {return -321;}
+		}
+	}
+	else{
+		return 0; // Failed to identify
 	}
 }
