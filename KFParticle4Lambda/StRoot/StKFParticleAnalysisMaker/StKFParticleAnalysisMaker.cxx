@@ -672,13 +672,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		if (IfRecordConsPart) {
 			PDG.emplace_back(particle.GetPDG());QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);QA_IfBadReconstructed.emplace_back(0);
-			H_GOOD_Mass->FIll(particle.GetMass());
+			H_GOOD_Mass->Fill(particle.GetMass());
 		}
 		else{
 			// continue;
 			PDG.emplace_back(particle.GetPDG());QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);
 			QA_IfBadReconstructed.emplace_back(1);
-			H_BAD_Mass->FIll(particle.GetMass());
+			H_BAD_Mass->Fill(particle.GetMass());
 		}
 		if (IfHelix && (fabs(particle.GetPDG()) == OmegaPdg)) {
 
