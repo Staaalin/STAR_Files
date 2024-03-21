@@ -664,7 +664,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					StPicoTrack *track = mPicoDst->track(jTrack);
 					if (track->id() == globalTrackId){
 						int TrackPDG = TrackID(track , Vertex3D , magnet , false);
-						if ((TrackPDG == -2212 || TrackPDG == 211) && particle.GetPDG() == LambdaPdg){cout<<"FUCK!"<<endl;;}
+						if ((TrackPDG != 2212 && TrackPDG != -211) && particle.GetPDG() == LambdaPdg){cout<<"FUCK!"<<endl;;}
 						if (iDaughter == 0){iTrack = jTrack;}
 						if (iDaughter == 1){kTrack = jTrack;}
 						break;
