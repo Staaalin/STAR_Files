@@ -16,7 +16,7 @@ CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
 Type ? for help. Commands must be C++ statements.
 Enclose multiple statements between { }.
 *** Float Point Exception is OFF ***
- *** Start at Date : Wed Mar 20 23:06:53 2024
+ *** Start at Date : Wed Mar 20 23:40:01 2024
 QAInfo:You are using STAR_LEVEL : TFG21g, git = tags/TFG21g,tag:50722f0e0, ROOT_LEVEL : 5.34.39 and node : rcas6013.rcf.bnl.gov with 8 AMD EPYC Processor (with IBPB)
 
 Processing ./readPicoDst.C("./datalist//200.0GeV_Run16/200.0.list.999998",999998,16,200.0,"./datalist/")...
@@ -103,7 +103,7 @@ BFC:INFO  - StFile::AddFile : *** IGNORED *** File ./datalist//200.0GeV_Run16/20
 
 QA :INFO  - Output root file name 200.0.999998.root
 QA :INFO  - ProcessLine:new StPicoDstMaker(2,"./datalist//200.0GeV_Run16/200.0.list.999998")
-(class StPicoDstMaker*)0x90c1540
+(class StPicoDstMaker*)0x8375630
 BFC:INFO  - Using DB flavors: ofl+TFG
 QA :INFO  - QAInfo:StBFChain            built Mar 14 2022 19:11:02 from Tag $Name:  $ $Id: StBFChain.h,v 1.59 2019/11/19 17:26:17 jeromel Exp $ 
 QA :INFO  - QAInfo:StPicoDstMaker       built Jun  9 2021 13:05:13 from Tag $Name:  $ $Id: StPicoDstMaker.h,v 1.30 2021/02/23 17:27:01 gnigmat Exp $ 
@@ -114,7 +114,7 @@ QA :INFO  -  StBFChain::bfc
 QA :INFO  -    StPicoDstMaker::PicoDst
 QA :INFO  -    St_db_Maker::db
 QA :INFO  -    StDetectorDbMaker::detDb
-BFC:INFO  - StBFChain::Init : Time=Wed Mar 20 23:07:06 2024 Cwd=/direct/star+u/svianping/STAR_Files/KFParticle4Lambda
+BFC:INFO  - StBFChain::Init : Time=Wed Mar 20 23:41:07 2024 Cwd=/direct/star+u/svianping/STAR_Files/KFParticle4Lambda
 QA :INFO  - blacklist tpc
 QA :INFO  - blacklist svt
 QA :INFO  - blacklist ssd
@@ -152,10 +152,10 @@ StChain:INFO  - StDbManagerImpl::lookUpServer() line=711
 
 StHyperCacheManager: reading cache config from /gpfs01/star/subsys-tpc/fisyak/STAR/packages/conf/hyperconfig.json
 StChain:INFO  - StDbLib: db server found in 3 iterations
-StChain:INFO  - MysqlDb::Connect: Load balancer took 0 ms, will use star-db05.rcf.bnl.gov:3316
+StChain:INFO  - MysqlDb::Connect: Load balancer took 0 ms, will use star-db04.rcf.bnl.gov:3316
 StChain:INFO  - Ssl_cipher = AES128-SHA
-StChain:INFO  - MysqlDb::Connect(host,user,pw,database,port) line=527 Server Connecting: DB=StarDb  Host=star-db05.rcf.bnl.gov:3316
- --> Connection Time=0.0360169 sec    MysqlVersion=5.7.24
+StChain:INFO  - MysqlDb::Connect(host,user,pw,database,port) line=527 Server Connecting: DB=StarDb  Host=star-db04.rcf.bnl.gov:3316
+ --> Connection Time=0.0350749 sec    MysqlVersion=5.7.24
 StChain:WARN  - StDbManagerImpl::getDbDomain(domainName) line=1061 Adding New dbDomain= fst
 StChain:WARN  - StDbManagerImpl::getDbDomain(domainName) line=1061 Adding New dbDomain= ftt
 StChain:INFO  - St_db_Maker::OpenMySQL : Unknown table rhicf/rhicfBarPos..rhicfBarPos
@@ -689,7 +689,7 @@ SCHEME 2: DecayLength = 45.5491;  -3122  1.5881
 SCHEME 1: DecayLength = 2.85741;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 80.7125;  3122  1.47254
 
-== Event 300 finish == 0min 15s: 0.05s/event
+== Event 300 finish == 0min 14s: 0.0466667s/event
 SCHEME 1: DecayLength = 12.1461;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 11.9892;   
 SCHEME 1: DecayLength = 30.1073;  DistanceToVertexLine = 0 , dl = 0
@@ -876,7 +876,7 @@ SCHEME 2: DecayLength = 42.9369;
 SCHEME 1: DecayLength = 161.823;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 161.805;   
 
-== Event 400 finish == 0min 20s: 0.05s/event
+== Event 400 finish == 0min 19s: 0.0475s/event
 SCHEME 1: DecayLength = 42.4401;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 42.3564;   
 SCHEME 1: DecayLength = 124.332;  DistanceToVertexLine = 0 , dl = 0
@@ -1034,7 +1034,7 @@ SCHEME 2: DecayLength = 5.02884;
 SCHEME 1: DecayLength = 98.2669;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 98.2099;   
 
-== Event 500 finish == 0min 26s: 0.052s/event
+== Event 500 finish == 0min 25s: 0.05s/event
 SCHEME 1: DecayLength = 34.4863;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 34.5155;   
 SCHEME 1: DecayLength = 199.67;  DistanceToVertexLine = 34.5155 , dl = 0.42574
@@ -1194,7 +1194,7 @@ SCHEME 2: DecayLength = 12.527;
 SCHEME 1: DecayLength = 7.83444;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 7.84469;   
 
-== Event 600 finish == 0min 31s: 0.0516667s/event
+== Event 600 finish == 0min 29s: 0.0483333s/event
 SCHEME 1: DecayLength = 75.1821;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 75.1443;   
 SCHEME 1: DecayLength = 33.9758;  DistanceToVertexLine = 0 , dl = 0
@@ -1351,7 +1351,7 @@ SCHEME 2: DecayLength = 26.975;
 SCHEME 1: DecayLength = 13.1798;  DistanceToVertexLine = 26.975 , dl = 0.302822
 SCHEME 2: DecayLength = 13.1715;   
 
-== Event 700 finish == 0min 35s: 0.05s/event
+== Event 700 finish == 0min 33s: 0.0471429s/event
 SCHEME 1: DecayLength = 141.328;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 141.268;   
 SCHEME 1: DecayLength = 5.47127;  DistanceToVertexLine = 0 , dl = 0
@@ -1483,7 +1483,7 @@ SCHEME 2: DecayLength = 31.3417;  3122  1.40964
 SCHEME 1: DecayLength = 46.6847;  DistanceToVertexLine = 31.3417 , dl = 1.11076
 SCHEME 2: DecayLength = 46.6947;   
 
-== Event 800 finish == 0min 40s: 0.05s/event
+== Event 800 finish == 0min 38s: 0.0475s/event
 SCHEME 1: DecayLength = 17.4848;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 17.3375;   
 SCHEME 1: DecayLength = 15.6533;  DistanceToVertexLine = 0 , dl = 0
@@ -1615,7 +1615,7 @@ SCHEME 2: DecayLength = 184.978;  3122  1.89266
 SCHEME 1: DecayLength = 27.4987;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 5.40066;  -3122  0
 
-== Event 900 finish == 0min 45s: 0.05s/event
+== Event 900 finish == 0min 43s: 0.0477778s/event
 SCHEME 1: DecayLength = 17.509;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 17.4931;   
 SCHEME 1: DecayLength = 137.353;  DistanceToVertexLine = 0 , dl = 0
@@ -1739,7 +1739,7 @@ SCHEME 2: DecayLength = 16.4099;
 SCHEME 1: DecayLength = 51.2261;  DistanceToVertexLine = 16.4099 , dl = 0.359091
 SCHEME 2: DecayLength = 51.2305;   
 
-== Event 1000 finish == 0min 49s: 0.049s/event
+== Event 1000 finish == 0min 47s: 0.047s/event
 SCHEME 1: DecayLength = 7.9425;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 72.4976;  3122  1.26373
 SCHEME 1: DecayLength = 159.417;  DistanceToVertexLine = 0 , dl = 0
@@ -1887,7 +1887,7 @@ SCHEME 2: DecayLength = 168.473;
 SCHEME 1: DecayLength = 19.0112;  DistanceToVertexLine = 168.473 , dl = 20.4661
 SCHEME 2: DecayLength = 19.0568;   
 
-== Event 1100 finish == 0min 54s: 0.0490909s/event
+== Event 1100 finish == 0min 51s: 0.0463636s/event
 SCHEME 1: DecayLength = 7.22015;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 7.21426;   
 SCHEME 1: DecayLength = 14.9701;  DistanceToVertexLine = 7.21426 , dl = 0.126768
@@ -2093,7 +2093,7 @@ SCHEME 2: DecayLength = 9.55502;
 SCHEME 1: DecayLength = 34.9543;  DistanceToVertexLine = 9.55502 , dl = 0.75306
 SCHEME 2: DecayLength = 35.5443;   
 
-== Event 1200 finish == 0min 59s: 0.0491667s/event
+== Event 1200 finish == 0min 56s: 0.0466667s/event
 SCHEME 1: DecayLength = 69.4678;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 45.0036;  -3122  1.08583
 SCHEME 1: DecayLength = 94.2335;  DistanceToVertexLine = 45.0036 , dl = 4.14275
@@ -2211,7 +2211,7 @@ SCHEME 2: DecayLength = 38.2403;
 SCHEME 1: DecayLength = 186.567;  DistanceToVertexLine = 38.2403 , dl = 0.292066
 SCHEME 2: DecayLength = 186.492;   
 
-== Event 1300 finish == 1min 3s: 0.0484615s/event
+== Event 1300 finish == 1min 0s: 0.0461538s/event
 SCHEME 1: DecayLength = 113.135;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 109.527;   
 SCHEME 1: DecayLength = 39.1664;  DistanceToVertexLine = 109.527 , dl = 7.03042
@@ -2357,7 +2357,7 @@ SCHEME 2: DecayLength = 19.143;  -3122  1.18873
 SCHEME 1: DecayLength = 8.7404;  DistanceToVertexLine = 19.143 , dl = 0.565979
 SCHEME 2: DecayLength = 8.72915;   
 
-== Event 1400 finish == 1min 7s: 0.0478571s/event
+== Event 1400 finish == 1min 4s: 0.0457143s/event
 SCHEME 1: DecayLength = 36.0613;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 36.0904;   
 SCHEME 1: DecayLength = 56.0676;  DistanceToVertexLine = 0 , dl = 0
@@ -2501,7 +2501,7 @@ SCHEME 2: DecayLength = 35.7741;
 SCHEME 1: DecayLength = 8.7035;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 8.71572;   
 
-== Event 1500 finish == 1min 11s: 0.0473333s/event
+== Event 1500 finish == 1min 9s: 0.046s/event
 SCHEME 1: DecayLength = 7.39288;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 7.38422;   
 SCHEME 1: DecayLength = 171.857;  DistanceToVertexLine = 0 , dl = 0
@@ -2638,7 +2638,7 @@ SCHEME 2: DecayLength = 8.90975;
 SCHEME 1: DecayLength = 167.394;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 167.364;   
 
-== Event 1600 finish == 1min 16s: 0.0475s/event
+== Event 1600 finish == 1min 13s: 0.045625s/event
 SCHEME 1: DecayLength = 9.85262;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 9.50473;   
 SCHEME 1: DecayLength = 24.3133;  DistanceToVertexLine = 9.50473 , dl = 0.335649
@@ -2770,7 +2770,7 @@ SCHEME 2: DecayLength = 9.86469;
 SCHEME 1: DecayLength = 32.0078;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 32.0104;   
 
-== Event 1700 finish == 1min 20s: 0.0470588s/event
+== Event 1700 finish == 1min 17s: 0.0452941s/event
 SCHEME 1: DecayLength = 3.10339;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 62.522;  -3122  1.13945
 SCHEME 1: DecayLength = 21.9983;  DistanceToVertexLine = 0 , dl = 0
@@ -2910,7 +2910,7 @@ Found Omega
 SCHEME 1: DecayLength = 3.26276;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 24.5883;  3122  1.17843
 
-== Event 1800 finish == 1min 25s: 0.0472222s/event
+== Event 1800 finish == 1min 22s: 0.0455556s/event
 SCHEME 1: DecayLength = 45.9546;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 45.8692;   
 SCHEME 1: DecayLength = 7.64834;  DistanceToVertexLine = 45.8692 , dl = 3.0655
@@ -3092,7 +3092,7 @@ SCHEME 2: DecayLength = 20.6099;  3122  1.45146
 SCHEME 1: DecayLength = 71.8927;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 190.69;  3122  1.15059
 
-== Event 1900 finish == 1min 30s: 0.0473684s/event
+== Event 1900 finish == 1min 27s: 0.0457895s/event
 SCHEME 1: DecayLength = 31.312;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 31.3101;   
 SCHEME 1: DecayLength = 50.4378;  DistanceToVertexLine = 0 , dl = 0
@@ -3238,7 +3238,7 @@ SCHEME 2: DecayLength = 98.4687;
 SCHEME 1: DecayLength = 35.2338;  DistanceToVertexLine = 98.4687 , dl = 1.12256
 SCHEME 2: DecayLength = 35.3149;   
 
-== Event 2000 finish == 1min 35s: 0.0475s/event
+== Event 2000 finish == 1min 32s: 0.046s/event
 SCHEME 1: DecayLength = 142.314;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 142.149;   
 SCHEME 1: DecayLength = 8.19752;  DistanceToVertexLine = 0 , dl = 0
@@ -3388,7 +3388,7 @@ SCHEME 2: DecayLength = 4.83001;
 SCHEME 1: DecayLength = 16.0335;  DistanceToVertexLine = 4.83001 , dl = 0.619893
 SCHEME 2: DecayLength = 15.9056;   
 
-== Event 2100 finish == 1min 39s: 0.0471429s/event
+== Event 2100 finish == 1min 36s: 0.0457143s/event
 SCHEME 1: DecayLength = 5.93684;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 5.87972;   
 SCHEME 1: DecayLength = 6.2938;  DistanceToVertexLine = 5.87972 , dl = 0.462931
@@ -3556,7 +3556,7 @@ SCHEME 2: DecayLength = -32.4255;  -3122  1.86095
 SCHEME 1: DecayLength = 8.14879;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 8.07892;   
 
-== Event 2200 finish == 1min 45s: 0.0477273s/event
+== Event 2200 finish == 1min 41s: 0.0459091s/event
 SCHEME 1: DecayLength = 41.2606;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 41.2521;   
 SCHEME 1: DecayLength = 46.3221;  DistanceToVertexLine = 0 , dl = 0
@@ -3728,7 +3728,7 @@ SCHEME 2: DecayLength = 37.1947;
 SCHEME 1: DecayLength = 118.02;  DistanceToVertexLine = 37.1947 , dl = 0.443035
 SCHEME 2: DecayLength = 118.073;   
 
-== Event 2300 finish == 1min 49s: 0.0473913s/event
+== Event 2300 finish == 1min 46s: 0.046087s/event
 SCHEME 1: DecayLength = 11.7771;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 11.6795;   
 SCHEME 1: DecayLength = 30.8443;  DistanceToVertexLine = 0 , dl = 0
@@ -3911,7 +3911,7 @@ SCHEME 2: DecayLength = 10.8836;
 SCHEME 1: DecayLength = 61.6334;  DistanceToVertexLine = 10.8836 , dl = 0.829556
 SCHEME 2: DecayLength = 61.6707;   
 
-== Event 2400 finish == 1min 54s: 0.0475s/event
+== Event 2400 finish == 1min 50s: 0.0458333s/event
 SCHEME 1: DecayLength = 16.2402;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 15.4318;   
 SCHEME 1: DecayLength = 15.5822;  DistanceToVertexLine = 15.4318 , dl = 1.04178
@@ -4075,7 +4075,7 @@ SCHEME 2: DecayLength = 63.7009;
 SCHEME 1: DecayLength = 6.15101;  DistanceToVertexLine = 63.7009 , dl = 0.379198
 SCHEME 2: DecayLength = 198.673;  3122  1.48528
 
-== Event 2500 finish == 1min 59s: 0.0476s/event
+== Event 2500 finish == 1min 55s: 0.046s/event
 SCHEME 1: DecayLength = 191.582;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 191.582;   
 SCHEME 1: DecayLength = 13.6833;  DistanceToVertexLine = 0 , dl = 0
@@ -4207,7 +4207,7 @@ SCHEME 2: DecayLength = 150.157;  -3122  2.92174
 SCHEME 1: DecayLength = 15.0168;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 14.3641;   
 
-== Event 2600 finish == 2min 3s: 0.0473077s/event
+== Event 2600 finish == 2min 0s: 0.0461538s/event
 SCHEME 1: DecayLength = 12.9182;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 182.948;  3122  1.1608
 SCHEME 1: DecayLength = 160.889;  DistanceToVertexLine = 182.948 , dl = 2.48162
@@ -4373,7 +4373,7 @@ SCHEME 2: DecayLength = 83.124;
 SCHEME 1: DecayLength = 34.8852;  DistanceToVertexLine = 83.124 , dl = 0.798824
 SCHEME 2: DecayLength = 34.9038;   
 
-== Event 2700 finish == 2min 7s: 0.047037s/event
+== Event 2700 finish == 2min 4s: 0.0459259s/event
 SCHEME 1: DecayLength = 29.9955;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 29.6688;   
 SCHEME 1: DecayLength = 20.332;  DistanceToVertexLine = 0 , dl = 0
@@ -4527,7 +4527,7 @@ SCHEME 2: DecayLength = 7.11427;
 SCHEME 1: DecayLength = 38.5698;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 38.5622;   
 
-== Event 2800 finish == 2min 12s: 0.0471429s/event
+== Event 2800 finish == 2min 9s: 0.0460714s/event
 SCHEME 1: DecayLength = 110.427;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 110.426;   
 SCHEME 1: DecayLength = 104.967;  DistanceToVertexLine = 0 , dl = 0
@@ -4681,7 +4681,7 @@ SCHEME 2: DecayLength = 100.713;
 SCHEME 1: DecayLength = 72.8611;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 72.8526;   
 
-== Event 2900 finish == 2min 17s: 0.0472414s/event
+== Event 2900 finish == 2min 13s: 0.0458621s/event
 SCHEME 1: DecayLength = 195.689;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 195.703;   
 SCHEME 1: DecayLength = 7.0743;  DistanceToVertexLine = 195.703 , dl = 3.35393
@@ -4815,7 +4815,7 @@ SCHEME 2: DecayLength = 131.924;
 SCHEME 1: DecayLength = 5.96192;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 5.92436;   
 
-== Event 3000 finish == 2min 21s: 0.047s/event
+== Event 3000 finish == 2min 18s: 0.046s/event
 SCHEME 1: DecayLength = 43.1958;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 43.2131;   
 SCHEME 1: DecayLength = 2.0083;  DistanceToVertexLine = 0 , dl = 0
@@ -4979,7 +4979,7 @@ SCHEME 2: DecayLength = 43.3368;
 SCHEME 1: DecayLength = 15.0583;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 15.0842;   
 
-== Event 3100 finish == 2min 26s: 0.0470968s/event
+== Event 3100 finish == 2min 22s: 0.0458065s/event
 SCHEME 1: DecayLength = 9.34482;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 9.34618;   
 SCHEME 1: DecayLength = 51.3699;  DistanceToVertexLine = 9.34618 , dl = 0.627502
@@ -5147,7 +5147,7 @@ SCHEME 2: DecayLength = 7.02226;
 SCHEME 1: DecayLength = 11.4263;  DistanceToVertexLine = 7.02226 , dl = 0.594149
 SCHEME 2: DecayLength = 11.4229;   
 
-== Event 3200 finish == 2min 31s: 0.0471875s/event
+== Event 3200 finish == 2min 27s: 0.0459375s/event
 SCHEME 1: DecayLength = 11.4719;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 11.5399;   
 SCHEME 1: DecayLength = 158.827;  DistanceToVertexLine = 11.5399 , dl = 1.34561
@@ -5323,7 +5323,7 @@ SCHEME 2: DecayLength = 125.914;
 SCHEME 1: DecayLength = 23.9843;  DistanceToVertexLine = 125.914 , dl = 4.12737
 SCHEME 2: DecayLength = 23.9731;   
 
-== Event 3300 finish == 2min 36s: 0.0472727s/event
+== Event 3300 finish == 2min 32s: 0.0460606s/event
 SCHEME 1: DecayLength = 16.2908;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 16.2904;   
 SCHEME 1: DecayLength = 16.0399;  DistanceToVertexLine = 0 , dl = 0
@@ -5477,7 +5477,7 @@ SCHEME 2: DecayLength = 100.091;
 SCHEME 1: DecayLength = 27.2718;  DistanceToVertexLine = 100.091 , dl = 1.52179
 SCHEME 2: DecayLength = 27.3594;   
 
-== Event 3400 finish == 2min 40s: 0.0470588s/event
+== Event 3400 finish == 2min 37s: 0.0461765s/event
 SCHEME 1: DecayLength = 102.475;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 30.0507;  3122  1.56185
 SCHEME 1: DecayLength = 11.9687;  DistanceToVertexLine = 0 , dl = 0
@@ -5629,7 +5629,7 @@ SCHEME 2: DecayLength = 25.9466;  3122  1.50071
 SCHEME 1: DecayLength = 70.4227;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 70.4025;   
 
-== Event 3500 finish == 2min 45s: 0.0471429s/event
+== Event 3500 finish == 2min 42s: 0.0462857s/event
 SCHEME 1: DecayLength = 110.234;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 110.264;   
 SCHEME 1: DecayLength = 101.131;  DistanceToVertexLine = 110.264 , dl = 2.81722
@@ -5754,7 +5754,7 @@ SCHEME 2: DecayLength = 86.4618;
 SCHEME 1: DecayLength = 42.6232;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 191.614;  -3122  1.32386
 
-== Event 3600 finish == 2min 49s: 0.0469444s/event
+== Event 3600 finish == 2min 46s: 0.0461111s/event
 SCHEME 1: DecayLength = 13.3261;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 13.1669;   
 SCHEME 1: DecayLength = 4.92139;  DistanceToVertexLine = 0 , dl = 0
@@ -5936,7 +5936,7 @@ SCHEME 2: DecayLength = 10.2368;
 SCHEME 1: DecayLength = 45.8172;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 22.092;  3122  1.10628
 
-== Event 3700 finish == 2min 55s: 0.0472973s/event
+== Event 3700 finish == 2min 51s: 0.0462162s/event
 SCHEME 1: DecayLength = 70.4444;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 70.447;   
 SCHEME 1: DecayLength = 72.1448;  DistanceToVertexLine = 0 , dl = 0
@@ -6070,7 +6070,7 @@ SCHEME 2: DecayLength = 10.4139;
 SCHEME 1: DecayLength = 5.38008;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 0.466303;  3122  1.10213
 
-== Event 3800 finish == 3min 0s: 0.0473684s/event
+== Event 3800 finish == 2min 56s: 0.0463158s/event
 SCHEME 1: DecayLength = 84.4144;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 83.2733;   
 SCHEME 1: DecayLength = 28.3049;  DistanceToVertexLine = 83.2733 , dl = 1.69907
@@ -6193,7 +6193,7 @@ SCHEME 2: DecayLength = 134.962;
 SCHEME 1: DecayLength = 5.47106;  DistanceToVertexLine = 134.962 , dl = 1.45131
 SCHEME 2: DecayLength = 5.45929;   
 
-== Event 3900 finish == 3min 4s: 0.0471795s/event
+== Event 3900 finish == 3min 0s: 0.0461538s/event
 SCHEME 1: DecayLength = 169.714;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 169.735;   
 SCHEME 1: DecayLength = 12.2549;  DistanceToVertexLine = 0 , dl = 0
@@ -6317,7 +6317,7 @@ SCHEME 2: DecayLength = 8.81898;
 SCHEME 1: DecayLength = 127.145;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 127.129;   
 
-== Event 4000 finish == 3min 9s: 0.04725s/event
+== Event 4000 finish == 3min 5s: 0.04625s/event
 SCHEME 1: DecayLength = 86.6695;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 86.7203;   
 SCHEME 1: DecayLength = 8.64568;  DistanceToVertexLine = 0 , dl = 0
@@ -6472,7 +6472,7 @@ SCHEME 2: DecayLength = 5.29672;
 SCHEME 1: DecayLength = 15.5885;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 15.5314;   
 
-== Event 4100 finish == 3min 15s: 0.047561s/event
+== Event 4100 finish == 3min 10s: 0.0463415s/event
 SCHEME 1: DecayLength = 13.265;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 13.2807;   
 SCHEME 1: DecayLength = 50.1618;  DistanceToVertexLine = 13.2807 , dl = 0.709594
@@ -6570,7 +6570,7 @@ SCHEME 2: DecayLength = 75.0213;  3122  1.20236
 SCHEME 1: DecayLength = 68.2162;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 68.2669;   
 
-== Event 4200 finish == 3min 19s: 0.047381s/event
+== Event 4200 finish == 3min 14s: 0.0461905s/event
 SCHEME 1: DecayLength = 19.5131;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 19.5334;   
 SCHEME 1: DecayLength = 66.4545;  DistanceToVertexLine = 19.5334 , dl = 1.8673
@@ -6698,7 +6698,7 @@ SCHEME 2: DecayLength = 24.2758;
 SCHEME 1: DecayLength = 7.83067;  DistanceToVertexLine = 24.2758 , dl = 1.56252
 SCHEME 2: DecayLength = 7.81598;   
 
-== Event 4300 finish == 3min 23s: 0.0472093s/event
+== Event 4300 finish == 3min 18s: 0.0460465s/event
 SCHEME 1: DecayLength = 18.2812;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 33.4796;  3122  1.11691
 SCHEME 1: DecayLength = 106.133;  DistanceToVertexLine = 33.4796 , dl = 4.12387
@@ -6866,7 +6866,7 @@ SCHEME 2: DecayLength = 5.16847;  -3122  1.09672
 SCHEME 1: DecayLength = 39.0469;  DistanceToVertexLine = 5.16847 , dl = 3.30287
 SCHEME 2: DecayLength = 33.9919;   
 
-== Event 4400 finish == 3min 29s: 0.0475s/event
+== Event 4400 finish == 3min 23s: 0.0461364s/event
 SCHEME 1: DecayLength = 56.9196;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 56.9524;   
 SCHEME 1: DecayLength = 26.0122;  DistanceToVertexLine = 0 , dl = 0
@@ -6984,7 +6984,7 @@ SCHEME 2: DecayLength = 17.2424;  3122  1.29656
 SCHEME 1: DecayLength = 5.5989;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 5.56282;   
 
-== Event 4500 finish == 3min 33s: 0.0473333s/event
+== Event 4500 finish == 3min 27s: 0.046s/event
 SCHEME 1: DecayLength = 48.5893;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 48.5894;   
 SCHEME 1: DecayLength = 104.031;  DistanceToVertexLine = 0 , dl = 0
@@ -7103,7 +7103,7 @@ SCHEME 2: DecayLength = 104.615;
 SCHEME 1: DecayLength = 108.938;  DistanceToVertexLine = 104.615 , dl = 1.93219
 SCHEME 2: DecayLength = 90.3151;  -3122  2.18131
 
-== Event 4600 finish == 3min 38s: 0.0473913s/event
+== Event 4600 finish == 3min 32s: 0.046087s/event
 SCHEME 1: DecayLength = 4.36223;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 28.0632;  3122  1.28047
 SCHEME 1: DecayLength = 35.5197;  DistanceToVertexLine = 0 , dl = 0
@@ -7255,7 +7255,7 @@ SCHEME 2: DecayLength = 123.224;
 SCHEME 1: DecayLength = 19.1143;  DistanceToVertexLine = 123.224 , dl = 0.471477
 SCHEME 2: DecayLength = 19.1131;   
 
-== Event 4700 finish == 3min 43s: 0.0474468s/event
+== Event 4700 finish == 3min 37s: 0.0461702s/event
 SCHEME 1: DecayLength = 90.8162;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 90.6596;   
 SCHEME 1: DecayLength = 24.6216;  DistanceToVertexLine = 90.6596 , dl = 2.21707
@@ -7441,7 +7441,7 @@ SCHEME 2: DecayLength = 5.5793;
 SCHEME 1: DecayLength = 5.98501;  DistanceToVertexLine = 5.5793 , dl = 0.483271
 SCHEME 2: DecayLength = 6.14715;   
 
-== Event 4800 finish == 3min 47s: 0.0472917s/event
+== Event 4800 finish == 3min 41s: 0.0460417s/event
 SCHEME 1: DecayLength = 0.487352;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 40.8549;  -3122  1.66705
 SCHEME 1: DecayLength = 8.33833;  DistanceToVertexLine = 0 , dl = 0
@@ -7651,7 +7651,7 @@ SCHEME 2: DecayLength = 112.468;
 SCHEME 1: DecayLength = 36.0516;  DistanceToVertexLine = 112.468 , dl = 3.51401
 SCHEME 2: DecayLength = 36.0562;   
 
-== Event 4900 finish == 3min 52s: 0.0473469s/event
+== Event 4900 finish == 3min 46s: 0.0461224s/event
 SCHEME 1: DecayLength = 16.1232;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 16.1074;   
 SCHEME 1: DecayLength = 58.6257;  DistanceToVertexLine = 0 , dl = 0
@@ -7763,7 +7763,7 @@ SCHEME 2: DecayLength = 5.21904;
 SCHEME 1: DecayLength = 6.35147;  DistanceToVertexLine = 5.21904 , dl = 0.39791
 SCHEME 2: DecayLength = 6.22304;   
 
-== Event 5000 finish == 3min 57s: 0.0474s/event
+== Event 5000 finish == 3min 50s: 0.046s/event
 SCHEME 1: DecayLength = 9.25331;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 9.26195;   
 SCHEME 1: DecayLength = 18.112;  DistanceToVertexLine = 0 , dl = 0
@@ -7892,7 +7892,7 @@ SCHEME 2: DecayLength = 39.5186;
 SCHEME 1: DecayLength = 175.964;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 175.966;   
 
-== Event 5100 finish == 4min 2s: 0.047451s/event
+== Event 5100 finish == 3min 54s: 0.0458824s/event
 SCHEME 1: DecayLength = 12.9617;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 13.0178;   
 SCHEME 1: DecayLength = 22.4063;  DistanceToVertexLine = 13.0178 , dl = 0.439306
@@ -8058,7 +8058,7 @@ SCHEME 2: DecayLength = 32.4079;
 SCHEME 1: DecayLength = 175.742;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 175.684;   
 
-== Event 5200 finish == 4min 7s: 0.0475s/event
+== Event 5200 finish == 3min 59s: 0.0459615s/event
 SCHEME 1: DecayLength = 43.1815;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 42.8185;   
 SCHEME 1: DecayLength = 125.113;  DistanceToVertexLine = 42.8185 , dl = 1.2432
@@ -8160,7 +8160,7 @@ SCHEME 2: DecayLength = 6.7929;  -3122  1.17076
 SCHEME 1: DecayLength = 57.3092;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 57.2957;   
 
-== Event 5300 finish == 4min 11s: 0.0473585s/event
+== Event 5300 finish == 4min 3s: 0.0458491s/event
 SCHEME 1: DecayLength = 4.84506;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 7.93832;  -3122  1.1264
 SCHEME 1: DecayLength = 15.1335;  DistanceToVertexLine = 0 , dl = 0
@@ -8268,7 +8268,7 @@ SCHEME 2: DecayLength = 72.1598;
 SCHEME 1: DecayLength = 46.9728;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 46.9787;   
 
-== Event 5400 finish == 4min 16s: 0.0474074s/event
+== Event 5400 finish == 4min 8s: 0.0459259s/event
 SCHEME 1: DecayLength = 27.1037;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 27.0927;   
 SCHEME 1: DecayLength = 77.7751;  DistanceToVertexLine = 27.0927 , dl = 0.640826
@@ -8398,7 +8398,7 @@ SCHEME 2: DecayLength = 7.41675;
 SCHEME 1: DecayLength = 94.9673;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 94.9434;   
 
-== Event 5500 finish == 4min 20s: 0.0472727s/event
+== Event 5500 finish == 4min 12s: 0.0458182s/event
 SCHEME 1: DecayLength = 14.5378;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 14.4284;   
 SCHEME 1: DecayLength = 2.5889;  DistanceToVertexLine = 0 , dl = 0
@@ -8510,7 +8510,7 @@ SCHEME 2: DecayLength = 12.035;
 SCHEME 1: DecayLength = 18.0569;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 16.9325;   
 
-== Event 5600 finish == 4min 25s: 0.0473214s/event
+== Event 5600 finish == 4min 16s: 0.0457143s/event
 SCHEME 1: DecayLength = 18.8242;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 18.8365;   
 SCHEME 1: DecayLength = 103.646;  DistanceToVertexLine = 18.8365 , dl = 0.226636
@@ -8662,7 +8662,7 @@ SCHEME 2: DecayLength = 19.5186;
 SCHEME 1: DecayLength = 104.16;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 104.127;   
 
-== Event 5700 finish == 4min 30s: 0.0473684s/event
+== Event 5700 finish == 4min 21s: 0.0457895s/event
 SCHEME 1: DecayLength = 108.598;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 108.554;   
 SCHEME 1: DecayLength = 16.9491;  DistanceToVertexLine = 0 , dl = 0
@@ -8798,7 +8798,7 @@ SCHEME 2: DecayLength = 19.4814;
 SCHEME 1: DecayLength = 7.99242;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 7.88097;   
 
-== Event 5800 finish == 4min 34s: 0.0472414s/event
+== Event 5800 finish == 4min 26s: 0.0458621s/event
 SCHEME 1: DecayLength = 6.63121;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 6.60596;   
 SCHEME 1: DecayLength = 79.1304;  DistanceToVertexLine = 0 , dl = 0
@@ -8934,7 +8934,7 @@ SCHEME 2: DecayLength = 7.60083;
 SCHEME 1: DecayLength = 6.54192;  DistanceToVertexLine = 7.60083 , dl = 0.521317
 SCHEME 2: DecayLength = 6.60489;   
 
-== Event 5900 finish == 4min 39s: 0.0472881s/event
+== Event 5900 finish == 4min 30s: 0.0457627s/event
 SCHEME 1: DecayLength = 8.95897;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 8.92736;   
 SCHEME 1: DecayLength = 38.211;  DistanceToVertexLine = 8.92736 , dl = 0.481276
@@ -9074,7 +9074,7 @@ SCHEME 2: DecayLength = 73.677;
 SCHEME 1: DecayLength = 10.3339;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 10.3238;   
 
-== Event 6000 finish == 4min 44s: 0.0473333s/event
+== Event 6000 finish == 4min 35s: 0.0458333s/event
 SCHEME 1: DecayLength = 105.904;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = -76.0594;  3122  1.87334
 SCHEME 1: DecayLength = 13.9467;  DistanceToVertexLine = 0 , dl = 0
@@ -9208,7 +9208,7 @@ SCHEME 2: DecayLength = 128.407;
 SCHEME 1: DecayLength = 173.74;  DistanceToVertexLine = 128.407 , dl = 2.45043
 SCHEME 2: DecayLength = 173.704;   
 
-== Event 6100 finish == 4min 49s: 0.047377s/event
+== Event 6100 finish == 4min 40s: 0.0459016s/event
 SCHEME 1: DecayLength = 54.3107;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 13.1355;  -3122  0
 SCHEME 1: DecayLength = 88.1823;  DistanceToVertexLine = 0 , dl = 0
@@ -9348,7 +9348,7 @@ SCHEME 2: DecayLength = 6.90429;
 SCHEME 1: DecayLength = 5.8907;  DistanceToVertexLine = 6.90429 , dl = 0.979529
 SCHEME 2: DecayLength = 5.41017;   
 
-== Event 6200 finish == 4min 54s: 0.0474194s/event
+== Event 6200 finish == 4min 45s: 0.0459677s/event
 SCHEME 1: DecayLength = 7.46716;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 7.2963;   
 SCHEME 1: DecayLength = 62.0543;  DistanceToVertexLine = 0 , dl = 0
@@ -9476,7 +9476,7 @@ SCHEME 2: DecayLength = 43.5009;
 SCHEME 1: DecayLength = 6.4977;  DistanceToVertexLine = 43.5009 , dl = 1.14012
 SCHEME 2: DecayLength = 6.47263;   
 
-== Event 6300 finish == 4min 58s: 0.0473016s/event
+== Event 6300 finish == 4min 50s: 0.0460317s/event
 SCHEME 1: DecayLength = 36.0074;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 35.9298;   
 SCHEME 1: DecayLength = 8.01483;  DistanceToVertexLine = 0 , dl = 0
@@ -9625,7 +9625,7 @@ SCHEME 2: DecayLength = 98.7253;  3122  2.34987
 SCHEME 1: DecayLength = 17.0897;  DistanceToVertexLine = 98.7253 , dl = 0.183165
 SCHEME 2: DecayLength = 17.4439;   
 
-== Event 6400 finish == 5min 3s: 0.0473437s/event
+== Event 6400 finish == 4min 56s: 0.04625s/event
 SCHEME 1: DecayLength = 13.8992;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 14.0175;   
 SCHEME 1: DecayLength = 3.59197;  DistanceToVertexLine = 14.0175 , dl = 0.354077
@@ -9785,7 +9785,7 @@ SCHEME 2: DecayLength = 155.972;
 SCHEME 1: DecayLength = 86.465;  DistanceToVertexLine = 155.972 , dl = 2.54862
 SCHEME 2: DecayLength = 86.4658;   
 
-== Event 6500 finish == 5min 8s: 0.0473846s/event
+== Event 6500 finish == 5min 1s: 0.0463077s/event
 SCHEME 1: DecayLength = 11.4354;  DistanceToVertexLine = 0 , dl = 0
 SCHEME 2: DecayLength = 11.3909;   
 SCHEME 1: DecayLength = 19.0209;  DistanceToVertexLine = 11.3909 , dl = 0.729078
@@ -9864,17 +9864,17 @@ SCHEME 2: DecayLength = -64.5502;  -3122  1.24619
 Work done... now its time to close up shop!
 ****************************************** 
 QA :INFO  - =================================================================================
-QA :INFO  - QAInfo:Chain            StBFChain::bfc                  Ast =316.16        Cpu =305.96 
-QA :INFO  - QAInfo:Maker StKFParticleAnalysisMaker::ana                  Ast =290.01(91.7%) Cpu =287.69(94.0%) 
-QA :INFO  - QAInfo:Maker    StDetectorDbMaker::detDb                Ast =  0.33( 0.1%) Cpu =  0.34( 0.1%) 
-QA :INFO  - QAInfo:Maker          St_db_Maker::db                   Ast =  4.26( 1.3%) Cpu =  1.56( 0.5%) 
-QA :INFO  - QAInfo:Maker       StPicoDstMaker::PicoDst              Ast = 21.56( 6.8%) Cpu = 16.37( 5.4%) 
+QA :INFO  - QAInfo:Chain            StBFChain::bfc                  Ast =339.46        Cpu =300.42 
+QA :INFO  - QAInfo:Maker StKFParticleAnalysisMaker::ana                  Ast =284.39(83.8%) Cpu =282.83(94.1%) 
+QA :INFO  - QAInfo:Maker    StDetectorDbMaker::detDb                Ast =  0.30( 0.1%) Cpu =  0.31( 0.1%) 
+QA :INFO  - QAInfo:Maker          St_db_Maker::db                   Ast =  8.07( 2.4%) Cpu =  1.59( 0.5%) 
+QA :INFO  - QAInfo:Maker       StPicoDstMaker::PicoDst              Ast = 46.69(13.8%) Cpu = 15.69( 5.2%) 
 St_db_Maker::Init 
-Real time 0:00:01, CP time 0.210, 3 slices
+Real time 0:00:03, CP time 0.170, 3 slices
       MySQL::Init 
-Real time 0:00:01, CP time 0.270, 2 slices
+Real time 0:00:03, CP time 0.230, 2 slices
 St_db_Maker::Make 
-Real time 0:00:01, CP time 1.300, 7109 slices
+Real time 0:00:01, CP time 1.440, 7109 slices
       MySQL::Make 
 Real time 0:00:00, CP time 0.000, 570 slices
       MySQL::Data 
@@ -9888,13 +9888,13 @@ StChain:INFO  - --------------------------------------------------
          StDetectorDbMaker(detDb)::Clear(6519)    0.000000    0.000000    0.000000    0.000000
          StDetectorDbMaker(detDb)::Make (6520)    0.000000    0.000000    0.000000    0.000000
    StKFParticleAnalysisMaker(ana)::Clear(6519)    0.000000    0.000000    0.000000    0.000000
-   StKFParticleAnalysisMaker(ana)::Make (6520)   -0.076843    0.001251    0.642227    0.025829
+   StKFParticleAnalysisMaker(ana)::Make (6520)   -0.076843    0.001250    0.642181    0.025809
           StPicoDstMaker(PicoDst)::Clear(6519)    0.000000    0.000000    0.000000    0.000000
-          StPicoDstMaker(PicoDst)::Make (6520)   -0.106049    0.000798    1.728668    0.037018
-                  St_db_Maker(db)::Clear(6519)   -1.222610   -0.000188    0.000000    0.015141
-                  St_db_Maker(db)::Make (6520)   -0.000137    0.000000    0.000000    0.000002
+          StPicoDstMaker(PicoDst)::Make (6520)   -0.106079    0.000798    1.728668    0.037019
+                  St_db_Maker(db)::Clear(6519)    0.000000    0.000000    0.000000    0.000000
+                  St_db_Maker(db)::Make (6520)    0.000000    0.000000    0.000092    0.000001
 ---------------------------------------------------------------------------------------------
-                                   Total(8)   -1.222610    0.001861    1.728668    0.047610
+                                   Total(8)   -0.106079    0.002048    1.728668    0.045127
 =============================================================================================
 BFC:INFO  - StBFChain::Finish :  Closing all writable TFiles   . . . . 
 BFC:INFO  - StBFChain::Finish : file KFParticleQA_999998.root has been closed
@@ -9910,14 +9910,14 @@ Total Size of Data in Tables = 0 kBytes
 
 BFC:INFO  - StDbManagerImpl::printTimeStats() line=1624 
 *************************** DataBase ClockTime Stats *************************** 
-Total Time in DB-API       = 1.1378	 sec
+Total Time in DB-API       = 0.587117	 sec
  --------------------- In aggregate ------------------
- - Prepare Nodes & Servers = 1.1378	 sec --> 100% of total
+ - Prepare Nodes & Servers = 0.587117	 sec --> 100% of total
  - Select & Retrieve data  = 0	 sec --> 0% of total
  --------------- In MySQL C-API (approximate) ---------
- - Connecting to Servers   = 0.0360749	 sec --> 3.17059% of total
- - SQL Query Times         = 0.84511	 sec --> 74.276% of total
- - socket transfer Times   = 0.107569	 sec --> 9.45419% of total
+ - Connecting to Servers   = 0.0351419	 sec --> 5.98551% of total
+ - SQL Query Times         = 0.359404	 sec --> 61.2151% of total
+ - socket transfer Times   = 0.0799465	 sec --> 13.6168% of total
 ********************************************************************************
 
 
