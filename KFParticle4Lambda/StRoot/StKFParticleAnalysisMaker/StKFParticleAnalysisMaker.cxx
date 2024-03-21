@@ -663,7 +663,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
 					StPicoTrack *track = mPicoDst->track(jTrack);
 					if (track->id() == globalTrackId){
-						int TrackPDG = TrackID(track , Vertex3D , false);
+						int TrackPDG = TrackID(track , Vertex3D , magnet , false);
 						if ((TrackPDG == -2212 || TrackPDG == 211) && particle.GetPDG() == LambdaPdg){cout<<"FUCK!"<<endl;;}
 						if (iDaughter == 0){iTrack = jTrack;}
 						if (iDaughter == 1){kTrack = jTrack;}
@@ -1113,7 +1113,7 @@ void StKFParticleAnalysisMaker::SetDaughterTrackHits(KFParticle particle)
 	}
 }
 
-int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , bool Track_has_tof , float m2 = -999. , float beta = -999.){
+int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , double magnet , bool Track_has_tof , float m2 = -999. , float beta = -999.){
 
 	float TrackID_pt = track->gMom().Perp();
 	float TrackID_dcatopv = track->gDCA(Vertex3D).Mag();
@@ -1157,6 +1157,8 @@ int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , 
 	if (fabs(TrackID_eta_prim) > eta_trig_cut) kaon_cut = false;
 	if (!hasTOF && TrackID_pt > 0.4) kaon_cut = false;
 	if (TrackID_pt > 0.4 && (m2 > 0.34 || m2 < 0.15)) kaon_cut = false;
+	StPicoPhysicalHelix TrackID_helix = track->helix(magnet);
+	TVector3 pkaon = TrackID_helix.momentum(magnet*kilogauss);
 	double zTOF = 1/beta - sqrt(KaonPdgMass*KaonPdgMass/pkaon.Mag2()+1);
 	KaonPID kaon_pid(zTOF, TrackID_nSigmaKaon, TrackID_pt); // not using zTOF
 	if (!kaon_pid.IsKaonSimple(2., track->charge())) kaon_cut = false; // only 0.2 < TrackID_pt < 2.0!!!
