@@ -388,10 +388,10 @@ void readTree()
                     p0.SetPxPyPzE(px->at(j),py->at(j),pz->at(j),pow(pow(px->at(j),2) + pow(py->at(j),2) + pow(pz->at(j),2) + pow(InvariantMass->at(j),2),0.5));
                     float rap = p0.Rapidity();
 
-                    if (IfBadReconstructed->at(j) == 1){
+                    if (IfBadReconstructed == 1){
 					    HMass[k]->Fill(InvariantMass->at(j));
                     }
-                    if (IfBadReconstructed->at(j) == 0){
+                    if (IfBadReconstructed == 0){
                         HBadMass[k]->Fill(InvariantMass->at(j));
                     }
 					HP[k]->Fill(Mag);
@@ -492,5 +492,5 @@ void readTree()
 
     file->Write();
 
-    return 0;
+    return;
 }
