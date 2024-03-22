@@ -71,7 +71,7 @@ void HADDr()
 
     TList *list = new TList;
     int Itr = 0;
-    for(int i=65690;i <= 66389;i++){
+    for(int i=65690;i <= 65693;i++){ // 66389
         TString filename = midname;
         filename+=i;
         filename+=".root";
@@ -88,7 +88,7 @@ void HADDr()
         //     Result->Add(Result,Temp,1.0,1.0);
         // }
         // cout<<Itr<<" : "<<Result->Integral(1,1000)<<endl;
-        fileR->Close();
+        // fileR->Close();
         Itr++;
     }
     TH1F *Result = (TH1F*)h1->Clone("h");
