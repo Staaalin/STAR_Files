@@ -1149,7 +1149,7 @@ int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , 
 
 	// Test if Proton
 	bool proton_cut = true;
-	if (fabs(TrackID_nSigmaProton) > 2) proton_cut = false;
+	if (fabs(TrackID_nSigmaProton) > 3) proton_cut = false;
 	if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) proton_cut = false; 
 	if (fabs(TrackID_eta_prim) > eta_trig_cut) proton_cut = false;
 	if (!hasTOF && TrackID_pt > proton_pT_TOFth) proton_cut = false;
@@ -1160,7 +1160,7 @@ int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , 
 	
 	// Test if Pion
 	bool pion_cut = true;
-	if (fabs(TrackID_nSigmaPion) > 2) pion_cut = false;
+	if (fabs(TrackID_nSigmaPion) > 3) pion_cut = false;
 	if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) pion_cut = false; // use p < 2
 	if (fabs(TrackID_eta_prim) > eta_trig_cut) pion_cut = false;
 	PionPID pion_pid(0., TrackID_nSigmaPion, TrackID_pt); // not using zTOF
@@ -1171,7 +1171,7 @@ int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , 
 
 	// Test if Kaon
 	bool kaon_cut = true;
-	if (fabs(TrackID_nSigmaKaon) > 2) kaon_cut = false;
+	if (fabs(TrackID_nSigmaKaon) > 2.5) kaon_cut = false;
 	if (TrackID_pt < pT_trig_lo || TrackID_pt > 1.6) kaon_cut = false; // use p < 1.6
 	if (fabs(TrackID_eta_prim) > eta_trig_cut) kaon_cut = false;
 	if (!hasTOF && TrackID_pt > 0.4) kaon_cut = false;
