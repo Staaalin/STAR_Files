@@ -87,9 +87,10 @@ void HADDr()
         Itr++;
     }
     
+    cout<<Result->Integral(0,5)<<endl;
     Result->Write("h_Good_Mass");
     // file->Write();
-    // file->Close();
+    file->Close();
 
     return;
 }
