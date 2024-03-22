@@ -79,9 +79,9 @@ void HADDr()
         cout<<"FUCK"<<endl;
         TFile *fileR = TFile::Open(filename);
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
-        Temp = (TH1F*)h1->Clone("h_Good_Mass");
+        Temp = (TH1F*)h1->Clone("h_Good_Mass_Clone");
         if (Itr == 0) {
-            Result = (TH1F*)Temp->Clone("h_Good_Mass");
+            Result = (TH1F*)Temp->Clone("h_Good_Mass_reasult");
             Result->Reset();
         }
         list->Add(Temp);
@@ -94,7 +94,7 @@ void HADDr()
     Result->Merge(list);
     TFile *file = new TFile("HADDr.root", "RECREATE");
     cout<<Result->Integral(0,1000)<<endl;
-    Result->Write("h_Good_Mass");
+    Result->Write("h_Good_Mass_result");
     // file->Write();
     file->Close();
 
