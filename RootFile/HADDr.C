@@ -83,7 +83,7 @@ void HADDr()
         }
         else{
             Temp = (TH1F*)h1->Clone();
-            Result->Add(Temp);
+            Add(Result,Temp,1.0,1.0);
         }
         cout<<Itr<<" : "<<Result->Integral(0,5)<<endl;
         fileR->Close();
