@@ -62,6 +62,7 @@ void HADDr()
     // file->Write();
     // file->Close();
 
+    TFile *file = new TFile("HADDr.root", "RECREATE");
     
     TH1F* Result;
     TString midname = "/star/data01/pwg/svianping/output/output_";
@@ -86,8 +87,7 @@ void HADDr()
         Itr++;
     }
     
-    TFile *file = new TFile("HADDr.root", "RECREATE");
-    Result->Write();
+    Result->Write("h_Good_Mass");
     file->Write();
     // file->Close();
 
