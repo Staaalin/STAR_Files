@@ -249,6 +249,10 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_GOOD_Mass->GetXaxis()->SetTitle("Mass [GeV]");
 	H_BAD_Mass->GetXaxis()->SetTitle("Mass [GeV]");
 
+	hHM_ParentDCA = new TH2D("hH_M_ParentDCA","The DCA between parent particles vs. Mass",     2000,0,5,500,0,8);
+	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
+	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
+
 	Recorded_events = 0;
 
 	cout << "-----------------------------------------" << endl;
@@ -288,6 +292,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	hHM_Chi2->Write();
 	H_GOOD_Mass->Write();
 	H_BAD_Mass ->Write();
+	hHM_ParentDCA->Write();
 
 	return;
 }
@@ -647,8 +652,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
+
 		StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
+		pair<std::vector<double> , std::vector<double>>RV = mTrackI->pathLengths(mTrackK , 0.1 , 0.1)
+
+		
+		mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
+		mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		TVector3 xv0, op1, op2;
 		double dca1to2 = closestDistance(mTrackI, mTrackK, magnet, Vertex3D, xv0, op1, op2);
 		TVector3 pv0 = op1 + op2;

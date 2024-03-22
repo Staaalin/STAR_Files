@@ -123,6 +123,7 @@ private:
 	TH2D *hXY;
 	TH2D *hHXY;
 	TH2D *hHM_Chi2;
+	TH2D *hHM_ParentDCA;
 
 	TProfile *hcentRefM ; 
 	TProfile *hcentRefW ; 
