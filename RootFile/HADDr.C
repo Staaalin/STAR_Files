@@ -75,16 +75,16 @@ void HADDr()
 
         TFile *fileR = TFile::Open(filename);
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
+            cout<<"FUCK"<<endl;
         if (Itr == 0) {
             Result = (TH1F*)h1->Clone();
         }
         else{
             Result->Add((TH1F*)h1->Clone());
-            cout<<"FUCK"<<endl;
         }
         fileR->Close();
-        Itr++;
         cout<<Itr<<endl;
+        Itr++;
     }
     
     Result->Write();
