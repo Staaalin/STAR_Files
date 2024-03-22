@@ -33,7 +33,7 @@ using namespace std;
 
 void HADDr()
 {
-    
+
     // TFile *file = new TFile("HADDr.root", "RECREATE");
     
     // TH1F* Result;
@@ -45,7 +45,8 @@ void HADDr()
     //     filename+=i;
     //     filename+=".root";
 
-    //     TFile *fileR = new TFile(filename, "READ");
+    //         cout<<"FUCK"<<endl;
+    //     TFile *fileR = TFile::Open(filename);
     //     TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
     //     if (Itr == 0) {
     //         Result = (TH1F*)h1->Clone();
@@ -54,17 +55,18 @@ void HADDr()
     //         Result->Add((TH1F*)h1->Clone());
     //     }
     //     fileR->Close();
-    //     Itr++;
     //     cout<<Itr<<endl;
+    //     Itr++;
     // }
     
-    // Result->Write();
-    // file->Write();
+    // cout<<Result->Integral(0,5)<<endl;
+    // Result->Write("h_Good_Mass");
+    // // file->Write();
     // file->Close();
 
-    TFile *file = new TFile("HADDr.root", "RECREATE");
     
-    TH1F* Result;
+    
+    TH1F* Result,Temp;
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
     int Itr = 0;
@@ -73,20 +75,21 @@ void HADDr()
         filename+=i;
         filename+=".root";
 
-            cout<<"FUCK"<<endl;
+        cout<<"FUCK"<<endl;
         TFile *fileR = TFile::Open(filename);
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
         if (Itr == 0) {
             Result = (TH1F*)h1->Clone();
         }
         else{
-            Result->Add((TH1F*)h1->Clone());
+            Temp = (TH1F*)h1->Clone();
+            Result->Add(Temp);
         }
         fileR->Close();
         cout<<Itr<<endl;
         Itr++;
     }
-    
+    TFile *file = new TFile("HADDr.root", "RECREATE");
     cout<<Result->Integral(0,5)<<endl;
     Result->Write("h_Good_Mass");
     // file->Write();
