@@ -36,7 +36,7 @@ void HADDr()
 
     // TFile *file = new TFile("HADDr.root", "RECREATE");
     
-    // TH1F* Result;
+    // TH1F* Result1;
     // TString midname = "/star/data01/pwg/svianping/output/output_";
 
     // int Itr = 0;
@@ -49,27 +49,28 @@ void HADDr()
     //     TFile *fileR = TFile::Open(filename);
     //     TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
     //     if (Itr == 0) {
-    //         Result = (TH1F*)h1->Clone();
+    //         Result1 = (TH1F*)h1->Clone();
     //     }
     //     else{
-    //         Result->Add((TH1F*)h1->Clone());
+    //         Result1->Add((TH1F*)h1->Clone());
     //     }
     //     fileR->Close();
     //     cout<<Itr<<endl;
     //     Itr++;
     // }
     
-    // cout<<Result->Integral(0,5)<<endl;
-    // Result->Write("h_Good_Mass");
+    // cout<<Result1->Integral(0,5)<<endl;
+    // Result1->Write("h_Good_Mass");
     // // file->Write();
     // file->Close();
 
 //////////////////////////////////////////////////////////////////////////////
     
-    // TH1F* Result,Temp;
+    // TH1F* Result1,Temp;
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
-    TList *list = new TList;
+    TList *list1 = new TList;
+    TList *list2 = new TList;
     int Itr = 0;
     for(int i=65690;i <= 66389;i++){ // 66389
         TString filename = midname;
@@ -79,31 +80,37 @@ void HADDr()
         // cout<<"FUCK"<<endl;
         TFile *fileR = TFile::Open(filename);
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
-        list->Add(h1);
+        TH1F* h2 = (TH1F*)fileR->Get("h_Bad_Mass");
+        list1->Add(h1);
+        list2->Add(h2);
         // if (Itr == 0) {
-        //     Result = (TH1F*)h1->Clone();
+        //     Result1 = (TH1F*)h1->Clone();
         // }
         // else{
         //     Temp = (TH1F*)h1->Clone();
-        //     Result->Add(Result,Temp,1.0,1.0);
+        //     Result1->Add(Result1,Temp,1.0,1.0);
         // }
-        // cout<<Itr<<" : "<<Result->Integral(1,1000)<<endl;
+        // cout<<Itr<<" : "<<Result1->Integral(1,1000)<<endl;
         // fileR->Close();
         Itr++;
     }
-    TH1F *Result = (TH1F*)h1->Clone("h_Good_Mass_Merged");
-    Result->Reset();
-    Result->Merge(list);
+    TH1F *Result1 = (TH1F*)h1->Clone("h_Good_Mass_Merged");
+    TH1F *Result2 = (TH1F*)h2->Clone("h_Bad_Mass_Merged");
+    Result1->Reset();
+    Result1->Merge(list1);
+    Result2->Reset();
+    Result2->Merge(list1);
     TFile *file = new TFile("HADDr.root", "RECREATE");
-    cout<<Result->Integral(1,1000)<<endl;
-    Result->Write("h_Good_Mass_Merged");
+    cout<<Result1->Integral(1,1000)<<endl;
+    Result1->Write("h_Good_Mass_Merged");
+    Result2->Write("h_Bad_Mass_Merged");
     // file->Write();
     file->Close();
 
 //////////////////////////////////////////////////////////////////////////////
 
     // TString midname = "/star/data01/pwg/svianping/output/output_";
-    // TH1F* Result,Temp;
+    // TH1F* Result1,Temp;
     // for(int i=65690;i <= 66389;i++){
     //     TString filename = midname;
     //     filename+=i;
