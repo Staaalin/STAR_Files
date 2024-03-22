@@ -99,7 +99,7 @@ void HADDr()
     Result1->Reset();
     Result1->Merge(list1);
     Result2->Reset();
-    Result2->Merge(list1);
+    Result2->Merge(list2);
     TFile *file = new TFile("HADDr.root", "RECREATE");
     cout<<Result1->Integral(1,1000)<<endl;
     Result1->Write("h_Good_Mass_Merged");
