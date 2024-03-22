@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job simulateSubmission ="false" maxFilesPerProcess ="3" fileListSyntax="xrootd">
+<command>/star/u/svianping/STAR_Files/RootFile/readTree.C</command>
+<stdout URL="file:/star/u/svianping/STAR_Files/KFParticle4Lambda/log/script_readTree.out" />
+</job>
