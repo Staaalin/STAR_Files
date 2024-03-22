@@ -88,7 +88,7 @@ void HADDr()
     }
     
     Result->Write("h_Good_Mass");
-    file->Write();
+    // file->Write();
     // file->Close();
 
     return;
