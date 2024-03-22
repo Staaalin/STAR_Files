@@ -34,6 +34,34 @@ using namespace std;
 void HADDr()
 {
     
+    // TFile *file = new TFile("HADDr.root", "RECREATE");
+    
+    // TH1F* Result;
+    // TString midname = "/star/data01/pwg/svianping/output/output_";
+
+    // int Itr = 0;
+    // for(int i=65690;i <= 66389;i++){
+    //     TString filename = midname;
+    //     filename+=i;
+    //     filename+=".root";
+
+    //     TFile *fileR = new TFile(filename, "READ");
+    //     TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
+    //     if (Itr == 0) {
+    //         Result = (TH1F*)h1->Clone();
+    //     }
+    //     else{
+    //         Result->Add((TH1F*)h1->Clone());
+    //     }
+    //     fileR->Close();
+    //     Itr++;
+    //     cout<<Itr<<endl;
+    // }
+    
+    // Result->Write();
+    // file->Write();
+    // file->Close();
+
     TFile *file = new TFile("HADDr.root", "RECREATE");
     
     TH1F* Result;
@@ -45,7 +73,7 @@ void HADDr()
         filename+=i;
         filename+=".root";
 
-        TFile *fileR = new TFile(filename, "READ");
+        TFile *fileR = TFile::Open(filename);
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
         if (Itr == 0) {
             Result = (TH1F*)h1->Clone();
