@@ -73,9 +73,9 @@ void HADDr()
         filename+=i;
         filename+=".root";
 
+            cout<<"FUCK"<<endl;
         TFile *fileR = TFile::Open(filename);
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
-            cout<<"FUCK"<<endl;
         if (Itr == 0) {
             Result = (TH1F*)h1->Clone();
         }
