@@ -80,6 +80,7 @@ void HADDr()
         }
         else{
             Result->Add((TH1F*)h1->Clone());
+            cout<<"FUCK"<<endl;
         }
         fileR->Close();
         Itr++;
