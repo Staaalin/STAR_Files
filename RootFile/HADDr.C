@@ -72,7 +72,8 @@ void HADDr()
     TList *list1 = new TList;
     TList *list2 = new TList;
     int Itr = 0;
-    for(int i=65690;i <= 66389;i++){ // 66389
+    for(int i=65990;i <= 66389;i++){ // 66389
+        if (i == 66381){continue;}
         TString filename = midname;
         filename+=i;
         filename+=".root";
