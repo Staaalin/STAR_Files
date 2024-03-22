@@ -66,7 +66,7 @@ void HADDr()
 
 //////////////////////////////////////////////////////////////////////////////
     
-    // TH1F* Result,Temp;
+    TH1F* Result,Temp;
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
     TList *list = new TList;
@@ -79,20 +79,18 @@ void HADDr()
         cout<<"FUCK"<<endl;
         TFile *fileR = TFile::Open(filename);
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
-        list->Add(h1);
-        // if (Itr == 0) {
-        //     Result = (TH1F*)h1->Clone();
-        // }
-        // else{
-        //     Temp = (TH1F*)h1->Clone();
-        //     Result->Add(Result,Temp,1.0,1.0);
-        // }
+        Temp = (TH1F*)h1->Clone("h_Good_Mass");
+        if (Itr == 0) {
+            Result = (TH1F*)Temp->Clone("h_Good_Mass");
+            Result->Reset();
+        }
+        list->Add(Temp);
         // cout<<Itr<<" : "<<Result->Integral(1,1000)<<endl;
         fileR->Close();
         Itr++;
     }
-    TH1F *Result = (TH1F*)h1->Clone("h");
-    Result->Reset();
+    // Result = (TH1F*)h1->Clone("h");
+    // Result->Reset();
     Result->Merge(list);
     TFile *file = new TFile("HADDr.root", "RECREATE");
     cout<<Result->Integral(0,1000)<<endl;
