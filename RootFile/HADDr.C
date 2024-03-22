@@ -55,7 +55,7 @@ void HADDr()
         }
         fileR->Close();
         Itr++;
-        if (Itr/10 == 0){cout<<Itr<<endl;}
+        cout<<Itr<<endl;
     }
     
     Result->Write();
