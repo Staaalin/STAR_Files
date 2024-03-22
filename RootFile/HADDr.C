@@ -71,12 +71,12 @@ void HADDr()
 
     TList *list = new TList;
     int Itr = 0;
-    for(int i=65690;i <= 65693;i++){ // 66389
+    for(int i=65690;i <= 66389;i++){ // 66389
         TString filename = midname;
         filename+=i;
         filename+=".root";
 
-        cout<<"FUCK"<<endl;
+        // cout<<"FUCK"<<endl;
         TFile *fileR = TFile::Open(filename);
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
         list->Add(h1);
@@ -91,12 +91,12 @@ void HADDr()
         // fileR->Close();
         Itr++;
     }
-    TH1F *Result = (TH1F*)h1->Clone("h");
+    TH1F *Result = (TH1F*)h1->Clone("h_Good_Mass_Merged");
     Result->Reset();
     Result->Merge(list);
     TFile *file = new TFile("HADDr.root", "RECREATE");
-    cout<<Result->Integral(0,1000)<<endl;
-    Result->Write("h_Good_Mass");
+    cout<<Result->Integral(1,1000)<<endl;
+    Result->Write("h_Good_Mass_Merged");
     // file->Write();
     file->Close();
 
