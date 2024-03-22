@@ -85,8 +85,8 @@ void HADDr()
             Temp = (TH1F*)h1->Clone();
             Result->Add(Temp);
         }
+        cout<<Itr<<" : "<<Result->Integral(0,5)<<endl;
         fileR->Close();
-        cout<<Itr<<endl;
         Itr++;
     }
     TFile *file = new TFile("HADDr.root", "RECREATE");
