@@ -655,6 +655,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
+		StPicoPhysicalHelix* cTrackI = (StPicoPhysicalHelix*)mTrackI->helix(magnet);
+		StPicoPhysicalHelix* cTrackK = (StPicoPhysicalHelix*)mTrackK->helix(magnet);
 		if (particle.GetPDG() == LambdaPdg){
 			pair<std::vector<double> , std::vector<double>>RV = mTrackI->pathLengths(mTrackK , 0.1 , 0.1)
 			TVector3 LTrackI = LocAfterTransfer(mTrackI , RV.first);
@@ -1218,7 +1220,7 @@ int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , 
 	}
 }
 
-TVector3 StKFParticleAnalysisMaker::LocAfterTransfer(StPicoTrack* Track , double Length){
+TVector3 StKFParticleAnalysisMaker::LocAfterTransfer(StPicoPhysicalHelix* Track , double Length){
 	if (Track.mSingularity){
 		// Stright Line
 		TVector3 Position;
@@ -1240,3 +1242,8 @@ double StKFParticleAnalysisMaker::DistanceBetween(TVector3 LA , TVector3 LB){
 	double Dis = pow(rX*rX + rY*rY + rZ*rZ,0.5);
 	return Dis;
 }
+
+// StPicoHelix StKFParticleAnalysisMaker::StPicoTrack2StPicoHelix(StPicoTrack* Track){
+// 	StPicoHelix Result;
+// 	Result.setParameters(Double_t c, Double_t dip, Double_t phase,const TVector3& o, Int_t h)
+// }
