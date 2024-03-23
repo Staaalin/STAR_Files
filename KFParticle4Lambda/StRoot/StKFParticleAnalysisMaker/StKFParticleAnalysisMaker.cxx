@@ -658,10 +658,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 		StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
 		StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
 		if (particle.GetPDG() == LambdaPdg){
-			// pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
-			// TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
-			// TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);geometricSignedDistance(const TVector3& pos)
-			// hHM_ParentDCA->Fill(particle.GetMass(),DistanceBetween(LTrackI , LTrackK));
+			pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
+			TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
+			TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
 			hHM_ParentDCA->Fill(particle.GetMass(),DistanceBetween(LTrackI , LTrackK));
 		}
 
