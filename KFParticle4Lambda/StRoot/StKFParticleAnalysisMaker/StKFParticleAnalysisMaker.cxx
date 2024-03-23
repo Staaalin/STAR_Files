@@ -658,7 +658,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
 		StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
 		if (particle.GetPDG() == LambdaPdg){
-			pair<std::vector<double> , std::vector<double>>RV = cTrackI->pathLengths(cTrackK , 0.1 , 0.1)
+			pair<std::vector<Double_t> , std::vector<Double_t>>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1)
 			TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
 			TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
 			hHM_ParentDCA->Fill(particle.GetMass(),DistanceBetween(LTrackI , LTrackK));
@@ -1220,7 +1220,7 @@ int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , 
 	}
 }
 
-TVector3 StKFParticleAnalysisMaker::LocAfterTransfer(StPicoPhysicalHelix* Track , Double_t Length){
+TVector3 StKFParticleAnalysisMaker::LocAfterTransfer(StPicoPhysicalHelix Track , Double_t Length){
 	if (Track.mSingularity){
 		// Stright Line
 		TVector3 Position;
