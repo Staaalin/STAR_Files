@@ -249,7 +249,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_GOOD_Mass->GetXaxis()->SetTitle("Mass [GeV]");
 	H_BAD_Mass->GetXaxis()->SetTitle("Mass [GeV]");
 
-	hHM_ParentDCA = new TH2D("hH_M_ParentDCA","The DCA between parent particles vs. Mass",     2000,0,5,500,0,1500);
+	hHM_ParentDCA = new TH2D("hH_M_ParentDCA","The DCA between parent particles vs. Mass",     2000,0,5,500,0,5);
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
