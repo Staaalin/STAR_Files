@@ -655,8 +655,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
-		StPicoPhysicalHelix* cTrackI = (StPicoPhysicalHelix*)mTrackI->helix(magnet);
-		StPicoPhysicalHelix* cTrackK = (StPicoPhysicalHelix*)mTrackK->helix(magnet);
+		StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
+		StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
 		if (particle.GetPDG() == LambdaPdg){
 			pair<std::vector<double> , std::vector<double>>RV = mTrackI->pathLengths(mTrackK , 0.1 , 0.1)
 			TVector3 LTrackI = LocAfterTransfer(mTrackI , RV.first);
