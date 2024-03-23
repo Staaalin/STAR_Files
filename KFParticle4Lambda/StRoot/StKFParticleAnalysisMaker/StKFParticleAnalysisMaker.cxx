@@ -662,6 +662,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
 			TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
 			hHM_ParentDCA->Fill(particle.GetMass(),DistanceBetween(LTrackI , LTrackK));
+			cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
 		}
 
 		
