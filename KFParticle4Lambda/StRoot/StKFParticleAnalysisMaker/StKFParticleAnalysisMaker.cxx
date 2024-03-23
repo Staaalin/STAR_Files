@@ -658,9 +658,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 		StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
 		StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
 		if (particle.GetPDG() == LambdaPdg){
-			pair<std::vector<Double_t> , std::vector<Double_t>>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1)
-			TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
-			TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
+			// pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
+			// TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
+			// TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);geometricSignedDistance(const TVector3& pos)
+			// hHM_ParentDCA->Fill(particle.GetMass(),DistanceBetween(LTrackI , LTrackK));
 			hHM_ParentDCA->Fill(particle.GetMass(),DistanceBetween(LTrackI , LTrackK));
 		}
 
@@ -1227,10 +1228,10 @@ TVector3 StKFParticleAnalysisMaker::LocAfterTransfer(StPicoPhysicalHelix Track ,
 		return Position;
 	}
 	else{
-		double dPhase = 2*3.1415926535897932384626433*(Length*Track.mCosDipAngle)*Track.curvature();
-		TVector3 Position(cos(Track.mPhase + dPhase)*Track.curvature() + (Track.mOrigin).x(),
-						  sin(Track.mPhase + dPhase)*Track.curvature() + (Track.mOrigin).y(),
-						  Length*Track.mSinDipAngle + (Track.mOrigin).z());
+		double dPhase = 2*3.1415926535897932384626433*(Length*cos(Track.dipAngle()))*Track.curvature();
+		TVector3 Position(cos(Track.phase() + dPhase)*Track.curvature() + Track.xcenter(),
+						  sin(Track.phase() + dPhase)*Track.curvature() + Track.ycenter(),
+						  Length*sin(Track.dipAngle()) + (Track.origin()).z());
 		return Position;
 	}
 }
