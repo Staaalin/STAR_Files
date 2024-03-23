@@ -1221,18 +1221,11 @@ int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , 
 }
 
 TVector3 StKFParticleAnalysisMaker::LocAfterTransfer(StPicoPhysicalHelix Track , Double_t Length){
-	if (Track.mSingularity){
-		// Stright Line
-		TVector3 Position;
-		return Position;
-	}
-	else{
-		double dPhase = 2*3.1415926535897932384626433*(Length*cos(Track.dipAngle()))*Track.curvature();
-		TVector3 Position(cos(Track.phase() + dPhase)*Track.curvature() + Track.xcenter(),
-						  sin(Track.phase() + dPhase)*Track.curvature() + Track.ycenter(),
-						  Length*sin(Track.dipAngle()) + (Track.origin()).z());
-		return Position;
-	}
+	double dPhase = 2*3.1415926535897932384626433*(Length*cos(Track.dipAngle()))*Track.curvature();
+	TVector3 Position(cos(Track.phase() + dPhase)*Track.curvature() + Track.xcenter(),
+						sin(Track.phase() + dPhase)*Track.curvature() + Track.ycenter(),
+						Length*sin(Track.dipAngle()) + (Track.origin()).z());
+	return Position;
 }
 
 double StKFParticleAnalysisMaker::DistanceBetween(TVector3 LA , TVector3 LB){
