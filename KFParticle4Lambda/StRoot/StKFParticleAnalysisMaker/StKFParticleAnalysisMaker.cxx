@@ -655,7 +655,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
-		pair<std::vector<double> , std::vector<double>>RV = mTrackI->pathLengths(mTrackK , 0.1 , 0.1)
+		if (particle.GetPDG() == LambdaPdg){
+			pair<std::vector<double> , std::vector<double>>RV = mTrackI->pathLengths(mTrackK , 0.1 , 0.1)
+			TVector3 LTrackI = LocAfterTransfer(mTrackI , RV.first);
+			TVector3 LTrackK = LocAfterTransfer(mTrackK , RV.second);
+			hHM_ParentDCA->Fill(particle.GetMass(),DistanceBetween(LTrackI , LTrackK));
+		}
 
 		
 		mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
@@ -1211,4 +1216,27 @@ int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , 
 	else{
 		return 0; // Failed to identify
 	}
+}
+
+TVector3 StKFParticleAnalysisMaker::LocAfterTransfer(StPicoTrack* Track , double Length){
+	if (Track.mSingularity){
+		// Stright Line
+		TVector3 Position;
+		return Position;
+	}
+	else{
+		double dPhase = 2*3.1415926535897932384626433*(Length*Track.mCosDipAngle)*Track.curvature();
+		TVector3 Position(cos(Track.mPhase + dPhase)*Track.curvature() + (Track.mOrigin).x(),
+						  sin(Track.mPhase + dPhase)*Track.curvature() + (Track.mOrigin).y(),
+						  Length*Track.mSinDipAngle + (Track.mOrigin).z());
+		return Position;
+	}
+}
+
+double StKFParticleAnalysisMaker::DistanceBetween(TVector3 LA , TVector3 LB){
+	double rX = (LA.x() - LB.x());
+	double rY = (LA.y() - LB.y());
+	double rZ = (LA.z() - LB.z());
+	double Dis = pow(rX*rX + rY*rY + rZ*rZ,0.5);
+	return Dis;
 }

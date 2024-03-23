@@ -69,6 +69,8 @@ private:
 	bool IsTrackParticleDaughter(KFParticle particle, int TrackId);
 	void SetDaughterTrackHits(KFParticle particle);
 	int TrackID(StPicoTrack *track , TVector3 Vertex3D , double magnet , bool Track_has_tof , float m2 = -999. , float beta = -999.);
+	TVector3 StKFParticleAnalysisMaker::LocAfterTransfer(StPicoTrack* Track , double Length);
+	double StKFParticleAnalysisMaker::DistanceBetween(TVector3 LA , TVector3 LB);
 	bool InterfaceCantProcessEvent;
 	int ProtonTrackIndex, PionTrackIndex, KaonTrackIndex;
 	vector<int> trackMap;
