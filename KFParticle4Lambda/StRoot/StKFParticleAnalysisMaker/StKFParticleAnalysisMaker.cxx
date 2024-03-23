@@ -1222,7 +1222,7 @@ int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , 
 }
 
 TVector3 StKFParticleAnalysisMaker::LocAfterTransfer(StPicoPhysicalHelix Track , Double_t Length){
-	double dPhase = 2*3.1415926535897932384626433*(Length*cos(Track.dipAngle()))/(2*3.1415926535897932384626433/Track.curvature());
+	double dPhase = (Length*cos(Track.dipAngle()))/(1/Track.curvature());
 	TVector3 Position(cos(Track.phase() + dPhase)*Track.curvature() + Track.xcenter(),
 						sin(Track.phase() + dPhase)*Track.curvature() + Track.ycenter(),
 						Length*sin(Track.dipAngle()) + (Track.origin()).z());
