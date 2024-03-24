@@ -83,7 +83,7 @@ void HADDr()
         TFile *fileR = TFile::Open(filename);
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
         TH1F* h2 = (TH1F*)fileR->Get("h_Bad_Mass");
-        TH1F* h3 = (TH1F*)fileR->Get("hHM_ParentDCA");
+        TH2D* h3 = (TH2D*)fileR->Get("hHM_ParentDCA");
         list1->Add(h1);
         list2->Add(h2);
         list3->Add(h3);
@@ -100,7 +100,7 @@ void HADDr()
     }
     TH1F *Result1 = (TH1F*)h1->Clone("h_Good_Mass_Merged");
     TH1F *Result2 = (TH1F*)h2->Clone("h_Bad_Mass_Merged");
-    TH1F *Result3 = (TH1F*)h3->Clone("hHM_ParentDCA_Merged");
+    TH2D *Result3 = (TH2D*)h3->Clone("hHM_ParentDCA_Merged");
     Result1->Reset();
     Result1->Merge(list1);
     Result2->Reset();
