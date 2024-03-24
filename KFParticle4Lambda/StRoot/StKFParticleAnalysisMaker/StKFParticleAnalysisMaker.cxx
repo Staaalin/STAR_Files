@@ -253,6 +253,23 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
+	H_DaughterDCA_LitP1_Mass = new TH1F("H_DaughterDCA_LitP1_Mass","Lambda those Daughter DCA < 0.1 cm",10000,0,5);
+	H_DaughterDCA_LitP2_Mass = new TH1F("H_DaughterDCA_LitP2_Mass","Lambda those Daughter DCA < 0.2 cm",10000,0,5);
+	H_DaughterDCA_LitP3_Mass = new TH1F("H_DaughterDCA_LitP3_Mass","Lambda those Daughter DCA < 0.3 cm",10000,0,5);
+	H_DaughterDCA_LitP4_Mass = new TH1F("H_DaughterDCA_LitP3_Mass","Lambda those Daughter DCA < 0.4 cm",10000,0,5);
+	H_DaughterDCA_LitP5_Mass = new TH1F("H_DaughterDCA_LitP3_Mass","Lambda those Daughter DCA < 0.5 cm",10000,0,5);
+	H_DaughterDCA_LitP6_Mass = new TH1F("H_DaughterDCA_LitP3_Mass","Lambda those Daughter DCA < 0.6 cm",10000,0,5);
+	H_DaughterDCA_LitP8_Mass = new TH1F("H_DaughterDCA_LitP3_Mass","Lambda those Daughter DCA < 0.8 cm",10000,0,5);
+	H_DaughterDCA_NOLIM_Mass = new TH1F("H_DaughterDCA_LitP3_Mass","Lambda those Daughter DCA no limite",10000,0,5);
+	H_DaughterDCA_LitP1_Mass->GetXaxis()->SetTitle("Mass [GeV]");
+	H_DaughterDCA_LitP2_Mass->GetXaxis()->SetTitle("Mass [GeV]");
+	H_DaughterDCA_LitP3_Mass->GetXaxis()->SetTitle("Mass [GeV]");
+	H_DaughterDCA_LitP4_Mass->GetXaxis()->SetTitle("Mass [GeV]");
+	H_DaughterDCA_LitP5_Mass->GetXaxis()->SetTitle("Mass [GeV]");
+	H_DaughterDCA_LitP6_Mass->GetXaxis()->SetTitle("Mass [GeV]");
+	H_DaughterDCA_LitP8_Mass->GetXaxis()->SetTitle("Mass [GeV]");
+	H_DaughterDCA_NOLIM_Mass->GetXaxis()->SetTitle("Mass [GeV]");
+
 	Recorded_events = 0;
 
 	cout << "-----------------------------------------" << endl;
@@ -287,12 +304,21 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hdEdx_pQ_2cut->Write();
 
 	// hLN_M->Write();
-	hXY->Write();
-	hHXY->Write();
-	hHM_Chi2->Write();
-	H_GOOD_Mass->Write();
-	H_BAD_Mass ->Write();
+	// hXY->Write();
+	// hHXY->Write();
+	// hHM_Chi2->Write();
+	// H_GOOD_Mass->Write();
+	// H_BAD_Mass ->Write();
 	hHM_ParentDCA->Write();
+	
+	H_DaughterDCA_LitP1_Mass->Write();
+	H_DaughterDCA_LitP2_Mass->Write();
+	H_DaughterDCA_LitP3_Mass->Write();
+	H_DaughterDCA_LitP4_Mass->Write();
+	H_DaughterDCA_LitP5_Mass->Write();
+	H_DaughterDCA_LitP6_Mass->Write();
+	H_DaughterDCA_LitP8_Mass->Write();
+	H_DaughterDCA_NOLIM_Mass->Write();
 
 	return;
 }
@@ -663,8 +689,17 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
 			TVector3 LTrackI = cTrackI.at(RV.first);
 			TVector3 LTrackK = cTrackK.at(RV.second);
-			hHM_ParentDCA->Fill(particle.GetMass(),DistanceBetween(LTrackI , LTrackK));
-			cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
+			double TrackDCA = DistanceBetween(LTrackI , LTrackK);
+			hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
+			if      (TrackDCA < 0.1) {H_DaughterDCA_LitP1_Mass->Fill(particle.GetMass());}
+			else if (TrackDCA < 0.2) {H_DaughterDCA_LitP2_Mass->Fill(particle.GetMass());}
+			else if (TrackDCA < 0.3) {H_DaughterDCA_LitP3_Mass->Fill(particle.GetMass());}
+			else if (TrackDCA < 0.4) {H_DaughterDCA_LitP4_Mass->Fill(particle.GetMass());}
+			else if (TrackDCA < 0.5) {H_DaughterDCA_LitP5_Mass->Fill(particle.GetMass());}
+			else if (TrackDCA < 0.6) {H_DaughterDCA_LitP6_Mass->Fill(particle.GetMass());}
+			else if (TrackDCA < 0.8) {H_DaughterDCA_LitP8_Mass->Fill(particle.GetMass());}
+			else                     {H_DaughterDCA_NOLIM_Mass->Fill(particle.GetMass());}
+			// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
 		}
 
 		

@@ -118,6 +118,16 @@ private:
 	TH1F *H_GOOD_Mass;
 	TH1F *H_BAD_Mass;
 
+	TH1F *H_DaughterDCA_LitP1_Mass;// Those Daughter DCA < 0.1 cm
+	TH1F *H_DaughterDCA_LitP2_Mass;// Those Daughter DCA < 0.2 cm
+	TH1F *H_DaughterDCA_LitP3_Mass;// Those Daughter DCA < 0.3 cm
+	TH1F *H_DaughterDCA_LitP4_Mass;// Those Daughter DCA < 0.4 cm
+	TH1F *H_DaughterDCA_LitP5_Mass;// Those Daughter DCA < 0.5 cm
+	TH1F *H_DaughterDCA_LitP6_Mass;// Those Daughter DCA < 0.6 cm
+	TH1F *H_DaughterDCA_LitP8_Mass;// Those Daughter DCA < 0.8 cm
+	TH1F *H_DaughterDCA_NOLIM_Mass;// No Daughter limite
+
+
 	TH2D *hdEdx_pQ;
 	TH2D *hdEdx_pQ_1cut;
 	TH2D *hdEdx_pQ_2cut;
