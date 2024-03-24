@@ -83,7 +83,7 @@ void HADDr()
         TFile *fileR = TFile::Open(filename);
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
         TH1F* h2 = (TH1F*)fileR->Get("h_Bad_Mass");
-        TH2D* h3 = (TH2D*)fileR->Get("hHM_ParentDCA");
+        TH2D* h3 = (TH2D*)fileR->GetPrimitive("hHM_ParentDCA");
         list1->Add(h1);
         list2->Add(h2);
         list3->Add(h3);

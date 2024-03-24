@@ -11,6 +11,7 @@
         "vector": "cpp",
         "analysis.C": "cpp",
         "kfpAnalysis.C": "cpp",
-        "HADDr.C": "cpp"
+        "HADDr.C": "cpp",
+        "read_TH2D.C": "cpp"
     }
 }
