@@ -71,9 +71,10 @@ void HADDr()
 
     TList *list1 = new TList;
     TList *list2 = new TList;
+    TList *list3 = new TList;
     int Itr = 0;
-    for(int i=65990;i <= 66389;i++){ // 66389
-        if (i == 66381){continue;}
+    for(int i=66090;i <= 66389;i++){ // 66389
+        // if (i == 66381){continue;}
         TString filename = midname;
         filename+=i;
         filename+=".root";
@@ -82,8 +83,10 @@ void HADDr()
         TFile *fileR = TFile::Open(filename);
         TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
         TH1F* h2 = (TH1F*)fileR->Get("h_Bad_Mass");
+        TH1F* h3 = (TH1F*)fileR->Get("hHM_ParentDCA");
         list1->Add(h1);
         list2->Add(h2);
+        list3->Add(h3);
         // if (Itr == 0) {
         //     Result1 = (TH1F*)h1->Clone();
         // }
@@ -97,14 +100,18 @@ void HADDr()
     }
     TH1F *Result1 = (TH1F*)h1->Clone("h_Good_Mass_Merged");
     TH1F *Result2 = (TH1F*)h2->Clone("h_Bad_Mass_Merged");
+    TH1F *Result3 = (TH1F*)h3->Clone("hHM_ParentDCA_Merged");
     Result1->Reset();
     Result1->Merge(list1);
     Result2->Reset();
     Result2->Merge(list2);
+    Result3->Reset();
+    Result3->Merge(list3);
     TFile *file = new TFile("HADDr.root", "RECREATE");
     cout<<Result1->Integral(1,1000)<<endl;
     Result1->Write("h_Good_Mass_Merged");
     Result2->Write("h_Bad_Mass_Merged");
+    Result3->Write("hHM_ParentDCA_Merged");
     // file->Write();
     file->Close();
 
