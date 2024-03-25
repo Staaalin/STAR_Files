@@ -113,6 +113,7 @@ void HADDr()
         // cout<<Itr<<" : "<<Result1->Integral(1,1000)<<endl;
         // fileR->Close();
         Itr++;
+        delete fileR;
     }
     TH1F *Result1 = (TH1F*)h1->Clone("H_DaughterDCA_LitP1_Mass_merge");
     TH1F *Result2 = (TH1F*)h2->Clone("H_DaughterDCA_LitP2_Mass_merge");
