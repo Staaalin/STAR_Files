@@ -108,14 +108,14 @@ void cHADD()
 
     auto c1 = new TCanvas("c1","c1",600,500);
     gStyle->SetOptStat(0);
-    Result1->SetFillColor(kRed);
-    Result2->SetFillColor(kGreen);
-    Result3->SetFillColor(kBlue);
-    Result4->SetFillColor(kYellow);
-    Result5->SetFillColor(kMagenta);
-    Result6->SetFillColor(kCyan);
+    Result1->SetFillColor(2);
+    Result2->SetFillColor(3);
+    Result3->SetFillColor(4);
+    Result4->SetFillColor(5);
+    Result5->SetFillColor(6);
+    Result6->SetFillColor(7);
     Result7->SetFillColor(8);
-    Result8->SetFillColor(kBlack);
+    Result8->SetFillColor(1);
 
     Result8->Draw();
     Result7->Draw();
