@@ -80,8 +80,8 @@ void HADDr()
     TH1F *Result4 = (TH1F*)h4->Clone("H_DaughterDCA_LitP4_Mass_merge");
     TH1F *Result5 = (TH1F*)h5->Clone("H_DaughterDCA_LitP5_Mass_merge");
     TH1F *Result6 = (TH1F*)h6->Clone("H_DaughterDCA_LitP6_Mass_merge");
-    TH1F *Result7 = (TH1F*)h7->Clone("H_DaughterDCA_LitP8_Mass_merge");
-    TH1F *Result8 = (TH1F*)h8->Clone("H_DaughterDCA_NOLIM_Mass_merge");
+    TH1F *Result7 = (TH1F*)h8->Clone("H_DaughterDCA_LitP8_Mass_merge");
+    TH1F *Result8 = (TH1F*)h9->Clone("H_DaughterDCA_NOLIM_Mass_merge");
     Result1->Reset();
     Result1->Merge(list1);
     Result2->Reset();
