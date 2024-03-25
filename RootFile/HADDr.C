@@ -43,6 +43,7 @@ void HADDr()
     TList *list6 = new TList;
     TList *list7 = new TList;
     TList *list8 = new TList;
+    TFile *fileR;
     int Itr = 0;
     for(int i=62690;i <= 66389;i++){ // 66389
         // if (i == 66381){continue;}
@@ -52,7 +53,8 @@ void HADDr()
 
         // cout<<"FUCK"<<endl;
         // TFile *fileR = TFile::Open(filename);
-        TFile *fileR = new TFile(filename,"read");
+        // TFile *fileR = new TFile(filename,"read");
+        fileR = (*TFile)TFile::Open(filename,"read");
         TH1F* h1 = (TH1F*)fileR->Get("H_DaughterDCA_LitP1_Mass");
         TH1F* h2 = (TH1F*)fileR->Get("H_DaughterDCA_LitP2_Mass");
         TH1F* h3 = (TH1F*)fileR->Get("H_DaughterDCA_LitP3_Mass");
@@ -70,6 +72,8 @@ void HADDr()
         list7->Add(h7);
         list8->Add(h8);
         Itr++;
+        fileR->Close();
+        // delete fileR;
     }
     TH1F *Result1 = (TH1F*)h1->Clone("H_DaughterDCA_LitP1_Mass_merge");
     TH1F *Result2 = (TH1F*)h2->Clone("H_DaughterDCA_LitP2_Mass_merge");
