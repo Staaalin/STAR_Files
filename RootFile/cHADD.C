@@ -32,7 +32,7 @@
 using namespace std;
 
 // void HADDr(int from_FileID,int to_FIleID)
-void cHADDr()
+void cHADD()
 {
     TString midname = "/star/u/svianping/STAR_Files/RootFile/HADDr";
 
