@@ -105,6 +105,39 @@ void cHADD()
     Result6->Write("H_DaughterDCA_LitP6_Mass_Merge");
     Result7->Write("H_DaughterDCA_LitP8_Mass_Merge");
     Result8->Write("H_DaughterDCA_NOLIM_Mass_Merge");
+
+    auto c1 = new TCanvas("c1","c1",600,500);
+    gStyle->SetOptStat(0);
+    Result1->SetFillColor(kRed);
+    Result2->SetFillColor(kGreen);
+    Result3->SetFillColor(kBlue);
+    Result4->SetFillColor(kYellow);
+    Result5->SetFillColor(kMagenta);
+    Result6->SetFillColor(kCyan);
+    Result7->SetFillColor(8);
+    Result8->SetFillColor(kBlack);
+
+    Result8->Draw();
+    Result7->Draw();
+    Result6->Draw();
+    Result5->Draw();
+    Result4->Draw();
+    Result3->Draw();
+    Result2->Draw();
+    Result1->Draw();
+
+    auto legend = new TLegend(0.1,0.7,0.48,0.9);
+    legend->SetHeader("The DCA between Daughts vs. Lambda mass","C"); // option "C" allows to center the header
+    legend->AddEntry(h1,"DCA < 0.1","f");
+    legend->AddEntry(h2,"DCA < 0.2","f");
+    legend->AddEntry(h3,"DCA < 0.3","f");
+    legend->AddEntry(h4,"DCA < 0.4","f");
+    legend->AddEntry(h5,"DCA < 0.5","f");
+    legend->AddEntry(h6,"DCA < 0.6","f");
+    legend->AddEntry(h7,"DCA < 0.8","f");
+    legend->AddEntry(h8,"DCA no limit","f");
+    legend->Draw();
+
     file->Close();
 
 //////////////////////////////////////////////////////////////////////////////
