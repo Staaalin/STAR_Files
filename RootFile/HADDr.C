@@ -31,7 +31,8 @@
 #include <stdio.h>
 using namespace std;
 
-void HADDr(int from_FileID,int to_FIleID)
+// void HADDr(int from_FileID,int to_FIleID)
+void HADDr()
 {
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
@@ -45,7 +46,8 @@ void HADDr(int from_FileID,int to_FIleID)
     TList *list8 = new TList;
     TFile *fileR;
     int Itr = 0;
-    for(int i=from_FileID;i <= to_FIleID;i++){ // 62690 ~ 66389
+    // for(int i=from_FileID;i <= to_FIleID;i++){ // 62690 ~ 66389
+    for(int i=62690;i <= 66389;i++){ // 62690 ~ 66389
         // if (i == 66381){continue;}
         TString filename = midname;
         filename+=i;

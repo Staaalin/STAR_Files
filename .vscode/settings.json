@@ -12,6 +12,11 @@
         "analysis.C": "cpp",
         "kfpAnalysis.C": "cpp",
         "HADDr.C": "cpp",
-        "read_TH2D.C": "cpp"
+        "read_TH2D.C": "cpp",
+        "tut26.C": "cpp",
+        "tut25.C": "cpp",
+        "tut24.C": "cpp",
+        "tut23.C": "cpp",
+        "tut22.C": "cpp"
     }
 }
