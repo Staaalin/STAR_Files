@@ -54,7 +54,7 @@ void HADDr()
         // cout<<"FUCK"<<endl;
         // TFile *fileR = TFile::Open(filename);
         // TFile *fileR = new TFile(filename,"read");
-        fileR = (*TFile)TFile::Open(filename,"read");
+        fileR = TFile::Open(filename,"read");
         TH1F* h1 = (TH1F*)fileR->Get("H_DaughterDCA_LitP1_Mass");
         TH1F* h2 = (TH1F*)fileR->Get("H_DaughterDCA_LitP2_Mass");
         TH1F* h3 = (TH1F*)fileR->Get("H_DaughterDCA_LitP3_Mass");
