@@ -118,13 +118,13 @@ void cHADD()
     Result8->SetFillColor(1);
 
     Result8->Draw();
-    Result7->Draw();
-    Result6->Draw();
-    Result5->Draw();
-    Result4->Draw();
-    Result3->Draw();
-    Result2->Draw();
-    Result1->Draw();
+    Result7->Draw("sames");
+    Result6->Draw("sames");
+    Result5->Draw("sames");
+    Result4->Draw("sames");
+    Result3->Draw("sames");
+    Result2->Draw("sames");
+    Result1->Draw("sames");
 
     auto legend = new TLegend(0.1,0.7,0.48,0.9);
     legend->SetHeader("The DCA between Daughts vs. Lambda mass"); // option "C" allows to center the header
