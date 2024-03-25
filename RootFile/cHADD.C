@@ -109,13 +109,21 @@ void cHADD()
     auto c1 = new TCanvas("c1","c1",600,500);
     gStyle->SetOptStat(0);
     Result1->SetFillColor(2);
+    Result1->SetLineColor(2);
     Result2->SetFillColor(3);
+    Result2->SetLineColor(3);
     Result3->SetFillColor(4);
+    Result3->SetLineColor(4);
     Result4->SetFillColor(5);
+    Result4->SetLineColor(5);
     Result5->SetFillColor(6);
+    Result5->SetLineColor(6);
     Result6->SetFillColor(7);
+    Result6->SetLineColor(7);
     Result7->SetFillColor(8);
+    Result7->SetLineColor(8);
     Result8->SetFillColor(1);
+    Result8->SetLineColor(1);
 
     Result8->Draw();
     Result7->Draw("sames");
@@ -128,13 +136,13 @@ void cHADD()
 
     auto legend = new TLegend(0.1,0.7,0.48,0.9);
     legend->SetHeader("The DCA between Daughts vs. Lambda mass"); // option "C" allows to center the header
-    legend->AddEntry(h1,"DCA < 0.1","f");
-    legend->AddEntry(h2,"DCA < 0.2","f");
-    legend->AddEntry(h3,"DCA < 0.3","f");
-    legend->AddEntry(h4,"DCA < 0.4","f");
-    legend->AddEntry(h5,"DCA < 0.5","f");
-    legend->AddEntry(h6,"DCA < 0.6","f");
-    legend->AddEntry(h7,"DCA < 0.8","f");
+    legend->AddEntry(h1,"DCA < 0.1 cm","f");
+    legend->AddEntry(h2,"DCA < 0.2 cm","f");
+    legend->AddEntry(h3,"DCA < 0.3 cm","f");
+    legend->AddEntry(h4,"DCA < 0.4 cm","f");
+    legend->AddEntry(h5,"DCA < 0.5 cm","f");
+    legend->AddEntry(h6,"DCA < 0.6 cm","f");
+    legend->AddEntry(h7,"DCA < 0.8 cm","f");
     legend->AddEntry(h8,"DCA no limit","f");
     legend->Draw();
     c1->Write();
