@@ -127,7 +127,7 @@ void cHADD()
     Result1->Draw();
 
     auto legend = new TLegend(0.1,0.7,0.48,0.9);
-    legend->SetHeader("The DCA between Daughts vs. Lambda mass","C"); // option "C" allows to center the header
+    legend->SetHeader("The DCA between Daughts vs. Lambda mass"); // option "C" allows to center the header
     legend->AddEntry(h1,"DCA < 0.1","f");
     legend->AddEntry(h2,"DCA < 0.2","f");
     legend->AddEntry(h3,"DCA < 0.3","f");
