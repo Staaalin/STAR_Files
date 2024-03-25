@@ -33,40 +33,6 @@ using namespace std;
 
 void HADDr()
 {
-
-    // TFile *file = new TFile("HADDr.root", "RECREATE");
-    
-    // TH1F* Result1;
-    // TString midname = "/star/data01/pwg/svianping/output/output_";
-
-    // int Itr = 0;
-    // for(int i=65690;i <= 66389;i++){
-    //     TString filename = midname;
-    //     filename+=i;
-    //     filename+=".root";
-
-    //         cout<<"FUCK"<<endl;
-    //     TFile *fileR = TFile::Open(filename);
-    //     TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
-    //     if (Itr == 0) {
-    //         Result1 = (TH1F*)h1->Clone();
-    //     }
-    //     else{
-    //         Result1->Add((TH1F*)h1->Clone());
-    //     }
-    //     fileR->Close();
-    //     cout<<Itr<<endl;
-    //     Itr++;
-    // }
-    
-    // cout<<Result1->Integral(0,5)<<endl;
-    // Result1->Write("h_Good_Mass");
-    // // file->Write();
-    // file->Close();
-
-//////////////////////////////////////////////////////////////////////////////
-    
-    // TH1F* Result1,Temp;
     TString midname = "/star/data01/pwg/svianping/output/output_";
 
     TList *list1 = new TList;
@@ -94,7 +60,6 @@ void HADDr()
         TH1F* h6 = (TH1F*)fileR->Get("H_DaughterDCA_LitP6_Mass");
         TH1F* h7 = (TH1F*)fileR->Get("H_DaughterDCA_LitP8_Mass");
         TH1F* h8 = (TH1F*)fileR->Get("H_DaughterDCA_NOLIM_Mass");
-        // TH2D* h3 = (TH2D*)fileR->Get("hH_M_ParentDCA");
         list1->Add(h1);
         list2->Add(h2);
         list3->Add(h3);
@@ -103,17 +68,7 @@ void HADDr()
         list6->Add(h6);
         list7->Add(h7);
         list8->Add(h8);
-        // if (Itr == 0) {
-        //     Result1 = (TH1F*)h1->Clone();
-        // }
-        // else{
-        //     Temp = (TH1F*)h1->Clone();
-        //     Result1->Add(Result1,Temp,1.0,1.0);
-        // }
-        // cout<<Itr<<" : "<<Result1->Integral(1,1000)<<endl;
-        // fileR->Close();
         Itr++;
-        delete fileR;
     }
     TH1F *Result1 = (TH1F*)h1->Clone("H_DaughterDCA_LitP1_Mass_merge");
     TH1F *Result2 = (TH1F*)h2->Clone("H_DaughterDCA_LitP2_Mass_merge");
@@ -123,7 +78,6 @@ void HADDr()
     TH1F *Result6 = (TH1F*)h6->Clone("H_DaughterDCA_LitP6_Mass_merge");
     TH1F *Result7 = (TH1F*)h8->Clone("H_DaughterDCA_LitP8_Mass_merge");
     TH1F *Result8 = (TH1F*)h9->Clone("H_DaughterDCA_NOLIM_Mass_merge");
-    // TH2D *Result3 = (TH2D*)h3->Clone("hHM_ParentDCA_Merged");
     Result1->Reset();
     Result1->Merge(list1);
     Result2->Reset();
@@ -150,23 +104,11 @@ void HADDr()
     Result6->Write("H_DaughterDCA_LitP6_Mass_merge");
     Result7->Write("H_DaughterDCA_LitP8_Mass_merge");
     Result8->Write("H_DaughterDCA_NOLIM_Mass_merge");
-    // file->Write();
     file->Close();
 
 //////////////////////////////////////////////////////////////////////////////
 
-    // TString midname = "/star/data01/pwg/svianping/output/output_";
-    // TH1F* Result1,Temp;
-    // for(int i=65690;i <= 66389;i++){
-    //     TString filename = midname;
-    //     filename+=i;
-    //     filename+=".root";
 
-    //     TFile *fileR = TFile::Open(filename);
-    //     TH1F* h1 = (TH1F*)fileR->Get("h_Good_Mass");
-    //     for (int j=0;j<h1->GetNbins();j++){}
-    //     fileR->Close();
-    // }
 
     return;
 }
