@@ -137,6 +137,7 @@ void cHADD()
     legend->AddEntry(h7,"DCA < 0.8","f");
     legend->AddEntry(h8,"DCA no limit","f");
     legend->Draw();
+    c1->Write();
 
     file->Close();
 
