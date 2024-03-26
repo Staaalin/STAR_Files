@@ -136,14 +136,14 @@ void cHADD()
 
     auto legend = new TLegend(0.1,0.7,0.48,0.9);
     legend->SetHeader("The DCA between Daughts vs. Lambda mass"); // option "C" allows to center the header
-    legend->AddEntry(h1,"DCA < 0.1 cm","l");
-    legend->AddEntry(h2,"DCA < 0.2 cm","l");
-    legend->AddEntry(h3,"DCA < 0.3 cm","l");
-    legend->AddEntry(h4,"DCA < 0.4 cm","l");
-    legend->AddEntry(h5,"DCA < 0.5 cm","l");
-    legend->AddEntry(h6,"DCA < 0.6 cm","l");
-    legend->AddEntry(h7,"DCA < 0.8 cm","l");
-    legend->AddEntry(h8,"DCA no limit","l");
+    legend->AddEntry(Result1,"DCA < 0.1 cm","f");
+    legend->AddEntry(Result2,"DCA < 0.2 cm","f");
+    legend->AddEntry(Result3,"DCA < 0.3 cm","f");
+    legend->AddEntry(Result4,"DCA < 0.4 cm","f");
+    legend->AddEntry(Result5,"DCA < 0.5 cm","f");
+    legend->AddEntry(Result6,"DCA < 0.6 cm","f");
+    legend->AddEntry(Result7,"DCA < 0.8 cm","f");
+    legend->AddEntry(Result8,"DCA no limit","f");
     legend->Draw();
     c1->Write();
 
