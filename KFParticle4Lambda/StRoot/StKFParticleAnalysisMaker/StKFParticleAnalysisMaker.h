@@ -127,6 +127,7 @@ private:
 	TH1F *H_DaughterDCA_LitP8_Mass;// Those Daughter DCA < 0.8 cm
 	TH1F *H_DaughterDCA_NOLIM_Mass;// No Daughter limite
 
+	TH1F *H_DaughterDCA_Mass_readDST;// SetMaxDistanceBetweenParticlesCut
 
 	TH2D *hdEdx_pQ;
 	TH2D *hdEdx_pQ_1cut;
@@ -147,7 +148,7 @@ private:
 	double zTOF_proton,zTOF_pion,zTOF_kaon;
 	// Used for QA
 	std::vector<float> QA_dEdx,QA_m2,QA_nSigmaProton,QA_nSigmaPion,QA_nSigmaKaon,QA_Chi2;
-	std::vector<double> QA_zTOF_proton,QA_zTOF_pion,QA_zTOF_kaon,QA_Decay_Length,QA_DCA_V0_PV;
+	std::vector<double> QA_zTOF_proton,QA_zTOF_pion,QA_zTOF_kaon,QA_Decay_Length,QA_DCA_V0_PV,QA_DCA_Daughters;
 	std::vector<int> QA_hasTOF,QA_IfConfuse,QA_IfBadReconstructed;// Used as bool
 
 	/////////////////////////////////////

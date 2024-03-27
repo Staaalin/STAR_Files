@@ -215,6 +215,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length      );
 	hadronTree->Branch("Chi2"               ,&QA_Chi2              );
 	hadronTree->Branch("IfBadReconstructed" ,&QA_IfBadReconstructed);
+	hadronTree->Branch("DCA_Daughters"      ,&QA_DCA_Daughters     );
 	
 	hdEdx_pQ = new TH2D("hdEdx_p_NO_CUT","dE/dx vs. p*Q without cut",2000,10,10,2000,0,20);
 	hdEdx_pQ->GetXaxis()->SetTitle("p*Q [GeV]");
@@ -244,8 +245,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_Chi2->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_Chi2->GetYaxis()->SetTitle("Chi2");
 
-	H_GOOD_Mass = new TH1F("h_Good_Mass","Good Mass of Lambda",1000,0,5);
-	H_BAD_Mass  = new TH1F("h_Bad_Mass" ,"Bad Mass of Lambda" ,1000,0,5);
+	H_GOOD_Mass = new TH1F("h_Good_Mass","Good Mass of Lambda",6000,0,3);
+	H_BAD_Mass  = new TH1F("h_Bad_Mass" ,"Bad Mass of Lambda" ,6000,0,3);
 	H_GOOD_Mass->GetXaxis()->SetTitle("Mass [GeV]");
 	H_BAD_Mass->GetXaxis()->SetTitle("Mass [GeV]");
 
@@ -307,9 +308,9 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hXY->Write();
 	// hHXY->Write();
 	// hHM_Chi2->Write();
-	// H_GOOD_Mass->Write();
-	// H_BAD_Mass ->Write();
-	hHM_ParentDCA->Write();
+	H_GOOD_Mass->Write();
+	H_BAD_Mass ->Write();
+	// hHM_ParentDCA->Write();
 	
 	H_DaughterDCA_LitP1_Mass->Write();
 	H_DaughterDCA_LitP2_Mass->Write();
@@ -620,6 +621,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	QA_dEdx.resize(0);QA_DCA_V0_PV.resize(0);QA_m2.resize(0);QA_nSigmaProton.resize(0);
 	QA_nSigmaPion.resize(0);QA_nSigmaKaon.resize(0);QA_zTOF_proton.resize(0);QA_zTOF_pion.resize(0);QA_zTOF_kaon.resize(0);
 	QA_hasTOF.resize(0);QA_IfConfuse.resize(0);QA_Decay_Length.resize(0);QA_Chi2.resize(0);QA_IfBadReconstructed.resize(0);
+	QA_DCA_Daughters.resize(0);
 
 	// std::vector<int> Constructed_KFParticle_Vec_index; Constructed_KFParticle_Vec_index.resize(0);
 	// for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
@@ -699,7 +701,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (TrackDCA < 0.3) {H_DaughterDCA_LitP3_Mass->Fill(particle.GetMass());}
 			if (TrackDCA < 0.2) {H_DaughterDCA_LitP2_Mass->Fill(particle.GetMass());}
 			if (TrackDCA < 0.1) {H_DaughterDCA_LitP1_Mass->Fill(particle.GetMass());}
+			QA_DCA_Daughters.emplace_back(TrackDCA);
 			// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
+		}else{
+			QA_DCA_Daughters.emplace_back(-1);// Temperally
 		}
 
 		
@@ -989,6 +994,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_Decay_Length.emplace_back(-1.0);
 			QA_Chi2.emplace_back(-1.0);
 			QA_IfBadReconstructed.emplace_back(-1);
+			QA_DCA_Daughters.emplace_back(-1.0);
 		}
 
 	}
