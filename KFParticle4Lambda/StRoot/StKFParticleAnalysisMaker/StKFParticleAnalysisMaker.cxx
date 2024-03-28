@@ -312,14 +312,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	H_BAD_Mass ->Write();
 	// hHM_ParentDCA->Write();
 	
-	H_DaughterDCA_LitP1_Mass->Write();
-	H_DaughterDCA_LitP2_Mass->Write();
-	H_DaughterDCA_LitP3_Mass->Write();
-	H_DaughterDCA_LitP4_Mass->Write();
 	H_DaughterDCA_LitP5_Mass->Write();
-	H_DaughterDCA_LitP6_Mass->Write();
-	H_DaughterDCA_LitP8_Mass->Write();
-	H_DaughterDCA_NOLIM_Mass->Write();
 
 	return;
 }
@@ -692,15 +685,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 			TVector3 LTrackI = cTrackI.at(RV.first);
 			TVector3 LTrackK = cTrackK.at(RV.second);
 			double TrackDCA = DistanceBetween(LTrackI , LTrackK);
+			if (TrackDCA < 0.5) {
+				H_DaughterDCA_LitP5_Mass -> Fill(particle.GetMass());
+				QA_IfBadReconstructed.emplace_back(0);
+			}
+			
 			hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
-			H_DaughterDCA_NOLIM_Mass->Fill(particle.GetMass());
-			if (TrackDCA < 0.8) {H_DaughterDCA_LitP8_Mass->Fill(particle.GetMass());}
-			if (TrackDCA < 0.6) {H_DaughterDCA_LitP6_Mass->Fill(particle.GetMass());}
-			if (TrackDCA < 0.5) {H_DaughterDCA_LitP5_Mass->Fill(particle.GetMass());}
-			if (TrackDCA < 0.4) {H_DaughterDCA_LitP4_Mass->Fill(particle.GetMass());}
-			if (TrackDCA < 0.3) {H_DaughterDCA_LitP3_Mass->Fill(particle.GetMass());}
-			if (TrackDCA < 0.2) {H_DaughterDCA_LitP2_Mass->Fill(particle.GetMass());}
-			if (TrackDCA < 0.1) {H_DaughterDCA_LitP1_Mass->Fill(particle.GetMass());}
 			QA_DCA_Daughters.emplace_back(TrackDCA);
 			// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
 		}else{
