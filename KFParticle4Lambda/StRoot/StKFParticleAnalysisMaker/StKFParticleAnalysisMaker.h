@@ -115,12 +115,10 @@ private:
 	TH1F *hDiffVz  ; 
 	TH1F *hcent;
 	TH1F *hcentw;
-	TH1F *H_GOOD_Mass;
-	TH1F *H_BAD_Mass;
 
 	TH1F *H_DaughterDCA_LitP5_Mass;// Those Daughter DCA < 0.5 cm
 
-	TH1F *H_ALL_Lambda;// SetMaxDistanceBetweenParticlesCut
+	TH1F *H_ALL_Lambda;// NO CUT
 
 	TH2D *hdEdx_pQ;
 	TH2D *hdEdx_pQ_1cut;

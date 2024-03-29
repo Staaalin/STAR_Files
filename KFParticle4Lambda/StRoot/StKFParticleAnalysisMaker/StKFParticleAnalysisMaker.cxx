@@ -245,11 +245,6 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_Chi2->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_Chi2->GetYaxis()->SetTitle("Chi2");
 
-	H_GOOD_Mass = new TH1F("h_Good_Mass","Good Mass of Lambda",6000,0,3);
-	H_BAD_Mass  = new TH1F("h_Bad_Mass" ,"Bad Mass of Lambda" ,6000,0,3);
-	H_GOOD_Mass->GetXaxis()->SetTitle("Mass [GeV]");
-	H_BAD_Mass->GetXaxis()->SetTitle("Mass [GeV]");
-
 	hHM_ParentDCA = new TH2D("hH_M_ParentDCA","The DCA between parent particles vs. Mass",     2000,0,5,500,0,5);
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
@@ -308,8 +303,6 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hXY->Write();
 	// hHXY->Write();
 	// hHM_Chi2->Write();
-	H_GOOD_Mass->Write();
-	H_BAD_Mass ->Write();
 	// hHM_ParentDCA->Write();
 	
 	H_DaughterDCA_LitP5_Mass->Write();
@@ -633,7 +626,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
-		bool IfRecordConsPart = true;
+		bool IfWellConstrcuted = true;
 		bool IfHelix = false;
 
 		#ifdef DEBUGGING
@@ -665,8 +658,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				StPicoTrack *track = mPicoDst->track(jTrack);
 				if (track->id() == globalTrackId){
 					int TrackPDG = TrackID(track , Vertex3D , magnet , false);
-					if ((TrackPDG != 2212 && TrackPDG != -211) && particle.GetPDG() ==    LambdaPdg){IfRecordConsPart = false;}
-					if ((TrackPDG != -2212 && TrackPDG != 211) && particle.GetPDG() == -1*LambdaPdg){IfRecordConsPart = false;}
+					if ((TrackPDG != 2212 && TrackPDG != -211) && particle.GetPDG() ==    LambdaPdg){IfWellConstrcuted = false;}
+					if ((TrackPDG != -2212 && TrackPDG != 211) && particle.GetPDG() == -1*LambdaPdg){IfWellConstrcuted = false;}
 					if (iDaughter == 0){iTrack = jTrack;}
 					if (iDaughter == 1){kTrack = jTrack;}
 					break;
@@ -688,6 +681,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (TrackDCA < 0.5) {
 				H_DaughterDCA_LitP5_Mass -> Fill(particle.GetMass());
 				QA_IfBadReconstructed.emplace_back(0);
+			}
+			else
+			{
+				H_ALL_Lambda->Fill(particle.GetMass());
+				IfWellConstrcuted = false;
 			}
 			
 			hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
@@ -721,15 +719,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
 		ParticleVec.push_back(particle);
 
-		if (IfRecordConsPart) {
+		if (IfWellConstrcuted) {
 			PDG.emplace_back(particle.GetPDG());QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);QA_IfBadReconstructed.emplace_back(0);
-			H_GOOD_Mass->Fill(particle.GetMass());
 		}
 		else{
 			// continue;
 			PDG.emplace_back(particle.GetPDG());QA_Decay_Length.emplace_back(v0decaylength);QA_DCA_V0_PV.emplace_back(dcav0toPV);
 			QA_IfBadReconstructed.emplace_back(1);
-			H_BAD_Mass->Fill(particle.GetMass());
 		}
 		if (IfHelix && (fabs(particle.GetPDG()) == OmegaPdg)) {
 
