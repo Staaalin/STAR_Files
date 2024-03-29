@@ -249,22 +249,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
-	H_DaughterDCA_LitP1_Mass = new TH1F("H_DaughterDCA_LitP1_Mass","Lambda those Daughter DCA < 0.1 cm",5000,0,2.5);
-	H_DaughterDCA_LitP2_Mass = new TH1F("H_DaughterDCA_LitP2_Mass","Lambda those Daughter DCA < 0.2 cm",5000,0,2.5);
-	H_DaughterDCA_LitP3_Mass = new TH1F("H_DaughterDCA_LitP3_Mass","Lambda those Daughter DCA < 0.3 cm",5000,0,2.5);
-	H_DaughterDCA_LitP4_Mass = new TH1F("H_DaughterDCA_LitP4_Mass","Lambda those Daughter DCA < 0.4 cm",5000,0,2.5);
 	H_DaughterDCA_LitP5_Mass = new TH1F("H_DaughterDCA_LitP5_Mass","Lambda those Daughter DCA < 0.5 cm",5000,0,2.5);
-	H_DaughterDCA_LitP6_Mass = new TH1F("H_DaughterDCA_LitP6_Mass","Lambda those Daughter DCA < 0.6 cm",5000,0,2.5);
-	H_DaughterDCA_LitP8_Mass = new TH1F("H_DaughterDCA_LitP8_Mass","Lambda those Daughter DCA < 0.8 cm",5000,0,2.5);
-	H_DaughterDCA_NOLIM_Mass = new TH1F("H_DaughterDCA_NOLIM_Mass","Lambda those Daughter DCA no limite",5000,0,2.5);
-	H_DaughterDCA_LitP1_Mass->GetXaxis()->SetTitle("Mass [GeV]");
-	H_DaughterDCA_LitP2_Mass->GetXaxis()->SetTitle("Mass [GeV]");
-	H_DaughterDCA_LitP3_Mass->GetXaxis()->SetTitle("Mass [GeV]");
-	H_DaughterDCA_LitP4_Mass->GetXaxis()->SetTitle("Mass [GeV]");
 	H_DaughterDCA_LitP5_Mass->GetXaxis()->SetTitle("Mass [GeV]");
-	H_DaughterDCA_LitP6_Mass->GetXaxis()->SetTitle("Mass [GeV]");
-	H_DaughterDCA_LitP8_Mass->GetXaxis()->SetTitle("Mass [GeV]");
-	H_DaughterDCA_NOLIM_Mass->GetXaxis()->SetTitle("Mass [GeV]");
 
 	Recorded_events = 0;
 

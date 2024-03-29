@@ -118,7 +118,13 @@ private:
 
 	TH1F *H_DaughterDCA_LitP5_Mass;// Those Daughter DCA < 0.5 cm
 
-	TH1F *H_ALL_Lambda;// NO CUT
+	map<int,TString> PDG2Name;
+	PDG2Name[ 3122] = "Lambda";
+	PDG2Name[-3122] = "Lambdab";
+	PDG2Name[ 3334] = "Omega";
+	PDG2Name[-3334] = "Omegab";
+	#define PDG2NameSize 4; // PDG2Name.size()
+	TH1F *H_ALL_NO_CUT[PDG2NameSize];// NO CUT
 
 	TH2D *hdEdx_pQ;
 	TH2D *hdEdx_pQ_1cut;
