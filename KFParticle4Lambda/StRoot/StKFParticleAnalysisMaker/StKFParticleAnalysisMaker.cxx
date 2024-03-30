@@ -250,7 +250,11 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
+	const int tPDGList[]      = {   3122  ,   -3122   ,   3334  ,  -3334};
+	const TString tNameList[] = {"Lambda" , "Lambdab" , "Omega" , "Omegab"};
 	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
+		PDGList[Itr] = tPDGList[Itr];NameList[Itr] = tNameList[Itr];
+
 		TString HistName1 = "HM_";
 		TString HistName2 = "The Mass of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];

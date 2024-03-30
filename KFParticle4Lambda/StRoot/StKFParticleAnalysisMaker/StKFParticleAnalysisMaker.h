@@ -118,8 +118,8 @@ private:
 	TH1F *hcentw;
 
 	#define PDG2NameSize 4 // PDG2Name.size()
-	const int PDGList[PDG2NameSize]      = {   3122  ,   -3122   ,   3334  ,  -3334};
-	const TString NameList[PDG2NameSize] = {"Lambda" , "Lambdab" , "Omega" , "Omegab"};
+	int PDGList[PDG2NameSize];
+	TString NameList[PDG2NameSize];
 	// std::map<int, TString> PDG2Name;
 	// PDG2Name[ 3122] = "Lambda"; 
 	// PDG2Name[-3122] = "Lambdab";
