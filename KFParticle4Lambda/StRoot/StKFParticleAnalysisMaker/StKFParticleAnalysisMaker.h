@@ -117,14 +117,14 @@ private:
 	TH1F *hcent;
 	TH1F *hcentw;
 
-	int PDGList[]      = {   3122  ,   -3122   ,   3334  ,  -3334};
-	TString NameList[] = {"Lambda" , "Lambdab" , "Omega" , "Omegab"};
+	#define PDG2NameSize 4 // PDG2Name.size()
+	int PDGList[PDG2NameSize]      = {   3122  ,   -3122   ,   3334  ,  -3334};
+	TString NameList[PDG2NameSize] = {"Lambda" , "Lambdab" , "Omega" , "Omegab"};
 	// std::map<int, TString> PDG2Name;
 	// PDG2Name[ 3122] = "Lambda"; 
 	// PDG2Name[-3122] = "Lambdab";
 	// PDG2Name[ 3334] = "Omega";  
 	// PDG2Name[-3334] = "Omegab"; 
-	#define PDG2NameSize 4 // PDG2Name.size()
 	TH1F *H_ALL_NO_CUT[PDG2NameSize];// NO CUT
 	TH1F *H_DaughterDCA[PDG2NameSize];// Cut DaughterDCA
 
