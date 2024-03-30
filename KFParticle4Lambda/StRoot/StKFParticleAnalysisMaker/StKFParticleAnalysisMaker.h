@@ -125,6 +125,7 @@ private:
 	// PDG2Name[-3122] = "Lambdab";
 	// PDG2Name[ 3334] = "Omega";  
 	// PDG2Name[-3334] = "Omegab"; 
+	int PDG2NameSize = sizeof(PDGList)/sizeof(PDGList[0]);
 	TH1F *H_ALL_NO_CUT[4];// NO CUT
 	TH1F *H_DaughterDCA[4];// Cut DaughterDCA
 
