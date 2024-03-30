@@ -655,10 +655,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 		//SCHEME 1: reconstruction of V0, the parent particle
 		if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
 		int iTrack,kTrack;
+		if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
+			cout<<"Particle ID = "<<particle.GetPDG()<<endl;
+		}
 		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 			const int daughterId = particle.DaughterIds()[iDaughter]; 
-			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
-			if (daughter.GetPDG() == -1) {cout<<"Particle ID = "<<particle.GetPDG()<<endl;}
+			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+			if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
+				cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
+			}
 			const int globalTrackId = daughter.DaughterIds()[0];
 			Int_t nTracks = mPicoDst->numberOfTracks();
 			Int_t iTrackStart = globalTrackId - 1;
@@ -718,14 +723,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 		double dcav0toPV = rdotp*rdotp/pv0.Mag2();
 		dcav0toPV = sqrt(xv0toPV.Mag2() - dcav0toPV);
 		double v0decaylength = xv0toPV.Mag();
-		double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
+		double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();// cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
 		//SCHEME 2:
 		KFParticle tempParticle(particle);
 		float l,dl;
 		KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
 		// pv += particle;
 		tempParticle.SetProductionVertex(pv);
-		tempParticle.GetDecayLength(l, dl);cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
+		tempParticle.GetDecayLength(l, dl);// cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
 		if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
 		if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
 		if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
