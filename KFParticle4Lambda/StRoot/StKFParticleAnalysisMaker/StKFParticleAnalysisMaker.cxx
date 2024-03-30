@@ -250,22 +250,19 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
-	int Itr = 0;
-	for (map<int,TString>::iterator mt = PDG2Name.begin();mt != PDG2Name.end();++mt){
+	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 		TString HistName1 = "HM_";
 		TString HistName2 = "The Mass of ";
-		HistName1 += mt->second;HistName2 += mt->second;
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		H_ALL_NO_CUT[Itr] = new TH1F(HistName1,HistName2,5000,0,2.5);
 		H_ALL_NO_CUT[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
 
 		HistName1 = "HM_DaughtersDCA_";
 		HistName2 = "The Mass of ";
-		HistName1 += mt->second;HistName2 += mt->second;
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		HistName2 += " those DayghtersDCA < 0.6 [cm]";
 		H_DaughterDCA[Itr] = new TH1F(HistName1,HistName2,5000,0,2.5);
 		H_DaughterDCA[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
-
-		Itr++;
 	}
 
 	Recorded_events = 0;
@@ -677,9 +674,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
 		StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
-		int Itr = 0;
-		for (map<int,TString>::iterator mt = PDG2Name.begin();mt != PDG2Name.end();++mt){
-			if (particle.GetPDG() == mt.first){
+		
+		for (int Itr = 0;Itr < PDG2NameSize;Itr++){
+			if (particle.GetPDG() == PDGList[Itr]){
 				pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
 				// TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
 				// TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
@@ -703,7 +700,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
 				break;
 			}
-			Itr++;
 		}
 
 

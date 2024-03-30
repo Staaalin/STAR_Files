@@ -117,11 +117,9 @@ private:
 	TH1F *hcent;
 	TH1F *hcentw;
 
-	std::map<int, TString> PDG2Name;
-	PDG2Name.insert(pair<int, TString>( 3122,"Lambda"));
-	PDG2Name.insert(pair<int, TString>(-3122,"Lambdab"));
-	PDG2Name.insert(pair<int, TString>( 3334,"Omega"));
-	PDG2Name.insert(pair<int, TString>(-3334,"Omegab"));
+	int PDGList[]      = {   3122  ,   -3122   ,   3334  ,  -3334};
+	TString NameList[] = {"Lambda" , "Lambdab" , "Omega" , "Omegab"};
+	// std::map<int, TString> PDG2Name;
 	// PDG2Name[ 3122] = "Lambda"; 
 	// PDG2Name[-3122] = "Lambdab";
 	// PDG2Name[ 3334] = "Omega";  
