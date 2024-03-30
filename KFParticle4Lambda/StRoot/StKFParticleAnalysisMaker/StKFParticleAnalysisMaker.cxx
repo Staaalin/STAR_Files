@@ -650,7 +650,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 		// if (IfRecordThisParticle = false){continue;}
 
-		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {cout<<"Error! Got Mix! "<<endl;continue;}
+		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {cout<<"Error! Got Mix! We found "<<particle.GetPDG()<<endl;continue;}
 		if ((fabs(particle.GetPDG()) == OmegaPdg)) {continue;} // Temp
 
 		//SCHEME 1: reconstruction of V0, the parent particle
