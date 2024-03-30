@@ -595,6 +595,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	std::vector<StLambdaDecayPair> KFParticleLambdaDecayPair;
 	std::vector<KFParticle> ParticleVec , OmegaVec , LambdaVec;
 	ParticleVec.resize(0);OmegaVec.resize(0);LambdaVec.resize(0);
+	int PDG2NameSize = sizeof(PDGList)/sizeof(PDGList[0]);
 
 	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
 	float pT_trig_lo = 0.2;
