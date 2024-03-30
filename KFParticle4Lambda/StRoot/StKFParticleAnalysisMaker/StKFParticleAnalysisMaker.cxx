@@ -657,8 +657,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		int iTrack,kTrack;
 		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 			const int daughterId = particle.DaughterIds()[iDaughter]; 
-			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
-			cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
+			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
+			if (daughter.GetPDG() == -1) {cout<<"Particle ID = "<<particle.GetPDG()<<endl;}
 			const int globalTrackId = daughter.DaughterIds()[0];
 			Int_t nTracks = mPicoDst->numberOfTracks();
 			Int_t iTrackStart = globalTrackId - 1;
@@ -1284,6 +1284,7 @@ double StKFParticleAnalysisMaker::DistanceBetween(TVector3 LA , TVector3 LB){
 // 	for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 // 		const int daughterId = particle.DaughterIds()[iDaughter]; 
 // 		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
+// 		if (fabs(daughter.GetPDG()) == 211 || fabs(daughter.GetPDG()) == 321 || fabs(daughter.GetPDG()) == 2212)
 // 		const int globalTrackId = daughter.DaughterIds()[0];
 // 		Int_t nTracks = mPicoDst->numberOfTracks();
 // 		Int_t iTrackStart = globalTrackId - 1;
