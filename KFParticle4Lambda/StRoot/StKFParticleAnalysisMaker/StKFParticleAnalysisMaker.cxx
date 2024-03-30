@@ -650,8 +650,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 		// if (IfRecordThisParticle = false){continue;}
 
-		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {cout<<"Error! Got Mix! We found "<<particle.GetPDG()<<endl;continue;}
-		if ((fabs(particle.GetPDG()) == OmegaPdg)) {continue;} // Temp
+		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
 
 		//SCHEME 1: reconstruction of V0, the parent particle
 		if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
@@ -659,6 +658,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 			const int daughterId = particle.DaughterIds()[iDaughter]; 
 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
+			cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
 			const int globalTrackId = daughter.DaughterIds()[0];
 			Int_t nTracks = mPicoDst->numberOfTracks();
 			Int_t iTrackStart = globalTrackId - 1;
@@ -1276,6 +1276,60 @@ double StKFParticleAnalysisMaker::DistanceBetween(TVector3 LA , TVector3 LB){
 	double rZ = (LA.z() - LB.z());
 	double Dis = pow(rX*rX + rY*rY + rZ*rZ,0.5);
 	return Dis;
+}
+
+bool IfGoodDaughterDCA(int iKFParticle){
+	KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+	int iTrack,kTrack;
+	for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+		const int daughterId = particle.DaughterIds()[iDaughter]; 
+		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
+		const int globalTrackId = daughter.DaughterIds()[0];
+		Int_t nTracks = mPicoDst->numberOfTracks();
+		Int_t iTrackStart = globalTrackId - 1;
+		if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+		for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+			StPicoTrack *track = mPicoDst->track(jTrack);
+			if (track->id() == globalTrackId){
+				// int TrackPDG = TrackID(track , Vertex3D , magnet , false);
+				if (iDaughter == 0){iTrack = jTrack;}
+				if (iDaughter == 1){kTrack = jTrack;}
+				break;
+			}
+		}
+	}
+
+	StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
+	StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
+	StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
+	StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
+	
+	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
+		if (particle.GetPDG() == PDGList[Itr]){
+			pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
+			// TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
+			// TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
+			TVector3 LTrackI = cTrackI.at(RV.first);
+			TVector3 LTrackK = cTrackK.at(RV.second);
+			double TrackDCA = DistanceBetween(LTrackI , LTrackK);
+			if (TrackDCA < 0.6) {
+				H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
+				H_DaughterDCA[Itr]->Fill(particle.GetMass());
+				QA_IfBadReconstructed.emplace_back(0);
+			}
+			else
+			{
+				H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
+				IfWellConstrcuted = false;
+				QA_IfBadReconstructed.emplace_back(1);
+			}
+			
+			hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
+			QA_DCA_Daughters.emplace_back(TrackDCA);
+			// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
+			break;
+		}
+	}
 }
 
 // StPicoHelix StKFParticleAnalysisMaker::StPicoTrack2StPicoHelix(StPicoTrack* Track){
