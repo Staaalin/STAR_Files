@@ -22,6 +22,7 @@
 #include "TProfile3D.h"
 #include <cmath>
 #include <vector>
+#include <map>
 #include <algorithm>
 #include <iostream>
 #include "TF1.h"
