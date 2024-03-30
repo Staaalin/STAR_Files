@@ -249,8 +249,23 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
-	H_DaughterDCA_LitP5_Mass = new TH1F("H_DaughterDCA_LitP5_Mass","Lambda those Daughter DCA < 0.5 cm",5000,0,2.5);
-	H_DaughterDCA_LitP5_Mass->GetXaxis()->SetTitle("Mass [GeV]");
+	int Itr = 0;
+	for (map<int,TString>::iterator mt = PDG2Name.begin();mt != PDG2Name.end();++mt){
+		TString HistName1 = "HM_";
+		TString HistName2 = "The Mass of ";
+		HistName1 += mt->second;HistName2 += mt->second;
+		H_ALL_NO_CUT[Itr] = new TH1F(HistName1,HistName2,5000,0,2.5);
+		H_ALL_NO_CUT[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
+
+		HistName1 = "HM_DaughtersDCA_";
+		HistName2 = "The Mass of ";
+		HistName1 += mt->second;HistName2 += mt->second;
+		HistName2 += " those DayghtersDCA < 0.6 [cm]";
+		H_DaughterDCA[Itr] = new TH1F(HistName1,HistName2,5000,0,2.5);
+		H_DaughterDCA[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
+
+		Itr++;
+	}
 
 	Recorded_events = 0;
 
@@ -291,7 +306,12 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hHM_Chi2->Write();
 	// hHM_ParentDCA->Write();
 	
-	H_DaughterDCA_LitP5_Mass->Write();
+	for (int i=0;i<PDG2NameSize;i++){
+		H_ALL_NO_CUT[i]->Write();
+
+		H_DaughterDCA[i]->Write();
+
+	}
 
 	return;
 }
@@ -628,7 +648,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 		// if (IfRecordThisParticle = false){continue;}
 
-		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
+		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {cout<<"Error! Got Mix! "<<endl;continue;}
+		if ((fabs(particle.GetPDG()) == OmegaPdg)) {continue;} // Temp
 
 		//SCHEME 1: reconstruction of V0, the parent particle
 		if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
@@ -643,9 +664,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
 				StPicoTrack *track = mPicoDst->track(jTrack);
 				if (track->id() == globalTrackId){
-					int TrackPDG = TrackID(track , Vertex3D , magnet , false);
-					if ((TrackPDG != 2212 && TrackPDG != -211) && particle.GetPDG() ==    LambdaPdg){IfWellConstrcuted = false;}
-					if ((TrackPDG != -2212 && TrackPDG != 211) && particle.GetPDG() == -1*LambdaPdg){IfWellConstrcuted = false;}
+					// int TrackPDG = TrackID(track , Vertex3D , magnet , false);
 					if (iDaughter == 0){iTrack = jTrack;}
 					if (iDaughter == 1){kTrack = jTrack;}
 					break;
@@ -657,29 +676,35 @@ Int_t StKFParticleAnalysisMaker::Make()
 		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
 		StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
-		if (particle.GetPDG() == LambdaPdg){
-			pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
-			// TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
-			// TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
-			TVector3 LTrackI = cTrackI.at(RV.first);
-			TVector3 LTrackK = cTrackK.at(RV.second);
-			double TrackDCA = DistanceBetween(LTrackI , LTrackK);
-			if (TrackDCA < 0.5) {
-				H_DaughterDCA_LitP5_Mass -> Fill(particle.GetMass());
-				QA_IfBadReconstructed.emplace_back(0);
+		int Itr = 0;
+		for (map<int,TString>::iterator mt = PDG2Name.begin();mt != PDG2Name.end();++mt){
+			if (particle.GetPDG() == mt.first){
+				pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
+				// TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
+				// TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
+				TVector3 LTrackI = cTrackI.at(RV.first);
+				TVector3 LTrackK = cTrackK.at(RV.second);
+				double TrackDCA = DistanceBetween(LTrackI , LTrackK);
+				if (TrackDCA < 0.6) {
+					H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
+					H_DaughterDCA[Itr]->Fill(particle.GetMass());
+					QA_IfBadReconstructed.emplace_back(0);
+				}
+				else
+				{
+					H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
+					IfWellConstrcuted = false;
+					QA_IfBadReconstructed.emplace_back(1);
+				}
+				
+				hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
+				QA_DCA_Daughters.emplace_back(TrackDCA);
+				// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
+				break;
 			}
-			else
-			{
-				H_ALL_Lambda->Fill(particle.GetMass());
-				IfWellConstrcuted = false;
-			}
-			
-			hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
-			QA_DCA_Daughters.emplace_back(TrackDCA);
-			// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
-		}else{
-			QA_DCA_Daughters.emplace_back(-1);// Temperally
+			Itr++;
 		}
+
 
 		
 		mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
