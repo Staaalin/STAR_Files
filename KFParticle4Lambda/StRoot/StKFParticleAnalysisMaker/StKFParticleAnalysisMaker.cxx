@@ -258,14 +258,14 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		TString HistName1 = "HM_";
 		TString HistName2 = "The Mass of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_ALL_NO_CUT[Itr] = new TH1F(HistName1,HistName2,5000,0,2.5);
+		H_ALL_NO_CUT[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
 		H_ALL_NO_CUT[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
 
 		HistName1 = "HM_DaughtersDCA_";
 		HistName2 = "The Mass of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		HistName2 += " those DayghtersDCA < 0.6 [cm]";
-		H_DaughterDCA[Itr] = new TH1F(HistName1,HistName2,5000,0,2.5);
+		H_DaughterDCA[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
 		H_DaughterDCA[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
 	}
 
