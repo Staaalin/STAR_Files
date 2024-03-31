@@ -641,65 +641,78 @@ Int_t StKFParticleAnalysisMaker::Make()
 		std::cout << "Parsing refMult : " << refMult <<std::endl;
 		std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 		#endif
-
-		// bool IfRecordThisParticle = true;
-		// for (int Constructed_KFParticle_i = 0;Constructed_KFParticle_i<Constructed_KFParticle_Vec_index.size();Constructed_KFParticle_i++){
-		// 	if(iKFParticle == Constructed_KFParticle_Vec_index[Constructed_KFParticle_i]){
-		// 		IfRecordThisParticle = false;
-		// 	}
-		// }
-		// if (IfRecordThisParticle = false){continue;}
 		
 		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
 
 		//SCHEME 1: reconstruction of V0, the parent particle
-		if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
-		int iTrack,kTrack;
-		if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
-			cout<<"Particle ID = "<<particle.GetPDG()<<endl;
-		}
-		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-			const int daughterId = particle.DaughterIds()[iDaughter]; 
-			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-			if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
-				cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
-				if (daughter.GetPDG() == -1) {
-					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
-						int DdaughterId = daughter.DaughterIds()[jDaughter];
-						KFParticle Ddaughter = KFParticleInterface->GetParticles()[DdaughterId];
-						cout<<"Grand daughter ID = "<<Ddaughter.GetPDG()<<endl;
-					}
-				}
-			}
-			const int globalTrackId = daughter.DaughterIds()[0];
-			Int_t nTracks = mPicoDst->numberOfTracks();
-			Int_t iTrackStart = globalTrackId - 1;
-			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-			for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
-				StPicoTrack *track = mPicoDst->track(jTrack);
-				if (track->id() == globalTrackId){
-					// int TrackPDG = TrackID(track , Vertex3D , magnet , false);
-					if (iDaughter == 0){iTrack = jTrack;}
-					if (iDaughter == 1){kTrack = jTrack;}
-					break;
-				}
-			}
-		}
+		// if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
+		// int iTrack,kTrack;
+		// if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
+		// 	cout<<"Particle ID = "<<particle.GetPDG()<<endl;
+		// }
+		// for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+		// 	const int daughterId = particle.DaughterIds()[iDaughter]; 
+		// 	const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+		// 	if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
+		// 		cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
+		// 		if (daughter.GetPDG() == -1) {
+		// 			for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
+		// 				int DdaughterId = daughter.DaughterIds()[jDaughter];
+		// 				KFParticle Ddaughter = KFParticleInterface->GetParticles()[DdaughterId];
+		// 				cout<<"Grand daughter ID = "<<Ddaughter.GetPDG()<<endl;
+		// 			}
+		// 		}
+		// 	}
+		// 	const int globalTrackId = daughter.DaughterIds()[0];
+		// 	Int_t nTracks = mPicoDst->numberOfTracks();
+		// 	Int_t iTrackStart = globalTrackId - 1;
+		// 	if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+		// 	for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+		// 		StPicoTrack *track = mPicoDst->track(jTrack);
+		// 		if (track->id() == globalTrackId){
+		// 			// int TrackPDG = TrackID(track , Vertex3D , magnet , false);
+		// 			if (iDaughter == 0){iTrack = jTrack;}
+		// 			if (iDaughter == 1){kTrack = jTrack;}
+		// 			break;
+		// 		}
+		// 	}
+		// }
 
-		StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
-		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
-		StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
-		StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
+		// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
+		// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
+		// StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
+		// StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
 		
+		// for (int Itr = 0;Itr < PDG2NameSize;Itr++){
+		// 	if (particle.GetPDG() == PDGList[Itr]){
+		// 		pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
+		// 		// TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
+		// 		// TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
+		// 		TVector3 LTrackI = cTrackI.at(RV.first);
+		// 		TVector3 LTrackK = cTrackK.at(RV.second);
+		// 		double TrackDCA = DistanceBetween(LTrackI , LTrackK);
+		// 		if (TrackDCA < 0.6) {
+		// 			H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
+		// 			H_DaughterDCA[Itr]->Fill(particle.GetMass());
+		// 			QA_IfBadReconstructed.emplace_back(0);
+		// 		}
+		// 		else
+		// 		{
+		// 			H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
+		// 			IfWellConstrcuted = false;
+		// 			QA_IfBadReconstructed.emplace_back(1);
+		// 		}
+				
+		// 		hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
+		// 		QA_DCA_Daughters.emplace_back(TrackDCA);
+		// 		// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
+		// 		break;
+		// 	}
+		// }
+
 		for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 			if (particle.GetPDG() == PDGList[Itr]){
-				pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
-				// TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
-				// TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
-				TVector3 LTrackI = cTrackI.at(RV.first);
-				TVector3 LTrackK = cTrackK.at(RV.second);
-				double TrackDCA = DistanceBetween(LTrackI , LTrackK);
-				if (TrackDCA < 0.6) {
+				if (IfGoodDaughterDCA(mPicoDst , iKFParticle , magnet , 0.6 , 100.0)){
 					H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
 					H_DaughterDCA[Itr]->Fill(particle.GetMass());
 					QA_IfBadReconstructed.emplace_back(0);
@@ -711,17 +724,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 					QA_IfBadReconstructed.emplace_back(1);
 				}
 				
-				hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
-				QA_DCA_Daughters.emplace_back(TrackDCA);
+				// hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
+				QA_DCA_Daughters.emplace_back(-1.0);
 				// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
 				break;
 			}
 		}
-
-
 		
-		mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
-		mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
+		StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
+		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		TVector3 xv0, op1, op2;
 		double dca1to2 = closestDistance(mTrackI, mTrackK, magnet, Vertex3D, xv0, op1, op2);
 		TVector3 pv0 = op1 + op2;
@@ -1290,60 +1301,57 @@ double StKFParticleAnalysisMaker::DistanceBetween(TVector3 LA , TVector3 LB){
 	return Dis;
 }
 
-// bool IfGoodDaughterDCA(int iKFParticle){
-// 	KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
-// 	int iTrack,kTrack;
-// 	for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-// 		const int daughterId = particle.DaughterIds()[iDaughter]; 
-// 		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
-// 		if (fabs(daughter.GetPDG()) == 211 || fabs(daughter.GetPDG()) == 321 || fabs(daughter.GetPDG()) == 2212)
-// 		const int globalTrackId = daughter.DaughterIds()[0];
-// 		Int_t nTracks = mPicoDst->numberOfTracks();
-// 		Int_t iTrackStart = globalTrackId - 1;
-// 		if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-// 		for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
-// 			StPicoTrack *track = mPicoDst->track(jTrack);
-// 			if (track->id() == globalTrackId){
-// 				// int TrackPDG = TrackID(track , Vertex3D , magnet , false);
-// 				if (iDaughter == 0){iTrack = jTrack;}
-// 				if (iDaughter == 1){kTrack = jTrack;}
-// 				break;
-// 			}
-// 		}
-// 	}
+bool IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFParticle , double magnet , double Gen1_DCALim , double Gen2_DCALim){
+	bool result = true;
+	KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+	int iTrack,kTrack;
+	std::vector<StPicoPhysicalHelix> cTrack;
+	for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+		const int daughterId = particle.DaughterIds()[iDaughter]; 
+		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
+		if (fabs(daughter.GetPDG()) == 211 || fabs(daughter.GetPDG()) == 321 || fabs(daughter.GetPDG()) == 2212) // meaning this daughter particle was NOT reconstructed
+		{
+			const int globalTrackId = daughter.DaughterIds()[0];
+			Int_t nTracks = mPicoDst->numberOfTracks();
+			Int_t iTrackStart = globalTrackId - 1;
+			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+			for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+				StPicoTrack *track = mPicoDst->track(jTrack);
+				if (track->id() == globalTrackId){
+					// int TrackPDG = TrackID(track , Vertex3D , magnet , false);
+					// if (iDaughter == 0){
+					// 	StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(jTrack);
+					// 	cTrackI = mTrackI->helix(magnet);
+					// }
+					// if (iDaughter == 1){
+					// 	StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(jTrack);
+					// 	cTrackI = mTrackI->helix(magnet);
+					// }
+					cTrack.emplace_back(track->helix(magnet));
+					break;
+				}
+			}
+		}
+		else
+		{
+			result = IfGoodDaughterDCA(mPicoDst,daughterId,magnet,Gen2_DCALim,-1.0);
+			if (result = false;) {return result;}
 
-// 	StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
-// 	StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
-// 	StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
-// 	StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
-	
-// 	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
-// 		if (particle.GetPDG() == PDGList[Itr]){
-// 			pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
-// 			// TVector3 LTrackI = LocAfterTransfer(cTrackI , RV.first);
-// 			// TVector3 LTrackK = LocAfterTransfer(cTrackK , RV.second);
-// 			TVector3 LTrackI = cTrackI.at(RV.first);
-// 			TVector3 LTrackK = cTrackK.at(RV.second);
-// 			double TrackDCA = DistanceBetween(LTrackI , LTrackK);
-// 			if (TrackDCA < 0.6) {
-// 				H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
-// 				H_DaughterDCA[Itr]->Fill(particle.GetMass());
-// 				QA_IfBadReconstructed.emplace_back(0);
-// 			}
-// 			else
-// 			{
-// 				H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
-// 				IfWellConstrcuted = false;
-// 				QA_IfBadReconstructed.emplace_back(1);
-// 			}
-			
-// 			hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
-// 			QA_DCA_Daughters.emplace_back(TrackDCA);
-// 			// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
-// 			break;
-// 		}
-// 	}
-// }
+			TVector3 MomentumOfParticle(daughter.GetPx(), daughter.GetPy(), daughter.GetPz());
+			TVector3 PositionOfParticle(daughter.GetX(),  daughter.GetY(),  daughter.GetZ());
+			StPicoPhysicalHelix heliPositionOfParticle(MomentumOfParticle, PositionOfParticle, magnet*kilogauss, particle.GetQ());
+			cTrack.emplace_back(heliPositionOfParticle);
+		}
+	}
+
+	pair<Double_t , Double_t>RV = cTrack[0].pathLengths(cTrack[1] , 0.1 , 0.1);
+	TVector3 LTrackI = cTrack[0].at(RV.first);
+	TVector3 LTrackK = cTrack[1].at(RV.second);
+	double TrackDCA = DistanceBetween(LTrackI , LTrackK);
+
+	if (TrackDCA < Gen1_DCALim) {return result;}
+	else {return false;}
+}
 
 // StPicoHelix StKFParticleAnalysisMaker::StPicoTrack2StPicoHelix(StPicoTrack* Track){
 // 	StPicoHelix Result;
