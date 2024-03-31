@@ -712,7 +712,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 			if (particle.GetPDG() == PDGList[Itr]){
-				if (StKFParticleAnalysisMaker::IfGoodDaughterDCA(mPicoDst , iKFParticle , magnet , 0.6 , 100.0)){
+				if (StKFParticleAnalysisMaker::IfGoodDaughterDCA(mPicoDst , iKFParticle , magnet , 0.6 , 0.6)){
 					H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
 					H_DaughterDCA[Itr]->Fill(particle.GetMass());
 					QA_IfBadReconstructed.emplace_back(0);
