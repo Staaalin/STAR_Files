@@ -47,7 +47,7 @@ void HADDr()
     TFile *fileR;
     int Itr = 0;
     // for(int i=from_FileID;i <= to_FIleID;i++){ // 62690 ~ 66389
-    for(int i=65890;i <= 65389;i++){ // 62690 ~ 66389
+    for(int i=65890;i <= 66389;i++){ // 62690 ~ 66389
         // if (i == 66381){continue;}
         TString filename = midname;
         filename+=i;
@@ -56,14 +56,14 @@ void HADDr()
         // cout<<"FUCK"<<endl;
         TFile *fileR = TFile::Open(filename);
         // TFile *fileR = new TFile(filename,"read");
-        TH1F* h1 = (TH1F*)fileR->Get("H_DaughterDCA_LitP1_Mass");
-        TH1F* h2 = (TH1F*)fileR->Get("H_DaughterDCA_LitP2_Mass");
-        TH1F* h3 = (TH1F*)fileR->Get("H_DaughterDCA_LitP3_Mass");
-        TH1F* h4 = (TH1F*)fileR->Get("H_DaughterDCA_LitP4_Mass");
-        TH1F* h5 = (TH1F*)fileR->Get("H_DaughterDCA_LitP5_Mass");
-        TH1F* h6 = (TH1F*)fileR->Get("H_DaughterDCA_LitP6_Mass");
-        TH1F* h7 = (TH1F*)fileR->Get("H_DaughterDCA_LitP8_Mass");
-        TH1F* h8 = (TH1F*)fileR->Get("H_DaughterDCA_NOLIM_Mass");
+        TH1F* h1 = (TH1F*)fileR->Get("HM_Lambda");
+        TH1F* h2 = (TH1F*)fileR->Get("HM_Lambdab");
+        TH1F* h3 = (TH1F*)fileR->Get("HM_Omega");
+        TH1F* h4 = (TH1F*)fileR->Get("HM_Omegab");
+        TH1F* h5 = (TH1F*)fileR->Get("HM_DaughtersDCA_Lambda");
+        TH1F* h6 = (TH1F*)fileR->Get("HM_DaughtersDCA_Lambdab");
+        TH1F* h7 = (TH1F*)fileR->Get("HM_DaughtersDCA_Omega");
+        TH1F* h8 = (TH1F*)fileR->Get("HM_DaughtersDCA_Omegab");
         list1->Add(h1);
         list2->Add(h2);
         list3->Add(h3);
@@ -74,14 +74,14 @@ void HADDr()
         list8->Add(h8);
         Itr++;
     }
-    TH1F *Result1 = (TH1F*)h1->Clone("H_DaughterDCA_LitP1_Mass_merge");
-    TH1F *Result2 = (TH1F*)h2->Clone("H_DaughterDCA_LitP2_Mass_merge");
-    TH1F *Result3 = (TH1F*)h3->Clone("H_DaughterDCA_LitP3_Mass_merge");
-    TH1F *Result4 = (TH1F*)h4->Clone("H_DaughterDCA_LitP4_Mass_merge");
-    TH1F *Result5 = (TH1F*)h5->Clone("H_DaughterDCA_LitP5_Mass_merge");
-    TH1F *Result6 = (TH1F*)h6->Clone("H_DaughterDCA_LitP6_Mass_merge");
-    TH1F *Result7 = (TH1F*)h7->Clone("H_DaughterDCA_LitP8_Mass_merge");
-    TH1F *Result8 = (TH1F*)h8->Clone("H_DaughterDCA_NOLIM_Mass_merge");
+    TH1F *Result1 = (TH1F*)h1->Clone("merge_Lambda");
+    TH1F *Result2 = (TH1F*)h2->Clone("merge_Lambdab");
+    TH1F *Result3 = (TH1F*)h3->Clone("merge_Omega");
+    TH1F *Result4 = (TH1F*)h4->Clone("merge_Omegab");
+    TH1F *Result5 = (TH1F*)h5->Clone("merge_DaughtersDCA_Lambda");
+    TH1F *Result6 = (TH1F*)h6->Clone("merge_DaughtersDCA_Lambdab");
+    TH1F *Result7 = (TH1F*)h7->Clone("merge_DaughtersDCA_Omega");
+    TH1F *Result8 = (TH1F*)h8->Clone("merge_DaughtersDCA_Omegab");
     Result1->Reset();
     Result1->Merge(list1);
     Result2->Reset();
@@ -100,14 +100,14 @@ void HADDr()
     Result8->Merge(list8);
     TFile *file = new TFile("HADDr.root", "RECREATE");
     cout<<Result1->Integral(1,1000)<<endl;
-    Result1->Write("H_DaughterDCA_LitP1_Mass_merge");
-    Result2->Write("H_DaughterDCA_LitP2_Mass_merge");
-    Result3->Write("H_DaughterDCA_LitP3_Mass_merge");
-    Result4->Write("H_DaughterDCA_LitP4_Mass_merge");
-    Result5->Write("H_DaughterDCA_LitP5_Mass_merge");
-    Result6->Write("H_DaughterDCA_LitP6_Mass_merge");
-    Result7->Write("H_DaughterDCA_LitP8_Mass_merge");
-    Result8->Write("H_DaughterDCA_NOLIM_Mass_merge");
+    Result1->Write("merge_Lambda");
+    Result2->Write("merge_Lambdab");
+    Result3->Write("merge_Omega");
+    Result4->Write("merge_Omegab");
+    Result5->Write("merge_DaughtersDCA_Lambda");
+    Result6->Write("merge_DaughtersDCA_Lambdab");
+    Result7->Write("merge_DaughtersDCA_Omega");
+    Result8->Write("merge_DaughtersDCA_Omegab");
     file->Close();
 
 //////////////////////////////////////////////////////////////////////////////
