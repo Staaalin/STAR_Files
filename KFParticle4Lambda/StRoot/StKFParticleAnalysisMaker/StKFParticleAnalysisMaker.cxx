@@ -712,7 +712,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 			if (particle.GetPDG() == PDGList[Itr]){
-				if (IfGoodDaughterDCA(mPicoDst , iKFParticle , magnet , 0.6 , 100.0)){
+				if (StKFParticleAnalysisMaker::IfGoodDaughterDCA(mPicoDst , iKFParticle , magnet , 0.6 , 100.0)){
 					H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
 					H_DaughterDCA[Itr]->Fill(particle.GetMass());
 					QA_IfBadReconstructed.emplace_back(0);
@@ -731,17 +731,17 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 		
-		StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
-		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
-		TVector3 xv0, op1, op2;
-		double dca1to2 = closestDistance(mTrackI, mTrackK, magnet, Vertex3D, xv0, op1, op2);
-		TVector3 pv0 = op1 + op2;
-		TVector3 xv0toPV = xv0 - Vertex3D;
-		double rdotp = xv0toPV.Dot(pv0);
-		double dcav0toPV = rdotp*rdotp/pv0.Mag2();
-		dcav0toPV = sqrt(xv0toPV.Mag2() - dcav0toPV);
-		double v0decaylength = xv0toPV.Mag();
-		double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();// cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
+		// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
+		// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
+		// TVector3 xv0, op1, op2;
+		// double dca1to2 = closestDistance(mTrackI, mTrackK, magnet, Vertex3D, xv0, op1, op2);
+		// TVector3 pv0 = op1 + op2;
+		// TVector3 xv0toPV = xv0 - Vertex3D;
+		// double rdotp = xv0toPV.Dot(pv0);
+		// double dcav0toPV = rdotp*rdotp/pv0.Mag2();
+		// dcav0toPV = sqrt(xv0toPV.Mag2() - dcav0toPV);
+		// double v0decaylength = xv0toPV.Mag();
+		// double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();// cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
 		//SCHEME 2:
 		KFParticle tempParticle(particle);
 		float l,dl;
@@ -1301,7 +1301,7 @@ double StKFParticleAnalysisMaker::DistanceBetween(TVector3 LA , TVector3 LB){
 	return Dis;
 }
 
-bool IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFParticle , double magnet , double Gen1_DCALim , double Gen2_DCALim){
+bool StKFParticleAnalysisMaker::IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFParticle , double magnet , double Gen1_DCALim , double Gen2_DCALim){
 	bool result = true;
 	KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 	int iTrack,kTrack;
@@ -1334,8 +1334,8 @@ bool IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFParticle , double magnet , d
 		}
 		else
 		{
-			result = IfGoodDaughterDCA(mPicoDst,daughterId,magnet,Gen2_DCALim,-1.0);
-			if (result = false;) {return result;}
+			result = StKFParticleAnalysisMaker::IfGoodDaughterDCA(mPicoDst,daughterId,magnet,Gen2_DCALim,-1.0);
+			if (result = false) {return result;}
 
 			TVector3 MomentumOfParticle(daughter.GetPx(), daughter.GetPy(), daughter.GetPz());
 			TVector3 PositionOfParticle(daughter.GetX(),  daughter.GetY(),  daughter.GetZ());
@@ -1347,7 +1347,7 @@ bool IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFParticle , double magnet , d
 	pair<Double_t , Double_t>RV = cTrack[0].pathLengths(cTrack[1] , 0.1 , 0.1);
 	TVector3 LTrackI = cTrack[0].at(RV.first);
 	TVector3 LTrackK = cTrack[1].at(RV.second);
-	double TrackDCA = DistanceBetween(LTrackI , LTrackK);
+	double TrackDCA = StKFParticleAnalysisMaker::DistanceBetween(LTrackI , LTrackK);
 
 	if (TrackDCA < Gen1_DCALim) {return result;}
 	else {return false;}
