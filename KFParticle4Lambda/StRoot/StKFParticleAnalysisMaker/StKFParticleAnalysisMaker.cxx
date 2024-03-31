@@ -1311,6 +1311,7 @@ bool StKFParticleAnalysisMaker::IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFP
 		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
 		if (fabs(daughter.GetPDG()) == 211 || fabs(daughter.GetPDG()) == 321 || fabs(daughter.GetPDG()) == 2212) // meaning this daughter particle was NOT reconstructed
 		{
+			cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
 			const int globalTrackId = daughter.DaughterIds()[0];
 			Int_t nTracks = mPicoDst->numberOfTracks();
 			Int_t iTrackStart = globalTrackId - 1;
@@ -1348,6 +1349,7 @@ bool StKFParticleAnalysisMaker::IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFP
 	TVector3 LTrackI = cTrack[0].at(RV.first);
 	TVector3 LTrackK = cTrack[1].at(RV.second);
 	double TrackDCA = StKFParticleAnalysisMaker::DistanceBetween(LTrackI , LTrackK);
+	cout<<"TrackDCA = "<<TrackDCA<<endl;
 
 	if (TrackDCA < Gen1_DCALim) {return result;}
 	else {return false;}
