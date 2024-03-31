@@ -1345,7 +1345,7 @@ bool StKFParticleAnalysisMaker::IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFP
 		}
 	}
 
-	pair<Double_t , Double_t>RV = cTrack[0].pathLengths(cTrack[1] , 0.1 , 0.1);
+	pair<Double_t , Double_t>RV = cTrack[0].pathLengths(cTrack[1] , 0.05 , 0.05);
 	TVector3 LTrackI = cTrack[0].at(RV.first);
 	TVector3 LTrackK = cTrack[1].at(RV.second);
 	double TrackDCA = StKFParticleAnalysisMaker::DistanceBetween(LTrackI , LTrackK);
