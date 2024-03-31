@@ -649,7 +649,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// 	}
 		// }
 		// if (IfRecordThisParticle = false){continue;}
-
+		
+		if (particle.GetPDG() == -1) {cout<<"FOUND!!!"<<endl;}
 		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
 
 		//SCHEME 1: reconstruction of V0, the parent particle
