@@ -650,7 +650,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 		// if (IfRecordThisParticle = false){continue;}
 		
-		if (particle.GetPDG() == -1) {cout<<"FOUND!!!"<<endl;}
 		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
 
 		//SCHEME 1: reconstruction of V0, the parent particle
@@ -664,6 +663,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 			if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
 				cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
+				if (daughter.GetPDG() == -1) {
+					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
+						int DdaughterId = daughter.DaughterIds()[jDaughter];
+						KFParticle Ddaughter = KFParticleInterface->GetParticles()[DdaughterId];
+						cout<<"Grand daughter ID = "<<Ddaughter.GetPDG()<<endl;
+					}
+				}
 			}
 			const int globalTrackId = daughter.DaughterIds()[0];
 			Int_t nTracks = mPicoDst->numberOfTracks();
