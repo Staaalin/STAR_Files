@@ -32,10 +32,6 @@
 #include <stdio.h>
 using namespace std;
 
-bool fileExists(const TString& filename) {
-    std::ifstream file(filename);
-    return file.good();
-}
 void HADDr()
 {
     int Filr_Itr = 5; // IMPORTANT
@@ -62,8 +58,8 @@ void HADDr()
         filename+=".root";
 
         // cout<<"FUCK"<<endl;
-        if (!fileExists(filename)) {continue;}
-        TFile *fileR = TFile::Open(filename);
+        TFile *fileR = TFile::Open(filename,"read");
+        if (!fileR){continue;}
         // TFile *fileR = new TFile(filename,"read");
         TH1F* h1 = (TH1F*)fileR->Get("HM_Lambda");
         TH1F* h2 = (TH1F*)fileR->Get("HM_Lambdab");
