@@ -46,7 +46,7 @@ void cHADD()
     TList *list8 = new TList;
     TFile *fileR;
     int Itr = 0;
-    for(int i=0;i <= 22;i++){
+    for(int i=0;i <= 21;i++){
         TString filename = midname;
         filename+=i;
         filename+=".root";
