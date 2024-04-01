@@ -118,7 +118,7 @@ private:
 	TH1F *hcent;
 	TH1F *hcentw;
 
-	#define PDG2NameSize 4 // PDG2Name.size()
+	#define PDG2NameSize 6 // PDG2Name.size()
 	int PDGList[PDG2NameSize];
 	TString NameList[PDG2NameSize];
 	// std::map<int, TString> PDG2Name;
