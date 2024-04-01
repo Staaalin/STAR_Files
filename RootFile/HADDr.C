@@ -51,7 +51,11 @@ void HADDr()
     int Itr = 0;
      
     RecordFileName += Filr_Itr;
-    for(int i=Start_File + Filr_Itr*400;i <= Start_File + (Filr_Itr + 1)*400 - 1;i++){
+    int File_Start = Start_File + Filr_Itr*400;
+    int File_End   = Start_File + (Filr_Itr + 1)*400 - 1;
+    if (File_Start >= 66390){return;}
+    if (File_End   >= 66390){File_End = 66389;}
+    for(int i=File_Start;i <= File_End;i++){
         if (i == 66390){cout<<"END"<<endl;break;}
         TString filename = midname;
         filename+=i;
