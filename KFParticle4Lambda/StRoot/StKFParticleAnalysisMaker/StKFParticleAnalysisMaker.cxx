@@ -47,6 +47,7 @@
 #define XiPdg              3312
 #define phiPdg			   333
 #define OmegaPdg           3334
+#define XiPdg              3312
 #define KaonPdg			   321
 #define ProtonPdg          2212
 #define KsPdg			   310
@@ -642,7 +643,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 		#endif
 		
-		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
+		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg) && (fabs(particle.GetPDG()) != XiPdg)) {continue;}
 
 		//SCHEME 1: reconstruction of V0, the parent particle
 		if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
