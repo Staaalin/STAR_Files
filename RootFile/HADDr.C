@@ -27,11 +27,15 @@
 #include "TRandom3.h"
 // #endif
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <stdio.h>
 using namespace std;
 
-// void HADDr(int from_FileID,int to_FIleID)
+bool fileExists(const TString& filename) {
+    std::ifstream file(filename);
+    return file.good();
+}
 void HADDr()
 {
     int Filr_Itr = 5; // IMPORTANT
@@ -58,6 +62,7 @@ void HADDr()
         filename+=".root";
 
         // cout<<"FUCK"<<endl;
+        if (!fileExists(filename)) {continue;}
         TFile *fileR = TFile::Open(filename);
         // TFile *fileR = new TFile(filename,"read");
         TH1F* h1 = (TH1F*)fileR->Get("HM_Lambda");
