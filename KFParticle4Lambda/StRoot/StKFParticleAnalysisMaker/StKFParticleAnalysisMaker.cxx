@@ -1335,7 +1335,7 @@ bool StKFParticleAnalysisMaker::IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFP
 		}
 		else
 		{
-			result = StKFParticleAnalysisMaker::IfGoodDaughterDCA(mPicoDst,daughterId,magnet,Gen2_DCALim,-1.0);
+			result = StKFParticleAnalysisMaker::IfGoodDaughterDCA(mPicoDst,daughterId,magnet,Gen2_DCALim,1000.0);
 			if (result = false) {return result;}
 
 			TVector3 MomentumOfParticle(daughter.GetPx(), daughter.GetPy(), daughter.GetPz());
