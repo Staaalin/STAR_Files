@@ -34,7 +34,7 @@ using namespace std;
 // void HADDr(int from_FileID,int to_FIleID)
 void HADDr()
 {
-    int Filr_Itr = 0; // IMPORTANT
+    int Filr_Itr = 5; // IMPORTANT
     int Start_File = 57590;
     TString midname  = "/star/data01/pwg/svianping/output/output_";
     TString RecordFileName = "HADDr";
