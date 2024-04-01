@@ -34,7 +34,10 @@ using namespace std;
 // void HADDr(int from_FileID,int to_FIleID)
 void HADDr()
 {
-    TString midname = "/star/data01/pwg/svianping/output/output_";
+    int Filr_Itr = 0; // IMPORTANT
+    int Start_File = 57590;
+    TString midname  = "/star/data01/pwg/svianping/output/output_";
+    TString RecordFileName = "HADDr";
 
     TList *list1 = new TList;
     TList *list2 = new TList;
@@ -46,9 +49,10 @@ void HADDr()
     TList *list8 = new TList;
     TFile *fileR;
     int Itr = 0;
-    // for(int i=from_FileID;i <= to_FIleID;i++){ // 62690 ~ 66389
-    for(int i=65490;i <= 65889;i++){ // 62690 ~ 66389
-        // if (i == 66381){continue;}
+     
+    RecordFileName += Filr_Itr;
+    for(int i=Start_File + Filr_Itr*400;i <= Start_File + (Filr_Itr + 1)*400 - 1;i++){
+        if (i == 66390){cout<<"END"<<endl;break;}
         TString filename = midname;
         filename+=i;
         filename+=".root";
@@ -98,7 +102,8 @@ void HADDr()
     Result7->Merge(list7);
     Result8->Reset();
     Result8->Merge(list8);
-    TFile *file = new TFile("HADDr.root", "RECREATE");
+    RecordFileName += ".root";
+    TFile *file = new TFile(RecordFileName, "RECREATE");
     cout<<Result1->Integral(1,1000)<<endl;
     Result1->Write("merge_Lambda");
     Result2->Write("merge_Lambdab");
