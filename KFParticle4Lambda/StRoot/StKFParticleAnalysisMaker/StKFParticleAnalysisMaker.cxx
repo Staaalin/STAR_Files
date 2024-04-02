@@ -649,18 +649,18 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
 		int iTrack,kTrack;
 		if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
-			cout<<"Particle ID = "<<particle.GetPDG()<<endl;
+			// cout<<"Particle ID = "<<particle.GetPDG()<<endl;
 		}
 		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 			const int daughterId = particle.DaughterIds()[iDaughter]; 
 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 			if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
-				cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
+				// cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
 				if (daughter.GetPDG() == -1) {
 					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
 						int DdaughterId = daughter.DaughterIds()[jDaughter];
 						KFParticle Ddaughter = KFParticleInterface->GetParticles()[DdaughterId];
-						cout<<"Grand daughter ID = "<<Ddaughter.GetPDG()<<endl;
+						// cout<<"Grand daughter ID = "<<Ddaughter.GetPDG()<<endl;
 					}
 				}
 			}
@@ -1101,7 +1101,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			cout<<"Found Omega"<<endl;
 			// hadronTree->Fill();
 		}
-		hadronTree->Fill();
+		// hadronTree->Fill();
 	}
 	/////////////////////////////////////////////////////////
 	return kStOK;
@@ -1312,7 +1312,7 @@ bool StKFParticleAnalysisMaker::IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFP
 		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
 		if (fabs(daughter.GetPDG()) == 211 || fabs(daughter.GetPDG()) == 321 || fabs(daughter.GetPDG()) == 2212) // meaning this daughter particle was NOT reconstructed
 		{
-			cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
+			// cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
 			const int globalTrackId = daughter.DaughterIds()[0];
 			Int_t nTracks = mPicoDst->numberOfTracks();
 			Int_t iTrackStart = globalTrackId - 1;
@@ -1350,7 +1350,7 @@ bool StKFParticleAnalysisMaker::IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFP
 	TVector3 LTrackI = cTrack[0].at(RV.first);
 	TVector3 LTrackK = cTrack[1].at(RV.second);
 	double TrackDCA = StKFParticleAnalysisMaker::DistanceBetween(LTrackI , LTrackK);
-	cout<<"TrackDCA = "<<TrackDCA<<endl;
+	// cout<<"TrackDCA = "<<TrackDCA<<endl;
 
 	if (TrackDCA < Gen1_DCALim) {return result;}
 	else {return false;}
