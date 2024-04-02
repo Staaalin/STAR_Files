@@ -117,10 +117,19 @@ void HADDr2D()
         Result[i+4]->SetFillColor(3);
         Result[i+4]->SetLineColor(3);
 
-        Result[i]  ->GetXaxis()->SetRangeUser(1.05, 1.8);
-        Result[i]  ->GetXaxis()->SetRangeUser(1.05, 1.8);
-        Result[i+4]->GetXaxis()->SetRangeUser(1.05, 1.8);
-        Result[i+4]->GetXaxis()->SetRangeUser(1.05, 1.8);
+        if (i <= 2){
+            Result[i]  ->GetXaxis()->SetRangeUser(1.05, 1.8);
+            Result[i]  ->GetXaxis()->SetRangeUser(1.05, 1.8);
+            Result[i+4]->GetXaxis()->SetRangeUser(1.05, 1.8);
+            Result[i+4]->GetXaxis()->SetRangeUser(1.05, 1.8);
+        }
+        else
+        {
+            Result[i]  ->GetXaxis()->SetRangeUser(1.6, 2.4);
+            Result[i]  ->GetXaxis()->SetRangeUser(1.6, 2.4);
+            Result[i+4]->GetXaxis()->SetRangeUser(1.6, 2.4);
+            Result[i+4]->GetXaxis()->SetRangeUser(1.6, 2.4);
+        }
 
         Result[i]->Draw();
         Result[i+4]->Draw("sames");
