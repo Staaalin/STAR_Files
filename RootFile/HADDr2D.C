@@ -32,7 +32,7 @@
 using namespace std;
 
 // void HADDr(int from_FileID,int to_FIleID)
-void HADDr()
+void HADDr2D()
 {
     TString midname = "/star/u/svianping/STAR_Files/RootFile/HADDr";
 
@@ -97,7 +97,7 @@ void HADDr()
     Result[7]->Merge(list7);
     Result[8]->Reset();
     Result[8]->Merge(list8);
-    TFile *file = new TFile("HADDrM.root", "RECREATE");
+    TFile *file = new TFile("HADDrN.root", "RECREATE");
     Result[1]->Write("Merge_merge_Lambda");
     Result[2]->Write("Merge_merge_Lambdab");
     Result[3]->Write("Merge_merge_Omega");
@@ -107,7 +107,7 @@ void HADDr()
     Result[7]->Write("Merge_merge_DaughtersDCA_Omega");
     Result[8]->Write("Merge_merge_DaughtersDCA_Omegab");
 
-    for(int i=1;i<=4,i++){
+    for(int i=1;i<=4;i++){
         TString Name = "c";
         Name += i;
         auto c1 = new TCanvas(Name,Name,600,500);
