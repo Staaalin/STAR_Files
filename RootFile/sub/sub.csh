@@ -92,7 +92,7 @@ while ($i <= $numFiles)
     echo \<output fromScratch=\"$OutputName$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     echo \</job\> >> $SubXml
 
-    # star-submit $SubXml
+    star-submit $SubXml
 
     echo "submitted"$i"/"$numFiles
     @ i = $i + 1
