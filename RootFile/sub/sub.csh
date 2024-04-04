@@ -59,6 +59,7 @@ while ($i <= $numFiles)
 
     # print xml file
     echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
+    echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${FilesPerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
 
     echo \<command\> >> $SubXml
     echo rm \*\.log >> $SubXml
