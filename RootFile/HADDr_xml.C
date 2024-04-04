@@ -32,12 +32,10 @@
 #include <stdio.h>
 using namespace std;
 
-void HADDr_xml(const TString FileList,const TString JobID)
+void HADDr_xml(const TString InputName,const TString OutputName,const int JobID,const int FilesPerJob,int Start_File,int OverflowIndex)
 {
-    int Filr_Itr = 22; // IMPORTANT
-    int Start_File = 57590;
-    TString midname  = "/star/data01/pwg/svianping/output/output_";
-    TString RecordFileName = "HADDr";
+    int Filr_Itr = JobID; // IMPORTANT FROM 0
+    TString midname = InputName;
 
     TList *list1 = new TList;
     TList *list2 = new TList;
@@ -49,14 +47,14 @@ void HADDr_xml(const TString FileList,const TString JobID)
     TList *list8 = new TList;
     TFile *fileR;
     int Itr = 0;
-     
+    
+    TString RecordFileName = OutputName;
     RecordFileName += Filr_Itr;
-    int File_Start = Start_File + Filr_Itr*400;
-    int File_End   = Start_File + (Filr_Itr + 1)*400 - 1;
-    if (File_Start >= 66390){return;}
-    if (File_End   >= 66390){File_End = 66389;}
+    int File_Start = Start_File + Filr_Itr*FilesPerJob;
+    int File_End   = Start_File + (Filr_Itr + 1)*FilesPerJob - 1;
+    if (File_Start >= OverflowIndex + 1){return;}
     for(int i=File_Start;i <= File_End;i++){
-        if (i == 66390){cout<<"END"<<endl;break;}
+        if (i == OverflowIndex + 1){cout<<"END"<<endl;break;}
         TString filename = midname;
         filename+=i;
         filename+=".root";
@@ -83,14 +81,14 @@ void HADDr_xml(const TString FileList,const TString JobID)
         list8->Add(h8);
         Itr++;
     }
-    TH1F *Result1 = (TH1F*)h1->Clone("merge_Lambda");
-    TH1F *Result2 = (TH1F*)h2->Clone("merge_Lambdab");
-    TH1F *Result3 = (TH1F*)h3->Clone("merge_Omega");
-    TH1F *Result4 = (TH1F*)h4->Clone("merge_Omegab");
-    TH1F *Result5 = (TH1F*)h5->Clone("merge_DaughtersDCA_Lambda");
-    TH1F *Result6 = (TH1F*)h6->Clone("merge_DaughtersDCA_Lambdab");
-    TH1F *Result7 = (TH1F*)h7->Clone("merge_DaughtersDCA_Omega");
-    TH1F *Result8 = (TH1F*)h8->Clone("merge_DaughtersDCA_Omegab");
+    TH1F *Result1 = (TH1F*)h1->Clone("HM_Lambda");
+    TH1F *Result2 = (TH1F*)h2->Clone("HM_Lambdab");
+    TH1F *Result3 = (TH1F*)h3->Clone("HM_Omega");
+    TH1F *Result4 = (TH1F*)h4->Clone("HM_Omegab");
+    TH1F *Result5 = (TH1F*)h5->Clone("HM_DaughtersDCA_Lambda");
+    TH1F *Result6 = (TH1F*)h6->Clone("HM_DaughtersDCA_Lambdab");
+    TH1F *Result7 = (TH1F*)h7->Clone("HM_DaughtersDCA_Omega");
+    TH1F *Result8 = (TH1F*)h8->Clone("HM_DaughtersDCA_Omegab");
     Result1->Reset();
     Result1->Merge(list1);
     Result2->Reset();
@@ -110,14 +108,14 @@ void HADDr_xml(const TString FileList,const TString JobID)
     RecordFileName += ".root";
     TFile *file = new TFile(RecordFileName, "RECREATE");
     cout<<Result1->Integral(1,1000)<<endl;
-    Result1->Write("merge_Lambda");
-    Result2->Write("merge_Lambdab");
-    Result3->Write("merge_Omega");
-    Result4->Write("merge_Omegab");
-    Result5->Write("merge_DaughtersDCA_Lambda");
-    Result6->Write("merge_DaughtersDCA_Lambdab");
-    Result7->Write("merge_DaughtersDCA_Omega");
-    Result8->Write("merge_DaughtersDCA_Omegab");
+    Result1->Write("HM_Lambda");
+    Result2->Write("HM_Lambdab");
+    Result3->Write("HM_Omega");
+    Result4->Write("HM_Omegab");
+    Result5->Write("HM_DaughtersDCA_Lambda");
+    Result6->Write("HM_DaughtersDCA_Lambdab");
+    Result7->Write("HM_DaughtersDCA_Omega");
+    Result8->Write("HM_DaughtersDCA_Omegab");
     file->Close();
 
 //////////////////////////////////////////////////////////////////////////////
