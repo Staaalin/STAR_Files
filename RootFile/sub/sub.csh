@@ -81,6 +81,8 @@ while ($i <= $numFiles)
         else
             break
         endif
+
+        @ k = $k + 1
     end
 
     echo \</Package\> >> $SubXml
