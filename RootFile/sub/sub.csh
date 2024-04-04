@@ -61,7 +61,7 @@ while ($i <= $numFiles)
     echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
 
     echo \<command\> >> $SubXml
-    set ARM = " >& "
+    set ARM = " >&amp; "
     echo root4star -q -b HADDr_xml.C\(\"$InputName\",\"$OutputName\",\"$i\",\"$FilesPerJob\",\"$FileStart\",\"$FileEnd\"\)$ARM$i".log" >> $SubXml
     echo \</command\> >> $SubXml
 
