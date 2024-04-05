@@ -62,8 +62,8 @@ while ($i <= $numFiles)
     echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${FilesPerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
 
     echo \<command\> >> $SubXml
-    echo rm \*\.log >> $SubXml
-    set ARM = " > "
+    echo rm $i\.log >> $SubXml
+    set ARM = " >> "
     echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",\"$i\",\"$FilesPerJob\",\"$FileStart\",\"$FileEnd\"\)\'$ARM$i".log" >> $SubXml
     # echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",\"$i\",\"$FilesPerJob\",\"$FileStart\",\"$FileEnd\"\)\'$ARM"/star/u/svianping/STAR_Files/RootFile/sub.log" >> $SubXml
     echo \</command\> >> $SubXml
