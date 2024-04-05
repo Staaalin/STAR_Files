@@ -68,8 +68,8 @@ while ($i <= $numFiles)
     set ARM = " > "
     echo ll >> $SubXml
     echo echo \"000000000000000000000000000000000000000\" >> $SubXml
-    # echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'$ARM$i".log" >> $SubXml
-    echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'" >> /star/u/svianping/STAR_Files/RootFile/sub.log" >> $SubXml
+    echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'$ARM$i".log" >> $SubXml
+    # echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'" >> /star/u/svianping/STAR_Files/RootFile/sub.log" >> $SubXml
     echo \</command\> >> $SubXml
 
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
