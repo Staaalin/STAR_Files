@@ -61,7 +61,7 @@ void HADDr_xml(const TString InputName,const TString OutputName,const int JobID,
 
         // cout<<"FUCK"<<endl;
         TFile *fileR = TFile::Open(filename,"read");
-        if (!fileR){continue;}
+        if (!fileR){continue;cout<<"File: "<<fileR<<" not found"<<endl;}
         // TFile *fileR = new TFile(filename,"read");
         TH1F* h1 = (TH1F*)fileR->Get("HM_Lambda");
         TH1F* h2 = (TH1F*)fileR->Get("HM_Lambdab");
@@ -116,6 +116,7 @@ void HADDr_xml(const TString InputName,const TString OutputName,const int JobID,
     Result6->Write("HM_DaughtersDCA_Lambdab");
     Result7->Write("HM_DaughtersDCA_Omega");
     Result8->Write("HM_DaughtersDCA_Omegab");
+    cout<<"Finish writing"<<endl;
     file->Close();
 
 //////////////////////////////////////////////////////////////////////////////
