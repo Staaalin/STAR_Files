@@ -32,12 +32,12 @@
 #include <stdio.h>
 using namespace std;
 
-// void HADDr_xml(const TString InputName,const TString OutputName,const int JobID,const int FilesPerJob,int Start_File,int OverflowIndex)
-void HADDr_xml(Char_t *InputName,Char_t *OutputName,const int JobID,const int FilesPerJob,int Start_File,int OverflowIndex)
+void HADDr_xml(const TString InputName,const TString OutputName,const int JobID,const int FilesPerJob,int Start_File,int OverflowIndex)
+// void HADDr_xml(Char_t *InputName,Char_t *OutputName,const int JobID,const int FilesPerJob,int Start_File,int OverflowIndex)
 {
     int Filr_Itr = JobID; // IMPORTANT FROM 0
-    // TString midname = InputName;
-    TString midname = str(InputName);
+    TString midname = InputName;
+    // TString midname = str(InputName);
 
     TList *list1 = new TList;
     TList *list2 = new TList;
@@ -50,8 +50,8 @@ void HADDr_xml(Char_t *InputName,Char_t *OutputName,const int JobID,const int Fi
     TFile *fileR;
     int Itr = 0;
     
-    // TString RecordFileName = OutputName;
-    TString RecordFileName = str(OutputName);
+    TString RecordFileName = OutputName;
+    // TString RecordFileName = str(OutputName);
     RecordFileName += Filr_Itr;
     int File_Start = Start_File + Filr_Itr*FilesPerJob;
     int File_End   = Start_File + (Filr_Itr + 1)*FilesPerJob - 1;
