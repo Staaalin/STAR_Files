@@ -62,6 +62,7 @@ while ($i <= $numFiles)
     echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${FilesPerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
 
     echo \<command\> >> $SubXml
+    echo "source /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh" >> $SubXml
     echo rm $i\.log >> $SubXml
     # echo touch $i\.log >> $SubXml
     set ARM = " > "
