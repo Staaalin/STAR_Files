@@ -53,7 +53,8 @@ set i = 0
 set j = 0
 while ($i <= $numFiles)
 
-    set SubXml=sub.xml
+    # set SubXml=sub.xml
+    set SubXml=/star/data01/pwg/svianping/HADD/sub.xml
     if(-e $SubXml) rm $SubXml
     touch $SubXml
 
@@ -102,9 +103,9 @@ while ($i <= $numFiles)
     star-submit $SubXml
 
     echo "submitted"$i"/"$numFiles
-rm -rf /star/u/svianping/STAR_Files/RootFile/sub/ZIP*
-rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sch*
-rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sub.xml
-echo "Delate submit files"
+    # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/ZIP*
+    # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sch*
+    # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sub.xml
+    # echo "Delate submit files"
     @ i = $i + 1
 end
