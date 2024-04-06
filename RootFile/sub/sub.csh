@@ -49,6 +49,7 @@ set MainDir=`pwd`
 set numFiles = 1
 @ numFiles = ( $FileEnd - $FileStart ) / $FilesPerJob
 
+cd /star/data01/pwg/svianping/HADD/
 set i = 0
 set j = 0
 while ($i <= $numFiles)
