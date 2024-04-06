@@ -42,9 +42,9 @@ set i = 0
 set j = 0
 while ($i <= $numFiles)
 
-    echo "source /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh"
+    source /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh
     set ARM = " > HADD_"
-    root4star -q -b HADDr_xml.C\(\"$ObvInputName\","$ObvOutputName",$i,$FilesPerJob,$FileStart,$FileEnd\)$ARM$i.log
+    root4star -q -b HADDr_xml.C\(\"$ObvInputName\",\"$ObvOutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)$ARM$i.log
 
     @ i = $i + 1
 end
