@@ -102,5 +102,9 @@ while ($i <= $numFiles)
     star-submit $SubXml
 
     echo "submitted"$i"/"$numFiles
+rm -rf /star/u/svianping/STAR_Files/RootFile/sub/ZIP*
+rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sch*
+rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sub.xml
+echo "Delate submit files"
     @ i = $i + 1
 end
