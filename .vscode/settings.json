@@ -23,6 +23,7 @@
         "RunAnalyzer_QA.C": "cpp",
         "Gamma_QA.C": "cpp",
         "treeMaker.C": "cpp",
-        "HADDr_xml.C": "cpp"
+        "HADDr_xml.C": "cpp",
+        "test.C": "cpp"
     }
 }
