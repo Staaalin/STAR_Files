@@ -27,20 +27,20 @@ using namespace std;
 #include "TLorentzVector.h"
 
 /// PicoDst headers
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoDstReader.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoDst.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoEvent.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoTrack.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoBTofHit.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoBTowHit.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoEmcTrigger.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoBTofPidTraits.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoTrackCovMatrix.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StEpdUtil/StEpdEpFinder.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StRefMultCorr/StRefMultCorr.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StRefMultCorr/CentralityMaker.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoEpdHit.h"
-#include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StEpdUtil//StEpdGeom.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoDstReader.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoDst.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoEvent.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoTrack.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoBTofHit.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoBTowHit.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoEmcTrigger.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoBTofPidTraits.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoTrackCovMatrix.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StEpdUtil/StEpdEpFinder.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StRefMultCorr/StRefMultCorr.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StRefMultCorr/CentralityMaker.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StPicoEvent/StPicoEpdHit.h"
+// #include "/star/data01/pwg/zhiwanxu/ESE-11GeV/StRoot/StEpdUtil//StEpdGeom.h"
 
 //class StRefMultCorr;
 //class CentralityMaker;
@@ -381,6 +381,11 @@ void EPD_hits(TClonesArray *mEpdHits);
 void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){	//main_function
 	delete gRandom;
 	gRandom = new TRandom(0);
+
+	gSystem->Load("StUtilities");
+	gSystem->Load("StRefMultCorr");
+	gSystem->Load("StPicoEvent");
+	gSystem->Load("StPicoDstMaker");
 
 	DefineHistogram();
         char fname_old[200], fname_new[200];
