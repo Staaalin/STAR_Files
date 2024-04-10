@@ -3,6 +3,8 @@
 # starver DEV
 # starver SL20a
 
+source /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh
+
 ## pAu@200GeV or dAu@200GeV
 # inputs
 set iJob=$1
