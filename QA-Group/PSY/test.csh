@@ -1,0 +1,23 @@
+#!/bin/csh
+#starver SL19b
+# starver DEV
+# starver SL20a
+
+## pAu@200GeV or dAu@200GeV
+# inputs
+set iJob=$1
+# settings
+set nRun=16
+set mRun=Run${nRun}
+set mEnergy=200.0
+set ListDir=./datalist/
+set MainDir=`pwd`
+
+set sen = 1
+set opt_weight = 1
+
+echo $mEnergy $nRun
+
+set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/$mEnergy.list.`printf "%.6d" ${iJob}`
+
+root4star -b -q ./Gamma_QA.C\($cen,$opt_weight,\"$FILELIST\"\)
