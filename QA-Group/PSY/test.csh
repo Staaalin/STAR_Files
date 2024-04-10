@@ -7,13 +7,13 @@
 # inputs
 set iJob=$1
 # settings
-set nRun=16
+set nRun=18
 set mRun=Run${nRun}
-set mEnergy=200.0
+set mEnergy=26.5
 set ListDir=./datalist/
 set MainDir=`pwd`
 
-set sen = 1
+set cen = 1
 set opt_weight = 1
 
 echo $mEnergy $nRun
