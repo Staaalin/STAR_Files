@@ -22,4 +22,6 @@ echo $mEnergy $nRun
 
 set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/$mEnergy.list.`printf "%.6d" ${iJob}`
 
-root4star -b -q ./Gamma_QA.C\($cen,$opt_weight,\"$FILELIST\"\)
+cd /star/u/svianping/STAR_Files/QA-Group/StRoot
+
+root4star -b -q /star/u/svianping/STAR_Files/QA-Group/PSY/Gamma_QA.C\($cen,$opt_weight,\"/star/u/svianping/STAR_Files/QA-Group/PSY/$FILELIST\"\)
