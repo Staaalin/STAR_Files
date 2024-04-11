@@ -24,7 +24,7 @@
 #ifdef _VANILLA_ROOT_
 #include "SystemOfUnits.h"
 #else
-#include "StarClassLibrary/SystemOfUnits.h"
+#include "../StarClassLibrary/SystemOfUnits.h"
 #endif
 
 // Declare C++ namespaces
