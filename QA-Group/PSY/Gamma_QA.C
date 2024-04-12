@@ -393,8 +393,11 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
         sprintf(fname_old,"cen%d.weight_1%d%d_QA.root",cen,nHar-1,nHar);
 	Weight_Read = ReadWeight(fname_old);
 
+        cout<<"Ready to read"<<endl;
   	StPicoDstReader* picoReader = new StPicoDstReader(inFile);
+        cout<<"Finish reading"<<endl;
   	picoReader->Init();
+        cout<<"Finish initting"<<endl;
   	if( !picoReader->chain() ) { std::cout << "No chain has been found." << std::endl; }
 	Int_t nentries = picoReader->chain()->GetEntries();
 	
