@@ -4,6 +4,7 @@
 starver SL20d
 
 source /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh
+cons
 
 ## pAu@200GeV or dAu@200GeV
 # inputs
