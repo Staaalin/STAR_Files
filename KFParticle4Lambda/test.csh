@@ -20,7 +20,7 @@ set iJob=$1
 set nRun=16
 set mRun=Run${nRun}
 set mEnergy=200.0
-set ListDir=./datalist/
+set ListDir=datalist/
 set MainDir=`pwd`
 
 ## AuAu@200GeV
