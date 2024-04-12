@@ -1,7 +1,7 @@
 #!/bin/csh
 #starver SL19b
 # starver DEV
-# starver SL20a
+starver SL20d
 
 source /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh
 
