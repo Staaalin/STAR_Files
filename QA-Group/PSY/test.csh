@@ -12,7 +12,7 @@ set iJob=$1
 set nRun=18
 set mRun=Run${nRun}
 set mEnergy=26.5
-set ListDir=./datalist/
+set ListDir=datalist/
 set MainDir=`pwd`
 
 set cen = 1
