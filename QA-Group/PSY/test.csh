@@ -1,10 +1,20 @@
 #!/bin/csh
 #starver SL19b
 # starver DEV
+setenv NODEBUG yes
 starver SL20d
 
-source /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh
-cons
+echo "If Source? 0:[NO] 1:[YES]"
+set IfSource = "$<"
+if ($IfSource == 1) then
+    source /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh
+endif
+echo "If Cons? 0:[NO] 1:[YES]"
+set IfCons = "$<"
+if ($IfCons == 1) then
+    cons
+endif
+
 
 ## pAu@200GeV or dAu@200GeV
 # inputs
