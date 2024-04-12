@@ -1,6 +1,7 @@
 #!/bin/csh
 #starver SL19b
 # starver DEV
+rm -r .sl73_gcc485
 setenv NODEBUG yes
 starver SL20d
 
