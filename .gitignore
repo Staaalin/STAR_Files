@@ -47,3 +47,8 @@ KFParticle4Lambda/.sl73_x8664_gcc485/obj/StRoot/StRefMultCorr/StRefMultCorr_Cint
 KFParticle4Lambda/.sl73_x8664_gcc485/obj/StRoot/StKFParticleAnalysisMaker/StKFParticleAnalysisMaker_Cint.cxx
 KFParticle4Lambda/.sl73_x8664_gcc485/obj/StRoot/StKFParticleAnalysisMaker/StKFParticleAnalysisMaker_Cint.cxx
 .vscode/settings.json
+
+QA-Group/PSY/.sl73_gcc485
+QA-Group/PSY/.sl73_x8664_gcc485
+QA-Group/PSY/temp_gccflags.c
+
