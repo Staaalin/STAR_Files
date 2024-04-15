@@ -101,9 +101,8 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
         TF1 *customFunction = new TF1("SFunction", FitFuction, FIT_X_Min[i], FIT_X_Max[i], PolyI+3);
         double OrderFCT1 = calculateAverage(h[i] , XValue2BinID(h[i], FIT_A_Min[i]) , XValue2BinID(h[i], FIT_A_Max[i]));
         cout<<"The 1st order poly factor is "<<OrderFCT1<<endl;
-        Double_t* params[13] = {OrderFCT1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]};
         if       (PolyI == 10) {
-            customFunction->SetParameters(params);
+            customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
         }else if (PolyI == 5)  {
             customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, 0.3, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
         }
