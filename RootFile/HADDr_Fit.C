@@ -93,6 +93,7 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
     cout<<"#####################################################################################"<<endl;
     TFile *file = new TFile(OutputName, "RECREATE");
     for (int i=0;i<4;i++) {
+        if (i > 1) {break;}
         cout<<"Start in "<<List_Name[i]<<endl;
         h[i] = (TH1F*)fileR->Get(List_Name[i]);
         canvas[i] = new TCanvas(TCan_Name[i] , TCan_Name[i]);
@@ -108,7 +109,7 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
             customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
         }
         h[i]->Draw();
-        h[i]->Fit(customFunction);
+        h[i]->Fit(customFunction, "R");
         customFunction->Draw("same");
         canvas[i]->Draw();
         canvas[i]->Write();
