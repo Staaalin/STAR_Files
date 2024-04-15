@@ -134,6 +134,10 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
             PolyF->SetParameters(params);
             PolyF->SetLineColor(kRed);
             PolyF->Draw("same");
+            TF1* GausF = new TF1 ("GausFuction",GausFuction,FIT_X_Min[i], FIT_X_Max[i], PolyI+3);
+            GausF->SetParameters(params);
+            GausF->SetLineColor(kBlue);
+            GausF->Draw("same");
         }else if (PolyI == 4)  {
         }
         canvas[i]->Draw();
