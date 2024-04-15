@@ -49,7 +49,7 @@ Double_t FitFuction(Double_t *x, Double_t *params){
     return value;
 }
 
-int XValue2BinID(TH1F* histogram, double x){
+int XValue2BinID(TH1F* histogram, Double_t x){
     int binCount = histogram->GetNbinsX();
     for (int i = 0;i<binCount;i++){
         if (x <= histogram->GetBinContent(i)){
@@ -58,20 +58,20 @@ int XValue2BinID(TH1F* histogram, double x){
     }
 }
 
-double calculateAverage(TH1F* histogram, int startBin, int endBin) {
+Double_t calculateAverage(TH1F* histogram, int startBin, int endBin) {
    // 求和变量和计数器
-   double sum = 0;
+   Double_t sum = 0;
    int count = 0;
 
    // 遍历区间内的bin，并求和
    for (int bin = startBin; bin <= endBin; bin++) {
-      double binContent = histogram->GetBinContent(bin);
+      Double_t binContent = histogram->GetBinContent(bin);
       sum += binContent;
       count++;
    }
 
    // 计算平均值
-   double average = sum / count;
+   Double_t average = sum / count;
 
    return average;
 }
@@ -80,12 +80,12 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
 {
     TString List_Name[4] = { "HM_Lambda" , "HM_Lambdab" , "HM_Omega" , "HM_Omegab"};
     TString TCan_Name[4] = { "CM_Lambda" , "CM_Lambdab" , "CM_Omega" , "CM_Omegab"};
-    double  FIT_X_Min[4] = {    1.09     ,    1.09      ,   1.63     ,    1.63    };
-    double  FIT_X_Max[4] = {    1.14     ,    1.14      ,   1.71     ,    1.71    };
-    double  FIT_X_Wid[4] = {    0.005    ,    0.005     ,   0.009    ,    0.009   };
-    double  FIT_X_Mid[4] = {    1.1165   ,    1.1165    ,   1.6725   ,    1.6725  };
-    double  FIT_A_Min[4] = {    1.09     ,    1.09      ,   1.635    ,    1.635   };
-    double  FIT_A_Max[4] = {    1.10     ,    1.10      ,   1.663    ,    1.663   };
+    Double_t  FIT_X_Min[4] = {    1.09     ,    1.09      ,   1.63     ,    1.63    };
+    Double_t  FIT_X_Max[4] = {    1.14     ,    1.14      ,   1.71     ,    1.71    };
+    Double_t  FIT_X_Wid[4] = {    0.005    ,    0.005     ,   0.009    ,    0.009   };
+    Double_t  FIT_X_Mid[4] = {    1.1165   ,    1.1165    ,   1.6725   ,    1.6725  };
+    Double_t  FIT_A_Min[4] = {    1.09     ,    1.09      ,   1.635    ,    1.635   };
+    Double_t  FIT_A_Max[4] = {    1.10     ,    1.10      ,   1.663    ,    1.663   };
     TH1F* h[4];
     TCanvas *canvas[4];
     TFile *fileR = TFile::Open(InputName,"read");
@@ -96,10 +96,10 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
         h[i] = (TH1F*)fileR->Get(List_Name[i]);
         canvas[i] = new TCanvas(TCan_Name[i] , TCan_Name[i]);
         int maxBinIndex = h[i]->GetMaximumBin();
-        double maxBinValue = h[i]->GetBinContent(maxBinIndex);
+        Double_t maxBinValue = h[i]->GetBinContent(maxBinIndex);
         cout<<"MaxBin at "<<maxBinIndex<<", and value is "<<maxBinValue<<endl;
         TF1 *customFunction = new TF1("SFunction", FitFuction, FIT_X_Min[i], FIT_X_Max[i], PolyI+3);
-        double OrderFCT1 = calculateAverage(h[i] , XValue2BinID(h[i], FIT_A_Min[i]) , XValue2BinID(h[i], FIT_A_Max[i]));
+        Double_t OrderFCT1 = calculateAverage(h[i] , XValue2BinID(h[i], FIT_A_Min[i]) , XValue2BinID(h[i], FIT_A_Max[i]));
         cout<<"The 1st order poly factor is "<<OrderFCT1<<endl;
         if       (PolyI == 10) {
             customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
