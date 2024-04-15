@@ -32,8 +32,8 @@
 #include <stdio.h>
 using namespace std;
 
-// const int PolyI = 7;
-const int PolyI = 4;
+const int PolyI = 7;
+// const int PolyI = 4;
 
 Double_t FitFuction(Double_t *x, Double_t *params){
     // params[0]  多项式常数项
@@ -47,6 +47,19 @@ Double_t FitFuction(Double_t *x, Double_t *params){
        value += params[i] * TMath::Power(x[0], i); // 多项式的求和
     }
     value += params[PolyI]*TMath::Exp(-1.0*TMath::Power((x[0] - params[PolyI+1]),2)/(2*params[PolyI+2]*params[PolyI+2]));
+    return value;
+}
+
+Double_t PolyFuction(Double_t *x, Double_t *params){
+    Double_t value = params[0];
+    for (Int_t i = 1; i < PolyI; ++i) {
+       value += params[i] * TMath::Power(x[0], i); // 多项式的求和
+    }
+    return value;
+}
+
+Double_t GausFuction(Double_t *x, Double_t *params){
+    Double_t value = params[PolyI]*TMath::Exp(-1.0*TMath::Power((x[0] - params[PolyI+1]),2)/(2*params[PolyI+2]*params[PolyI+2]));
     return value;
 }
 
@@ -93,7 +106,7 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
     cout<<"#####################################################################################"<<endl;
     TFile *file = new TFile(OutputName, "RECREATE");
     for (int i=0;i<4;i++) {
-        if (i > 1) {break;}
+        if (i > 0) {break;}
         cout<<"Start in "<<List_Name[i]<<endl;
         h[i] = (TH1F*)fileR->Get(List_Name[i]);
         canvas[i] = new TCanvas(TCan_Name[i] , TCan_Name[i]);
@@ -110,7 +123,19 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
         }
         h[i]->Draw();
         h[i]->Fit(customFunction, "R");
+        customFunction->SetLineColor(kGreen);
         customFunction->Draw("same");
+        if       (PolyI == 7) {
+            Double_t params[] = { customFunction->GetParameter(0) , customFunction->GetParameter(1) , customFunction->GetParameter(2) ,
+                                  customFunction->GetParameter(3) , customFunction->GetParameter(4) , customFunction->GetParameter(5) ,
+                                  customFunction->GetParameter(6) , customFunction->GetParameter(7) , customFunction->GetParameter(8) ,
+                                  customFunction->GetParameter(9)};
+            TF1* PolyF = new TF1 ("PolyFuction",PolyFuction,FIT_X_Min[i], FIT_X_Max[i], PolyI+3);
+            PolyF->SetParameters(params);
+            PolyF->SetLineColor(kRed);
+            PolyF->Draw("same");
+        }else if (PolyI == 4)  {
+        }
         canvas[i]->Draw();
         canvas[i]->Write();
         cout<<"#####################################################################################"<<endl;
