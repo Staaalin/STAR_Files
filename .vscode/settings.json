@@ -24,6 +24,7 @@
         "Gamma_QA.C": "cpp",
         "treeMaker.C": "cpp",
         "HADDr_xml.C": "cpp",
-        "test.C": "cpp"
+        "test.C": "cpp",
+        "HADDr_Fit.C": "cpp"
     }
 }
