@@ -32,7 +32,7 @@
 #include <stdio.h>
 using namespace std;
 
-const int PolyI = 10;
+const int PolyI = 7;
 
 Double_t FitFuction(Double_t *x, Double_t *params){
     // params[0]  多项式常数项
@@ -101,8 +101,8 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
         TF1 *customFunction = new TF1("SFunction", FitFuction, FIT_X_Min[i], FIT_X_Max[i], PolyI+3);
         Double_t OrderFCT1 = calculateAverage(h[i] , XValue2BinID(h[i], FIT_A_Min[i]) , XValue2BinID(h[i], FIT_A_Max[i]));
         cout<<"The 1st order poly factor is "<<OrderFCT1<<endl;
-        if       (PolyI == 10) {
-            customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
+        if       (PolyI == 7) {
+            customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
         }else if (PolyI == 5)  {
             customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, 0.3, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
         }
