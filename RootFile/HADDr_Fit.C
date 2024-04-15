@@ -32,7 +32,8 @@
 #include <stdio.h>
 using namespace std;
 
-const int PolyI = 7;
+// const int PolyI = 7;
+const int PolyI = 4;
 
 Double_t FitFuction(Double_t *x, Double_t *params){
     // params[0]  多项式常数项
@@ -103,13 +104,14 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
         cout<<"The 1st order poly factor is "<<OrderFCT1<<endl;
         if       (PolyI == 7) {
             customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
-        }else if (PolyI == 5)  {
-            customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, 0.3, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
+        }else if (PolyI == 4)  {
+            customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
         }
         h[i]->Draw();
         h[i]->Fit(customFunction);
         customFunction->Draw("same");
         canvas[i]->Draw();
+        canvas[i]->Write();
         cout<<"#####################################################################################"<<endl;
     }
     
