@@ -65,13 +65,13 @@ Double_t calculateAverage(TH1F* histogram, int startBin, int endBin) {
 
    // 遍历区间内的bin，并求和
    for (int bin = startBin; bin <= endBin; bin++) {
-      Double_t binContent = histogram->GetBinContent(bin);
+      Double_t binContent = 1.0*histogram->GetBinContent(bin);
       sum += binContent;
       count++;
    }
 
    // 计算平均值
-   Double_t average = sum / count;
+   Double_t average = sum / (1.0*count);
 
    return average;
 }
