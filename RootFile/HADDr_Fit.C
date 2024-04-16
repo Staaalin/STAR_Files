@@ -32,6 +32,8 @@
 #include <stdio.h>
 using namespace std;
 
+Double_t PI = 3.14159265358979383246;
+
 const int PolyI = 7;
 // const int PolyI = 4;
 
@@ -54,6 +56,14 @@ Double_t PolyFuction(Double_t *x, Double_t *params){
     Double_t value = params[0];
     for (Int_t i = 1; i < PolyI; ++i) {
        value += params[i] * TMath::Power(x[0], i); // 多项式的求和
+    }
+    return value;
+}
+
+Double_t IntPolyFuction(Double_t *x, Double_t *params){
+    Double_t value = params[0]*x[0];
+    for (Int_t i = 1; i < PolyI; ++i) {
+       value += params[i] * TMath::Power(x[0], i+1) / (i+1); // 多项式的求和
     }
     return value;
 }
@@ -92,14 +102,16 @@ Double_t calculateAverage(TH1F* histogram, int startBin, int endBin) {
 
 void HADDr_Fit(const TString InputName,const TString OutputName)
 {
-    TString List_Name[4] = { "HM_Lambda" , "HM_Lambdab" , "HM_Omega" , "HM_Omegab"};
-    TString TCan_Name[4] = { "CM_Lambda" , "CM_Lambdab" , "CM_Omega" , "CM_Omegab"};
-    Double_t  FIT_X_Min[4] = {    1.09     ,    1.09      ,   1.63     ,    1.63    };
-    Double_t  FIT_X_Max[4] = {    1.14     ,    1.14      ,   1.71     ,    1.71    };
+    TString   List_Name[4] = { "HM_Lambda" , "HM_Lambdab" , "HM_Omega" , "HM_Omegab"};
+    TString   TCan_Name[4] = { "CM_Lambda" , "CM_Lambdab" , "CM_Omega" , "CM_Omegab"};
+    Double_t  FIT_X_Min[4] = {    1.098    ,    1.098     ,   1.63     ,    1.63    };
+    Double_t  FIT_X_Max[4] = {    1.131    ,    1.131     ,   1.71     ,    1.71    };
     Double_t  FIT_X_Wid[4] = {    0.005    ,    0.005     ,   0.009    ,    0.009   };
     Double_t  FIT_X_Mid[4] = {    1.1165   ,    1.1165    ,   1.6725   ,    1.6725  };
     Double_t  FIT_A_Min[4] = {    1.09     ,    1.09      ,   1.635    ,    1.635   };
     Double_t  FIT_A_Max[4] = {    1.10     ,    1.10      ,   1.663    ,    1.663   };
+    Double_t Hist_X_Min[4] = {    1.078    ,    1.078     ,   1.635    ,    1.635   };
+    Double_t Hist_X_Max[4] = {    1.178    ,    1.178     ,   1.663    ,    1.663   };
     TH1F* h[4];
     TCanvas *canvas[4];
     TFile *fileR = TFile::Open(InputName,"read");
@@ -121,6 +133,7 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
         }else if (PolyI == 4)  {
             customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
         }
+        h[i]->GetXaxis()->SetRangeUser(Hist_X_Min[i], Hist_X_Max[i]);
         h[i]->Draw();
         h[i]->Fit(customFunction, "R");
         customFunction->SetLineColor(kGreen);
@@ -138,6 +151,25 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
             GausF->SetParameters(params);
             GausF->SetLineColor(kBlue);
             GausF->Draw("same");
+
+            Double_t Signal_Integral = TMath::Erf(3.0/TMath::Power(2.0,0.5))*(customFunction->GetParameter(9))*TMath::Power(2.0*PI,0.5)*customFunction->GetParameter(7);
+            Double_t BackGr_Integral = IntPolyFuction(customFunction->GetParameter(8) + 3*customFunction->GetParameter(9),params) - 
+                                       IntPolyFuction(customFunction->GetParameter(8) - 3*customFunction->GetParameter(9),params);
+            Double_t S_B = 1.0*Signal_Integral/BackGr_Integral;
+            TString SBText = "In 3 sigma, S/B = ";
+            SBText += S_B;
+            TString SText = "In 3 sigma, S = ";
+            SText += Signal_Integral;
+            TText *SB_text = new TText(0.7, 0.3, SBText);
+            TText *S_text = new TText(0.7, 0.4, SText);
+            SB_text->SetTextColor(kRed);
+            SB_text->SetTextAlign(22);
+            SB_text->SetTextSize(0.04);
+            S_text->SetTextColor(kRed);
+            S_text->SetTextAlign(22);
+            S_text->SetTextSize(0.04);
+            SB_text->Draw();
+            S_text->Draw();
         }else if (PolyI == 4)  {
         }
         canvas[i]->Draw();
