@@ -128,10 +128,10 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
         TF1 *customFunction = new TF1("SFunction", FitFuction, FIT_X_Min[i], FIT_X_Max[i], PolyI+3);
         Double_t OrderFCT1 = calculateAverage(h[i] , XValue2BinID(h[i], FIT_A_Min[i]) , XValue2BinID(h[i], FIT_A_Max[i]));
         cout<<"The 1st order poly factor is "<<OrderFCT1<<endl;
-        if       (PolyI == 7) {
+        if       (i < 2) {
             customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
-        }else if (PolyI == 4)  {
-            customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, maxBinValue - OrderFCT1, FIT_X_Mid[i] , 0.5*FIT_X_Wid[i]);
+        }else{
+            customFunction->SetParameters(OrderFCT1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, h[i]->GetBinContent(3346) - OrderFCT1, 1.673 , 0.5*FIT_X_Wid[i]);
         }
         h[i]->GetXaxis()->SetRangeUser(Hist_X_Min[i], Hist_X_Max[i]);
         h[i]->Draw();
@@ -155,7 +155,7 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
             Double_t Signal_Integral = TMath::Erf(3.0/TMath::Power(2.0,0.5))*(customFunction->GetParameter(9))*TMath::Power(2.0*PI,0.5)*customFunction->GetParameter(7);
             Double_t xl[] = {customFunction->GetParameter(8) - 3*customFunction->GetParameter(9)};
             Double_t xr[] = {customFunction->GetParameter(8) + 3*customFunction->GetParameter(9)};
-            Double_t BackGr_Integral = IntPolyFuction(xr,params) - IntPolyFuction(xl,params);
+            Double_t BackGr_Integral = fabs(IntPolyFuction(xr,params) - IntPolyFuction(xl,params));
             Double_t S_B = 1.0*Signal_Integral/BackGr_Integral;
             TString SBText = "In 3 sigma, S/B = ";
             SBText += S_B;
