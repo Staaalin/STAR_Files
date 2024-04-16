@@ -172,8 +172,8 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
             S_text->SetTextColor(kRed);
             S_text->SetTextAlign(22);
             S_text->SetTextSize(0.04);
-            SB_text->Draw();
-            S_text->Draw();
+            SB_text->DrawText(0.5, 0.5);
+            S_text->DrawText(0.5, 0.5);
         }else if (PolyI == 4)  {
         }
         canvas[i]->Draw();
