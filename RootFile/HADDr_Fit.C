@@ -164,16 +164,16 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
             TString SText = "In 3 sigma, S = ";
             SText += Signal_Integral;
             cout<<SText<<endl;
-            TText *SB_text = new TText(0.7, 0.3, SBText);
-            TText *S_text = new TText(0.7, 0.4, SText);
+            TPaveText *SB_text = new TPaveText(0.7, 0.3, 0.8, 0.8, "NDC");
+            TPaveText *S_text  = new TPaveText(0.7, 0.4, 0.8, 0.8, "NDC");
             SB_text->SetTextColor(kRed);
             SB_text->SetTextAlign(22);
             SB_text->SetTextSize(0.04);
             S_text->SetTextColor(kRed);
             S_text->SetTextAlign(22);
             S_text->SetTextSize(0.04);
-            SB_text->DrawText(0.5, 0.5);
-            S_text->DrawText(0.5, 0.5);
+            S_text->Draw();
+            SB_text->Draw();
         }else if (PolyI == 4)  {
         }
         canvas[i]->Draw();
