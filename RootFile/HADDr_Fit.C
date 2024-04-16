@@ -153,8 +153,9 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
             GausF->Draw("same");
 
             Double_t Signal_Integral = TMath::Erf(3.0/TMath::Power(2.0,0.5))*(customFunction->GetParameter(9))*TMath::Power(2.0*PI,0.5)*customFunction->GetParameter(7);
-            Double_t BackGr_Integral = IntPolyFuction(customFunction->GetParameter(8) + 3*customFunction->GetParameter(9),params) - 
-                                       IntPolyFuction(customFunction->GetParameter(8) - 3*customFunction->GetParameter(9),params);
+            Double_t xl = customFunction->GetParameter(8) - 3*customFunction->GetParameter(9);
+            Double_t xr = customFunction->GetParameter(8) + 3*customFunction->GetParameter(9);
+            Double_t BackGr_Integral = IntPolyFuction(xr,params) - IntPolyFuction(xl,params);
             Double_t S_B = 1.0*Signal_Integral/BackGr_Integral;
             TString SBText = "In 3 sigma, S/B = ";
             SBText += S_B;
