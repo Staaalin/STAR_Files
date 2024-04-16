@@ -104,14 +104,14 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
 {
     TString   List_Name[4] = { "HM_Lambda" , "HM_Lambdab" , "HM_Omega" , "HM_Omegab"};
     TString   TCan_Name[4] = { "CM_Lambda" , "CM_Lambdab" , "CM_Omega" , "CM_Omegab"};
-    Double_t  FIT_X_Min[4] = {    1.090    ,    1.090     ,   1.63     ,    1.63    };
-    Double_t  FIT_X_Max[4] = {    1.136    ,    1.136     ,   1.71     ,    1.71    };
-    Double_t  FIT_X_Wid[4] = {    0.005    ,    0.005     ,   0.009    ,    0.009   };
+    Double_t  FIT_X_Min[4] = {    1.090    ,    1.090     ,   1.625    ,    1.625   };
+    Double_t  FIT_X_Max[4] = {    1.136    ,    1.136     ,   1.72     ,    1.72    };
+    Double_t  FIT_X_Wid[4] = {    0.005    ,    0.005     ,   0.002    ,    0.002   };
     Double_t  FIT_X_Mid[4] = {    1.1165   ,    1.1165    ,   1.6725   ,    1.6725  };
     Double_t  FIT_A_Min[4] = {    1.09     ,    1.09      ,   1.635    ,    1.635   };
     Double_t  FIT_A_Max[4] = {    1.10     ,    1.10      ,   1.663    ,    1.663   };
     Double_t Hist_X_Min[4] = {    1.078    ,    1.078     ,   1.635    ,    1.635   };
-    Double_t Hist_X_Max[4] = {    1.178    ,    1.178     ,   1.663    ,    1.663   };
+    Double_t Hist_X_Max[4] = {    1.178    ,    1.178     ,   1.750    ,    1.750   };
     TH1F* h[4];
     TCanvas *canvas[4];
     TFile *fileR = TFile::Open(InputName,"read");
