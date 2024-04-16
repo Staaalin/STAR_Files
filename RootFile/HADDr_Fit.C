@@ -159,8 +159,10 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
             Double_t S_B = 1.0*Signal_Integral/BackGr_Integral;
             TString SBText = "In 3 sigma, S/B = ";
             SBText += S_B;
+            cout<<SBText<<endl;
             TString SText = "In 3 sigma, S = ";
             SText += Signal_Integral;
+            cout<<SText<<endl;
             TText *SB_text = new TText(0.7, 0.3, SBText);
             TText *S_text = new TText(0.7, 0.4, SText);
             SB_text->SetTextColor(kRed);
