@@ -118,7 +118,7 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
     cout<<"#####################################################################################"<<endl;
     TFile *file = new TFile(OutputName, "RECREATE");
     for (int i=0;i<4;i++) {
-        if (i > 0) {break;}
+        // if (i > 0) {break;}
         cout<<"Start in "<<List_Name[i]<<endl;
         h[i] = (TH1F*)fileR->Get(List_Name[i]);
         canvas[i] = new TCanvas(TCan_Name[i] , TCan_Name[i]);
@@ -160,6 +160,7 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
             TString SBText = "In 3 sigma, S/B = ";
             SBText += S_B;
             cout<<SBText<<endl;
+            Signal_Integral = Signal_Integral / (h[i]->GetBinWidth(1));
             TString SText = "In 3 sigma, S = ";
             SText += Signal_Integral;
             cout<<SText<<endl;
