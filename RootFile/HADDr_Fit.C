@@ -164,8 +164,10 @@ void HADDr_Fit(const TString InputName,const TString OutputName)
             TString SText = "In 3 sigma, S = ";
             SText += Signal_Integral;
             cout<<SText<<endl;
-            TPaveText *SB_text = new TPaveText(0.7, 0.3, 0.8, 0.8, "NDC");
-            TPaveText *S_text  = new TPaveText(0.7, 0.4, 0.8, 0.8, "NDC");
+            TPaveText *SB_text = new TPaveText(0.55, 0.8, 0.3, 0.8, "NDC");
+            TPaveText *S_text  = new TPaveText(0.55, 0.8, 0.5, 0.8, "NDC");
+            S_text->AddText(SText);
+            SB_text->AddText(SBText);
             SB_text->SetTextColor(kRed);
             SB_text->SetTextAlign(22);
             SB_text->SetTextSize(0.04);
