@@ -1,1 +1,1 @@
-const std::map<std::TString, int> TriggerList;
+std::map<TString, vector<int> > TriggerList;
