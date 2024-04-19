@@ -1,6 +1,7 @@
 #include "TriggerList.h"
 #include <cmath>
 
+std::map<TString, vector<int> > TriggerList;
 TriggerList["dAu_200_16"] = {
 							2,
                             3,
