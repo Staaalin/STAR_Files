@@ -2,10 +2,12 @@
 #include <TString.h>
 #include <map>
 
-static std::vector<TString> TriggerList::DataNameList = {"dAu_200_16",
-														 "pAu_200_15"}
+static const std::vector<TString> TriggerList::DataNameList = {
+	"dAu_200_16",
+	"pAu_200_15"
+};
 
-static std::vector<std::vector<int>> TriggerList::TriggerNameList = {
+static const std::vector<std::vector<int>> TriggerList::TriggerNameList = {
 
 	{// dAu_200_16
 		2,
@@ -46,7 +48,7 @@ static std::vector<std::vector<int>> TriggerList::TriggerNameList = {
 		-3
 	}
 
-}
+};
 
 std::vector<int> TriggerList::GetTriggerList()
 {
