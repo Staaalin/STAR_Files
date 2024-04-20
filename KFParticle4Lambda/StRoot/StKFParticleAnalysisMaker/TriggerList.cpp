@@ -2,6 +2,7 @@
 #include <TString.h>
 #include <map>
 
+std::map<TString,std::vector<int>>TriggerList;
 TriggerList["dAu_200_16"] = {
 							2,
                             3,
