@@ -37,7 +37,7 @@
 #include "TriggerList.h"
 #include "MyToolkit.h"
 
-#define DataName           "dAu_200_16"
+#define DataName           "pAu_200_15"
 #define pi                 TMath::Pi()
 #define OmegaPdgMass	   1.67245
 //#define OmegaMassSigma     0.0021
