@@ -531,10 +531,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 	//   &&(!mEvent->isTrigger(59))
 	//   &&(!mEvent->isTrigger(61)) //vpd-30
 	//   )return kStOK;
-	int TriggerListLength = TriggerList[DataName].size();
+	TriggerList Trigger_List_Data(DataName);
+	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
+	int TriggerListLength = Trigger_List.size();
 	bool IfTriggerMatch = false;
 	for (int i = 0;i<TriggerListLength;i++){
-		if (mEvent->isTrigger(TriggerList[DataName][i])) {
+		if (mEvent->isTrigger(Trigger_List[i])) {
 			IfTriggerMatch = true;
 			break;
 		}
