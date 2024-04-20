@@ -2,9 +2,6 @@
 #include <TString.h>
 #include <map>
 
-std::vector<TString> TriggerList::DataNameList;
-std::vector<std::vector<int> > TriggerList::TriggerNameList;
-
 static std::vector<TString> TriggerList::DataNameList = {"dAu_200_16",
 														 "pAu_200_15"}
 
