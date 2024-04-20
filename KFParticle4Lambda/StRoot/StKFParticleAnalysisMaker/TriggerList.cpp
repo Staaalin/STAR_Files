@@ -71,7 +71,7 @@ DataTriggerList["pAu_200_15"] = {
 								530866
 								}
 
-std::vector<int> GetTriggerList()
+std::vector<int> TriggerList::GetTriggerList()
 {
 	std::vector<int> result = DataTriggerList[DataName];
 	return result;
