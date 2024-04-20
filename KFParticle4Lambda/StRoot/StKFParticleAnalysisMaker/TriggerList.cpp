@@ -2,6 +2,9 @@
 #include <TString.h>
 #include <map>
 
+std::vector<TString> TriggerList::DataNameList;
+std::vector<std::vector<int> > TriggerList::TriggerNameList;
+
 TriggerList::DataNameList.clear();
 TriggerList::TriggerNameList.clear();
 
