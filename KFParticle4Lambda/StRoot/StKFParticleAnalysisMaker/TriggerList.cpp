@@ -5,11 +5,11 @@
 std::vector<TString> TriggerList::DataNameList;
 std::vector<std::vector<int> > TriggerList::TriggerNameList;
 
-TriggerList::DataNameList.clear();
-TriggerList::TriggerNameList.clear();
+DataNameList.clear();
+TriggerNameList.clear();
 
-TriggerList::DataNameList.emplace_back("dAu_200_16");
-TriggerList::TriggerNameList.emplace_back({
+DataNameList.emplace_back("dAu_200_16");
+TriggerNameList.emplace_back({
 								2,
                             	3,
                             	4,
@@ -43,8 +43,8 @@ TriggerList::TriggerNameList.emplace_back({
 								530866
 								});
 
-TriggerList::DataNameList.emplace_back("pAu_200_15");
-TriggerList::TriggerNameList.emplace_back({
+DataNameList.emplace_back("pAu_200_15");
+TriggerNameList.emplace_back({
 								-1,
 								-10,
 								});
@@ -54,8 +54,8 @@ std::vector<int> TriggerList::GetTriggerList()
 	for (int i=0;i<DataNameList.size();i++){
 		if (DataNameList[i] == DataName){
 			std::vector<int> result = TriggerNameList[DataName];
-			break;
+			return result;
 		}
 	}
-	return result;
+	cout<<"NOT FOUND TRIGGER LIST!!"<<endl;
 }
