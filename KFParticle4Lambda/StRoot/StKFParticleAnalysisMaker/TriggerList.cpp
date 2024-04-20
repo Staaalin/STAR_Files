@@ -2,11 +2,11 @@
 #include <TString.h>
 #include <map>
 
-DataNameList.clear();
-TriggerNameList.clear();
+TriggerList::DataNameList.clear();
+TriggerList::TriggerNameList.clear();
 
-DataNameList.emplace_back("dAu_200_16");
-TriggerNameList.emplace_back({
+TriggerList::DataNameList.emplace_back("dAu_200_16");
+TriggerList::TriggerNameList.emplace_back({
 								2,
                             	3,
                             	4,
@@ -40,8 +40,8 @@ TriggerNameList.emplace_back({
 								530866
 								});
 
-DataNameList.emplace_back("pAu_200_15");
-TriggerNameList.emplace_back({
+TriggerList::DataNameList.emplace_back("pAu_200_15");
+TriggerList::TriggerNameList.emplace_back({
 								-1,
 								-10,
 								});
