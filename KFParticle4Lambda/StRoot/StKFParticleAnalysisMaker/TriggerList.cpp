@@ -1,6 +1,8 @@
 #include "TriggerList.h"
 #include <TString.h>
 #include <map>
+#include <fstream>
+#include <iostream>
 
 static const std::vector<TString> TriggerList::DataNameList = {
 	"dAu_200_16",
@@ -52,7 +54,8 @@ static const std::vector<std::vector<int>> TriggerList::TriggerNameList = {
 
 std::vector<int> TriggerList::GetTriggerList()
 {
-	for (int i=0;i<DataNameList.size();i++){
+	int Length = DataNameList.size();
+	for (int i=0;i<Length;i++){
 		if (DataNameList[i] == TriggerList::DataName){
 			std::vector<int> result = TriggerNameList[i];
 			return result;
