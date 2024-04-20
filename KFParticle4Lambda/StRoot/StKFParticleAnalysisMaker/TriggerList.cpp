@@ -2,8 +2,11 @@
 #include <TString.h>
 #include <map>
 
-std::map<TString,std::vector<int>> DataTriggerList;
-DataTriggerList["dAu_200_16"] = {
+DataNameList.clear();
+TriggerNameList.clear();
+
+DataNameList.emplace_back("dAu_200_16");
+TriggerNameList.emplace_back({
 								2,
                             	3,
                             	4,
@@ -35,44 +38,21 @@ DataTriggerList["dAu_200_16"] = {
 								530857,
 								530861,
 								530866
-								}
+								});
 
-DataTriggerList["pAu_200_15"] = {
-								2,
-                           		3,
-                           		4,
-                           		6,
-                           		15,
-                           		16,
-								17,
-								54,
-								55,
-								56,
-								57,
-								58,
-								59,
-								61,
-								530003,
-								530002,
-								530806,
-								530101,
-								530102,
-								530201,
-								530202,
-								530213,
-								530851,
-								530852,
-								530853,
-								530854,
-								530855,
-								530856,
-								530857,
-								530861,
-								530866
-								}
+DataNameList.emplace_back("pAu_200_15");
+TriggerNameList.emplace_back({
+								-1,
+								-10,
+								});
 
 std::vector<int> TriggerList::GetTriggerList()
 {
-	std::vector<int> result = DataTriggerList[DataName];
+	for (int i=0;i<DataNameList.size();i++){
+		if (DataNameList[i] == DataName){
+			std::vector<int> result = TriggerNameList[DataName];
+			break;
+		}
+	}
 	return result;
 }
