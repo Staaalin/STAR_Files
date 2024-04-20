@@ -58,5 +58,5 @@ std::vector<int> TriggerList::GetTriggerList()
 			return result;
 		}
 	}
-	cout<<"NOT FOUND TRIGGER LIST!!"<<endl;
+	std::cout<<"NOT FOUND TRIGGER LIST!!"<<std::endl;
 }
