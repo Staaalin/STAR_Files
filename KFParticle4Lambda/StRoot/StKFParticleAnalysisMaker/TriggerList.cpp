@@ -6,7 +6,8 @@
 
 static const std::vector<TString> TriggerList::DataNameList = {
 	"dAu_200_16",
-	"pAu_200_15"
+	"pAu_200_15",
+	"dAu_62_16"
 };
 
 static const std::vector<std::vector<int>> TriggerList::TriggerNameList = {
@@ -77,6 +78,21 @@ static const std::vector<std::vector<int>> TriggerList::TriggerNameList = {
 		510807,
 		510808,
 		510904
+	},
+
+	{// dAu_62_16
+		3,
+		540003,
+		540101,
+		540112,
+		540203,
+		540204,
+		540603,
+		540611,
+		540701,
+		540806,
+		540852,
+		540863
 	}
 
 };
