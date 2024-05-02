@@ -39,7 +39,8 @@
 
 // #define DataName           "pAu_200_15"
 // #define DataName           "dAu_200_16"
-#define DataName           "dAu_62_16"
+// #define DataName           "dAu_62_16"
+#define DataName           "dAu_39_16"
 #define pi                 TMath::Pi()
 #define OmegaPdgMass	   1.67245
 //#define OmegaMassSigma     0.0021
