@@ -49,6 +49,7 @@ void HADDr_xml(const TString InputName,const TString OutputName,const int JobID,
     TList *list8  = new TList;
     TList *list9  = new TList;
     TList *list10 = new TList;
+    TList *list11 = new TList;
     TFile *fileR;
     int Itr = 0;
     
@@ -78,6 +79,7 @@ void HADDr_xml(const TString InputName,const TString OutputName,const int JobID,
         TH1F* h8  = (TH1F*)fileR->Get("HM_DaughtersDCA_Omegab");
         TH1F* h9  = (TH1F*)fileR->Get("HM_Xi");
         TH1F* h10 = (TH1F*)fileR->Get("HM_Xib");
+        TH1F* h11 = (TH1F*)fileR->Get("Events_Total");
         list1 ->Add(h1);
         list2 ->Add(h2);
         list3 ->Add(h3);
@@ -88,6 +90,7 @@ void HADDr_xml(const TString InputName,const TString OutputName,const int JobID,
         list8 ->Add(h8);
         list9 ->Add(h9);
         list10->Add(h10);
+        list11->Add(h11);
         Itr++;
     }
     TH1F *Result1  = (TH1F*)h1 ->Clone("HM_Lambda");
@@ -100,6 +103,7 @@ void HADDr_xml(const TString InputName,const TString OutputName,const int JobID,
     TH1F *Result8  = (TH1F*)h8 ->Clone("HM_DaughtersDCA_Omegab");
     TH1F *Result9  = (TH1F*)h9 ->Clone("HM_Xi");
     TH1F *Result10 = (TH1F*)h10->Clone("HM_Xib");
+    TH1F *Result11 = (TH1F*)h11->Clone("Events_Total");
     Result1 ->Reset();
     Result1 ->Merge(list1);
     Result2 ->Reset();
@@ -120,6 +124,8 @@ void HADDr_xml(const TString InputName,const TString OutputName,const int JobID,
     Result9 ->Merge(list9);
     Result10->Reset();
     Result10->Merge(list10);
+    Result11->Reset();
+    Result11->Merge(list11);
     RecordFileName += ".root";
     TFile *file = new TFile(RecordFileName, "RECREATE");
     cout<<Result1->Integral(1,1000)<<endl;
@@ -133,6 +139,7 @@ void HADDr_xml(const TString InputName,const TString OutputName,const int JobID,
     Result8 ->Write("HM_DaughtersDCA_Omegab");
     Result9 ->Write("HM_Xi");
     Result10->Write("HM_Xib");
+    Result11->Write("Events_Total");
     cout<<"Finish writing"<<endl;
     file->Close();
 
