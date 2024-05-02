@@ -137,6 +137,7 @@ private:
 	TH2D *hHXY;
 	TH2D *hHM_Chi2;
 	TH2D *hHM_ParentDCA;
+	TH1D *hEventNum;
 
 	TProfile *hcentRefM ; 
 	TProfile *hcentRefW ; 

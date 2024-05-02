@@ -256,6 +256,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
+	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
+
 	const int tPDGList[]      = {   3122  ,   -3122   ,   3334  ,  -3334   , 3312 , -3312 };
 	const TString tNameList[] = {"Lambda" , "Lambdab" , "Omega" , "Omegab" , "Xi" ,  "Xib" };
 	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
@@ -313,6 +315,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hHXY->Write();
 	// hHM_Chi2->Write();
 	// hHM_ParentDCA->Write();
+
+	hEventNum->Write();
 	
 	for (int i=0;i<PDG2NameSize;i++){
 		H_ALL_NO_CUT[i]->Write();
@@ -545,9 +549,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 	}
 	if (IfTriggerMatch == false) {return kStOK;}
-	
+	hEventNum -> Fill(1);
 
-	cout<<"Trigger OK"<<endl;
+	// cout<<"Trigger OK"<<endl;
 
 	const TVector3 Vertex3D=mEvent->primaryVertex();
 	const double VertexX = Vertex3D.x(); 
