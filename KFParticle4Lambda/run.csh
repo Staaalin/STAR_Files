@@ -3,7 +3,7 @@
 # AuAu RUN=18 Energy=27.0 
 
 # settings
-set nRun=16
+set nRun=15
 set mRun=Run${nRun}
 set mEnergy=200
 set ListDir=/star/u/svianping/STAR_Files/KFParticle4Lambda/datalist #TODO
