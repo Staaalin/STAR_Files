@@ -1,6 +1,6 @@
 #!/bin/csh
 echo "开始执行"
-sleep 7200
+sleep 3600
 echo "执行"
 
 condor_rm svianping
