@@ -11,9 +11,9 @@ set InputName = "output_"
 set OutputName = "HADD_"
 set OutputURL = "/star/data01/pwg/svianping/HADD/"
 
-set FilesPerJob = 200
+set FilesPerJob = 171
 set FileStart = 0
-set FileEnd = 15911
+set FileEnd = 68191
 
 set MainDir=`pwd`
 
@@ -21,6 +21,8 @@ set MainDir=`pwd`
 set numFiles = 1
 @ numFiles = ( $FileEnd - $FileStart ) / $FilesPerJob
 
+rm -rf /star/data01/pwg/svianping/HADD/*
+mkdir /star/data01/pwg/svianping/HADD/log/
 cd /star/data01/pwg/svianping/HADD/
 set i = 0
 set j = 0
