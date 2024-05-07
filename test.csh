@@ -1,9 +1,10 @@
 #!/bin/csh
 echo "开始执行"
-sleep 3600
+sleep 5
 echo "执行"
 
 condor_rm svianping
+sleep 10
 
 set ObvInputName = "/star/data01/pwg/svianping/output/output_"
 set ObvOutputName = "/star/data01/pwg/svianping/HADD/HADD_"
