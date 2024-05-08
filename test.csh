@@ -12,9 +12,9 @@ set InputName = "output_"
 set OutputName = "HADD_"
 set OutputURL = "/star/data01/pwg/svianping/HADD/"
 
-set FilesPerJob = 171
+set FilesPerJob = 40
 set FileStart = 0
-set FileEnd = 68191
+set FileEnd = 15911
 
 set MainDir=`pwd`
 
