@@ -700,7 +700,38 @@ Int_t StKFParticleAnalysisMaker::Make()
 		std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 		#endif
 		
-		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg) && (fabs(particle.GetPDG()) != XiPdg)) {cout<<particle.GetPDG()<<endl;continue;}
+		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg) && (fabs(particle.GetPDG()) != XiPdg)) { // Proton , Pion or Kaon
+			int TPID = 0;
+			float tMass = 0;
+			if      (fabs(particle.GetPDG()) == 2212) {
+				if (particle.GetPDG() > 0) {TPID = 2212;}
+				else                     {TPID = -2212;}
+				tMass = ProtonPdgMass;
+			}
+			else if (fabs(particle.GetPDG()) == 211) {
+				if (particle.GetPDG() > 0) {TPID = 211;}
+				else                     {TPID = -211;}
+				tMass = PionPdgMass;
+			}
+			else if (fabs(particle.GetPDG()) == 321) {
+				if (particle.GetPDG() > 0) {TPID = 321;}
+				else                     {TPID = -321;}
+				tMass = KaonPdgMass;
+			}
+			for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+				int Jtr = Itr - PDG2NameSize;
+				if (TPID == PDGList[Itr]) {
+					float tPt2 = pow(particle.GetPx(),2) + pow(particle.GetPy(),2);
+					H_Pt[Jtr] -> Fill(pow(tPt2,0.5));
+					tPt2 += pow(particle.GetPz(),2);
+					H_P[Jtr] -> Fill(pow(tPt2,0.5));
+					float tEnergy = particle.GetE();
+					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+particle.GetPz())/(tEnergy-particle.GetPz())));
+					break;
+				}
+			}
+			continue;
+		}
 
 		//SCHEME 1: reconstruction of V0, the parent particle
 		if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
