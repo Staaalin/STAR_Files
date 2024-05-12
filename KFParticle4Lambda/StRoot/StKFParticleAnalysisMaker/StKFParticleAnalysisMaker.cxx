@@ -701,6 +701,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		#endif
 		
 		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg) && (fabs(particle.GetPDG()) != XiPdg)) {continue;}
+		else {cout<<particle.GetPDG()<<endl;}
 
 		//SCHEME 1: reconstruction of V0, the parent particle
 		if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
@@ -1030,39 +1031,39 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (proton_cut + pion_cut + kaon_cut == 1) {IfRecordThisTrack = true;QA_IfConfuse.emplace_back(0);}
 		if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack = true;QA_IfConfuse.emplace_back(1);}
 
-//////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
-		if (IfRecordThisTrack == true) {
-			int TPID = 0;
-			float tMass = 0;
-			if      (proton_cut) {
-				if (track->charge() > 0) {TPID = 2212;}
-				else                     {TPID = -2212;}
-				tMass = ProtonPdgMass;
-			}
-			else if (pion_cut) {
-				if (track->charge() > 0) {TPID = 211;}
-				else                     {TPID = -211;}
-				tMass = PionPdgMass;
-			}
-			else if (kaon_cut) {
-				if (track->charge() > 0) {TPID = 321;}
-				else                     {TPID = -321;}
-				tMass = KaonPdgMass;
-			}
-			for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
-				int Jtr = Itr - PDG2NameSize;
-				if (TPID == PDGList[Itr]) {
-					float tPt2 = pow(track->gMom().X(),2) + pow(track->gMom().Y(),2);
-					H_Pt[Jtr] -> Fill(pow(tPt2,0.5));
-					tPt2 += pow(track->gMom().Z(),2);
-					H_P[Jtr] -> Fill(pow(tPt2,0.5));
-					float tEnergy = pow(pow(track->gMom().Mag(),2) + tMass*tMass , 0.5);
-					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+track->gMom().Z())/(tEnergy-track->gMom().Z())));
-					break;
-				}
-			}
-		}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
+// 		if (IfRecordThisTrack == true) {
+// 			int TPID = 0;
+// 			float tMass = 0;
+// 			if      (proton_cut) {
+// 				if (track->charge() > 0) {TPID = 2212;}
+// 				else                     {TPID = -2212;}
+// 				tMass = ProtonPdgMass;
+// 			}
+// 			else if (pion_cut) {
+// 				if (track->charge() > 0) {TPID = 211;}
+// 				else                     {TPID = -211;}
+// 				tMass = PionPdgMass;
+// 			}
+// 			else if (kaon_cut) {
+// 				if (track->charge() > 0) {TPID = 321;}
+// 				else                     {TPID = -321;}
+// 				tMass = KaonPdgMass;
+// 			}
+// 			for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+// 				int Jtr = Itr - PDG2NameSize;
+// 				if (TPID == PDGList[Itr]) {
+// 					float tPt2 = pow(track->gMom().X(),2) + pow(track->gMom().Y(),2);
+// 					H_Pt[Jtr] -> Fill(pow(tPt2,0.5));
+// 					tPt2 += pow(track->gMom().Z(),2);
+// 					H_P[Jtr] -> Fill(pow(tPt2,0.5));
+// 					float tEnergy = pow(pow(track->gMom().Mag(),2) + tMass*tMass , 0.5);
+// 					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+track->gMom().Z())/(tEnergy-track->gMom().Z())));
+// 					break;
+// 				}
+// 			}
+// 		}
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		if (IfRecordThisTrack == true) {
 			hdEdx_pQ_2cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
