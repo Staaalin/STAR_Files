@@ -700,8 +700,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 		#endif
 		
-		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg) && (fabs(particle.GetPDG()) != XiPdg)) {continue;}
-		else {cout<<particle.GetPDG()<<endl;}
+		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != LambdaPdg) && (fabs(particle.GetPDG()) != XiPdg)) {cout<<particle.GetPDG()<<endl;continue;}
 
 		//SCHEME 1: reconstruction of V0, the parent particle
 		if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
