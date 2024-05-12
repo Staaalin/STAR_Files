@@ -1052,7 +1052,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_Pt[Jtr] -> Fill(pow(tPt2,0.5));
 					tPt2 += pow(track->gMom().Z(),2);
 					H_P[Jtr] -> Fill(pow(tPt2,0.5));
-					H_rapidity[Jtr]->track->rapidity();
+					H_rapidity[Jtr]->Fill(track->rapidity());
 					break;
 				}
 			}
