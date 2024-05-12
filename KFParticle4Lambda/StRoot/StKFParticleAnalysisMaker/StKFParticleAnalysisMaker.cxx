@@ -38,8 +38,8 @@
 #include "MyToolkit.h"
 
 // #define DataName           "pAu_200_15"
-// #define DataName           "dAu_200_16"
-#define DataName           "dAu_62_16"
+#define DataName           "dAu_200_16"
+// #define DataName           "dAu_62_16"
 // #define DataName           "dAu_39_16"
 // #define DataName           "dAu_20_16"
 #define pi                 TMath::Pi()
@@ -285,19 +285,19 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 		TString HistName1 = "HY_";
 		TString HistName2 = "The rapidity of ";
-		HistName1 += NameList[Jtr];HistName2 += NameList[Jtr];
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		H_rapidity[Jtr] = new TH1F(HistName1,HistName2,30,-1.5,1.5);
 		H_rapidity[Jtr]->GetXaxis()->SetTitle("y");
 
 		HistName1 = "HP_";
 		HistName2 = "The momentum of ";
-		HistName1 += NameList[Jtr];HistName2 += NameList[Jtr];
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		H_P[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
 		H_P[Jtr]->GetXaxis()->SetTitle("p [GeV]");
 
 		HistName1 = "HPt_";
 		HistName2 = "The momentum_t of ";
-		HistName1 += NameList[Jtr];HistName2 += NameList[Jtr];
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		H_Pt[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
 		H_Pt[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
 	}
