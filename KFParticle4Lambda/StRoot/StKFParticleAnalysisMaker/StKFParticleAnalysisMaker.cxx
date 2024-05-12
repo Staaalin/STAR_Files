@@ -1033,17 +1033,21 @@ Int_t StKFParticleAnalysisMaker::Make()
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
 		if (IfRecordThisTrack == true) {
 			int TPID = 0;
+			float tMass = 0;
 			if      (proton_cut) {
 				if (track->charge() > 0) {TPID = 2212;}
 				else                     {TPID = -2212;}
+				tMass = ProtonPdgMass;
 			}
 			else if (pion_cut) {
 				if (track->charge() > 0) {TPID = 211;}
 				else                     {TPID = -211;}
+				tMass = PionPdgMass;
 			}
 			else if (kaon_cut) {
 				if (track->charge() > 0) {TPID = 321;}
 				else                     {TPID = -321;}
+				tMass = KaonPdgMass;
 			}
 			for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 				int Jtr = Itr - PDG2NameSize;
@@ -1052,7 +1056,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_Pt[Jtr] -> Fill(pow(tPt2,0.5));
 					tPt2 += pow(track->gMom().Z(),2);
 					H_P[Jtr] -> Fill(pow(tPt2,0.5));
-					H_rapidity[Jtr]->Fill(track->rapidity());
+					float tEnergy = pow(pow(track->gMom().Mag(),2) + tMass*tMass , 0.5);
+					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+track->gMom().Z())/(tEnergy-track->gMom().Z())));
 					break;
 				}
 			}
