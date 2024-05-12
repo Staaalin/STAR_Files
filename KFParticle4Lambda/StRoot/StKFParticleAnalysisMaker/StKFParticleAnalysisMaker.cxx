@@ -259,10 +259,12 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
 
-	const int tPDGList[]      = {   3122  ,   -3122   ,   3334  ,  -3334   , 3312 , -3312 };
-	const TString tNameList[] = {"Lambda" , "Lambdab" , "Omega" , "Omegab" , "Xi" ,  "Xib" };
+	const int APDGList[]      = {   3122  ,   -3122   ,   3334  ,  -3334   , 3312 ,  -3312 };
+	const TString ANameList[] = {"Lambda" , "Lambdab" , "Omega" , "Omegab" , "Xi" ,  "Xib" };
+	const int BPDGList[]      = {  321  ,   -321   ,  211  , -211  ,    2212   ,   -2212 };
+	const TString BNameList[] = {"Kaon+" , "Kaon-" , "Pi+" , "Pi-" , "Proton"  , "Protonb"};
 	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
-		PDGList[Itr] = tPDGList[Itr];NameList[Itr] = tNameList[Itr];
+		PDGList[Itr] = APDGList[Itr];NameList[Itr] = ANameList[Itr];
 
 		TString HistName1 = "HM_";
 		TString HistName2 = "The Mass of ";
@@ -277,8 +279,29 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_DaughterDCA[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
 		H_DaughterDCA[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
 	}
+	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+		int Jtr = Itr - PDG2NameSize;
+		PDGList[Itr] = BPDGList[Jtr];NameList[Itr] = BNameList[Jtr];
 
-	Recorded_events = 0;
+		TString HistName1 = "HY_";
+		TString HistName2 = "The rapidity of ";
+		HistName1 += NameList[Jtr];HistName2 += NameList[Jtr];
+		H_rapidity[Jtr] = new TH1F(HistName1,HistName2,30,-1.5,1.5);
+		H_rapidity[Jtr]->GetXaxis()->SetTitle("y");
+
+		HistName1 = "HP_";
+		HistName2 = "The momentum of ";
+		HistName1 += NameList[Jtr];HistName2 += NameList[Jtr];
+		H_P[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
+		H_P[Jtr]->GetXaxis()->SetTitle("p [GeV]");
+
+		HistName1 = "HPt_";
+		HistName2 = "The momentum_t of ";
+		HistName1 += NameList[Jtr];HistName2 += NameList[Jtr];
+		H_Pt[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
+		H_Pt[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
+	}
+
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
@@ -325,6 +348,18 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_DaughterDCA[i]->Write();
 
 	}
+
+//////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
+	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+		int Jtr = Itr - PDG2NameSize;
+
+		H_rapidity[Jtr] -> Write();
+
+		H_P[Jtr] -> Write();
+
+		H_Pt[Jtr] -> Write();
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	return;
 }
@@ -994,6 +1029,35 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		if (proton_cut + pion_cut + kaon_cut == 1) {IfRecordThisTrack = true;QA_IfConfuse.emplace_back(0);}
 		if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack = true;QA_IfConfuse.emplace_back(1);}
+
+//////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
+		if (IfRecordThisTrack == true) {
+			int TPID = 0;
+			if      (proton_cut) {
+				if (track->charge() > 0) {TPID = 2212;}
+				else                     {TPID = -2212;}
+			}
+			else if (pion_cut) {
+				if (track->charge() > 0) {TPID = 211;}
+				else                     {TPID = -211;}
+			}
+			else if (kaon_cut) {
+				if (track->charge() > 0) {TPID = 321;}
+				else                     {TPID = -321;}
+			}
+			for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+				int Jtr = Itr - PDG2NameSize;
+				if (TPID == PDGList[Itr]) {
+					float tPt2 = pow(track->gMom().X(),2) + pow(track->gMom().Y(),2);
+					H_Pt[Jtr] -> Fill(pow(tPt2,0.5));
+					tPt2 += pow(track->gMom().Z(),2);
+					H_P[Jtr] -> Fill(pow(tPt2,0.5));
+					H_rapidity[Jtr]->track->rapidity();
+					break;
+				}
+			}
+		}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		if (IfRecordThisTrack == true) {
 			hdEdx_pQ_2cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());

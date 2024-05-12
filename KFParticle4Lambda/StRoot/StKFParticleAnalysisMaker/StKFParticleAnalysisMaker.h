@@ -118,9 +118,10 @@ private:
 	TH1F *hcent;
 	TH1F *hcentw;
 
-	#define PDG2NameSize 6 // PDG2Name.size()
-	int PDGList[PDG2NameSize];
-	TString NameList[PDG2NameSize];
+	#define PDG2NameSize 6 // APDGList.size()
+	#define PDG2NameSize2 6 // BPDGList.size()
+	int PDGList[PDG2NameSize + PDG2NameSize2];
+	TString NameList[PDG2NameSize + PDG2NameSize2];
 	// std::map<int, TString> PDG2Name;
 	// PDG2Name[ 3122] = "Lambda"; 
 	// PDG2Name[-3122] = "Lambdab";
@@ -128,6 +129,9 @@ private:
 	// PDG2Name[-3334] = "Omegab"; 
 	TH1F *H_ALL_NO_CUT[PDG2NameSize];// NO CUT
 	TH1F *H_DaughterDCA[PDG2NameSize];// Cut DaughterDCA
+	TH1F *H_rapidity[PDG2NameSize2];
+	TH1F *H_P[PDG2NameSize2];
+	TH1F *H_Pt[PDG2NameSize2];
 
 	TH2D *hdEdx_pQ;
 	TH2D *hdEdx_pQ_1cut;
@@ -143,7 +147,7 @@ private:
 	TProfile *hcentRefW ; 
 
 	TTree *hadronTree;
-	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult , Omega_Omegab_Num , Recorded_events;
+	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult , Omega_Omegab_Num;
 	std::vector<int> PDG , ReCons_TrackID;
 	std::vector<float> px,py,pz,InvariantMass;
 	double zTOF_proton,zTOF_pion,zTOF_kaon;
