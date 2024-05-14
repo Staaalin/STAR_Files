@@ -26,6 +26,8 @@ if ($InputNameIndex == 1) then
     set InputName = "output_"
     set OutputName = "HADD_"
     set OutputURL = "/star/data01/pwg/svianping/HADD/"
+    rm -rf /star/data01/pwg/svianping/HADD
+    mkdir /star/data01/pwg/svianping/HADD/log/
 else if ($InputNameIndex == 2) then
     set ObvInputName = "/star/data01/pwg/svianping/HADD/HADD_"
     set ObvOutputName = "/star/data01/pwg/svianping/HADD/HADDrA_"
