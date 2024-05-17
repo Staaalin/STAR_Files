@@ -693,7 +693,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
 		bool IfWellConstrcuted = true;
-		bool IfHelix = false;
+		bool IfHelix = true;
 
 		#ifdef DEBUGGING
 		std::cout << "Parsing refMult : " << refMult <<std::endl;
