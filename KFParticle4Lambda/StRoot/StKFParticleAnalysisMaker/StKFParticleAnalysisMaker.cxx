@@ -262,10 +262,11 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
 
-	const int APDGList[]      = {   3122  ,   -3122   ,   3334  ,  -3334   , 3312 ,  -3312 };
-	const TString ANameList[] = {"Lambda" , "Lambdab" , "Omega" , "Omegab" , "Xi" ,  "Xib" };
-	const int BPDGList[]      = {  321  ,   -321   ,  211  , -211  ,    2212   ,   -2212 };
-	const TString BNameList[] = {"Kaon+" , "Kaon-" , "Pi+" , "Pi-" , "Proton"  , "Protonb"};
+	const int APDGList[]      = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312   };
+	const TString ANameList[] = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"   };
+	const int BPDGList[]      = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212  };
+	const TString BNameList[] = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"};
+	const int BPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
 	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 		PDGList[Itr] = APDGList[Itr];NameList[Itr] = ANameList[Itr];
 
@@ -319,6 +320,44 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName1 = "nSigma";HistName1 += NameList[Itr];
 		H_Pt_nSigma[Jtr]->GetXaxis()->SetTitle(HistName1);
 		H_Pt_nSigma[Jtr]->GetYaxis()->SetTitle("pT [GeV]");
+
+		HistName1 = "H_DCAtoPV";
+		HistName2 = "The DCA(to PV) of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_DCAtoPV[Jtr] = new TH1F(HistName1,HistName2,500,0,5);
+		H_DCAtoPV[Jtr]->GetXaxis()->SetTitle("DCA [cm]");
+
+		HistName1 = "H_eta";
+		HistName2 = "The eta of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_eta[Jtr] = new TH1F(HistName1,HistName2,500,-5,5);
+		H_eta[Jtr]->GetXaxis()->SetTitle("eta");
+
+		HistName1 = "H_nHitsFit";
+		HistName2 = "The nHitsFit of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_nHitsFit_p[Jtr] = new TH2F(HistName1,HistName2,60,0,60,500,0,10);
+		H_nHitsFit_p[Jtr]->GetXaxis()->SetTitle("nHitsFit");
+		H_nHitsFit_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
+
+		HistName1 = "H_nHitsFit_nHitsMax";
+		HistName2 = "The nHitsFit/nHitsMax of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_nHitsFit_nHitsMax[Jtr] = new TH1F(HistName1,HistName2,100,0,1);
+		H_nHitsFit_nHitsMax[Jtr]->GetXaxis()->SetTitle("nHitsFit/nHitsMax");
+
+		HistName1 = "H_ndEdx";
+		HistName2 = "The ndEdx of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_ndEdx[Jtr] = new TH1F(HistName1,HistName2,50,0,50);
+		H_ndEdx[Jtr]->GetXaxis()->SetTitle("ndEdx");
+
+		HistName1 = "H_nSigmaTOF_p";
+		HistName2 = "The nSigmaTOF vs p of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_nSigmaTOF_p[Jtr] = new TH2F(HistName1,HistName2,500,0,10,500,-10,10);
+		H_nSigmaTOF_p[Jtr]->GetXaxis()->SetTitle("nSigmaTOF");
+		H_nSigmaTOF_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
 	}
 
 
@@ -381,6 +420,12 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_Pt[Jtr] -> Write();
 		H_dEdx_p[Jtr]->Write();
 		H_Pt_nSigma[Jtr]->Write();
+		H_DCAtoPV[Jtr]->Write();
+		H_eta[Jtr]->Write();
+		H_nHitsFit_p[Jtr]->Write();
+		H_nHitsFit_nHitsMax[Jtr]->Write();
+		H_ndEdx[Jtr]->Write();
+		H_nSigmaTOF_p[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -759,6 +804,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 						StPicoTrack *track = mPicoDst->track(jTrack);
 						if (track->id() == globalTrackId){
 							H_dEdx_p[Jtr]->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+							H_DCAtoPV[Jtr]->Fill(track->gDCA(Vertex3D).Mag());
+							H_eta[Jtr]->Fill(track->gMom().Eta());
+							H_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
+							H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMAX()*1.0));
+							H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
 							if (fabs(TPID) == 321){
 								H_Pt_nSigma[Jtr]->Fill(track->nSigmaKaon(),track->gMom().Perp());
 							}
@@ -788,12 +838,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 								beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
 								m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
 
-
+								float betaTheroy = 1/pow(pow(BPDGListMass[Jtr]/(track->gMom().Mag()),2)+1,0.5);
 								// some kaon QA
 								if (TPID == 321){
-									if (track->nSigmaKaon() >  6) H_m2_KSigma_L->Fill(track->gMom().Perp(), m2);
-									if (track->nSigmaKaon() < -6) H_m2_KSigma_S->Fill(track->gMom().Perp(), m2);
+									if (track->nSigmaKaon() >  3) H_m2_KSigma_L->Fill(track->gMom().Perp(), m2);
+									if (track->nSigmaKaon() < -3) H_m2_KSigma_S->Fill(track->gMom().Perp(), m2);
 								}
+								float nSIgmaTOF = (1/beta-1/betaTheroy)/0.013;
+								H_nSigmaTOF_p[Jtr]->Fill(nSIgmaTOF,track->gMom().Mag());
 								// zTOF_proton = 1/beta - sqrt(ProtonPdgMass*ProtonPdgMass/pkaon.Mag2()+1);
 								// zTOF_pion   = 1/beta - sqrt(PionPdgMass*PionPdgMass/pkaon.Mag2()+1);
 								// zTOF_kaon   = 1/beta - sqrt(KaonPdgMass*KaonPdgMass/pkaon.Mag2()+1);

@@ -132,6 +132,12 @@ private:
 	TH1F *H_rapidity[PDG2NameSize2];
 	TH1F *H_P[PDG2NameSize2];
 	TH1F *H_Pt[PDG2NameSize2];
+	TH1F *H_DCAtoPV[PDG2NameSize2];
+	TH1F *H_eta[PDG2NameSize2];
+	TH2F *H_nHitsFit_p[PDG2NameSize2];
+	TH1F *H_nHitsFit_nHitsMax[PDG2NameSize2];
+	TH1F *H_ndEdx[PDG2NameSize2];
+	TH2F *H_nSigmaTOF_p[PDG2NameSize2];
 	TH2F *H_dEdx_p[PDG2NameSize2];
 	TH2F *H_Pt_nSigma[PDG2NameSize2];
 	TH2F *H_m2_KSigma_S;
