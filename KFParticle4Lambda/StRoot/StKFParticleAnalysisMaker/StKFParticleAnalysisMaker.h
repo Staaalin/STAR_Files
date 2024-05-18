@@ -132,6 +132,10 @@ private:
 	TH1F *H_rapidity[PDG2NameSize2];
 	TH1F *H_P[PDG2NameSize2];
 	TH1F *H_Pt[PDG2NameSize2];
+	TH2F *H_dEdx_p[PDG2NameSize2];
+	TH2F *H_Pt_nSigma[PDG2NameSize2];
+	TH2F *H_m2_KSigma_S;
+	TH2F *H_m2_KSigma_L;
 
 	TH2D *hdEdx_pQ;
 	TH2D *hdEdx_pQ_1cut;

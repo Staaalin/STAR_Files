@@ -194,6 +194,9 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hcentRefM = new TProfile("hcentRefM","hcentRefM",nCent,0.,nCent,0,1000);
 	hcentRefW = new TProfile("hcentRefW","hcentRefW",nCent,0.,nCent,0,1000);
 
+	H_m2_KSigma_S = new TH2F("H_m2_KSigma_S" , "Kaon m2 vs. Pt for small nSigmaKaon" , 600 , 0 , 3 , 1000 , -1 , 4.5) ;
+	H_m2_KSigma_L = new TH2F("H_m2_KSigma_S" , "Kaon m2 vs. Pt for large nSigmaKaon" , 600 , 0 , 3 , 1000 , -1 , 4.5) ;
+
     buffer_size = 5000000;
     hadronTree = new TTree("hadronTree", "Tree_STAR");
     // hadronTree->Branch("buffer_size"       ,&buffer_size         ,"buffer_size/I"                       );
@@ -300,6 +303,22 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		H_Pt[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
 		H_Pt[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
+
+		HistName1 = "H_dEdx_p";
+		HistName2 = "The dEdx vs. momentum of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_dEdx_p[Jtr] = new TH2F(HistName1,HistName2,2000,-10,10,1000,0,20);
+		H_dEdx_p[Jtr]->GetXaxis()->SetTitle("P [GeV]");
+		H_dEdx_p[Jtr]->GetYaxis()->SetTitle("dE/dx [keV/cm]");
+
+		HistName1 = "H_Pt_nSigma";
+		HistName2 = "The P_t vs. nSigma";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		HistName2 += " of ";HistName2 += NameList[Itr];
+		H_Pt_nSigma[Jtr] = new TH2F(HistName1,HistName2,1000,-10,10,1000,0,8);
+		HistName1 = "nSigma";HistName1 += NameList[Itr];
+		H_Pt_nSigma[Jtr]->GetXaxis()->SetTitle(HistName1);
+		H_Pt_nSigma[Jtr]->GetYaxis()->SetTitle("pT [GeV]");
 	}
 
 
@@ -340,26 +359,30 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hHM_Chi2->Write();
 	// hHM_ParentDCA->Write();
 
+	H_m2_KSigma_L->Write();
+	H_m2_KSigma_S->Write();
+
 	hEventNum->Write();
 	
 	for (int i=0;i<PDG2NameSize;i++){
 		H_ALL_NO_CUT[i]->Write();
-
 		H_DaughterDCA[i]->Write();
 
 	}
 
-// //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
-// 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
-// 		int Jtr = Itr - PDG2NameSize;
+//////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
+	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+		int Jtr = Itr - PDG2NameSize;
 
-// 		H_rapidity[Jtr] -> Write();
+		H_rapidity[Jtr] -> Write();
 
-// 		H_P[Jtr] -> Write();
+		H_P[Jtr] -> Write();
 
-// 		H_Pt[Jtr] -> Write();
-// 	}
-// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		H_Pt[Jtr] -> Write();
+		H_dEdx_p[Jtr]->Write();
+		H_Pt_nSigma[Jtr]->Write();
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	return;
 }
@@ -704,18 +727,18 @@ Int_t StKFParticleAnalysisMaker::Make()
 			int TPID = 0;
 			float tMass = 0;
 			if      (fabs(particle.GetPDG()) == 2212) {
-				if (particle.GetPDG() > 0) {TPID = 2212;}
-				else                     {TPID = -2212;}
+				if (particle.GetPDG() > 0) {TPID =  2212;}
+				else                       {TPID = -2212;}
 				tMass = ProtonPdgMass;
 			}
 			else if (fabs(particle.GetPDG()) == 211) {
-				if (particle.GetPDG() > 0) {TPID = 211;}
-				else                     {TPID = -211;}
+				if (particle.GetPDG() > 0) {TPID =  211;}
+				else                       {TPID = -211;}
 				tMass = PionPdgMass;
 			}
 			else if (fabs(particle.GetPDG()) == 321) {
-				if (particle.GetPDG() > 0) {TPID = 321;}
-				else                     {TPID = -321;}
+				if (particle.GetPDG() > 0) {TPID =  321;}
+				else                       {TPID = -321;}
 				tMass = KaonPdgMass;
 			}
 			for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
@@ -727,6 +750,58 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_P[Jtr] -> Fill(pow(tPt2,0.5));
 					float tEnergy = particle.GetE();
 					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+particle.GetPz())/(tEnergy-particle.GetPz())));
+
+					const int globalTrackId = particle.DaughterIds()[0];
+					Int_t nTracks = mPicoDst->numberOfTracks();
+					Int_t iTrackStart = globalTrackId - 1;
+					if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+					for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+						StPicoTrack *track = mPicoDst->track(jTrack);
+						if (track->id() == globalTrackId){
+							H_dEdx_p[Jtr]->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+							if (fabs(TPID) == 321){
+								H_Pt_nSigma[Jtr]->Fill(track->nSigmaKaon(),track->gMom().Perp());
+							}
+							if (fabs(TPID) == 2212){
+								H_Pt_nSigma[Jtr]->Fill(track->nSigmaProton(),track->gMom().Perp());
+							}
+							if (fabs(TPID) == 211){
+								H_Pt_nSigma[Jtr]->Fill(track->nSigmaPion(),track->gMom().Perp());
+							}
+							// TOF Info
+							bool hasTOF = false;
+							int tofindex = track->bTofPidTraitsIndex();
+							float m2 = -999.;
+							float beta = -999.;
+							if (tofindex >= 0) 
+							{
+								int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
+								float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
+								float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
+								// hgbtofYlocal->Fill(BtofYLocal);
+								if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+							}
+							StPicoPhysicalHelix helix = track->helix(magnet);
+							TVector3 pkaon = helix.momentum(magnet*kilogauss);
+							if (hasTOF)
+							{
+								beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
+								m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
+
+
+								// some kaon QA
+								if (TPID == 321){
+									if (track->nSigmaKaon() >  6) H_m2_KSigma_L->Fill(track->gMom().Perp(), m2);
+									if (track->nSigmaKaon() < -6) H_m2_KSigma_S->Fill(track->gMom().Perp(), m2);
+								}
+								// zTOF_proton = 1/beta - sqrt(ProtonPdgMass*ProtonPdgMass/pkaon.Mag2()+1);
+								// zTOF_pion   = 1/beta - sqrt(PionPdgMass*PionPdgMass/pkaon.Mag2()+1);
+								// zTOF_kaon   = 1/beta - sqrt(KaonPdgMass*KaonPdgMass/pkaon.Mag2()+1);
+							}
+							
+							break;
+						}
+					}
 					break;
 				}
 			}
