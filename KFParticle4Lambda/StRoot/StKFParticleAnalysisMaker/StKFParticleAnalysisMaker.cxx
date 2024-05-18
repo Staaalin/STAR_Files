@@ -807,7 +807,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 							H_DCAtoPV[Jtr]->Fill(track->gDCA(Vertex3D).Mag());
 							H_eta[Jtr]->Fill(track->gMom().Eta());
 							H_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
-							// H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMAX()*1.0));
+							H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
 							H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
 							if (fabs(TPID) == 321){
 								H_Pt_nSigma[Jtr]->Fill(track->nSigmaKaon(),track->gMom().Perp());
