@@ -122,6 +122,7 @@ private:
 	#define PDG2NameSize2 6 // BPDGList.size()
 	int PDGList[PDG2NameSize + PDG2NameSize2];
 	TString NameList[PDG2NameSize + PDG2NameSize2];
+	int BPDGListMass[PDG2NameSize2];
 	// std::map<int, TString> PDG2Name;
 	// PDG2Name[ 3122] = "Lambda"; 
 	// PDG2Name[-3122] = "Lambdab";

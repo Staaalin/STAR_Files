@@ -262,10 +262,10 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
 
-	const int APDGList[]      = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312   };
-	const TString ANameList[] = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"   };
-	const int BPDGList[]      = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212  };
-	const TString BNameList[] = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"};
+	const int APDGList[]      = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      };
+	const TString ANameList[] = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      };
+	const int BPDGList[]      = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
+	const TString BNameList[] = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
 	const int BPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
 	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 		PDGList[Itr] = APDGList[Itr];NameList[Itr] = ANameList[Itr];
