@@ -1037,15 +1037,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
 		int eLambda = -(upQ-1)/2; // 0 if Lambda, 1 if AntiLambda
 
+	cout<<"Here is good 2"<<endl;
 		SetDaughterTrackPointers(iKFParticle);
 		if (ProtonTrackIndex == -99999 || PionTrackIndex == -99999) continue; if(!ProtonTrack) continue; if(!PionTrack) continue;
 
-	cout<<"Here is good 2"<<endl;
+	cout<<"Here is good 3"<<endl;
 		double dmass = -999; // just a placeholder
 		TLorentzVector p4Pair, p4Proton; // just a placeholder
 		StLambdaDecayPair TmpLambdaDecayPair(p4Pair, p4Proton, ProtonTrackIndex, PionTrackIndex, (eLambda==0), dmass);
 		KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
-	cout<<"Here is good 3"<<endl;
 	} // End loop over KFParticles
 
 	// // HighLight Reconstructed Track
