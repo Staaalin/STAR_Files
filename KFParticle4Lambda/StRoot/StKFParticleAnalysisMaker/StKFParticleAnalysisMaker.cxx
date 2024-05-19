@@ -1034,11 +1034,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 	cout<<"Here is good 1"<<endl;
 
 
-		int upQ; 
-		if (particle.GetPDG() == LambdaPdg) {upQ = 1;cout<<"Here is good 2"<<endl;} 
-		else if (particle.GetPDG() == -1*LambdaPdg) {upQ = -1;cout<<"Here is good 3"<<endl;} 
+		int upQ; cout<<"Here is good 2"<<endl;
+		if (particle.GetPDG() == LambdaPdg) {upQ = 1;cout<<"Here is good 3"<<endl;} 
+		else if (particle.GetPDG() == -1*LambdaPdg) {upQ = -1;cout<<"Here is good 4"<<endl;} 
 		else continue;
-cout<<"Here is good 4"<<endl;
+cout<<"Here is good 5"<<endl;
 	
 	
 		int eLambda = -(upQ-1)/2; // 0 if Lambda, 1 if AntiLambda
