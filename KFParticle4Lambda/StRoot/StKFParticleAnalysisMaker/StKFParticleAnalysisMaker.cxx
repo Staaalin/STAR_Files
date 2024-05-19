@@ -879,27 +879,28 @@ Int_t StKFParticleAnalysisMaker::Make()
 			continue;
 		}
 
-		cout<<"Here is good 3"<<endl;
+		// cout<<"Here is good 3"<<endl;
 
+		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != XiPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
 		//SCHEME 1: reconstruction of V0, the parent particle
 		int iTrack,kTrack;
-		cout<<"particle.NDaughters() = "<<particle.NDaughters()<<endl;
+		// cout<<"particle.NDaughters() = "<<particle.NDaughters()<<endl;
 		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 			const int daughterId = particle.DaughterIds()[iDaughter];
-			cout<<"daughterId = "<<daughterId<<endl;
+			// cout<<"daughterId = "<<daughterId<<endl;
 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 			if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
 				// cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
 				if (daughter.GetPDG() == -1) {
 					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
-						cout<<"Here is good 7"<<endl;
+						// cout<<"Here is good 7"<<endl;
 						int DdaughterId = daughter.DaughterIds()[jDaughter];
 						KFParticle Ddaughter = KFParticleInterface->GetParticles()[DdaughterId];
 						// cout<<"Grand daughter ID = "<<Ddaughter.GetPDG()<<endl;
 					}
 				}
 			}
-			cout<<"Here is good 4"<<endl;
+			// cout<<"Here is good 4"<<endl;
 			const int globalTrackId = daughter.DaughterIds()[0];
 			Int_t nTracks = mPicoDst->numberOfTracks();
 			Int_t iTrackStart = globalTrackId - 1;
@@ -914,7 +915,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
-		cout<<"Here is good 5"<<endl;
+		// cout<<"Here is good 5"<<endl;
 		StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		// StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
