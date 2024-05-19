@@ -878,11 +878,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 
 		//SCHEME 1: reconstruction of V0, the parent particle
-		if (particle.NDaughters() != 2){cout<<"FUCK! particle.NDaughters() = "<<particle.NDaughters()<<endl;}
-		int iTrack,kTrack;
-		if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
-			// cout<<"Particle ID = "<<particle.GetPDG()<<endl;
-		}
 		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 			const int daughterId = particle.DaughterIds()[iDaughter]; 
 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
