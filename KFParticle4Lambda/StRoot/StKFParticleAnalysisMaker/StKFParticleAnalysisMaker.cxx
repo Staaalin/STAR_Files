@@ -1035,6 +1035,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 
 		int upQ; cout<<"Here is good 2"<<endl;
+		cout<<particle.GetPDG()<<endl;
 		if (particle.GetPDG() == LambdaPdg) {upQ = 1;cout<<"Here is good 3"<<endl;} 
 		else if (particle.GetPDG() == -1*LambdaPdg) {upQ = -1;cout<<"Here is good 4"<<endl;} 
 		else continue;
