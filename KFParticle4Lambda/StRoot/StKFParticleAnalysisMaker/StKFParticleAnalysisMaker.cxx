@@ -883,12 +883,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 		int iTrack,kTrack;
 		cout<<"particle.NDaughters() = "<<particle.NDaughters()<<endl;
 		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-			const int daughterId = particle.DaughterIds()[iDaughter]; 
+			const int daughterId = particle.DaughterIds()[iDaughter];
+			cout<<"daughterId = "<<daughterId<<endl;
 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 			if (particle.GetPDG() == 3334 || particle.GetPDG() == -3334) {
 				// cout<<"daughter ID = "<<daughter.GetPDG()<<endl;
 				if (daughter.GetPDG() == -1) {
 					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
+						cout<<"Here is good 7"<<endl;
 						int DdaughterId = daughter.DaughterIds()[jDaughter];
 						KFParticle Ddaughter = KFParticleInterface->GetParticles()[DdaughterId];
 						// cout<<"Grand daughter ID = "<<Ddaughter.GetPDG()<<endl;
@@ -962,7 +964,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				break;
 			}
 		}
-		cout<<"Here is good 6"<<endl;
+		
 		// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		TVector3 xv0, op1, op2;
