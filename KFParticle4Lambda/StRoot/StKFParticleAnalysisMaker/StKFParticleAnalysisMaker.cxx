@@ -1028,11 +1028,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_nSigmaKaon.emplace_back(-999);
 
 		}
-	cout<<"Here is good 2"<<endl;
 		// cout<<"CrefMult:"<<CrefMult<<endl;
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 
 		hLN_M->Fill(particle.GetMass(),H_ProcessEventNum);
+	cout<<"Here is good 2"<<endl;
 
 
 		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
