@@ -982,7 +982,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
 		if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
 		ParticleVec.push_back(particle);
-	cout<<"Here is good"<<endl;
+	cout<<"Here is good 1"<<endl;
 
 		if (IfHelix && ((fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg))) {
 
@@ -1028,6 +1028,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_nSigmaKaon.emplace_back(-999);
 
 		}
+	cout<<"Here is good 2"<<endl;
 		// cout<<"CrefMult:"<<CrefMult<<endl;
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 
