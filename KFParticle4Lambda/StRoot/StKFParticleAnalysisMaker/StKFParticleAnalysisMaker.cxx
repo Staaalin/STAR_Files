@@ -763,6 +763,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if ( (fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg) || (fabs(particle.GetPDG()) == LambdaPdg) ) {
 			cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+				const int daughterId = particle.DaughterIds()[iDaughter]; 
 				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 				cout<<"daughter.GetPDG() = "<<particle.GetPDG()<<endl;
 			}
@@ -774,7 +775,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if ( (fabs(daughter.GetPDG()) == OmegaPdg) || (fabs(daughter.GetPDG()) == XiPdg) || (fabs(daughter.GetPDG()) == LambdaPdg) ){
 				// for (int Itr = 0;Itr < ReCons_TrackID.size();Itr++){}
 				// ReCons_TrackID.push_back(daughter.DaughterIds()[0]);
-				cout<<
+				// cout<<
 			}
 			if ( (fabs(daughter.GetPDG()) != 2212) && (fabs(daughter.GetPDG()) != 211) && (fabs(daughter.GetPDG()) != 321) ){continue;}
 			const int globalTrackId = daughter.DaughterIds()[0];
