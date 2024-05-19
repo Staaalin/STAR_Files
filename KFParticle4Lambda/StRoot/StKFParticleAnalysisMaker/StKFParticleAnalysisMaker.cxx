@@ -881,6 +881,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		//SCHEME 1: reconstruction of V0, the parent particle
 		int iTrack,kTrack;
+		cout<<"particle.NDaughters() = "<<particle.NDaughters()<<endl;
 		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 			const int daughterId = particle.DaughterIds()[iDaughter]; 
 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
