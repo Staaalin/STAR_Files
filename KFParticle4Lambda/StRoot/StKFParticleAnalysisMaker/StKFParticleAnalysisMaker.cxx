@@ -769,6 +769,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 		#endif
 		
+		cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
 		if ((fabs(particle.GetPDG()) == 2212) || (fabs(particle.GetPDG()) == 211) || (fabs(particle.GetPDG()) == 321)) { // Proton , Pion or Kaon
 			int TPID = 0;
 			float tMass = 0;
@@ -1041,7 +1042,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 
 		int upQ; cout<<"Here is good 2"<<endl;
-		cout<<particle.GetPDG()<<endl;
 		if (particle.GetPDG() == LambdaPdg) {upQ = 1;} 
 		else if (particle.GetPDG() == -1*LambdaPdg) {upQ = -1;} 
 		else continue;
