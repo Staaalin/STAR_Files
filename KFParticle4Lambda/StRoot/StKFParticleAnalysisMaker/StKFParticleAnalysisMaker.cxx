@@ -982,7 +982,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
 		if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
 		ParticleVec.push_back(particle);
-	cout<<"Here is good 1"<<endl;
 
 		if (IfHelix && ((fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg))) {
 
@@ -1032,7 +1031,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 
 		hLN_M->Fill(particle.GetMass(),H_ProcessEventNum);
-	cout<<"Here is good 2"<<endl;
+	cout<<"Here is good 1"<<endl;
 
 
 		int upQ; if (particle.GetPDG() == LambdaPdg) upQ = 1; else if (particle.GetPDG() == -1*LambdaPdg) upQ = -1; else continue;
@@ -1045,6 +1044,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		TLorentzVector p4Pair, p4Proton; // just a placeholder
 		StLambdaDecayPair TmpLambdaDecayPair(p4Pair, p4Proton, ProtonTrackIndex, PionTrackIndex, (eLambda==0), dmass);
 		KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
+	cout<<"Here is good 2"<<endl;
 	} // End loop over KFParticles
 
 	// // HighLight Reconstructed Track
