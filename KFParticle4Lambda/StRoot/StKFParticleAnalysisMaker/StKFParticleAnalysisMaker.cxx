@@ -877,6 +877,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 			continue;
 		}
 
+		cout<<"Here is good 3"<<endl;
+
 		//SCHEME 1: reconstruction of V0, the parent particle
 		int iTrack,kTrack;
 		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
@@ -959,7 +961,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				break;
 			}
 		}
-		
+		cout<<"Here is good 4"<<endl;
 		// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		TVector3 xv0, op1, op2;
@@ -1031,15 +1033,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 
 		hLN_M->Fill(particle.GetMass(),H_ProcessEventNum);
-	cout<<"Here is good 1"<<endl;
+		cout<<"Here is good 1"<<endl;
 
 
 		int upQ; cout<<"Here is good 2"<<endl;
 		cout<<particle.GetPDG()<<endl;
-		if (particle.GetPDG() == LambdaPdg) {upQ = 1;cout<<"Here is good 3"<<endl;} 
-		else if (particle.GetPDG() == -1*LambdaPdg) {upQ = -1;cout<<"Here is good 4"<<endl;} 
+		if (particle.GetPDG() == LambdaPdg) {upQ = 1;} 
+		else if (particle.GetPDG() == -1*LambdaPdg) {upQ = -1;} 
 		else continue;
-cout<<"Here is good 5"<<endl;
 	
 	
 		int eLambda = -(upQ-1)/2; // 0 if Lambda, 1 if AntiLambda
