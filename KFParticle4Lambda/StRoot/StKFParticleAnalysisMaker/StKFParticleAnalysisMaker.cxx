@@ -757,6 +757,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// }
 
 	Omega_Omegab_Num = 0;
+	cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
