@@ -908,7 +908,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
-
+		cout<<"Here is good 4"<<endl;
 		StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		// StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
@@ -940,7 +940,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// 		break;
 		// 	}
 		// }
-
+		cout<<"Here is good 5"<<endl;
 		for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 			if (particle.GetPDG() == PDGList[Itr]){
 				if (StKFParticleAnalysisMaker::IfGoodDaughterDCA(mPicoDst , iKFParticle , magnet , 0.6 , 0.6)){
@@ -961,7 +961,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				break;
 			}
 		}
-		cout<<"Here is good 4"<<endl;
+		cout<<"Here is good 6"<<endl;
 		// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		TVector3 xv0, op1, op2;
