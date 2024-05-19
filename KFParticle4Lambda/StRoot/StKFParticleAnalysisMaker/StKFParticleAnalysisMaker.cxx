@@ -756,8 +756,53 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// 	}
 	// }
 
+	// // HighLight Reconstructed Track
+	ReCons_TrackID.resize(0);
+	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
+		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+		if ( (fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg) || (fabs(particle.GetPDG()) == LambdaPdg) ) {
+			cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
+			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+				cout<<"daughter.GetPDG() = "<<particle.GetPDG()<<endl;
+			}
+		}
+		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
+		{ 
+			const int daughterId = particle.DaughterIds()[iDaughter]; 
+			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+			if ( (fabs(daughter.GetPDG()) == OmegaPdg) || (fabs(daughter.GetPDG()) == XiPdg) || (fabs(daughter.GetPDG()) == LambdaPdg) ){
+				// for (int Itr = 0;Itr < ReCons_TrackID.size();Itr++){}
+				// ReCons_TrackID.push_back(daughter.DaughterIds()[0]);
+				cout<<
+			}
+			if ( (fabs(daughter.GetPDG()) != 2212) && (fabs(daughter.GetPDG()) != 211) && (fabs(daughter.GetPDG()) != 321) ){continue;}
+			const int globalTrackId = daughter.DaughterIds()[0];
+
+			Int_t nTracks = mPicoDst->numberOfTracks();
+			// for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
+			// 	StPicoTrack *track = mPicoDst->track(iTrack);
+			// 	if (track->id() == globalTrackId){
+			// 		if (iTrack > track->id()){
+			// 			cout<<"track location = "<<iTrack<<" , TrackId = "<<track->id()<<endl;
+			// 		}
+			// 		break;
+			// 	}
+			// }
+			Int_t iTrackStart = globalTrackId - 1;
+			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+			for (Int_t iTrack = iTrackStart;iTrack >= 0;iTrack--){
+				StPicoTrack *track = mPicoDst->track(iTrack);
+				if (track->id() == globalTrackId){
+					(mPicoDst->track(iTrack))->setNHitsFit(0);
+					break;
+				}
+			}
+		}
+	}
+
 	Omega_Omegab_Num = 0;
-	cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
+	// cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
@@ -768,7 +813,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		std::cout << "Parsing refMult : " << refMult <<std::endl;
 		std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 		#endif
-		
+	
 		// cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
 		if ((fabs(particle.GetPDG()) == 2212) || (fabs(particle.GetPDG()) == 211) || (fabs(particle.GetPDG()) == 321)) { // Proton , Pion or Kaon
 			int TPID = 0;
@@ -1059,38 +1104,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 	} // End loop over KFParticles
 
-	// // HighLight Reconstructed Track
-	ReCons_TrackID.resize(0);
-	for (int iParticle = 0;iParticle < ParticleVec.size();iParticle++){
-		KFParticle particle = ParticleVec[iParticle];
-		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
-		{ 
-			const int daughterId = particle.DaughterIds()[iDaughter]; 
-			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId]; 
-			const int globalTrackId = daughter.DaughterIds()[0];
-			ReCons_TrackID.push_back(globalTrackId);
 
-			Int_t nTracks = mPicoDst->numberOfTracks();
-			// for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
-			// 	StPicoTrack *track = mPicoDst->track(iTrack);
-			// 	if (track->id() == globalTrackId){
-			// 		if (iTrack > track->id()){
-			// 			cout<<"track location = "<<iTrack<<" , TrackId = "<<track->id()<<endl;
-			// 		}
-			// 		break;
-			// 	}
-			// }
-			Int_t iTrackStart = globalTrackId - 1;
-			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-			for (Int_t iTrack = iTrackStart;iTrack >= 0;iTrack--){
-				StPicoTrack *track = mPicoDst->track(iTrack);
-				if (track->id() == globalTrackId){
-					(mPicoDst->track(iTrack))->setNHitsFit(0);
-					break;
-				}
-			}
-		}
-	}
 
 	// Filling Track
 // 	Int_t nTracks = mPicoDst->numberOfTracks();
