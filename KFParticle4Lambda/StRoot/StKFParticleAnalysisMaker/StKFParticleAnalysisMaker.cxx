@@ -283,14 +283,14 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_DaughterDCA[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
 		H_DaughterDCA[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
 
-		TString HistName1 = "HM_WDaughter_";
-		TString HistName2 = "The Mass of (Wrong Daughter) ";
+		HistName1 = "HM_WDaughter_";
+		HistName2 = "The Mass of (Wrong Daughter) ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		H_WrongDaughter[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
 		H_WrongDaughter[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
 
-		TString HistName1 = "HM_CDaughter_";
-		TString HistName2 = "The Mass of (Corect Daughter) ";
+		HistName1 = "HM_CDaughter_";
+		HistName2 = "The Mass of (Corect Daughter) ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		H_CrectDaughter[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
 		H_CrectDaughter[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
@@ -780,31 +780,25 @@ Int_t StKFParticleAnalysisMaker::Make()
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 				const int daughterId = particle.DaughterIds()[iDaughter];
 				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-				for (int Itr = 0;Itr < DaughterParticle.size();Itr++){
-					if ( DaughterParticle[Itr] == daughterId ){
-						MultyReconMather.emplace_back(iKFParticle);
-						MultyReconMather.emplace_back(DaughterParticle[Itr]);
-						MultyReconMather.emplace_back(MatherPartiecle[Itr]);
-						break;
-					}
+				if (daughter.GetPDG() != -1) {
+					DaughterParticle.push_back(daughterId);
+					MatherPartiecle.push_back(iKFParticle);
 				}
-				if ( daughter.GetPDG() == -1 ){
-					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++) {
+				else {
+					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
 						const int GdaughterId = daughter.DaughterIds()[jDaughter];
-						for (int Itr = 0;Itr < DaughterParticle.size();Itr++){
-							if ( DaughterParticle[Itr] == GdaughterId ){
-								MultyReconMather.emplace_back(iKFParticle);
-								MultyReconMather.emplace_back(DaughterParticle[Itr]);
-								MultyReconMather.emplace_back(MatherPartiecle[Itr]);
-								break;
-							}
-						}
+						DaughterParticle.push_back(GdaughterId);
+						MatherPartiecle.push_back(iKFParticle);
 					}
-					DaughterParticle.emplace_back(GdaughterId);
-					MatherPartiecle.emplace_back(iKFParticle);
 				}
-				DaughterParticle.emplace_back(daughterId);
-				MatherPartiecle.emplace_back(iKFParticle);
+			}
+		}
+	}
+	for (int Itr = 0;Itr < DaughterParticle.size();Itr++){
+		for (int Jtr = Itr;Jtr < DaughterParticle.size();Jtr++){
+			if (DaughterParticle[Itr] == DaughterParticle[Jtr]) {
+				MultyReconMather.push_back(MatherPartiecle[Itr]);
+				MultyReconMather.push_back(MatherPartiecle[Jtr]);
 			}
 		}
 	}
