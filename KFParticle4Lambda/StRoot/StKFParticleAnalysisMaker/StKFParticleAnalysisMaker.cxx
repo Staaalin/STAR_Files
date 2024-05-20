@@ -765,42 +765,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if ( (fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg) || (fabs(particle.GetPDG()) == LambdaPdg) ) {
 			cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-				const int daughterId = particle.DaughterIds()[iDaughter]; 
+				const int daughterId = particle.DaughterIds()[iDaughter];
+				// if (daughterId >= KFParticlePerformanceInterface->GetNReconstructedParticles())
 				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 				cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
 				cout<<"daughterId        = "<<daughterId<<endl;
-			}
-		}
-		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
-		{ 
-			const int daughterId = particle.DaughterIds()[iDaughter]; 
-			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-			if ( (fabs(daughter.GetPDG()) == OmegaPdg) || (fabs(daughter.GetPDG()) == XiPdg) || (fabs(daughter.GetPDG()) == LambdaPdg) ){
-				// for (int Itr = 0;Itr < ReCons_TrackID.size();Itr++){}
-				// ReCons_TrackID.push_back(daughter.DaughterIds()[0]);
-				// cout<<
-			}
-			if ( (fabs(daughter.GetPDG()) != 2212) && (fabs(daughter.GetPDG()) != 211) && (fabs(daughter.GetPDG()) != 321) ){continue;}
-			const int globalTrackId = daughter.DaughterIds()[0];
-
-			Int_t nTracks = mPicoDst->numberOfTracks();
-			// for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
-			// 	StPicoTrack *track = mPicoDst->track(iTrack);
-			// 	if (track->id() == globalTrackId){
-			// 		if (iTrack > track->id()){
-			// 			cout<<"track location = "<<iTrack<<" , TrackId = "<<track->id()<<endl;
-			// 		}
-			// 		break;
-			// 	}
-			// }
-			Int_t iTrackStart = globalTrackId - 1;
-			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-			for (Int_t iTrack = iTrackStart;iTrack >= 0;iTrack--){
-				StPicoTrack *track = mPicoDst->track(iTrack);
-				if (track->id() == globalTrackId){
-					(mPicoDst->track(iTrack))->setNHitsFit(0);
-					break;
-				}
 			}
 		}
 	}
