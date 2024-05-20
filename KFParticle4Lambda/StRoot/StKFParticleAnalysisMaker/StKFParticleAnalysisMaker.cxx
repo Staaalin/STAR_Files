@@ -38,8 +38,8 @@
 #include "MyToolkit.h"
 
 // #define DataName           "pAu_200_15"
-// #define DataName           "dAu_200_16"
-#define DataName           "dAu_62_16"
+#define DataName           "dAu_200_16"
+// #define DataName           "dAu_62_16"
 // #define DataName           "dAu_39_16"
 // #define DataName           "dAu_20_16"
 #define pi                 TMath::Pi()
@@ -556,6 +556,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	//     pass event  
 	/////////////////////////////////////////////////////////
+	int Recorded_Hyperon = 0;
 	StPicoEvent* mEvent= (StPicoEvent*) mPicoDst->event(); 
 	if(!mEvent)return kStOK;
 
@@ -756,54 +757,55 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// 	}
 	// }
 
-	// // HighLight Reconstructed Track
-	// ReCons_TrackID.resize(0);
-	// for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
-	// 	KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
-	// 	if ( (fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg) || (fabs(particle.GetPDG()) == LambdaPdg) ) {
-	// 		cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
-	// 		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-	// 			const int daughterId = particle.DaughterIds()[iDaughter]; 
-	// 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-	// 			cout<<"daughter.GetPDG() = "<<particle.GetPDG()<<endl;
-	// 		}
-	// 	}
-	// 	for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
-	// 	{ 
-	// 		const int daughterId = particle.DaughterIds()[iDaughter]; 
-	// 		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-	// 		if ( (fabs(daughter.GetPDG()) == OmegaPdg) || (fabs(daughter.GetPDG()) == XiPdg) || (fabs(daughter.GetPDG()) == LambdaPdg) ){
-	// 			// for (int Itr = 0;Itr < ReCons_TrackID.size();Itr++){}
-	// 			// ReCons_TrackID.push_back(daughter.DaughterIds()[0]);
-	// 			// cout<<
-	// 		}
-	// 		if ( (fabs(daughter.GetPDG()) != 2212) && (fabs(daughter.GetPDG()) != 211) && (fabs(daughter.GetPDG()) != 321) ){continue;}
-	// 		const int globalTrackId = daughter.DaughterIds()[0];
+	// HighLight Reconstructed Track
+	ReCons_TrackID.resize(0);
+	cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
+	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
+		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+		if ( (fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg) || (fabs(particle.GetPDG()) == LambdaPdg) ) {
+			cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
+			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+				const int daughterId = particle.DaughterIds()[iDaughter]; 
+				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+				cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
+				cout<<"daughterId        = "<<daughterId<<endl;
+			}
+		}
+		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++)
+		{ 
+			const int daughterId = particle.DaughterIds()[iDaughter]; 
+			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+			if ( (fabs(daughter.GetPDG()) == OmegaPdg) || (fabs(daughter.GetPDG()) == XiPdg) || (fabs(daughter.GetPDG()) == LambdaPdg) ){
+				// for (int Itr = 0;Itr < ReCons_TrackID.size();Itr++){}
+				// ReCons_TrackID.push_back(daughter.DaughterIds()[0]);
+				// cout<<
+			}
+			if ( (fabs(daughter.GetPDG()) != 2212) && (fabs(daughter.GetPDG()) != 211) && (fabs(daughter.GetPDG()) != 321) ){continue;}
+			const int globalTrackId = daughter.DaughterIds()[0];
 
-	// 		Int_t nTracks = mPicoDst->numberOfTracks();
-	// 		// for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
-	// 		// 	StPicoTrack *track = mPicoDst->track(iTrack);
-	// 		// 	if (track->id() == globalTrackId){
-	// 		// 		if (iTrack > track->id()){
-	// 		// 			cout<<"track location = "<<iTrack<<" , TrackId = "<<track->id()<<endl;
-	// 		// 		}
-	// 		// 		break;
-	// 		// 	}
-	// 		// }
-	// 		Int_t iTrackStart = globalTrackId - 1;
-	// 		if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-	// 		for (Int_t iTrack = iTrackStart;iTrack >= 0;iTrack--){
-	// 			StPicoTrack *track = mPicoDst->track(iTrack);
-	// 			if (track->id() == globalTrackId){
-	// 				(mPicoDst->track(iTrack))->setNHitsFit(0);
-	// 				break;
-	// 			}
-	// 		}
-	// 	}
-	// }
+			Int_t nTracks = mPicoDst->numberOfTracks();
+			// for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
+			// 	StPicoTrack *track = mPicoDst->track(iTrack);
+			// 	if (track->id() == globalTrackId){
+			// 		if (iTrack > track->id()){
+			// 			cout<<"track location = "<<iTrack<<" , TrackId = "<<track->id()<<endl;
+			// 		}
+			// 		break;
+			// 	}
+			// }
+			Int_t iTrackStart = globalTrackId - 1;
+			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+			for (Int_t iTrack = iTrackStart;iTrack >= 0;iTrack--){
+				StPicoTrack *track = mPicoDst->track(iTrack);
+				if (track->id() == globalTrackId){
+					(mPicoDst->track(iTrack))->setNHitsFit(0);
+					break;
+				}
+			}
+		}
+	}
 
 	Omega_Omegab_Num = 0;
-	// cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
@@ -928,6 +930,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// cout<<"Here is good 3"<<endl;
 
 		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != XiPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
+		Recorded_Hyperon ++;
 		//SCHEME 1: reconstruction of V0, the parent particle
 		int iTrack,kTrack;
 		// cout<<"particle.NDaughters() = "<<particle.NDaughters()<<endl;
@@ -1385,7 +1388,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	if (PDG.size()>0){
 		PDGMult = PDG.size(); // This is multiplicity of Recorded Particles
-		if (Omega_Omegab_Num != 0){
+		if (Recorded_Hyperon != 0){
 			cout<<"Found Omega"<<endl;
 			hadronTree->Fill();
 		}
