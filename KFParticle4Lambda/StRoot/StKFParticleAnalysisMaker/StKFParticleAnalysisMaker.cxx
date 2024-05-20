@@ -766,7 +766,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 			cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 				const int daughterId = particle.DaughterIds()[iDaughter];
-				// if (daughterId >= KFParticlePerformanceInterface->GetNReconstructedParticles())
+				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+				cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
+				cout<<"daughterId        = "<<daughterId<<endl;
+			}
+		}
+		if ( (fabs(particle.GetPDG()) == LambdaPdg) ) {
+			cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
+			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+				const int daughterId = particle.DaughterIds()[iDaughter];
 				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 				cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
 				cout<<"daughterId        = "<<daughterId<<endl;
