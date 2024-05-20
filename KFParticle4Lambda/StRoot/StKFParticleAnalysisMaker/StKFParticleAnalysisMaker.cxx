@@ -282,6 +282,18 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName2 += " those DayghtersDCA < 0.6 [cm]";
 		H_DaughterDCA[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
 		H_DaughterDCA[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
+
+		TString HistName1 = "HM_WDaughter_";
+		TString HistName2 = "The Mass of (Wrong Daughter) ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_WrongDaughter[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
+		H_WrongDaughter[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
+
+		TString HistName1 = "HM_CDaughter_";
+		TString HistName2 = "The Mass of (Corect Daughter) ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_CrectDaughter[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
+		H_CrectDaughter[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
 	}
 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 		int Jtr = Itr - PDG2NameSize;
@@ -372,7 +384,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	///////////////////
-	hadronTree ->Write();
+	// hadronTree ->Write();
 
 	//-- Used for  test --
 	// hNRefMult ->Write();  
@@ -404,8 +416,10 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	hEventNum->Write();
 	
 	for (int i=0;i<PDG2NameSize;i++){
-		H_ALL_NO_CUT[i]->Write();
-		H_DaughterDCA[i]->Write();
+		// H_ALL_NO_CUT[i]->Write();
+		// H_DaughterDCA[i]->Write();
+		H_WrongDaughter[i]->Write();
+		H_CrectDaughter[i]->Write();
 
 	}
 
@@ -758,26 +772,39 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// }
 
 	// HighLight Reconstructed Track
-	ReCons_TrackID.resize(0);
-	cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
+	ReCons_TrackID.resize(0);std::vector<int> DaughterParticle,MatherPartiecle,MultyReconMather;DaughterParticle.resize(0);MatherPartiecle.resize(0);MultyReconMather.resize(0);
+	// cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
-		if ( (fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg) ) {
-			cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
+		if ( (fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg)  || (fabs(particle.GetPDG()) == LambdaPdg) ) {
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 				const int daughterId = particle.DaughterIds()[iDaughter];
 				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-				cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
-				cout<<"daughterId        = "<<daughterId<<endl;
-			}
-		}
-		if ( (fabs(particle.GetPDG()) == LambdaPdg) ) {
-			cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
-			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-				const int daughterId = particle.DaughterIds()[iDaughter];
-				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-				cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
-				cout<<"daughterId        = "<<daughterId<<endl;
+				for (int Itr = 0;Itr < DaughterParticle.size();Itr++){
+					if ( DaughterParticle[Itr] == daughterId ){
+						MultyReconMather.emplace_back(iKFParticle);
+						MultyReconMather.emplace_back(DaughterParticle[Itr]);
+						MultyReconMather.emplace_back(MatherPartiecle[Itr]);
+						break;
+					}
+				}
+				if ( daughter.GetPDG() == -1 ){
+					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++) {
+						const int GdaughterId = daughter.DaughterIds()[jDaughter];
+						for (int Itr = 0;Itr < DaughterParticle.size();Itr++){
+							if ( DaughterParticle[Itr] == GdaughterId ){
+								MultyReconMather.emplace_back(iKFParticle);
+								MultyReconMather.emplace_back(DaughterParticle[Itr]);
+								MultyReconMather.emplace_back(MatherPartiecle[Itr]);
+								break;
+							}
+						}
+					}
+					DaughterParticle.emplace_back(GdaughterId);
+					MatherPartiecle.emplace_back(iKFParticle);
+				}
+				DaughterParticle.emplace_back(daughterId);
+				MatherPartiecle.emplace_back(iKFParticle);
 			}
 		}
 	}
@@ -906,8 +933,34 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		// cout<<"Here is good 3"<<endl;
 
+
 		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != XiPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
 		Recorded_Hyperon ++;
+
+		// Check if wrong daughters
+		bool IfCorrectDaughter = true;
+		for (int Itr = 0;Itr < MultyReconMather.size();Itr++) {
+			if ( iKFParticle == MultyReconMather[Itr]) {
+				for (int Jtr = 0;Jtr < PDG2NameSize;Jtr++){
+					if (particle.GetPDG() == PDGList[Jtr]){
+						H_WrongDaughter[Jtr]->Fill(particle.GetMass());
+						IfCorrectDaughter = false;
+						break;
+					}
+				}
+				break;
+			}
+			if (Itr == MultyReconMather.size() - 1) {
+				for (int Jtr = 0;Jtr < PDG2NameSize;Jtr++){
+					if (particle.GetPDG() == PDGList[Jtr]){
+						H_CrectDaughter[Jtr]->Fill(particle.GetMass());
+						break;
+					}
+				}
+			}
+		}
+		if (IfCorrectDaughter == false) {continue;}
+
 		//SCHEME 1: reconstruction of V0, the parent particle
 		int iTrack,kTrack;
 		// cout<<"particle.NDaughters() = "<<particle.NDaughters()<<endl;

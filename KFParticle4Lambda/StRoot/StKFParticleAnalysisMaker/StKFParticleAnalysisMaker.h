@@ -130,6 +130,8 @@ private:
 	// PDG2Name[-3334] = "Omegab"; 
 	TH1F *H_ALL_NO_CUT[PDG2NameSize];// NO CUT
 	TH1F *H_DaughterDCA[PDG2NameSize];// Cut DaughterDCA
+	TH1F *H_WrongDaughter[PDG2NameSize];
+	TH1F *H_CrectDaughter[PDG2NameSize];
 	TH1F *H_rapidity[PDG2NameSize2];
 	TH1F *H_P[PDG2NameSize2];
 	TH1F *H_Pt[PDG2NameSize2];
