@@ -778,14 +778,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 		if (particle.GetPDG() == -1){continue;}
 		if ( (fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg)  || (fabs(particle.GetPDG()) == LambdaPdg) ) {
-			cout<<"###############################################"<<endl;
-			cout<<"iKFParticle = "<<iKFParticle<<endl;
-			cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
+			// cout<<"###############################################"<<endl;
+			// cout<<"iKFParticle = "<<iKFParticle<<endl;
+			// cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 				const int daughterId = particle.DaughterIds()[iDaughter];
 				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-				cout<<"daughterId = "<<daughterId<<endl;
-				cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
+				// cout<<"daughterId = "<<daughterId<<endl;
+				// cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
 				if (daughter.GetPDG() != -1) {
 					DaughterParticle.push_back(daughterId);
 					MatherPartiecle.push_back(iKFParticle);
@@ -795,28 +795,28 @@ Int_t StKFParticleAnalysisMaker::Make()
 						const int GdaughterId = daughter.DaughterIds()[jDaughter];
 						DaughterParticle.push_back(GdaughterId);
 						MatherPartiecle.push_back(iKFParticle);
-						cout<<"GrandDaughterId = "<<GdaughterId<<endl;
-						cout<<"GrandDaughter.GetPDG() = "<<(KFParticleInterface->GetParticles()[GdaughterId]).GetPDG()<<endl;
+						// cout<<"GrandDaughterId = "<<GdaughterId<<endl;
+						// cout<<"GrandDaughter.GetPDG() = "<<(KFParticleInterface->GetParticles()[GdaughterId]).GetPDG()<<endl;
 					}
 				}
 			}
-			cout<<"MatherPartiecle = ["<<endl;
-			for (int Itr = 0;Itr < DaughterParticle.size();Itr++) {
-				cout<<" "<<MatherPartiecle[Itr]<<" "<<endl;
-				if (Itr == DaughterParticle.size()-1) {cout<<"]"<<endl;}
-				else{cout<<",";}
-			}
-			cout<<"DaughterParticle = ["<<endl;
-			for (int Itr = 0;Itr < DaughterParticle.size();Itr++) {
-				cout<<" "<<DaughterParticle[Itr]<<" "<<endl;
-				if (Itr == DaughterParticle.size()-1) {cout<<"]"<<endl;}
-				else{cout<<",";}
-			}
+			// cout<<"MatherPartiecle = [";
+			// for (int Itr = 0;Itr < DaughterParticle.size();Itr++) {
+			// 	cout<<" "<<MatherPartiecle[Itr]<<" ";
+			// 	if (Itr == DaughterParticle.size()-1) {cout<<"]"<<endl;}
+			// 	else{cout<<",";}
+			// }
+			// cout<<"DaughterParticle = [";
+			// for (int Itr = 0;Itr < DaughterParticle.size();Itr++) {
+			// 	cout<<" "<<DaughterParticle[Itr]<<" ";
+			// 	if (Itr == DaughterParticle.size()-1) {cout<<"]"<<endl;}
+			// 	else{cout<<",";}
+			// }
 		}
-		DaughterParticle.resize(0);MatherPartiecle.resize(0);
+		// DaughterParticle.resize(0);MatherPartiecle.resize(0);
 	}
 	for (int Itr = 0;Itr < DaughterParticle.size();Itr++){
-		for (int Jtr = Itr;Jtr < DaughterParticle.size();Jtr++){
+		for (int Jtr = Itr + 1;Jtr < DaughterParticle.size();Jtr++){
 			if (DaughterParticle[Itr] == DaughterParticle[Jtr]) {
 				MultyReconMather.push_back(MatherPartiecle[Itr]);
 				MultyReconMather.push_back(MatherPartiecle[Jtr]);
@@ -1434,7 +1434,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	if (PDG.size()>0){
 		PDGMult = PDG.size(); // This is multiplicity of Recorded Particles
 		if (Recorded_Hyperon != 0){
-			cout<<"Found Omega"<<endl;
+			cout<<"Found Hyperon"<<endl;
 			hadronTree->Fill();
 		}
 		// hadronTree->Fill();
