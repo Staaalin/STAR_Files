@@ -82,8 +82,8 @@ const int cenDef[9] = {6,11,21,38,61,95,141,205,249}; //Updated 19June 2023 for 
 
 //Full production dataset 
 ////
-static Int_t runmin=19158057; 
-static Int_t runmax=21055018;//need to add 1 from the runmax 21055017 
+static Int_t runmin=19169001; 
+static Int_t runmax=19169018;//need to add 1 from the runmax 19169017 
 static Int_t runbins=runmax-runmin;
 const int run_sta = (int)((runmin%1000000)/1);
 const int run_end = (int)((runmax%1000000)/1);
@@ -410,7 +410,7 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
         picoReader->SetStatus("Track",1);
         picoReader->SetStatus("BTofHit",1);
         picoReader->SetStatus("BTofPidTraits",1);
-cout<<"1st"<<endl;
+        cout<<"1st"<<endl;
 
 	// Prepare EPD
 	TClonesArray* mEpdHits = new TClonesArray("StPicoEpdHit");
@@ -442,9 +442,10 @@ cout<<"1st"<<endl;
       			cout << "Something went wrong, Master! Event is hiding from me..." << endl;
       			break;
     		}
-//cout<<"2nd"<<endl;
+        //cout<<"2nd"<<endl;
 		hTally->Fill(0);
-                if(!event->isTrigger(710000)&& !event->isTrigger(710010) &&!event->isTrigger(710020)) continue; //Updated 19June 2023 for 11GeV v1
+                // if(!event->isTrigger(710000)&& !event->isTrigger(710010) &&!event->isTrigger(710020)) continue; //Updated 19June 2023 for 11GeV v1
+                if(!event->isTrigger(630052)) continue; //Updated 19June 2023 for 11GeV v1
 
 		Run	= event->runId();
 		pV 	= event->primaryVertex();
@@ -462,7 +463,7 @@ cout<<"1st"<<endl;
 		Day2    = (int)((Run%1000000)/10);
                 Day3    = (int)((Run%1000000)/1);
 
-		if(Run<21001000) continue;
+		// if(Run<21001000) continue;
 
 /*                refmultCorrUtil->init(Run);
                 if ( refmultCorrUtil->isBadRun(Run) ) continue;
