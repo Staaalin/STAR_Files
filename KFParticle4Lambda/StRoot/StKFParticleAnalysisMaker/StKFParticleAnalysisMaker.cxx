@@ -338,7 +338,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 			HistName1 = "H_Pt_nSigma";
 			HistName2 = "The P_t vs. nSigma";
 			HistName1 += CNameList[Ktr];HistName2 += CNameList[Ktr];
-			HistName1 = "_";HistName1 += NameList[Itr];
+			HistName1 += "_";HistName1 += NameList[Itr];
 			HistName2 += " of ";HistName2 += NameList[Itr];
 			H_Pt_nSigma[Jtr][Ktr] = new TH2F(HistName1,HistName2,1000,-10,10,1000,0,8);
 			HistName1 = "nSigma";HistName1 += NameList[Itr];
