@@ -330,9 +330,10 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 			HistName1 = "H_Pt_nSigma";
 			HistName2 = "The P_t vs. nSigma";
 			HistName1 += CNameList[Ktr];HistName2 += CNameList[Ktr];
+			HistName1 = "_";HistName1 += NameList[Itr];
 			HistName2 += " of ";HistName2 += NameList[Itr];
 			H_Pt_nSigma[Jtr][Ktr] = new TH2F(HistName1,HistName2,1000,-10,10,1000,0,8);
-			HistName1 = "_";HistName1 += NameList[Itr];
+			HistName1 = "nSigma";HistName1 += NameList[Itr];
 			H_Pt_nSigma[Jtr][Ktr]->GetXaxis()->SetTitle(HistName1);
 			H_Pt_nSigma[Jtr][Ktr]->GetYaxis()->SetTitle("pT [GeV]");
 		}
@@ -888,10 +889,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 							H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
 							H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
 							for (int Ktr=0;Ktr<PDG2NameSize3;Ktr++){
-								if ( CNameList[Ktr] == "Kaon"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
+								if ( CNameList[Ktr] == "Kaon"){cout<<"OK";H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
 								if ( CNameList[Ktr] == "Pion"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
 								if ( CNameList[Ktr] == "Proton"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
 							}
+							cout<<" "<<end;
 							// TOF Info
 							bool hasTOF = false;
 							int tofindex = track->bTofPidTraitsIndex();
