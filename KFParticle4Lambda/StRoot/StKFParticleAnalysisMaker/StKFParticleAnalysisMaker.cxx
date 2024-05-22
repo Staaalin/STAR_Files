@@ -428,31 +428,31 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	hEventNum->Write();
 	
-	// for (int i=0;i<PDG2NameSize;i++){
-	// 	H_ALL_NO_CUT[i]->Write();
-	// 	H_DaughterDCA[i]->Write();
+	for (int i=0;i<PDG2NameSize;i++){
+		H_ALL_NO_CUT[i]->Write();
+		// H_DaughterDCA[i]->Write();
 
-	// }
+	}
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 		int Jtr = Itr - PDG2NameSize;
 
-		H_rapidity[Jtr] -> Write();
+		// H_rapidity[Jtr] -> Write();
 
-		H_P[Jtr] -> Write();
+		// H_P[Jtr] -> Write();
 
-		H_Pt[Jtr] -> Write();
-		H_dEdx_p[Jtr]->Write();
+		// H_Pt[Jtr] -> Write();
+		// H_dEdx_p[Jtr]->Write();
 		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
 			H_Pt_nSigma[Jtr][Ktr]->Write();
 		}
-		H_DCAtoPV[Jtr]->Write();
-		H_eta[Jtr]->Write();
-		H_nHitsFit_p[Jtr]->Write();
-		H_nHitsFit_nHitsMax[Jtr]->Write();
-		H_ndEdx[Jtr]->Write();
-		H_nSigmaTOF_p[Jtr]->Write();
+		// H_DCAtoPV[Jtr]->Write();
+		// H_eta[Jtr]->Write();
+		// H_nHitsFit_p[Jtr]->Write();
+		// H_nHitsFit_nHitsMax[Jtr]->Write();
+		// H_ndEdx[Jtr]->Write();
+		// H_nSigmaTOF_p[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
