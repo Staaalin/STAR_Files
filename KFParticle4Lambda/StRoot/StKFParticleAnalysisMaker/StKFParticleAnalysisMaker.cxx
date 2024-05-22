@@ -894,7 +894,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 							H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
 							H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
 							for (int Ktr=0;Ktr<PDG2NameSize3;Ktr++){
-								cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
+								// cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
 								if ( CNameList[Ktr] == "Kaon"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
 								if ( CNameList[Ktr] == "Pion"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
 								if ( CNameList[Ktr] == "Proton"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
