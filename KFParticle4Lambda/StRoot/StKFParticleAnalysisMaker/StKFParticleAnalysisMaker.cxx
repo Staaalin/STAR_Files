@@ -415,13 +415,11 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	hEventNum->Write();
 	
-	for (int i=0;i<PDG2NameSize;i++){
-		// H_ALL_NO_CUT[i]->Write();
-		// H_DaughterDCA[i]->Write();
-		H_WrongDaughter[i]->Write();
-		H_CrectDaughter[i]->Write();
+	// for (int i=0;i<PDG2NameSize;i++){
+	// 	H_ALL_NO_CUT[i]->Write();
+	// 	H_DaughterDCA[i]->Write();
 
-	}
+	// }
 
 // //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
 // 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
@@ -758,71 +756,59 @@ Int_t StKFParticleAnalysisMaker::Make()
 	QA_hasTOF.resize(0);QA_IfConfuse.resize(0);QA_Decay_Length.resize(0);QA_Chi2.resize(0);QA_IfBadReconstructed.resize(0);
 	QA_DCA_Daughters.resize(0);
 
-	// std::vector<int> Constructed_KFParticle_Vec_index; Constructed_KFParticle_Vec_index.resize(0);
-	// for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
-	// 	KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
-	// 	if ((particle.GetPDG() == OmegaPdg) || 
-	// 		(particle.GetPDG() == LambdaPdg))
-	// 	{
-	// 		for(int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){ 
-	// 			const int daughterId = particle.DaughterIds()[iDaughter]; 
-	// 			Constructed_KFParticle_Vec_index.push_back(daughterId);
-	// 		}  // iDaughter
-	// 	}
-	// }
 
 	// HighLight Reconstructed Track
-	ReCons_TrackID.resize(0);std::vector<int> DaughterParticle,MatherPartiecle,MultyReconMather;DaughterParticle.resize(0);MatherPartiecle.resize(0);MultyReconMather.resize(0);
-	// cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
-	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
-		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
-		if (particle.GetPDG() == -1){continue;}
-		if ( (fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg)  || (fabs(particle.GetPDG()) == LambdaPdg) ) {
-			// cout<<"###############################################"<<endl;
-			// cout<<"iKFParticle = "<<iKFParticle<<endl;
-			// cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
-			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-				const int daughterId = particle.DaughterIds()[iDaughter];
-				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-				// cout<<"daughterId = "<<daughterId<<endl;
-				// cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
-				if (daughter.GetPDG() != -1) {
-					DaughterParticle.push_back(daughterId);
-					MatherPartiecle.push_back(iKFParticle);
-				}
-				else {
-					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
-						const int GdaughterId = daughter.DaughterIds()[jDaughter];
-						DaughterParticle.push_back(GdaughterId);
-						MatherPartiecle.push_back(iKFParticle);
-						// cout<<"GrandDaughterId = "<<GdaughterId<<endl;
-						// cout<<"GrandDaughter.GetPDG() = "<<(KFParticleInterface->GetParticles()[GdaughterId]).GetPDG()<<endl;
-					}
-				}
-			}
-			// cout<<"MatherPartiecle = [";
-			// for (int Itr = 0;Itr < DaughterParticle.size();Itr++) {
-			// 	cout<<" "<<MatherPartiecle[Itr]<<" ";
-			// 	if (Itr == DaughterParticle.size()-1) {cout<<"]"<<endl;}
-			// 	else{cout<<",";}
-			// }
-			// cout<<"DaughterParticle = [";
-			// for (int Itr = 0;Itr < DaughterParticle.size();Itr++) {
-			// 	cout<<" "<<DaughterParticle[Itr]<<" ";
-			// 	if (Itr == DaughterParticle.size()-1) {cout<<"]"<<endl;}
-			// 	else{cout<<",";}
-			// }
-		}
-		// DaughterParticle.resize(0);MatherPartiecle.resize(0);
-	}
-	for (int Itr = 0;Itr < DaughterParticle.size();Itr++){
-		for (int Jtr = Itr + 1;Jtr < DaughterParticle.size();Jtr++){
-			if (DaughterParticle[Itr] == DaughterParticle[Jtr]) {
-				MultyReconMather.push_back(MatherPartiecle[Itr]);
-				MultyReconMather.push_back(MatherPartiecle[Jtr]);
-			}
-		}
-	}
+	// ReCons_TrackID.resize(0);std::vector<int> DaughterParticle,MatherPartiecle,MultyReconMather;DaughterParticle.resize(0);MatherPartiecle.resize(0);MultyReconMather.resize(0);
+	// // cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
+	// for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
+	// 	KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+	// 	if (particle.GetPDG() == -1){continue;}
+	// 	if ( (fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg)  || (fabs(particle.GetPDG()) == LambdaPdg) ) {
+	// 		// cout<<"###############################################"<<endl;
+	// 		// cout<<"iKFParticle = "<<iKFParticle<<endl;
+	// 		// cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
+	// 		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+	// 			const int daughterId = particle.DaughterIds()[iDaughter];
+	// 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+	// 			// cout<<"daughterId = "<<daughterId<<endl;
+	// 			// cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
+	// 			if (daughter.GetPDG() != -1) {
+	// 				DaughterParticle.push_back(daughterId);
+	// 				MatherPartiecle.push_back(iKFParticle);
+	// 			}
+	// 			else {
+	// 				for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
+	// 					const int GdaughterId = daughter.DaughterIds()[jDaughter];
+	// 					DaughterParticle.push_back(GdaughterId);
+	// 					MatherPartiecle.push_back(iKFParticle);
+	// 					// cout<<"GrandDaughterId = "<<GdaughterId<<endl;
+	// 					// cout<<"GrandDaughter.GetPDG() = "<<(KFParticleInterface->GetParticles()[GdaughterId]).GetPDG()<<endl;
+	// 				}
+	// 			}
+	// 		}
+	// 		// cout<<"MatherPartiecle = [";
+	// 		// for (int Itr = 0;Itr < DaughterParticle.size();Itr++) {
+	// 		// 	cout<<" "<<MatherPartiecle[Itr]<<" ";
+	// 		// 	if (Itr == DaughterParticle.size()-1) {cout<<"]"<<endl;}
+	// 		// 	else{cout<<",";}
+	// 		// }
+	// 		// cout<<"DaughterParticle = [";
+	// 		// for (int Itr = 0;Itr < DaughterParticle.size();Itr++) {
+	// 		// 	cout<<" "<<DaughterParticle[Itr]<<" ";
+	// 		// 	if (Itr == DaughterParticle.size()-1) {cout<<"]"<<endl;}
+	// 		// 	else{cout<<",";}
+	// 		// }
+	// 	}
+	// 	// DaughterParticle.resize(0);MatherPartiecle.resize(0);
+	// }
+	// for (int Itr = 0;Itr < DaughterParticle.size();Itr++){
+	// 	for (int Jtr = Itr + 1;Jtr < DaughterParticle.size();Jtr++){
+	// 		if (DaughterParticle[Itr] == DaughterParticle[Jtr]) {
+	// 			MultyReconMather.push_back(MatherPartiecle[Itr]);
+	// 			MultyReconMather.push_back(MatherPartiecle[Jtr]);
+	// 		}
+	// 	}
+	// }
 
 	Omega_Omegab_Num = 0;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
@@ -873,6 +859,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					float tEnergy = particle.GetE();
 					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+particle.GetPz())/(tEnergy-particle.GetPz())));
 
+					if ( particle.NDaughters() > 1 ){cout<<"One more daughters in particle.GetPDG() = "<<particle.GetPDG()<<endl;}
 					const int globalTrackId = particle.DaughterIds()[0];
 					Int_t nTracks = mPicoDst->numberOfTracks();
 					Int_t iTrackStart = globalTrackId - 1;
