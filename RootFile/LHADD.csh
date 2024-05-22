@@ -2,7 +2,7 @@
 
 cd /star/data01/pwg/svianping/output/
 
-set numFiles = ls -l output_*.root | wc -l
+set numFiles = 'ls -l output_*.root | wc -l'
 
 echo $numFiles
 
