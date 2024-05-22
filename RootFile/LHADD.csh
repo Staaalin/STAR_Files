@@ -2,7 +2,8 @@
 
 cd /star/data01/pwg/svianping/output/
 
-set numFiles = 'ls -l output_1000*.root | wc -l'
+# set numFiles = 'ls -l output_1000*.root | wc -l'
+set numFiles = `find . -maxdepth 1 -name "output_1000*.root" -type f | wc -l`
 
 echo $numFiles
 
