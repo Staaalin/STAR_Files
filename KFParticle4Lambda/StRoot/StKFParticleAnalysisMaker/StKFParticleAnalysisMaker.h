@@ -120,7 +120,7 @@ private:
 
 	#define PDG2NameSize 6 // APDGList.size()
 	#define PDG2NameSize2 6 // BPDGList.size()
-	#define PDG2NameSize3 3 // BPDGList.size()
+	#define PDG2NameSize3 3 // CPDGList.size()
 	int PDGList[PDG2NameSize + PDG2NameSize2];
 	TString NameList[PDG2NameSize + PDG2NameSize2];
 	int BPDGListMass[PDG2NameSize2];

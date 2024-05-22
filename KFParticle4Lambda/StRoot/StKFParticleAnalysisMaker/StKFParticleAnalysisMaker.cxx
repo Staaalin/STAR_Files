@@ -267,8 +267,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	const int BPDGList[]      = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
 	const TString BNameList[] = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
 	const int BPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
-	const int CPDGList[]      = {    321       ,    211    ,    2212   };
-	const TString CNameList[] = {  "Kaon"      ,  "Pion"   ,  "Proton" };
+	CPDGList[]      = {    321       ,    211    ,    2212   };
+	CNameList[] = {  "Kaon"      ,  "Pion"   ,  "Proton" };
 	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 		PDGList[Itr] = APDGList[Itr];NameList[Itr] = ANameList[Itr];
 
