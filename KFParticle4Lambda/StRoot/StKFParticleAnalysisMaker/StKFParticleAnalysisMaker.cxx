@@ -941,26 +941,26 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		// Check if wrong daughters
 		bool IfCorrectDaughter = true;
-		for (int Itr = 0;Itr < MultyReconMather.size();Itr++) {
-			if ( iKFParticle == MultyReconMather[Itr]) {
-				for (int Jtr = 0;Jtr < PDG2NameSize;Jtr++){
-					if (particle.GetPDG() == PDGList[Jtr]){
-						H_WrongDaughter[Jtr]->Fill(particle.GetMass());
-						IfCorrectDaughter = false;
-						break;
-					}
-				}
-				break;
-			}
-			if (Itr == MultyReconMather.size() - 1) {
-				for (int Jtr = 0;Jtr < PDG2NameSize;Jtr++){
-					if (particle.GetPDG() == PDGList[Jtr]){
-						H_CrectDaughter[Jtr]->Fill(particle.GetMass());
-						break;
-					}
-				}
-			}
-		}
+		// for (int Itr = 0;Itr < MultyReconMather.size();Itr++) {
+		// 	if ( iKFParticle == MultyReconMather[Itr]) {
+		// 		for (int Jtr = 0;Jtr < PDG2NameSize;Jtr++){
+		// 			if (particle.GetPDG() == PDGList[Jtr]){
+		// 				H_WrongDaughter[Jtr]->Fill(particle.GetMass());
+		// 				IfCorrectDaughter = false;
+		// 				break;
+		// 			}
+		// 		}
+		// 		break;
+		// 	}
+		// 	if (Itr == MultyReconMather.size() - 1) {
+		// 		for (int Jtr = 0;Jtr < PDG2NameSize;Jtr++){
+		// 			if (particle.GetPDG() == PDGList[Jtr]){
+		// 				H_CrectDaughter[Jtr]->Fill(particle.GetMass());
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
+		// }
 		if (IfCorrectDaughter == false) {continue;}
 
 		//SCHEME 1: reconstruction of V0, the parent particle
