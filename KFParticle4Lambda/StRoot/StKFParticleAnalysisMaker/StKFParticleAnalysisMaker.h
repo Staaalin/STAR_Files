@@ -120,9 +120,12 @@ private:
 
 	#define PDG2NameSize 6 // APDGList.size()
 	#define PDG2NameSize2 6 // BPDGList.size()
+	#define PDG2NameSize3 3 // BPDGList.size()
 	int PDGList[PDG2NameSize + PDG2NameSize2];
 	TString NameList[PDG2NameSize + PDG2NameSize2];
 	int BPDGListMass[PDG2NameSize2];
+	int CPDGList[PDG2NameSize3];
+	TString CNameList[PDG2NameSize3];
 	// std::map<int, TString> PDG2Name;
 	// PDG2Name[ 3122] = "Lambda"; 
 	// PDG2Name[-3122] = "Lambdab";
@@ -142,7 +145,7 @@ private:
 	TH1F *H_ndEdx[PDG2NameSize2];
 	TH2F *H_nSigmaTOF_p[PDG2NameSize2];
 	TH2F *H_dEdx_p[PDG2NameSize2];
-	TH2F *H_Pt_nSigma[PDG2NameSize2];
+	TH2F *H_Pt_nSigma[PDG2NameSize2][PDG2NameSize3];
 	TH2F *H_m2_KSigma_S;
 	TH2F *H_m2_KSigma_L;
 

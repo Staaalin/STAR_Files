@@ -267,6 +267,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	const int BPDGList[]      = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
 	const TString BNameList[] = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
 	const int BPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
+	const int CPDGList[]      = {    321       ,    211    ,    2212   };
+	const TString CNameList[] = {  "Kaon"      ,  "Pion"   ,  "Proton" };
 	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 		PDGList[Itr] = APDGList[Itr];NameList[Itr] = ANameList[Itr];
 
@@ -324,14 +326,16 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_dEdx_p[Jtr]->GetXaxis()->SetTitle("P [GeV]");
 		H_dEdx_p[Jtr]->GetYaxis()->SetTitle("dE/dx [keV/cm]");
 
-		HistName1 = "H_Pt_nSigma";
-		HistName2 = "The P_t vs. nSigma";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		HistName2 += " of ";HistName2 += NameList[Itr];
-		H_Pt_nSigma[Jtr] = new TH2F(HistName1,HistName2,1000,-10,10,1000,0,8);
-		HistName1 = "nSigma";HistName1 += NameList[Itr];
-		H_Pt_nSigma[Jtr]->GetXaxis()->SetTitle(HistName1);
-		H_Pt_nSigma[Jtr]->GetYaxis()->SetTitle("pT [GeV]");
+		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
+			HistName1 = "H_Pt_nSigma";
+			HistName2 = "The P_t vs. nSigma";
+			HistName1 += CNameList[Ktr];HistName2 += CNameList[Ktr];
+			HistName2 += " of ";HistName2 += NameList[Itr];
+			H_Pt_nSigma[Jtr][Ktr] = new TH2F(HistName1,HistName2,1000,-10,10,1000,0,8);
+			HistName1 = "_";HistName1 += NameList[Itr];
+			H_Pt_nSigma[Jtr][Ktr]->GetXaxis()->SetTitle(HistName1);
+			H_Pt_nSigma[Jtr][Ktr]->GetYaxis()->SetTitle("pT [GeV]");
+		}
 
 		HistName1 = "H_DCAtoPV";
 		HistName2 = "The DCA(to PV) of ";
@@ -421,25 +425,27 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	// }
 
-// //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
-// 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
-// 		int Jtr = Itr - PDG2NameSize;
+//////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
+	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+		int Jtr = Itr - PDG2NameSize;
 
-// 		H_rapidity[Jtr] -> Write();
+		H_rapidity[Jtr] -> Write();
 
-// 		H_P[Jtr] -> Write();
+		H_P[Jtr] -> Write();
 
-// 		H_Pt[Jtr] -> Write();
-// 		H_dEdx_p[Jtr]->Write();
-// 		H_Pt_nSigma[Jtr]->Write();
-// 		H_DCAtoPV[Jtr]->Write();
-// 		H_eta[Jtr]->Write();
-// 		H_nHitsFit_p[Jtr]->Write();
-// 		H_nHitsFit_nHitsMax[Jtr]->Write();
-// 		H_ndEdx[Jtr]->Write();
-// 		H_nSigmaTOF_p[Jtr]->Write();
-// 	}
-// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		H_Pt[Jtr] -> Write();
+		H_dEdx_p[Jtr]->Write();
+		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
+			H_Pt_nSigma[Jtr][Ktr]->Write();
+		}
+		H_DCAtoPV[Jtr]->Write();
+		H_eta[Jtr]->Write();
+		H_nHitsFit_p[Jtr]->Write();
+		H_nHitsFit_nHitsMax[Jtr]->Write();
+		H_ndEdx[Jtr]->Write();
+		H_nSigmaTOF_p[Jtr]->Write();
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	return;
 }
@@ -881,14 +887,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 							H_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
 							H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
 							H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
-							if (fabs(TPID) == 321){
-								H_Pt_nSigma[Jtr]->Fill(track->nSigmaKaon(),track->gMom().Perp());
-							}
-							if (fabs(TPID) == 2212){
-								H_Pt_nSigma[Jtr]->Fill(track->nSigmaProton(),track->gMom().Perp());
-							}
-							if (fabs(TPID) == 211){
-								H_Pt_nSigma[Jtr]->Fill(track->nSigmaPion(),track->gMom().Perp());
+							for (int Ktr=0;Ktr<PDG2NameSize3;Ktr++){
+								if ( CNameList[Ktr] == "Kaon"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
+								if ( CNameList[Ktr] == "Pion"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
+								if ( CNameList[Ktr] == "Proton"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
 							}
 							// TOF Info
 							bool hasTOF = false;
