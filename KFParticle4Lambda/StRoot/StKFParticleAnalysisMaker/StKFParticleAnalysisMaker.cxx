@@ -341,7 +341,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 			HistName1 += "_";HistName1 += NameList[Itr];
 			HistName2 += " of ";HistName2 += NameList[Itr];
 			H_Pt_nSigma[Jtr][Ktr] = new TH2F(HistName1,HistName2,1000,-10,10,1000,0,8);
-			HistName1 = "nSigma";HistName1 += NameList[Itr];
+			HistName1 = "nSigma";HistName1 += CNameList[Ktr];
 			H_Pt_nSigma[Jtr][Ktr]->GetXaxis()->SetTitle(HistName1);
 			H_Pt_nSigma[Jtr][Ktr]->GetYaxis()->SetTitle("pT [GeV]");
 		}
