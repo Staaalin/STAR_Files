@@ -16,12 +16,12 @@ set k = 0
 set n = 0
 set start = 0
 set end = 0
-set step = 100
+set step = 180
 
 while ($n < 500)
 
     cd /star/data01/pwg/svianping/output/
-    
+
     if (-e output_$i.root) then
         
         cp output_$i.root /star/data01/pwg/svianping/HADD/
@@ -48,7 +48,6 @@ while ($n < 500)
 
 end
 
-echo 
 
 if (-e output_*.root) then
     hadd HADD_$k.root output_*.root
