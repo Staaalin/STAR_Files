@@ -879,12 +879,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 			for (int i=0;i < DaughterParticle.size();i++) {
 				if (DaughterParticle[i] == iKFParticle) {
 					IfContinue = true;
-					cout<<"iKFParticle = "<<iKFParticle<<endl;
 					break;
 				}
 			}
-			if (IfContinue) {cout<<"RETURN"<<endl;continue;}
-			if (IfContinue == true) {cout<<"FUCK"<<endl;}
+			// if (IfContinue) {continue;}
 
 			int TPID = 0;
 			float tMass = 0;
