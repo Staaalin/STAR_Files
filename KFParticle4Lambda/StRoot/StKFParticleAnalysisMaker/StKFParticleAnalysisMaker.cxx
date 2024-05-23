@@ -858,7 +858,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 	}
-	cout<<DaughterParticle.size()<<endl;
+	// cout<<DaughterParticle.size()<<endl;
 
 	Omega_Omegab_Num = 0;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
@@ -883,7 +883,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					break;
 				}
 			}
-			if (IfContinue) {continue;}
+			if (IfContinue) {cout<<"RETURN"<<endl;;continue;}
 
 			int TPID = 0;
 			float tMass = 0;
