@@ -21,6 +21,7 @@ set step = 100
 while ($n < 500)
 
     if (-e output_$i.root) then
+        cd /star/data01/pwg/svianping/output/
         cp output_$i.root /star/data01/pwg/svianping/HADD/
         echo "成功复制 output_$i.root"
         @ n = 0
@@ -44,6 +45,8 @@ while ($n < 500)
 
 
 end
+
+echo 
 
 if (-e output_*.root) then
     hadd HADD_$k.root output_*.root
