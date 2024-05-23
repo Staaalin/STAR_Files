@@ -858,6 +858,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 	}
+	cout<<DaughterParticle.size()<<endl;
 
 	Omega_Omegab_Num = 0;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
@@ -878,6 +879,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			for (int i=0;i < DaughterParticle.size();i++) {
 				if (DaughterParticle[i] == iKFParticle) {
 					IfContinue = true;
+					cout<<"iKFParticle = "<<iKFParticle<<endl;
 					break;
 				}
 			}
