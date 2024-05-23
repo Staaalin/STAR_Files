@@ -884,7 +884,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 			if (IfContinue) {cout<<"RETURN"<<endl;continue;}
-			if (DaughterParticle.size() != 0) {cout<<"FUCK"<<endl;}
+			if (IfContinue == true) {cout<<"FUCK"<<endl;}
 
 			int TPID = 0;
 			float tMass = 0;
