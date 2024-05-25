@@ -215,18 +215,18 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
     hadronTree->Branch("dEdx"               ,&QA_dEdx              );
     hadronTree->Branch("m2"                 ,&QA_m2                );
     hadronTree->Branch("dcatopv"            ,&QA_DCA_V0_PV         );
-    hadronTree->Branch("hasTOF"             ,&QA_hasTOF            );
+    // hadronTree->Branch("hasTOF"             ,&QA_hasTOF            );
     hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton      );
     hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion        );
     hadronTree->Branch("nSigmaKaon"         ,&QA_nSigmaKaon        );
-    hadronTree->Branch("zTOF_proton"        ,&QA_zTOF_proton       );
-    hadronTree->Branch("zTOF_pion"          ,&QA_zTOF_pion         );
-    hadronTree->Branch("zTOF_kaon"          ,&QA_zTOF_kaon         );
-	hadronTree->Branch("IfConfuse"          ,&QA_IfConfuse         );
+    // hadronTree->Branch("zTOF_proton"        ,&QA_zTOF_proton       );
+    // hadronTree->Branch("zTOF_pion"          ,&QA_zTOF_pion         );
+    // hadronTree->Branch("zTOF_kaon"          ,&QA_zTOF_kaon         );
+	// hadronTree->Branch("IfConfuse"          ,&QA_IfConfuse         );
 	hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length      );
 	hadronTree->Branch("Chi2"               ,&QA_Chi2              );
-	hadronTree->Branch("IfBadReconstructed" ,&QA_IfBadReconstructed);
-	hadronTree->Branch("DCA_Daughters"      ,&QA_DCA_Daughters     );
+	// hadronTree->Branch("IfBadReconstructed" ,&QA_IfBadReconstructed);
+	// hadronTree->Branch("DCA_Daughters"      ,&QA_DCA_Daughters     );
 	
 	hdEdx_pQ = new TH2D("hdEdx_p_NO_CUT","dE/dx vs. p*Q without cut",2000,10,10,2000,0,20);
 	hdEdx_pQ->GetXaxis()->SetTitle("p*Q [GeV]");
@@ -397,7 +397,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	///////////////////
-	// hadronTree ->Write();
+	hadronTree ->Write();
 
 	//-- Used for  test --
 	// hNRefMult ->Write();  
@@ -428,32 +428,32 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	hEventNum->Write();
 	
-	for (int i=0;i<PDG2NameSize;i++){
-		H_ALL_NO_CUT[i]->Write();
-		// H_DaughterDCA[i]->Write();
+	// for (int i=0;i<PDG2NameSize;i++){
+	// 	H_ALL_NO_CUT[i]->Write();
+	// 	// H_DaughterDCA[i]->Write();
 
-	}
+	// }
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
-	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
-		int Jtr = Itr - PDG2NameSize;
+	// for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+	// 	int Jtr = Itr - PDG2NameSize;
 
-		// H_rapidity[Jtr] -> Write();
+	// 	// H_rapidity[Jtr] -> Write();
 
-		// H_P[Jtr] -> Write();
+	// 	// H_P[Jtr] -> Write();
 
-		// H_Pt[Jtr] -> Write();
-		// H_dEdx_p[Jtr]->Write();
-		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
-			H_Pt_nSigma[Jtr][Ktr]->Write();
-		}
-		// H_DCAtoPV[Jtr]->Write();
-		// H_eta[Jtr]->Write();
-		// H_nHitsFit_p[Jtr]->Write();
-		// H_nHitsFit_nHitsMax[Jtr]->Write();
-		// H_ndEdx[Jtr]->Write();
-		// H_nSigmaTOF_p[Jtr]->Write();
-	}
+	// 	// H_Pt[Jtr] -> Write();
+	// 	// H_dEdx_p[Jtr]->Write();
+	// 	for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
+	// 		H_Pt_nSigma[Jtr][Ktr]->Write();
+	// 	}
+	// 	// H_DCAtoPV[Jtr]->Write();
+	// 	// H_eta[Jtr]->Write();
+	// 	// H_nHitsFit_p[Jtr]->Write();
+	// 	// H_nHitsFit_nHitsMax[Jtr]->Write();
+	// 	// H_ndEdx[Jtr]->Write();
+	// 	// H_nSigmaTOF_p[Jtr]->Write();
+	// }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	return;
@@ -767,9 +767,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvariantMass.resize(0);
 	// QA
 	QA_dEdx.resize(0);QA_DCA_V0_PV.resize(0);QA_m2.resize(0);QA_nSigmaProton.resize(0);
-	QA_nSigmaPion.resize(0);QA_nSigmaKaon.resize(0);QA_zTOF_proton.resize(0);QA_zTOF_pion.resize(0);QA_zTOF_kaon.resize(0);
-	QA_hasTOF.resize(0);QA_IfConfuse.resize(0);QA_Decay_Length.resize(0);QA_Chi2.resize(0);QA_IfBadReconstructed.resize(0);
-	QA_DCA_Daughters.resize(0);
+	QA_nSigmaPion.resize(0);QA_nSigmaKaon.resize(0);// QA_zTOF_proton.resize(0);QA_zTOF_pion.resize(0);QA_zTOF_kaon.resize(0);
+	QA_Decay_Length.resize(0);QA_Chi2.resize(0);// QA_IfBadReconstructed.resize(0);QA_IfConfuse.resize(0);QA_hasTOF.resize(0);
+	// QA_DCA_Daughters.resize(0);
 
 
 	// // Check If one Particle is used to reconstructed to two more particles
