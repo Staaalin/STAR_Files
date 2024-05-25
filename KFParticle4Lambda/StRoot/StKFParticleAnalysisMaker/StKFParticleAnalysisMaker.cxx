@@ -882,7 +882,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					break;
 				}
 			}
-			// if (IfContinue) {continue;} // if this track has been used to reconstruct other particles, continue
+			if (IfContinue) {continue;} // if this track has been used to reconstruct other particles, continue
 
 			int TPID = 0;
 			float tMass = 0;
