@@ -488,10 +488,12 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 for (int Ktr = 0;Ktr < Kp_px.size();Ktr++) {
                     TLorentzVector p1;
                     p1.SetXYZM(Kp_px[Ktr],Kp_py[Ktr],Kp_pz[Ktr],massList[KaonpPID]);
+                    cout<<"KEK1"<<endl;
                     // float ALength = pow(pow(A_px[j],2)+pow(A_py[j],2)+pow(A_pz[j],2) ,0.5);
                     for (int Ntr = 0;Ntr < Lambda_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambda_px[Ntr],Lambda_py[Ntr],Lambda_pz[Ntr],massList[LambdaPID]);
+                        cout<<"KEK2"<<endl;
 
                         p3 = p4 + p2;
                         // float dpt = fabs(p1.Perp() - p2.Perp());
@@ -499,6 +501,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Lambda[Itr][Jtr]->Fill(kstar);
+                        cout<<"KEK3"<<endl;
                         // Ay->Fill(fabs(A_y[j] - B_y[k]));
 
                         // float BLength = pow(pow(B_px[k],2)+pow(B_py[k],2)+pow(B_pz[k],2) ,0.5);
