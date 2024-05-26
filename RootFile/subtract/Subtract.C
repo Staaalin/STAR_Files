@@ -647,7 +647,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         Km_py[MesonPhaseIndex].push_back(py->at(j));
                         Km_pz[MesonPhaseIndex].push_back(pz->at(j));
                         Km_y [MesonPhaseIndex].push_back(rap);
-                        dNdy_Kaomm[MesonPhaseIndex]->Fill(rap);
+                        dNdy_Kaonm[MesonPhaseIndex]->Fill(rap);
                     }
                 }
             }
