@@ -32,9 +32,9 @@
 #include <stdio.h>
 using namespace std;
 
-float massList(int PID , float Energy)
+Double_t massList(int PID , float Energy)
 {
-    float Result;
+    Double_t Result;
     if (Energy == 62.0){
         switch (PID)
         {
@@ -75,9 +75,9 @@ float massList(int PID , float Energy)
     return Result;
 }
 
-float massListSigma(int PID , float Energy)
+Double_t massListSigma(int PID , float Energy)
 {
-    float Result;
+    Double_t Result;
     if (Energy == 62.0){
         switch (PID)
         {
