@@ -325,14 +325,18 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
         // if(b>7){continue;}
-        Kp_px.resize(0);Km_px.resize(0);Pip_px.resize(0);Pim_px.resize(0);
-        Kp_py.resize(0);Km_py.resize(0);Pip_py.resize(0);Pim_py.resize(0);
-        Kp_pz.resize(0);Km_pz.resize(0);Pip_pz.resize(0);Pim_pz.resize(0);
-        Kp_y .resize(0);Km_y .resize(0);Pip_y .resize(0);Pim_y .resize(0);
-        Lambda_px.resize(0);Lambdab_px.resize(0);Omega_px.resize(0);Omegab_px.resize(0);Xi_px.resize(0);Xib_px.resize(0);
-        Lambda_py.resize(0);Lambdab_py.resize(0);Omega_py.resize(0);Omegab_py.resize(0);Xi_py.resize(0);Xib_py.resize(0);
-        Lambda_pz.resize(0);Lambdab_pz.resize(0);Omega_pz.resize(0);Omegab_pz.resize(0);Xi_pz.resize(0);Xib_pz.resize(0);
-        Lambda_y .resize(0);Lambdab_y .resize(0);Omega_y .resize(0);Omegab_y .resize(0);Xi_y .resize(0);Xib_y .resize(0);
+        for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
+            Kp_px[Itr].resize(0);Km_px[Itr].resize(0);Pip_px[Itr].resize(0);Pim_px[Itr].resize(0);
+            Kp_py[Itr].resize(0);Km_py[Itr].resize(0);Pip_py[Itr].resize(0);Pim_py[Itr].resize(0);
+            Kp_pz[Itr].resize(0);Km_pz[Itr].resize(0);Pip_pz[Itr].resize(0);Pim_pz[Itr].resize(0);
+            Kp_y [Itr].resize(0);Km_y [Itr].resize(0);Pip_y [Itr].resize(0);Pim_y [Itr].resize(0);
+        }
+        for (int Itr = 0;Itr < HyperonPhaseNum;Itr++) {
+            Lambda_px[Itr].resize(0);Lambdab_px[Itr].resize(0);Omega_px[Itr].resize(0);Omegab_px[Itr].resize(0);Xi_px[Itr].resize(0);Xib_px[Itr].resize(0);
+            Lambda_py[Itr].resize(0);Lambdab_py[Itr].resize(0);Omega_py[Itr].resize(0);Omegab_py[Itr].resize(0);Xi_py[Itr].resize(0);Xib_py[Itr].resize(0);
+            Lambda_pz[Itr].resize(0);Lambdab_pz[Itr].resize(0);Omega_pz[Itr].resize(0);Omegab_pz[Itr].resize(0);Xi_pz[Itr].resize(0);Xib_pz[Itr].resize(0);
+            Lambda_y [Itr].resize(0);Lambdab_y [Itr].resize(0);Omega_y [Itr].resize(0);Omegab_y [Itr].resize(0);Xi_y [Itr].resize(0);Xib_y [Itr].resize(0);
+        }
         cout<<"Here OK"<<endl;
         for (int j=0;j < mult;j++){
             if ((fabs(id[j]) == LambdaPID) || (fabs(id[j]) == XiPID || (fabs(id[j]) == OmegaPID))){
