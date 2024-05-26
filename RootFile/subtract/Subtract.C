@@ -659,8 +659,6 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 // cout<<"KEK0"<<endl;
                 for (int Ktr = 0;Ktr < Kp_px.size();Ktr++) {
                     TLorentzVector p1;
-                    // float Tpx=Kp_px->at(Ktr),Tpy=Kp_py->at(Ktr),Tpz=Kp_pz->at(Ktr);
-                    // p1.SetXYZM(Tpx,Tpy,Tpz,massList(KaonpPID,Energy));
                     p1.SetXYZM(Kp_px->at(Ktr),Kp_py->at(Ktr),Kp_pz->at(Ktr),massList(KaonpPID,Energy));
                     // cout<<p1.Rapidity()<<endl;
                     // cout<<"KEK1"<<endl;
@@ -675,9 +673,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         // Apt->Fill(dpt);
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
-                        cout<<"1"<<endl;
                         k_Kp_Lambda[Itr][Jtr]->Fill(kstar);
-                        cout<<"2"<<endl;
                         // cout<<"KEK3"<<endl;
                         // Ay->Fill(fabs(A_y[j] - B_y[k]));
 
@@ -687,12 +683,14 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Lambdab_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
+                        cout<<"1"<<endl;
                         p2.SetXYZM(Lambdab_px->at(Ntr),Lambdab_py->at(Ntr),Lambdab_pz->at(Ntr),massList(LambdabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Lambdab[Itr][Jtr]->Fill(kstar);
+                        cout<<"2"<<endl;
                     }
                     for (int Ntr = 0;Ntr < Xi_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
