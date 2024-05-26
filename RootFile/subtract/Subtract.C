@@ -328,6 +328,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
+        cout<<mult<<endl;
         // if(b>7){continue;}
         for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
             Kp_px[Itr].resize(0);Km_px[Itr].resize(0);Pip_px[Itr].resize(0);Pim_px[Itr].resize(0);
