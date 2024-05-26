@@ -289,7 +289,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         filename+=i;
         filename+=".root";
         hadronTree->Add(filename);
-        cout<<"Add "<<filename<<" Successfully"<<endl;
+        // cout<<"Add "<<filename<<" Successfully"<<endl;
     }
     
     hadronTree->SetBranchAddress("PDGMult",&mult);
@@ -309,18 +309,18 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     float kstar, rap;
     TVector3 BetaTemp;
 
-    vector<float> Kp_px[MesonPhaseNum],Km_px[MesonPhaseNum],Pip_px[MesonPhaseNum],Pim_px[MesonPhaseNum];
-    vector<float> Kp_py[MesonPhaseNum],Km_py[MesonPhaseNum],Pip_py[MesonPhaseNum],Pim_py[MesonPhaseNum];
-    vector<float> Kp_pz[MesonPhaseNum],Km_pz[MesonPhaseNum],Pip_pz[MesonPhaseNum],Pim_pz[MesonPhaseNum];
-    vector<float> Kp_y [MesonPhaseNum],Km_y [MesonPhaseNum],Pip_y [MesonPhaseNum],Pim_y [MesonPhaseNum];
-    vector<float> Lambda_px[HyperonPhaseNum],Lambdab_px[HyperonPhaseNum],Omega_px[HyperonPhaseNum],Omegab_px[HyperonPhaseNum],Xi_px[HyperonPhaseNum],Xib_px[HyperonPhaseNum];
-    vector<float> Lambda_py[HyperonPhaseNum],Lambdab_py[HyperonPhaseNum],Omega_py[HyperonPhaseNum],Omegab_py[HyperonPhaseNum],Xi_py[HyperonPhaseNum],Xib_py[HyperonPhaseNum];
-    vector<float> Lambda_pz[HyperonPhaseNum],Lambdab_pz[HyperonPhaseNum],Omega_pz[HyperonPhaseNum],Omegab_pz[HyperonPhaseNum],Xi_pz[HyperonPhaseNum],Xib_pz[HyperonPhaseNum];
-    vector<float> Lambda_y [HyperonPhaseNum],Lambdab_y [HyperonPhaseNum],Omega_y [HyperonPhaseNum],Omegab_y [HyperonPhaseNum],Xi_y [HyperonPhaseNum],Xib_y [HyperonPhaseNum];
+    std::vector<float> Kp_px[MesonPhaseNum],Km_px[MesonPhaseNum],Pip_px[MesonPhaseNum],Pim_px[MesonPhaseNum];
+    std::vector<float> Kp_py[MesonPhaseNum],Km_py[MesonPhaseNum],Pip_py[MesonPhaseNum],Pim_py[MesonPhaseNum];
+    std::vector<float> Kp_pz[MesonPhaseNum],Km_pz[MesonPhaseNum],Pip_pz[MesonPhaseNum],Pim_pz[MesonPhaseNum];
+    std::vector<float> Kp_y [MesonPhaseNum],Km_y [MesonPhaseNum],Pip_y [MesonPhaseNum],Pim_y [MesonPhaseNum];
+    std::vector<float> Lambda_px[HyperonPhaseNum],Lambdab_px[HyperonPhaseNum],Omega_px[HyperonPhaseNum],Omegab_px[HyperonPhaseNum],Xi_px[HyperonPhaseNum],Xib_px[HyperonPhaseNum];
+    std::vector<float> Lambda_py[HyperonPhaseNum],Lambdab_py[HyperonPhaseNum],Omega_py[HyperonPhaseNum],Omegab_py[HyperonPhaseNum],Xi_py[HyperonPhaseNum],Xib_py[HyperonPhaseNum];
+    std::vector<float> Lambda_pz[HyperonPhaseNum],Lambdab_pz[HyperonPhaseNum],Omega_pz[HyperonPhaseNum],Omegab_pz[HyperonPhaseNum],Xi_pz[HyperonPhaseNum],Xib_pz[HyperonPhaseNum];
+    std::vector<float> Lambda_y [HyperonPhaseNum],Lambdab_y [HyperonPhaseNum],Omega_y [HyperonPhaseNum],Omegab_y [HyperonPhaseNum],Xi_y [HyperonPhaseNum],Xib_y [HyperonPhaseNum];
 
     int KaonpPID = 321,KaonmPID = -321,PionpPID = 211,PionmPID = -211,LambdaPID = 3122,LambdabPID = -3122,XiPID = 3312,XibPID = -3312,OmegaPID = 3334,OmegabPID = -3334;
 
-    TString States = " ";
+    TString States;
 
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
