@@ -41,6 +41,46 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                    float OmegaBarFitMass,float OmegaBarFitMassSigma)
 {
 
+    map<int, float> massList;
+    map<int, float> massListSigma;
+    massList.insert(pair<int, float>(321, 0.493677));//Kaon
+    massList.insert(pair<int, float>(-321, 0.493677));
+    massList.insert(pair<int, float>(311, 0.49765));//Kaon ^0
+    massList.insert(pair<int, float>(-311, 0.49765));
+    massList.insert(pair<int, float>(211, 0.13957));//Pion
+    massList.insert(pair<int, float>(-211, 0.13957));
+
+    // massList.insert(pair<int, float>(3334, 1.67245));//Omega
+    // massList.insert(pair<int, float>(-3334, 1.67245));
+    massList.insert(pair<int, float>(3334, OmegaFitMass));//Omega
+    massList.insert(pair<int, float>(-3334, OmegaBarFitMass));
+    massListSigma.insert(pair<int, float>(3334, OmegaFitMassSigma));//Omega
+    massListSigma.insert(pair<int, float>(-3334, OmegaBarFitMassSigma));
+
+    // massList.insert(pair<int, float>(3312, 1.32171));//Xi^-
+    // massList.insert(pair<int, float>(-3312, 1.32171));
+    massList.insert(pair<int, float>(3312, XiFitMass));//Xi^-
+    massList.insert(pair<int, float>(-3312, XiBarFitMass));
+    massListSigma.insert(pair<int, float>(3312, XiFitMassSigma));//Xi^-
+    massListSigma.insert(pair<int, float>(-3312, XiBarFitMassSigma));
+
+    massList.insert(pair<int, float>(3322, 1.3148));//Xi^0
+    massList.insert(pair<int, float>(-3322, 1.3148));
+
+    // massList.insert(pair<int, float>(3122, 1.11568));//Lambda
+    // massList.insert(pair<int, float>(-3122, 1.11568));
+    massList.insert(pair<int, float>(3122, LambdaFitMass));//Lambda
+    massList.insert(pair<int, float>(-3122, LambdaBarFitMass));
+    massListSigma.insert(pair<int, float>(3122, LambdaFitMassSigma));//Lambda
+    massListSigma.insert(pair<int, float>(-3122, LambdaBarFitMassSigma));
+
+    massList.insert(pair<int, float>(3222, 1.18937));//Sigma^+
+    massList.insert(pair<int, float>(-3222, 1.18937));
+
+    massList.insert(pair<int, float>(3112, 1.19745));//Sigma^-
+    massList.insert(pair<int, float>(-3112, 1.19745));
+
+
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
         std::vector<Int_t>   *id              = nullptr;
         std::vector<Int_t>   *evtID           = nullptr;
@@ -191,44 +231,6 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     // cout<<StartFileIndex<<endl;
     // cout<<EndFileIndex<<endl;
 
-    map<int, float> massList;
-    map<int, float> massListSigma;
-    massList.insert(pair<int, float>(321, 0.493677));//Kaon
-    massList.insert(pair<int, float>(-321, 0.493677));
-    massList.insert(pair<int, float>(311, 0.49765));//Kaon ^0
-    massList.insert(pair<int, float>(-311, 0.49765));
-    massList.insert(pair<int, float>(211, 0.13957));//Pion
-    massList.insert(pair<int, float>(-211, 0.13957));
-
-    // massList.insert(pair<int, float>(3334, 1.67245));//Omega
-    // massList.insert(pair<int, float>(-3334, 1.67245));
-    massList.insert(pair<int, float>(3334, OmegaFitMass));//Omega
-    massList.insert(pair<int, float>(-3334, OmegaBarFitMass));
-    massListSigma.insert(pair<int, float>(3334, OmegaFitMassSigma));//Omega
-    massListSigma.insert(pair<int, float>(-3334, OmegaBarFitMassSigma));
-
-    // massList.insert(pair<int, float>(3312, 1.32171));//Xi^-
-    // massList.insert(pair<int, float>(-3312, 1.32171));
-    massList.insert(pair<int, float>(3312, XiFitMass));//Xi^-
-    massList.insert(pair<int, float>(-3312, XiBarFitMass));
-    massListSigma.insert(pair<int, float>(3312, XiFitMassSigma));//Xi^-
-    massListSigma.insert(pair<int, float>(-3312, XiBarFitMassSigma));
-
-    massList.insert(pair<int, float>(3322, 1.3148));//Xi^0
-    massList.insert(pair<int, float>(-3322, 1.3148));
-
-    // massList.insert(pair<int, float>(3122, 1.11568));//Lambda
-    // massList.insert(pair<int, float>(-3122, 1.11568));
-    massList.insert(pair<int, float>(3122, LambdaFitMass));//Lambda
-    massList.insert(pair<int, float>(-3122, LambdaBarFitMass));
-    massListSigma.insert(pair<int, float>(3122, LambdaFitMassSigma));//Lambda
-    massListSigma.insert(pair<int, float>(-3122, LambdaBarFitMassSigma));
-
-    massList.insert(pair<int, float>(3222, 1.18937));//Sigma^+
-    massList.insert(pair<int, float>(-3222, 1.18937));
-
-    massList.insert(pair<int, float>(3112, 1.19745));//Sigma^-
-    massList.insert(pair<int, float>(-3112, 1.19745));
 
     #define HyperonPhaseNum  2
     #define MesonPhaseNum    2
