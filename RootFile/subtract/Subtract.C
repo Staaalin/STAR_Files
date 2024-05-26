@@ -487,6 +487,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
             for (int Jtr = 0;Jtr < HyperonPhaseNum;Jtr++) {
                 cout<<"KEK0"<<endl;
+                cout<<Kp_px
                 for (int Ktr = 0;Ktr < Kp_px.size();Ktr++) {
                     TLorentzVector p1;
                     p1.SetXYZM(Kp_px[Ktr],Kp_py[Ktr],Kp_pz[Ktr],massList[KaonpPID]);
@@ -559,6 +560,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 for (int Ktr = 0;Ktr < Km_px.size();Ktr++) {
                     TLorentzVector p1;
                     p1.SetXYZM(Km_px[Ktr],Km_py[Ktr],Km_pz[Ktr],massList[KaonmPID]);
+                    cout<<"KEK4"<<endl;
                     for (int Ntr = 0;Ntr < Lambda_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambda_px[Ntr],Lambda_py[Ntr],Lambda_pz[Ntr],massList[LambdaPID]);
@@ -617,6 +619,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 for (int Ktr = 0;Ktr < Pip_px.size();Ktr++) {
                     TLorentzVector p1;
                     p1.SetXYZM(Pip_px[Ktr],Pip_py[Ktr],Pip_pz[Ktr],massList[PionpPID]);
+                    cout<<"KEK5"<<endl;
                     for (int Ntr = 0;Ntr < Lambda_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambda_px[Ntr],Lambda_py[Ntr],Lambda_pz[Ntr],massList[LambdaPID]);
@@ -675,6 +678,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 for (int Ktr = 0;Ktr < Pim_px.size();Ktr++) {
                     TLorentzVector p1;
                     p1.SetXYZM(Pim_px[Ktr],Pim_py[Ktr],Pim_pz[Ktr],massList[PionmPID]);
+                    cout<<"KEK6"<<endl;
                     for (int Ntr = 0;Ntr < Lambda_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambda_px[Ntr],Lambda_py[Ntr],Lambda_pz[Ntr],massList[LambdaPID]);
