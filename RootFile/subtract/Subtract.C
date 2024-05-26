@@ -338,7 +338,6 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             Lambda_pz[Itr].resize(0);Lambdab_pz[Itr].resize(0);Omega_pz[Itr].resize(0);Omegab_pz[Itr].resize(0);Xi_pz[Itr].resize(0);Xib_pz[Itr].resize(0);
             Lambda_y [Itr].resize(0);Lambdab_y [Itr].resize(0);Omega_y [Itr].resize(0);Omegab_y [Itr].resize(0);Xi_y [Itr].resize(0);Xib_y [Itr].resize(0);
         }
-        cout<<"Here OK"<<endl;
         for (int j=0;j < mult;j++){
             for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
                 MesonStates[Itr] = false;
@@ -482,6 +481,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
         }
+        cout<<"Here OK"<<endl;
 
         for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
             for (int Jtr = 0;Jtr < HyperonPhaseNum;Jtr++) {
