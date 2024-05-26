@@ -84,16 +84,19 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     massList.insert(pair<int, float>(3112, 1.19745));//Sigma^-
     massList.insert(pair<int, float>(-3112, 1.19745));
 
-    // FileMax = 500;
-    // Int_t kBinNum = 200;
-    // Float_t kmin = 0;
-    // Float_t kmax = 20;
+
+    // const Int_t maxMultiplicity = 20000;
+    // Int_t mult,npart;
+    // Int_t id[maxMultiplicity];
+    // Float_t px[maxMultiplicity],py[maxMultiplicity],pz[maxMultiplicity];
+    // Float_t nSigmaPion[maxMultiplicity],nSigmaKaon[maxMultiplicity],nSigmaProton[maxMultiplicity],mass[maxMultiplicity];
 
     const Int_t maxMultiplicity = 20000;
     Int_t mult,npart;
-    Int_t id[maxMultiplicity];
-    Float_t px[maxMultiplicity],py[maxMultiplicity],pz[maxMultiplicity];
-    Float_t nSigmaPion[maxMultiplicity],nSigmaKaon[maxMultiplicity],z[maxMultiplicity],nSigmaProton[maxMultiplicity],mass[maxMultiplicity],energy[maxMultiplicity],b;
+    Int_t id;
+    Float_t px,py,pz;
+    Float_t nSigmaPion,nSigmaKaon,nSigmaProton,mass;
+
 
     #define HyperonPhaseNum  2
     #define MesonPhaseNum    2
