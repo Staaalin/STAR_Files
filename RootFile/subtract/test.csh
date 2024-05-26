@@ -19,4 +19,4 @@ set StartFileIndex = 0
 set EndFileIndex = 20
 set OutputFileIndex = 0
 
-root4star -b Subtract.C\($midname,$StartFileIndex,$EndFileIndex,$OutputFileIndex,$LambdaFitMass,$LambdaFitMassSigma,$XiFitMass,$XiFitMassSigma,$OmegaFitMass,$OmegaFitMassSigma,$LambdaBarFitMass,$LambdaBarFitMassSigma,$XiBarFitMass,$XiBarFitMassSigma,$OmegaBarFitMass,$OmegaBarFitMassSigma\)
+root4star -b Subtract.C\(\"$midname\",$StartFileIndex,$EndFileIndex,$OutputFileIndex,$LambdaFitMass,$LambdaFitMassSigma,$XiFitMass,$XiFitMassSigma,$OmegaFitMass,$OmegaFitMassSigma,$LambdaBarFitMass,$LambdaBarFitMassSigma,$XiBarFitMass,$XiBarFitMassSigma,$OmegaBarFitMass,$OmegaBarFitMassSigma\)
