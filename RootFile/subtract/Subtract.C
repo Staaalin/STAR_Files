@@ -320,6 +320,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     int KaonpPID = 321,KaonmPID = -321,PionpPID = 211,PionmPID = -211,LambdaPID = 3122,LambdabPID = -3122,XiPID = 3312,XibPID = -3312,OmegaPID = 3334,OmegabPID = -3334;
 
+    bool MesonStates[MesonPhaseNum],HyperonStates[HyperonPhaseNum];
     TString States;
 
     for (int i=0;i<nentries;i++){
@@ -339,6 +340,12 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         }
         cout<<"Here OK"<<endl;
         for (int j=0;j < mult;j++){
+            for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
+                MesonStates[Itr] = false;
+            }
+            for (int Itr = 0;Itr < HyperonPhaseNum;Itr++) {
+                HyperonStates[Itr] = false;
+            }
             if ((fabs(id[j]) == LambdaPID) || (fabs(id[j]) == XiPID || (fabs(id[j]) == OmegaPID))){
                 if ((fabs(mass[j] - massList[id[j]])) > 3*massListSigma[id[j]]) {
                     continue;
@@ -351,58 +358,66 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
                 if (rap > 0) {
                     States = "0p1Rap";
-                }else{
-                    States = "m1p1Rap";
-                }
-                int HyperonPhaseIndex;
-                for (int Itr = 0;Itr < HyperonPhaseNum;Itr++) {
-                    if (HyperonPhase[Itr] == States){
-                        HyperonPhaseIndex = Itr;
-                        break;
+                    for (int Itr = 0;Itr < HyperonPhaseNum;Itr++) {
+                        if (HyperonPhase[Itr] == States){
+                            HyperonStates[Itr] = true;
+                            break;
+                        }
                     }
                 }
-
-                if (id[j] = LambdaPID) {
-                    Lambda_px[HyperonPhaseIndex].push_back(px[j]);
-                    Lambda_py[HyperonPhaseIndex].push_back(py[j]);
-                    Lambda_pz[HyperonPhaseIndex].push_back(pz[j]);
-                    Lambda_y [HyperonPhaseIndex].push_back(rap);
-                    dNdy_Lambda[HyperonPhaseIndex]->Fill(rap);
+                if (true){
+                    States = "m1p1Rap";
+                    for (int Itr = 0;Itr < HyperonPhaseNum;Itr++) {
+                        if (HyperonPhase[Itr] == States){
+                            HyperonStates[Itr] = true;
+                            break;
+                        }
+                    }
                 }
-                else if (id[j] = LambdabPID) {
-                    Lambdab_px[HyperonPhaseIndex].push_back(px[j]);
-                    Lambdab_py[HyperonPhaseIndex].push_back(py[j]);
-                    Lambdab_pz[HyperonPhaseIndex].push_back(pz[j]);
-                    Lambdab_y [HyperonPhaseIndex].push_back(rap);
-                    dNdy_Lambdab[HyperonPhaseIndex]->Fill(rap);
-                }
-                else if (id[j] = XiPID) {
-                    Xi_px[HyperonPhaseIndex].push_back(px[j]);
-                    Xi_py[HyperonPhaseIndex].push_back(py[j]);
-                    Xi_pz[HyperonPhaseIndex].push_back(pz[j]);
-                    Xi_y [HyperonPhaseIndex].push_back(rap);
-                    dNdy_Xi[HyperonPhaseIndex]->Fill(rap);
-                }
-                else if (id[j] = XibPID) {
-                    Xib_px[HyperonPhaseIndex].push_back(px[j]);
-                    Xib_py[HyperonPhaseIndex].push_back(py[j]);
-                    Xib_pz[HyperonPhaseIndex].push_back(pz[j]);
-                    Xib_y [HyperonPhaseIndex].push_back(rap);
-                    dNdy_Xib[HyperonPhaseIndex]->Fill(rap);
-                }
-                else if (id[j] = OmegaPID) {
-                    Omega_px[HyperonPhaseIndex].push_back(px[j]);
-                    Omega_py[HyperonPhaseIndex].push_back(py[j]);
-                    Omega_pz[HyperonPhaseIndex].push_back(pz[j]);
-                    Omega_y [HyperonPhaseIndex].push_back(rap);
-                    dNdy_Omega[HyperonPhaseIndex]->Fill(rap);
-                }
-                else if (id[j] = OmegabPID) {
-                    Omegab_px[HyperonPhaseIndex].push_back(px[j]);
-                    Omegab_py[HyperonPhaseIndex].push_back(py[j]);
-                    Omegab_pz[HyperonPhaseIndex].push_back(pz[j]);
-                    Omegab_y [HyperonPhaseIndex].push_back(rap);
-                    dNdy_Omegab[HyperonPhaseIndex]->Fill(rap);
+                for (int HyperonPhaseIndex = 0;HyperonPhaseIndex < HyperonPhaseNum;HyperonPhaseIndex++){
+                    if (HyperonStates[HyperonPhaseIndex] == false) {continue;}
+                    if (id[j] == LambdaPID) {
+                        Lambda_px[HyperonPhaseIndex].push_back(px[j]);
+                        Lambda_py[HyperonPhaseIndex].push_back(py[j]);
+                        Lambda_pz[HyperonPhaseIndex].push_back(pz[j]);
+                        Lambda_y [HyperonPhaseIndex].push_back(rap);
+                        dNdy_Lambda[HyperonPhaseIndex]->Fill(rap);
+                    }
+                    else if (id[j] == LambdabPID) {
+                        Lambdab_px[HyperonPhaseIndex].push_back(px[j]);
+                        Lambdab_py[HyperonPhaseIndex].push_back(py[j]);
+                        Lambdab_pz[HyperonPhaseIndex].push_back(pz[j]);
+                        Lambdab_y [HyperonPhaseIndex].push_back(rap);
+                        dNdy_Lambdab[HyperonPhaseIndex]->Fill(rap);
+                    }
+                    else if (id[j] == XiPID) {
+                        Xi_px[HyperonPhaseIndex].push_back(px[j]);
+                        Xi_py[HyperonPhaseIndex].push_back(py[j]);
+                        Xi_pz[HyperonPhaseIndex].push_back(pz[j]);
+                        Xi_y [HyperonPhaseIndex].push_back(rap);
+                        dNdy_Xi[HyperonPhaseIndex]->Fill(rap);
+                    }
+                    else if (id[j] == XibPID) {
+                        Xib_px[HyperonPhaseIndex].push_back(px[j]);
+                        Xib_py[HyperonPhaseIndex].push_back(py[j]);
+                        Xib_pz[HyperonPhaseIndex].push_back(pz[j]);
+                        Xib_y [HyperonPhaseIndex].push_back(rap);
+                        dNdy_Xib[HyperonPhaseIndex]->Fill(rap);
+                    }
+                    else if (id[j] == OmegaPID) {
+                        Omega_px[HyperonPhaseIndex].push_back(px[j]);
+                        Omega_py[HyperonPhaseIndex].push_back(py[j]);
+                        Omega_pz[HyperonPhaseIndex].push_back(pz[j]);
+                        Omega_y [HyperonPhaseIndex].push_back(rap);
+                        dNdy_Omega[HyperonPhaseIndex]->Fill(rap);
+                    }
+                    else if (id[j] == OmegabPID) {
+                        Omegab_px[HyperonPhaseIndex].push_back(px[j]);
+                        Omegab_py[HyperonPhaseIndex].push_back(py[j]);
+                        Omegab_pz[HyperonPhaseIndex].push_back(pz[j]);
+                        Omegab_y [HyperonPhaseIndex].push_back(rap);
+                        dNdy_Omegab[HyperonPhaseIndex]->Fill(rap);
+                    }
                 }
             }
 
@@ -418,44 +433,52 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 float Meg = pow(pow(px[j],2)+pow(py[j],2)+pow(pz[j],2),0.5);
                 if ((0.5 < Meg) && (Meg < 2)) {
                     States = "0p5t2p";
-                }else{
-                    States = "Allp";
-                }
-                int MesonPhaseIndex;
-                for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
-                    if (MesonPhase[Itr] == States){
-                        MesonPhaseIndex = Itr;
-                        break;
+                    for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
+                        if (MesonPhase[Itr] == States){
+                            MesonStates[Itr] = true;
+                            break;
+                        }
                     }
                 }
-                
-                if (id[j] == PionpPID) {
-                    Pip_px[MesonPhaseIndex].push_back(px[j]);
-                    Pip_py[MesonPhaseIndex].push_back(py[j]);
-                    Pip_pz[MesonPhaseIndex].push_back(pz[j]);
-                    Pip_y [MesonPhaseIndex].push_back(rap);
-                    dNdy_Pionp[MesonPhaseIndex]->Fill(rap);
+                if(true){
+                    States = "Allp";
+                    for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
+                        if (MesonPhase[Itr] == States){
+                            MesonStates[Itr] = true;
+                            break;
+                        }
+                    }
                 }
-                else if (id[j] == PionmPID) {
-                    Pim_px[MesonPhaseIndex].push_back(px[j]);
-                    Pim_py[MesonPhaseIndex].push_back(py[j]);
-                    Pim_pz[MesonPhaseIndex].push_back(pz[j]);
-                    Pim_y [MesonPhaseIndex].push_back(rap);
-                    dNdy_Pionm[MesonPhaseIndex]->Fill(rap);
-                }
-                else if (id[j] == KaonpPID) {
-                    Kp_px[MesonPhaseIndex].push_back(px[j]);
-                    Kp_py[MesonPhaseIndex].push_back(py[j]);
-                    Kp_pz[MesonPhaseIndex].push_back(pz[j]);
-                    Kp_y [MesonPhaseIndex].push_back(rap);
-                    dNdy_Kaonp[MesonPhaseIndex]->Fill(rap);
-                }
-                else if (id[j] == KaonmPID) {
-                    Km_px[MesonPhaseIndex].push_back(px[j]);
-                    Km_py[MesonPhaseIndex].push_back(py[j]);
-                    Km_pz[MesonPhaseIndex].push_back(pz[j]);
-                    Km_y [MesonPhaseIndex].push_back(rap);
-                    dNdy_Kaomm[MesonPhaseIndex]->Fill(rap);
+                for (int MesonPhaseIndex = 0;MesonPhaseIndex < HyperonPhaseNum;MesonPhaseIndex++){
+                    if (MesonStates[MesonPhaseIndex] == false) {continue;}
+                    if (id[j] == PionpPID) {
+                        Pip_px[MesonPhaseIndex].push_back(px[j]);
+                        Pip_py[MesonPhaseIndex].push_back(py[j]);
+                        Pip_pz[MesonPhaseIndex].push_back(pz[j]);
+                        Pip_y [MesonPhaseIndex].push_back(rap);
+                        dNdy_Pionp[MesonPhaseIndex]->Fill(rap);
+                    }
+                    else if (id[j] == PionmPID) {
+                        Pim_px[MesonPhaseIndex].push_back(px[j]);
+                        Pim_py[MesonPhaseIndex].push_back(py[j]);
+                        Pim_pz[MesonPhaseIndex].push_back(pz[j]);
+                        Pim_y [MesonPhaseIndex].push_back(rap);
+                        dNdy_Pionm[MesonPhaseIndex]->Fill(rap);
+                    }
+                    else if (id[j] == KaonpPID) {
+                        Kp_px[MesonPhaseIndex].push_back(px[j]);
+                        Kp_py[MesonPhaseIndex].push_back(py[j]);
+                        Kp_pz[MesonPhaseIndex].push_back(pz[j]);
+                        Kp_y [MesonPhaseIndex].push_back(rap);
+                        dNdy_Kaonp[MesonPhaseIndex]->Fill(rap);
+                    }
+                    else if (id[j] == KaonmPID) {
+                        Km_px[MesonPhaseIndex].push_back(px[j]);
+                        Km_py[MesonPhaseIndex].push_back(py[j]);
+                        Km_pz[MesonPhaseIndex].push_back(pz[j]);
+                        Km_y [MesonPhaseIndex].push_back(rap);
+                        dNdy_Kaomm[MesonPhaseIndex]->Fill(rap);
+                    }
                 }
             }
         }
