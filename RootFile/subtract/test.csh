@@ -15,8 +15,8 @@ set OmegaBarFitMassSigma = 0.0024
 
 
 set midname = "/star/data01/pwg/svianping/output/output_"
-set StartFileIndex = 0
-set EndFileIndex = 20
+set StartFileIndex = 500
+set EndFileIndex = 520
 set OutputFileIndex = 0
 
 root4star -b Subtract.C\(\"$midname\",$StartFileIndex,$EndFileIndex,$OutputFileIndex,$LambdaFitMass,$LambdaFitMassSigma,$XiFitMass,$XiFitMassSigma,$OmegaFitMass,$OmegaFitMassSigma,$LambdaBarFitMass,$LambdaBarFitMassSigma,$XiBarFitMass,$XiBarFitMassSigma,$OmegaBarFitMass,$OmegaBarFitMassSigma\)
