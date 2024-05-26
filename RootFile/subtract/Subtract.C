@@ -509,18 +509,18 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         }
         for (int j=0;j < mult;j++){
 
-            cout<<"id[j] = "<<id->at(j)<<endl;
+            cout<<"id->at(j) = "<<id->at(j)<<endl;
             for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
                 MesonStates[Itr] = false;
             }
             for (int Itr = 0;Itr < HyperonPhaseNum;Itr++) {
                 HyperonStates[Itr] = false;
             }
-            if ((fabs(id[j]) == LambdaPID) || (fabs(id[j]) == XiPID || (fabs(id[j]) == OmegaPID))){
-                if ((fabs(mass[j] - massList(id[j],Energy))) > 3*massListSigma(id[j],Energy)) {
+            if ((fabs(id->at(j)) == LambdaPID) || (fabs(id->at(j)) == XiPID || (fabs(id->at(j)) == OmegaPID))){
+                if ((fabs(mass->at(j) - massList(id->at(j),Energy))) > 3*massListSigma(id->at(j),Energy)) {
                     continue;
                 }
-                p0.SetXYZM(px[j],py[j],pz[j],massList(id[j],Energy));
+                p0.SetXYZM(px->at(j),py->at(j),pz->at(j),massList(id->at(j),Energy));
                 rap = p0.Rapidity();
                 if (-1 > rap || rap > 1) {
                     continue;
@@ -546,61 +546,61 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
                 for (int HyperonPhaseIndex = 0;HyperonPhaseIndex < HyperonPhaseNum;HyperonPhaseIndex++){
                     if (HyperonStates[HyperonPhaseIndex] == false) {continue;}
-                    if (id[j] == LambdaPID) {
-                        Lambda_px[HyperonPhaseIndex].push_back(px[j]);
-                        Lambda_py[HyperonPhaseIndex].push_back(py[j]);
-                        Lambda_pz[HyperonPhaseIndex].push_back(pz[j]);
+                    if (id->at(j) == LambdaPID) {
+                        Lambda_px[HyperonPhaseIndex].push_back(px->at(j));
+                        Lambda_py[HyperonPhaseIndex].push_back(py->at(j));
+                        Lambda_pz[HyperonPhaseIndex].push_back(pz->at(j));
                         Lambda_y [HyperonPhaseIndex].push_back(rap);
                         dNdy_Lambda[HyperonPhaseIndex]->Fill(rap);
                     }
-                    else if (id[j] == LambdabPID) {
-                        Lambdab_px[HyperonPhaseIndex].push_back(px[j]);
-                        Lambdab_py[HyperonPhaseIndex].push_back(py[j]);
-                        Lambdab_pz[HyperonPhaseIndex].push_back(pz[j]);
+                    else if (id->at(j) == LambdabPID) {
+                        Lambdab_px[HyperonPhaseIndex].push_back(px->at(j));
+                        Lambdab_py[HyperonPhaseIndex].push_back(py->at(j));
+                        Lambdab_pz[HyperonPhaseIndex].push_back(pz->at(j));
                         Lambdab_y [HyperonPhaseIndex].push_back(rap);
                         dNdy_Lambdab[HyperonPhaseIndex]->Fill(rap);
                     }
-                    else if (id[j] == XiPID) {
-                        Xi_px[HyperonPhaseIndex].push_back(px[j]);
-                        Xi_py[HyperonPhaseIndex].push_back(py[j]);
-                        Xi_pz[HyperonPhaseIndex].push_back(pz[j]);
+                    else if (id->at(j) == XiPID) {
+                        Xi_px[HyperonPhaseIndex].push_back(px->at(j));
+                        Xi_py[HyperonPhaseIndex].push_back(py->at(j));
+                        Xi_pz[HyperonPhaseIndex].push_back(pz->at(j));
                         Xi_y [HyperonPhaseIndex].push_back(rap);
                         dNdy_Xi[HyperonPhaseIndex]->Fill(rap);
                     }
-                    else if (id[j] == XibPID) {
-                        Xib_px[HyperonPhaseIndex].push_back(px[j]);
-                        Xib_py[HyperonPhaseIndex].push_back(py[j]);
-                        Xib_pz[HyperonPhaseIndex].push_back(pz[j]);
+                    else if (id->at(j) == XibPID) {
+                        Xib_px[HyperonPhaseIndex].push_back(px->at(j));
+                        Xib_py[HyperonPhaseIndex].push_back(py->at(j));
+                        Xib_pz[HyperonPhaseIndex].push_back(pz->at(j));
                         Xib_y [HyperonPhaseIndex].push_back(rap);
                         dNdy_Xib[HyperonPhaseIndex]->Fill(rap);
                     }
-                    else if (id[j] == OmegaPID) {
-                        Omega_px[HyperonPhaseIndex].push_back(px[j]);
-                        Omega_py[HyperonPhaseIndex].push_back(py[j]);
-                        Omega_pz[HyperonPhaseIndex].push_back(pz[j]);
+                    else if (id->at(j) == OmegaPID) {
+                        Omega_px[HyperonPhaseIndex].push_back(px->at(j));
+                        Omega_py[HyperonPhaseIndex].push_back(py->at(j));
+                        Omega_pz[HyperonPhaseIndex].push_back(pz->at(j));
                         Omega_y [HyperonPhaseIndex].push_back(rap);
                         dNdy_Omega[HyperonPhaseIndex]->Fill(rap);
                     }
-                    else if (id[j] == OmegabPID) {
-                        Omegab_px[HyperonPhaseIndex].push_back(px[j]);
-                        Omegab_py[HyperonPhaseIndex].push_back(py[j]);
-                        Omegab_pz[HyperonPhaseIndex].push_back(pz[j]);
+                    else if (id->at(j) == OmegabPID) {
+                        Omegab_px[HyperonPhaseIndex].push_back(px->at(j));
+                        Omegab_py[HyperonPhaseIndex].push_back(py->at(j));
+                        Omegab_pz[HyperonPhaseIndex].push_back(pz->at(j));
                         Omegab_y [HyperonPhaseIndex].push_back(rap);
                         dNdy_Omegab[HyperonPhaseIndex]->Fill(rap);
                     }
                 }
             }
 
-            if ((fabs(id[j]) == KaonpPID) || (fabs(id[j]) == PionpPID)) {
-                if ((fabs(id[j]) == KaonpPID) && ((nSigmaKaon[j] < -2) || (nSigmaKaon[j] > 2))) {
+            if ((fabs(id->at(j)) == KaonpPID) || (fabs(id->at(j)) == PionpPID)) {
+                if ((fabs(id->at(j)) == KaonpPID) && ((nSigmaKaon->at(j) < -2) || (nSigmaKaon->at(j) > 2))) {
                     continue;
                 }
-                if ((fabs(id[j]) == PionpPID) && ((nSigmaPion[j] < -3) || (nSigmaPion[j] > 3))) {
+                if ((fabs(id->at(j)) == PionpPID) && ((nSigmaPion->at(j) < -3) || (nSigmaPion->at(j) > 3))) {
                     continue;
                 }
-                p0.SetXYZM(px[j],py[j],pz[j],massList(id[j],Energy));
+                p0.SetXYZM(px->at(j),py->at(j),pz->at(j),massList(id->at(j),Energy));
                 rap = p0.Rapidity();
-                float Meg = pow(pow(px[j],2)+pow(py[j],2)+pow(pz[j],2),0.5);
+                float Meg = pow(pow(px->at(j),2)+pow(py->at(j),2)+pow(pz->at(j),2),0.5);
                 if ((0.5 < Meg) && (Meg < 2)) {
                     States = "0p5t2p";
                     for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
@@ -621,31 +621,31 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
                 for (int MesonPhaseIndex = 0;MesonPhaseIndex < HyperonPhaseNum;MesonPhaseIndex++){
                     if (MesonStates[MesonPhaseIndex] == false) {continue;}
-                    if (id[j] == PionpPID) {
-                        Pip_px[MesonPhaseIndex].push_back(px[j]);
-                        Pip_py[MesonPhaseIndex].push_back(py[j]);
-                        Pip_pz[MesonPhaseIndex].push_back(pz[j]);
+                    if (id->at(j) == PionpPID) {
+                        Pip_px[MesonPhaseIndex].push_back(px->at(j));
+                        Pip_py[MesonPhaseIndex].push_back(py->at(j));
+                        Pip_pz[MesonPhaseIndex].push_back(pz->at(j));
                         Pip_y [MesonPhaseIndex].push_back(rap);
                         dNdy_Pionp[MesonPhaseIndex]->Fill(rap);
                     }
-                    else if (id[j] == PionmPID) {
-                        Pim_px[MesonPhaseIndex].push_back(px[j]);
-                        Pim_py[MesonPhaseIndex].push_back(py[j]);
-                        Pim_pz[MesonPhaseIndex].push_back(pz[j]);
+                    else if (id->at(j) == PionmPID) {
+                        Pim_px[MesonPhaseIndex].push_back(px->at(j));
+                        Pim_py[MesonPhaseIndex].push_back(py->at(j));
+                        Pim_pz[MesonPhaseIndex].push_back(pz->at(j));
                         Pim_y [MesonPhaseIndex].push_back(rap);
                         dNdy_Pionm[MesonPhaseIndex]->Fill(rap);
                     }
-                    else if (id[j] == KaonpPID) {
-                        Kp_px[MesonPhaseIndex].push_back(px[j]);
-                        Kp_py[MesonPhaseIndex].push_back(py[j]);
-                        Kp_pz[MesonPhaseIndex].push_back(pz[j]);
+                    else if (id->at(j) == KaonpPID) {
+                        Kp_px[MesonPhaseIndex].push_back(px->at(j));
+                        Kp_py[MesonPhaseIndex].push_back(py->at(j));
+                        Kp_pz[MesonPhaseIndex].push_back(pz->at(j));
                         Kp_y [MesonPhaseIndex].push_back(rap);
                         dNdy_Kaonp[MesonPhaseIndex]->Fill(rap);
                     }
-                    else if (id[j] == KaonmPID) {
-                        Km_px[MesonPhaseIndex].push_back(px[j]);
-                        Km_py[MesonPhaseIndex].push_back(py[j]);
-                        Km_pz[MesonPhaseIndex].push_back(pz[j]);
+                    else if (id->at(j) == KaonmPID) {
+                        Km_px[MesonPhaseIndex].push_back(px->at(j));
+                        Km_py[MesonPhaseIndex].push_back(py->at(j));
+                        Km_pz[MesonPhaseIndex].push_back(pz->at(j));
                         Km_y [MesonPhaseIndex].push_back(rap);
                         dNdy_Kaomm[MesonPhaseIndex]->Fill(rap);
                     }
@@ -661,7 +661,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     TLorentzVector p1;
                     p1.SetXYZM(Kp_px[Ktr],Kp_py[Ktr],Kp_pz[Ktr],massList(KaonpPID,Energy));
                     cout<<"KEK1"<<endl;
-                    // float ALength = pow(pow(A_px[j],2)+pow(A_py[j],2)+pow(A_pz[j],2) ,0.5);
+                    // float ALength = pow(pow(A_px->at(j),2)+pow(A_py->at(j),2)+pow(A_pz->at(j),2) ,0.5);
                     for (int Ntr = 0;Ntr < Lambda_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambda_px[Ntr],Lambda_py[Ntr],Lambda_pz[Ntr],massList(LambdaPID,Energy));
@@ -677,7 +677,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         // Ay->Fill(fabs(A_y[j] - B_y[k]));
 
                         // float BLength = pow(pow(B_px[k],2)+pow(B_py[k],2)+pow(B_pz[k],2) ,0.5);
-                        // float CosAB = (A_px[j]*B_px[k] + A_py[j]*B_py[k] + A_pz[j]*B_pz[k])/(ALength*BLength);
+                        // float CosAB = (A_px->at(j)*B_px[k] + A_py->at(j)*B_py[k] + A_pz->at(j)*B_pz[k])/(ALength*BLength);
                         // Aphi->Fill(acos(CosAB));
                     }
                     for (int Ntr = 0;Ntr < Lambdab_px.size();Ntr++) {
