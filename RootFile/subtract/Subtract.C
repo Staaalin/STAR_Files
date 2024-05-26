@@ -691,6 +691,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Lambdab[Itr][Jtr]->Fill(kstar);
                         cout<<"2"<<endl;
+                        return;
                     }
                     for (int Ntr = 0;Ntr < Xi_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
