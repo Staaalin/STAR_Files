@@ -6,26 +6,6 @@
 #include "math.h"
 #include "string.h"
 #include <vector>
-#ifndef __CINT__
-#include "TROOT.h"
-#include "TFile.h"
-#include "TGraph.h"
-#include "TChain.h"
-#include "TF1.h"
-#include "TH1.h"
-#include "TStyle.h"
-#include "TCanvas.h"
-#include "TTree.h"
-#include "TNtuple.h"
-#include "TRandom.h"
-#include "TMath.h"
-#include "TVector3.h"
-#include "TLorentzVector.h"
-#include "TSystem.h"
-#include "TLegend.h"
-#include "TUnixSystem.h"
-#include "TRandom3.h"
-#endif
 #include <iostream>
 #include <map>
 #include <stdio.h>
