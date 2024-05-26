@@ -2,16 +2,16 @@
 
 set LambdaFitMass = 1.1161
 set LambdaFitMassSigma = 0.002
-set LambdabFitMass = 1.1161
-set LambdabFitMassSigma = 0.002
+set LambdaBarFitMass = 1.1161
+set LambdaBarFitMassSigma = 0.002
 set XiFitMass = 1.3223
 set XiFitMassSigma = 0.0024
-set XibFitMass = 1.3223
-set XibFitMassSigma = 0.0024
+set XiBarFitMass = 1.3223
+set XiBarFitMassSigma = 0.0024
 set OmegaFitMass = 1.6725
 set OmegaFitMassSigma = 0.0029
-set OmegabFitMass = 1.6727
-set OmegabFitMassSigma = 0.0024
+set OmegaBarFitMass = 1.6727
+set OmegaBarFitMassSigma = 0.0024
 
 
 set midname = "/star/data01/pwg/svianping/output/output_"
