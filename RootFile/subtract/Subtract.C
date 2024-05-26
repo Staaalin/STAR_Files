@@ -95,8 +95,8 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     int HyperonPhaseNum = 2;
     int MesonPhaseNum = 2;
-    TString HyperonPhase[HyperonPhaseNum] = {"m1p1Rap","0p1Rap"}
-    TString MesonPhase[MesonPhaseNum] = {"Allp","0p5t2p"}
+    TString HyperonPhase[] = {"m1p1Rap","0p1Rap"}
+    TString MesonPhase[] = {"Allp","0p5t2p"}
     TH1D *dNdy_Kaonp  [MesonPhaseNum];
     TH1D *dNdy_Kaonm  [MesonPhaseNum];
     TH1D *dNdy_Pionp  [MesonPhaseNum];
