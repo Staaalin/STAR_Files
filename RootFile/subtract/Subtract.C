@@ -325,6 +325,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
         // if(b>7){continue;}
+        cout<<"Here OK"<<endl;
         Kp_px.resize(0);Km_px.resize(0);Pip_px.resize(0);Pim_px.resize(0);
         Kp_py.resize(0);Km_py.resize(0);Pip_py.resize(0);Pim_py.resize(0);
         Kp_pz.resize(0);Km_pz.resize(0);Pip_pz.resize(0);Pim_pz.resize(0);
