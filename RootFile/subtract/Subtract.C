@@ -456,6 +456,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         Pip_pz[MesonPhaseIndex].push_back(pz[j]);
                         Pip_y [MesonPhaseIndex].push_back(rap);
                         dNdy_Pionp[MesonPhaseIndex]->Fill(rap);
+                        cout<<"Check"<<endl;
                     }
                     else if (id[j] == PionmPID) {
                         Pim_px[MesonPhaseIndex].push_back(px[j]);
