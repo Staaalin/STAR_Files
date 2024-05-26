@@ -509,7 +509,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         }
         for (int j=0;j < mult;j++){
 
-            cout<<"id[j] = "<<id[j]<<endl;
+            cout<<"id[j] = "<<id->at(j)<<endl;
             for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
                 MesonStates[Itr] = false;
             }
