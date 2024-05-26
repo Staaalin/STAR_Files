@@ -670,12 +670,12 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         p2.SetXYZM(Lambda_px->at(Ntr),Lambda_py->at(Ntr),Lambda_pz->at(Ntr),massList(LambdaPID,Energy));
                         // cout<<"KEK2"<<endl;
 
-                        cout<<"1"<<endl;
                         p3 = p4 + p2;
-                        cout<<"2"<<endl;
                         // float dpt = fabs(p1.Perp() - p2.Perp());
                         // Apt->Fill(dpt);
+                        cout<<"2"<<endl;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
+                        cout<<"1"<<endl;
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Lambda[Itr][Jtr]->Fill(kstar);
                         // cout<<"KEK3"<<endl;
