@@ -727,6 +727,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
         }
+        cout<<"There OK"<<endl;
 
     }
 
