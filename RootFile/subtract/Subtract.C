@@ -1,19 +1,35 @@
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <random>
+// #include <sys/types.h>
+// #include <sys/stat.h>
+// #include <dirent.h>
+// #include <random>
 #include "math.h"
 #include "string.h"
 #include <vector>
+// #ifndef __CINT__
+#include "TROOT.h"
+#include "TFile.h"
+#include "TGraph.h"
+#include "TChain.h"
+#include "TF1.h"
+#include "TH1.h"
+#include "TStyle.h"
+#include "TCanvas.h"
+#include "TTree.h"
+#include "TNtuple.h"
+#include "TRandom.h"
+#include "TMath.h"
+#include "TVector3.h"
+#include "TLorentzVector.h"
+#include "TSystem.h"
+#include "TLegend.h"
+#include "TUnixSystem.h"
+#include "TRandom3.h"
+// #endif
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <stdio.h>
-const float omegaMass = 1.67245;
-const float lambdaMass = 1.11568;
-const float xiMass = 1.32171;
-const float kaonMass = 0.493677;
-const int maxTrack = 30000;
 using namespace std;
 
 void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
@@ -25,6 +41,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                    float OmegaBarFitMass,float OmegaBarFitMassSigma)
 {
     // TString FileName = "output_";
+    cout<<"Start Running"<<endl;
 
     map<int, float> massList;
     map<int, float> massListSigma;
