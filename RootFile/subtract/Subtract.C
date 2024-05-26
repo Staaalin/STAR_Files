@@ -306,7 +306,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     cout << "file number: " << nentries << endl;
     
     TLorentzVector p0,p3;
-    float kstar, rap;
+    double kstar, rap;
     TVector3 BetaTemp;
 
     std::vector<float> Kp_px[MesonPhaseNum],Km_px[MesonPhaseNum],Pip_px[MesonPhaseNum],Pim_px[MesonPhaseNum];
@@ -420,8 +420,8 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
 
+            cout<<"id[j] = "<<id[j]<<endl;
             if ((fabs(id[j]) == KaonpPID) || (fabs(id[j]) == PionpPID)) {
-                cout<<"Check"<<endl;
                 if ((fabs(id[j]) == KaonpPID) && ((nSigmaKaon[j] < -2) || (nSigmaKaon[j] > 2))) {
                     continue;
                 }
