@@ -16,7 +16,7 @@ const float kaonMass = 0.493677;
 const int maxTrack = 30000;
 using namespace std;
 
-void pAcorSubtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
+void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                    float LambdaFitMass,float LambdaFitMassSigma,
                    float XiFitMass,float XiFitMassSigma,
                    float OmegaFitMass,float OmegaFitMassSigma,
