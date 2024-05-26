@@ -667,12 +667,12 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     // float ALength = pow(pow(A_px->at(j),2)+pow(A_py->at(j),2)+pow(A_pz->at(j),2) ,0.5);
                     for (int Ntr = 0;Ntr < Lambda_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        cout<<"1"<<endl;
                         p2.SetXYZM(Lambda_px->at(Ntr),Lambda_py->at(Ntr),Lambda_pz->at(Ntr),massList(LambdaPID,Energy));
-                        cout<<"2"<<endl;
                         // cout<<"KEK2"<<endl;
 
+                        cout<<"1"<<endl;
                         p3 = p4 + p2;
+                        cout<<"2"<<endl;
                         // float dpt = fabs(p1.Perp() - p2.Perp());
                         // Apt->Fill(dpt);
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
