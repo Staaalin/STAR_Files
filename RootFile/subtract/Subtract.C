@@ -508,6 +508,8 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             Lambda_y [Itr].resize(0);Lambdab_y [Itr].resize(0);Omega_y [Itr].resize(0);Omegab_y [Itr].resize(0);Xi_y [Itr].resize(0);Xib_y [Itr].resize(0);
         }
         for (int j=0;j < mult;j++){
+
+            cout<<"id[j] = "<<id[j]<<endl;
             for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
                 MesonStates[Itr] = false;
             }
@@ -589,7 +591,6 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
 
-            cout<<"id[j] = "<<id[j]<<endl;
             if ((fabs(id[j]) == KaonpPID) || (fabs(id[j]) == PionpPID)) {
                 if ((fabs(id[j]) == KaonpPID) && ((nSigmaKaon[j] < -2) || (nSigmaKaon[j] > 2))) {
                     continue;
