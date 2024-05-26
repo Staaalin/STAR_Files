@@ -133,7 +133,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TH1D *k_Pim_Lambdab[MesonPhaseNum][HyperonPhaseNum];
 
     for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
-        TSting HistName = "dNdy_Kaonp_";HistName += MesonPhase[Itr];
+        TString HistName = "dNdy_Kaonp_";HistName += MesonPhase[Itr];
         dNdy_Kaonp[Itr] = new TH1D(HistName,HistName,40,-2,2);
         dNdy_Kaonp[Itr]->GetXaxis()->SetTitle("y");
         dNdy_Kaonp[Itr]->GetYaxis()->SetTitle("Counts");
@@ -151,7 +151,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         dNdy_Pionm[Itr]->GetYaxis()->SetTitle("Counts");
     }
     for (int Itr = 0;Itr < HyperonPhaseNum;Itr++) {
-        TSting HistName = "dNdy_Lambda_";HistName += HyperonPhase[Itr];
+        TString HistName = "dNdy_Lambda_";HistName += HyperonPhase[Itr];
         dNdy_Lambda[Itr] = new TH1D(HistName,HistName,40,-2,2);
         dNdy_Lambda[Itr]->GetXaxis()->SetTitle("y");
         dNdy_Lambda[Itr]->GetYaxis()->SetTitle("Counts");
@@ -178,7 +178,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     }
     for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
         for (int Jtr = 0;Jtr < HyperonPhaseNum;Jtr++) {
-            TSting HistName = "k_Kp_Omega_";HistName += MesonPhase[Itr];HistName += "_";HistName += HyperonPhase[Jtr];
+            TString HistName = "k_Kp_Omega_";HistName += MesonPhase[Itr];HistName += "_";HistName += HyperonPhase[Jtr];
             k_Kp_Omega  [Itr][Jtr] = new TH1D(HistName,HistName,100,0,10);
             HistName = "k_Kp_Omegab_";HistName += MesonPhase[Itr];HistName += "_";HistName += HyperonPhase[Jtr];
             k_Kp_Omegab [Itr][Jtr] = new TH1D(HistName,HistName,100,0,10);
