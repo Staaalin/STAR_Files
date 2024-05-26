@@ -487,7 +487,6 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
             for (int Jtr = 0;Jtr < HyperonPhaseNum;Jtr++) {
                 cout<<"KEK0"<<endl;
-                cout<<Kp_px
                 for (int Ktr = 0;Ktr < Kp_px.size();Ktr++) {
                     TLorentzVector p1;
                     p1.SetXYZM(Kp_px[Ktr],Kp_py[Ktr],Kp_pz[Ktr],massList[KaonpPID]);
