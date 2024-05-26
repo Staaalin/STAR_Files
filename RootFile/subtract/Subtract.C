@@ -749,5 +749,5 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     file->Write();
 
-    return 0;
+    return;
 }
