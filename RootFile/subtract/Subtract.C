@@ -701,6 +701,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     TString OutputFileName = "Cor_";
     OutputFileName += OutputFileIndex;
+    OutputFileName += ".root";
     TFile *file = new TFile(OutputFileName, "RECREATE");
 
     for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
