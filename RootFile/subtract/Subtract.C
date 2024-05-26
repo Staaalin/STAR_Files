@@ -659,6 +659,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 cout<<"KEK0"<<endl;
                 for (int Ktr = 0;Ktr < Kp_px.size();Ktr++) {
                     TLorentzVector p1;
+                    cout<<"Kp_px->at(Ktr) = "<<Kp_px->at(Ktr)<<endl;
                     p1.SetXYZM(Kp_px->at(Ktr),Kp_py->at(Ktr),Kp_pz->at(Ktr),massList(KaonpPID,Energy));
                     cout<<"KEK1"<<endl;
                     // float ALength = pow(pow(A_px->at(j),2)+pow(A_py->at(j),2)+pow(A_pz->at(j),2) ,0.5);
