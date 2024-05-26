@@ -289,6 +289,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         filename+=i;
         filename+=".root";
         hadronTree->Add(filename);
+        cout<<"Add "<<filename<<" Successfully"<endl;
     }
     
     hadronTree->SetBranchAddress("PDGMult",&mult);
