@@ -42,6 +42,8 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 {
     // TString FileName = "output_";
     cout<<"Start Running"<<endl;
+    cout<<StartFileIndex<<endl;
+    cout<<EndFileIndex<<endl;
 
     map<int, float> massList;
     map<int, float> massListSigma;
