@@ -93,8 +93,8 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     Float_t px[maxMultiplicity],py[maxMultiplicity],pz[maxMultiplicity];
     Float_t nSigmaPion[maxMultiplicity],nSigmaKaon[maxMultiplicity],z[maxMultiplicity],nSigmaProton[maxMultiplicity],mass[maxMultiplicity],energy[maxMultiplicity],b;
 
-    int HyperonPhaseNum = 2;
-    int MesonPhaseNum = 2;
+    const static HyperonPhaseNum = 2;
+    const static MesonPhaseNum = 2;
     TString HyperonPhase[] = {"m1p1Rap","0p1Rap"}
     TString MesonPhase[] = {"Allp","0p5t2p"}
     TH1D *dNdy_Kaonp  [MesonPhaseNum];
