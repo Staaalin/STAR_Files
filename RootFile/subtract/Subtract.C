@@ -325,7 +325,6 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
         // if(b>7){continue;}
-        cout<<"Here OK"<<endl;
         Kp_px.resize(0);Km_px.resize(0);Pip_px.resize(0);Pim_px.resize(0);
         Kp_py.resize(0);Km_py.resize(0);Pip_py.resize(0);Pim_py.resize(0);
         Kp_pz.resize(0);Km_pz.resize(0);Pip_pz.resize(0);Pim_pz.resize(0);
@@ -334,6 +333,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         Lambda_py.resize(0);Lambdab_py.resize(0);Omega_py.resize(0);Omegab_py.resize(0);Xi_py.resize(0);Xib_py.resize(0);
         Lambda_pz.resize(0);Lambdab_pz.resize(0);Omega_pz.resize(0);Omegab_pz.resize(0);Xi_pz.resize(0);Xib_pz.resize(0);
         Lambda_y .resize(0);Lambdab_y .resize(0);Omega_y .resize(0);Omegab_y .resize(0);Xi_y .resize(0);Xib_y .resize(0);
+        cout<<"Here OK"<<endl;
         for (int j=0;j < mult;j++){
             if ((fabs(id[j]) == LambdaPID) || (fabs(id[j]) == XiPID || (fabs(id[j]) == OmegaPID))){
                 if ((fabs(mass[j] - massList[id[j]])) > 3*massListSigma[id[j]]) {
