@@ -296,14 +296,14 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     }
     
     hadronTree->SetBranchAddress("PDGMult",&mult);
-    hadronTree->SetBranchAddress("PDG",&id);
-    hadronTree->SetBranchAddress("mix_px",&px);
-    hadronTree->SetBranchAddress("mix_py",&py);
-    hadronTree->SetBranchAddress("mix_pz",&pz);
-    hadronTree->SetBranchAddress("InvariantMass",&mass);
-    hadronTree->SetBranchAddress("nSigmaProton",&nSigmaProton);
-    hadronTree->SetBranchAddress("nSigmaPion",&nSigmaPion);
-    hadronTree->SetBranchAddress("nSigmaKaon",&nSigmaKaon);
+    hadronTree->SetBranchAddress("PDG",id);
+    hadronTree->SetBranchAddress("mix_px",px);
+    hadronTree->SetBranchAddress("mix_py",py);
+    hadronTree->SetBranchAddress("mix_pz",pz);
+    hadronTree->SetBranchAddress("InvariantMass",mass);
+    hadronTree->SetBranchAddress("nSigmaProton",nSigmaProton);
+    hadronTree->SetBranchAddress("nSigmaPion",nSigmaPion);
+    hadronTree->SetBranchAddress("nSigmaKaon",nSigmaKaon);
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
