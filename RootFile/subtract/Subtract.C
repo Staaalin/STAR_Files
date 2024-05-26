@@ -673,10 +673,10 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         p3 = p4 + p2;
                         // float dpt = fabs(p1.Perp() - p2.Perp());
                         // Apt->Fill(dpt);
-                        cout<<"2"<<endl;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         cout<<"1"<<endl;
                         kstar = 0.5 * (p4 - p2).Rho();
+                        cout<<"2"<<endl;
                         k_Kp_Lambda[Itr][Jtr]->Fill(kstar);
                         // cout<<"KEK3"<<endl;
                         // Ay->Fill(fabs(A_y[j] - B_y[k]));
