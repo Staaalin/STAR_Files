@@ -653,7 +653,12 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
         // cout<<"Here OK"<<endl;
-
+        cout<<"Found Lambda: " <<Lambda_px.size()<<endl;
+        cout<<"Found Lambdab: "<<Lambdab_px.size()<<endl;
+        cout<<"Found Xi: " <<Xi_px.size()<<endl;
+        cout<<"Found Xib: "<<Xib_px.size()<<endl;
+        cout<<"Found Omega: " <<Omega_px.size()<<endl;
+        cout<<"Found Omegab: "<<Omegab_px.size()<<endl;
         for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
             for (int Jtr = 0;Jtr < HyperonPhaseNum;Jtr++) {
                 // cout<<"KEK0"<<endl;
@@ -665,6 +670,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     // float ALength = pow(pow(A_px->at(j),2)+pow(A_py->at(j),2)+pow(A_pz->at(j),2) ,0.5);
                     for (int Ntr = 0;Ntr < Lambda_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
+                        cout<<"1"<<endl;
                         p2.SetXYZM(Lambda_px->at(Ntr),Lambda_py->at(Ntr),Lambda_pz->at(Ntr),massList(LambdaPID,Energy));
                         // cout<<"KEK2"<<endl;
 
@@ -674,6 +680,8 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Lambda[Itr][Jtr]->Fill(kstar);
+                        cout<<"2"<<endl;
+                        return;
                         // cout<<"KEK3"<<endl;
                         // Ay->Fill(fabs(A_y[j] - B_y[k]));
 
@@ -692,15 +700,12 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Xi_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        cout<<"1"<<endl;
                         p2.SetXYZM(Xi_px->at(Ntr),Xi_py->at(Ntr),Xi_pz->at(Ntr),massList(XiPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Xi[Itr][Jtr]->Fill(kstar);
-                        cout<<"2"<<endl;
-                        return;
                     }
                     for (int Ntr = 0;Ntr < Xib_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
