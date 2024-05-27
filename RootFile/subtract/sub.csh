@@ -28,7 +28,6 @@ set SubXml=sub.xml
 cd /star/data01/pwg/svianping/output/
 while ($n < 500)
     if (($j == 0) && !(-e $SubXml)) then
-        ll
         echo "Here good"
         # 写入xml
         mkdir /star/data01/pwg/svianping/Subtract/$k/
@@ -41,6 +40,7 @@ while ($n < 500)
         echo \<File\>file:/star/u/svianping/STAR\_Files/RootFile/subtract/Subtract\.C\</File\> >> $SubXml
     endif
 
+    cd /star/data01/pwg/svianping/output/
     if (-e output_$i.root) then
         echo "There good"
         echo \<File\>file:/star/data01/pwg/svianping/output/output\_$i\.root\</File\> >> $SubXml
