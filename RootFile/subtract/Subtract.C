@@ -492,9 +492,9 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TString States;
 
     for (int i=0;i<nentries;i++){
-        if (i > 15) {break;}
+        // if (i > 15) {break;}
         hadronTree->GetEntry(i);
-        cout<<"Calculating Event "<<i<<endl;
+        cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
         // cout<<mult<<endl;
         // if(b>7){continue;}
         for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
@@ -510,7 +510,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             Lambda_y [Itr].resize(0);Lambdab_y [Itr].resize(0);Omega_y [Itr].resize(0);Omegab_y [Itr].resize(0);Xi_y [Itr].resize(0);Xib_y [Itr].resize(0);
         }
         if (Kp_px[0].size() != 0 || Lambda_px[0].size() != 0) {cout<<"vector resize Error"<<endl;return;}
-        else {cout<<"vector resize Ok"<<endl;}
+        // else {cout<<"vector resize Ok"<<endl;}
         for (int j=0;j < mult;j++){
 
             // cout<<"id->at(j) = "<<id->at(j)<<endl;
