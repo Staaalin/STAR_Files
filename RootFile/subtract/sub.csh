@@ -31,7 +31,7 @@ while ($n < 500)
         # 写入xml
         mkdir /star/data01/pwg/svianping/Subtract/$k/
         cd /star/data01/pwg/svianping/Subtract/$k/
-        @ SubXml = /star/data01/pwg/svianping/Subtract/$k/sub.xml
+        set SubXml = /star/data01/pwg/svianping/Subtract/$k/sub.xml
         touch $SubXml
         echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
         echo \<SandBox installer=\"ZIP\"\> >> $SubXml
@@ -72,6 +72,7 @@ while ($n < 500)
         @ j = 0
 
         @ k = $k + 1
+
     endif
 
     @ i = $i + 1
