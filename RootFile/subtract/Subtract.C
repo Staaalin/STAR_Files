@@ -492,6 +492,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TString States;
 
     for (int i=0;i<nentries;i++){
+        if (i > 15) {break;}
         hadronTree->GetEntry(i);
         cout<<"Calculating Event "<<i<<endl;
         // cout<<mult<<endl;
