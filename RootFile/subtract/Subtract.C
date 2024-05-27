@@ -662,13 +662,13 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 // cout<<"KEK0"<<endl;
                 for (int Ktr = 0;Ktr < Kp_px[Itr].size();Ktr++) {
                     TLorentzVector p1;
-                    p1.SetXYZM(Kp_px[Itr]->at(Ktr),Kp_py[Itr]->at(Ktr),Kp_pz[Itr]->at(Ktr),massList(KaonpPID,Energy));
+                    p1.SetXYZM(Kp_px[Itr][Ktr],Kp_py[Itr][Ktr],Kp_pz[Itr][Ktr],massList(KaonpPID,Energy));
                     // cout<<p1.Rapidity()<<endl;
                     // cout<<"KEK1"<<endl;
                     // float ALength = pow(pow(A_px->at(j),2)+pow(A_py->at(j),2)+pow(A_pz->at(j),2) ,0.5);
                     for (int Ntr = 0;Ntr < Lambda_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambda_px[Jtr]->at(Ntr),Lambda_py[Jtr]->at(Ntr),Lambda_pz[Jtr]->at(Ntr),massList(LambdaPID,Energy));
+                        p2.SetXYZM(Lambda_px[Jtr][Ntr],Lambda_py[Jtr][Ntr],Lambda_pz[Jtr][Ntr],massList(LambdaPID,Energy));
                         // cout<<"KEK2"<<endl;
 
                         p3 = p4 + p2;
@@ -686,7 +686,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Lambdab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambdab_px[Jtr]->at(Ntr),Lambdab_py[Jtr]->at(Ntr),Lambdab_pz[Jtr]->at(Ntr),massList(LambdabPID,Energy));
+                        p2.SetXYZM(Lambdab_px[Jtr][Ntr],Lambdab_py[Jtr][Ntr],Lambdab_pz[Jtr][Ntr],massList(LambdabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -695,7 +695,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Xi_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xi_px[Jtr]->at(Ntr),Xi_py[Jtr]->at(Ntr),Xi_pz[Jtr]->at(Ntr),massList(XiPID,Energy));
+                        p2.SetXYZM(Xi_px[Jtr][Ntr],Xi_py[Jtr][Ntr],Xi_pz[Jtr][Ntr],massList(XiPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -704,7 +704,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Xib_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xib_px[Jtr]->at(Ntr),Xib_py[Jtr]->at(Ntr),Xib_pz[Jtr]->at(Ntr),massList(XibPID,Energy));
+                        p2.SetXYZM(Xib_px[Jtr][Ntr],Xib_py[Jtr][Ntr],Xib_pz[Jtr][Ntr],massList(XibPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -713,7 +713,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Omega_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omega_px[Jtr]->at(Ntr),Omega_py[Jtr]->at(Ntr),Omega_pz[Jtr]->at(Ntr),massList(OmegaPID,Energy));
+                        p2.SetXYZM(Omega_px[Jtr][Ntr],Omega_py[Jtr][Ntr],Omega_pz[Jtr][Ntr],massList(OmegaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -722,7 +722,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Omegab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omegab_px[Jtr]->at(Ntr),Omegab_py[Jtr]->at(Ntr),Omegab_pz[Jtr]->at(Ntr),massList(OmegabPID,Energy));
+                        p2.SetXYZM(Omegab_px[Jtr][Ntr],Omegab_py[Jtr][Ntr],Omegab_pz[Jtr][Ntr],massList(OmegabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -732,11 +732,11 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
                 for (int Ktr = 0;Ktr < Km_px[Itr].size();Ktr++) {
                     TLorentzVector p1;
-                    p1.SetXYZM(Km_px[Itr]->at(Ktr),Km_py[Itr]->at(Ktr),Km_pz[Itr]->at(Ktr),massList(KaonmPID,Energy));
+                    p1.SetXYZM(Km_px[Itr][Ktr],Km_py[Itr][Ktr],Km_pz[Itr][Ktr],massList(KaonmPID,Energy));
                     // cout<<"KEK4"<<endl;
                     for (int Ntr = 0;Ntr < Lambda_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambda_px[Jtr]->at(Ntr),Lambda_py[Jtr]->at(Ntr),Lambda_pz[Jtr]->at(Ntr),massList(LambdaPID,Energy));
+                        p2.SetXYZM(Lambda_px[Jtr][Ntr],Lambda_py[Jtr][Ntr],Lambda_pz[Jtr][Ntr],massList(LambdaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -745,7 +745,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Lambdab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambdab_px[Jtr]->at(Ntr),Lambdab_py[Jtr]->at(Ntr),Lambdab_pz[Jtr]->at(Ntr),massList(LambdabPID,Energy));
+                        p2.SetXYZM(Lambdab_px[Jtr][Ntr],Lambdab_py[Jtr][Ntr],Lambdab_pz[Jtr][Ntr],massList(LambdabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -754,7 +754,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Xi_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xi_px[Jtr]->at(Ntr),Xi_py[Jtr]->at(Ntr),Xi_pz[Jtr]->at(Ntr),massList(XiPID,Energy));
+                        p2.SetXYZM(Xi_px[Jtr][Ntr],Xi_py[Jtr][Ntr],Xi_pz[Jtr][Ntr],massList(XiPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -763,7 +763,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Xib_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xib_px[Jtr]->at(Ntr),Xib_py[Jtr]->at(Ntr),Xib_pz[Jtr]->at(Ntr),massList(XibPID,Energy));
+                        p2.SetXYZM(Xib_px[Jtr][Ntr],Xib_py[Jtr][Ntr],Xib_pz[Jtr][Ntr],massList(XibPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -772,7 +772,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Omega_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omega_px[Jtr]->at(Ntr),Omega_py[Jtr]->at(Ntr),Omega_pz[Jtr]->at(Ntr),massList(OmegaPID,Energy));
+                        p2.SetXYZM(Omega_px[Jtr][Ntr],Omega_py[Jtr][Ntr],Omega_pz[Jtr][Ntr],massList(OmegaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -781,7 +781,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Omegab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omegab_px[Jtr]->at(Ntr),Omegab_py[Jtr]->at(Ntr),Omegab_pz[Jtr]->at(Ntr),massList(OmegabPID,Energy));
+                        p2.SetXYZM(Omegab_px[Jtr][Ntr],Omegab_py[Jtr][Ntr],Omegab_pz[Jtr][Ntr],massList(OmegabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -791,11 +791,11 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
                 for (int Ktr = 0;Ktr < Pip_px[Itr].size();Ktr++) {
                     TLorentzVector p1;
-                    p1.SetXYZM(Pip_px[Itr]->at(Ktr),Pip_py[Itr]->at(Ktr),Pip_pz[Itr]->at(Ktr),massList(PionpPID,Energy));
+                    p1.SetXYZM(Pip_px[Itr][Ktr],Pip_py[Itr][Ktr],Pip_pz[Itr][Ktr],massList(PionpPID,Energy));
                     // cout<<"KEK5"<<endl;
                     for (int Ntr = 0;Ntr < Lambda_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambda_px[Jtr]->at(Ntr),Lambda_py[Jtr]->at(Ntr),Lambda_pz[Jtr]->at(Ntr),massList(LambdaPID,Energy));
+                        p2.SetXYZM(Lambda_px[Jtr][Ntr],Lambda_py[Jtr][Ntr],Lambda_pz[Jtr][Ntr],massList(LambdaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -804,7 +804,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Lambdab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambdab_px[Jtr]->at(Ntr),Lambdab_py[Jtr]->at(Ntr),Lambdab_pz[Jtr]->at(Ntr),massList(LambdabPID,Energy));
+                        p2.SetXYZM(Lambdab_px[Jtr][Ntr],Lambdab_py[Jtr][Ntr],Lambdab_pz[Jtr][Ntr],massList(LambdabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -813,7 +813,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Xi_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xi_px[Jtr]->at(Ntr),Xi_py[Jtr]->at(Ntr),Xi_pz[Jtr]->at(Ntr),massList(XiPID,Energy));
+                        p2.SetXYZM(Xi_px[Jtr][Ntr],Xi_py[Jtr][Ntr],Xi_pz[Jtr][Ntr],massList(XiPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -822,7 +822,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Xib_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xib_px[Jtr]->at(Ntr),Xib_py[Jtr]->at(Ntr),Xib_pz[Jtr]->at(Ntr),massList(XibPID,Energy));
+                        p2.SetXYZM(Xib_px[Jtr][Ntr],Xib_py[Jtr][Ntr],Xib_pz[Jtr][Ntr],massList(XibPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -831,7 +831,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Omega_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omega_px[Jtr]->at(Ntr),Omega_py[Jtr]->at(Ntr),Omega_pz[Jtr]->at(Ntr),massList(OmegaPID,Energy));
+                        p2.SetXYZM(Omega_px[Jtr][Ntr],Omega_py[Jtr][Ntr],Omega_pz[Jtr][Ntr],massList(OmegaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -840,7 +840,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Omegab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omegab_px[Jtr]->at(Ntr),Omegab_py[Jtr]->at(Ntr),Omegab_pz[Jtr]->at(Ntr),massList(OmegabPID,Energy));
+                        p2.SetXYZM(Omegab_px[Jtr][Ntr],Omegab_py[Jtr][Ntr],Omegab_pz[Jtr][Ntr],massList(OmegabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -850,11 +850,11 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
                 for (int Ktr = 0;Ktr < Pim_px[Itr].size();Ktr++) {
                     TLorentzVector p1;
-                    p1.SetXYZM(Pim_px[Itr]->at(Ktr),Pim_py[Itr]->at(Ktr),Pim_pz[Itr]->at(Ktr),massList(PionmPID,Energy));
+                    p1.SetXYZM(Pim_px[Itr][Ktr],Pim_py[Itr][Ktr],Pim_pz[Itr][Ktr],massList(PionmPID,Energy));
                     // cout<<"KEK6"<<endl;
                     for (int Ntr = 0;Ntr < Lambda_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambda_px[Jtr]->at(Ntr),Lambda_py[Jtr]->at(Ntr),Lambda_pz[Jtr]->at(Ntr),massList(LambdaPID,Energy));
+                        p2.SetXYZM(Lambda_px[Jtr][Ntr],Lambda_py[Jtr][Ntr],Lambda_pz[Jtr][Ntr],massList(LambdaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -863,7 +863,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Lambdab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambdab_px[Jtr]->at(Ntr),Lambdab_py[Jtr]->at(Ntr),Lambdab_pz[Jtr]->at(Ntr),massList(LambdabPID,Energy));
+                        p2.SetXYZM(Lambdab_px[Jtr][Ntr],Lambdab_py[Jtr][Ntr],Lambdab_pz[Jtr][Ntr],massList(LambdabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -872,7 +872,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Xi_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xi_px[Jtr]->at(Ntr),Xi_py[Jtr]->at(Ntr),Xi_pz[Jtr]->at(Ntr),massList(XiPID,Energy));
+                        p2.SetXYZM(Xi_px[Jtr][Ntr],Xi_py[Jtr][Ntr],Xi_pz[Jtr][Ntr],massList(XiPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -881,7 +881,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Xib_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xib_px[Jtr]->at(Ntr),Xib_py[Jtr]->at(Ntr),Xib_pz[Jtr]->at(Ntr),massList(XibPID,Energy));
+                        p2.SetXYZM(Xib_px[Jtr][Ntr],Xib_py[Jtr][Ntr],Xib_pz[Jtr][Ntr],massList(XibPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -890,7 +890,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Omega_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omega_px[Jtr]->at(Ntr),Omega_py[Jtr]->at(Ntr),Omega_pz[Jtr]->at(Ntr),massList(OmegaPID,Energy));
+                        p2.SetXYZM(Omega_px[Jtr][Ntr],Omega_py[Jtr][Ntr],Omega_pz[Jtr][Ntr],massList(OmegaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -899,7 +899,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Omegab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omegab_px[Jtr]->at(Ntr),Omegab_py[Jtr]->at(Ntr),Omegab_pz[Jtr]->at(Ntr),massList(OmegabPID,Energy));
+                        p2.SetXYZM(Omegab_px[Jtr][Ntr],Omegab_py[Jtr][Ntr],Omegab_pz[Jtr][Ntr],massList(OmegabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
