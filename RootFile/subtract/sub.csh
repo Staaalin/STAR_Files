@@ -54,11 +54,12 @@ while ($n < 500)
 
     if (($j == $step) || (($n == 500) && ($j > 0))) then
         @ EndFileIndex = $i
+        @ OutputFileIndex = $k
         echo \</Package\> >> $SubXml
         echo \</SandBox\> >> $SubXml
         echo \<command\> >> $SubXml
         echo "source /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh" >> $SubXml
-        echo rm $i\.log >> $SubXml
+        echo rm $k\.log >> $SubXml
         set ARM = " > "
         echo ll >> $SubXml
         echo echo \"000000000000000000000000000000000000000\" >> $SubXml
@@ -69,12 +70,14 @@ while ($n < 500)
         echo \<output fromScratch=\"Cor\_$k\.root\" toURL=\"file:/star/data01/pwg/svianping/Subtract/Cor\_$k\.root\" /\> >> $SubXml
         echo \</job\> >> $SubXml
 
+        cd /star/data01/pwg/svianping/Subtract/$k/
         star-submit $SubXml
         
         @ StartFileIndex = $i + 1
         @ j = 0
 
         @ k = $k + 1
+        echo "k = "$k
 
     endif
 
