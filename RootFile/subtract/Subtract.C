@@ -660,15 +660,15 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
             for (int Jtr = 0;Jtr < HyperonPhaseNum;Jtr++) {
                 // cout<<"KEK0"<<endl;
-                for (int Ktr = 0;Ktr < Kp_px->size();Ktr++) {
+                for (int Ktr = 0;Ktr < Kp_px[Itr].size();Ktr++) {
                     TLorentzVector p1;
-                    p1.SetXYZM(Kp_px->at(Ktr),Kp_py->at(Ktr),Kp_pz->at(Ktr),massList(KaonpPID,Energy));
+                    p1.SetXYZM(Kp_px[Itr]->at(Ktr),Kp_py[Itr]->at(Ktr),Kp_pz[Itr]->at(Ktr),massList(KaonpPID,Energy));
                     // cout<<p1.Rapidity()<<endl;
                     // cout<<"KEK1"<<endl;
                     // float ALength = pow(pow(A_px->at(j),2)+pow(A_py->at(j),2)+pow(A_pz->at(j),2) ,0.5);
-                    for (int Ntr = 0;Ntr < Lambda_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambda_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambda_px->at(Ntr),Lambda_py->at(Ntr),Lambda_pz->at(Ntr),massList(LambdaPID,Energy));
+                        p2.SetXYZM(Lambda_px[Jtr]->at(Ntr),Lambda_py[Jtr]->at(Ntr),Lambda_pz[Jtr]->at(Ntr),massList(LambdaPID,Energy));
                         // cout<<"KEK2"<<endl;
 
                         p3 = p4 + p2;
@@ -684,45 +684,45 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         // float CosAB = (A_px->at(j)*B_px[k] + A_py->at(j)*B_py[k] + A_pz->at(j)*B_pz[k])/(ALength*BLength);
                         // Aphi->Fill(acos(CosAB));
                     }
-                    for (int Ntr = 0;Ntr < Lambdab_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambdab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambdab_px->at(Ntr),Lambdab_py->at(Ntr),Lambdab_pz->at(Ntr),massList(LambdabPID,Energy));
+                        p2.SetXYZM(Lambdab_px[Jtr]->at(Ntr),Lambdab_py[Jtr]->at(Ntr),Lambdab_pz[Jtr]->at(Ntr),massList(LambdabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Lambdab[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xi_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xi_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xi_px->at(Ntr),Xi_py->at(Ntr),Xi_pz->at(Ntr),massList(XiPID,Energy));
+                        p2.SetXYZM(Xi_px[Jtr]->at(Ntr),Xi_py[Jtr]->at(Ntr),Xi_pz[Jtr]->at(Ntr),massList(XiPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Xi[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xib_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xib_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xib_px->at(Ntr),Xib_py->at(Ntr),Xib_pz->at(Ntr),massList(XibPID,Energy));
+                        p2.SetXYZM(Xib_px[Jtr]->at(Ntr),Xib_py[Jtr]->at(Ntr),Xib_pz[Jtr]->at(Ntr),massList(XibPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Xib[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omega_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omega_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omega_px->at(Ntr),Omega_py->at(Ntr),Omega_pz->at(Ntr),massList(OmegaPID,Energy));
+                        p2.SetXYZM(Omega_px[Jtr]->at(Ntr),Omega_py[Jtr]->at(Ntr),Omega_pz[Jtr]->at(Ntr),massList(OmegaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Omega[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omegab_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omegab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omegab_px->at(Ntr),Omegab_py->at(Ntr),Omegab_pz->at(Ntr),massList(OmegabPID,Energy));
+                        p2.SetXYZM(Omegab_px[Jtr]->at(Ntr),Omegab_py[Jtr]->at(Ntr),Omegab_pz[Jtr]->at(Ntr),massList(OmegabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -730,58 +730,58 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         k_Kp_Omegab[Itr][Jtr]->Fill(kstar);
                     }
                 }
-                for (int Ktr = 0;Ktr < Km_px->size();Ktr++) {
+                for (int Ktr = 0;Ktr < Km_px[Itr].size();Ktr++) {
                     TLorentzVector p1;
-                    p1.SetXYZM(Km_px->at(Ktr),Km_py->at(Ktr),Km_pz->at(Ktr),massList(KaonmPID,Energy));
+                    p1.SetXYZM(Km_px[Itr]->at(Ktr),Km_py[Itr]->at(Ktr),Km_pz[Itr]->at(Ktr),massList(KaonmPID,Energy));
                     // cout<<"KEK4"<<endl;
-                    for (int Ntr = 0;Ntr < Lambda_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambda_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambda_px->at(Ntr),Lambda_py->at(Ntr),Lambda_pz->at(Ntr),massList(LambdaPID,Energy));
+                        p2.SetXYZM(Lambda_px[Jtr]->at(Ntr),Lambda_py[Jtr]->at(Ntr),Lambda_pz[Jtr]->at(Ntr),massList(LambdaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Km_Lambda[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Lambdab_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambdab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambdab_px->at(Ntr),Lambdab_py->at(Ntr),Lambdab_pz->at(Ntr),massList(LambdabPID,Energy));
+                        p2.SetXYZM(Lambdab_px[Jtr]->at(Ntr),Lambdab_py[Jtr]->at(Ntr),Lambdab_pz[Jtr]->at(Ntr),massList(LambdabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Km_Lambdab[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xi_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xi_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xi_px->at(Ntr),Xi_py->at(Ntr),Xi_pz->at(Ntr),massList(XiPID,Energy));
+                        p2.SetXYZM(Xi_px[Jtr]->at(Ntr),Xi_py[Jtr]->at(Ntr),Xi_pz[Jtr]->at(Ntr),massList(XiPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Km_Xi[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xib_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xib_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xib_px->at(Ntr),Xib_py->at(Ntr),Xib_pz->at(Ntr),massList(XibPID,Energy));
+                        p2.SetXYZM(Xib_px[Jtr]->at(Ntr),Xib_py[Jtr]->at(Ntr),Xib_pz[Jtr]->at(Ntr),massList(XibPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Km_Xib[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omega_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omega_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omega_px->at(Ntr),Omega_py->at(Ntr),Omega_pz->at(Ntr),massList(OmegaPID,Energy));
+                        p2.SetXYZM(Omega_px[Jtr]->at(Ntr),Omega_py[Jtr]->at(Ntr),Omega_pz[Jtr]->at(Ntr),massList(OmegaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Km_Omega[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omegab_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omegab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omegab_px->at(Ntr),Omegab_py->at(Ntr),Omegab_pz->at(Ntr),massList(OmegabPID,Energy));
+                        p2.SetXYZM(Omegab_px[Jtr]->at(Ntr),Omegab_py[Jtr]->at(Ntr),Omegab_pz[Jtr]->at(Ntr),massList(OmegabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -789,58 +789,58 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         k_Km_Omegab[Itr][Jtr]->Fill(kstar);
                     }
                 }
-                for (int Ktr = 0;Ktr < Pip_px->size();Ktr++) {
+                for (int Ktr = 0;Ktr < Pip_px[Itr].size();Ktr++) {
                     TLorentzVector p1;
-                    p1.SetXYZM(Pip_px->at(Ktr),Pip_py->at(Ktr),Pip_pz->at(Ktr),massList(PionpPID,Energy));
+                    p1.SetXYZM(Pip_px[Itr]->at(Ktr),Pip_py[Itr]->at(Ktr),Pip_pz[Itr]->at(Ktr),massList(PionpPID,Energy));
                     // cout<<"KEK5"<<endl;
-                    for (int Ntr = 0;Ntr < Lambda_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambda_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambda_px->at(Ntr),Lambda_py->at(Ntr),Lambda_pz->at(Ntr),massList(LambdaPID,Energy));
+                        p2.SetXYZM(Lambda_px[Jtr]->at(Ntr),Lambda_py[Jtr]->at(Ntr),Lambda_pz[Jtr]->at(Ntr),massList(LambdaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pip_Lambda[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Lambdab_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambdab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambdab_px->at(Ntr),Lambdab_py->at(Ntr),Lambdab_pz->at(Ntr),massList(LambdabPID,Energy));
+                        p2.SetXYZM(Lambdab_px[Jtr]->at(Ntr),Lambdab_py[Jtr]->at(Ntr),Lambdab_pz[Jtr]->at(Ntr),massList(LambdabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pip_Lambdab[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xi_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xi_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xi_px->at(Ntr),Xi_py->at(Ntr),Xi_pz->at(Ntr),massList(XiPID,Energy));
+                        p2.SetXYZM(Xi_px[Jtr]->at(Ntr),Xi_py[Jtr]->at(Ntr),Xi_pz[Jtr]->at(Ntr),massList(XiPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pip_Xi[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xib_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xib_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xib_px->at(Ntr),Xib_py->at(Ntr),Xib_pz->at(Ntr),massList(XibPID,Energy));
+                        p2.SetXYZM(Xib_px[Jtr]->at(Ntr),Xib_py[Jtr]->at(Ntr),Xib_pz[Jtr]->at(Ntr),massList(XibPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pip_Xib[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omega_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omega_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omega_px->at(Ntr),Omega_py->at(Ntr),Omega_pz->at(Ntr),massList(OmegaPID,Energy));
+                        p2.SetXYZM(Omega_px[Jtr]->at(Ntr),Omega_py[Jtr]->at(Ntr),Omega_pz[Jtr]->at(Ntr),massList(OmegaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pip_Omega[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omegab_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omegab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omegab_px->at(Ntr),Omegab_py->at(Ntr),Omegab_pz->at(Ntr),massList(OmegabPID,Energy));
+                        p2.SetXYZM(Omegab_px[Jtr]->at(Ntr),Omegab_py[Jtr]->at(Ntr),Omegab_pz[Jtr]->at(Ntr),massList(OmegabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
@@ -848,58 +848,58 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         k_Pip_Omegab[Itr][Jtr]->Fill(kstar);
                     }
                 }
-                for (int Ktr = 0;Ktr < Pim_px->size();Ktr++) {
+                for (int Ktr = 0;Ktr < Pim_px[Itr].size();Ktr++) {
                     TLorentzVector p1;
-                    p1.SetXYZM(Pim_px->at(Ktr),Pim_py->at(Ktr),Pim_pz->at(Ktr),massList(PionmPID,Energy));
+                    p1.SetXYZM(Pim_px[Itr]->at(Ktr),Pim_py[Itr]->at(Ktr),Pim_pz[Itr]->at(Ktr),massList(PionmPID,Energy));
                     // cout<<"KEK6"<<endl;
-                    for (int Ntr = 0;Ntr < Lambda_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambda_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambda_px->at(Ntr),Lambda_py->at(Ntr),Lambda_pz->at(Ntr),massList(LambdaPID,Energy));
+                        p2.SetXYZM(Lambda_px[Jtr]->at(Ntr),Lambda_py[Jtr]->at(Ntr),Lambda_pz[Jtr]->at(Ntr),massList(LambdaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pim_Lambda[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Lambdab_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambdab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Lambdab_px->at(Ntr),Lambdab_py->at(Ntr),Lambdab_pz->at(Ntr),massList(LambdabPID,Energy));
+                        p2.SetXYZM(Lambdab_px[Jtr]->at(Ntr),Lambdab_py[Jtr]->at(Ntr),Lambdab_pz[Jtr]->at(Ntr),massList(LambdabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pim_Lambdab[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xi_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xi_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xi_px->at(Ntr),Xi_py->at(Ntr),Xi_pz->at(Ntr),massList(XiPID,Energy));
+                        p2.SetXYZM(Xi_px[Jtr]->at(Ntr),Xi_py[Jtr]->at(Ntr),Xi_pz[Jtr]->at(Ntr),massList(XiPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pim_Xi[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xib_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xib_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Xib_px->at(Ntr),Xib_py->at(Ntr),Xib_pz->at(Ntr),massList(XibPID,Energy));
+                        p2.SetXYZM(Xib_px[Jtr]->at(Ntr),Xib_py[Jtr]->at(Ntr),Xib_pz[Jtr]->at(Ntr),massList(XibPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pim_Xib[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omega_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omega_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omega_px->at(Ntr),Omega_py->at(Ntr),Omega_pz->at(Ntr),massList(OmegaPID,Energy));
+                        p2.SetXYZM(Omega_px[Jtr]->at(Ntr),Omega_py[Jtr]->at(Ntr),Omega_pz[Jtr]->at(Ntr),massList(OmegaPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pim_Omega[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omegab_px->size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omegab_px[Jtr].size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        p2.SetXYZM(Omegab_px->at(Ntr),Omegab_py->at(Ntr),Omegab_pz->at(Ntr),massList(OmegabPID,Energy));
+                        p2.SetXYZM(Omegab_px[Jtr]->at(Ntr),Omegab_py[Jtr]->at(Ntr),Omegab_pz[Jtr]->at(Ntr),massList(OmegabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
