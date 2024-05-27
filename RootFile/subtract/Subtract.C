@@ -683,24 +683,24 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int Ntr = 0;Ntr < Lambdab_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
-                        cout<<"1"<<endl;
                         p2.SetXYZM(Lambdab_px->at(Ntr),Lambdab_py->at(Ntr),Lambdab_pz->at(Ntr),massList(LambdabPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Lambdab[Itr][Jtr]->Fill(kstar);
-                        cout<<"2"<<endl;
-                        return;
                     }
                     for (int Ntr = 0;Ntr < Xi_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
+                        cout<<"1"<<endl;
                         p2.SetXYZM(Xi_px->at(Ntr),Xi_py->at(Ntr),Xi_pz->at(Ntr),massList(XiPID,Energy));
 
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Xi[Itr][Jtr]->Fill(kstar);
+                        cout<<"2"<<endl;
+                        return;
                     }
                     for (int Ntr = 0;Ntr < Xib_px.size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
