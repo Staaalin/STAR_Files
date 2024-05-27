@@ -493,6 +493,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
+        cout<<"Calculating Event "<<i<<endl;
         // cout<<mult<<endl;
         // if(b>7){continue;}
         for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
