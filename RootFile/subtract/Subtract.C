@@ -653,22 +653,16 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
         // cout<<"Here OK"<<endl;
-        cout<<"Found Lambda: " <<Lambda_px->size()<<endl;
-        cout<<"Found Lambdab: "<<Lambdab_px->size()<<endl;
-        cout<<"Found Xi: " <<Xi_px.size()<<endl;
-        cout<<"Found Xib: "<<Xib_px.size()<<endl;
-        cout<<"Found Omega: " <<Omega_px.size()<<endl;
-        cout<<"Found Omegab: "<<Omegab_px.size()<<endl;
         for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
             for (int Jtr = 0;Jtr < HyperonPhaseNum;Jtr++) {
                 // cout<<"KEK0"<<endl;
-                for (int Ktr = 0;Ktr < Kp_px.size();Ktr++) {
+                for (int Ktr = 0;Ktr < Kp_px->size();Ktr++) {
                     TLorentzVector p1;
                     p1.SetXYZM(Kp_px->at(Ktr),Kp_py->at(Ktr),Kp_pz->at(Ktr),massList(KaonpPID,Energy));
                     // cout<<p1.Rapidity()<<endl;
                     // cout<<"KEK1"<<endl;
                     // float ALength = pow(pow(A_px->at(j),2)+pow(A_py->at(j),2)+pow(A_pz->at(j),2) ,0.5);
-                    for (int Ntr = 0;Ntr < Lambda_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambda_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         cout<<"1"<<endl;
                         p2.SetXYZM(Lambda_px->at(Ntr),Lambda_py->at(Ntr),Lambda_pz->at(Ntr),massList(LambdaPID,Energy));
@@ -689,7 +683,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         // float CosAB = (A_px->at(j)*B_px[k] + A_py->at(j)*B_py[k] + A_pz->at(j)*B_pz[k])/(ALength*BLength);
                         // Aphi->Fill(acos(CosAB));
                     }
-                    for (int Ntr = 0;Ntr < Lambdab_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambdab_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambdab_px->at(Ntr),Lambdab_py->at(Ntr),Lambdab_pz->at(Ntr),massList(LambdabPID,Energy));
 
@@ -698,7 +692,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Lambdab[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xi_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xi_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Xi_px->at(Ntr),Xi_py->at(Ntr),Xi_pz->at(Ntr),massList(XiPID,Energy));
 
@@ -707,7 +701,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Xi[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xib_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xib_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Xib_px->at(Ntr),Xib_py->at(Ntr),Xib_pz->at(Ntr),massList(XibPID,Energy));
 
@@ -716,7 +710,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Xib[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omega_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omega_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Omega_px->at(Ntr),Omega_py->at(Ntr),Omega_pz->at(Ntr),massList(OmegaPID,Energy));
 
@@ -725,7 +719,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Kp_Omega[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omegab_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omegab_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Omegab_px->at(Ntr),Omegab_py->at(Ntr),Omegab_pz->at(Ntr),massList(OmegabPID,Energy));
 
@@ -735,11 +729,11 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         k_Kp_Omegab[Itr][Jtr]->Fill(kstar);
                     }
                 }
-                for (int Ktr = 0;Ktr < Km_px.size();Ktr++) {
+                for (int Ktr = 0;Ktr < Km_px->size();Ktr++) {
                     TLorentzVector p1;
                     p1.SetXYZM(Km_px->at(Ktr),Km_py->at(Ktr),Km_pz->at(Ktr),massList(KaonmPID,Energy));
                     // cout<<"KEK4"<<endl;
-                    for (int Ntr = 0;Ntr < Lambda_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambda_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambda_px->at(Ntr),Lambda_py->at(Ntr),Lambda_pz->at(Ntr),massList(LambdaPID,Energy));
 
@@ -748,7 +742,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Km_Lambda[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Lambdab_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambdab_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambdab_px->at(Ntr),Lambdab_py->at(Ntr),Lambdab_pz->at(Ntr),massList(LambdabPID,Energy));
 
@@ -757,7 +751,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Km_Lambdab[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xi_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xi_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Xi_px->at(Ntr),Xi_py->at(Ntr),Xi_pz->at(Ntr),massList(XiPID,Energy));
 
@@ -766,7 +760,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Km_Xi[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xib_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xib_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Xib_px->at(Ntr),Xib_py->at(Ntr),Xib_pz->at(Ntr),massList(XibPID,Energy));
 
@@ -775,7 +769,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Km_Xib[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omega_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omega_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Omega_px->at(Ntr),Omega_py->at(Ntr),Omega_pz->at(Ntr),massList(OmegaPID,Energy));
 
@@ -784,7 +778,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Km_Omega[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omegab_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omegab_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Omegab_px->at(Ntr),Omegab_py->at(Ntr),Omegab_pz->at(Ntr),massList(OmegabPID,Energy));
 
@@ -794,11 +788,11 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         k_Km_Omegab[Itr][Jtr]->Fill(kstar);
                     }
                 }
-                for (int Ktr = 0;Ktr < Pip_px.size();Ktr++) {
+                for (int Ktr = 0;Ktr < Pip_px->size();Ktr++) {
                     TLorentzVector p1;
                     p1.SetXYZM(Pip_px->at(Ktr),Pip_py->at(Ktr),Pip_pz->at(Ktr),massList(PionpPID,Energy));
                     // cout<<"KEK5"<<endl;
-                    for (int Ntr = 0;Ntr < Lambda_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambda_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambda_px->at(Ntr),Lambda_py->at(Ntr),Lambda_pz->at(Ntr),massList(LambdaPID,Energy));
 
@@ -807,7 +801,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pip_Lambda[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Lambdab_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambdab_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambdab_px->at(Ntr),Lambdab_py->at(Ntr),Lambdab_pz->at(Ntr),massList(LambdabPID,Energy));
 
@@ -816,7 +810,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pip_Lambdab[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xi_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xi_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Xi_px->at(Ntr),Xi_py->at(Ntr),Xi_pz->at(Ntr),massList(XiPID,Energy));
 
@@ -825,7 +819,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pip_Xi[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xib_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xib_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Xib_px->at(Ntr),Xib_py->at(Ntr),Xib_pz->at(Ntr),massList(XibPID,Energy));
 
@@ -834,7 +828,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pip_Xib[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omega_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omega_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Omega_px->at(Ntr),Omega_py->at(Ntr),Omega_pz->at(Ntr),massList(OmegaPID,Energy));
 
@@ -843,7 +837,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pip_Omega[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omegab_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omegab_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Omegab_px->at(Ntr),Omegab_py->at(Ntr),Omegab_pz->at(Ntr),massList(OmegabPID,Energy));
 
@@ -853,11 +847,11 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         k_Pip_Omegab[Itr][Jtr]->Fill(kstar);
                     }
                 }
-                for (int Ktr = 0;Ktr < Pim_px.size();Ktr++) {
+                for (int Ktr = 0;Ktr < Pim_px->size();Ktr++) {
                     TLorentzVector p1;
                     p1.SetXYZM(Pim_px->at(Ktr),Pim_py->at(Ktr),Pim_pz->at(Ktr),massList(PionmPID,Energy));
                     // cout<<"KEK6"<<endl;
-                    for (int Ntr = 0;Ntr < Lambda_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambda_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambda_px->at(Ntr),Lambda_py->at(Ntr),Lambda_pz->at(Ntr),massList(LambdaPID,Energy));
 
@@ -866,7 +860,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pim_Lambda[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Lambdab_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Lambdab_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Lambdab_px->at(Ntr),Lambdab_py->at(Ntr),Lambdab_pz->at(Ntr),massList(LambdabPID,Energy));
 
@@ -875,7 +869,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pim_Lambdab[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xi_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xi_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Xi_px->at(Ntr),Xi_py->at(Ntr),Xi_pz->at(Ntr),massList(XiPID,Energy));
 
@@ -884,7 +878,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pim_Xi[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Xib_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Xib_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Xib_px->at(Ntr),Xib_py->at(Ntr),Xib_pz->at(Ntr),massList(XibPID,Energy));
 
@@ -893,7 +887,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pim_Xib[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omega_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omega_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Omega_px->at(Ntr),Omega_py->at(Ntr),Omega_pz->at(Ntr),massList(OmegaPID,Energy));
 
@@ -902,7 +896,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         kstar = 0.5 * (p4 - p2).Rho();
                         k_Pim_Omega[Itr][Jtr]->Fill(kstar);
                     }
-                    for (int Ntr = 0;Ntr < Omegab_px.size();Ntr++) {
+                    for (int Ntr = 0;Ntr < Omegab_px->size();Ntr++) {
                         TLorentzVector p2,p4 = p1;
                         p2.SetXYZM(Omegab_px->at(Ntr),Omegab_py->at(Ntr),Omegab_pz->at(Ntr),massList(OmegabPID,Energy));
 
