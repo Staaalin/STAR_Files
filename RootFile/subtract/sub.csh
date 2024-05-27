@@ -41,6 +41,7 @@ while ($n < 500)
     endif
 
     if (-e output_$i.root) then
+        echo "There good"
         echo \<File\>file:/star/data01/pwg/svianping/output/output\_$i\.root\</File\> >> $SubXml
         @ n = 0
 
