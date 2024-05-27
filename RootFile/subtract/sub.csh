@@ -35,6 +35,7 @@ while ($n < 500)
         set SubXml = /star/data01/pwg/svianping/Subtract/$k/sub.xml
         touch $SubXml
         echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
+        echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"$step\" fileListSyntax=\"xrootd\"\> >> $SubXml
         echo \<SandBox installer=\"ZIP\"\> >> $SubXml
         echo \<Package name=\"ZIP\_File\_$k\"\> >> $SubXml
         echo \<File\>file:/star/u/svianping/STAR\_Files/RootFile/subtract/Subtract\.C\</File\> >> $SubXml
