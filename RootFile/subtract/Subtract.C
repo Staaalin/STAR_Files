@@ -653,8 +653,8 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
         // cout<<"Here OK"<<endl;
-        cout<<"Found Lambda: " <<Lambda_px.size()<<endl;
-        cout<<"Found Lambdab: "<<Lambdab_px.size()<<endl;
+        cout<<"Found Lambda: " <<Lambda_px->size()<<endl;
+        cout<<"Found Lambdab: "<<Lambdab_px->size()<<endl;
         cout<<"Found Xi: " <<Xi_px.size()<<endl;
         cout<<"Found Xib: "<<Xib_px.size()<<endl;
         cout<<"Found Omega: " <<Omega_px.size()<<endl;
