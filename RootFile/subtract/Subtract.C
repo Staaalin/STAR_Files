@@ -509,7 +509,7 @@ void Subtract(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             Lambda_pz[Itr].resize(0);Lambdab_pz[Itr].resize(0);Omega_pz[Itr].resize(0);Omegab_pz[Itr].resize(0);Xi_pz[Itr].resize(0);Xib_pz[Itr].resize(0);
             Lambda_y [Itr].resize(0);Lambdab_y [Itr].resize(0);Omega_y [Itr].resize(0);Omegab_y [Itr].resize(0);Xi_y [Itr].resize(0);Xib_y [Itr].resize(0);
         }
-        if (Kp_px[0]->size() != 0 || Lambda_px[0]->size() != 0) {cout<<"vector resize Error"<<endl;return;}
+        if (Kp_px[0].size() != 0 || Lambda_px[0].size() != 0) {cout<<"vector resize Error"<<endl;return;}
         else {cout<<"vector resize Ok"<<endl;}
         for (int j=0;j < mult;j++){
 
