@@ -27,7 +27,7 @@ set SubXml=sub.xml
 
 cd /star/data01/pwg/svianping/output/
 while ($n < 500)
-    if (($j == 0) && !(-e $SubXml)) then
+    if (($j == 0)) then
         echo "Here good"
         # 写入xml
         mkdir /star/data01/pwg/svianping/Subtract/$k/
