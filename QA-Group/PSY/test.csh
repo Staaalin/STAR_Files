@@ -8,7 +8,8 @@ starver SL20d
 echo "If Source? 0:[NO] 1:[YES]"
 set IfSource = "$<"
 if ($IfSource == 1) then
-    source /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh
+    cp /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh /star/u/svianping/STAR_Files/QA-Group/PSY/
+    source setDEV2.csh
 endif
 echo "If Cons? 0:[NO] 1:[YES]"
 set IfCons = "$<"
