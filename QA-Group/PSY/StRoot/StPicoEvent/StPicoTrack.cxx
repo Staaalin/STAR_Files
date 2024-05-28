@@ -39,9 +39,9 @@ StPicoTrack::StPicoTrack() : TObject(),
   mNSigmaElectron( std::numeric_limits<short>::min() ),
   mTopologyMap{}, mBEmcPidTraitsIndex(-1), mBTofPidTraitsIndex(-1),
   mMtdPidTraitsIndex(-1), mETofPidTraitsIndex(-1),
-  mBEmcMatchedTowerIndex(-1)
+  mBEmcMatchedTowerIndex(-1), 
 #if !defined (__TFG__VERSION__)
-  , mTopoMap_iTpc(0),
+  mTopoMap_iTpc(0),
 #endif
   mStatus(0),
   mIdTruth(0), mQATruth(0), mVertexIndex(-1)
