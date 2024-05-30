@@ -860,6 +860,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	}
 	// cout<<DaughterParticle.size()<<endl;
 
+	cout<<"T1";
 	Omega_Omegab_Num = 0;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
@@ -1197,10 +1198,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 		StLambdaDecayPair TmpLambdaDecayPair(p4Pair, p4Proton, ProtonTrackIndex, PionTrackIndex, (eLambda==0), dmass);
 		KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 	} // End loop over KFParticles
+	cout<<"T2";
 
 
 
-	cout<<"T1";
 	// Filling Track
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	std::vector<int> NeedPDG; NeedPDG.resize(0);
@@ -1449,7 +1450,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 
 	}
-	cout<<"T2";
 
 // ======= KFParticle end ======= //
 
