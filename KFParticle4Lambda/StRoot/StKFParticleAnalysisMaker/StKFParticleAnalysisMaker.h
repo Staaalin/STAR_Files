@@ -150,6 +150,8 @@ private:
 	TH2F *H_Pt_nSigma[PDG2NameSize2][PDG2NameSize3];
 	TH2F *H_m2_KSigma_S;
 	TH2F *H_m2_KSigma_L;
+	TH2F *H_All_nSigmaKaon_y;
+	TH2F *H_All_nSigmaKaon_eta;
 
 	TH2D *hdEdx_pQ;
 	TH2D *hdEdx_pQ_1cut;

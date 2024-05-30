@@ -262,6 +262,13 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
 
+	H_All_nSigmaKaon_y   = new TH2F("H_All_nSigmaKaon_y"  ,"nSigmaKaon vs. y for all tracks"  ,200,-2,2,200,0,6);
+	H_All_nSigmaKaon_eta = new TH2F("H_All_nSigmaKaon_eta","nSigmaKaon vs. eta for all tracks",200,-2,2,200,0,6);
+	H_All_nSigmaKaon_y->GetXaxis()->SetTitle("rapidity");
+	H_All_nSigmaKaon_y->GetYaxis()->SetTitle("nSigmaKaon");
+	H_All_nSigmaKaon_eta->GetXaxis()->SetTitle("eta");
+	H_All_nSigmaKaon_eta->GetYaxis()->SetTitle("nSigmaKaon");
+
 	const int APDGList[]      = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      };
 	const TString ANameList[] = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      };
 	const int BPDGList[]      = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
@@ -425,6 +432,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	// H_m2_KSigma_L->Write();
 	// H_m2_KSigma_S->Write();
+	H_All_nSigmaKaon_y  ->Write();
+	H_All_nSigmaKaon_eta->Write();
 
 	hEventNum->Write();
 	
@@ -1215,6 +1224,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
 		if (! track->isPrimary()) continue;
 		track_index.push_back(iTrack);
+		// H_All_nSigmaKaon_y->Fill();
 
 		hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
 
@@ -1684,11 +1694,11 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 		if (abs(TestPDG[Itr]) == 321){// Kaon
 			// Test if Kaon
 			bool kaon_cut = true;
-			if (fabs(TrackID_nSigmaKaon) > 3) kaon_cut = false;
+			if (fabs(TrackID_nSigmaKaon) > 2) kaon_cut = false;
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) kaon_cut = false; 
 			if (fabs(TrackID_eta_prim) > eta_trig_cut) kaon_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) kaon_cut = false;
-			if (fabs(TrackID_nSigmaKaon) > fabs(TrackID_nSigmaPion) ) kaon_cut = false;
+			if (fabs(TrackID_nSigmaPion) < 3 || fabs(TrackID_nSigmaProton) < 3) kaon_cut = false;
 
 			if (track->charge() * TestPDG[Itr] > 0) {result.push_back(kaon_cut);}
 			else {result.push_back(false);}
