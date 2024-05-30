@@ -1207,6 +1207,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	NeedPDG.push_back(-2212);NeedPDG.push_back(-211);NeedPDG.push_back(-321);
 	std::vector<int> track_index;
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
+		cout<<"T1";
 		StPicoTrack *track = mPicoDst->track(iTrack);
 		hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
     	if (! track)            continue;
@@ -1326,7 +1327,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack = true;QA_IfConfuse.emplace_back(1);}
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
-		cout<<"T1";
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
