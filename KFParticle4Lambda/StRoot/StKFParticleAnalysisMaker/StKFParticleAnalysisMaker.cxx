@@ -825,7 +825,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// 	}
 	// }
 
-	cout<<"T1";
 	// HighLight Reconstructed Track
 	// cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
 	std::vector<int> DaughterParticle,MatherPartiecle;DaughterParticle.resize(0);MatherPartiecle.resize(0);
@@ -860,7 +859,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 	}
 	// cout<<DaughterParticle.size()<<endl;
-	cout<<"T2";
+	cout<<"T1";
 
 	Omega_Omegab_Num = 0;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
@@ -1023,6 +1022,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 		if (IfCorrectDaughter == false) {continue;}
 
+		cout<<"T3";
 		//SCHEME 1: reconstruction of V0, the parent particle
 		int iTrack,kTrack;
 		// cout<<"particle.NDaughters() = "<<particle.NDaughters()<<endl;
@@ -1056,6 +1056,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
+		cout<<"T4";
 		// cout<<"Here is good 5"<<endl;
 		StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
@@ -1109,6 +1110,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 		
+		cout<<"T5";
 		// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		TVector3 xv0, op1, op2;
@@ -1131,6 +1133,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
 		if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
 		ParticleVec.push_back(particle);
+		cout<<"T6";
 
 		if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg))) {
 
@@ -1179,6 +1182,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// cout<<"CrefMult:"<<CrefMult<<endl;
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 
+		cout<<"T7";
 		hLN_M->Fill(particle.GetMass(),H_ProcessEventNum);
 		// cout<<"Here is good 1"<<endl;
 
@@ -1199,7 +1203,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		StLambdaDecayPair TmpLambdaDecayPair(p4Pair, p4Proton, ProtonTrackIndex, PionTrackIndex, (eLambda==0), dmass);
 		KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 	} // End loop over KFParticles
-	cout<<"T3";
+	cout<<"T8";
 
 
 
