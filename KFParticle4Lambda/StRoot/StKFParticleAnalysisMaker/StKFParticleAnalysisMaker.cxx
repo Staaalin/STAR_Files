@@ -1225,9 +1225,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 		float pt = track->gMom().Perp();
 		float phi = track->gMom().Phi();
 		float eta = track->gMom().Eta();
-		double px = track->gMom().X();
-		double py = track->gMom().Y();
-		double pz = track->gMom().Z();
+		double track_px = track->gMom().X();
+		double track_py = track->gMom().Y();
+		double track_pz = track->gMom().Z();
 		// float dcatopv = track->gDCA(Vertex3D).Mag();
 		// float nSigmaKaon = track->nSigmaKaon();
 		// float nSigmaPion = track->nSigmaPion();
@@ -1335,6 +1335,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_Pt[Jtr] -> Fill(pt);
 					H_P[Jtr] -> Fill(p);
 					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(TPID),2),0.5);
+					PDG.emplace_back(NeedPDG[Ktr]);
+					px.emplace_back(track_px);
+					py.emplace_back(track_py);
+					pz.emplace_back(track_pz);
+					QA_Chi2.emplace_back(-999);
+					QA_Decay_Length.emplace_back(l);
 					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+pz)/(tEnergy-pz)));
 
 					QA_dEdx.emplace_back(track->dEdx());
@@ -1350,9 +1356,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
 					for (int Ntr=0;Ntr<PDG2NameSize3;Ntr++){
 						// cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
-						if ( CNameList[Ntr] == "Kaon"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
-						if ( CNameList[Ntr] == "Pion"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
-						if ( CNameList[Ntr] == "Proton"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
+						if ( CNameList[Ntr] == "Kaon"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaKaon(),track->gMom().Perp());InvariantMass.emplace_back(KaonPdgMass);}
+						if ( CNameList[Ntr] == "Pion"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaPion(),track->gMom().Perp());InvariantMass.emplace_back(PionPdgMass);}
+						if ( CNameList[Ntr] == "Proton"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());InvariantMass.emplace_back(ProtonPdgMass);}
 					}
 					// TOF Info
 					bool hasTOF = false;
