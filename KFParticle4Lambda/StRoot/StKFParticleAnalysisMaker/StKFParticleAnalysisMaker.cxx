@@ -1107,45 +1107,26 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 		
-		cout<<"T1";
 		// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
-		TVector3 xv0, op1, op2;
-		cout<<"T2";
-		double dca1to2 = closestDistance(mTrackI, mTrackK, magnet, Vertex3D, xv0, op1, op2);
-		cout<<"T3";
-		TVector3 pv0 = op1 + op2;
-		cout<<"T4";
-		TVector3 xv0toPV = xv0 - Vertex3D;
-		cout<<"T5";
-		double rdotp = xv0toPV.Dot(pv0);
-		cout<<"T6";
-		double dcav0toPV = rdotp*rdotp/pv0.Mag2();
-		cout<<"T7";
-		dcav0toPV = sqrt(xv0toPV.Mag2() - dcav0toPV);
-		cout<<"T8";
-		double v0decaylength = xv0toPV.Mag();
-		cout<<"T9";
-		double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();// cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
-		cout<<"T10";
+		// TVector3 xv0, op1, op2;
+		// cout<<"T2";
+		// double dca1to2 = closestDistance(mTrackI, mTrackK, magnet, Vertex3D, xv0, op1, op2);
+		// cout<<"T3";
+		// TVector3 pv0 = op1 + op2;
+		// TVector3 xv0toPV = xv0 - Vertex3D;
+		// double rdotp = xv0toPV.Dot(pv0);
+		// double dcav0toPV = rdotp*rdotp/pv0.Mag2();
+		// dcav0toPV = sqrt(xv0toPV.Mag2() - dcav0toPV);
+		// double v0decaylength = xv0toPV.Mag();
+		// double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();// cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
 		//SCHEME 2:
 		KFParticle tempParticle(particle);
-		cout<<"T11";
 		float l,dl;
-		cout<<"T12";
 		KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
-		cout<<"T13";
 		// pv += particle;
 		tempParticle.SetProductionVertex(pv);
-		cout<<"T14";
 		tempParticle.GetDecayLength(l, dl);// cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
-		cout<<"T15";
-		if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
-		if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
-		if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
-		cout<<"T16";
-		ParticleVec.push_back(particle);
-		cout<<"T17";
 
 		if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg))) {
 
@@ -1165,7 +1146,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_Decay_Length.emplace_back(l);
 			OmegaVec.push_back(particle);ParticleVec.push_back(particle);
 			QA_Chi2.emplace_back(particle.GetChi2());
-			QA_DCA_V0_PV.emplace_back(dcav0toPV);
+			QA_DCA_V0_PV.emplace_back(-1);
 			QA_dEdx.emplace_back(-999);
 			QA_nSigmaProton.emplace_back(-999);
 			QA_nSigmaPion.emplace_back(-999);
