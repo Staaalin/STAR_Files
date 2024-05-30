@@ -1326,65 +1326,69 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
 		std::vector<int> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , *track , Vertex3D);
-		for (int Itr = 0;Itr < PDGBool.size();Itr++) {
-			if (TPID == PDGList[Itr]) {
-				H_Pt[Jtr] -> Fill(pt);
-				H_P[Jtr] -> Fill(p);
-				float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(TPID),2),0.5);
-				H_rapidity[Jtr]->Fill(0.5*log((tEnergy+pz)/(tEnergy-pz)));
+		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
+			if (PDGBool[Ktr] == true) {
+				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+					if (NeedPDG[Ktr] != PDGList[Itr]){continue;}
+					int Jtr = Itr - PDG2NameSize;
+					H_Pt[Jtr] -> Fill(pt);
+					H_P[Jtr] -> Fill(p);
+					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(TPID),2),0.5);
+					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+pz)/(tEnergy-pz)));
 
-				QA_dEdx.emplace_back(track->dEdx());
-				QA_nSigmaProton.emplace_back(track->nSigmaProton());
-				QA_nSigmaPion.emplace_back(track->nSigmaPion());
-				QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
-				H_dEdx_p[Jtr]->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
-				H_DCAtoPV[Jtr]->Fill(track->gDCA(Vertex3D).Mag());
-				QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
-				H_eta[Jtr]->Fill(track->gMom().Eta());
-				H_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
-				H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
-				H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
-				for (int Ktr=0;Ktr<PDG2NameSize3;Ktr++){
-					// cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
-					if ( CNameList[Ktr] == "Kaon"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
-					if ( CNameList[Ktr] == "Pion"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
-					if ( CNameList[Ktr] == "Proton"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
-				}
-				// TOF Info
-				bool hasTOF = false;
-				int tofindex = track->bTofPidTraitsIndex();
-				float m2 = -999.;
-				float beta = -999.;
-				if (tofindex >= 0) 
-				{
-					int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
-					float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
-					float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
-					// hgbtofYlocal->Fill(BtofYLocal);
-					if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
-				}
-				StPicoPhysicalHelix helix = track->helix(magnet);
-				TVector3 pkaon = helix.momentum(magnet*kilogauss);
-				if (hasTOF)
-				{
-					beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
-					m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
-
-					float betaTheroy = 1/pow(pow(BPDGListMass[Jtr]/(track->gMom().Mag()),2)+1,0.5);
-					// some kaon QA
-					if (TPID == 321){
-						if (track->nSigmaKaon() >  3) H_m2_KSigma_L->Fill(track->gMom().Perp(), m2);
-						if (track->nSigmaKaon() < -3) H_m2_KSigma_S->Fill(track->gMom().Perp(), m2);
+					QA_dEdx.emplace_back(track->dEdx());
+					QA_nSigmaProton.emplace_back(track->nSigmaProton());
+					QA_nSigmaPion.emplace_back(track->nSigmaPion());
+					QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
+					H_dEdx_p[Jtr]->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+					H_DCAtoPV[Jtr]->Fill(track->gDCA(Vertex3D).Mag());
+					QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
+					H_eta[Jtr]->Fill(track->gMom().Eta());
+					H_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
+					H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
+					H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
+					for (int Ntr=0;Ntr<PDG2NameSize3;Ntr++){
+						// cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
+						if ( CNameList[Ntr] == "Kaon"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
+						if ( CNameList[Ntr] == "Pion"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
+						if ( CNameList[Ntr] == "Proton"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
 					}
-					float nSIgmaTOF = (1/beta-1/betaTheroy)/0.013;
-					H_nSigmaTOF_p[Jtr]->Fill(nSIgmaTOF,track->gMom().Mag());
-					// zTOF_proton = 1/beta - sqrt(ProtonPdgMass*ProtonPdgMass/pkaon.Mag2()+1);
-					// zTOF_pion   = 1/beta - sqrt(PionPdgMass*PionPdgMass/pkaon.Mag2()+1);
-					// zTOF_kaon   = 1/beta - sqrt(KaonPdgMass*KaonPdgMass/pkaon.Mag2()+1);
+					// TOF Info
+					bool hasTOF = false;
+					int tofindex = track->bTofPidTraitsIndex();
+					float m2 = -999.;
+					float beta = -999.;
+					if (tofindex >= 0) 
+					{
+						int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
+						float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
+						float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
+						// hgbtofYlocal->Fill(BtofYLocal);
+						if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+					}
+					StPicoPhysicalHelix helix = track->helix(magnet);
+					TVector3 pkaon = helix.momentum(magnet*kilogauss);
+					if (hasTOF)
+					{
+						beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
+						m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
+
+						float betaTheroy = 1/pow(pow(BPDGListMass[Jtr]/(track->gMom().Mag()),2)+1,0.5);
+						// some kaon QA
+						if (TPID == 321){
+							if (track->nSigmaKaon() >  3) H_m2_KSigma_L->Fill(track->gMom().Perp(), m2);
+							if (track->nSigmaKaon() < -3) H_m2_KSigma_S->Fill(track->gMom().Perp(), m2);
+						}
+						float nSIgmaTOF = (1/beta-1/betaTheroy)/0.013;
+						H_nSigmaTOF_p[Jtr]->Fill(nSIgmaTOF,track->gMom().Mag());
+						// zTOF_proton = 1/beta - sqrt(ProtonPdgMass*ProtonPdgMass/pkaon.Mag2()+1);
+						// zTOF_pion   = 1/beta - sqrt(PionPdgMass*PionPdgMass/pkaon.Mag2()+1);
+						// zTOF_kaon   = 1/beta - sqrt(KaonPdgMass*KaonPdgMass/pkaon.Mag2()+1);
+					}
+					QA_m2.emplace_back(m2);
+					
+					break;
 				}
-				QA_m2.emplace_back(m2);
-				
-				break;
 			}
 		}
 				
