@@ -438,21 +438,21 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 		int Jtr = Itr - PDG2NameSize;
 
-		// H_rapidity[Jtr] -> Write();
+		H_rapidity[Jtr] -> Write();
 
-		// H_P[Jtr] -> Write();
+		H_P[Jtr] -> Write();
 
-		// H_Pt[Jtr] -> Write();
-		// H_dEdx_p[Jtr]->Write();
+		H_Pt[Jtr] -> Write();
+		H_dEdx_p[Jtr]->Write();
 		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
 			H_Pt_nSigma[Jtr][Ktr]->Write();
 		}
-		// H_DCAtoPV[Jtr]->Write();
-		// H_eta[Jtr]->Write();
-		// H_nHitsFit_p[Jtr]->Write();
-		// H_nHitsFit_nHitsMax[Jtr]->Write();
-		// H_ndEdx[Jtr]->Write();
-		// H_nSigmaTOF_p[Jtr]->Write();
+		H_DCAtoPV[Jtr]->Write();
+		H_eta[Jtr]->Write();
+		H_nHitsFit_p[Jtr]->Write();
+		H_nHitsFit_nHitsMax[Jtr]->Write();
+		H_ndEdx[Jtr]->Write();
+		H_nSigmaTOF_p[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1690,6 +1690,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) kaon_cut = false; 
 			if (fabs(TrackID_eta_prim) > eta_trig_cut) kaon_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) kaon_cut = false;
+			if (fabs(TrackID_nSigmaKaon) > fabs(TrackID_nSigmaPion) ) kaon_cut = false;
 
 			if (track->charge() * TestPDG[Itr] > 0) {result.push_back(kaon_cut);}
 			else {result.push_back(false);}
