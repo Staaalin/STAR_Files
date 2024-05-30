@@ -1199,6 +1199,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		StLambdaDecayPair TmpLambdaDecayPair(p4Pair, p4Proton, ProtonTrackIndex, PionTrackIndex, (eLambda==0), dmass);
 		KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 	} // End loop over KFParticles
+	cout<<"T3";
 
 
 
