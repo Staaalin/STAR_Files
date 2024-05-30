@@ -1326,6 +1326,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack = true;QA_IfConfuse.emplace_back(1);}
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
+		cout<<"T1";
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
@@ -1398,6 +1399,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
+		cout<<"T2";
 				
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1532,6 +1534,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// hadronTree->Fill();
 	}
 	/////////////////////////////////////////////////////////
+	cout<<" "<<endl;
+	cout<<"##"<<endl;
 	return kStOK;
 
 }
