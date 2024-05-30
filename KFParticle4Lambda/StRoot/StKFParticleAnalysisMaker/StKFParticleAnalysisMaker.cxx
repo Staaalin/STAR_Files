@@ -1661,8 +1661,8 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 	float TrackID_eta_prim = track->pMom().Eta();
 
 	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
-	float pT_trig_lo = 0.2; // 0.2
-	float pT_trig_hi = 2.0; // 10
+	float pT_trig_lo = 0.0; // 0.2
+	float pT_trig_hi = 10.0; // 2
 	float eta_trig_cut = 1.0;
 
 	std::vector<bool> result;result.resize(0);
@@ -1698,7 +1698,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) kaon_cut = false; 
 			if (fabs(TrackID_eta_prim) > eta_trig_cut) kaon_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) kaon_cut = false;
-			if (fabs(TrackID_nSigmaPion) < 3 || fabs(TrackID_nSigmaProton) < 3) kaon_cut = false;
+			// if (fabs(TrackID_nSigmaPion) < 3 || fabs(TrackID_nSigmaProton) < 3) kaon_cut = false;
 
 			if (track->charge() * TestPDG[Itr] > 0) {result.push_back(kaon_cut);}
 			else {result.push_back(false);}
