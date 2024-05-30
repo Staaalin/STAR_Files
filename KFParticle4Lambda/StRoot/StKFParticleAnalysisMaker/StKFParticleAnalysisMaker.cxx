@@ -1657,7 +1657,7 @@ bool StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack
 	float pT_trig_hi = 2.0;
 	float eta_trig_cut = 1.0;
 
-	std::vector<bool> result;result.resize();
+	std::vector<bool> result;result.resize(0);
 	for (int Itr = 0;Itr < TestPDG.size();Itr++){
 		if (fabs(TestPDG[Itr]) == 2212){// Proton
 			// Test if Proton
@@ -1667,8 +1667,8 @@ bool StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack
 			if (fabs(TrackID_eta_prim) > eta_trig_cut) proton_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) proton_cut = false;
 
-			if (track->charge() * TestPDG[Itr] > 0) {result.emplace_back(proton_cut);}
-			else {result.emplace_back(false);}
+			if (track->charge() * TestPDG[Itr] > 0) {result.push_back(proton_cut);}
+			else {result.push_back(false);}
 			
 		}
 		if (fabs(TestPDG[Itr]) == 211){// Pion
@@ -1679,8 +1679,8 @@ bool StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack
 			if (fabs(TrackID_eta_prim) > eta_trig_cut) pion_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) pion_cut = false;
 
-			if (track->charge() * TestPDG[Itr] > 0) {result.emplace_back(pion_cut);}
-			else {result.emplace_back(false);}
+			if (track->charge() * TestPDG[Itr] > 0) {result.push_back(pion_cut);}
+			else {result.push_back(false);}
 			
 		}
 		if (fabs(TestPDG[Itr]) == 321){// Kaon
@@ -1691,8 +1691,8 @@ bool StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack
 			if (fabs(TrackID_eta_prim) > eta_trig_cut) kaon_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) kaon_cut = false;
 
-			if (track->charge() * TestPDG[Itr] > 0) {result.emplace_back(kaon_cut);}
-			else {result.emplace_back(false);}
+			if (track->charge() * TestPDG[Itr] > 0) {result.push_back(kaon_cut);}
+			else {result.push_back(false);}
 			
 		}
 	}
