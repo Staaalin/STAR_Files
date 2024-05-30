@@ -1130,7 +1130,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
 		ParticleVec.push_back(particle);
 
-		if (IfHelix && ((fabs(particle.GetPDG()) == OmegaPdg) || (fabs(particle.GetPDG()) == XiPdg))) {
+		if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg))) {
 
 			// helix
 			TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
@@ -1158,7 +1158,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// cout<<"MomentumOfParticle_tb.Mag() = "<<MomentumOfParticle_tb.Mag()<<endl;
 			// cout<<"MomentumOfParticle.Mag() = "<<MomentumOfParticle.Mag()<<endl;
 		}
-		else if ((fabs(particle.GetPDG()) == LambdaPdg))
+		else if ((abs(particle.GetPDG()) == LambdaPdg))
 		{
 			PDG.emplace_back(particle.GetPDG());
 			px.emplace_back(particle.GetPx());
@@ -1326,7 +1326,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack = true;QA_IfConfuse.emplace_back(1);}
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
-		std::vector<int> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , *track , Vertex3D);
+		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , *track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
 				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
@@ -1334,14 +1334,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 					int Jtr = Itr - PDG2NameSize;
 					H_Pt[Jtr] -> Fill(pt);
 					H_P[Jtr] -> Fill(p);
-					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(TPID),2),0.5);
+					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
 					PDG.emplace_back(NeedPDG[Ktr]);
 					px.emplace_back(track_px);
 					py.emplace_back(track_py);
 					pz.emplace_back(track_pz);
 					QA_Chi2.emplace_back(-999);
-					QA_Decay_Length.emplace_back(l);
-					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+pz)/(tEnergy-pz)));
+					QA_Decay_Length.emplace_back(-99);
+					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+track_pz)/(tEnergy-track_pz)));
 
 					QA_dEdx.emplace_back(track->dEdx());
 					QA_nSigmaProton.emplace_back(track->nSigmaProton());
@@ -1382,7 +1382,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 						float betaTheroy = 1/pow(pow(BPDGListMass[Jtr]/(track->gMom().Mag()),2)+1,0.5);
 						// some kaon QA
-						if (TPID == 321){
+						if (NeedPDG[Ktr] == 321){
 							if (track->nSigmaKaon() >  3) H_m2_KSigma_L->Fill(track->gMom().Perp(), m2);
 							if (track->nSigmaKaon() < -3) H_m2_KSigma_S->Fill(track->gMom().Perp(), m2);
 						}
@@ -1644,7 +1644,7 @@ void StKFParticleAnalysisMaker::SetDaughterTrackHits(KFParticle particle)
 	}
 }
 
-bool StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack *track , TVector3 Vertex3D) {
+std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack *track , TVector3 Vertex3D) {
 	float TrackID_pt = track->gMom().Perp();
 	float TrackID_dcatopv = track->gDCA(Vertex3D).Mag();
 	float TrackID_nSigmaKaon = track->nSigmaKaon();
@@ -1659,7 +1659,7 @@ bool StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack
 
 	std::vector<bool> result;result.resize(0);
 	for (int Itr = 0;Itr < TestPDG.size();Itr++){
-		if (fabs(TestPDG[Itr]) == 2212){// Proton
+		if (abs(TestPDG[Itr]) == 2212){// Proton
 			// Test if Proton
 			bool proton_cut = true;
 			if (fabs(TrackID_nSigmaProton) > 3) proton_cut = false;
@@ -1671,7 +1671,7 @@ bool StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack
 			else {result.push_back(false);}
 			
 		}
-		if (fabs(TestPDG[Itr]) == 211){// Pion
+		if (abs(TestPDG[Itr]) == 211){// Pion
 			// Test if Pion
 			bool pion_cut = true;
 			if (fabs(TrackID_nSigmaPion) > 3) pion_cut = false;
@@ -1683,7 +1683,7 @@ bool StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack
 			else {result.push_back(false);}
 			
 		}
-		if (fabs(TestPDG[Itr]) == 321){// Kaon
+		if (abs(TestPDG[Itr]) == 321){// Kaon
 			// Test if Kaon
 			bool kaon_cut = true;
 			if (fabs(TrackID_nSigmaKaon) > 3) kaon_cut = false;

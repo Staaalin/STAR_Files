@@ -73,7 +73,7 @@ private:
 	TVector3 StKFParticleAnalysisMaker::LocAfterTransfer(StPicoPhysicalHelix Track , double Length);
 	double StKFParticleAnalysisMaker::DistanceBetween(TVector3 LA , TVector3 LB);
 	bool StKFParticleAnalysisMaker::IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFParticle , double magnet , double Gen1_DCALim , double Gen2_DCALim);
-	bool StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack *track , TVector3 Vertex3D);
+	std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack *track , TVector3 Vertex3D);
 	Double_t StKFParticleAnalysisMaker::massList(int PID);
 	bool InterfaceCantProcessEvent;
 	int ProtonTrackIndex, PionTrackIndex, KaonTrackIndex;
