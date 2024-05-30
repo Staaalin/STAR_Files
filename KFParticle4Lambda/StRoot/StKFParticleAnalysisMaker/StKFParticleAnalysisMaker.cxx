@@ -1530,8 +1530,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// hadronTree->Fill();
 	}
 	/////////////////////////////////////////////////////////
-	cout<<" "<<endl;
-	cout<<"##"<<endl;
 	return kStOK;
 
 }
