@@ -1165,7 +1165,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			InvariantMass.emplace_back(particle.GetMass());
 			QA_Chi2.emplace_back(particle.GetChi2());
 			QA_Decay_Length.emplace_back(l);
-			QA_DCA_V0_PV.emplace_back(dcav0toPV);
+			QA_DCA_V0_PV.emplace_back(-1);
 			QA_dEdx.emplace_back(-999);
 			QA_nSigmaProton.emplace_back(-999);
 			QA_nSigmaPion.emplace_back(-999);
