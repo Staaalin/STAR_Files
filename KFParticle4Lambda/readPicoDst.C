@@ -93,6 +93,7 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	Int_t istat = 0, i = 1;
 	while(i<=EventsToRun && istat!=2) {
 		//if(i%5000==0){cout << endl; cout << "== Event " << i << " start ==" << endl;}
+		if (i<13900){continue;}// Test
 		chain->Clear();
 		istat = chain->Make(i);
 		if(i%100==0) { // 100
