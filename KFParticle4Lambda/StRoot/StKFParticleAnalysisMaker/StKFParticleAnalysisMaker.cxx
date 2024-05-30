@@ -1661,8 +1661,8 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 	float TrackID_eta_prim = track->pMom().Eta();
 
 	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
-	float pT_trig_lo = 0.2;
-	float pT_trig_hi = 2.0;
+	float pT_trig_lo = 0.2; // 0.2
+	float pT_trig_hi = 2.0; // 10
 	float eta_trig_cut = 1.0;
 
 	std::vector<bool> result;result.resize(0);
