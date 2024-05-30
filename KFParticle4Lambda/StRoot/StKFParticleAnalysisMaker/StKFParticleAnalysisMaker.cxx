@@ -859,7 +859,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 	}
 	// cout<<DaughterParticle.size()<<endl;
-	cout<<"T1";
 
 	Omega_Omegab_Num = 0;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
@@ -1022,7 +1021,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 		if (IfCorrectDaughter == false) {continue;}
 
-		cout<<"T3";
 		//SCHEME 1: reconstruction of V0, the parent particle
 		int iTrack,kTrack;
 		// cout<<"particle.NDaughters() = "<<particle.NDaughters()<<endl;
@@ -1056,7 +1054,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
-		cout<<"T4";
 		// cout<<"Here is good 5"<<endl;
 		StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
@@ -1110,30 +1107,45 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 		
-		cout<<"T5";
+		cout<<"T1";
 		// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		TVector3 xv0, op1, op2;
+		cout<<"T2";
 		double dca1to2 = closestDistance(mTrackI, mTrackK, magnet, Vertex3D, xv0, op1, op2);
+		cout<<"T3";
 		TVector3 pv0 = op1 + op2;
+		cout<<"T4";
 		TVector3 xv0toPV = xv0 - Vertex3D;
+		cout<<"T5";
 		double rdotp = xv0toPV.Dot(pv0);
+		cout<<"T6";
 		double dcav0toPV = rdotp*rdotp/pv0.Mag2();
+		cout<<"T7";
 		dcav0toPV = sqrt(xv0toPV.Mag2() - dcav0toPV);
+		cout<<"T8";
 		double v0decaylength = xv0toPV.Mag();
+		cout<<"T9";
 		double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();// cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
+		cout<<"T10";
 		//SCHEME 2:
 		KFParticle tempParticle(particle);
+		cout<<"T11";
 		float l,dl;
+		cout<<"T12";
 		KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
+		cout<<"T13";
 		// pv += particle;
 		tempParticle.SetProductionVertex(pv);
+		cout<<"T14";
 		tempParticle.GetDecayLength(l, dl);// cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
+		cout<<"T15";
 		if (particle.GetPDG() == OmegaPdg ) { OmegaVec.push_back(particle);Omega_Omegab_Num ++;}
 		if (particle.GetPDG() == -1*OmegaPdg ) {Omega_Omegab_Num ++;}
 		if (particle.GetPDG() == LambdaPdg) {LambdaVec.push_back(particle);}
+		cout<<"T16";
 		ParticleVec.push_back(particle);
-		cout<<"T6";
+		cout<<"T17";
 
 		if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg))) {
 
@@ -1182,7 +1194,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// cout<<"CrefMult:"<<CrefMult<<endl;
 		// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 
-		cout<<"T7";
 		hLN_M->Fill(particle.GetMass(),H_ProcessEventNum);
 		// cout<<"Here is good 1"<<endl;
 
@@ -1203,7 +1214,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		StLambdaDecayPair TmpLambdaDecayPair(p4Pair, p4Proton, ProtonTrackIndex, PionTrackIndex, (eLambda==0), dmass);
 		KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 	} // End loop over KFParticles
-	cout<<"T8";
 
 
 
