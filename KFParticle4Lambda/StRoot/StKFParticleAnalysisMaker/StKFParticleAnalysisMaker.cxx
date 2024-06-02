@@ -1360,9 +1360,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			{
 				beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
 				m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
-
-				float betaTheroy = 1/pow(pow(BPDGListMass[Jtr]/(track->gMom().Mag()),2)+1,0.5);
-				float nSIgmaTOF = (1/beta-1/betaTheroy)/0.013;
 				H_Pt_m2->Fill(track->gMom().Mag(),m2);
 				if (fabs((pow(track->gMom().Mag(),2) - pkaon.Mag2())/pkaon.Mag2()) > 0.01) {cout<<"Different Value"<<endl;}
 			}
