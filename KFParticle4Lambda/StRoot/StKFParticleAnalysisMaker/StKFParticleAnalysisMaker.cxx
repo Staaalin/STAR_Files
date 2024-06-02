@@ -260,6 +260,10 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
+	H_Pt_m2 = new TH2D("H_Pt_m2","m2 vs. p_t",     400,0,10,500,-0.5,2);
+	H_Pt_m2->GetXaxis()->SetTitle("p_t [GeV]");
+	H_Pt_m2->GetYaxis()->SetTitle("m2 [Gev^2]");
+
 	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
 
 	H_All_nSigmaKaon_y   = new TH2F("H_All_nSigmaKaon_y"  ,"nSigmaKaon vs. y for all tracks"  ,200,-2,2,200,0,6);
@@ -434,6 +438,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// H_m2_KSigma_S->Write();
 	H_All_nSigmaKaon_y  ->Write();
 	H_All_nSigmaKaon_eta->Write();
+	H_Pt_m2->Write();
 
 	hEventNum->Write();
 	
@@ -1334,6 +1339,34 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack = true;QA_IfConfuse.emplace_back(1);}
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
+		// Raw Data TOF
+		bool RawTOF = true;
+		if (RawTOF){
+			bool hasTOF = false;
+			int tofindex = track->bTofPidTraitsIndex();
+			float m2 = -999.;
+			float beta = -999.;
+			if (tofindex >= 0) 
+			{
+				int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
+				float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
+				float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
+				// hgbtofYlocal->Fill(BtofYLocal);
+				if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+			}
+			StPicoPhysicalHelix helix = track->helix(magnet);
+			TVector3 pkaon = helix.momentum(magnet*kilogauss);
+			if (hasTOF)
+			{
+				beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
+				m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
+
+				float betaTheroy = 1/pow(pow(BPDGListMass[Jtr]/(track->gMom().Mag()),2)+1,0.5);
+				float nSIgmaTOF = (1/beta-1/betaTheroy)/0.013;
+				H_Pt_m2->Fill(track->gMom().Mag(),m2);
+				if (fabs((pow(track->gMom().Mag(),2) - pkaon.Mag2())/pkaon.Mag2()) > 0.01) {cout<<"Different Value"<<endl;}
+			}
+		}
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
