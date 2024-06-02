@@ -260,7 +260,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
-	H_Pt_m2 = new TH2D("H_Pt_m2","m2 vs. p_t",     400,0,10,500,-0.5,2);
+	H_Pt_m2 = new TH2F("H_Pt_m2","m2 vs. p_t",     400,0,10,500,-0.5,2);
 	H_Pt_m2->GetXaxis()->SetTitle("p_t [GeV]");
 	H_Pt_m2->GetYaxis()->SetTitle("m2 [Gev^2]");
 
