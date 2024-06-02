@@ -408,7 +408,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	///////////////////
-	hadronTree ->Write();
+	// hadronTree ->Write();
 
 	//-- Used for  test --
 	// hNRefMult ->Write();  
@@ -424,8 +424,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hcentRefM ->Write();
 	// hcentRefW ->Write();
 
-	// hdEdx_pQ->Write();
-	// hdEdx_pQ_1cut->Write();
+	hdEdx_pQ->Write();
+	hdEdx_pQ_1cut->Write();
 	// hdEdx_pQ_2cut->Write();
 
 	// hLN_M->Write();
@@ -436,8 +436,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	// H_m2_KSigma_L->Write();
 	// H_m2_KSigma_S->Write();
-	H_All_nSigmaKaon_y  ->Write();
-	H_All_nSigmaKaon_eta->Write();
+	// H_All_nSigmaKaon_y  ->Write();
+	// H_All_nSigmaKaon_eta->Write();
 	H_Pt_m2->Write();
 
 	hEventNum->Write();
@@ -1231,7 +1231,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		track_index.push_back(iTrack);
 		// H_All_nSigmaKaon_y->Fill();
 
-		hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
 
 		// track info
 		float p = track->gMom().Mag();
@@ -1361,7 +1360,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 				beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
 				m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
 				H_Pt_m2->Fill(track->gMom().Mag(),m2);
-				if (fabs((pow(track->gMom().Mag(),2) - pkaon.Mag2())/pkaon.Mag2()) > 0.01) {cout<<"Different Value"<<endl;}
+				if (fabs(1/beta-1)<0.03) {
+					hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+				}
 			}
 		}
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
