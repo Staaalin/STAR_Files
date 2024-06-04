@@ -1502,7 +1502,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				else if (2.1 <= pt && pt < 2.2) {H_m2_nSigmaKaon_2p1_2p2->Fill(m2,track->nSigmaKaon());}
 				else if (2.2 <= pt && pt < 2.3) {H_m2_nSigmaKaon_2p2_2p3->Fill(m2,track->nSigmaKaon());}
 				else if (2.3 <= pt && pt < 2.4) {H_m2_nSigmaKaon_2p3_2p4->Fill(m2,track->nSigmaKaon());}
-				else    (2.4 <= pt && pt < 2.5) {H_m2_nSigmaKaon_2p4_2p5->Fill(m2,track->nSigmaKaon());}
+				else if (2.4 <= pt && pt < 2.5) {H_m2_nSigmaKaon_2p4_2p5->Fill(m2,track->nSigmaKaon());}
 				if (fabs(1/beta-1)<0.03) {
 					hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
 				}
