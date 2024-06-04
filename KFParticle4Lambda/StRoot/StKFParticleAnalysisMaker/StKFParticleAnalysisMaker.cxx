@@ -264,6 +264,102 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_Pt_m2->GetXaxis()->SetTitle("p_t [GeV]");
 	H_Pt_m2->GetYaxis()->SetTitle("m2 [Gev^2]");
 
+	H_Pt_nSigmaKaon = new TH2F("H_Pt_nSigmaKaon","nSigmaKaon vs. p_t",     400,0,10,500,-6,10);
+	H_Pt_nSigmaKaon->GetXaxis()->SetTitle("p_t [GeV]");
+	H_Pt_nSigmaKaon->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_0p2_0p3 = new TH2F("H_m2_nSigmaKaon_0p2_0p3","nSigmaKaon vs. m2 0.2 < p_t < 0.3 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_0p2_0p3->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_0p2_0p3->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_0p3_0p4 = new TH2F("H_m2_nSigmaKaon_0p3_0p4","nSigmaKaon vs. m2 0.3 < p_t < 0.4 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_0p3_0p4->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_0p3_0p4->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_0p4_0p5 = new TH2F("H_m2_nSigmaKaon_0p4_0p5","nSigmaKaon vs. m2 0.4 < p_t < 0.5 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_0p4_0p5->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_0p4_0p5->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_0p5_0p6 = new TH2F("H_m2_nSigmaKaon_0p5_0p6","nSigmaKaon vs. m2 0.5 < p_t < 0.6 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_0p5_0p6->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_0p5_0p6->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_0p6_0p7 = new TH2F("H_m2_nSigmaKaon_0p6_0p7","nSigmaKaon vs. m2 0.6 < p_t < 0.7 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_0p6_0p7->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_0p6_0p7->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_0p7_0p8 = new TH2F("H_m2_nSigmaKaon_0p7_0p8","nSigmaKaon vs. m2 0.7 < p_t < 0.8 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_0p7_0p8->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_0p7_0p8->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_0p8_0p9 = new TH2F("H_m2_nSigmaKaon_0p8_0p9","nSigmaKaon vs. m2 0.8 < p_t < 0.9 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_0p8_0p9->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_0p8_0p9->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_0p9_1p0 = new TH2F("H_m2_nSigmaKaon_0p9_1p0","nSigmaKaon vs. m2 0.9 < p_t < 1.0 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_0p9_1p0->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_0p9_1p0->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_1p0_1p1 = new TH2F("H_m2_nSigmaKaon_1p0_1p1","nSigmaKaon vs. m2 1.0 < p_t < 1.1 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_1p0_1p1->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_1p0_1p1->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_1p1_1p2 = new TH2F("H_m2_nSigmaKaon_1p1_1p2","nSigmaKaon vs. m2 1.1 < p_t < 1.2 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_1p1_1p2->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_1p1_1p2->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_1p2_1p3 = new TH2F("H_m2_nSigmaKaon_1p2_1p3","nSigmaKaon vs. m2 1.2 < p_t < 1.3 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_1p2_1p3->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_1p2_1p3->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_1p3_1p4 = new TH2F("H_m2_nSigmaKaon_1p3_1p4","nSigmaKaon vs. m2 1.3 < p_t < 1.4 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_1p3_1p4->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_1p3_1p4->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_1p4_1p5 = new TH2F("H_m2_nSigmaKaon_1p4_1p5","nSigmaKaon vs. m2 1.4 < p_t < 1.5 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_1p4_1p5->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_1p4_1p5->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_1p5_1p6 = new TH2F("H_m2_nSigmaKaon_1p5_1p6","nSigmaKaon vs. m2 1.5 < p_t < 1.6 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_1p5_1p6->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_1p5_1p6->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_1p6_1p7 = new TH2F("H_m2_nSigmaKaon_1p6_1p7","nSigmaKaon vs. m2 1.6 < p_t < 1.7 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_1p6_1p7->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_1p6_1p7->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_1p7_1p8 = new TH2F("H_m2_nSigmaKaon_1p7_1p8","nSigmaKaon vs. m2 1.7 < p_t < 1.8 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_1p7_1p8->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_1p7_1p8->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_1p8_1p9 = new TH2F("H_m2_nSigmaKaon_1p8_1p9","nSigmaKaon vs. m2 1.8 < p_t < 1.9 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_1p8_1p9->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_1p8_1p9->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_1p9_2p0 = new TH2F("H_m2_nSigmaKaon_1p9_2p0","nSigmaKaon vs. m2 1.9 < p_t < 2.0 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_1p9_2p0->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_1p9_2p0->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_2p0_2p1 = new TH2F("H_m2_nSigmaKaon_2p0_2p1","nSigmaKaon vs. m2 2.0 < p_t < 2.1 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_2p0_2p1->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_2p0_2p1->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_2p1_2p2 = new TH2F("H_m2_nSigmaKaon_2p1_2p2","nSigmaKaon vs. m2 2.1 < p_t < 2.2 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_2p1_2p2->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_2p1_2p2->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_2p2_2p3 = new TH2F("H_m2_nSigmaKaon_2p2_2p3","nSigmaKaon vs. m2 2.2 < p_t < 2.3 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_2p2_2p3->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_2p2_2p3->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_2p3_2p4 = new TH2F("H_m2_nSigmaKaon_2p3_2p4","nSigmaKaon vs. m2 2.3 < p_t < 2.4 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_2p3_2p4->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_2p3_2p4->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_m2_nSigmaKaon_2p4_2p5 = new TH2F("H_m2_nSigmaKaon_2p4_2p5","nSigmaKaon vs. m2 2.4 < p_t < 2.5 GeV",320,-0.5,2,320,-6,10);
+	H_m2_nSigmaKaon_2p4_2p5->GetXaxis()->SetTitle("m2 [Gev^2]");
+	H_m2_nSigmaKaon_2p4_2p5->GetYaxis()->SetTitle("nSigmaKaon");
+
 	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
 
 	H_All_nSigmaKaon_y   = new TH2F("H_All_nSigmaKaon_y"  ,"nSigmaKaon vs. y for all tracks"  ,200,-2,2,200,0,6);
@@ -439,6 +535,30 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// H_All_nSigmaKaon_y  ->Write();
 	// H_All_nSigmaKaon_eta->Write();
 	H_Pt_m2->Write();
+	H_Pt_nSigmaKaon->Write();
+	H_m2_nSigmaKaon_0p2_0p3->Write();
+	H_m2_nSigmaKaon_0p3_0p4->Write();
+	H_m2_nSigmaKaon_0p4_0p5->Write();
+	H_m2_nSigmaKaon_0p5_0p6->Write();
+	H_m2_nSigmaKaon_0p6_0p7->Write();
+	H_m2_nSigmaKaon_0p7_0p8->Write();
+	H_m2_nSigmaKaon_0p8_0p9->Write();
+	H_m2_nSigmaKaon_0p9_1p0->Write();
+	H_m2_nSigmaKaon_1p0_1p1->Write();
+	H_m2_nSigmaKaon_1p1_1p2->Write();
+	H_m2_nSigmaKaon_1p2_1p3->Write();
+	H_m2_nSigmaKaon_1p3_1p4->Write();
+	H_m2_nSigmaKaon_1p4_1p5->Write();
+	H_m2_nSigmaKaon_1p5_1p6->Write();
+	H_m2_nSigmaKaon_1p6_1p7->Write();
+	H_m2_nSigmaKaon_1p7_1p8->Write();
+	H_m2_nSigmaKaon_1p8_1p9->Write();
+	H_m2_nSigmaKaon_1p9_2p0->Write();
+	H_m2_nSigmaKaon_2p0_2p1->Write();
+	H_m2_nSigmaKaon_2p1_2p2->Write();
+	H_m2_nSigmaKaon_2p2_2p3->Write();
+	H_m2_nSigmaKaon_2p3_2p4->Write();
+	H_m2_nSigmaKaon_2p4_2p5->Write();
 
 	hEventNum->Write();
 	
@@ -449,25 +569,25 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// }
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
-	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
-		int Jtr = Itr - PDG2NameSize;
+	// for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+	// 	int Jtr = Itr - PDG2NameSize;
 
-		H_rapidity[Jtr] -> Write();
+	// 	H_rapidity[Jtr] -> Write();
 
-		H_P[Jtr] -> Write();
+	// 	H_P[Jtr] -> Write();
 
-		H_Pt[Jtr] -> Write();
-		H_dEdx_p[Jtr]->Write();
-		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
-			H_Pt_nSigma[Jtr][Ktr]->Write();
-		}
-		H_DCAtoPV[Jtr]->Write();
-		H_eta[Jtr]->Write();
-		H_nHitsFit_p[Jtr]->Write();
-		H_nHitsFit_nHitsMax[Jtr]->Write();
-		H_ndEdx[Jtr]->Write();
-		H_nSigmaTOF_p[Jtr]->Write();
-	}
+	// 	H_Pt[Jtr] -> Write();
+	// 	H_dEdx_p[Jtr]->Write();
+	// 	for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
+	// 		H_Pt_nSigma[Jtr][Ktr]->Write();
+	// 	}
+	// 	H_DCAtoPV[Jtr]->Write();
+	// 	H_eta[Jtr]->Write();
+	// 	H_nHitsFit_p[Jtr]->Write();
+	// 	H_nHitsFit_nHitsMax[Jtr]->Write();
+	// 	H_ndEdx[Jtr]->Write();
+	// 	H_nSigmaTOF_p[Jtr]->Write();
+	// }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	return;
@@ -1360,11 +1480,35 @@ Int_t StKFParticleAnalysisMaker::Make()
 				beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
 				m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
 				H_Pt_m2->Fill(track->gMom().Mag(),m2);
+				if      (0.2 <= pt && pt < 0.3) {H_m2_nSigmaKaon_0p2_0p3->Fill(m2,track->nSigmaKaon());}
+				else if (0.3 <= pt && pt < 0.4) {H_m2_nSigmaKaon_0p3_0p4->Fill(m2,track->nSigmaKaon());}
+				else if (0.4 <= pt && pt < 0.5) {H_m2_nSigmaKaon_0p4_0p5->Fill(m2,track->nSigmaKaon());}
+				else if (0.5 <= pt && pt < 0.6) {H_m2_nSigmaKaon_0p5_0p6->Fill(m2,track->nSigmaKaon());}
+				else if (0.6 <= pt && pt < 0.7) {H_m2_nSigmaKaon_0p6_0p7->Fill(m2,track->nSigmaKaon());}
+				else if (0.7 <= pt && pt < 0.8) {H_m2_nSigmaKaon_0p7_0p8->Fill(m2,track->nSigmaKaon());}
+				else if (0.8 <= pt && pt < 0.9) {H_m2_nSigmaKaon_0p8_0p9->Fill(m2,track->nSigmaKaon());}
+				else if (0.9 <= pt && pt < 1.0) {H_m2_nSigmaKaon_0p9_1p0->Fill(m2,track->nSigmaKaon());}
+				else if (1.0 <= pt && pt < 1.1) {H_m2_nSigmaKaon_1p0_1p1->Fill(m2,track->nSigmaKaon());}
+				else if (1.1 <= pt && pt < 1.2) {H_m2_nSigmaKaon_1p1_1p2->Fill(m2,track->nSigmaKaon());}
+				else if (1.2 <= pt && pt < 1.3) {H_m2_nSigmaKaon_1p2_1p3->Fill(m2,track->nSigmaKaon());}
+				else if (1.3 <= pt && pt < 1.4) {H_m2_nSigmaKaon_1p3_1p4->Fill(m2,track->nSigmaKaon());}
+				else if (1.4 <= pt && pt < 1.5) {H_m2_nSigmaKaon_1p4_1p5->Fill(m2,track->nSigmaKaon());}
+				else if (1.5 <= pt && pt < 1.6) {H_m2_nSigmaKaon_1p5_1p6->Fill(m2,track->nSigmaKaon());}
+				else if (1.6 <= pt && pt < 1.7) {H_m2_nSigmaKaon_1p6_1p7->Fill(m2,track->nSigmaKaon());}
+				else if (1.7 <= pt && pt < 1.8) {H_m2_nSigmaKaon_1p7_1p8->Fill(m2,track->nSigmaKaon());}
+				else if (1.8 <= pt && pt < 1.9) {H_m2_nSigmaKaon_1p8_1p9->Fill(m2,track->nSigmaKaon());}
+				else if (1.9 <= pt && pt < 2.0) {H_m2_nSigmaKaon_1p9_2p0->Fill(m2,track->nSigmaKaon());}
+				else if (2.0 <= pt && pt < 2.1) {H_m2_nSigmaKaon_2p0_2p1->Fill(m2,track->nSigmaKaon());}
+				else if (2.1 <= pt && pt < 2.2) {H_m2_nSigmaKaon_2p1_2p2->Fill(m2,track->nSigmaKaon());}
+				else if (2.2 <= pt && pt < 2.3) {H_m2_nSigmaKaon_2p2_2p3->Fill(m2,track->nSigmaKaon());}
+				else if (2.3 <= pt && pt < 2.4) {H_m2_nSigmaKaon_2p3_2p4->Fill(m2,track->nSigmaKaon());}
+				else    (2.4 <= pt && pt < 2.5) {H_m2_nSigmaKaon_2p4_2p5->Fill(m2,track->nSigmaKaon());}
 				if (fabs(1/beta-1)<0.03) {
 					hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
 				}
 			}
 		}
+		H_Pt_nSigmaKaon->Fill(track->gMom().Mag(),track->nSigmaKaon());
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
