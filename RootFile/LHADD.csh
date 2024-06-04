@@ -1,4 +1,11 @@
 #!/bin/csh
+echo "准备执行"
+sleep 1000
+echo "执行"
+
+condor_q > condor.log
+# condor_rm svianping
+# sleep 10
 
 rm -rf /star/data01/pwg/svianping/HADD/
 mkdir /star/data01/pwg/svianping/HADD/
