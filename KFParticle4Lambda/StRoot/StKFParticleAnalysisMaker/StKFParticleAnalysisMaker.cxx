@@ -268,7 +268,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_Pt_nSigmaKaon->GetXaxis()->SetTitle("p_t [GeV]");
 	H_Pt_nSigmaKaon->GetYaxis()->SetTitle("nSigmaKaon");
 
-	H_Pt_nSigmaKaonTOF = new TH2F("H_Pt_nSigmaKaonTOF","nSigmaKaonTOF vs. p_t",     400,0,10,800,10,10);
+	H_Pt_nSigmaKaonTOF = new TH2F("H_Pt_nSigmaKaonTOF","nSigmaKaonTOF vs. p_t",     400,0,10,800,-10,10);
 	H_Pt_nSigmaKaonTOF->GetXaxis()->SetTitle("p_t [GeV]");
 	H_Pt_nSigmaKaonTOF->GetYaxis()->SetTitle("nSigmaKaonTOF");
 
@@ -1601,7 +1601,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
 				H_Pt_m2->Fill(track->gMom().Mag(),m2);
 				H_Pt_nSigmaKaonTOF->Fill(track->gMom().Mag(),(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon());
-				cout<<"nsigmaTOF = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
+				// cout<<"nsigmaTOF = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
 				if      (0.2 <= pt && pt < 0.3) {H_m2_nSigmaKaon_0p2_0p3->Fill(m2,track->nSigmaKaon());H_nSigmaKaonTOF_nSigmaKaon_0p2_0p3->Fill((mPicoDst->btofPidTraits(tofindex))->nSigmaKaon(),track->nSigmaKaon());}
 				else if (0.3 <= pt && pt < 0.4) {H_m2_nSigmaKaon_0p3_0p4->Fill(m2,track->nSigmaKaon());H_nSigmaKaonTOF_nSigmaKaon_0p3_0p4->Fill((mPicoDst->btofPidTraits(tofindex))->nSigmaKaon(),track->nSigmaKaon());}
 				else if (0.4 <= pt && pt < 0.5) {H_m2_nSigmaKaon_0p4_0p5->Fill(m2,track->nSigmaKaon());H_nSigmaKaonTOF_nSigmaKaon_0p4_0p5->Fill((mPicoDst->btofPidTraits(tofindex))->nSigmaKaon(),track->nSigmaKaon());}
