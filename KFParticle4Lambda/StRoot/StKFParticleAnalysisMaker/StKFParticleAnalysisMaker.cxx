@@ -268,7 +268,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_Pt_nSigmaKaon->GetXaxis()->SetTitle("p_t [GeV]");
 	H_Pt_nSigmaKaon->GetYaxis()->SetTitle("nSigmaKaon");
 
-	H_Pt_nSigmaKaonTOF = new TH2F("H_Pt_nSigmaKaonTOF","nSigmaKaonTOF vs. p_t",     400,0,10,800,-10,10);
+	H_Pt_nSigmaKaonTOF = new TH2F("H_Pt_nSigmaKaonTOF","nSigmaKaonTOF vs. p_t",     400,0,10,800,10,10);
 	H_Pt_nSigmaKaonTOF->GetXaxis()->SetTitle("p_t [GeV]");
 	H_Pt_nSigmaKaonTOF->GetYaxis()->SetTitle("nSigmaKaonTOF");
 
