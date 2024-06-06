@@ -150,6 +150,7 @@ private:
 	TH2F *H_Pt_nSigma[PDG2NameSize2][PDG2NameSize3];
 	TH2F *H_Pt_m2;
 	TH2F *H_Pt_nSigmaKaon;
+	TH2F *H_Pt_nSigmaKaonTOF;
 	TH2F *H_m2_nSigmaKaon_0p2_0p3;
 	TH2F *H_m2_nSigmaKaon_0p3_0p4;
 	TH2F *H_m2_nSigmaKaon_0p4_0p5;
@@ -173,6 +174,30 @@ private:
 	TH2F *H_m2_nSigmaKaon_2p2_2p3;
 	TH2F *H_m2_nSigmaKaon_2p3_2p4;
 	TH2F *H_m2_nSigmaKaon_2p4_2p5;
+	
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_0p2_0p3;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_0p3_0p4;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_0p4_0p5;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_0p5_0p6;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_0p6_0p7;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_0p7_0p8;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_0p8_0p9;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_0p9_1p0;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_1p0_1p1;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_1p1_1p2;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_1p2_1p3;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_1p3_1p4;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_1p4_1p5;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_1p5_1p6;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_1p6_1p7;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_1p7_1p8;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_1p8_1p9;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_1p9_2p0;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_2p0_2p1;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_2p1_2p2;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_2p2_2p3;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_2p3_2p4;
+	TH2F *H_nSigmaKaonTOF_nSigmaKaon_2p4_2p5;
 	TH2F *H_m2_KSigma_S;
 	TH2F *H_m2_KSigma_L;
 	TH2F *H_All_nSigmaKaon_y;
