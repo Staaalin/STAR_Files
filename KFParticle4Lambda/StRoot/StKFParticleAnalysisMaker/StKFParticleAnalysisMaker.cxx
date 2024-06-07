@@ -1639,8 +1639,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 					//// For Kaon
 					if (abs(PDGList[Itr])==321) {
 						if (
-							( ((0.026 <= m2)&&(m2 <= 0.441)) || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3) ) == false
-							)
+							(
+								((0.026 <= m2)&&(m2 <= 0.441))
+								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
+							) == false
+						)
 						{continue;}
 					}
 					////
