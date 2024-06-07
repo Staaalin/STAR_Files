@@ -1640,7 +1640,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					if (abs(PDGList[Itr])==321) {
 						if (
 							(
-								((0.123 <= m2)&&(m2 <= 0.358))
+								((0.196 <= m2)&&(m2 <= 0.292))
 								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
 							) == false
 						)
