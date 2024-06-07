@@ -599,7 +599,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	///////////////////
-	// hadronTree ->Write();
+	hadronTree ->Write();
 
 	//-- Used for  test --
 	// hNRefMult ->Write();  
@@ -615,8 +615,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hcentRefM ->Write();
 	// hcentRefW ->Write();
 
-	hdEdx_pQ->Write();
-	hdEdx_pQ_1cut->Write();
+	// hdEdx_pQ->Write();
+	// hdEdx_pQ_1cut->Write();
 	// hdEdx_pQ_2cut->Write();
 
 	// hLN_M->Write();
@@ -629,56 +629,56 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// H_m2_KSigma_S->Write();
 	// H_All_nSigmaKaon_y  ->Write();
 	// H_All_nSigmaKaon_eta->Write();
-	H_Pt_m2->Write();
-	H_Pt_nSigmaKaon->Write();
-	H_Pt_nSigmaKaonTOF->Write();
-	H_m2_nSigmaKaon_0p2_0p3->Write();
-	H_m2_nSigmaKaon_0p3_0p4->Write();
-	H_m2_nSigmaKaon_0p4_0p5->Write();
-	H_m2_nSigmaKaon_0p5_0p6->Write();
-	H_m2_nSigmaKaon_0p6_0p7->Write();
-	H_m2_nSigmaKaon_0p7_0p8->Write();
-	H_m2_nSigmaKaon_0p8_0p9->Write();
-	H_m2_nSigmaKaon_0p9_1p0->Write();
-	H_m2_nSigmaKaon_1p0_1p1->Write();
-	H_m2_nSigmaKaon_1p1_1p2->Write();
-	H_m2_nSigmaKaon_1p2_1p3->Write();
-	H_m2_nSigmaKaon_1p3_1p4->Write();
-	H_m2_nSigmaKaon_1p4_1p5->Write();
-	H_m2_nSigmaKaon_1p5_1p6->Write();
-	H_m2_nSigmaKaon_1p6_1p7->Write();
-	H_m2_nSigmaKaon_1p7_1p8->Write();
-	H_m2_nSigmaKaon_1p8_1p9->Write();
-	H_m2_nSigmaKaon_1p9_2p0->Write();
-	H_m2_nSigmaKaon_2p0_2p1->Write();
-	H_m2_nSigmaKaon_2p1_2p2->Write();
-	H_m2_nSigmaKaon_2p2_2p3->Write();
-	H_m2_nSigmaKaon_2p3_2p4->Write();
-	H_m2_nSigmaKaon_2p4_2p5->Write();
+	// H_Pt_m2->Write();
+	// H_Pt_nSigmaKaon->Write();
+	// H_Pt_nSigmaKaonTOF->Write();
+	// H_m2_nSigmaKaon_0p2_0p3->Write();
+	// H_m2_nSigmaKaon_0p3_0p4->Write();
+	// H_m2_nSigmaKaon_0p4_0p5->Write();
+	// H_m2_nSigmaKaon_0p5_0p6->Write();
+	// H_m2_nSigmaKaon_0p6_0p7->Write();
+	// H_m2_nSigmaKaon_0p7_0p8->Write();
+	// H_m2_nSigmaKaon_0p8_0p9->Write();
+	// H_m2_nSigmaKaon_0p9_1p0->Write();
+	// H_m2_nSigmaKaon_1p0_1p1->Write();
+	// H_m2_nSigmaKaon_1p1_1p2->Write();
+	// H_m2_nSigmaKaon_1p2_1p3->Write();
+	// H_m2_nSigmaKaon_1p3_1p4->Write();
+	// H_m2_nSigmaKaon_1p4_1p5->Write();
+	// H_m2_nSigmaKaon_1p5_1p6->Write();
+	// H_m2_nSigmaKaon_1p6_1p7->Write();
+	// H_m2_nSigmaKaon_1p7_1p8->Write();
+	// H_m2_nSigmaKaon_1p8_1p9->Write();
+	// H_m2_nSigmaKaon_1p9_2p0->Write();
+	// H_m2_nSigmaKaon_2p0_2p1->Write();
+	// H_m2_nSigmaKaon_2p1_2p2->Write();
+	// H_m2_nSigmaKaon_2p2_2p3->Write();
+	// H_m2_nSigmaKaon_2p3_2p4->Write();
+	// H_m2_nSigmaKaon_2p4_2p5->Write();
 
-	H_nSigmaKaonTOF_nSigmaKaon_0p2_0p3->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_0p3_0p4->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_0p4_0p5->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_0p5_0p6->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_0p6_0p7->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_0p7_0p8->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_0p8_0p9->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_0p9_1p0->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_1p0_1p1->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_1p1_1p2->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_1p2_1p3->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_1p3_1p4->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_1p4_1p5->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_1p5_1p6->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_1p6_1p7->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_1p7_1p8->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_1p8_1p9->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_1p9_2p0->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_2p0_2p1->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_2p1_2p2->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_2p2_2p3->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_2p3_2p4->Write();
-	H_nSigmaKaonTOF_nSigmaKaon_2p4_2p5->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_0p2_0p3->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_0p3_0p4->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_0p4_0p5->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_0p5_0p6->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_0p6_0p7->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_0p7_0p8->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_0p8_0p9->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_0p9_1p0->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_1p0_1p1->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_1p1_1p2->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_1p2_1p3->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_1p3_1p4->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_1p4_1p5->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_1p5_1p6->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_1p6_1p7->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_1p7_1p8->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_1p8_1p9->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_1p9_2p0->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_2p0_2p1->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_2p1_2p2->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_2p2_2p3->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_2p3_2p4->Write();
+	// H_nSigmaKaonTOF_nSigmaKaon_2p4_2p5->Write();
 
 	hEventNum->Write();
 	
@@ -1580,10 +1580,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
 		// Raw Data TOF
 		bool RawTOF = true;
+		bool hasTOF = false;
+		float m2 = -999.;
 		if (RawTOF){
-			bool hasTOF = false;
 			int tofindex = track->bTofPidTraitsIndex();
-			float m2 = -999.;
 			float beta = -999.;
 			if (tofindex >= 0) 
 			{
@@ -1636,6 +1636,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (PDGBool[Ktr] == true) {
 				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 					if (NeedPDG[Ktr] != PDGList[Itr]){continue;}
+					//// For Kaon
+					if (abs(PDGList[Itr])==321) {
+						if (
+							( ((0.026 <= m2)&&(m2 <= 0.441)) || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3) ) == false
+							)
+						{continue;}
+					}
+					////
 					int Jtr = Itr - PDG2NameSize;
 					H_Pt[Jtr] -> Fill(pt);
 					H_P[Jtr] -> Fill(p);
