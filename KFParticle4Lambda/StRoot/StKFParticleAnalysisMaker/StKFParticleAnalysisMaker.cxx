@@ -272,6 +272,22 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_Pt_nSigmaKaonTOF->GetXaxis()->SetTitle("p_t [GeV]");
 	H_Pt_nSigmaKaonTOF->GetYaxis()->SetTitle("nSigmaKaonTOF");
 
+	H_eta_nSigmaKaon = new TH2F("H_eta_nSigmaKaon","nSigmaKaon vs. eta",     200,-2,2,200,-8,8);
+	H_eta_nSigmaKaon->GetXaxis()->SetTitle("eta");
+	H_eta_nSigmaKaon->GetYaxis()->SetTitle("nSigmaKaon");
+
+	H_eta_nSigmaPion = new TH2F("H_eta_nSigmaPion","nSigmaPion vs. eta",     200,-2,2,200,-8,8);
+	H_eta_nSigmaPion->GetXaxis()->SetTitle("eta");
+	H_eta_nSigmaPion->GetYaxis()->SetTitle("nSigmaPion");
+	
+	H_eta_nSigmaProton = new TH2F("H_eta_nSigmaProton","nSigmaProton vs. eta",     200,-2,2,200,-8,8);
+	H_eta_nSigmaProton->GetXaxis()->SetTitle("eta");
+	H_eta_nSigmaProton->GetYaxis()->SetTitle("nSigmaProton");
+	
+	H_eta_m2 = new TH2F("H_eta_m2","m2 vs. eta",     200,-2,2,200,-0.5,2);
+	H_eta_m2->GetXaxis()->SetTitle("eta");
+	H_eta_m2->GetYaxis()->SetTitle("m2 [GeV^2]");
+
 	H_m2_nSigmaKaon_0p2_0p3 = new TH2F("H_m2_nSigmaKaon_0p2_0p3","nSigmaKaon vs. m2 0.2 < p_t < 0.3 GeV",320,-0.5,2,500,-10,10);
 	H_m2_nSigmaKaon_0p2_0p3->GetXaxis()->SetTitle("m2 [Gev^2]");
 	H_m2_nSigmaKaon_0p2_0p3->GetYaxis()->SetTitle("nSigmaKaon");
@@ -735,6 +751,11 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// H_nSigmaKaonTOF_nSigmaKaon_2p2_2p3->Write();
 	// H_nSigmaKaonTOF_nSigmaKaon_2p3_2p4->Write();
 	// H_nSigmaKaonTOF_nSigmaKaon_2p4_2p5->Write();
+
+	H_eta_nSigmaKaon  ->Write();
+	H_eta_nSigmaPion  ->Write();
+	H_eta_nSigmaProton->Write();
+	H_eta_m2          ->Write();
 
 	hEventNum->Write();
 	
@@ -1695,6 +1716,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 		H_Pt_nSigmaKaon->Fill(track->gMom().Mag(),track->nSigmaKaon());
+		H_eta_nSigmaKaon  ->Fill(track->pMom().Eta(),track->nSigmaKaon());
+		H_eta_nSigmaPion  ->Fill(track->pMom().Eta(),track->nSigmaPion());
+		H_eta_nSigmaProton->Fill(track->pMom().Eta(),track->nSigmaProton());
+		H_eta_m2          ->Fill(track->pMom().Eta(),m2);
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
