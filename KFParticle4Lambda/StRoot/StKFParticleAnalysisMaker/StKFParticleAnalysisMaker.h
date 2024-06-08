@@ -143,6 +143,9 @@ private:
 	TH1F *H_DCAtoPV[PDG2NameSize2];
 	TH1F *H_eta[PDG2NameSize2];
 	TH2F *H_y_Pt[PDG2NameSize2];
+	TH2F *H_y_m2[PDG2NameSize2];
+	TH2F *H_y_nSigmaPion[PDG2NameSize2];
+	TH2F *H_y_nSigmaElectron[PDG2NameSize2];
 	TH2F *H_nHitsFit_p[PDG2NameSize2];
 	TH1F *H_nHitsFit_nHitsMax[PDG2NameSize2];
 	TH1F *H_ndEdx[PDG2NameSize2];

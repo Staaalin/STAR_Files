@@ -532,9 +532,30 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName1 = "H_y_Pt_";
 		HistName2 = "The y vs. momentum_t of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_Pt[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,10);
+		H_y_Pt[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,5);
 		H_y_Pt[Jtr]->GetXaxis()->SetTitle("y");
 		H_y_Pt[Jtr]->GetYaxis()->SetTitle("Pt [GeV]");
+
+		HistName1 = "H_y_m2_";
+		HistName2 = "The y vs. m2 of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_y_m2[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,1);
+		H_y_m2[Jtr]->GetXaxis()->SetTitle("y");
+		H_y_m2[Jtr]->GetYaxis()->SetTitle("m^2 [GeV^2]");
+
+		HistName1 = "H_y_nSigmaPion_";
+		HistName2 = "The y vs. nSigmaPion of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_y_nSigmaPion[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+		H_y_nSigmaPion[Jtr]->GetXaxis()->SetTitle("y");
+		H_y_nSigmaPion[Jtr]->GetYaxis()->SetTitle("nSigmaPion");
+
+		HistName1 = "H_y_nSigmaElectron_";
+		HistName2 = "The y vs. nSigmaElectron of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_y_nSigmaElectron[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+		H_y_nSigmaElectron[Jtr]->GetXaxis()->SetTitle("y");
+		H_y_nSigmaElectron[Jtr]->GetYaxis()->SetTitle("nSigmaElectron");
 
 		HistName1 = "H_dEdx_p";
 		HistName2 = "The dEdx vs. momentum of ";
@@ -715,6 +736,9 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_ndEdx[Jtr]->Write();
 		H_nSigmaTOF_p[Jtr]->Write();
 		H_y_Pt[Jtr]->Write();
+		H_y_m2[Jtr]->Write();
+		H_y_nSigmaPion[Jtr]->Write();
+		H_y_nSigmaElectron[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1665,8 +1689,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 					pz.emplace_back(track_pz);
 					QA_Chi2.emplace_back(-999);
 					QA_Decay_Length.emplace_back(-99);
-					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+track_pz)/(tEnergy-track_pz)));
-					H_y_Pt[Jtr]->Fill(0.5*log((tEnergy+track_pz)/(tEnergy-track_pz)),pt);
+					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
+					H_rapidity[Jtr]->Fill(rap);
+					H_y_Pt[Jtr]->Fill(rap,pt);
+					H_y_m2[Jtr]->Fill(rap,m2);
+					H_y_nSigmaPion[Jtr]->Fill(rap,track->nSigmaPion());
+					H_y_nSigmaElectron[Jtr]->Fill(rap,track->nSigmaElectron());
 
 					QA_dEdx.emplace_back(track->dEdx());
 					QA_nSigmaProton.emplace_back(track->nSigmaProton());
@@ -1686,9 +1714,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 						if ( CNameList[Ntr] == "Proton"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());InvariantMass.emplace_back(ProtonPdgMass);}
 					}
 					// TOF Info
-					bool hasTOF = false;
+					hasTOF = false;
 					int tofindex = track->bTofPidTraitsIndex();
-					float m2 = -999.;
+					m2 = -999.;
 					float beta = -999.;
 					if (tofindex >= 0) 
 					{
