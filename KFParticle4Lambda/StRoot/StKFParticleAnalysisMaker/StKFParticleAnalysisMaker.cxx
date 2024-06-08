@@ -1730,7 +1730,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_y_nHitsFit[Jtr]->Fill(rap,track->nHitsFit());
 					H_y_nHitsDedx[Jtr]->Fill(rap,track->nHitsDedx());
 					H_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
-					H_y_eta[Jtr]->Fill(rap,track->pMom().Eta(););
+					H_y_eta[Jtr]->Fill(rap,track->pMom().Eta());
 
 					QA_dEdx.emplace_back(track->dEdx());
 					QA_nSigmaProton.emplace_back(track->nSigmaProton());
