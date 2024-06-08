@@ -557,6 +557,13 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_y_nSigmaElectron[Jtr]->GetXaxis()->SetTitle("y");
 		H_y_nSigmaElectron[Jtr]->GetYaxis()->SetTitle("nSigmaElectron");
 
+		HistName1 = "H_y_nHitsFit_";
+		HistName2 = "The y vs. nHitsFit of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_y_nHitsFit[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,70,0,70);
+		H_y_nHitsFit[Jtr]->GetXaxis()->SetTitle("y");
+		H_y_nHitsFit[Jtr]->GetYaxis()->SetTitle("nHitsFit");
+
 		HistName1 = "H_dEdx_p";
 		HistName2 = "The dEdx vs. momentum of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
@@ -739,6 +746,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_y_m2[Jtr]->Write();
 		H_y_nSigmaPion[Jtr]->Write();
 		H_y_nSigmaElectron[Jtr]->Write();
+		H_y_nHitsFit[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1695,6 +1703,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_y_m2[Jtr]->Fill(rap,m2);
 					H_y_nSigmaPion[Jtr]->Fill(rap,track->nSigmaPion());
 					H_y_nSigmaElectron[Jtr]->Fill(rap,track->nSigmaElectron());
+					H_y_nHitsFit[Jtr]->Fill(rap,track->nHitsFit());
 
 					QA_dEdx.emplace_back(track->dEdx());
 					QA_nSigmaProton.emplace_back(track->nSigmaProton());
