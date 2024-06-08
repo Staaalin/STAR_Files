@@ -529,6 +529,13 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_Pt[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
 		H_Pt[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
 
+		HistName1 = "H_y_Pt_";
+		HistName2 = "The y vs. momentum_t of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_y_Pt[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,10);
+		H_y_Pt[Jtr]->GetXaxis()->SetTitle("y");
+		H_y_Pt[Jtr]->GetYaxis()->SetTitle("Pt [GeV]");
+
 		HistName1 = "H_dEdx_p";
 		HistName2 = "The dEdx vs. momentum of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
@@ -707,6 +714,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_nHitsFit_nHitsMax[Jtr]->Write();
 		H_ndEdx[Jtr]->Write();
 		H_nSigmaTOF_p[Jtr]->Write();
+		H_y_Pt[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1658,6 +1666,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					QA_Chi2.emplace_back(-999);
 					QA_Decay_Length.emplace_back(-99);
 					H_rapidity[Jtr]->Fill(0.5*log((tEnergy+track_pz)/(tEnergy-track_pz)));
+					H_y_Pt[Jtr]->Fill(0.5*log((tEnergy+track_pz)/(tEnergy-track_pz)),pt);
 
 					QA_dEdx.emplace_back(track->dEdx());
 					QA_nSigmaProton.emplace_back(track->nSigmaProton());
