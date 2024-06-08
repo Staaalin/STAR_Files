@@ -627,7 +627,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	///////////////////
-	hadronTree ->Write();
+	// hadronTree ->Write();
 
 	//-- Used for  test --
 	// hNRefMult ->Write();  
