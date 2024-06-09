@@ -273,25 +273,26 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_Pt_nSigmaKaonTOF->GetXaxis()->SetTitle("p_t [GeV]");
 	H_Pt_nSigmaKaonTOF->GetYaxis()->SetTitle("nSigmaKaonTOF");
 
-	H_eta_nSigmaKaon = new TH2F("H_eta_nSigmaKaon","nSigmaKaon vs. eta",     200,-2,2,200,-8,8);
-	H_eta_nSigmaKaon->GetXaxis()->SetTitle("eta");
-	H_eta_nSigmaKaon->GetYaxis()->SetTitle("nSigmaKaon");
-
-	H_eta_nSigmaPion = new TH2F("H_eta_nSigmaPion","nSigmaPion vs. eta",     200,-2,2,200,-8,8);
-	H_eta_nSigmaPion->GetXaxis()->SetTitle("eta");
-	H_eta_nSigmaPion->GetYaxis()->SetTitle("nSigmaPion");
-	
-	H_eta_nSigmaProton = new TH2F("H_eta_nSigmaProton","nSigmaProton vs. eta",     200,-2,2,200,-8,8);
-	H_eta_nSigmaProton->GetXaxis()->SetTitle("eta");
-	H_eta_nSigmaProton->GetYaxis()->SetTitle("nSigmaProton");
-	
-	H_eta_m2 = new TH2F("H_eta_m2","m2 vs. eta",     200,-2,2,200,-0.5,2);
-	H_eta_m2->GetXaxis()->SetTitle("eta");
-	H_eta_m2->GetYaxis()->SetTitle("m2 [GeV^2]");
-	
 	TriggerList Trigger_List_Data(DataName);
 	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
 	int TriggerListLength = Trigger_List.size();
+	for (int TriggerItr = 0;TriggerItr < TriggerListLength;TriggerItr++){
+		H_eta_nSigmaKaon[TriggerItr] = new TH2F("H_eta_nSigmaKaon","nSigmaKaon vs. eta",     200,-2,2,200,-8,8);
+		H_eta_nSigmaKaon[TriggerItr]->GetXaxis()->SetTitle("eta");
+		H_eta_nSigmaKaon[TriggerItr]->GetYaxis()->SetTitle("nSigmaKaon");
+
+		H_eta_nSigmaPion[TriggerItr] = new TH2F("H_eta_nSigmaPion","nSigmaPion vs. eta",     200,-2,2,200,-8,8);
+		H_eta_nSigmaPion[TriggerItr]->GetXaxis()->SetTitle("eta");
+		H_eta_nSigmaPion[TriggerItr]->GetYaxis()->SetTitle("nSigmaPion");
+		
+		H_eta_nSigmaProton[TriggerItr] = new TH2F("H_eta_nSigmaProton","nSigmaProton vs. eta",     200,-2,2,200,-8,8);
+		H_eta_nSigmaProton[TriggerItr]->GetXaxis()->SetTitle("eta");
+		H_eta_nSigmaProton[TriggerItr]->GetYaxis()->SetTitle("nSigmaProton");
+		
+		H_eta_m2[TriggerItr] = new TH2F("H_eta_m2","m2 vs. eta",     200,-2,2,200,-0.5,2);
+		H_eta_m2[TriggerItr]->GetXaxis()->SetTitle("eta");
+		H_eta_m2[TriggerItr]->GetYaxis()->SetTitle("m2 [GeV^2]");
+	}
 	H_eta_trigger = new TH2F("H_eta_trigger","trigger vs. eta",     200,-2,2,TriggerListLength,-0.5,TriggerListLength-0.5);
 	H_eta_trigger->GetXaxis()->SetTitle("eta");
 	H_eta_trigger->GetYaxis()->SetTitle("trigger");
@@ -759,11 +760,15 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// H_nSigmaKaonTOF_nSigmaKaon_2p2_2p3->Write();
 	// H_nSigmaKaonTOF_nSigmaKaon_2p3_2p4->Write();
 	// H_nSigmaKaonTOF_nSigmaKaon_2p4_2p5->Write();
-
-	H_eta_nSigmaKaon  ->Write();
-	H_eta_nSigmaPion  ->Write();
-	H_eta_nSigmaProton->Write();
-	H_eta_m2          ->Write();
+	TriggerList Trigger_List_Data(DataName);
+	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
+	int TriggerListLength = Trigger_List.size();
+	for (int TriggerItr = 0;TriggerItr < TriggerListLength;TriggerItr++){
+		H_eta_nSigmaKaon  [TriggerItr]->Write();
+		H_eta_nSigmaPion  [TriggerItr]->Write();
+		H_eta_nSigmaProton[TriggerItr]->Write();
+		H_eta_m2          [TriggerItr]->Write();
+	}
 	H_eta_trigger     ->Write();
 
 	hEventNum->Write();
@@ -1727,10 +1732,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 		H_Pt_nSigmaKaon->Fill(track->gMom().Mag(),track->nSigmaKaon());
-		H_eta_nSigmaKaon  ->Fill(eta,track->nSigmaKaon());
-		H_eta_nSigmaPion  ->Fill(eta,track->nSigmaPion());
-		H_eta_nSigmaProton->Fill(eta,track->nSigmaProton());
-		H_eta_m2          ->Fill(eta,m2);
+		H_eta_nSigmaKaon  [TriggerID_in_TriggerList]->Fill(eta,track->nSigmaKaon());
+		H_eta_nSigmaPion  [TriggerID_in_TriggerList]->Fill(eta,track->nSigmaPion());
+		H_eta_nSigmaProton[TriggerID_in_TriggerList]->Fill(eta,track->nSigmaProton());
+		H_eta_m2          [TriggerID_in_TriggerList]->Fill(eta,m2);
 		H_eta_trigger     ->Fill(eta,TriggerID_in_TriggerList);
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
