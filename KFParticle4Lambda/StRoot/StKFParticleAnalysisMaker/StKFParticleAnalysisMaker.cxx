@@ -783,6 +783,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
 	int TriggerListLength = Trigger_List.size();
 	for (int TriggerItr = 0;TriggerItr < TriggerListLength;TriggerItr++){
+		if (H_eta_nSigmaPion[TriggerItr]->Integral() == 0){continue;}
 		H_eta_nSigmaKaon  [TriggerItr]->Write();
 		H_eta_nSigmaPion  [TriggerItr]->Write();
 		H_eta_nSigmaProton[TriggerItr]->Write();
