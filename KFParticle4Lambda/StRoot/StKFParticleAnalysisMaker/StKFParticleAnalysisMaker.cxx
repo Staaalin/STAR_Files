@@ -1716,10 +1716,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 		H_Pt_nSigmaKaon->Fill(track->gMom().Mag(),track->nSigmaKaon());
-		H_eta_nSigmaKaon  ->Fill(track->pMom().Eta(),track->nSigmaKaon());
-		H_eta_nSigmaPion  ->Fill(track->pMom().Eta(),track->nSigmaPion());
-		H_eta_nSigmaProton->Fill(track->pMom().Eta(),track->nSigmaProton());
-		H_eta_m2          ->Fill(track->pMom().Eta(),m2);
+		H_eta_nSigmaKaon  ->Fill(eta,track->nSigmaKaon());
+		H_eta_nSigmaPion  ->Fill(eta,track->nSigmaPion());
+		H_eta_nSigmaProton->Fill(eta,track->nSigmaProton());
+		H_eta_m2          ->Fill(eta,m2);
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
@@ -1755,7 +1755,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_y_nHitsFit[Jtr]->Fill(rap,track->nHitsFit());
 					H_y_nHitsDedx[Jtr]->Fill(rap,track->nHitsDedx());
 					H_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
-					H_y_eta[Jtr]->Fill(rap,track->pMom().Eta());
+					H_y_eta[Jtr]->Fill(rap,eta);
 
 					QA_dEdx.emplace_back(track->dEdx());
 					QA_nSigmaProton.emplace_back(track->nSigmaProton());
@@ -1764,7 +1764,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_dEdx_p[Jtr]->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
 					H_DCAtoPV[Jtr]->Fill(track->gDCA(Vertex3D).Mag());
 					QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
-					H_eta[Jtr]->Fill(track->gMom().Eta());
+					H_eta[Jtr]->Fill(eta);
 					H_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
 					H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
 					H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
