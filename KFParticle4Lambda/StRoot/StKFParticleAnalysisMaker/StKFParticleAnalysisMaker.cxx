@@ -277,19 +277,38 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
 	int TriggerListLength = Trigger_List.size();
 	for (int TriggerItr = 0;TriggerItr < TriggerListLength;TriggerItr++){
-		H_eta_nSigmaKaon[TriggerItr] = new TH2F("H_eta_nSigmaKaon","nSigmaKaon vs. eta",     200,-2,2,200,-8,8);
+		
+		TString HistName1;
+		TString HistName2;
+		HistName1 = "H_eta_nSigmaKaon_Trigger_";
+		HistName2 = "nSigmaKaon vs. eta, Trigger: ";
+		HistName1 += TriggerItr;
+		HistName2 += Trigger_List[TriggerItr];
+		H_eta_nSigmaKaon[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
 		H_eta_nSigmaKaon[TriggerItr]->GetXaxis()->SetTitle("eta");
 		H_eta_nSigmaKaon[TriggerItr]->GetYaxis()->SetTitle("nSigmaKaon");
 
-		H_eta_nSigmaPion[TriggerItr] = new TH2F("H_eta_nSigmaPion","nSigmaPion vs. eta",     200,-2,2,200,-8,8);
+		HistName1 = "H_eta_nSigmaPion_Trigger_";
+		HistName2 = "nSigmaPion vs. eta, Trigger: ";
+		HistName1 += TriggerItr;
+		HistName2 += Trigger_List[TriggerItr];
+		H_eta_nSigmaPion[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
 		H_eta_nSigmaPion[TriggerItr]->GetXaxis()->SetTitle("eta");
 		H_eta_nSigmaPion[TriggerItr]->GetYaxis()->SetTitle("nSigmaPion");
 		
-		H_eta_nSigmaProton[TriggerItr] = new TH2F("H_eta_nSigmaProton","nSigmaProton vs. eta",     200,-2,2,200,-8,8);
+		HistName1 = "H_eta_nSigmaProton_Trigger_";
+		HistName2 = "nSigmaProton vs. eta, Trigger: ";
+		HistName1 += TriggerItr;
+		HistName2 += Trigger_List[TriggerItr];
+		H_eta_nSigmaProton[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
 		H_eta_nSigmaProton[TriggerItr]->GetXaxis()->SetTitle("eta");
 		H_eta_nSigmaProton[TriggerItr]->GetYaxis()->SetTitle("nSigmaProton");
 		
-		H_eta_m2[TriggerItr] = new TH2F("H_eta_m2","m2 vs. eta",     200,-2,2,200,-0.5,2);
+		HistName1 = "H_eta_m2_Trigger_";
+		HistName2 = "m2 vs. eta, Trigger: ";
+		HistName1 += TriggerItr;
+		HistName2 += Trigger_List[TriggerItr];
+		H_eta_m2[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-0.5,2);
 		H_eta_m2[TriggerItr]->GetXaxis()->SetTitle("eta");
 		H_eta_m2[TriggerItr]->GetYaxis()->SetTitle("m2 [GeV^2]");
 	}
