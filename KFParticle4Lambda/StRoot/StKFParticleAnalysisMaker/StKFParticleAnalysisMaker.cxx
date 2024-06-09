@@ -1021,7 +1021,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	TriggerList Trigger_List_Data(DataName);
 	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
 	int TriggerListLength = Trigger_List.size();
-	int TriggerID_in_TriggerList = 0:
+	int TriggerID_in_TriggerList = 0;
 	bool IfTriggerMatch = false;
 	for (int i = 0;i<TriggerListLength;i++){
 		if (mEvent->isTrigger(Trigger_List[i])) {
