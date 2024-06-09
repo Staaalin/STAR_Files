@@ -16,23 +16,9 @@ static const std::vector<TString> TriggerList::DataNameList = {
 static const std::vector<std::vector<int>> TriggerList::TriggerNameList = {
 
 	{// dAu_200_16
-		2,
-		3,
-		4,
-		6,
-		15,
-		16,
-		17,
-		54,
-		55,
-		56,
-		57,
-		58,
-		59,
-		61,
 		530003,
 		530002,
-		530806,
+		// 530806,
 		530101,
 		530102,
 		530201,
@@ -114,23 +100,22 @@ static const std::vector<std::vector<int>> TriggerList::TriggerNameList = {
 	{// dAu_39_16
 		560000,
 		560001,
-		560002,
+		// 560002,
 		560007,
-		560008,
+		// 560008,
 		560011,
 		560017,
-		560018,
+		// 560018,
 		560853
 	},
 
 	{// dAu_20_16
-		8,
 		550001,
 		550003,
 		550007,
-		550009,
-		550011,
-		550018
+		// 550009,
+		550011
+		// 550018
 	},
 
 	{// AuAu_27_18
