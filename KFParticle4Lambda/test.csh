@@ -19,7 +19,7 @@ set iJob=$1
 # settings
 set nRun=18
 set mRun=Run${nRun}
-set mEnergy=200.0
+set mEnergy=27.0
 set ListDir=./datalist/
 set MainDir=`pwd`
 
