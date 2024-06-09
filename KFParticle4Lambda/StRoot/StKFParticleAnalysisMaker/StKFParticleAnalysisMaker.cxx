@@ -38,8 +38,9 @@
 #include "MyToolkit.h"
 
 // #define DataName           "pAu_200_15"
+#define DataName           "AuAu_27_18"
 // #define DataName           "dAu_200_16"
-#define DataName           "dAu_62_16"
+// #define DataName           "dAu_62_16"
 // #define DataName           "dAu_39_16"
 // #define DataName           "dAu_20_16"
 #define pi                 TMath::Pi()
@@ -287,6 +288,13 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_eta_m2 = new TH2F("H_eta_m2","m2 vs. eta",     200,-2,2,200,-0.5,2);
 	H_eta_m2->GetXaxis()->SetTitle("eta");
 	H_eta_m2->GetYaxis()->SetTitle("m2 [GeV^2]");
+	
+	TriggerList Trigger_List_Data(DataName);
+	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
+	int TriggerListLength = Trigger_List.size();
+	H_eta_trigger = new TH2F("H_eta_trigger","trigger vs. eta",     200,-2,2,TriggerListLength,-0.5,TriggerListLength-0.5);
+	H_eta_trigger->GetXaxis()->SetTitle("eta");
+	H_eta_trigger->GetYaxis()->SetTitle("trigger");
 
 	H_m2_nSigmaKaon_0p2_0p3 = new TH2F("H_m2_nSigmaKaon_0p2_0p3","nSigmaKaon vs. m2 0.2 < p_t < 0.3 GeV",320,-0.5,2,500,-10,10);
 	H_m2_nSigmaKaon_0p2_0p3->GetXaxis()->SetTitle("m2 [Gev^2]");
@@ -756,6 +764,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	H_eta_nSigmaPion  ->Write();
 	H_eta_nSigmaProton->Write();
 	H_eta_m2          ->Write();
+	H_eta_trigger     ->Write();
 
 	hEventNum->Write();
 	
@@ -1012,10 +1021,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 	TriggerList Trigger_List_Data(DataName);
 	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
 	int TriggerListLength = Trigger_List.size();
+	int TriggerID_in_TriggerList = 0:
 	bool IfTriggerMatch = false;
 	for (int i = 0;i<TriggerListLength;i++){
 		if (mEvent->isTrigger(Trigger_List[i])) {
 			IfTriggerMatch = true;
+			TriggerID_in_TriggerList = i;
 			break;
 		}
 	}
@@ -1720,6 +1731,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		H_eta_nSigmaPion  ->Fill(eta,track->nSigmaPion());
 		H_eta_nSigmaProton->Fill(eta,track->nSigmaProton());
 		H_eta_m2          ->Fill(eta,m2);
+		H_eta_trigger     ->Fill(eta,TriggerID_in_TriggerList);
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {

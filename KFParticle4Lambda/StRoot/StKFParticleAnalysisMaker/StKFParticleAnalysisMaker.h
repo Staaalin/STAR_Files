@@ -155,6 +155,7 @@ private:
 	TH2F *H_eta_nSigmaPion  ;
 	TH2F *H_eta_nSigmaProton;
 	TH2F *H_eta_m2          ;
+	TH2F *H_eta_trigger     ;
 
 	TH2F *H_nHitsFit_p[PDG2NameSize2];
 	TH1F *H_nHitsFit_nHitsMax[PDG2NameSize2];
