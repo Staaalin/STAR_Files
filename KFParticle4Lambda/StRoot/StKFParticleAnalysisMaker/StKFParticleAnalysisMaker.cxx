@@ -1977,7 +1977,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	if (PDG.size()>0){
 		PDGMult = PDG.size(); // This is multiplicity of Recorded Particles
 		if (Recorded_Hyperon != 0){
-			cout<<"Found Hyperon"<<endl;
+			// cout<<"Found Hyperon"<<endl;
 			hadronTree->Fill();
 		}
 		// hadronTree->Fill();
