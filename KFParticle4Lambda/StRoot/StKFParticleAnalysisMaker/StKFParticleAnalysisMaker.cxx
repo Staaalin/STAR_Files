@@ -707,8 +707,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hNRefMultB->Write();  
 	hVertexXY ->Write();  
 	hVertexZ  ->Write();  
-	// hVertex2D ->Write();
-	// hDiffVz   ->Write();
+	hVertex2D ->Write();
+	hDiffVz   ->Write();
 	// hcent     ->Write();  
 	// hcentw    ->Write();  
 
@@ -1078,7 +1078,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	const double DVz = VertexZ-vpdVz;
 
-	if(fabs(VertexZ) > 10) return kStOK; // AuAu27 80 ; dAu 15
+	if(fabs(VertexZ) > 80) return kStOK; // AuAu27 80 ; dAu 10
 	if(sqrt(pow(VertexX,2.)+pow(VertexY,2.))>2.0) return kStOK; 
 	if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
 
