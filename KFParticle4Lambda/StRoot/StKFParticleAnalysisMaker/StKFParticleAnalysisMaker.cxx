@@ -705,8 +705,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hNRefMult ->Write();  
 	// hNRefMultA->Write();  
 	// hNRefMultB->Write();  
-	// hVertexXY ->Write();  
-	// hVertexZ  ->Write();  
+	hVertexXY ->Write();  
+	hVertexZ  ->Write();  
 	// hVertex2D ->Write();
 	// hDiffVz   ->Write();
 	// hcent     ->Write();  
