@@ -75,7 +75,7 @@ const int nFitHits_trig = 10;
 const int nFitRatio_trig_lo = 0.52;  //0.52
 const int nFitRatio_trig_up = 1.05;  //1.05
 
-const Float_t Vz_cut = 145;    	//30, Vz
+const Float_t Vz_cut = 1000;    	//30, Vz
 const Float_t Vr_cut = 2;	//2, Vr
 const float Vz_diff = 10;        //5, difference between Vz{TPC} and Vz{VPD}
 const int cenDef[9] = {6,11,21,38,61,95,141,205,249}; //Updated 19June 2023 for 11GeV v1
