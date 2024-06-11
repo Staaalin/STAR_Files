@@ -445,7 +445,7 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
         //cout<<"2nd"<<endl;
 		hTally->Fill(0);
                 // if(!event->isTrigger(710000)&& !event->isTrigger(710010) &&!event->isTrigger(710020)) continue; //Updated 19June 2023 for 11GeV v1
-                if(!event->isTrigger(630052)) continue; //Updated 19June 2023 for 11GeV v1
+                if( !event->isTrigger(630052) ) continue; // AuAu26p5
 
 		Run	= event->runId();
 		pV 	= event->primaryVertex();
