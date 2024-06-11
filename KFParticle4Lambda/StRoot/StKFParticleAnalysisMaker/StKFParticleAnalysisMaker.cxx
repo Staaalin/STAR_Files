@@ -1078,7 +1078,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	const double DVz = VertexZ-vpdVz;
 
-	if(fabs(VertexZ) > 80) return kStOK; // AuAu27 80 ; dAu 10
+	if(fabs(VertexZ) > 25) return kStOK; // AuAu27 80 ; dAu@39 25
 	if(sqrt(pow(VertexX,2.)+pow(VertexY,2.))>2.0) return kStOK; 
 	if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
 
