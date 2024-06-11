@@ -40,8 +40,8 @@
 // #define DataName           "pAu_200_15"
 // #define DataName           "AuAu_27_18"
 // #define DataName           "dAu_200_16"
-// #define DataName           "dAu_62_16"
-#define DataName           "dAu_39_16"
+#define DataName           "dAu_62_16"
+// #define DataName           "dAu_39_16"
 // #define DataName           "dAu_20_16"
 #define pi                 TMath::Pi()
 #define OmegaPdgMass	   1.67245
@@ -1078,7 +1078,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	const double DVz = VertexZ-vpdVz;
 
-	if(fabs(VertexZ) > 10) return kStOK; // AuAu27 80 ; dAu@39 25
+	if(fabs(VertexZ) > 8) return kStOK; // AuAu27 80 ; dAu@39 25
 	if(sqrt(pow(VertexX,2.)+pow(VertexY,2.))>2.0) return kStOK; 
 	if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
 
