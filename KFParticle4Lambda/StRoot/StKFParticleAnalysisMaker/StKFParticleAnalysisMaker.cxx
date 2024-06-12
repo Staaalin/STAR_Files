@@ -335,6 +335,13 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_eta_DVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-5,5);
 		H_eta_DVz[TriggerItr]->GetXaxis()->SetTitle("eta");
 		H_eta_DVz[TriggerItr]->GetYaxis()->SetTitle("DVz [cm]");
+		
+		HistName1 = "H_eta_triggerBIN_";
+		HistName2 = "eta Trigger: ";
+		HistName1 += TriggerItr;
+		HistName2 += Trigger_List[TriggerItr];
+		H_eta_triggerBIN[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2);
+		H_eta_triggerBIN[TriggerItr]->GetXaxis()->SetTitle("eta");
 	}
 	H_eta_trigger = new TH2F("H_eta_trigger","trigger vs. eta",     200,-2,2,TriggerListLength,-0.5,TriggerListLength-0.5);
 	H_eta_trigger->GetXaxis()->SetTitle("eta");
@@ -815,6 +822,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_eta_PVz         [TriggerItr]->Write();
 		H_eta_PVr         [TriggerItr]->Write();
 		H_eta_DVz         [TriggerItr]->Write();
+		H_eta_triggerBIN  [TriggerItr]->Write();
 	}
 	H_eta_trigger     ->Write();
 
@@ -1107,7 +1115,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	if(fabs(VertexZ) > 80) return kStOK; // AuAu27 80 ; dAu@39 25
 	if(sqrt(pow(VertexX,2.)+pow(VertexY,2.))>2.0) return kStOK; 
-	// if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
+	if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
 
 	//check run number
 	int runnumberPointer = -999;
@@ -1787,6 +1795,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		H_eta_PVr         [TriggerID_in_TriggerList]->Fill(eta,VertexR);
 		H_eta_DVz         [TriggerID_in_TriggerList]->Fill(eta,DVz);
 		H_eta_trigger     ->Fill(eta,TriggerID_in_TriggerList);
+		H_eta_triggerBIN  [TriggerID_in_TriggerList]->Fill(eta);
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
