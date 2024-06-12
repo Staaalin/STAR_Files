@@ -340,7 +340,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName2 = "eta Trigger: ";
 		HistName1 += TriggerItr;
 		HistName2 += Trigger_List[TriggerItr];
-		H_eta_triggerBIN[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2);
+		H_eta_triggerBIN[TriggerItr] = new TH1F(HistName1,HistName2,     200,-2,2);
 		H_eta_triggerBIN[TriggerItr]->GetXaxis()->SetTitle("eta");
 	}
 	H_eta_trigger = new TH2F("H_eta_trigger","trigger vs. eta",     200,-2,2,TriggerListLength,-0.5,TriggerListLength-0.5);
