@@ -72,6 +72,8 @@ end
 
 if (-e output_*.root) then
 
+    @ k = $k + 1
+
     hadd HADD_$k.root output_*.root
 
 endif
