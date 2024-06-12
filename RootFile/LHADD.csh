@@ -41,18 +41,27 @@ while ($n < 500)
         @ j = $j + 1
 
     else
+
         @ n = $n + 1
+        
     endif
 
     echo $j
 
     if ($j == $step) then
+
         cd /star/data01/pwg/svianping/HADD/
+
         hadd HADD_$k.root output_*.root
+
         # echo "成功创建 HADD_$k.root"
+
         rm -rf output_*.root
+
         @ k = $k + 1
+
         @ j = 0
+
     endif
 
     @ i = $i + 1
@@ -62,7 +71,9 @@ end
 
 
 if (-e output_*.root) then
+
     hadd HADD_$k.root output_*.root
+
 endif
 
 # while ($i <= $numFiles)
