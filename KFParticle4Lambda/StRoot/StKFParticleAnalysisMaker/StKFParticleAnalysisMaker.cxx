@@ -311,6 +311,30 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_eta_m2[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-0.5,2);
 		H_eta_m2[TriggerItr]->GetXaxis()->SetTitle("eta");
 		H_eta_m2[TriggerItr]->GetYaxis()->SetTitle("m2 [GeV^2]");
+		
+		HistName1 = "H_eta_PVz_Trigger_";
+		HistName2 = "Primary Vertex Z vs. eta, Trigger: ";
+		HistName1 += TriggerItr;
+		HistName2 += Trigger_List[TriggerItr];
+		H_eta_PVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,20,-100,100);
+		H_eta_PVz[TriggerItr]->GetXaxis()->SetTitle("eta");
+		H_eta_PVz[TriggerItr]->GetYaxis()->SetTitle("PVz [cm]");
+		
+		HistName1 = "H_eta_PVr_Trigger_";
+		HistName2 = "Primary Vertex XY vs. eta, Trigger: ";
+		HistName1 += TriggerItr;
+		HistName2 += Trigger_List[TriggerItr];
+		H_eta_PVr[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,20,0,5);
+		H_eta_PVr[TriggerItr]->GetXaxis()->SetTitle("eta");
+		H_eta_PVr[TriggerItr]->GetYaxis()->SetTitle("PVr [cm]");
+		
+		HistName1 = "H_eta_DVz_Trigger_";
+		HistName2 = "VertexZ-vpdVz vs. eta, Trigger: ";
+		HistName1 += TriggerItr;
+		HistName2 += Trigger_List[TriggerItr];
+		H_eta_DVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,20,-5,5);
+		H_eta_DVz[TriggerItr]->GetXaxis()->SetTitle("eta");
+		H_eta_DVz[TriggerItr]->GetYaxis()->SetTitle("DVz [cm]");
 	}
 	H_eta_trigger = new TH2F("H_eta_trigger","trigger vs. eta",     200,-2,2,TriggerListLength,-0.5,TriggerListLength-0.5);
 	H_eta_trigger->GetXaxis()->SetTitle("eta");
@@ -788,6 +812,9 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_eta_nSigmaPion  [TriggerItr]->Write();
 		H_eta_nSigmaProton[TriggerItr]->Write();
 		H_eta_m2          [TriggerItr]->Write();
+		H_eta_PVz         [TriggerItr]->Write();
+		H_eta_PVr         [TriggerItr]->Write();
+		H_eta_DVz         [TriggerItr]->Write();
 	}
 	H_eta_trigger     ->Write();
 
@@ -1756,6 +1783,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 		H_eta_nSigmaPion  [TriggerID_in_TriggerList]->Fill(eta,track->nSigmaPion());
 		H_eta_nSigmaProton[TriggerID_in_TriggerList]->Fill(eta,track->nSigmaProton());
 		H_eta_m2          [TriggerID_in_TriggerList]->Fill(eta,m2);
+		H_eta_PVz         [TriggerID_in_TriggerList]->Fill(eta,VertexZ);
+		H_eta_PVr         [TriggerID_in_TriggerList]->Fill(eta,VertexR);
+		H_eta_DVz         [TriggerID_in_TriggerList]->Fill(eta,DVz);
 		H_eta_trigger     ->Fill(eta,TriggerID_in_TriggerList);
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
