@@ -44,6 +44,8 @@ while ($n < 500)
         @ n = $n + 1
     endif
 
+    echo $j
+
     if ($j == $step) then
         cd /star/data01/pwg/svianping/HADD/
         hadd HADD_$k.root output_*.root
