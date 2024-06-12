@@ -316,7 +316,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName2 = "Primary Vertex Z vs. eta, Trigger: ";
 		HistName1 += TriggerItr;
 		HistName2 += Trigger_List[TriggerItr];
-		H_eta_PVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,20,-100,100);
+		H_eta_PVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-100,100);
 		H_eta_PVz[TriggerItr]->GetXaxis()->SetTitle("eta");
 		H_eta_PVz[TriggerItr]->GetYaxis()->SetTitle("PVz [cm]");
 		
@@ -324,7 +324,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName2 = "Primary Vertex XY vs. eta, Trigger: ";
 		HistName1 += TriggerItr;
 		HistName2 += Trigger_List[TriggerItr];
-		H_eta_PVr[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,20,0,5);
+		H_eta_PVr[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,100,0,5);
 		H_eta_PVr[TriggerItr]->GetXaxis()->SetTitle("eta");
 		H_eta_PVr[TriggerItr]->GetYaxis()->SetTitle("PVr [cm]");
 		
@@ -332,7 +332,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName2 = "VertexZ-vpdVz vs. eta, Trigger: ";
 		HistName1 += TriggerItr;
 		HistName2 += Trigger_List[TriggerItr];
-		H_eta_DVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,20,-5,5);
+		H_eta_DVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-5,5);
 		H_eta_DVz[TriggerItr]->GetXaxis()->SetTitle("eta");
 		H_eta_DVz[TriggerItr]->GetYaxis()->SetTitle("DVz [cm]");
 	}
