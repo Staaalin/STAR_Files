@@ -22,9 +22,9 @@ set i = 0
 set j = 0
 set k = 0
 set n = 0
-set start = 14662
+set start = 15713
 set end = 0
-set step = 180
+set step = 100
 
 @ i = $i + $start
 
