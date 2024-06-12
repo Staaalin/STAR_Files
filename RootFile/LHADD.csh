@@ -3,6 +3,7 @@ echo "准备执行"
 sleep 5
 echo "执行"
 
+rm condor.log
 condor_q > condor.log
 # condor_rm svianping
 # sleep 10
@@ -24,6 +25,8 @@ set n = 0
 set start = 0
 set end = 0
 set step = 180
+
+@ i = $i + $start
 
 while ($n < 500)
 
