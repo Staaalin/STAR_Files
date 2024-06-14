@@ -332,7 +332,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName2 = "VertexZ-vpdVz vs. eta, Trigger: ";
 		HistName1 += TriggerItr;
 		HistName2 += Trigger_List[TriggerItr];
-		H_eta_DVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-5,5);
+		// H_eta_DVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-5,5);
+		H_eta_DVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,1000,-50,50); // band
 		H_eta_DVz[TriggerItr]->GetXaxis()->SetTitle("eta");
 		H_eta_DVz[TriggerItr]->GetYaxis()->SetTitle("DVz [cm]");
 		
@@ -1108,6 +1109,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	if(mRefMultCorr->isBadRun(runID)) return kStOK; // reject bad run of StRefMultCorr
 	if(!mRefMultCorr->passnTofMatchRefmultCut(1.*refMult, 1.*tofMatch)) return kStOK; // reject pileup of StRefMultCorr
 
+	if (!(fabs(vpdVz)<20 && 40<fabs(VertexZ) && fabs(VertexZ)<80)) return kStOK; // band test
+
 	hVertex2D ->Fill(VertexZ,vpdVz);
 	hDiffVz   ->Fill(VertexZ-vpdVz); 
 
@@ -1116,8 +1119,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// if(fabs(VertexZ) > 80) return kStOK; // AuAu27 80 ; dAu@39 25
 	if(sqrt(pow(VertexX,2.)+pow(VertexY,2.))>2.0) return kStOK; 
 	// if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
-
-	if (!(fabs(vpdVz)<20 && 40<fabs(VertexZ) && fabs(VertexZ)<80)) return kStOK; // band test
 
 	//check run number
 	int runnumberPointer = -999;
