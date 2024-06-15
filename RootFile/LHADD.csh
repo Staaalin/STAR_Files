@@ -22,7 +22,7 @@ set i = 0
 set j = 0
 set k = 0
 set n = 0
-set start = 82926
+set start = 67204
 set end = 0
 set step = 100
 
