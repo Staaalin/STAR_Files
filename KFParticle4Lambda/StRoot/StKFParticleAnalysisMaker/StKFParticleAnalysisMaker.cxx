@@ -1109,7 +1109,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	if(mRefMultCorr->isBadRun(runID)) return kStOK; // reject bad run of StRefMultCorr
 	if(!mRefMultCorr->passnTofMatchRefmultCut(1.*refMult, 1.*tofMatch)) return kStOK; // reject pileup of StRefMultCorr
 
-	if (!(fabs(vpdVz)<20 && 40<fabs(VertexZ) && fabs(VertexZ)<80)) return kStOK; // band test
+	// if (!(fabs(vpdVz)<20 && 40<fabs(VertexZ) && fabs(VertexZ)<80)) return kStOK; // band test
+	if (!(fabs(vpdVz-VertexZ)<10 && 30<fabs(VertexZ) && fabs(VertexZ)<80)) return kStOK; // center test
 
 	hVertex2D ->Fill(VertexZ,vpdVz);
 	hDiffVz   ->Fill(VertexZ-vpdVz); 
