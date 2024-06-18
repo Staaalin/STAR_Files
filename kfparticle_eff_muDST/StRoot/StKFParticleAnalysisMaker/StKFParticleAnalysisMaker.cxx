@@ -371,11 +371,9 @@ Int_t StKFParticleAnalysisMaker::Make()
     {
       StMuTrack *gTrack = fMuDst->globalTracks(iTrack);
       if (! gTrack) continue;
-    	if (! gTrack->charge())  continue;
-    	if (  gTrack->nHitsFit() < 15) continue;
-		  if (  gTrack->nHitsDedx() < 15) continue;
-		  // if (  gTrack->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
-		  // if (  gTrack->dEdxError() < 0.04 || gTrack->dEdxError() > 0.12) continue; // same as kfp
+    	// if (! gTrack->charge())  continue;
+    	// if (  gTrack->nHitsFit() < 15) continue;
+		  // if (  gTrack->nHitsDedx() < 15) continue;
       int index = gTrack->id();
       if(index > maxGBTrackIndex){
         maxGBTrackIndex = index;
