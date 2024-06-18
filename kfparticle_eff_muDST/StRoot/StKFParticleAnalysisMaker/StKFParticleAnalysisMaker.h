@@ -76,6 +76,12 @@ class StKFParticleAnalysisMaker : public StMaker {
   TH1D *hDaughterNDF;
   TH1D *hDaughterNDF_2;
 
+  TH1F *h_eta;    
+  TH2F *H_eta_PVz;
+  TH2F *H_eta_DVz;
+  TH1F *hVertexZ ;
+  TH2F *hVertex2D;
+
   TH2D *hDaughterChi2PriPt_dist;
   TH2D *hDauProtonChi2PriPt_dist; // vs lambda pt
   TH2D *hDauPionChi2PriPt_dist; // vs lambda pt

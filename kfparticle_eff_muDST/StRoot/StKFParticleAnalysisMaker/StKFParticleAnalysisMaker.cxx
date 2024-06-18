@@ -162,82 +162,99 @@ void StKFParticleAnalysisMaker::DeclareHistograms()
   hChi2NDFPt = new TProfile("hChi2NDFPt", "hChi2NDFPt", 100, 0, 10, 0., 100.);
   hChi2NDFPt_primVtx = new TProfile("hChi2NDFPt_primVtx", "hChi2NDFPt_primVtx", 100, 0, 10, 0., 100.);
   hLdLPt = new TProfile("hLdLPt", "hLdLPt", 100, 0, 10, 0., 100.);
+  
+	hVertexZ  = new TH1F("VertexZ" , "Event Vertex Z Position", 200, -100.0, 100.0 ) ;
+	hVertex2D = new TH2F("Vertex2D", "VertexZ vs VPD Vz", 200, -100.0, 100.0 , 200, -100., 100 ) ;
+  h_eta      = new TH1F("h_eta", "eta distribution", 200, -2, 2);
+  H_eta     ->GetXaxis()->SetTitle("eta");
+  H_eta_PVz = new TH2F("H_eta_PVz", "Primary Vertex Z vs. eta", 200, -2, 2, 100,-100,100);
+  H_eta_PVz->GetXaxis()->SetTitle("eta");
+  H_eta_PVz->GetYaxis()->SetTitle("PVz [cm]");
+  H_eta_DVz = new TH2F("H_eta_DVz", "VertexZ-vpdVz vs. eta", 200, -2, 2, 100,-100,100);
+  H_eta_DVz->GetXaxis()->SetTitle("eta");
+  H_eta_DVz->GetYaxis()->SetTitle("DVz [cm]");
 }
 //_____________________________________________________________________________
 void StKFParticleAnalysisMaker::WriteHistograms()
 {
-  hCentrality->Write();
+  // hCentrality->Write();
 
-  for (int i = 0; i < 9; i++)
-  {
-    hKFPRecoParPt[i]->Write();
-    hMCRecoParPt[i]->Write();
-    hMCParPt[i]->Write();
-    hMCParPt_2[i]->Write();
-  }
+  // for (int i = 0; i < 9; i++)
+  // {
+  //   hKFPRecoParPt[i]->Write();
+  //   hMCRecoParPt[i]->Write();
+  //   hMCParPt[i]->Write();
+  //   hMCParPt_2[i]->Write();
+  // }
 
   hVertexDiff->Write();
-  hLambdaMassVerification->Write();
-  hMCLambdaMassVerification->Write();
-  for(Int_t i=0; i<4; i++)
-    hLambdaPtVerification[i]->Write();
-  for (int i=0; i<3; i++)
-    hMCDauPxPyPzVerification[i]->Write();
-  hDaughterChi2Pri->Write();
+  // hLambdaMassVerification->Write();
+  // hMCLambdaMassVerification->Write();
+  // for(Int_t i=0; i<4; i++)
+  //   hLambdaPtVerification[i]->Write();
+  // for (int i=0; i<3; i++)
+  //   hMCDauPxPyPzVerification[i]->Write();
+  // hDaughterChi2Pri->Write();
 
-  hDaughterChi2PriPt_dist->Write();
-  hDauProtonChi2PriPt_dist->Write();
-  hDauPionChi2PriPt_dist->Write();
-  hDauProtonDCAtoPVPt_dist->Write();
-  hDauPionDCAtoPVPt_dist->Write();
-  hMCDauProtonChi2PriPt_dist->Write();
-  hMCDauPionChi2PriPt_dist->Write();
-  hMCDauProtonDCAtoPVPt_dist->Write();
-  hMCDauPionDCAtoPVPt_dist->Write();
-  hPrimaryProtonChi2PriPt_dist->Write();
-  hPrimaryPionChi2PriPt_dist->Write();
-  hDauProtonChi2PriSelfPt_dist->Write();
-  hDauPionChi2PriSelfPt_dist->Write();
+  // hDaughterChi2PriPt_dist->Write();
+  // hDauProtonChi2PriPt_dist->Write();
+  // hDauPionChi2PriPt_dist->Write();
+  // hDauProtonDCAtoPVPt_dist->Write();
+  // hDauPionDCAtoPVPt_dist->Write();
+  // hMCDauProtonChi2PriPt_dist->Write();
+  // hMCDauPionChi2PriPt_dist->Write();
+  // hMCDauProtonDCAtoPVPt_dist->Write();
+  // hMCDauPionDCAtoPVPt_dist->Write();
+  // hPrimaryProtonChi2PriPt_dist->Write();
+  // hPrimaryPionChi2PriPt_dist->Write();
+  // hDauProtonChi2PriSelfPt_dist->Write();
+  // hDauPionChi2PriSelfPt_dist->Write();
 
-  hRecoDauProtonPt->Write();
-  hRecoDauPionPt->Write();
-  hMCRecoDauProtonPt->Write();
-  hMCRecoDauPionPt->Write();
-  hMCRecoDauProtonLamPt->Write();
-  hMCRecoDauPionLamPt->Write();
-  hMCDauProtonPt->Write();
-  hMCDauPionPt->Write();
-  hMCDauProtonLamPt->Write();
-  hMCDauPionLamPt->Write();
+  // hRecoDauProtonPt->Write();
+  // hRecoDauPionPt->Write();
+  // hMCRecoDauProtonPt->Write();
+  // hMCRecoDauPionPt->Write();
+  // hMCRecoDauProtonLamPt->Write();
+  // hMCRecoDauPionLamPt->Write();
+  // hMCDauProtonPt->Write();
+  // hMCDauPionPt->Write();
+  // hMCDauProtonLamPt->Write();
+  // hMCDauPionLamPt->Write();
 
-  hDauProtonChi2PriPt->Write();
-  hDauPionChi2PriPt->Write();
-  hDaughterChi2PriDCAtoPV->Write();
-  hDaughterNDF->Write();
-  hDaughterNDF_2->Write();
-  hDaughterChi2PriPt->Write();
-  hDaughterChi2PriPt_2->Write();
-  hDaughterKFPDisPt->Write();
-  hDaughterDCAPt->Write();
-  hDauProtonDCAtoPVPt->Write();
-  hDauPionDCAtoPVPt->Write();
-  hDauProtonTracknHitsPt->Write();
-  hDauPionTracknHitsPt->Write();
-  hDauProtonTracknHitsFitPt->Write();
-  hDauPionTracknHitsFitPt->Write();
-  hDauProtonTracknHitsdEdxPt->Write();
-  hDauPionTracknHitsdEdxPt->Write();
-  hDauProtonFirstPointDistancePt->Write();
-  hDauPionFirstPointDistancePt->Write();
-  hDauProtonLastPointDistancePt->Write();
-  hDauPionLastPointDistancePt->Write();
-  hDecayLengthPt->Write();
-  hDecayVertexPt->Write();
-  hDecayLengthTraditionalPt->Write();
-  hDecayVertexTraditionalPt->Write();
-  hChi2NDFPt->Write();
-  hChi2NDFPt_primVtx->Write();
-  hLdLPt->Write();
+  // hDauProtonChi2PriPt->Write();
+  // hDauPionChi2PriPt->Write();
+  // hDaughterChi2PriDCAtoPV->Write();
+  // hDaughterNDF->Write();
+  // hDaughterNDF_2->Write();
+  // hDaughterChi2PriPt->Write();
+  // hDaughterChi2PriPt_2->Write();
+  // hDaughterKFPDisPt->Write();
+  // hDaughterDCAPt->Write();
+  // hDauProtonDCAtoPVPt->Write();
+  // hDauPionDCAtoPVPt->Write();
+  // hDauProtonTracknHitsPt->Write();
+  // hDauPionTracknHitsPt->Write();
+  // hDauProtonTracknHitsFitPt->Write();
+  // hDauPionTracknHitsFitPt->Write();
+  // hDauProtonTracknHitsdEdxPt->Write();
+  // hDauPionTracknHitsdEdxPt->Write();
+  // hDauProtonFirstPointDistancePt->Write();
+  // hDauPionFirstPointDistancePt->Write();
+  // hDauProtonLastPointDistancePt->Write();
+  // hDauPionLastPointDistancePt->Write();
+  // hDecayLengthPt->Write();
+  // hDecayVertexPt->Write();
+  // hDecayLengthTraditionalPt->Write();
+  // hDecayVertexTraditionalPt->Write();
+  // hChi2NDFPt->Write();
+  // hChi2NDFPt_primVtx->Write();
+  // hLdLPt->Write();
+
+  h_eta    ->Write();
+  H_eta_PVz->Write();
+  H_eta_DVz->Write();
+  hVertexZ ->Write();
+  hVertex2D->Write();
 }
 //________________________________________________________________________________
 Int_t StKFParticleAnalysisMaker::InitRun(Int_t runumber) 
@@ -311,8 +328,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 
   // event cuts
   if (!selectedVertex) return kStOK;
-  if (fabs(fMuEvent->primaryVertexPosition().z()) > 70.0) return kStOK;
-  if (fMuEvent->primaryVertexPosition().perp() > 2.0) return kStOK;
+  const double VertexZ = fMuEvent->primaryVertexPosition().z();
+  const double vpdVz = fMuEvent->vpdVz ();
+	hVertex2D ->Fill(VertexZ,vpdVz);
+	hVertexZ  ->Fill(VertexZ); 
+  // if (fabs(fMuEvent->primaryVertexPosition().z()) > 70.0) return kStOK;
+  // if (fMuEvent->primaryVertexPosition().perp() > 2.0) return kStOK;
+  if (fabs(fMuEvent->primaryVertexPosition().z()) > 80.0) return kStOK;
+  if (fMuEvent->primaryVertexPosition().perp() > 3.0) return kStOK;
 
   // Centrality
   int Run = fMuEvent->runId();
@@ -349,8 +372,12 @@ Int_t StKFParticleAnalysisMaker::Make()
       StMuTrack *gTrack = fMuDst->globalTracks(iTrack);
       if (! gTrack) continue;
       int index = gTrack->id();
-      if(index > maxGBTrackIndex)
+      if(index > maxGBTrackIndex){
         maxGBTrackIndex = index;
+      }
+      h_eta->Fill(gTrack->eta());
+      H_eta_PVz->Fill(gTrack->eta(),VertexZ);
+      H_eta_DVz->Fill(gTrack->eta(),VertexZ-vpdVz);
     }
   }
   vector<KFMCTrack> mcTracks(0);
