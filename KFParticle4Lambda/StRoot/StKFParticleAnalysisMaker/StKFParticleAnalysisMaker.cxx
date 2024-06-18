@@ -277,72 +277,107 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
 	int TriggerListLength = Trigger_List.size();
 	for (int TriggerItr = 0;TriggerItr < TriggerListLength;TriggerItr++){
+		TString ChargeName[3] = {"Positive","Negative","All"};
+		for (int Itr = 0;Itr < 3;Itr++){
 		
-		TString HistName1;
-		TString HistName2;
-		HistName1 = "H_eta_nSigmaKaon_Trigger_";
-		HistName2 = "nSigmaKaon vs. eta, Trigger: ";
-		HistName1 += TriggerItr;
-		HistName2 += Trigger_List[TriggerItr];
-		H_eta_nSigmaKaon[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
-		H_eta_nSigmaKaon[TriggerItr]->GetXaxis()->SetTitle("eta");
-		H_eta_nSigmaKaon[TriggerItr]->GetYaxis()->SetTitle("nSigmaKaon");
+			TString HistName1;
+			TString HistName2;
+			HistName1 = "H_eta_nSigmaKaon_";
+			HistName2 = ChargeName[Itr];
+			HistName2 += "Tracks ";
+			HistName2 += "nSigmaKaon vs. eta, Trigger: ";
+			HistName1 += ChargeName[Itr];
+			HistName1 += "_Trigger_";
+			HistName1 += TriggerItr;
+			HistName2 += Trigger_List[TriggerItr];
+			H_eta_nSigmaKaon[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
+			H_eta_nSigmaKaon[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+			H_eta_nSigmaKaon[TriggerItr][Itr]->GetYaxis()->SetTitle("nSigmaKaon");
 
-		HistName1 = "H_eta_nSigmaPion_Trigger_";
-		HistName2 = "nSigmaPion vs. eta, Trigger: ";
-		HistName1 += TriggerItr;
-		HistName2 += Trigger_List[TriggerItr];
-		H_eta_nSigmaPion[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
-		H_eta_nSigmaPion[TriggerItr]->GetXaxis()->SetTitle("eta");
-		H_eta_nSigmaPion[TriggerItr]->GetYaxis()->SetTitle("nSigmaPion");
-		
-		HistName1 = "H_eta_nSigmaProton_Trigger_";
-		HistName2 = "nSigmaProton vs. eta, Trigger: ";
-		HistName1 += TriggerItr;
-		HistName2 += Trigger_List[TriggerItr];
-		H_eta_nSigmaProton[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
-		H_eta_nSigmaProton[TriggerItr]->GetXaxis()->SetTitle("eta");
-		H_eta_nSigmaProton[TriggerItr]->GetYaxis()->SetTitle("nSigmaProton");
-		
-		HistName1 = "H_eta_m2_Trigger_";
-		HistName2 = "m2 vs. eta, Trigger: ";
-		HistName1 += TriggerItr;
-		HistName2 += Trigger_List[TriggerItr];
-		H_eta_m2[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-0.5,2);
-		H_eta_m2[TriggerItr]->GetXaxis()->SetTitle("eta");
-		H_eta_m2[TriggerItr]->GetYaxis()->SetTitle("m2 [GeV^2]");
-		
-		HistName1 = "H_eta_PVz_Trigger_";
-		HistName2 = "Primary Vertex Z vs. eta, Trigger: ";
-		HistName1 += TriggerItr;
-		HistName2 += Trigger_List[TriggerItr];
-		H_eta_PVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-100,100);
-		H_eta_PVz[TriggerItr]->GetXaxis()->SetTitle("eta");
-		H_eta_PVz[TriggerItr]->GetYaxis()->SetTitle("PVz [cm]");
-		
-		HistName1 = "H_eta_PVr_Trigger_";
-		HistName2 = "Primary Vertex XY vs. eta, Trigger: ";
-		HistName1 += TriggerItr;
-		HistName2 += Trigger_List[TriggerItr];
-		H_eta_PVr[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,100,0,5);
-		H_eta_PVr[TriggerItr]->GetXaxis()->SetTitle("eta");
-		H_eta_PVr[TriggerItr]->GetYaxis()->SetTitle("PVr [cm]");
-		
-		HistName1 = "H_eta_DVz_Trigger_";
-		HistName2 = "VertexZ-vpdVz vs. eta, Trigger: ";
-		HistName1 += TriggerItr;
-		HistName2 += Trigger_List[TriggerItr];
-		// H_eta_DVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-5,5);
-		H_eta_DVz[TriggerItr] = new TH2F(HistName1,HistName2,     200,-2,2,1000,-50,50); // band
-		H_eta_DVz[TriggerItr]->GetXaxis()->SetTitle("eta");
-		H_eta_DVz[TriggerItr]->GetYaxis()->SetTitle("DVz [cm]");
-		
-		HistName1 = "H_eta_triggerBIN_";
-		HistName2 = "eta Trigger: ";
-		HistName1 += TriggerItr;
-		HistName2 += Trigger_List[TriggerItr];
-		H_eta_triggerBIN[TriggerItr] = new TH1F(HistName1,HistName2,     200,-2,2);
-		H_eta_triggerBIN[TriggerItr]->GetXaxis()->SetTitle("eta");
+			HistName1 = "H_eta_nSigmaPion_";
+			HistName2 = ChargeName[Itr];
+			HistName2 += "Tracks ";
+			HistName2 += "nSigmaPion vs. eta, Trigger: ";
+			HistName1 += ChargeName[Itr];
+			HistName1 += "_Trigger_";
+			HistName1 += TriggerItr;
+			HistName2 += Trigger_List[TriggerItr];
+			H_eta_nSigmaPion[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
+			H_eta_nSigmaPion[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+			H_eta_nSigmaPion[TriggerItr][Itr]->GetYaxis()->SetTitle("nSigmaPion");
+			
+			HistName1 = "H_eta_nSigmaProton_";
+			HistName2 = ChargeName[Itr];
+			HistName2 += "Tracks ";
+			HistName2 += "nSigmaProton vs. eta, Trigger: ";
+			HistName1 += ChargeName[Itr];
+			HistName1 += "_Trigger_";
+			HistName1 += TriggerItr;
+			HistName2 += Trigger_List[TriggerItr];
+			H_eta_nSigmaProton[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
+			H_eta_nSigmaProton[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+			H_eta_nSigmaProton[TriggerItr][Itr]->GetYaxis()->SetTitle("nSigmaProton");
+			
+			HistName1 = "H_eta_m2_";
+			HistName2 = ChargeName[Itr];
+			HistName2 += "Tracks ";
+			HistName2 += "m2 vs. eta, Trigger: ";
+			HistName1 += ChargeName[Itr];
+			HistName1 += "_Trigger_";
+			HistName1 += TriggerItr;
+			HistName2 += Trigger_List[TriggerItr];
+			H_eta_m2[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-0.5,2);
+			H_eta_m2[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+			H_eta_m2[TriggerItr][Itr]->GetYaxis()->SetTitle("m2 [GeV^2]");
+			
+			HistName1 = "H_eta_PVz_";
+			HistName2 = ChargeName[Itr];
+			HistName2 += "Tracks ";
+			HistName2 += "Primary Vertex Z vs. eta, Trigger: ";
+			HistName1 += ChargeName[Itr];
+			HistName1 += "_Trigger_";
+			HistName1 += TriggerItr;
+			HistName2 += Trigger_List[TriggerItr];
+			H_eta_PVz[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-100,100);
+			H_eta_PVz[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+			H_eta_PVz[TriggerItr][Itr]->GetYaxis()->SetTitle("PVz [cm]");
+			
+			HistName1 = "H_eta_PVr_";
+			HistName2 = ChargeName[Itr];
+			HistName2 += "Tracks ";
+			HistName2 += "Primary Vertex R vs. eta, Trigger: ";
+			HistName1 += ChargeName[Itr];
+			HistName1 += "_Trigger_";
+			HistName1 += TriggerItr;
+			HistName2 += Trigger_List[TriggerItr];
+			H_eta_PVr[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,100,0,5);
+			H_eta_PVr[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+			H_eta_PVr[TriggerItr][Itr]->GetYaxis()->SetTitle("PVr [cm]");
+			
+			HistName1 = "H_eta_DVz_";
+			HistName2 = ChargeName[Itr];
+			HistName2 += "Tracks ";
+			HistName2 += "VertexZ-vpdVz vs. eta, Trigger: ";
+			HistName1 += ChargeName[Itr];
+			HistName1 += "_Trigger_";
+			HistName1 += TriggerItr;
+			HistName2 += Trigger_List[TriggerItr];
+			// H_eta_DVz[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-5,5);
+			H_eta_DVz[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,1000,-50,50); // band
+			H_eta_DVz[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+			H_eta_DVz[TriggerItr][Itr]->GetYaxis()->SetTitle("DVz [cm]");
+			
+			HistName1 = "H_eta_triggerBIN_";
+			HistName2 = ChargeName[Itr];
+			HistName2 += "Tracks ";
+			HistName2 += "eta distribution, Trigger: ";
+			HistName1 += ChargeName[Itr];
+			HistName1 += "_Trigger_";
+			HistName1 += TriggerItr;
+			HistName2 += Trigger_List[TriggerItr];
+			H_eta_triggerBIN[TriggerItr][Itr] = new TH1F(HistName1,HistName2,     200,-2,2);
+			H_eta_triggerBIN[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+		}
 	}
 	H_eta_trigger = new TH2F("H_eta_trigger","trigger vs. eta",     200,-2,2,TriggerListLength,-0.5,TriggerListLength-0.5);
 	H_eta_trigger->GetXaxis()->SetTitle("eta");
@@ -815,15 +850,17 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
 	int TriggerListLength = Trigger_List.size();
 	for (int TriggerItr = 0;TriggerItr < TriggerListLength;TriggerItr++){
-		if (H_eta_nSigmaPion[TriggerItr]->Integral() == 0){continue;}
-		H_eta_nSigmaKaon  [TriggerItr]->Write();
-		H_eta_nSigmaPion  [TriggerItr]->Write();
-		H_eta_nSigmaProton[TriggerItr]->Write();
-		H_eta_m2          [TriggerItr]->Write();
-		H_eta_PVz         [TriggerItr]->Write();
-		H_eta_PVr         [TriggerItr]->Write();
-		H_eta_DVz         [TriggerItr]->Write();
-		H_eta_triggerBIN  [TriggerItr]->Write();
+		for (int Itr = 0;Itr < 3;Itr++){
+			if (H_eta_nSigmaPion[TriggerItr][Itr]->Integral() == 0){continue;}
+			H_eta_nSigmaKaon  [TriggerItr][Itr]->Write();
+			H_eta_nSigmaPion  [TriggerItr][Itr]->Write();
+			H_eta_nSigmaProton[TriggerItr][Itr]->Write();
+			H_eta_m2          [TriggerItr][Itr]->Write();
+			H_eta_PVz         [TriggerItr][Itr]->Write();
+			H_eta_PVr         [TriggerItr][Itr]->Write();
+			H_eta_DVz         [TriggerItr][Itr]->Write();
+			H_eta_triggerBIN  [TriggerItr][Itr]->Write();
+		}
 	}
 	H_eta_trigger     ->Write();
 
@@ -1792,15 +1829,36 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 		H_Pt_nSigmaKaon->Fill(track->gMom().Mag(),track->nSigmaKaon());
-		H_eta_nSigmaKaon  [TriggerID_in_TriggerList]->Fill(eta,track->nSigmaKaon());
-		H_eta_nSigmaPion  [TriggerID_in_TriggerList]->Fill(eta,track->nSigmaPion());
-		H_eta_nSigmaProton[TriggerID_in_TriggerList]->Fill(eta,track->nSigmaProton());
-		H_eta_m2          [TriggerID_in_TriggerList]->Fill(eta,m2);
-		H_eta_PVz         [TriggerID_in_TriggerList]->Fill(eta,VertexZ);
-		H_eta_PVr         [TriggerID_in_TriggerList]->Fill(eta,VertexR);
-		H_eta_DVz         [TriggerID_in_TriggerList]->Fill(eta,DVz);
+		H_eta_nSigmaKaon  [TriggerID_in_TriggerList][2]->Fill(eta,track->nSigmaKaon());
+		H_eta_nSigmaPion  [TriggerID_in_TriggerList][2]->Fill(eta,track->nSigmaPion());
+		H_eta_nSigmaProton[TriggerID_in_TriggerList][2]->Fill(eta,track->nSigmaProton());
+		H_eta_m2          [TriggerID_in_TriggerList][2]->Fill(eta,m2);
+		H_eta_PVz         [TriggerID_in_TriggerList][2]->Fill(eta,VertexZ);
+		H_eta_PVr         [TriggerID_in_TriggerList][2]->Fill(eta,VertexR);
+		H_eta_DVz         [TriggerID_in_TriggerList][2]->Fill(eta,DVz);
+		H_eta_triggerBIN  [TriggerID_in_TriggerList][2]->Fill(eta);
+		if (track->charge() > 0) {
+			H_eta_nSigmaKaon  [TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaKaon());
+			H_eta_nSigmaPion  [TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaPion());
+			H_eta_nSigmaProton[TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaProton());
+			H_eta_m2          [TriggerID_in_TriggerList][0]->Fill(eta,m2);
+			H_eta_PVz         [TriggerID_in_TriggerList][0]->Fill(eta,VertexZ);
+			H_eta_PVr         [TriggerID_in_TriggerList][0]->Fill(eta,VertexR);
+			H_eta_DVz         [TriggerID_in_TriggerList][0]->Fill(eta,DVz);
+			H_eta_triggerBIN  [TriggerID_in_TriggerList][0]->Fill(eta);
+		}
+		if (track->charge() < 0) {
+			H_eta_nSigmaKaon  [TriggerID_in_TriggerList][1]->Fill(eta,track->nSigmaKaon());
+			H_eta_nSigmaPion  [TriggerID_in_TriggerList][1]->Fill(eta,track->nSigmaPion());
+			H_eta_nSigmaProton[TriggerID_in_TriggerList][1]->Fill(eta,track->nSigmaProton());
+			H_eta_m2          [TriggerID_in_TriggerList][1]->Fill(eta,m2);
+			H_eta_PVz         [TriggerID_in_TriggerList][1]->Fill(eta,VertexZ);
+			H_eta_PVr         [TriggerID_in_TriggerList][1]->Fill(eta,VertexR);
+			H_eta_DVz         [TriggerID_in_TriggerList][1]->Fill(eta,DVz);
+			H_eta_triggerBIN  [TriggerID_in_TriggerList][1]->Fill(eta);
+		}
 		H_eta_trigger     ->Fill(eta,TriggerID_in_TriggerList);
-		H_eta_triggerBIN  [TriggerID_in_TriggerList]->Fill(eta);
+
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {

@@ -151,14 +151,14 @@ private:
 	TH2F *H_y_nHitsFit2nHitsMax[PDG2NameSize2];
 	TH2F *H_y_eta[PDG2NameSize2];
 
-	TH2F *H_eta_nSigmaKaon  [30];// Trigger Num not larger than 30
-	TH2F *H_eta_nSigmaPion  [30];// Trigger Num not larger than 30
-	TH2F *H_eta_nSigmaProton[30];// Trigger Num not larger than 30
-	TH2F *H_eta_m2          [30];// Trigger Num not larger than 30
-	TH2F *H_eta_PVz         [30];// Trigger Num not larger than 30
-	TH2F *H_eta_PVr         [30];// Trigger Num not larger than 30
-	TH2F *H_eta_DVz         [30];// Trigger Num not larger than 30
-	TH1F *H_eta_triggerBIN  [30];// Trigger Num not larger than 30
+	TH2F *H_eta_nSigmaKaon  [30][3];// Trigger Num not larger than 30
+	TH2F *H_eta_nSigmaPion  [30][3];// Trigger Num not larger than 30
+	TH2F *H_eta_nSigmaProton[30][3];// Trigger Num not larger than 30
+	TH2F *H_eta_m2          [30][3];// Trigger Num not larger than 30
+	TH2F *H_eta_PVz         [30][3];// Trigger Num not larger than 30
+	TH2F *H_eta_PVr         [30][3];// Trigger Num not larger than 30
+	TH2F *H_eta_DVz         [30][3];// Trigger Num not larger than 30
+	TH1F *H_eta_triggerBIN  [30][3];// Trigger Num not larger than 30
 	TH2F *H_eta_trigger     ;
 
 	TH2F *H_nHitsFit_p[PDG2NameSize2];
