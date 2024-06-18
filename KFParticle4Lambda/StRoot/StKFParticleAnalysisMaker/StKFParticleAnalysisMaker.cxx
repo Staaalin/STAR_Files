@@ -1146,8 +1146,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	if(mRefMultCorr->isBadRun(runID)) return kStOK; // reject bad run of StRefMultCorr
 	if(!mRefMultCorr->passnTofMatchRefmultCut(1.*refMult, 1.*tofMatch)) return kStOK; // reject pileup of StRefMultCorr
 
-	float DiffDVZCenter[2] = { -30.0 , 50.5 };// d+Au@200GeV RUN 16
-	if (!(6.5<fabs(vpdVz-VertexZ) && fabs(vpdVz-VertexZ)<9.5 && fabs(vpdVz)<20)) return kStOK; // band test
+	// float DiffDVZCenter[2] = { -30.0 , 50.5 };// d+Au@200GeV RUN 16
+	// if (!(6.5<fabs(vpdVz-VertexZ) && fabs(vpdVz-VertexZ)<9.5 && fabs(vpdVz)<20)) return kStOK; // band test
 	// if (!(fabs(vpdVz-VertexZ)<3 && 20<fabs(vpdVz) && (DiffDVZCenter[0] <= vpdVz) && (vpdVz <= DiffDVZCenter[1]))) return kStOK; // center test
 
 	hVertex2D ->Fill(VertexZ,vpdVz);
@@ -1155,9 +1155,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	const double DVz = VertexZ-vpdVz;
 
-	// if(fabs(VertexZ) > 80) return kStOK; // AuAu27 80 ; dAu@39 25
+	if(fabs(VertexZ) > 80) return kStOK; // AuAu27 80 ; dAu@39 25
 	if(sqrt(pow(VertexX,2.)+pow(VertexY,2.))>2.0) return kStOK; 
-	// if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
+	if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
 
 	//check run number
 	int runnumberPointer = -999;
