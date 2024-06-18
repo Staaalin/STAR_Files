@@ -77,8 +77,8 @@ class StKFParticleAnalysisMaker : public StMaker {
   TH1D *hDaughterNDF_2;
 
   TH1F *h_eta;    
-  TH2F *H_eta_PVz;
-  TH2F *H_eta_DVz;
+  TH2F *h_eta_PVz;
+  TH2F *h_eta_DVz;
   TH1F *hVertexZ ;
   TH2F *hVertex2D;
 

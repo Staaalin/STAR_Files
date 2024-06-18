@@ -166,13 +166,13 @@ void StKFParticleAnalysisMaker::DeclareHistograms()
 	hVertexZ  = new TH1F("VertexZ" , "Event Vertex Z Position", 200, -100.0, 100.0 ) ;
 	hVertex2D = new TH2F("Vertex2D", "VertexZ vs VPD Vz", 200, -100.0, 100.0 , 200, -100., 100 ) ;
   h_eta      = new TH1F("h_eta", "eta distribution", 200, -2, 2);
-  H_eta     ->GetXaxis()->SetTitle("eta");
-  H_eta_PVz = new TH2F("H_eta_PVz", "Primary Vertex Z vs. eta", 200, -2, 2, 100,-100,100);
-  H_eta_PVz->GetXaxis()->SetTitle("eta");
-  H_eta_PVz->GetYaxis()->SetTitle("PVz [cm]");
-  H_eta_DVz = new TH2F("H_eta_DVz", "VertexZ-vpdVz vs. eta", 200, -2, 2, 100,-100,100);
-  H_eta_DVz->GetXaxis()->SetTitle("eta");
-  H_eta_DVz->GetYaxis()->SetTitle("DVz [cm]");
+  h_eta     ->GetXaxis()->SetTitle("eta");
+  h_eta_PVz = new TH2F("H_eta_PVz", "Primary Vertex Z vs. eta", 200, -2, 2, 100,-100,100);
+  h_eta_PVz->GetXaxis()->SetTitle("eta");
+  h_eta_PVz->GetYaxis()->SetTitle("PVz [cm]");
+  h_eta_DVz = new TH2F("H_eta_DVz", "VertexZ-vpdVz vs. eta", 200, -2, 2, 100,-100,100);
+  h_eta_DVz->GetXaxis()->SetTitle("eta");
+  h_eta_DVz->GetYaxis()->SetTitle("DVz [cm]");
 }
 //_____________________________________________________________________________
 void StKFParticleAnalysisMaker::WriteHistograms()
@@ -251,8 +251,8 @@ void StKFParticleAnalysisMaker::WriteHistograms()
   // hLdLPt->Write();
 
   h_eta    ->Write();
-  H_eta_PVz->Write();
-  H_eta_DVz->Write();
+  h_eta_PVz->Write();
+  h_eta_DVz->Write();
   hVertexZ ->Write();
   hVertex2D->Write();
 }
@@ -376,8 +376,8 @@ Int_t StKFParticleAnalysisMaker::Make()
         maxGBTrackIndex = index;
       }
       h_eta->Fill(gTrack->eta());
-      H_eta_PVz->Fill(gTrack->eta(),VertexZ);
-      H_eta_DVz->Fill(gTrack->eta(),VertexZ-vpdVz);
+      h_eta_PVz->Fill(gTrack->eta(),VertexZ);
+      h_eta_DVz->Fill(gTrack->eta(),VertexZ-vpdVz);
     }
   }
   vector<KFMCTrack> mcTracks(0);
