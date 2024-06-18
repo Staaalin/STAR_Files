@@ -371,16 +371,16 @@ Int_t StKFParticleAnalysisMaker::Make()
     {
       StMuTrack *gTrack = fMuDst->globalTracks(iTrack);
       if (! gTrack) continue;
+      int index = gTrack->id();
+      if(index > maxGBTrackIndex){
+        maxGBTrackIndex = index;
+      }
     	if (! gTrack->charge())  continue;
       cout<<"1s";
     	if (  gTrack->nHitsFit() < 15) continue;
       cout<<"2s";
 		  if (  gTrack->nHitsDedx() < 15) continue;
       cout<<"3s"<<endl;
-      int index = gTrack->id();
-      if(index > maxGBTrackIndex){
-        maxGBTrackIndex = index;
-      }
       h_eta->Fill(gTrack->eta());
       h_eta_PVz->Fill(gTrack->eta(),VertexZ);
       h_eta_DVz->Fill(gTrack->eta(),VertexZ-vpdVz);
