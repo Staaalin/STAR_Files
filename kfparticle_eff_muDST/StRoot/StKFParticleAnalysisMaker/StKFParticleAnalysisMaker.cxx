@@ -376,11 +376,11 @@ Int_t StKFParticleAnalysisMaker::Make()
         maxGBTrackIndex = index;
       }
     	if (! gTrack->charge())  continue;
-      cout<<"1s";
+      // cout<<"1s";
     	if (  gTrack->nHitsFit() < 15) continue;
-      cout<<"2s";
+      // cout<<"2s";
 		  if (  gTrack->nHitsDedx() < 15) continue;
-      cout<<"3s"<<endl;
+      // cout<<"3s"<<endl;
       h_eta->Fill(gTrack->eta());
       h_eta_PVz->Fill(gTrack->eta(),VertexZ);
       h_eta_DVz->Fill(gTrack->eta(),VertexZ-vpdVz);
