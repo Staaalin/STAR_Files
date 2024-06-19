@@ -1663,8 +1663,8 @@ Int_t StKFParticleAnalysisMaker::Make()
     	if (! track->charge())  continue;
     	if (  track->nHitsFit() < 15) continue;
 		if (  track->nHitsDedx() < 15) continue;
-		// if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
-		// if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
+		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
+		if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
 		if (! track->isPrimary()) continue;
 		track_index.push_back(iTrack);
 		// H_All_nSigmaKaon_y->Fill();
