@@ -160,7 +160,7 @@ Int_t StKFParticleAnalysisMaker::Init() {
 //----------------------------------------------------------------------------- 
 Int_t StKFParticleAnalysisMaker::Finish() {
 	if(mOutName!="") {
-		TFile *fout = new TFile(mOutName.Data(),"RECREATE");
+		fout = new TFile(mOutName.Data(),"RECREATE");
 		fout->cd();
 		WriteHistograms();
 		fout->Close();
@@ -626,7 +626,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		TString HistName1 = "HY_";
 		TString HistName2 = "The rapidity of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_rapidity[Jtr] = new TH1F(HistName1,HistName2,30,-1.5,1.5);
+		// H_rapidity[Jtr] = new TH1F(HistName1,HistName2,30,-1.5,1.5); // KFP Setting
+		H_rapidity[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
 		H_rapidity[Jtr]->GetXaxis()->SetTitle("y");
 
 		HistName1 = "HP_";
@@ -725,7 +726,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName1 = "H_eta";
 		HistName2 = "The eta of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_eta[Jtr] = new TH1F(HistName1,HistName2,500,-5,5);
+		H_eta[Jtr] = new TH1F(HistName1,HistName2,200,-2,2);
 		H_eta[Jtr]->GetXaxis()->SetTitle("eta");
 
 		HistName1 = "H_nHitsFit";
@@ -766,9 +767,14 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 //-----------------------------------------------------------------------------
 void StKFParticleAnalysisMaker::WriteHistograms() {
 
-	///////////////////
+	folder_EventQA  = fout->mkdir("Event_QA");
+	folder_PIDQA    = fout->mkdir("PID_QA");
+	folder_ReconsQA = fout->mkdir("Reconstruction_QA");
+
+	////////////////////////////////////// Event-QA //////////////////////////////////////
 	// hadronTree ->Write();
 
+	folder_EventQA->cd();
 	//-- Used for  test --
 	// hNRefMult ->Write();  
 	// hNRefMultA->Write();  
@@ -783,6 +789,12 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hcentRefM ->Write();
 	// hcentRefW ->Write();
 
+	fout->cd();
+
+
+	////////////////////////////////////// PID-QA //////////////////////////////////////
+
+	folder_PIDQA->cd();
 	// hdEdx_pQ->Write();
 	// hdEdx_pQ_1cut->Write();
 	// hdEdx_pQ_2cut->Write();
@@ -852,13 +864,14 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	int TriggerListLength = Trigger_List.size();
 	for (int TriggerItr = 0;TriggerItr < TriggerListLength;TriggerItr++){
 		for (int Itr = 0;Itr < 3;Itr++){
+			if (Itr != 2) continue; // Do not write specific charge bin
 			if (H_eta_nSigmaPion[TriggerItr][Itr]->Integral() == 0){continue;}
 			H_eta_nSigmaKaon  [TriggerItr][Itr]->Write();
 			H_eta_nSigmaPion  [TriggerItr][Itr]->Write();
 			H_eta_nSigmaProton[TriggerItr][Itr]->Write();
 			H_eta_m2          [TriggerItr][Itr]->Write();
 			H_eta_PVz         [TriggerItr][Itr]->Write();
-			H_eta_PVr         [TriggerItr][Itr]->Write();
+			// H_eta_PVr         [TriggerItr][Itr]->Write();
 			H_eta_DVz         [TriggerItr][Itr]->Write();
 			H_eta_triggerBIN  [TriggerItr][Itr]->Write();
 		}
@@ -867,11 +880,6 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	hEventNum->Write();
 	
-	// for (int i=0;i<PDG2NameSize;i++){
-	// 	H_ALL_NO_CUT[i]->Write();
-	// 	// H_DaughterDCA[i]->Write();
-
-	// }
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
@@ -903,6 +911,16 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	fout->cd();
+
+	////////////////////////////////////// Reconstruction-QA //////////////////////////////////////
+	folder_ReconsQA->cd();
+	for (int i=0;i<PDG2NameSize;i++){
+		H_ALL_NO_CUT[i]->Write();
+		// H_DaughterDCA[i]->Write();
+
+	}
+	fout->cd();
 	return;
 }
 

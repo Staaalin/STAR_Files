@@ -120,6 +120,11 @@ private:
 	TH1F *hcent;
 	TH1F *hcentw;
 
+	TFile *fout;
+	TDirectory* folder_EventQA;
+	TDirectory* folder_PIDQA;
+	TDirectory* folder_ReconsQA;
+
 	#define PDG2NameSize 6 // APDGList.size()
 	#define PDG2NameSize2 6 // BPDGList.size()
 	#define PDG2NameSize3 3 // CPDGList.size()
