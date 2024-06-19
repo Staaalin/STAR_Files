@@ -788,6 +788,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 
 	// hcentRefM ->Write();
 	// hcentRefW ->Write();
+	hEventNum->Write();
 
 	fout->cd();
 
@@ -878,7 +879,6 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	}
 	H_eta_trigger     ->Write();
 
-	hEventNum->Write();
 	
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
