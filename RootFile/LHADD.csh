@@ -22,7 +22,7 @@ set i = 0
 set j = 0
 set k = 0
 set n = 0
-set start = 66204
+set start = 0
 set end = 0
 set step = 100
 
@@ -69,6 +69,7 @@ while ($n < 500)
 
 end
 
+cd /star/data01/pwg/svianping/HADD/
 
 if (-e output_*.root) then
 
