@@ -38,9 +38,9 @@
 #include "MyToolkit.h"
 
 // #define DataName           "pAu_200_15"
-#define DataName           "AuAu_27_18"
+// #define DataName           "AuAu_27_18"
 // #define DataName           "dAu_200_16"
-// #define DataName           "dAu_200_21"
+#define DataName           "dAu_200_21"
 // #define DataName           "dAu_62_16"
 // #define DataName           "dAu_39_16"
 // #define DataName           "dAu_20_16"
@@ -1887,7 +1887,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 					if (abs(PDGList[Itr])==321) {
 						if (
 							(
-								((0.196 <= m2)&&(m2 <= 0.292))
+								// ((0.196 <= m2)&&(m2 <= 0.292)) // Tight
+								((0.123 <= m2)&&(m2 <= 0.359))
 								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
 							) == false
 						)
