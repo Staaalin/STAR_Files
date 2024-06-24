@@ -46,6 +46,7 @@
 // #define DataName           "dAu_20_16"
 #define pi                 TMath::Pi()
 #define OmegaPdgMass	   1.67245
+#define XiPdgMass	       1.1972
 //#define OmegaMassSigma     0.0021
 #define LambdaPdgMass      1.11568
 #define ProtonPdgMass      0.938272
@@ -1570,7 +1571,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 				float PPy = particle.GetPy();
 				float PPz = particle.GetPz();
 				float PMass = 0.0;
-				if (PDGList[Itr] == )
+				if (abs(PDGList[Itr]) == LambdaPdg){ PMass = LambdaPdgMass;}
+				else if (abs(PDGList[Itr]) == XiPdg){ PMass = XiPdgMass;}
+				else if (abs(PDGList[Itr]) == OmegaPdg){ PMass = OmegaPdgMass;}
+				float PEnergy = pow(PPx*PPx + PPy*PPy + PPz*PPz + PMass*PMass , 0.5);
 				H_Hyperon_Rap[Itr]->Fill(0.5*log((PEnergy+PPz)/(PEnergy-PPz)));
 				if (StKFParticleAnalysisMaker::IfGoodDaughterDCA(mPicoDst , iKFParticle , magnet , 0.6 , 0.6)){
 					H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
@@ -1822,7 +1826,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 				float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
 				float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
 				// hgbtofYlocal->Fill(BtofYLocal);
-				if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+				// if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+				if((tofflag == 1) && (tof > 0)) hasTOF = true;
+				if ((BtofYLocal < -1.8) && (BtofYLocal > 1.8)) {cout<<"BtofYLocal = "<<BtofYLocal<<endl;}
+				if ((mPicoDst->btofPidTraits(tofindex))->nSigmaKaon() != 0){
+					cout<<"nSigmaKaon() = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
+				}
 			}
 			StPicoPhysicalHelix helix = track->helix(magnet);
 			TVector3 pkaon = helix.momentum(magnet*kilogauss);
