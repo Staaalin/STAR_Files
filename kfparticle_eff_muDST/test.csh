@@ -4,9 +4,9 @@
 # inputs
 set iJob=$1
 # settings
-set nRun=16
+set nRun=21
 set mRun=Run${nRun}
-set mEnergy=62.0
+set mEnergy=200.0
 set ListDir=./datalist/
 set MainDir=`pwd`
 
