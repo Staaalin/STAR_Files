@@ -618,6 +618,12 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		H_CrectDaughter[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
 		H_CrectDaughter[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
+		
+		HistName1 = "H_Hyperon_Rap_";
+		HistName2 = "The Rapidity of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_Hyperon_Rap[Itr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
+		H_Hyperon_Rap[Itr]->GetXaxis()->SetTitle("y");
 	}
 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 		int Jtr = Itr - PDG2NameSize;
@@ -918,6 +924,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	for (int i=0;i<PDG2NameSize;i++){
 		H_ALL_NO_CUT[i]->Write();
 		// H_DaughterDCA[i]->Write();
+		H_Hyperon_Rap[i]->Write();
 
 	}
 	fout->cd();
@@ -1559,6 +1566,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 		for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 			if (particle.GetPDG() == PDGList[Itr]){
+				float PPx = particle.GetPx();
+				float PPy = particle.GetPy();
+				float PPz = particle.GetPz();
+				float PMass = 0.0;
+				if (PDGList[Itr] == )
+				H_Hyperon_Rap[Itr]->Fill(0.5*log((PEnergy+PPz)/(PEnergy-PPz)));
 				if (StKFParticleAnalysisMaker::IfGoodDaughterDCA(mPicoDst , iKFParticle , magnet , 0.6 , 0.6)){
 					H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
 					H_DaughterDCA[Itr]->Fill(particle.GetMass());
@@ -1682,7 +1695,8 @@ Int_t StKFParticleAnalysisMaker::Make()
     	if (! track->charge())  continue;
     	if (  track->nHitsFit() < 15) continue;
 		if (  track->nHitsDedx() < 15) continue;
-		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
+		// if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
+		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 0.9) continue;
 		if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
 		if (! track->isPrimary()) continue;
 		track_index.push_back(iTrack);
