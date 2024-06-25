@@ -791,11 +791,18 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_ndEdx[Jtr]->GetXaxis()->SetTitle("ndEdx");
 
 		HistName1 = "H_nSigmaTOF_p_";
-		HistName2 = "The nSigmaTOF vs p of ";
+		HistName2 = "The nSigmaTOFKaon vs p of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_nSigmaTOF_p[Jtr] = new TH2F(HistName1,HistName2,500,-10,10,500,-10,10);
-		H_nSigmaTOF_p[Jtr]->GetXaxis()->SetTitle("nSigmaTOF");
+		H_nSigmaTOF_p[Jtr] = new TH2F(HistName1,HistName2,250,-10,10,250,0,10);
+		H_nSigmaTOF_p[Jtr]->GetXaxis()->SetTitle("nSigmaTOFKaon");
 		H_nSigmaTOF_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
+		
+		HistName1 = "H_y_nSigmaTOFKaon_";
+		HistName2 = "The nSigmaTOFKaon vs rapidity of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_y_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,250,-10,10);
+		H_y_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("y");
+		H_y_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
 		
 		HistName1 = "H_Pxy_";
 		HistName2 = "The Px vs Py of ";
@@ -974,6 +981,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_Pz[Jtr]->Write();
 		H_y_Nch[Jtr]->Write();
 		H_Pz_Nch[Jtr]->Write();
+		H_y_nSigmaTOFKaon[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2024,6 +2032,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					if(abs(PDGList[Itr])==321){
 						H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
 						hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
+						H_y_nSigmaTOFKaon[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
 					}
 
 					QA_dEdx.emplace_back(track->dEdx());
