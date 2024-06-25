@@ -1918,6 +1918,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
 				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+					int Jtr = Itr - PDG2NameSize;
 					if (NeedPDG[Ktr] != PDGList[Itr]){continue;}
 					//// For Kaon
 					if (abs(PDGList[Itr])==321) {
@@ -1930,9 +1931,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 							) == false
 						)
 						{continue;}
+						H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
+						hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
 					}
 					////
-					int Jtr = Itr - PDG2NameSize;
 					H_Pt[Jtr] -> Fill(pt);
 					H_P[Jtr] -> Fill(p);
 					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
@@ -1952,8 +1954,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_y_nHitsDedx[Jtr]->Fill(rap,track->nHitsDedx());
 					H_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
 					H_y_eta[Jtr]->Fill(rap,eta);
-					H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
-					hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
 
 					QA_dEdx.emplace_back(track->dEdx());
 					QA_nSigmaProton.emplace_back(track->nSigmaProton());
