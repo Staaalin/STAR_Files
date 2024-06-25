@@ -1692,6 +1692,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	NeedPDG.push_back( 2212);NeedPDG.push_back( 211);NeedPDG.push_back( 321);
 	NeedPDG.push_back(-2212);NeedPDG.push_back(-211);NeedPDG.push_back(-321);
 	std::vector<int> track_index;
+	double Total_Pz = 0.0;
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 		StPicoTrack *track = mPicoDst->track(iTrack);
 		hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
@@ -1705,6 +1706,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (! track->isPrimary()) continue;
 		track_index.push_back(iTrack);
 		// H_All_nSigmaKaon_y->Fill();
+		Total_Pz += track->gMom().Z();
 
 
 		// track info
@@ -2045,6 +2047,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 
 	}
+	cout<<"Total_Pz = "<<Total_Pz<<endl;
 
 // ======= KFParticle end ======= //
 
