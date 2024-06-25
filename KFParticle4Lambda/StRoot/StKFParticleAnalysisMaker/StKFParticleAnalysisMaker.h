@@ -119,6 +119,7 @@ private:
 	TH1F *hDiffVz  ; 
 	TH1F *hcent;
 	TH1F *hcentw;
+	TH1F *H_Total_Pz;
 
 	TFile *fout;
 	TDirectory* folder_EventQA;

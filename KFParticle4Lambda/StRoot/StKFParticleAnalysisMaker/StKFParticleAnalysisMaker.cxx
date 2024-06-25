@@ -263,6 +263,9 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
+	H_Total_Pz = new TH1D("H_Total_Pz","Total P_z for all tracks",     200,-1000,1000);
+	H_Total_Pz->GetXaxis()->SetTitle("P_z [GeV]");
+
 	H_Pt_m2 = new TH2F("H_Pt_m2","m2 vs. p_t",     400,0,10,500,-0.5,2);
 	H_Pt_m2->GetXaxis()->SetTitle("p_t [GeV]");
 	H_Pt_m2->GetYaxis()->SetTitle("m2 [Gev^2]");
@@ -796,6 +799,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	// hcentRefM ->Write();
 	// hcentRefW ->Write();
 	hEventNum->Write();
+	H_Total_Pz->Write();
 
 	fout->cd();
 
@@ -2048,6 +2052,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	}
 	cout<<"Total_Pz = "<<Total_Pz<<endl;
+	H_Total_Pz->Fill(Total_Pz);
 
 // ======= KFParticle end ======= //
 
