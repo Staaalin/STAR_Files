@@ -807,8 +807,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName1 = "H_Pz_";
 		HistName2 = "The Pz of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_Pz[Jtr] = new TH1F(HistName1,HistName2,400,-100,100);
-		H_Pz[Jtr]->GetXaxis()->SetTitle("Px [GeV]");
+		H_Pz[Jtr] = new TH1F(HistName1,HistName2,400,-10,10);
+		H_Pz[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
 	}
 
 
