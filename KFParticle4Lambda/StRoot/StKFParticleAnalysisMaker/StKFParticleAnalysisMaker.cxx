@@ -707,13 +707,20 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_y_eta[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-2,2);
 		H_y_eta[Jtr]->GetXaxis()->SetTitle("y");
 		H_y_eta[Jtr]->GetYaxis()->SetTitle("eta");
-
-		HistName1 = "H_dEdx_p";
-		HistName2 = "The dEdx vs. momentum of ";
+		
+		HistName1 = "H_y_eta_";
+		HistName2 = "The y vs. eta of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_dEdx_p[Jtr] = new TH2F(HistName1,HistName2,2000,-10,10,1000,0,20);
-		H_dEdx_p[Jtr]->GetXaxis()->SetTitle("P [GeV]");
-		H_dEdx_p[Jtr]->GetYaxis()->SetTitle("dE/dx [keV/cm]");
+		H_y_eta[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-2,2);
+		H_y_eta[Jtr]->GetXaxis()->SetTitle("y");
+		H_y_eta[Jtr]->GetYaxis()->SetTitle("eta");
+
+		HistName1 = "hgbtofYlocal";
+		HistName2 = "The btofYlocal vs. rapidity of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		hgbtofYlocal[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+		hgbtofYlocal[Jtr]->GetXaxis()->SetTitle("y");
+		hgbtofYlocal[Jtr]->GetYaxis()->SetTitle("btofYlocal");
 
 		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
 			HistName1 = "H_Pt_nSigma";
@@ -919,6 +926,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_y_nHitsDedx[Jtr]->Write();
 		H_y_nHitsFit2nHitsMax[Jtr]->Write();
 		H_y_eta[Jtr]->Write();
+		hgbtofYlocal[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1831,7 +1839,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
 				float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
 				float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
-				hgbtofYlocal->Fill(BtofYLocal);
 				if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
 				// if((tofflag == 1) && (tof > 0)) hasTOF = true;
 				// if ((BtofYLocal < -1.8) && (BtofYLocal > 1.8)) {cout<<"BtofYLocal = "<<BtofYLocal<<endl;}
@@ -1946,6 +1953,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
 					H_y_eta[Jtr]->Fill(rap,eta);
 					H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
+					hgbtofYlocal->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
 
 					QA_dEdx.emplace_back(track->dEdx());
 					QA_nSigmaProton.emplace_back(track->nSigmaProton());

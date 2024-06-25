@@ -157,6 +157,7 @@ private:
 	TH2F *H_y_nHitsDedx[PDG2NameSize2];
 	TH2F *H_y_nHitsFit2nHitsMax[PDG2NameSize2];
 	TH2F *H_y_eta[PDG2NameSize2];
+	TH2F *hgbtofYlocal[PDG2NameSize2];
 
 	TH2F *H_eta_nSigmaKaon  [30][3];// Trigger Num not larger than 30
 	TH2F *H_eta_nSigmaPion  [30][3];// Trigger Num not larger than 30
