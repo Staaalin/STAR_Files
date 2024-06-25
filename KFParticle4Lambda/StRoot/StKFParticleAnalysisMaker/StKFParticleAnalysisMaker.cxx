@@ -263,15 +263,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 	H_Total_Pz = new TH1F("H_Total_Pz","Total P_z for all tracks",     400,-100,100);
-=======
-	H_Total_Pz = new TH1D("H_Total_Pz","Total P_z for all tracks",     200,-1000,1000);
->>>>>>> parent of 38cda1f9 (Update StKFParticleAnalysisMaker.cxx)
-=======
-	H_Total_Pz = new TH1D("H_Total_Pz","Total P_z for all tracks",     200,-1000,1000);
->>>>>>> parent of 38cda1f9 (Update StKFParticleAnalysisMaker.cxx)
 	H_Total_Pz->GetXaxis()->SetTitle("P_z [GeV]");
 
 	H_Pt_m2 = new TH2F("H_Pt_m2","m2 vs. p_t",     400,0,10,500,-0.5,2);
