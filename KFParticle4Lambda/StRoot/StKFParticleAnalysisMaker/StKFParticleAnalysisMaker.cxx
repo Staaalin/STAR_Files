@@ -708,12 +708,12 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_y_eta[Jtr]->GetXaxis()->SetTitle("y");
 		H_y_eta[Jtr]->GetYaxis()->SetTitle("eta");
 		
-		HistName1 = "H_y_eta_";
-		HistName2 = "The y vs. eta of ";
+		HistName1 = "H_dEdx_p";
+		HistName2 = "The dEdx vs. momentum of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_eta[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-2,2);
-		H_y_eta[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_eta[Jtr]->GetYaxis()->SetTitle("eta");
+		H_dEdx_p[Jtr] = new TH2F(HistName1,HistName2,2000,-10,10,1000,0,20);
+		H_dEdx_p[Jtr]->GetXaxis()->SetTitle("P [GeV]");
+		H_dEdx_p[Jtr]->GetYaxis()->SetTitle("dE/dx [keV/cm]");
 
 		HistName1 = "hgbtofYlocal";
 		HistName2 = "The btofYlocal vs. rapidity of ";
@@ -1952,8 +1952,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_y_nHitsDedx[Jtr]->Fill(rap,track->nHitsDedx());
 					H_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
 					H_y_eta[Jtr]->Fill(rap,eta);
-					// H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
-					// hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
+					H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
+					hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
 
 					QA_dEdx.emplace_back(track->dEdx());
 					QA_nSigmaProton.emplace_back(track->nSigmaProton());
