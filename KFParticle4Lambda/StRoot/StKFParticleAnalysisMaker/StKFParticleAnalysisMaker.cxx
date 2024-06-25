@@ -1952,8 +1952,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_y_nHitsDedx[Jtr]->Fill(rap,track->nHitsDedx());
 					H_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
 					H_y_eta[Jtr]->Fill(rap,eta);
-					H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
-					hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
+					// H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
+					// hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
 
 					QA_dEdx.emplace_back(track->dEdx());
 					QA_nSigmaProton.emplace_back(track->nSigmaProton());
