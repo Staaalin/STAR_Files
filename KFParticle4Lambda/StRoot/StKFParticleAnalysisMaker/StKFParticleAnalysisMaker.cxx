@@ -263,7 +263,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
 	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
 
-	H_Total_Pz = new TH1F("H_Total_Pz","Total P_z for all tracks",     200,-1000,1000);
+	H_Total_Pz = new TH1F("H_Total_Pz","Total P_z for all tracks",     400,-100,100);
 	H_Total_Pz->GetXaxis()->SetTitle("P_z [GeV]");
 
 	H_Pt_m2 = new TH2F("H_Pt_m2","m2 vs. p_t",     400,0,10,500,-0.5,2);
@@ -761,7 +761,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName1 = "H_nSigmaTOF_p";
 		HistName2 = "The nSigmaTOF vs p of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_nSigmaTOF_p[Jtr] = new TH2F(HistName1,HistName2,500,0,10,500,-10,10);
+		H_nSigmaTOF_p[Jtr] = new TH2F(HistName1,HistName2,500,-10,10,500,-10,10);
 		H_nSigmaTOF_p[Jtr]->GetXaxis()->SetTitle("nSigmaTOF");
 		H_nSigmaTOF_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
 	}
@@ -1831,13 +1831,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 				int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
 				float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
 				float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
-				// hgbtofYlocal->Fill(BtofYLocal);
-				// if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
-				if((tofflag == 1) && (tof > 0)) hasTOF = true;
-				if ((BtofYLocal < -1.8) && (BtofYLocal > 1.8)) {cout<<"BtofYLocal = "<<BtofYLocal<<endl;}
-				if ((mPicoDst->btofPidTraits(tofindex))->nSigmaKaon() != 0){
-					cout<<"nSigmaKaon() = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
-				}
+				hgbtofYlocal->Fill(BtofYLocal);
+				if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+				// if((tofflag == 1) && (tof > 0)) hasTOF = true;
+				// if ((BtofYLocal < -1.8) && (BtofYLocal > 1.8)) {cout<<"BtofYLocal = "<<BtofYLocal<<endl;}
+				// if ((mPicoDst->btofPidTraits(tofindex))->nSigmaKaon() != 0){
+				// 	cout<<"nSigmaKaon() = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
+				// }
 			}
 			StPicoPhysicalHelix helix = track->helix(magnet);
 			TVector3 pkaon = helix.momentum(magnet*kilogauss);
@@ -1945,6 +1945,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_y_nHitsDedx[Jtr]->Fill(rap,track->nHitsDedx());
 					H_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
 					H_y_eta[Jtr]->Fill(rap,eta);
+					H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
 
 					QA_dEdx.emplace_back(track->dEdx());
 					QA_nSigmaProton.emplace_back(track->nSigmaProton());
@@ -1990,7 +1991,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 							if (track->nSigmaKaon() < -3) H_m2_KSigma_S->Fill(track->gMom().Perp(), m2);
 						}
 						float nSIgmaTOF = (1/beta-1/betaTheroy)/0.013;
-						H_nSigmaTOF_p[Jtr]->Fill(nSIgmaTOF,track->gMom().Mag());
+						// H_nSigmaTOF_p[Jtr]->Fill(nSIgmaTOF,track->gMom().Mag());
 						// zTOF_proton = 1/beta - sqrt(ProtonPdgMass*ProtonPdgMass/pkaon.Mag2()+1);
 						// zTOF_pion   = 1/beta - sqrt(PionPdgMass*PionPdgMass/pkaon.Mag2()+1);
 						// zTOF_kaon   = 1/beta - sqrt(KaonPdgMass*KaonPdgMass/pkaon.Mag2()+1);
