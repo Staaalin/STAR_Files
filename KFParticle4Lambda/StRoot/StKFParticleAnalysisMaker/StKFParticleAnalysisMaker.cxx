@@ -915,6 +915,9 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 		int Jtr = Itr - PDG2NameSize;
 
+		PID_Tracks[Jtr]  = folder_PIDQA->mkdir(NameList[Itr]);
+		PID_Tracks[Jtr] -> cd();
+
 		H_rapidity[Jtr] -> Write();
 
 		H_P[Jtr] -> Write();
@@ -948,6 +951,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	////////////////////////////////////// Reconstruction-QA //////////////////////////////////////
 	folder_ReconsQA->cd();
 	for (int i=0;i<PDG2NameSize;i++){
+		KFPRecons[i]  = folder_ReconsQA->mkdir(NameList[i]);
+		KFPRecons[i] -> cd();
 		H_ALL_NO_CUT[i]->Write();
 		// H_DaughterDCA[i]->Write();
 		H_Hyperon_Rap[i]->Write();

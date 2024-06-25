@@ -145,6 +145,7 @@ private:
 	TH1F *H_WrongDaughter[PDG2NameSize];
 	TH1F *H_CrectDaughter[PDG2NameSize];
 	TH1F *H_Hyperon_Rap[PDG2NameSize];
+	TDirectory* KFPRecons[PDG2NameSize];
 	TH1F *H_rapidity[PDG2NameSize2];
 	TH1F *H_P[PDG2NameSize2];
 	TH1F *H_Pt[PDG2NameSize2];
@@ -160,6 +161,7 @@ private:
 	TH2F *H_y_eta[PDG2NameSize2];
 	TH2F *hgbtofYlocal[PDG2NameSize2];
 	TH2F *H_y_Pz[PDG2NameSize2];
+	TDirectory* PID_Tracks[PDG2NameSize2];
 
 	TH2F *H_eta_nSigmaKaon  [30][3];// Trigger Num not larger than 30
 	TH2F *H_eta_nSigmaPion  [30][3];// Trigger Num not larger than 30
