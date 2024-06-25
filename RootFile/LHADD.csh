@@ -1,6 +1,6 @@
 #!/bin/csh
 echo "准备执行"
-sleep 5
+sleep 2000
 echo "执行"
 
 rm condor.log
@@ -22,7 +22,7 @@ set i = 0
 set j = 0
 set k = 0
 set n = 0
-set start = 0
+set start = 9520
 set end = 0
 set step = 100
 
