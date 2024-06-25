@@ -732,6 +732,20 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_y_Pz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,-10,10);
 		H_y_Pz[Jtr]->GetXaxis()->SetTitle("y");
 		H_y_Pz[Jtr]->GetYaxis()->SetTitle("p_z [GeV]");
+		
+		HistName1 = "H_y_Nch";
+		HistName2 = "The Nch vs. rapidity of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_y_Nch[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,0,200);
+		H_y_Nch[Jtr]->GetXaxis()->SetTitle("y");
+		H_y_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
+		
+		HistName1 = "H_Pz_Nch";
+		HistName2 = "The Nch vs. Pz of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_Pz_Nch[Jtr] = new TH2F(HistName1,HistName2,200,-10,10,200,0,200);
+		H_Pz_Nch[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
+		H_Pz_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
 
 		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
 			HistName1 = "H_Pt_nSigma";
@@ -776,12 +790,25 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_ndEdx[Jtr] = new TH1F(HistName1,HistName2,50,0,50);
 		H_ndEdx[Jtr]->GetXaxis()->SetTitle("ndEdx");
 
-		HistName1 = "H_nSigmaTOF_p";
+		HistName1 = "H_nSigmaTOF_p_";
 		HistName2 = "The nSigmaTOF vs p of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		H_nSigmaTOF_p[Jtr] = new TH2F(HistName1,HistName2,500,-10,10,500,-10,10);
 		H_nSigmaTOF_p[Jtr]->GetXaxis()->SetTitle("nSigmaTOF");
 		H_nSigmaTOF_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
+		
+		HistName1 = "H_Pxy_";
+		HistName2 = "The Px vs Py of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_Pxy[Jtr] = new TH2F(HistName1,HistName2,100,-10,10,100,-10,10);
+		H_Pxy[Jtr]->GetXaxis()->SetTitle("Px [GeV]");
+		H_Pxy[Jtr]->GetYaxis()->SetTitle("Py [GeV]");
+		
+		HistName1 = "H_Pz_";
+		HistName2 = "The Pz of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_Pz[Jtr] = new TH1F(HistName1,HistName2,400,-100,100);
+		H_Pz[Jtr]->GetXaxis()->SetTitle("Px [GeV]");
 	}
 
 
@@ -943,6 +970,10 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_y_eta[Jtr]->Write();
 		hgbtofYlocal[Jtr]->Write();
 		H_y_Pz[Jtr]->Write();
+		H_Pxy[Jtr]->Write();
+		H_Pz[Jtr]->Write();
+		H_y_Nch[Jtr]->Write();
+		H_Pz_Nch[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1723,6 +1754,19 @@ Int_t StKFParticleAnalysisMaker::Make()
 	NeedPDG.push_back(-2212);NeedPDG.push_back(-211);NeedPDG.push_back(-321);
 	std::vector<int> track_index;
 	double Total_Pz = 0.0, Total_Px = 0.0, Total_Py = 0.0;
+	// Calculating Nch
+	int NumCharge = 0;
+	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
+		StPicoTrack *track = mPicoDst->track(iTrack);
+    	if (! track)            continue;
+    	if (! track->charge())  continue;
+    	if (  track->nHitsFit() < 15) continue;
+		if (  track->nHitsDedx() < 15) continue;
+		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
+		if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
+		if (! track->isPrimary()) continue;
+		NumCharge++;
+	}
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 		StPicoTrack *track = mPicoDst->track(iTrack);
 		hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
@@ -1973,6 +2017,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
 					H_y_eta[Jtr]->Fill(rap,eta);
 					H_y_Pz[Jtr]->Fill(rap,track_pz);
+					H_Pxy[Jtr]->Fill(track_px,track_py);
+					H_Pz[Jtr]->Fill(track_pz);
+					H_y_Nch[Jtr]->Fill(rap,NumCharge);
+					H_Pz_Nch[Jtr]->Fill(track_pz,NumCharge);
 					if(abs(PDGList[Itr])==321){
 						H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
 						hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
