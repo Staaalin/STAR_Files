@@ -87,7 +87,7 @@ while ($i <= $numFiles)
     set ARM = " > "
     echo ll >> $SubXml
     echo echo \"000000000000000000000000000000000000000\" >> $SubXml
-    echo hadd \$OutputName\$i\.root \$InputName\_\*\.root >> $SubXml
+    echo hadd $OutputName$i\.root $InputName\*\.root >> $SubXml
     # echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'$ARM$i".log" >> $SubXml
     echo \</command\> >> $SubXml
 
