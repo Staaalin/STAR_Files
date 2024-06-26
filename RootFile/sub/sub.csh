@@ -62,6 +62,7 @@ endif
 
 rm -rf /star/data01/pwg/svianping/HADD/
 mkdir /star/data01/pwg/svianping/HADD/
+mkdir /star/data01/pwg/svianping/HADD/log/
 
 set MainDir=`pwd`
 
