@@ -1996,8 +1996,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 					if (abs(PDGList[Itr])==321) {
 						if (
 							(
-								// ((0.196 <= m2)&&(m2 <= 0.292)) // Tight 0.5 < $p_t$ < 0.6 GeV
-								((0.123 <= m2)&&(m2 <= 0.359)) // Soft 1.0 < $p_t$ < 1.1 GeV
+								((0.196 <= m2)&&(m2 <= 0.292)) // Tight 0.5 < $p_t$ < 0.6 GeV
+								// ((0.123 <= m2)&&(m2 <= 0.359)) // Soft 1.0 < $p_t$ < 1.1 GeV
 								// ((0.0674 <= m2)&&(m2 <= 0.407)) // Soft 1.2 < $p_t$ < 1.3 GeV
 								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
 							) == false
