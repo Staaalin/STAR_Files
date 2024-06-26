@@ -72,8 +72,11 @@ end
 
 cd /star/data01/pwg/svianping/HADD/
 
+ls
 
 if (-e output_*.root) then
+
+    echo "Final Group"
 
     @ k = $k + 1
 
