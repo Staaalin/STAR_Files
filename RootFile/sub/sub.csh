@@ -14,11 +14,25 @@ set InputNameIndex = "$<"
 echo "Please enter merge how much .root into ONE:"
 set FilesPerJob = "$<"
 
-echo "Please enter from which file:"
-set FileStart = "$<"
+echo "Set Start and End? 0:no , 1:yes"
+set Mode = "$<"
 
-echo "Please enter to which file:"
-set FileEnd = "$<"
+if ($Mode == 1) then
+
+    echo "Please enter from which file:"
+    set FileStart = "$<"
+
+    echo "Please enter to which file:"
+    set FileEnd = "$<"
+
+else if ($Mode == 0) then
+
+    echo "Please enter MAX files scan:"
+    set FileStart = 0
+    set FileEnd = "$<"
+
+endif
+
 
 if ($InputNameIndex == 1) then
     set ObvInputName = "/star/data01/pwg/svianping/output/output_"
@@ -73,14 +87,14 @@ while ($i <= $numFiles)
     set ARM = " > "
     echo ll >> $SubXml
     echo echo \"000000000000000000000000000000000000000\" >> $SubXml
-    echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'$ARM$i".log" >> $SubXml
-    # echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'" >> /star/u/svianping/STAR_Files/RootFile/sub.log" >> $SubXml
+    echo hadd \$OutputName\$i\.root \$InputName\_\*\.root >> $SubXml
+    # echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'$ARM$i".log" >> $SubXml
     echo \</command\> >> $SubXml
 
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
     echo \<Package name=\"ZIP\_File\_$i\"\> >> $SubXml
-    echo \<File\>file:/star/u/svianping/STAR\_Files/RootFile/HADDr\_xml\.C\</File\> >> $SubXml
-    set k = 0
+    # echo \<File\>file:/star/u/svianping/STAR\_Files/RootFile/HADDr\_xml\.C\</File\> >> $SubXml
+    @ k = 0
     while ($k < $FilesPerJob)
         @ j = $FileStart + $i * $FilesPerJob + $k
         if ($j > $FileEnd) then
