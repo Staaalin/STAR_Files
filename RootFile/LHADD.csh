@@ -1,6 +1,6 @@
 #!/bin/csh
 echo "准备执行"
-sleep 5
+sleep 10000
 echo "执行"
 
 rm condor.log
