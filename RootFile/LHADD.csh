@@ -69,7 +69,9 @@ while ($n < 500)
 
 end
 
+
 cd /star/data01/pwg/svianping/HADD/
+
 
 if (-e output_*.root) then
 
@@ -79,47 +81,4 @@ if (-e output_*.root) then
 
 endif
 
-# while ($i <= $numFiles)
 
-#     cp output_$i.root /star/data01/pwg/svianping/HADD/
-#     echo "成功复制 output_$i.root"
-
-#     if ($j == $step) then
-#         cd /star/data01/pwg/svianping/HADD/
-#         hadd HADD_$k.root output_*.root
-#         echo "成功创建 HADD_$k.root"
-#         rm -rf output_*.root
-#         @ j = 0
-#     endif
-
-#     @ i = $i + 1
-
-#     @ j = $j + 1
-
-# end
-
-# @ numFiles = `find . -maxdepth 1 -name "HADD_*.root" -type f | wc -l`
-# @ i = 0
-# @ j = 0
-# @ k = 0
-# @ start = 0
-# @ end = 0
-# @ step = 50
-# while ($i <= $numFiles)
-
-#     cp HADD_$i.root /star/data01/pwg/svianping/output/
-#     echo "成功复制 HADD_$i.root"
-
-#     if ($j == $step) then
-#         cd /star/data01/pwg/svianping/output/
-#         hadd HADDC_$k.root HADD_*.root
-#         echo "成功创建 HADDC_$k.root"
-#         rm -rf HADD_*.root
-#         @ j = 0
-#     endif
-
-#     @ i = $i + 1
-
-#     @ j = $j + 1
-
-# end
