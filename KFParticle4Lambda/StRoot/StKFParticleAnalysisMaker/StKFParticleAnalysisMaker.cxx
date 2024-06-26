@@ -40,10 +40,10 @@
 // #define DataName           "pAu_200_15"
 // #define DataName           "AuAu_27_18"
 // #define DataName           "dAu_200_16"
-#define DataName           "dAu_200_21"
+// #define DataName           "dAu_200_21"
 // #define DataName           "dAu_62_16"
 // #define DataName           "dAu_39_16"
-// #define DataName           "dAu_20_16"
+#define DataName           "dAu_20_16"
 #define pi                 TMath::Pi()
 #define OmegaPdgMass	   1.67245
 #define XiPdgMass	       1.1972
@@ -1997,8 +1997,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 						if (
 							(
 								// ((0.196 <= m2)&&(m2 <= 0.292)) // Tight 0.5 < $p_t$ < 0.6 GeV
-								// ((0.123 <= m2)&&(m2 <= 0.359)) // Soft 1.0 < $p_t$ < 1.1 GeV
-								((0.0674 <= m2)&&(m2 <= 0.407)) // Soft 1.2 < $p_t$ < 1.3 GeV
+								((0.123 <= m2)&&(m2 <= 0.359)) // Soft 1.0 < $p_t$ < 1.1 GeV
+								// ((0.0674 <= m2)&&(m2 <= 0.407)) // Soft 1.2 < $p_t$ < 1.3 GeV
 								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
 							) == false
 						)
