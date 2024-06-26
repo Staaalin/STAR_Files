@@ -22,7 +22,7 @@ set i = 0
 set j = 0
 set k = 0
 set n = 0
-set start = 9520
+set start = 0 # Changeable
 set end = 0
 set step = 100
 
