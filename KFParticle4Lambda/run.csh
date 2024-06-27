@@ -17,7 +17,7 @@ set TempDir=/home/tmp/svianping #TODO
 #set JOBID=ScriptTestSandbox
 
 cp $ListDir/runList/backup/$CollisionType/run${nRun}List$mEnergy.list $ListDir/runList/
-cp $ListDir/badList/backup/$CollisionType/badrun${nRun}List$mEnergy.list $ListDir/runList/
+cp $ListDir/badList/backup/$CollisionType/badrun${nRun}List$mEnergy.list $ListDir/badList/
 
 echo $FILELIST
 
