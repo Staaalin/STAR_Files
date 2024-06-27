@@ -662,16 +662,13 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
     
     if(fUseHFTTracksOnly && nHftHitsInTrack < 3) continue;
     
-    cout<<"SS6"<<endl;
     StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(iTrack);
     cout<<"SS8"<<endl;
     const StDcaGeometry dcaG = cov->dcaGeometry();
     cout<<"SS9"<<endl;
     Int_t q = 1; if (gTrack->charge() < 0) q = -1;
-    cout<<"SS10"<<endl;
     KFPTrack track;
     if( !GetTrack(dcaG, track, q, index) ) continue;
-    cout<<"SS11"<<endl;
     
     if(fCollectTrackHistograms)
     {
@@ -680,7 +677,6 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
       else    fTrackHistograms2D[2]->Fill(track.GetP(), gTrack->dEdx());  
     }
     
-    cout<<"SS12"<<endl;
     double m2tof = -1.e6;
     bool isTofm2 = false;
     if(gTrack->bTofPidTraitsIndex() > 0)
