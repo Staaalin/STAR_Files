@@ -1128,6 +1128,7 @@ void StKFParticleAnalysisMaker::Clear(Option_t *opt) {
 //----------------------------------------------------------------------------- 
 Int_t StKFParticleAnalysisMaker::Make() 
 {
+	cout<<"1"<<endl;
 	// cout<<"Start Make"<<endl;
 	PicoDst = StPicoDst::instance(); 		
 	StPicoDst* mPicoDst = PicoDst;
@@ -1240,6 +1241,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	if (IfTriggerMatch == false) {return kStOK;}
 	hEventNum -> Fill(1);
 
+	
+	cout<<"2"<<endl;
 	// cout<<"Trigger OK"<<endl;
 
 	const TVector3 Vertex3D=mEvent->primaryVertex();
@@ -1386,6 +1389,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// 	}
 	// }
 
+	
+	cout<<"3"<<endl;
 	// HighLight Reconstructed Track
 	// cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
 	std::vector<int> DaughterParticle,MatherPartiecle;DaughterParticle.resize(0);MatherPartiecle.resize(0);
@@ -1421,6 +1426,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	}
 	// cout<<DaughterParticle.size()<<endl;
 
+	
+	cout<<"4"<<endl;
 	Omega_Omegab_Num = 0;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
@@ -1555,6 +1562,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// cout<<"Here is good 3"<<endl;
 
 
+		cout<<"5"<<endl;
 		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != XiPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
 		Recorded_Hyperon ++;
 
@@ -1621,6 +1629,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
 		// StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
 		
+		cout<<"6"<<endl;
 		// for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 		// 	if (particle.GetPDG() == PDGList[Itr]){
 		// 		pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
@@ -1677,6 +1686,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 		
+		cout<<"7"<<endl;
 		// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		// TVector3 xv0, op1, op2;
@@ -1698,6 +1708,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		tempParticle.SetProductionVertex(pv);
 		tempParticle.GetDecayLength(l, dl);// cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
 
+		cout<<"8"<<endl;
 		if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg))) {
 
 			// helix
@@ -1749,6 +1760,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// cout<<"Here is good 1"<<endl;
 
 
+		cout<<"9"<<endl;
 		int upQ; // cout<<"Here is good 2"<<endl;
 		if (particle.GetPDG() == LambdaPdg) {upQ = 1;} 
 		else if (particle.GetPDG() == -1*LambdaPdg) {upQ = -1;} 
@@ -1768,6 +1780,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 
 
+	cout<<"10"<<endl;
 	// Filling Track
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	std::vector<int> NeedPDG; NeedPDG.resize(0);
@@ -2105,7 +2118,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
-				
+
+	cout<<"11"<<endl;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// if (IfRecordThisTrack == true) {
