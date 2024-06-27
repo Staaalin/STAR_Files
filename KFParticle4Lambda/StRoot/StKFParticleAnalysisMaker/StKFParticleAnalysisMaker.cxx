@@ -1128,7 +1128,6 @@ void StKFParticleAnalysisMaker::Clear(Option_t *opt) {
 //----------------------------------------------------------------------------- 
 Int_t StKFParticleAnalysisMaker::Make() 
 {
-	cout<<"1"<<endl;
 	// cout<<"Start Make"<<endl;
 	PicoDst = StPicoDst::instance(); 		
 	StPicoDst* mPicoDst = PicoDst;
@@ -1241,8 +1240,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 	if (IfTriggerMatch == false) {return kStOK;}
 	hEventNum -> Fill(1);
 
-	
-	cout<<"2"<<endl;
 	// cout<<"Trigger OK"<<endl;
 
 	const TVector3 Vertex3D=mEvent->primaryVertex();
@@ -1296,7 +1293,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	double mWght = refmultWght;
 	double mult_corr = refmultCorr;
-	cout<<"2a"<<endl;
 
 	///////////////////////////
 	hNRefMult ->Fill(grefMult);
@@ -1313,14 +1309,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 	hcentRefM    ->Fill(0.,mult_corr);     
 	hcentRefW    ->Fill(0.,mult_corr,mWght);  
 	///////////////
-	cout<<"2aa"<<endl;
 
 // ======= KFParticle ======= //
 	std::vector<StLambdaDecayPair> KFParticleLambdaDecayPair;
 	std::vector<KFParticle> ParticleVec , OmegaVec , LambdaVec;
 	ParticleVec.resize(0);OmegaVec.resize(0);LambdaVec.resize(0);
 
-	cout<<"2ab"<<endl;
 	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
 	float pT_trig_lo = 0.2;
 	float pT_trig_hi = 2.0;
@@ -1395,7 +1389,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// }
 
 	
-	cout<<"3"<<endl;
 	// HighLight Reconstructed Track
 	// cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
 	std::vector<int> DaughterParticle,MatherPartiecle;DaughterParticle.resize(0);MatherPartiecle.resize(0);
@@ -1432,7 +1425,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// cout<<DaughterParticle.size()<<endl;
 
 	
-	cout<<"4"<<endl;
 	Omega_Omegab_Num = 0;
 	for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 		KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
@@ -1567,7 +1559,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// cout<<"Here is good 3"<<endl;
 
 
-		cout<<"5"<<endl;
 		if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != XiPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
 		Recorded_Hyperon ++;
 
@@ -1634,7 +1625,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// StPicoPhysicalHelix cTrackI = mTrackI->helix(magnet);
 		// StPicoPhysicalHelix cTrackK = mTrackK->helix(magnet);
 		
-		cout<<"6"<<endl;
 		// for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 		// 	if (particle.GetPDG() == PDGList[Itr]){
 		// 		pair<Double_t , Double_t>RV = cTrackI.pathLengths(cTrackK , 0.1 , 0.1);
@@ -1691,7 +1681,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 		
-		cout<<"7"<<endl;
 		// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 		// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
 		// TVector3 xv0, op1, op2;
@@ -1713,7 +1702,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		tempParticle.SetProductionVertex(pv);
 		tempParticle.GetDecayLength(l, dl);// cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
 
-		cout<<"8"<<endl;
 		if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg))) {
 
 			// helix
@@ -1765,7 +1753,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// cout<<"Here is good 1"<<endl;
 
 
-		cout<<"9"<<endl;
 		int upQ; // cout<<"Here is good 2"<<endl;
 		if (particle.GetPDG() == LambdaPdg) {upQ = 1;} 
 		else if (particle.GetPDG() == -1*LambdaPdg) {upQ = -1;} 
@@ -1785,7 +1772,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 
 
-	cout<<"10"<<endl;
 	// Filling Track
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	std::vector<int> NeedPDG; NeedPDG.resize(0);
@@ -2124,7 +2110,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 
-	cout<<"11"<<endl;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// if (IfRecordThisTrack == true) {
@@ -2286,20 +2271,25 @@ void StKFParticleAnalysisMaker::BookVertexPlots()
 
 //------------------------------------------------------------
 void StKFParticleAnalysisMaker::SetupKFParticle(){
+	cout<<"S1"<<endl;
 	int maxGBTrackIndex = -1; //find max global track index
 	for (unsigned int iTrack = 0; iTrack < PicoDst->numberOfTracks(); iTrack++){
 		StPicoTrack *track = PicoDst->track(iTrack);
 		if ( !track ) continue;
 		if ( track->id() > maxGBTrackIndex ) maxGBTrackIndex = track->id();
 	}
+	cout<<"S2"<<endl;
 	vector<KFMCTrack> mcTracks(0);
 	vector<int> triggeredTracks;
 	vector<int> mcIndices(maxGBTrackIndex+1);
+	cout<<"S3"<<endl;
 	for (unsigned int iIndex = 0; iIndex < mcIndices.size(); iIndex++) mcIndices[iIndex] = -1;
 	if (maxGBTrackIndex > 0)  KFParticleInterface->ResizeTrackPidVectors(maxGBTrackIndex+1);
 
+	cout<<"S4"<<endl;
 	if ( !KFParticleInterface->ProcessEvent(PicoDst, triggeredTracks,H_ProcessEventNum) ) InterfaceCantProcessEvent = true; else InterfaceCantProcessEvent = false;
 
+	cout<<"S5"<<endl;
 	trackMap.resize(maxGBTrackIndex+1, -1); //make a map from trackID to track index in global track array
 	for(unsigned int iTrack = 0; iTrack < PicoDst->numberOfTracks(); iTrack++)
 	{
@@ -2308,6 +2298,7 @@ void StKFParticleAnalysisMaker::SetupKFParticle(){
 		trackMap[index] = iTrack;
 	}
 
+	cout<<"S5"<<endl;
 	KFParticlePerformanceInterface->SetMCTracks(mcTracks);
 	KFParticlePerformanceInterface->SetMCIndexes(mcIndices);    
 	KFParticlePerformanceInterface->SetCentralityBin(-1);
