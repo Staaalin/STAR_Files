@@ -1296,6 +1296,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	double mWght = refmultWght;
 	double mult_corr = refmultCorr;
+	cout<<"2a"<<endl;
 
 	///////////////////////////
 	hNRefMult ->Fill(grefMult);
@@ -1325,6 +1326,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	// cout<<"In InterfaceCantProcessEvent"<<endl;
 	SetupKFParticle();
+	cout<<"2b"<<endl;
 	// if (InterfaceCantProcessEvent) return;
 	// cout<<"InterfaceCantProcessEvent OK"<<endl;
 	CrefMult = refMult;CgrefMult = grefMult;
