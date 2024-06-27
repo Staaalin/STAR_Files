@@ -732,7 +732,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName1 = "H_y_Vz";
 		HistName2 = "The Event Primary Vertex Z vs. rapidity of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_Vz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,160,-80,5=80);
+		H_y_Vz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,160,-80,80);
 		H_y_Vz[Jtr]->GetXaxis()->SetTitle("y");
 		H_y_Vz[Jtr]->GetYaxis()->SetTitle("PVz [cm]");
 		
