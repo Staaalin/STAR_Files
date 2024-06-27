@@ -2271,18 +2271,15 @@ void StKFParticleAnalysisMaker::BookVertexPlots()
 
 //------------------------------------------------------------
 void StKFParticleAnalysisMaker::SetupKFParticle(){
-	cout<<"S1"<<endl;
 	int maxGBTrackIndex = -1; //find max global track index
 	for (unsigned int iTrack = 0; iTrack < PicoDst->numberOfTracks(); iTrack++){
 		StPicoTrack *track = PicoDst->track(iTrack);
 		if ( !track ) continue;
 		if ( track->id() > maxGBTrackIndex ) maxGBTrackIndex = track->id();
 	}
-	cout<<"S2"<<endl;
 	vector<KFMCTrack> mcTracks(0);
 	vector<int> triggeredTracks;
 	vector<int> mcIndices(maxGBTrackIndex+1);
-	cout<<"S3"<<endl;
 	for (unsigned int iIndex = 0; iIndex < mcIndices.size(); iIndex++) mcIndices[iIndex] = -1;
 	if (maxGBTrackIndex > 0)  KFParticleInterface->ResizeTrackPidVectors(maxGBTrackIndex+1);
 
@@ -2298,7 +2295,6 @@ void StKFParticleAnalysisMaker::SetupKFParticle(){
 		trackMap[index] = iTrack;
 	}
 
-	cout<<"S5"<<endl;
 	KFParticlePerformanceInterface->SetMCTracks(mcTracks);
 	KFParticlePerformanceInterface->SetMCIndexes(mcIndices);    
 	KFParticlePerformanceInterface->SetCentralityBin(-1);

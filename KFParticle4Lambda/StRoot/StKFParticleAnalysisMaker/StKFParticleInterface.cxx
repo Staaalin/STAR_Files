@@ -615,6 +615,7 @@ void StKFParticleInterface::ResizeTrackPidVectors(const int nTracks)
 // bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& triggeredTracks)
 bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& triggeredTracks,float &HM)
 {
+  cout<<"SS1"<<endl;
   triggeredTracks.resize(0);
   
   //read PV from pico Event
@@ -624,6 +625,7 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
   StPicoEvent* picoEvent = picoDst->event();
   if(!picoEvent) return 0;
   
+  cout<<"SS2"<<endl;
   const TVector3 picoPV = picoEvent->primaryVertex();
   const TVector3 picoPVError = picoEvent->primaryVertexError();
   
@@ -638,12 +640,14 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
   
   Int_t nGlobalTracks = picoDst->numberOfTracks( );
   
+  cout<<"SS3"<<endl;
   fParticles.resize(nGlobalTracks*7);
   fNHftHits.resize(nGlobalTracks*7);
   fParticlesPdg.resize(nGlobalTracks*7);
   int nPartSaved = 0;
   int nUsedTracks = 0;
   
+  cout<<"SS4"<<endl;
   for (Int_t iTrack = 0; iTrack < nGlobalTracks; iTrack++) 
   {
     StPicoTrack *gTrack = picoDst->track(iTrack);
@@ -715,6 +719,7 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
     nUsedTracks++;
   }
   
+  cout<<"SS5"<<endl;
   fParticles.resize(nPartSaved);
   fParticlesPdg.resize(nPartSaved);
   fNHftHits.resize(nPartSaved);
@@ -727,7 +732,8 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
 
   CleanPV();
   InitParticles();
-
+  
+  cout<<"SS6"<<endl;
   //read PV
   AddPV(primaryVertex, primaryTrackList);
   if(fCollectTrackHistograms)
@@ -739,6 +745,7 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
   //reconstruct short-lived particles
   ReconstructParticles();
   
+  cout<<"SS7"<<endl;
   return 1;
 }
 
