@@ -11,6 +11,20 @@ echo "SCHEME 2: /star/data01/pwg/svianping/HADD/HADD_*.root"
 echo "SCHEME 3: /star/data01/pwg/svianping/HADD/HADDrA_*.root"
 set InputNameIndex = "$<"
 
+if ($InputNameIndex == 1) then
+
+    cd /star/data01/pwg/svianping/output/
+    set numFiles = `find . -maxdepth 1 -name "output_*.root" -type f | wc -l`
+
+else if ($InputNameIndex == 2) then
+
+    cd /star/data01/pwg/svianping/HADD/
+    set numFiles = `find . -maxdepth 1 -name "HADD_*.root" -type f | wc -l`
+
+endif
+
+echo "一共有文件数：$numFiles"
+
 echo "Please enter merge how much .root into ONE:"
 set FilesPerJob = "$<"
 
