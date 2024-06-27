@@ -122,8 +122,6 @@ while ($i <= $numFiles)
         set FileName = $ObvInputName$j".root"
         if (-e $FileName) then
             echo \<File\>file:$FileName\</File\> >> $SubXml
-        else
-            break
         endif
 
         @ k = $k + 1
