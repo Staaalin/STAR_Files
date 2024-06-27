@@ -1313,17 +1313,20 @@ Int_t StKFParticleAnalysisMaker::Make()
 	hcentRefM    ->Fill(0.,mult_corr);     
 	hcentRefW    ->Fill(0.,mult_corr,mWght);  
 	///////////////
+	cout<<"2aa"<<endl;
 
 // ======= KFParticle ======= //
 	std::vector<StLambdaDecayPair> KFParticleLambdaDecayPair;
 	std::vector<KFParticle> ParticleVec , OmegaVec , LambdaVec;
 	ParticleVec.resize(0);OmegaVec.resize(0);LambdaVec.resize(0);
 
+	cout<<"2ab"<<endl;
 	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
 	float pT_trig_lo = 0.2;
 	float pT_trig_hi = 2.0;
 	float eta_trig_cut = 1.0;
 
+	cout<<"2ac"<<endl;
 	// cout<<"In InterfaceCantProcessEvent"<<endl;
 	SetupKFParticle();
 	cout<<"2b"<<endl;
