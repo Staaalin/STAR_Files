@@ -615,7 +615,6 @@ void StKFParticleInterface::ResizeTrackPidVectors(const int nTracks)
 // bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& triggeredTracks)
 bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& triggeredTracks,float &HM)
 {
-  cout<<"SS1"<<endl;
   triggeredTracks.resize(0);
   
   //read PV from pico Event
@@ -625,7 +624,6 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
   StPicoEvent* picoEvent = picoDst->event();
   if(!picoEvent) return 0;
   
-  cout<<"SS2"<<endl;
   const TVector3 picoPV = picoEvent->primaryVertex();
   const TVector3 picoPVError = picoEvent->primaryVertexError();
   
@@ -640,7 +638,6 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
   
   Int_t nGlobalTracks = picoDst->numberOfTracks( );
   
-  cout<<"SS3"<<endl;
   fParticles.resize(nGlobalTracks*7);
   fNHftHits.resize(nGlobalTracks*7);
   fParticlesPdg.resize(nGlobalTracks*7);
@@ -657,6 +654,7 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
     if (  gTrack->dEdxError() < 0.04 || gTrack->dEdxError() > 0.12 ) continue;
     const int index = gTrack->id();
     
+    cout<<"SS5"<<endl;
     int nHftHitsInTrack = 0;
     if(gTrack->hasPxl1Hit()) nHftHitsInTrack++;
     if(gTrack->hasPxl2Hit()) nHftHitsInTrack++;
@@ -666,12 +664,14 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
     
     if(fUseHFTTracksOnly && nHftHitsInTrack < 3) continue;
     
+    cout<<"SS6"<<endl;
     StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(iTrack);
     const StDcaGeometry dcaG = cov->dcaGeometry();
     Int_t q = 1; if (gTrack->charge() < 0) q = -1;
     KFPTrack track;
     if( !GetTrack(dcaG, track, q, index) ) continue;
     
+    cout<<"SS7"<<endl;
     if(fCollectTrackHistograms)
     {
       fTrackHistograms2D[0]->Fill(track.GetP(), gTrack->dEdx());
@@ -679,6 +679,7 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
       else    fTrackHistograms2D[2]->Fill(track.GetP(), gTrack->dEdx());  
     }
     
+    cout<<"SS8"<<endl;
     double m2tof = -1.e6;
     bool isTofm2 = false;
     if(gTrack->bTofPidTraitsIndex() > 0)
@@ -697,6 +698,7 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
       }
     }
 
+    cout<<"SS9"<<endl;
     double dEdXPull[7] = { fabs(gTrack->dEdxPull(0.139570, fdEdXMode, 1)),   //0 - pi
                            fabs(gTrack->dEdxPull(0.493677, fdEdXMode, 1)),   //1 - K
                            fabs(gTrack->dEdxPull(0.938272, fdEdXMode, 1)),   //2 - p
@@ -707,19 +709,22 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
     
     vector<int> totalPDG = GetPID(m2tof, track.GetP(), q, gTrack->dEdx(), dEdXPull, isTofm2, index);
     
+    cout<<"SS10"<<endl;
     int nPartSaved0 = nPartSaved;
     AddTrackToParticleList(track, nHftHitsInTrack, index, totalPDG, primaryVertex, primaryTrackList, fNHftHits, fParticlesPdg, fParticles, nPartSaved); 
     
+    cout<<"SS11"<<endl;
     if(nPartSaved > nPartSaved0) 
       triggeredTracks.push_back(iTrack);
     
+    cout<<"SS11"<<endl;
     //fill PID histograms if they are created
     if(fCollectPIDHistograms) FillPIDHistograms(gTrack, totalPDG, isTofm2, m2tof);
     
+    cout<<"SS12"<<endl;
     nUsedTracks++;
   }
   
-  cout<<"SS5"<<endl;
   fParticles.resize(nPartSaved);
   fParticlesPdg.resize(nPartSaved);
   fNHftHits.resize(nPartSaved);
@@ -733,7 +738,6 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
   CleanPV();
   InitParticles();
   
-  cout<<"SS6"<<endl;
   //read PV
   AddPV(primaryVertex, primaryTrackList);
   if(fCollectTrackHistograms)
@@ -745,7 +749,6 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
   //reconstruct short-lived particles
   ReconstructParticles();
   
-  cout<<"SS7"<<endl;
   return 1;
 }
 
