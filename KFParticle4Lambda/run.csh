@@ -3,7 +3,8 @@
 # AuAu RUN=18 Energy=27.0 
 
 # settings
-set nRun=21
+set CollisionType = pp
+set nRun=15
 set mRun=Run${nRun}
 set mEnergy=200.0
 set ListDir=/star/u/svianping/STAR_Files/KFParticle4Lambda/datalist #TODO
@@ -14,6 +15,9 @@ set TempDir=/home/tmp/svianping #TODO
 # set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/$mEnergy.list.`printf "%.6d" ${JOBINDEX}`
 #set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/test.list
 #set JOBID=ScriptTestSandbox
+
+cp $ListDir/runList/backup/$CollisionType/run${nRun}List$mEnergy.list $ListDir/runList/
+cp $ListDir/badList/backup/$CollisionType/badrun${nRun}List$mEnergy.list $ListDir/runList/
 
 echo $FILELIST
 
