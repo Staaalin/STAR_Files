@@ -40,8 +40,8 @@
 // #define DataName           "pAu_200_15"
 // #define DataName           "AuAu_27_18"
 // #define DataName           "dAu_200_16"
-// #define DataName           "dAu_200_21"
-#define DataName           "dAu_62_16"
+#define DataName           "dAu_200_21"
+// #define DataName           "dAu_62_16"
 // #define DataName           "dAu_39_16"
 // #define DataName           "dAu_20_16"
 #define pi                 TMath::Pi()
@@ -193,6 +193,9 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hDiffVz   = new TH1F("VertexZdiff" , "VertexZ-VPDVz diff", 100, -10.0, 10.0 ) ;
 	hcent     = new TH1F("centrality","centrality"  ,nCent,0.,nCent);
 	hcentw    = new TH1F("centralityw","centralityw",nCent,0.,nCent);
+	hNch_per_VertexZ = new TH2F("hNch_per_VertexZ" , "Event Nch vs. Vertex Z Position", 100, -100.0, 100.0 , 200 , 0,200) ;
+	hNch_per_VertexZ->GetXaxis()->SetTitle("PVz [cm]");
+	hNch_per_VertexZ->GetYaxis()->SetTitle("Nch");
 
 	hcentRefM = new TProfile("hcentRefM","hcentRefM",nCent,0.,nCent,0,1000);
 	hcentRefW = new TProfile("hcentRefW","hcentRefW",nCent,0.,nCent,0,1000);
@@ -725,6 +728,13 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hgbtofYlocal[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
 		hgbtofYlocal[Jtr]->GetXaxis()->SetTitle("y");
 		hgbtofYlocal[Jtr]->GetYaxis()->SetTitle("btofYlocal");
+
+		HistName1 = "H_y_Vz";
+		HistName2 = "The Event Primary Vertex Z vs. rapidity of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_y_Vz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,160,-80,5=80);
+		H_y_Vz[Jtr]->GetXaxis()->SetTitle("y");
+		H_y_Vz[Jtr]->GetYaxis()->SetTitle("PVz [cm]");
 		
 		HistName1 = "H_y_Pz";
 		HistName2 = "The P_z vs. rapidity of ";
@@ -853,6 +863,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	hEventNum->Write();
 	H_Total_Pz->Write();
 	H_Total_Pxy->Write();
+	hNch_per_VertexZ->Write();
 
 	fout->cd();
 
@@ -982,6 +993,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_y_Nch[Jtr]->Write();
 		H_Pz_Nch[Jtr]->Write();
 		H_y_nSigmaTOFKaon[Jtr]->Write();
+		H_y_Vz[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1775,6 +1787,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (! track->isPrimary()) continue;
 		NumCharge++;
 	}
+	hNch_per_VertexZ->Fill(VertexZ,NumCharge);
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 		StPicoTrack *track = mPicoDst->track(iTrack);
 		hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
@@ -2027,6 +2040,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_y_Pz[Jtr]->Fill(rap,track_pz);
 					H_Pxy[Jtr]->Fill(track_px,track_py);
 					H_Pz[Jtr]->Fill(track_pz);
+					H_y_Vz[Jtr]->Fill(rap,VertexZ);
 					H_y_Nch[Jtr]->Fill(rap,NumCharge);
 					H_Pz_Nch[Jtr]->Fill(track_pz,NumCharge);
 					if(abs(PDGList[Itr])==321){

@@ -115,6 +115,7 @@ private:
 	TH1F *hNRefMultB;
 	TH2F *hVertexXY;
 	TH1F *hVertexZ;
+	TH2F *hNch_per_VertexZ;
 	TH2F *hVertex2D; 
 	TH1F *hDiffVz  ; 
 	TH1F *hcent;
@@ -159,6 +160,7 @@ private:
 	TH2F *H_y_nHitsDedx[PDG2NameSize2];
 	TH2F *H_y_nHitsFit2nHitsMax[PDG2NameSize2];
 	TH2F *H_y_eta[PDG2NameSize2];
+	TH2F *H_y_Vz[PDG2NameSize2];
 	TH2F *hgbtofYlocal[PDG2NameSize2];
 	TH2F *H_y_Pz[PDG2NameSize2];
 	TH2F *H_Pxy[PDG2NameSize2];
