@@ -62,7 +62,7 @@
 #define ProtonPdg          2212
 #define KsPdg			   310
 #define Xi1530Pdg		   3324
-#define PionPdg           -211
+#define PionPdg            211
 
 // #define DEBUGGING
 
@@ -2013,7 +2013,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					int Jtr = Itr - PDG2NameSize;
 					if (NeedPDG[Ktr] != PDGList[Itr]){continue;}
 					//// For Kaon
-					if (abs(PDGList[Itr])==321) {
+					if (abs(PDGList[Itr])==KaonPdg) {
 						if (
 							(
 								((0.196 <= m2)&&(m2 <= 0.292)) // Tight 0.5 < $p_t$ < 0.6 GeV
@@ -2024,7 +2024,27 @@ Int_t StKFParticleAnalysisMaker::Make()
 						)
 						{continue;}
 					}
-					////
+					//// For Pion
+					if (abs(PDGList[Itr])==PionPdg) {
+						if (
+							(
+								((-0.012 <= m2)&&(m2 <= 0.049)) // Tight 0.5 < $p_t$ < 0.6 GeV
+								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
+							) == false
+						)
+						{continue;}
+					}
+					//// For Proton
+					if (abs(PDGList[Itr])==ProtonPdg) {
+						if (
+							(
+								((0.746 <= m2)&&(m2 <= 1.015)) // Tight 0.5 < $p_t$ < 0.6 GeV
+								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
+							) == false
+						)
+						{continue;}
+					}
+					//// 
 					H_Pt[Jtr] -> Fill(pt);
 					H_P[Jtr] -> Fill(p);
 					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
@@ -2380,7 +2400,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 		if (abs(TestPDG[Itr]) == 2212){// Proton
 			// Test if Proton
 			bool proton_cut = true;
-			if (fabs(TrackID_nSigmaProton) > 3) proton_cut = false;
+			if (fabs(TrackID_nSigmaProton) > 1) proton_cut = false;
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) proton_cut = false; 
 			// if (fabs(TrackID_eta_prim) > eta_trig_cut) proton_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) proton_cut = false;
@@ -2392,7 +2412,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 		if (abs(TestPDG[Itr]) == 211){// Pion
 			// Test if Pion
 			bool pion_cut = true;
-			if (fabs(TrackID_nSigmaPion) > 3) pion_cut = false;
+			if (fabs(TrackID_nSigmaPion) > 1) pion_cut = false;
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) pion_cut = false; 
 			// if (fabs(TrackID_eta_prim) > eta_trig_cut) pion_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) pion_cut = false;
@@ -2404,7 +2424,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 		if (abs(TestPDG[Itr]) == 321){// Kaon
 			// Test if Kaon
 			bool kaon_cut = true;
-			if (fabs(TrackID_nSigmaKaon) > 2) kaon_cut = false;
+			if (fabs(TrackID_nSigmaKaon) > 1) kaon_cut = false;
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) kaon_cut = false; 
 			// if (fabs(TrackID_eta_prim) > eta_trig_cut) kaon_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) kaon_cut = false;
