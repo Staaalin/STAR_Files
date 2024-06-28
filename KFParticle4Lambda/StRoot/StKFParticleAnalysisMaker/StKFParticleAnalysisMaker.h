@@ -168,6 +168,7 @@ private:
 	TH2F *H_y_Nch[PDG2NameSize2];
 	TH2F *H_Pz_Nch[PDG2NameSize2];
 	TH2F *H_y_nSigmaTOFKaon[PDG2NameSize2];
+	TH2F *H_m2_nSigmaTOFKaon[PDG2NameSize2];
 	TDirectory* PID_Tracks[PDG2NameSize2];
 
 	TH2F *H_eta_nSigmaKaon  [30][3];// Trigger Num not larger than 30

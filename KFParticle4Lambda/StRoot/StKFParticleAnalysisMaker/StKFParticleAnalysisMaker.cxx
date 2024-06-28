@@ -815,6 +815,13 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_y_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("y");
 		H_y_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
 		
+		HistName1 = "H_m2_nSigmaTOFKaon_";
+		HistName2 = "The nSigmaTOFKaon vs m^2 of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_m2_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-0.5,2,100,-10,10);
+		H_m2_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("m2");
+		H_m2_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
+		
 		HistName1 = "H_Pxy_";
 		HistName2 = "The Px vs Py of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
@@ -995,6 +1002,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_Pz_Nch[Jtr]->Write();
 		H_y_nSigmaTOFKaon[Jtr]->Write();
 		H_y_Vz[Jtr]->Write();
+		H_m2_nSigmaTOFKaon[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2075,6 +2083,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
 						hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
 						H_y_nSigmaTOFKaon[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
+						H_m2_nSigmaTOFKaon[Jtr]->Fill(m2,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
 					}
 
 					QA_dEdx.emplace_back(track->dEdx());
