@@ -1919,6 +1919,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack = true;QA_IfConfuse.emplace_back(1);}
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
+		if (pt > 1.4) {continue;}
 		// Raw Data TOF
 		bool RawTOF = true;
 		bool hasTOF = false;
