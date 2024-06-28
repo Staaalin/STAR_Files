@@ -663,9 +663,9 @@ bool StKFParticleInterface::ProcessEvent(StPicoDst* picoDst, std::vector<int>& t
     if(fUseHFTTracksOnly && nHftHitsInTrack < 3) continue;
     
     StPicoTrackCovMatrix *cov = picoDst->trackCovMatrix(iTrack);
-    cout<<"SS8"<<endl;
+    // cout<<"SS8"<<endl;
     const StDcaGeometry dcaG = cov->dcaGeometry();
-    cout<<"SS9"<<endl;
+    // cout<<"SS9"<<endl;
     Int_t q = 1; if (gTrack->charge() < 0) q = -1;
     KFPTrack track;
     if( !GetTrack(dcaG, track, q, index) ) continue;
