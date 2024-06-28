@@ -15,10 +15,10 @@
 
 ## pAu@200GeV or dAu@200GeV
 # inputs
-set CollisionType = pp
+set CollisionType = dAu
 set iJob=$1
 # settings
-set nRun=15
+set nRun=21
 set mRun=Run${nRun}
 set mEnergy=200.0
 set ListDir=./datalist/
