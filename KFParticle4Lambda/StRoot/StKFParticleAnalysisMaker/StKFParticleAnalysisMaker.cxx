@@ -674,6 +674,13 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_y_m2[Jtr]->GetXaxis()->SetTitle("y");
 		H_y_m2[Jtr]->GetYaxis()->SetTitle("m^2 [GeV^2]");
 
+		HistName1 = "H_y_nSigmaKaon_";
+		HistName2 = "The y vs. nSigmaKaon of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_y_nSigmaKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+		H_y_nSigmaKaon[Jtr]->GetXaxis()->SetTitle("y");
+		H_y_nSigmaKaon[Jtr]->GetYaxis()->SetTitle("nSigmaKaon");
+
 		HistName1 = "H_y_nSigmaPion_";
 		HistName2 = "The y vs. nSigmaPion of ";
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
@@ -988,6 +995,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_nSigmaTOF_p[Jtr]->Write();
 		H_y_Pt[Jtr]->Write();
 		H_y_m2[Jtr]->Write();
+		H_y_nSigmaKaon[Jtr]->Write();
 		H_y_nSigmaPion[Jtr]->Write();
 		H_y_nSigmaElectron[Jtr]->Write();
 		H_y_nHitsFit[Jtr]->Write();
@@ -2067,6 +2075,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_rapidity[Jtr]->Fill(rap);
 					H_y_Pt[Jtr]->Fill(rap,pt);
 					H_y_m2[Jtr]->Fill(rap,m2);
+					H_y_nSigmaKaon[Jtr]->Fill(rap,track->nSigmaKaon());
 					H_y_nSigmaPion[Jtr]->Fill(rap,track->nSigmaPion());
 					H_y_nSigmaElectron[Jtr]->Fill(rap,track->nSigmaElectron());
 					H_y_nHitsFit[Jtr]->Fill(rap,track->nHitsFit());
