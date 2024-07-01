@@ -24,6 +24,8 @@ set mEnergy=200.0
 set ListDir=./datalist/
 set MainDir=`pwd`
 
+cp $ListDir/runList/backup/$CollisionType/run${nRun}List$mEnergy.list $ListDir/runList/
+cp $ListDir/badList/backup/$CollisionType/badrun${nRun}List$mEnergy.list $ListDir/badList/
 
 
 ## AuAu@200GeV
