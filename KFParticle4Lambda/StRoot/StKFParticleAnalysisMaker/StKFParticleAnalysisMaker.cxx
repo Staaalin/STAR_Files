@@ -41,11 +41,11 @@
 // #define DataName           "AuAu_27_18"
 // #define DataName           "dAu_200_16"
 // #define DataName           "dAu_200_21"
-#define DataName           "dAu_62_16"
+// #define DataName           "dAu_62_16"
 // #define DataName           "dAu_39_16"
 // #define DataName           "dAu_20_16"
 // #define DataName           "pp_200_15"
-// #define DataName           "OO_200_21"
+#define DataName           "OO_200_21"
 #define pi                 TMath::Pi()
 #define OmegaPdgMass	   1.67245
 #define XiPdgMass	       1.1972
