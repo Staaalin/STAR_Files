@@ -589,11 +589,11 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_All_nSigmaKaon_eta->GetXaxis()->SetTitle("eta");
 	H_All_nSigmaKaon_eta->GetYaxis()->SetTitle("nSigmaKaon");
 
-	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      };
-	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      };
-	const int BPDGList[]         = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
-	const TString BNameList[]    = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
-	const float TBPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
+	const int APDGList[]      = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      };
+	const TString ANameList[] = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      };
+	const int BPDGList[]      = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
+	const TString BNameList[] = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
+	const int TBPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
 	const int TCPDGList[]      = {    321       ,    211    ,    2212   };
 	const TString TCNameList[] = {  "Kaon"      ,  "Pion"   ,  "Proton" };
 	for (int Itr = 0;Itr < PDG2NameSize3;Itr++){
@@ -842,215 +842,6 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		H_Pz[Jtr] = new TH1F(HistName1,HistName2,400,-10,10);
 		H_Pz[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
-
-		// KFP PID QA
-		HistName1 = "H_KFP_Y_";
-		HistName2 = "KFP: The rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_rapidity[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
-		H_KFP_rapidity[Jtr]->GetXaxis()->SetTitle("y");
-
-		HistName1 = "H_KFP_P_";
-		HistName2 = "KFP: The momentum of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_P[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
-		H_KFP_P[Jtr]->GetXaxis()->SetTitle("p [GeV]");
-
-		HistName1 = "H_KFP_Pt_";
-		HistName2 = "KFP: The momentum_t of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_Pt[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
-		H_KFP_Pt[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
-
-		HistName1 = "H_KFP_y_Pt_";
-		HistName2 = "KFP: The y vs. momentum_t of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_Pt[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,5);
-		H_KFP_y_Pt[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_Pt[Jtr]->GetYaxis()->SetTitle("Pt [GeV]");
-
-		HistName1 = "H_KFP_y_m2_";
-		HistName2 = "KFP: The y vs. m2 of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_m2[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,1);
-		H_KFP_y_m2[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_m2[Jtr]->GetYaxis()->SetTitle("m^2 [GeV^2]");
-
-		HistName1 = "H_KFP_y_nSigmaKaon_";
-		HistName2 = "KFP: The y vs. nSigmaKaon of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nSigmaKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		H_KFP_y_nSigmaKaon[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nSigmaKaon[Jtr]->GetYaxis()->SetTitle("nSigmaKaon");
-
-		HistName1 = "H_KFP_y_nSigmaPion_";
-		HistName2 = "KFP: The y vs. nSigmaPion of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nSigmaPion[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		H_KFP_y_nSigmaPion[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nSigmaPion[Jtr]->GetYaxis()->SetTitle("nSigmaPion");
-
-		HistName1 = "H_KFP_y_nSigmaElectron_";
-		HistName2 = "KFP: The y vs. nSigmaElectron of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nSigmaElectron[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		H_KFP_y_nSigmaElectron[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nSigmaElectron[Jtr]->GetYaxis()->SetTitle("nSigmaElectron");
-
-		HistName1 = "H_KFP_y_nHitsFit_";
-		HistName2 = "KFP: The y vs. nHitsFit of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nHitsFit[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,70,0,70);
-		H_KFP_y_nHitsFit[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nHitsFit[Jtr]->GetYaxis()->SetTitle("nHitsFit");
-
-		HistName1 = "H_KFP_y_nHitsDedx_";
-		HistName2 = "KFP: The y vs. nHitsDedx of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nHitsDedx[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,70,0,70);
-		H_KFP_y_nHitsDedx[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nHitsDedx[Jtr]->GetYaxis()->SetTitle("nHitsDedx");
-
-		HistName1 = "H_KFP_y_nHitsFit2nHitsMax_";
-		HistName2 = "KFP: The y vs. nHitsFit/nHitsMax of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nHitsFit2nHitsMax[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,40,0.4,1.4);
-		H_KFP_y_nHitsFit2nHitsMax[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nHitsFit2nHitsMax[Jtr]->GetYaxis()->SetTitle("nHitsFit/nHitsMax");
-
-		HistName1 = "H_KFP_y_eta_";
-		HistName2 = "KFP: The y vs. eta of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_eta[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-2,2);
-		H_KFP_y_eta[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_eta[Jtr]->GetYaxis()->SetTitle("eta");
-		
-		HistName1 = "H_KFP_dEdx_p";
-		HistName2 = "KFP: The dEdx vs. momentum of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_dEdx_p[Jtr] = new TH2F(HistName1,HistName2,2000,-10,10,1000,0,20);
-		H_KFP_dEdx_p[Jtr]->GetXaxis()->SetTitle("P [GeV]");
-		H_KFP_dEdx_p[Jtr]->GetYaxis()->SetTitle("dE/dx [keV/cm]");
-
-		HistName1 = "h_KFP_tofYlocal";
-		HistName2 = "KFP: The btofYlocal vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		h_KFP_tofYlocal[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		h_KFP_tofYlocal[Jtr]->GetXaxis()->SetTitle("y");
-		h_KFP_tofYlocal[Jtr]->GetYaxis()->SetTitle("btofYlocal");
-
-		HistName1 = "H_KFP_y_Vz";
-		HistName2 = "KFP: The Event Primary Vertex Z vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_Vz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,160,-80,80);
-		H_KFP_y_Vz[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_Vz[Jtr]->GetYaxis()->SetTitle("PVz [cm]");
-		
-		HistName1 = "H_KFP_y_Pz";
-		HistName2 = "KFP: The P_z vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_Pz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,-10,10);
-		H_KFP_y_Pz[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_Pz[Jtr]->GetYaxis()->SetTitle("p_z [GeV]");
-		
-		HistName1 = "H_KFP_y_Nch";
-		HistName2 = "KFP: The Nch vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_Nch[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,0,200);
-		H_KFP_y_Nch[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
-		
-		HistName1 = "H_KFP_Pz_Nch";
-		HistName2 = "KFP: The Nch vs. Pz of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_Pz_Nch[Jtr] = new TH2F(HistName1,HistName2,200,-10,10,200,0,200);
-		H_KFP_Pz_Nch[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
-		H_KFP_Pz_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
-
-		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
-			HistName1 = "H_KFP_Pt_nSigma";
-			HistName2 = "KFP: The P_t vs. nSigma";
-			HistName1 += CNameList[Ktr];HistName2 += CNameList[Ktr];
-			HistName1 += "_";HistName1 += NameList[Itr];
-			HistName2 += " of ";HistName2 += NameList[Itr];
-			H_KFP_Pt_nSigma[Jtr][Ktr] = new TH2F(HistName1,HistName2,1000,-10,10,1000,0,8);
-			HistName1 = "nSigma";HistName1 += CNameList[Ktr];
-			H_KFP_Pt_nSigma[Jtr][Ktr]->GetXaxis()->SetTitle(HistName1);
-			H_KFP_Pt_nSigma[Jtr][Ktr]->GetYaxis()->SetTitle("pT [GeV]");
-		}
-
-		HistName1 = "H_KFP_DCAtoPV";
-		HistName2 = "KFP: The DCA(to PV) of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_DCAtoPV[Jtr] = new TH1F(HistName1,HistName2,500,0,5);
-		H_KFP_DCAtoPV[Jtr]->GetXaxis()->SetTitle("DCA [cm]");
-
-		HistName1 = "H_KFP_eta";
-		HistName2 = "KFP: The eta of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_eta[Jtr] = new TH1F(HistName1,HistName2,200,-2,2);
-		H_KFP_eta[Jtr]->GetXaxis()->SetTitle("eta");
-
-		HistName1 = "H_KFP_nHitsFit";
-		HistName2 = "KFP: The nHitsFit of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_nHitsFit_p[Jtr] = new TH2F(HistName1,HistName2,60,0,60,500,0,10);
-		H_KFP_nHitsFit_p[Jtr]->GetXaxis()->SetTitle("nHitsFit");
-		H_KFP_nHitsFit_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
-
-		HistName1 = "H_KFP_nHitsFit_nHitsMax";
-		HistName2 = "KFP: The nHitsFit/nHitsMax of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_nHitsFit_nHitsMax[Jtr] = new TH1F(HistName1,HistName2,100,0,1);
-		H_KFP_nHitsFit_nHitsMax[Jtr]->GetXaxis()->SetTitle("nHitsFit/nHitsMax");
-
-		HistName1 = "H_KFP_ndEdx";
-		HistName2 = "KFP: The ndEdx of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_ndEdx[Jtr] = new TH1F(HistName1,HistName2,50,0,50);
-		H_KFP_ndEdx[Jtr]->GetXaxis()->SetTitle("ndEdx");
-
-		HistName1 = "H_KFP_nSigmaTOF_p_";
-		HistName2 = "KFP: The nSigmaTOFKaon vs p of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_nSigmaTOF_p[Jtr] = new TH2F(HistName1,HistName2,250,-10,10,250,0,10);
-		H_KFP_nSigmaTOF_p[Jtr]->GetXaxis()->SetTitle("nSigmaTOFKaon");
-		H_KFP_nSigmaTOF_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
-		
-		HistName1 = "H_KFP_y_nSigmaTOFKaon_";
-		HistName2 = "KFP: The nSigmaTOFKaon vs rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,250,-10,10);
-		H_KFP_y_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
-		
-		HistName1 = "H_KFP_m2_nSigmaTOFKaon_";
-		HistName2 = "KFP: The nSigmaTOFKaon vs m^2 of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_m2_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-0.5,2,100,-10,10);
-		H_KFP_m2_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("m2");
-		H_KFP_m2_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
-		
-		HistName1 = "H_KFP_Pxy_";
-		HistName2 = "KFP: The Px vs Py of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_Pxy[Jtr] = new TH2F(HistName1,HistName2,100,-10,10,100,-10,10);
-		H_KFP_Pxy[Jtr]->GetXaxis()->SetTitle("Px [GeV]");
-		H_KFP_Pxy[Jtr]->GetYaxis()->SetTitle("Py [GeV]");
-		
-		HistName1 = "H_KFP_Pz_";
-		HistName2 = "KFP: The Pz of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_Pz[Jtr] = new TH1F(HistName1,HistName2,400,-10,10);
-		H_KFP_Pz[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
-		
-		HistName1 = "H_KFP_Pt_m2_";
-		HistName2 = "KFP: The m2 vs pt of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_Pt_m2[Jtr] = new TH2F(HistName1,HistName2,100,0,5,100,-0.5,2);
-		H_KFP_Pt_m2[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
-		H_KFP_Pt_m2[Jtr]->GetYaxis()->SetTitle("m2 [GeV^2]");
-		// KFP PID QA End
 	}
 
 
@@ -1067,7 +858,6 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	folder_EventQA  = fout->mkdir("Event_QA");
 	folder_PIDQA    = fout->mkdir("PID_QA");
 	folder_ReconsQA = fout->mkdir("Reconstruction_QA");
-	KFPPIDQA        = fout->mkdir("KFP_PID_QA");
 
 	////////////////////////////////////// Event-QA //////////////////////////////////////
 	// hadronTree ->Write();
@@ -1224,52 +1014,6 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_m2_nSigmaTOFKaon[Jtr]->Write();
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	fout->cd();
-
-// KFP PID
-	KFPPIDQA->cd();
-	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
-		int Jtr = Itr - PDG2NameSize;
-		if (abs(PDGList[Itr]) != KaonPdg) {continue;}
-		KFPPID[Jtr]  = KFPPIDQA->mkdir(NameList[Itr]);
-		KFPPID[Jtr] -> cd();
-
-		H_KFP_rapidity[Jtr] -> Write();
-		H_KFP_P[Jtr] -> Write();
-		H_KFP_Pt[Jtr] -> Write();
-		H_KFP_dEdx_p[Jtr]->Write();
-		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
-			H_KFP_Pt_nSigma[Jtr][Ktr]->Write();
-		}
-		H_KFP_DCAtoPV[Jtr]->Write();
-		H_KFP_eta[Jtr]->Write();
-		H_KFP_nHitsFit_p[Jtr]->Write();
-		H_KFP_nHitsFit_nHitsMax[Jtr]->Write();
-		H_KFP_ndEdx[Jtr]->Write();
-		H_KFP_nSigmaTOF_p[Jtr]->Write();
-		H_KFP_y_Pt[Jtr]->Write();
-		H_KFP_y_m2[Jtr]->Write();
-		H_KFP_y_nSigmaKaon[Jtr]->Write();
-		H_KFP_y_nSigmaPion[Jtr]->Write();
-		H_KFP_y_nSigmaElectron[Jtr]->Write();
-		H_KFP_y_nHitsFit[Jtr]->Write();
-		H_KFP_y_nHitsDedx[Jtr]->Write();
-		H_KFP_y_nHitsFit2nHitsMax[Jtr]->Write();
-		H_KFP_y_eta[Jtr]->Write();
-		h_KFP_tofYlocal[Jtr]->Write();
-		H_KFP_y_Pz[Jtr]->Write();
-		H_KFP_Pxy[Jtr]->Write();
-		H_KFP_Pz[Jtr]->Write();
-		H_KFP_y_Nch[Jtr]->Write();
-		H_KFP_Pz_Nch[Jtr]->Write();
-		H_KFP_y_nSigmaTOFKaon[Jtr]->Write();
-		H_KFP_y_Vz[Jtr]->Write();
-		H_KFP_m2_nSigmaTOFKaon[Jtr]->Write();
-		H_KFP_Pt_m2[Jtr]->Write();
-
-	}
-// KFP PID end
 
 	fout->cd();
 
@@ -1602,22 +1346,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// QA_DCA_Daughters.resize(0);
 	// cout<<"2ac"<<endl;
 	// cout<<"In InterfaceCantProcessEvent"<<endl;
-
-	Int_t nTracks = mPicoDst->numberOfTracks();
-	// Calculating Nch
-	int NumCharge = 0;
-	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
-		StPicoTrack *track = mPicoDst->track(iTrack);
-    	if (! track)            continue;
-    	if (! track->charge())  continue;
-    	if (  track->nHitsFit() < 15) continue;
-		if (  track->nHitsDedx() < 15) continue;
-		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
-		if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
-		if (! track->isPrimary()) continue;
-		NumCharge++;
-	}
-
 	if (!(DataName == "pp_200_15")){
 		SetupKFParticle();
 		// cout<<"2b"<<endl;
@@ -1728,93 +1456,125 @@ Int_t StKFParticleAnalysisMaker::Make()
 			#endif
 			
 			// Fill track from KFP
-			if ((abs(particle.GetPDG()) == 2212) || (abs(particle.GetPDG()) == 211) || (abs(particle.GetPDG()) == 321)) { // Proton , Pion or Kaon
-				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
-					int Jtr = Itr - PDG2NameSize;
+			// cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
+			// if ((fabs(particle.GetPDG()) == 2212) || (fabs(particle.GetPDG()) == 211) || (fabs(particle.GetPDG()) == 321)) { // Proton , Pion or Kaon
 
-					// Find in PicoDST
-					int iTrack = 0;
-					const int globalTrackId = particle.DaughterIds()[0];
-					Int_t nTracks = mPicoDst->numberOfTracks();
-					Int_t iTrackStart = globalTrackId - 1;
-					if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-					for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
-						StPicoTrack *track = mPicoDst->track(jTrack);
-						if (track->id() == globalTrackId){
-							iTrack = jTrack;
-							break;
-						}
-					}
+			// 	bool IfContinue = false;
+			// 	for (int i=0;i < DaughterParticle.size();i++) {
+			// 		if (DaughterParticle[i] == iKFParticle) {
+			// 			IfContinue = true;
+			// 			break;
+			// 		}
+			// 	}
+			// 	if (IfContinue) {continue;} // if this track has been used to reconstruct other particles, continue
 
-					StPicoTrack *track = mPicoDst->track(iTrack);
-					float p = track->gMom().Mag();
-					float pt = track->gMom().Perp();
-					float phi = track->gMom().Phi();
-					float eta = track->gMom().Eta();
-					double track_px = track->gMom().X();
-					double track_py = track->gMom().Y();
-					double track_pz = track->gMom().Z();
-					if (pt < 0.4 || pt > 1.5) continue;
-					// if (p < 0.5  || p > 2   ) continue;
-					H_KFP_Pt[Jtr] -> Fill(pt);
-					H_KFP_P[Jtr] -> Fill(p);
-					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(particle.GetPDG()),2),0.5);
-					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
-					H_KFP_rapidity[Jtr]->Fill(rap);
-					H_KFP_y_Pt[Jtr]->Fill(rap,pt);
-					H_KFP_y_nSigmaKaon[Jtr]->Fill(rap,track->nSigmaKaon());
-					H_KFP_y_nSigmaPion[Jtr]->Fill(rap,track->nSigmaPion());
-					H_KFP_y_nSigmaElectron[Jtr]->Fill(rap,track->nSigmaElectron());
-					H_KFP_y_nHitsFit[Jtr]->Fill(rap,track->nHitsFit());
-					H_KFP_y_nHitsDedx[Jtr]->Fill(rap,track->nHitsDedx());
-					H_KFP_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
-					H_KFP_y_eta[Jtr]->Fill(rap,eta);
-					H_KFP_y_Pz[Jtr]->Fill(rap,track_pz);
-					H_KFP_Pxy[Jtr]->Fill(track_px,track_py);
-					H_KFP_Pz[Jtr]->Fill(track_pz);
-					H_KFP_y_Vz[Jtr]->Fill(rap,VertexZ);
-					H_KFP_y_Nch[Jtr]->Fill(rap,NumCharge);
-					H_KFP_Pz_Nch[Jtr]->Fill(track_pz,NumCharge);
-					for (int Ntr=0;Ntr<PDG2NameSize3;Ntr++){
-						// cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
-						if ( CNameList[Ntr] == "Kaon"){H_KFP_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
-						if ( CNameList[Ntr] == "Pion"){H_KFP_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
-						if ( CNameList[Ntr] == "Proton"){H_KFP_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
-					}
+			// 	int TPID = 0;
+			// 	float tMass = 0;
+			// 	if      (fabs(particle.GetPDG()) == 2212) {
+			// 		if (particle.GetPDG() > 0) {TPID =  2212;}
+			// 		else                       {TPID = -2212;}
+			// 		tMass = ProtonPdgMass;
+			// 	}
+			// 	else if (fabs(particle.GetPDG()) == 211) {
+			// 		if (particle.GetPDG() > 0) {TPID =  211;}
+			// 		else                       {TPID = -211;}
+			// 		tMass = PionPdgMass;
+			// 	}
+			// 	else if (fabs(particle.GetPDG()) == 321) {
+			// 		if (particle.GetPDG() > 0) {TPID =  321;}
+			// 		else                       {TPID = -321;}
+			// 		tMass = KaonPdgMass;
+			// 	}
+			// 	PDG.emplace_back(particle.GetPDG());
+			// 	px.emplace_back(particle.GetPx());py.emplace_back(particle.GetPy());pz.emplace_back(particle.GetPz());InvariantMass.emplace_back(tMass);
+			// 	QA_Decay_Length.emplace_back(-999);QA_Chi2.emplace_back(-999);
 
-					H_KFP_dEdx_p[Jtr]->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
-					H_KFP_DCAtoPV[Jtr]->Fill(track->gDCA(Vertex3D).Mag());
-					H_KFP_eta[Jtr]->Fill(eta);
-					H_KFP_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
-					H_KFP_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
-					H_KFP_ndEdx[Jtr]->Fill((track->nHitsDedx()));
-					bool hasTOF = false;
-					int tofindex = track->bTofPidTraitsIndex();
-					if (tofindex >= 0) 
-					{
-						int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
-						float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
-						if((tofflag >= 1) && (tof > 0)) hasTOF = true;
-					}
-					if (hasTOF) {
-						StPicoPhysicalHelix helix = track->helix(magnet);
-						TVector3 pkaon = helix.momentum(magnet*kilogauss);
-						double beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
-						double m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
-						if(abs(PDGList[Itr])==321){
-							H_KFP_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
-							h_KFP_tofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
-							H_KFP_y_nSigmaTOFKaon[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
-							H_KFP_m2_nSigmaTOFKaon[Jtr]->Fill(m2,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
-							H_KFP_Pt_m2[Jtr]->Fill(pt,m2);
-							H_KFP_y_m2[Jtr]->Fill(rap,m2);
-						}
-					}
+			// 	// QA
+			// 	// QA_zTOF_proton.emplace_back(0);QA_zTOF_pion.emplace_back(0);QA_zTOF_kaon.emplace_back(0);QA_hasTOF.emplace_back(0);
+			// 	// QA_IfConfuse.emplace_back(0);QA_IfBadReconstructed.emplace_back(0);
+			// 	// QA_DCA_Daughters.emplace_back(0);
+			// 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+			// 		int Jtr = Itr - PDG2NameSize;
+			// 		if (TPID == PDGList[Itr]) {
+			// 			float tPt2 = pow(particle.GetPx(),2) + pow(particle.GetPy(),2);
+			// 			H_Pt[Jtr] -> Fill(pow(tPt2,0.5));
+			// 			tPt2 += pow(particle.GetPz(),2);
+			// 			H_P[Jtr] -> Fill(pow(tPt2,0.5));
+			// 			float tEnergy = particle.GetE();
+			// 			H_rapidity[Jtr]->Fill(0.5*log((tEnergy+particle.GetPz())/(tEnergy-particle.GetPz())));
 
-				}
+			// 			if ( particle.NDaughters() > 1 ){cout<<"One more daughters in particle.GetPDG() = "<<particle.GetPDG()<<endl;}
+			// 			const int globalTrackId = particle.DaughterIds()[0];
+			// 			Int_t nTracks = mPicoDst->numberOfTracks();
+			// 			Int_t iTrackStart = globalTrackId - 1;
+			// 			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+			// 			for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+			// 				StPicoTrack *track = mPicoDst->track(jTrack);
+			// 				if (track->id() == globalTrackId){
+			// 					float PA = track->gMom().Mag();
+			// 					float PB = pow(pow(particle.GetPx(),2) + pow(particle.GetPy(),2) + pow(particle.GetPz(),2),0.5);
+			// 					if ( fabs(PA-PB)/(pow(PA*PB,0.5)) > 0.5 ) {cout<<"WORNING!!! Different Value Between KFP and PicoDST!!!"<<endl;}
+			// 					QA_dEdx.emplace_back(track->dEdx());
+			// 					QA_nSigmaProton.emplace_back(track->nSigmaProton());
+			// 					QA_nSigmaPion.emplace_back(track->nSigmaPion());
+			// 					QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
+			// 					H_dEdx_p[Jtr]->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+			// 					H_DCAtoPV[Jtr]->Fill(track->gDCA(Vertex3D).Mag());
+			// 					QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
+			// 					H_eta[Jtr]->Fill(track->gMom().Eta());
+			// 					H_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
+			// 					H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
+			// 					H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
+			// 					for (int Ktr=0;Ktr<PDG2NameSize3;Ktr++){
+			// 						// cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
+			// 						if ( CNameList[Ktr] == "Kaon"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
+			// 						if ( CNameList[Ktr] == "Pion"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
+			// 						if ( CNameList[Ktr] == "Proton"){H_Pt_nSigma[Jtr][Ktr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
+			// 					}
+			// 					// TOF Info
+			// 					bool hasTOF = false;
+			// 					int tofindex = track->bTofPidTraitsIndex();
+			// 					float m2 = -999.;
+			// 					float beta = -999.;
+			// 					if (tofindex >= 0) 
+			// 					{
+			// 						int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
+			// 						float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
+			// 						float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
+			// 						// hgbtofYlocal->Fill(BtofYLocal);
+			// 						if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
+			// 					}
+			// 					StPicoPhysicalHelix helix = track->helix(magnet);
+			// 					TVector3 pkaon = helix.momentum(magnet*kilogauss);
+			// 					if (hasTOF)
+			// 					{
+			// 						beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
+			// 						m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
 
-			}
+			// 						float betaTheroy = 1/pow(pow(BPDGListMass[Jtr]/(track->gMom().Mag()),2)+1,0.5);
+			// 						// some kaon QA
+			// 						if (TPID == 321){
+			// 							if (track->nSigmaKaon() >  3) H_m2_KSigma_L->Fill(track->gMom().Perp(), m2);
+			// 							if (track->nSigmaKaon() < -3) H_m2_KSigma_S->Fill(track->gMom().Perp(), m2);
+			// 						}
+			// 						float nSIgmaTOF = (1/beta-1/betaTheroy)/0.013;
+			// 						H_nSigmaTOF_p[Jtr]->Fill(nSIgmaTOF,track->gMom().Mag());
+			// 						// zTOF_proton = 1/beta - sqrt(ProtonPdgMass*ProtonPdgMass/pkaon.Mag2()+1);
+			// 						// zTOF_pion   = 1/beta - sqrt(PionPdgMass*PionPdgMass/pkaon.Mag2()+1);
+			// 						// zTOF_kaon   = 1/beta - sqrt(KaonPdgMass*KaonPdgMass/pkaon.Mag2()+1);
+			// 					}
+			// 					QA_m2.emplace_back(m2);
+								
+			// 					break;
+			// 				}
+			// 			}
+			// 			break;
+			// 		}
+			// 	}
+			// 	continue;
+			// }
 
+			// cout<<"Here is good 3"<<endl;
 
 
 			if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != XiPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
@@ -2031,12 +1791,26 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 
 
+	// Filling Track
+	Int_t nTracks = mPicoDst->numberOfTracks();
 	std::vector<int> NeedPDG; NeedPDG.resize(0);
 	NeedPDG.push_back( 2212);NeedPDG.push_back( 211);NeedPDG.push_back( 321);
 	NeedPDG.push_back(-2212);NeedPDG.push_back(-211);NeedPDG.push_back(-321);
 	std::vector<int> track_index;
 	double Total_Pz = 0.0, Total_Px = 0.0, Total_Py = 0.0;
-	// Filling Track
+	// Calculating Nch
+	int NumCharge = 0;
+	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
+		StPicoTrack *track = mPicoDst->track(iTrack);
+    	if (! track)            continue;
+    	if (! track->charge())  continue;
+    	if (  track->nHitsFit() < 15) continue;
+		if (  track->nHitsDedx() < 15) continue;
+		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
+		if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
+		if (! track->isPrimary()) continue;
+		NumCharge++;
+	}
 	hNch_per_VertexZ->Fill(VertexZ,NumCharge);
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 		StPicoTrack *track = mPicoDst->track(iTrack);
@@ -2637,8 +2411,8 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 	float TrackID_eta_prim = track->pMom().Eta();
 
 	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
-	float pT_trig_lo = 0.4; // 0.2
-	float pT_trig_hi = 1.4; // 2
+	float pT_trig_lo = 0.0; // 0.2
+	float pT_trig_hi = 10.0; // 2
 	float eta_trig_cut = 1.0;
 
 	std::vector<bool> result;result.resize(0);
@@ -2646,7 +2420,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 		if (abs(TestPDG[Itr]) == 2212){// Proton
 			// Test if Proton
 			bool proton_cut = true;
-			if (fabs(TrackID_nSigmaProton) > 2) proton_cut = false;
+			if (fabs(TrackID_nSigmaProton) > 1) proton_cut = false;
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) proton_cut = false; 
 			// if (fabs(TrackID_eta_prim) > eta_trig_cut) proton_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) proton_cut = false;
@@ -2658,7 +2432,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 		if (abs(TestPDG[Itr]) == 211){// Pion
 			// Test if Pion
 			bool pion_cut = true;
-			if (fabs(TrackID_nSigmaPion) > 2) pion_cut = false;
+			if (fabs(TrackID_nSigmaPion) > 1) pion_cut = false;
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) pion_cut = false; 
 			// if (fabs(TrackID_eta_prim) > eta_trig_cut) pion_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) pion_cut = false;
@@ -2670,7 +2444,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 		if (abs(TestPDG[Itr]) == 321){// Kaon
 			// Test if Kaon
 			bool kaon_cut = true;
-			if (fabs(TrackID_nSigmaKaon) > 2) kaon_cut = false;
+			if (fabs(TrackID_nSigmaKaon) > 1) kaon_cut = false;
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) kaon_cut = false; 
 			// if (fabs(TrackID_eta_prim) > eta_trig_cut) kaon_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) kaon_cut = false;
