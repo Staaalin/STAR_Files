@@ -1731,6 +1731,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if ((abs(particle.GetPDG()) == 2212) || (abs(particle.GetPDG()) == 211) || (abs(particle.GetPDG()) == 321)) { // Proton , Pion or Kaon
 				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 					int Jtr = Itr - PDG2NameSize;
+					if (PDGList[Itr] != particle.GetPDG()) {continue;}
 
 					// Find in PicoDST
 					int iTrack = 0;
