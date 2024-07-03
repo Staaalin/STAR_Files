@@ -243,6 +243,10 @@ private:
 	TH2F *H_All_nSigmaKaon_y;
 	TH2F *H_All_nSigmaKaon_eta;
 
+	// KFP PID QA
+	TDirectory* KFPPIDQA;
+
+
 	TH2F *hdEdx_pQ;
 	TH2F *hdEdx_pQ_1cut;
 	TH2F *hdEdx_pQ_2cut;
