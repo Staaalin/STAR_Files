@@ -245,6 +245,7 @@ private:
 
 	// KFP PID QA
 	TDirectory* KFPPIDQA;
+	TDirectory* KFPPID[PDG2NameSize2];
 
 
 	TH2F *hdEdx_pQ;
