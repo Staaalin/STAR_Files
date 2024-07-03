@@ -247,6 +247,7 @@ private:
 	TDirectory* KFPPIDQA;
 	TDirectory* KFPPID[PDG2NameSize2];
 	TH1F *H_KFP_rapidity[PDG2NameSize2];
+	TH1F *H_KFP_r[PDG2NameSize2]; // No meaning, just for compile successfuly...
 	TH1F *H_KFP_P[PDG2NameSize2];
 	TH1F *H_KFP_Pt[PDG2NameSize2];
 	TH1F *H_KFP_DCAtoPV[PDG2NameSize2];
@@ -260,22 +261,22 @@ private:
 	TH2F *H_KFP_y_nHitsDedx[PDG2NameSize2];
 	TH2F *H_KFP_y_nHitsFit2nHitsMax[PDG2NameSize2];
 	TH2F *H_KFP_y_eta[PDG2NameSize2];
-	// TH2F *H_KFP_y_Vz[PDG2NameSize2];
-	// TH2F *h_KFP_tofYlocal[PDG2NameSize2];
-	// TH2F *H_KFP_y_Pz[PDG2NameSize2];
-	// TH2F *H_KFP_Pxy[PDG2NameSize2];
-	// TH1F *H_KFP_Pz[PDG2NameSize2];
-	// TH2F *H_KFP_y_Nch[PDG2NameSize2];
-	// TH2F *H_KFP_Pz_Nch[PDG2NameSize2];
-	// TH2F *H_KFP_y_nSigmaTOFKaon[PDG2NameSize2];
-	// TH2F *H_KFP_m2_nSigmaTOFKaon[PDG2NameSize2];
-	// TH2F *H_KFP_nHitsFit_p[PDG2NameSize2];
-	// TH1F *H_KFP_nHitsFit_nHitsMax[PDG2NameSize2];
-	// TH1F *H_KFP_ndEdx[PDG2NameSize2];
-	// TH2F *H_KFP_nSigmaTOF_p[PDG2NameSize2];
-	// TH2F *H_KFP_dEdx_p[PDG2NameSize2];
-	// TH2F *H_KFP_Pt_nSigma[PDG2NameSize2][PDG2NameSize3];
-	// TH2F *H_KFP_Pt_m2[PDG2NameSize2];
+	TH2F *H_KFP_y_Vz[PDG2NameSize2];
+	TH2F *h_KFP_tofYlocal[PDG2NameSize2];
+	TH2F *H_KFP_y_Pz[PDG2NameSize2];
+	TH2F *H_KFP_Pxy[PDG2NameSize2];
+	TH1F *H_KFP_Pz[PDG2NameSize2];
+	TH2F *H_KFP_y_Nch[PDG2NameSize2];
+	TH2F *H_KFP_Pz_Nch[PDG2NameSize2];
+	TH2F *H_KFP_y_nSigmaTOFKaon[PDG2NameSize2];
+	TH2F *H_KFP_m2_nSigmaTOFKaon[PDG2NameSize2];
+	TH2F *H_KFP_nHitsFit_p[PDG2NameSize2];
+	TH1F *H_KFP_nHitsFit_nHitsMax[PDG2NameSize2];
+	TH1F *H_KFP_ndEdx[PDG2NameSize2];
+	TH2F *H_KFP_nSigmaTOF_p[PDG2NameSize2];
+	TH2F *H_KFP_dEdx_p[PDG2NameSize2];
+	TH2F *H_KFP_Pt_nSigma[PDG2NameSize2][PDG2NameSize3];
+	TH2F *H_KFP_Pt_m2[PDG2NameSize2];
 
 
 	TH2F *hdEdx_pQ;
