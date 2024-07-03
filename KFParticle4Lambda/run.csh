@@ -3,7 +3,7 @@
 # AuAu RUN=18 Energy=27.0 
 
 # settings
-set CollisionType = dAu
+set CollisionType = OO
 set nRun=21
 set mRun=Run${nRun}
 set mEnergy=200.0

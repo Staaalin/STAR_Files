@@ -83,7 +83,7 @@ const int cenDef[9] = {6,11,21,38,61,95,141,205,249}; //Updated 19June 2023 for 
 //Full production dataset 
 ////
 static Int_t runmin=19158057; 
-static Int_t runmax=19163026;//need to add 1 from the runmax 19169017 
+static Int_t runmax=19158058;//need to add 1 from the runmax 19169017 
 static Int_t runbins=runmax-runmin;
 const int run_sta = (int)((runmin%1000000)/1);
 const int run_end = (int)((runmax%1000000)/1);
@@ -167,7 +167,7 @@ const float PP2[9] = {4.82547e+00,7.87162e+00,1.72209e+01,1.18083e+01,1.37230e+0
         TH1D *hTrigger = new TH1D("hTrigger","hTrigger",200, 0.5, 200.5);
         TH1D *hCentrality = new TH1D("hCentrality","hCentrality",11,-1.5,9.5);
 	TH2D *hVertexXY = new TH2D("hVertexXY","hVertexXY",300,-3,3, 300,-3,3);
-        TH1D *hVertexZ = new TH1D("hVertexZ","hVertexZ",500,-500,500);
+        TH1D *hVertexZ = new TH1D("hVertexZ","hVertexZ",100,-100,100);
 	TH1D *hVzDiff = new TH1D("hVzDiff","hVzDiff",120,-30,30);
         TH2D *hMult_Vz = new TH2D("hMult_Vz","hMult_Vz",1000,-0.5,999.5,100,-100,100);
         TH2D *hMult_Vz_new = new TH2D("hMult_Vz_new","hMult_Vz_new",1000,-0.5,999.5,100,-100,100);

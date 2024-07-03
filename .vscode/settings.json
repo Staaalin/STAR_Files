@@ -26,8 +26,6 @@
         "HADDr_xml.C": "cpp",
         "test.C": "cpp",
         "HADDr_Fit.C": "cpp",
-        "Subtract.C": "cpp",
-        "Maker.C": "cpp",
-        "RunMaker.C": "cpp"
+        "Subtract.C": "cpp"
     }
 }
