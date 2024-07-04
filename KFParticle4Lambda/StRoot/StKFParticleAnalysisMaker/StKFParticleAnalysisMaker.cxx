@@ -969,6 +969,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 		int Jtr = Itr - PDG2NameSize;
 
+		if (abs(PDGList[Itr]) != KaonPdg) {continue;}
+
 		PID_Tracks[Jtr]  = folder_PIDQA->mkdir(NameList[Itr]);
 		PID_Tracks[Jtr] -> cd();
 
