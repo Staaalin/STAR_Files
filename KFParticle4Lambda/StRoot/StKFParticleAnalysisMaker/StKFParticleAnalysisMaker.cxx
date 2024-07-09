@@ -31,6 +31,7 @@
 #include "KaonPID.h"
 #include "ProtonPID.h"
 #include "PionPID.h"
+#include "TPCandTOF.cpp"
 
 #include "StTrackHelix.h"
 #include "StLambdaDecayPair.h"
@@ -2023,12 +2024,19 @@ Int_t StKFParticleAnalysisMaker::Make()
 					if (NeedPDG[Ktr] != PDGList[Itr]){continue;}
 					//// For Kaon
 					if (abs(PDGList[Itr])==KaonPdg) {
+						// if (
+						// 	(
+						// 		((0.196 <= m2)&&(m2 <= 0.292)) // Tight 0.5 < $p_t$ < 0.6 GeV
+						// 		// ((0.123 <= m2)&&(m2 <= 0.359)) // Soft 1.0 < $p_t$ < 1.1 GeV
+						// 		// ((0.0674 <= m2)&&(m2 <= 0.407)) // Soft 1.2 < $p_t$ < 1.3 GeV
+						// 		//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
+						// 	) == false
+						// )
+						// {continue;}
+						std::vector<float> m2Zone = KaonTOFm2(pt, DataName);
 						if (
 							(
-								((0.196 <= m2)&&(m2 <= 0.292)) // Tight 0.5 < $p_t$ < 0.6 GeV
-								// ((0.123 <= m2)&&(m2 <= 0.359)) // Soft 1.0 < $p_t$ < 1.1 GeV
-								// ((0.0674 <= m2)&&(m2 <= 0.407)) // Soft 1.2 < $p_t$ < 1.3 GeV
-								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
+								((m2Zone[0] <= m2)&&(m2 <= m2Zone[1]))
 							) == false
 						)
 						{continue;}
@@ -2436,7 +2444,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 		if (abs(TestPDG[Itr]) == 321){// Kaon
 			// Test if Kaon
 			bool kaon_cut = true;
-			if (fabs(TrackID_nSigmaKaon) > 2) kaon_cut = false;
+			if (fabs(TrackID_nSigmaKaon - KaonTPCCenter(TrackID_pt , DataName)) > 2) kaon_cut = false;
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) kaon_cut = false; 
 			// if (fabs(TrackID_eta_prim) > eta_trig_cut) kaon_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) kaon_cut = false;
