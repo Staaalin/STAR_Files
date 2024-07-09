@@ -1,4 +1,3 @@
-#include "TriggerList.h"
 #include <TString.h>
 #include <map>
 #include <fstream>
