@@ -14,15 +14,15 @@
 	// "pp_200_15",
 	// "OO_200_21"
 
-float KaonTPCCenter(flout Pt , TString DataName)
+float KaonTPCCenter(flaot Pt , TString DataName)
 {
 	if (DataName == "dAu_200_21") {
-		if      ( 0.2 <= Pt && Pt < 0.3) {return 0.8  }
-		else if ( 0.3 <= Pt && Pt < 0.4) {return 0.4  }
-		else if ( 0.4 <= Pt && Pt < 0.5) {return 0.1  }
-		else if ( 0.5 <= Pt && Pt < 0.6) {return -0.06}
-		else if ( 0.6 <= Pt && Pt < 0.7) {return -0.08}
-		else                             {return 0.0  }
+		if      ( 0.2 <= Pt && Pt < 0.3) {return 0.8  ;}
+		else if ( 0.3 <= Pt && Pt < 0.4) {return 0.4  ;}
+		else if ( 0.4 <= Pt && Pt < 0.5) {return 0.1  ;}
+		else if ( 0.5 <= Pt && Pt < 0.6) {return -0.06;}
+		else if ( 0.6 <= Pt && Pt < 0.7) {return -0.08;}
+		else                             {return 0.0  ;}
 	}
 }
 
