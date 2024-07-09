@@ -1,3 +1,4 @@
+#include "TPCandTOF.h"
 #include <TString.h>
 #include <map>
 #include <fstream>
@@ -13,7 +14,7 @@
 	// "pp_200_15",
 	// "OO_200_21"
 
-float KaonTPCCenter(float Pt , TString DataName)
+float TPCandTOF::KaonTPCCenter(float Pt , TString DataName)
 {
 	if (DataName == "dAu_200_21") {
 		if      ( 0.2 <= Pt && Pt < 0.3) {return 0.8  ;}
@@ -25,7 +26,7 @@ float KaonTPCCenter(float Pt , TString DataName)
 	}
 }
 
-std::vector<float> KaonTOFm2(float Pt, TString DataName)
+std::vector<float> TPCandTOF::KaonTOFm2(float Pt, TString DataName)
 {
     std::vector<float> result;
     if (DataName == "dAu_200_21") {
