@@ -197,8 +197,9 @@ private:
 	TH2F *H_m2_KSigma_L;
 	TH2F *H_All_nSigmaKaon_y;
 	TH2F *H_All_nSigmaKaon_eta;
-	TH2F *HAllTOF_nSigmaKaon_Pt;
-	TH2F *HHasTOF_nSigmaKaon_Pt;
+	TH2F *H_nSigmaKaon_Pt_AllTOF;
+	TH2F *H_nSigmaKaon_Pt_HasTOF;
+	TH2F *H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion;
 
 	// KFP PID QA
 	TDirectory* KFPPIDQA;

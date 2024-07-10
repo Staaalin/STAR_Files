@@ -405,13 +405,17 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_m2_nSigmaKaon_Pt->GetYaxis()->SetTitle("nSigmaKaon");
 	H_m2_nSigmaKaon_Pt->GetZaxis()->SetTitle("Pt [GeV]");
 
-	HAllTOF_nSigmaKaon_Pt = new TH2F("HAllTOF_nSigmaKaon_Pt","nSigmaKaon vs Pt wi noTOF",  500 , -5 , 5 , 18,0.2,2.0);
-	HAllTOF_nSigmaKaon_Pt->GetXaxis()->SetTitle("nSigmaKaon");
-	HAllTOF_nSigmaKaon_Pt->GetYaxis()->SetTitle("Pt");
+	H_nSigmaKaon_Pt_AllTOF = new TH2F("H_nSigmaKaon_Pt_AllTOF","nSigmaKaon vs Pt wi noTOF",  500 , -5 , 5 , 18,0.2,2.0);
+	H_nSigmaKaon_Pt_AllTOF->GetXaxis()->SetTitle("nSigmaKaon");
+	H_nSigmaKaon_Pt_AllTOF->GetYaxis()->SetTitle("Pt");
 
-	HHasTOF_nSigmaKaon_Pt = new TH2F("HHasTOF_nSigmaKaon_Pt","nSigmaKaon vs Pt wo noTOF",  500 , -5 , 5 , 18,0.2,2.0);
-	HHasTOF_nSigmaKaon_Pt->GetXaxis()->SetTitle("nSigmaKaon");
-	HHasTOF_nSigmaKaon_Pt->GetYaxis()->SetTitle("Pt");
+	H_nSigmaKaon_Pt_HasTOF = new TH2F("H_nSigmaKaon_Pt_HasTOF","nSigmaKaon vs Pt wo noTOF",  500 , -5 , 5 , 18,0.2,2.0);
+	H_nSigmaKaon_Pt_HasTOF->GetXaxis()->SetTitle("nSigmaKaon");
+	H_nSigmaKaon_Pt_HasTOF->GetYaxis()->SetTitle("Pt");
+
+	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion = new TH2F("H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion","nSigmaKaon vs Pt wo noTOF & -3<nSigmaPion<3",  500 , -5 , 5 , 18,0.2,2.0);
+	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->GetXaxis()->SetTitle("nSigmaKaon");
+	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->GetYaxis()->SetTitle("Pt");
 
 	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
 
@@ -974,8 +978,9 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	}
 	H_eta_trigger     ->Write();
 
-	HAllTOF_nSigmaKaon_Pt->Write();
-	HHasTOF_nSigmaKaon_Pt->Write();
+	H_nSigmaKaon_Pt_AllTOF->Write();
+	H_nSigmaKaon_Pt_HasTOF->Write();
+	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->Write();
 
 	
 
@@ -1963,7 +1968,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack = true;QA_IfConfuse.emplace_back(1);}
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
-		HAllTOF_nSigmaKaon_Pt->Fill(track->nSigmaKaon(),pt);
+		H_nSigmaKaon_Pt_AllTOF->Fill(track->nSigmaKaon(),pt);
 		// Raw Data TOF
 		bool RawTOF = true;
 		bool hasTOF = false;
@@ -1992,7 +1997,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				H_Pt_m2->Fill(track->gMom().Mag(),m2);
 				H_Pt_nSigmaKaonTOF->Fill(track->gMom().Mag(),(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon());
 				H_m2_nSigmaKaon_Pt->Fill(m2,track->nSigmaKaon(),pt);
-				HHasTOF_nSigmaKaon_Pt->Fill(track->nSigmaKaon(),pt);
+				H_nSigmaKaon_Pt_HasTOF->Fill(track->nSigmaKaon(),pt);
 				// cout<<"nsigmaTOF = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
 				if (fabs(1/beta-1)<0.03) {
 					hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
@@ -2037,6 +2042,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 					int Jtr = Itr - PDG2NameSize;
 					if (NeedPDG[Ktr] != PDGList[Itr]){continue;}
+					if (abs(PDGList[Itr])!=PionPdg) {H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->Fill(track->nSigmaKaon(),pt);}
 					//// For Kaon
 					if (abs(PDGList[Itr])==KaonPdg) {
 						// if (
@@ -2426,7 +2432,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 	float TrackID_eta_prim = track->pMom().Eta();
 
 	float dcatoPV_hi = 3.0; // Upper limit of DCA to PVs
-	float pT_trig_lo = 0.4; // 0.2
+	float pT_trig_lo = 0.2; // 0.2
 	float pT_trig_hi = 1.4; // 2
 	float eta_trig_cut = 1.0;
 
@@ -2435,7 +2441,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 		if (abs(TestPDG[Itr]) == 2212){// Proton
 			// Test if Proton
 			bool proton_cut = true;
-			if (fabs(TrackID_nSigmaProton) > 2) proton_cut = false;
+			if (fabs(TrackID_nSigmaProton) > 3) proton_cut = false;
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) proton_cut = false; 
 			// if (fabs(TrackID_eta_prim) > eta_trig_cut) proton_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) proton_cut = false;
@@ -2447,7 +2453,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 		if (abs(TestPDG[Itr]) == 211){// Pion
 			// Test if Pion
 			bool pion_cut = true;
-			if (fabs(TrackID_nSigmaPion) > 2) pion_cut = false;
+			if (fabs(TrackID_nSigmaPion) > 3) pion_cut = false;
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) pion_cut = false; 
 			// if (fabs(TrackID_eta_prim) > eta_trig_cut) pion_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) pion_cut = false;
