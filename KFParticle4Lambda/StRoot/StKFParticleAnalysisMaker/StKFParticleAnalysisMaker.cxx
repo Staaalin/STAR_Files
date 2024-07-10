@@ -413,7 +413,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_nSigmaKaon_Pt_HasTOF->GetXaxis()->SetTitle("nSigmaKaon");
 	H_nSigmaKaon_Pt_HasTOF->GetYaxis()->SetTitle("Pt");
 
-	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion = new TH2F("H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion","nSigmaKaon vs Pt wo noTOF & -3<nSigmaPion<3",  500 , -5 , 5 , 18,0.2,2.0);
+	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion = new TH2F("H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion","nSigmaKaon vs Pt for noTOF & -3<nSigmaPion<3",  500 , -5 , 5 , 18,0.2,2.0);
 	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->GetXaxis()->SetTitle("nSigmaKaon");
 	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->GetYaxis()->SetTitle("Pt");
 
@@ -2042,7 +2042,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 					int Jtr = Itr - PDG2NameSize;
 					if (NeedPDG[Ktr] != PDGList[Itr]){continue;}
-					if ((abs(PDGList[Itr])!=PionPdg) && (hasTOF) ) {H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->Fill(track->nSigmaKaon(),pt);}
+					if ((abs(PDGList[Itr])!=PionPdg) && (!hasTOF) ) {H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->Fill(track->nSigmaKaon(),pt);}
 					//// For Kaon
 					if (abs(PDGList[Itr])==KaonPdg) {
 						// if (
