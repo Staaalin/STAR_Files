@@ -2042,7 +2042,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 					int Jtr = Itr - PDG2NameSize;
 					if (NeedPDG[Ktr] != PDGList[Itr]){continue;}
-					if (abs(PDGList[Itr])!=PionPdg) {H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->Fill(track->nSigmaKaon(),pt);}
+					if ((abs(PDGList[Itr])!=PionPdg) && (!hasTOF) ) {H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->Fill(track->nSigmaKaon(),pt);}
 					//// For Kaon
 					if (abs(PDGList[Itr])==KaonPdg) {
 						// if (
