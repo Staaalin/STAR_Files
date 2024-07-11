@@ -2097,7 +2097,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_rapidity[Jtr]->Fill(rap);
 					H_y_Pt[Jtr]->Fill(rap,pt);
 					H_y_P[Jtr]->Fill(rap,p);
-					H_y_m2[Jtr]->Fill(rap,m2);
+					if (hasTOF) H_y_m2[Jtr]->Fill(rap,m2);
 					H_y_nSigmaKaon[Jtr]->Fill(rap,track->nSigmaKaon());
 					H_y_nSigmaPion[Jtr]->Fill(rap,track->nSigmaPion());
 					H_y_nSigmaElectron[Jtr]->Fill(rap,track->nSigmaElectron());
@@ -2111,7 +2111,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					H_y_Vz[Jtr]->Fill(rap,VertexZ);
 					H_y_Nch[Jtr]->Fill(rap,NumCharge);
 					H_Pz_Nch[Jtr]->Fill(track_pz,NumCharge);
-					if(abs(PDGList[Itr])==321){
+					if(abs(PDGList[Itr])==321 && hasTOF) {
 						H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
 						hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
 						H_y_nSigmaTOFKaon[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
