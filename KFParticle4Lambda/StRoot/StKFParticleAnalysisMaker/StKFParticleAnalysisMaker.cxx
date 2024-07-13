@@ -434,8 +434,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_All_nSigmaKaon_eta->GetXaxis()->SetTitle("eta");
 	H_All_nSigmaKaon_eta->GetYaxis()->SetTitle("nSigmaKaon");
 
-	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,  -310   ,   333   };
-	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "K0Sb" ,  "Phi"  };
+	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,   333   };
+	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "Phi"  };
 	const int BPDGList[]         = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
 	const TString BNameList[]    = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
 	const float TBPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
@@ -1747,13 +1747,16 @@ Int_t StKFParticleAnalysisMaker::Make()
 						// QA_IfBadReconstructed.emplace_back(1);
 					}
 					float PMass = 0.0;
-					if      ((abs(PDGList[Itr]) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) < LambdaPdgMassSigma)){ PMass = LambdaPdgMass;}
+					if      ((abs(PDGList[Itr]) == K0SPdg   ) && (fabs(particle.GetMass() - K0SPdgMass   ) < K0SPdgMassSigma   )){ PMass = K0SPdgMass;}
+					else if ((abs(PDGList[Itr]) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) < LambdaPdgMassSigma)){ PMass = LambdaPdgMass;}
 					else if ((abs(PDGList[Itr]) == XiPdg    ) && (fabs(particle.GetMass() - XiPdgMass    ) < XiPdgMassSigma    )){ PMass = XiPdgMass;}
-					else if ((abs(PDGList[Itr]) == K0SPdg   ) && (fabs(particle.GetMass() - K0SPdgMass   ) < K0SPdgMassSigma   )){ PMass = K0SPdgMass;}
 					else if ((abs(PDGList[Itr]) == OmegaPdg ) && (fabs(particle.GetMass() - OmegaPdgMass ) < OmegaPdgMassSigma )){ PMass = OmegaPdgMass;}
 					else if ((abs(PDGList[Itr]) == PhiPdg   ) && (fabs(particle.GetMass() - PhiPdgMass   ) < PhiPdgMassSigma   )){ PMass = PhiPdgMass;}
 					else if ((abs(PDGList[Itr]) == LambdaPdg) || (abs(PDGList[Itr]) == XiPdg) || (abs(PDGList[Itr]) == OmegaPdg) || (abs(PDGList[Itr]) == K0SPdg) || (abs(PDGList[Itr]) == PhiPdg)) {break;}
-					else {continue;}
+					else {
+						if (abs(particle.GetPDG()) != 2212 && abs(particle.GetPDG()) != 211 && abs(particle.GetPDG()) != 321 && abs(particle.GetPDG()) != 1) {cout<<particle.GetPDG()<<endl;}
+						continue;
+					}
 					float PEnergy = pow(PPx*PPx + PPy*PPy + PPz*PPz + PMass*PMass , 0.5);
 					H_Hyperon_Rap[Itr]->Fill(0.5*log((PEnergy+PPz)/(PEnergy-PPz)));
 					
