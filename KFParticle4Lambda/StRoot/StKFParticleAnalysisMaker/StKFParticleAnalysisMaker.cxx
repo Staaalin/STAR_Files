@@ -2016,11 +2016,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// Raw Data eTOF
 		if (!hasTOF && RawTOF){
 			int tofindex = track->eTofPidTraitsIndex();
+			cout<<"tofindex = "<<tofindex<<endl;
 			float beta = -999.;
 			if (tofindex >= 0){
 				int tofflag = (mPicoDst->etofPidTraits(tofindex))->matchFlag();
 				float tof = (mPicoDst->etofPidTraits(tofindex))->tof();
 				float EtofYLocal = (mPicoDst->etofPidTraits(tofindex))->deltaY();
+				cout<<"EtofYLocal = "<<EtofYLocal<<endl;
 				if((tofflag >= 1) && (tof > 0) && (EtofYLocal > -100) && (EtofYLocal < 100)) hasTOF = true;
 			}
 			StPicoPhysicalHelix helix = track->helix(magnet);
