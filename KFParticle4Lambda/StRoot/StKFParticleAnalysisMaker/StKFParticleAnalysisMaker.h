@@ -128,7 +128,7 @@ private:
 	TDirectory* folder_PIDQA;
 	TDirectory* folder_ReconsQA;
 
-	#define PDG2NameSize 6 // APDGList.size()
+	#define PDG2NameSize  9 // APDGList.size()
 	#define PDG2NameSize2 6 // BPDGList.size()
 	#define PDG2NameSize3 3 // CPDGList.size()
 	int PDGList[PDG2NameSize + PDG2NameSize2];
