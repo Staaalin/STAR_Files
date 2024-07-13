@@ -1969,7 +1969,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
 		H_nSigmaKaon_Pt_AllTOF->Fill(track->nSigmaKaon(),pt);
-		// Raw Data TOF
+		// Raw Data bTOF
 		bool RawTOF = true;
 		bool hasTOF = false;
 		float m2 = -999.;
@@ -1993,6 +1993,32 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (hasTOF)
 			{
 				beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
+				m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
+				H_Pt_m2->Fill(track->gMom().Mag(),m2);
+				H_Pt_nSigmaKaonTOF->Fill(track->gMom().Mag(),(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon());
+				H_m2_nSigmaKaon_Pt->Fill(m2,track->nSigmaKaon(),pt);
+				H_nSigmaKaon_Pt_HasTOF->Fill(track->nSigmaKaon(),pt);
+				// cout<<"nsigmaTOF = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
+				if (fabs(1/beta-1)<0.03) {
+					hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+				}
+			}
+		}
+		// Raw Data eTOF
+		if (!hasTOF && RawTOF){
+			int tofindex = track->eTofPidTraitsIndex();
+			float beta = -999.;
+			if (tofindex >= 0){
+				int tofflag = (mPicoDst->etofPidTraits(tofindex))->matchFlag();
+				float tof = (mPicoDst->etofPidTraits(tofindex))->tof();
+				float EtofYLocal = (mPicoDst->etofPidTraits(tofindex))->deltaY();
+				if((tofflag >= 1) && (tof > 0) && (EtofYLocal > -100) && (EtofYLocal < 100)) hasTOF = true;
+			}
+			StPicoPhysicalHelix helix = track->helix(magnet);
+			TVector3 pkaon = helix.momentum(magnet*kilogauss);
+			if (hasTOF)
+			{
+				beta = (mPicoDst->etofPidTraits(tofindex))->beta();
 				m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
 				H_Pt_m2->Fill(track->gMom().Mag(),m2);
 				H_Pt_nSigmaKaonTOF->Fill(track->gMom().Mag(),(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon());
