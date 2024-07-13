@@ -1638,7 +1638,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 
 
-			if ((fabs(particle.GetPDG()) != OmegaPdg) && (fabs(particle.GetPDG()) != XiPdg) && (fabs(particle.GetPDG()) != LambdaPdg)) {continue;}
+			if (
+				(fabs(particle.GetPDG()) != OmegaPdg ) && 
+				(fabs(particle.GetPDG()) != XiPdg    ) && 
+				(fabs(particle.GetPDG()) != LambdaPdg) &&
+				(fabs(particle.GetPDG()) != K0SPdg   ) && 
+				(fabs(particle.GetPDG()) != PhiPdg)
+			) {continue;}
 			Recorded_Hyperon ++;
 
 			// Check if wrong daughters
@@ -1754,7 +1760,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 					else if ((abs(PDGList[Itr]) == PhiPdg   ) && (fabs(particle.GetMass() - PhiPdgMass   ) < PhiPdgMassSigma   )){ PMass = PhiPdgMass;}
 					else if ((abs(PDGList[Itr]) == LambdaPdg) || (abs(PDGList[Itr]) == XiPdg) || (abs(PDGList[Itr]) == OmegaPdg) || (abs(PDGList[Itr]) == K0SPdg) || (abs(PDGList[Itr]) == PhiPdg)) {break;}
 					else {
-						if (abs(particle.GetPDG()) != 2212 && abs(particle.GetPDG()) != 211 && abs(particle.GetPDG()) != 321 && abs(particle.GetPDG()) != 1) {cout<<particle.GetPDG()<<endl;}
 						continue;
 					}
 					float PEnergy = pow(PPx*PPx + PPy*PPy + PPz*PPz + PMass*PMass , 0.5);
