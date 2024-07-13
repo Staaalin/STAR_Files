@@ -20,7 +20,7 @@
 #include <algorithm>
 #include <TMath.h>
 #include <map>
-#include "StPicoETofPidTraits.h"
+#include "StPicoEvent/StPicoETofPidTraits.h"
 
 #include "KFVertex.h"
 #include "KFParticle.h"
