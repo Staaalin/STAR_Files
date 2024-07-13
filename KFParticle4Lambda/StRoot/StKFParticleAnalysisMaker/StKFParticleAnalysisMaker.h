@@ -149,6 +149,7 @@ private:
 	TDirectory* KFPRecons[PDG2NameSize];
 	TH1F *H_rapidity[PDG2NameSize2];
 	TH1F *H_rapidity_eTOF[PDG2NameSize2];
+	TH1F *H_rapidity_Only_eTOF[PDG2NameSize2];
 	TH1F *H_P[PDG2NameSize2];
 	TH1F *H_Pt[PDG2NameSize2];
 	TH1F *H_DCAtoPV[PDG2NameSize2];

@@ -499,6 +499,12 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 		H_rapidity_eTOF[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
 		H_rapidity_eTOF[Jtr]->GetXaxis()->SetTitle("y");
+		
+		HistName1 = "HY_eTOF_Only";
+		HistName2 = "The rapidity in eTOF contained event of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_rapidity_Only_eTOF[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
+		H_rapidity_Only_eTOF[Jtr]->GetXaxis()->SetTitle("y");
 
 		HistName1 = "HP_";
 		HistName2 = "The momentum of ";
@@ -1009,6 +1015,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 
 		H_rapidity[Jtr] -> Write();
 		H_rapidity_eTOF[Jtr] -> Write();
+		H_rapidity_eTOF_eTOF[Jtr] -> Write();
 
 		H_P[Jtr] -> Write();
 
@@ -1871,6 +1878,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	double Total_Pz = 0.0, Total_Px = 0.0, Total_Py = 0.0;
 	// Filling Track
 	hNch_per_VertexZ->Fill(VertexZ,NumCharge);
+	
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 		StPicoTrack *track = mPicoDst->track(iTrack);
 		hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
