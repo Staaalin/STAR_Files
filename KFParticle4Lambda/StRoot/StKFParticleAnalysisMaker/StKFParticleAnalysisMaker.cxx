@@ -2084,7 +2084,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						std::vector<float> m2Zone = TPCandTOF_Gen.KaonTOFm2(pt, DataName);
 						if (
 							(
-								(0.2 <= pt && pt < 0.3) ||
+								// (0.2 <= pt && pt < 0.3) ||
 								((m2Zone[0] <= m2)&&(m2 <= m2Zone[1]))
 							) == false
 						)
@@ -2494,7 +2494,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 			// Test if Kaon
 			bool kaon_cut = true;
 			if (fabs(TrackID_nSigmaKaon - TPCandTOF_Gen.KaonTPCCenter(TrackID_pt , DataName)) > 2) kaon_cut = false;
-			if ((0.2 <= TrackID_pt) && (TrackID_pt < 0.3) && (1 < track->nSigmaKaon()) && (track->nSigmaKaon() < 3)) kaon_cut = true;
+			// if ((0.2 <= TrackID_pt) && (TrackID_pt < 0.3) && (1 < track->nSigmaKaon()) && (track->nSigmaKaon() < 3)) kaon_cut = true;
 			if (TrackID_pt < pT_trig_lo || TrackID_pt > pT_trig_hi) kaon_cut = false; 
 			// if (fabs(TrackID_eta_prim) > eta_trig_cut) kaon_cut = false;
 			if (TrackID_dcatopv > dcatoPV_hi) kaon_cut = false;
