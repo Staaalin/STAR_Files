@@ -434,8 +434,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	H_All_nSigmaKaon_eta->GetXaxis()->SetTitle("eta");
 	H_All_nSigmaKaon_eta->GetYaxis()->SetTitle("nSigmaKaon");
 
-	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,  -310  ,   333   };
-	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "K0S" ,  "Phi"  };
+	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,  -310   ,   333   };
+	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "K0Sb" ,  "Phi"  };
 	const int BPDGList[]         = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
 	const TString BNameList[]    = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
 	const float TBPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
