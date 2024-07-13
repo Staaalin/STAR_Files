@@ -148,6 +148,7 @@ private:
 	TH1F *H_Hyperon_Rap[PDG2NameSize];
 	TDirectory* KFPRecons[PDG2NameSize];
 	TH1F *H_rapidity[PDG2NameSize2];
+	TH1F *H_rapidity_eTOF[PDG2NameSize2];
 	TH1F *H_P[PDG2NameSize2];
 	TH1F *H_Pt[PDG2NameSize2];
 	TH1F *H_DCAtoPV[PDG2NameSize2];

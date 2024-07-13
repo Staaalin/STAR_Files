@@ -486,6 +486,12 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		// H_rapidity[Jtr] = new TH1F(HistName1,HistName2,30,-1.5,1.5); // KFP Setting
 		H_rapidity[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
 		H_rapidity[Jtr]->GetXaxis()->SetTitle("y");
+		
+		HistName1 = "HY_eTOF_";
+		HistName2 = "The eTOF rapidity of ";
+		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+		H_rapidity_eTOF[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
+		H_rapidity_eTOF[Jtr]->GetXaxis()->SetTitle("y");
 
 		HistName1 = "HP_";
 		HistName2 = "The momentum of ";
@@ -995,6 +1001,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		PID_Tracks[Jtr] -> cd();
 
 		H_rapidity[Jtr] -> Write();
+		H_rapidity_eTOF[Jtr] -> Write();
 
 		H_P[Jtr] -> Write();
 
@@ -1973,6 +1980,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// Raw Data bTOF
 		bool RawTOF = true;
 		bool hasTOF = false;
+		bool IfeTof = false;
 		float m2 = -999.;
 		if (RawTOF){
 			int tofindex = track->bTofPidTraitsIndex();
@@ -2019,6 +2027,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			TVector3 pkaon = helix.momentum(magnet*kilogauss);
 			if (hasTOF)
 			{
+				IfeTof = true;
 				beta = (mPicoDst->etofPidTraits(tofindex))->beta();
 				m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
 				H_Pt_m2->Fill(track->gMom().Mag(),m2);
@@ -2122,6 +2131,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					QA_Decay_Length.emplace_back(-99);
 					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
 					H_rapidity[Jtr]->Fill(rap);
+					if (IfeTof) H_rapidity_eTOF[Jtr]->Fill(rap);
 					H_y_Pt[Jtr]->Fill(rap,pt);
 					H_y_P[Jtr]->Fill(rap,p);
 					if (hasTOF) H_y_m2[Jtr]->Fill(rap,m2);
