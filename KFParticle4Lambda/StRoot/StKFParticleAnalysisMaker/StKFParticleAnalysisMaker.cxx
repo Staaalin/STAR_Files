@@ -71,7 +71,7 @@
 #define LambdaPdgMassSigma 0.0019
 #define XiPdgMassSigma     0.0024
 #define OmegaPdgMassSigma  0.0027
-#define K0SPdgMassSigma    0.0004
+#define K0SPdgMassSigma    0.0056
 #define PhiPdgMassSigma    0.05
 
 // #define DEBUGGING
