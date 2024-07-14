@@ -1015,7 +1015,6 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 
 		H_rapidity[Jtr] -> Write();
 		H_rapidity_eTOF[Jtr] -> Write();
-		H_rapidity_eTOF_eTOF[Jtr] -> Write();
 
 		H_P[Jtr] -> Write();
 
