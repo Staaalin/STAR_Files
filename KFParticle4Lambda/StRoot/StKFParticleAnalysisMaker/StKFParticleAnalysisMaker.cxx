@@ -2050,7 +2050,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				float tof = (mPicoDst->etofPidTraits(tofindex))->tof();
 				float EtofYLocal = (mPicoDst->etofPidTraits(tofindex))->deltaY();
 				// cout<<"EtofYLocal = "<<EtofYLocal<<endl;
-				if((tofflag >= 1) && (tof > 0) && (EtofYLocal > -100) && (EtofYLocal < 100)) hasTOF = true;
+				// if((tofflag >= 1) && (tof > 0) && (EtofYLocal > -100) && (EtofYLocal < 100)) hasTOF = true;
+				hasTOF = true;
 			}
 			StPicoPhysicalHelix helix = track->helix(magnet);
 			TVector3 pkaon = helix.momentum(magnet*kilogauss);
