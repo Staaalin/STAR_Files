@@ -1008,7 +1008,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 		int Jtr = Itr - PDG2NameSize;
 
-		if (abs(PDGList[Itr]) != KaonPdg) {continue;}
+		// if (abs(PDGList[Itr]) != KaonPdg) {continue;}
 
 		PID_Tracks[Jtr]  = folder_PIDQA->mkdir(NameList[Itr]);
 		PID_Tracks[Jtr] -> cd();
@@ -2049,7 +2049,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				float tof = (mPicoDst->etofPidTraits(tofindex))->tof();
 				float EtofYLocal = (mPicoDst->etofPidTraits(tofindex))->deltaY();
 				// cout<<"EtofYLocal = "<<EtofYLocal<<endl;
-				// if((tofflag >= 1) && (tof > 0) && (EtofYLocal > -100) && (EtofYLocal < 100)) hasTOF = true;
+				if((tofflag >= 1) && (tof > 0) && (EtofYLocal > -100) && (EtofYLocal < 100)) hasTOF = true;
 				hasTOF = true;
 			}
 			StPicoPhysicalHelix helix = track->helix(magnet);
