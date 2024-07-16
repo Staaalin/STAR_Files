@@ -402,6 +402,17 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 			HistName2 += Trigger_List[TriggerItr];
 			H_eta_triggerBIN[TriggerItr][Itr] = new TH1F(HistName1,HistName2,     200,-2,2);
 			H_eta_triggerBIN[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+			
+			HistName1 = "H_eta_triggerBIN_hasTOF_";
+			HistName2 = ChargeName[Itr];
+			HistName2 += "Tracks ";
+			HistName2 += "hasTOF eta distribution, Trigger: ";
+			HistName1 += ChargeName[Itr];
+			HistName1 += "_Trigger_";
+			HistName1 += TriggerItr;
+			HistName2 += Trigger_List[TriggerItr];
+			H_eta_triggerBIN_hasTOF[TriggerItr][Itr] = new TH1F(HistName1,HistName2,     200,-2,2);
+			H_eta_triggerBIN_hasTOF[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
 		}
 	}
 	H_eta_trigger = new TH2F("H_eta_trigger","trigger vs. eta",     200,-2,2,TriggerListLength,-0.5,TriggerListLength-0.5);
@@ -986,14 +997,15 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		for (int Itr = 0;Itr < 3;Itr++){
 			if (Itr != 2) continue; // Do not write specific charge bin
 			if (H_eta_nSigmaPion[TriggerItr][Itr]->Integral() == 0){continue;}
-			H_eta_nSigmaKaon  [TriggerItr][Itr]->Write();
-			H_eta_nSigmaPion  [TriggerItr][Itr]->Write();
-			H_eta_nSigmaProton[TriggerItr][Itr]->Write();
-			H_eta_m2          [TriggerItr][Itr]->Write();
-			H_eta_PVz         [TriggerItr][Itr]->Write();
-			// H_eta_PVr         [TriggerItr][Itr]->Write();
-			H_eta_DVz         [TriggerItr][Itr]->Write();
-			H_eta_triggerBIN  [TriggerItr][Itr]->Write();
+			H_eta_nSigmaKaon         [TriggerItr][Itr]->Write();
+			H_eta_nSigmaPion         [TriggerItr][Itr]->Write();
+			H_eta_nSigmaProton       [TriggerItr][Itr]->Write();
+			H_eta_m2                 [TriggerItr][Itr]->Write();
+			H_eta_PVz                [TriggerItr][Itr]->Write();
+			// H_eta_PVr                [TriggerItr][Itr]->Write();
+			H_eta_DVz                [TriggerItr][Itr]->Write();
+			H_eta_triggerBIN         [TriggerItr][Itr]->Write();
+			H_eta_triggerBIN_hasTOF  [TriggerItr][Itr]->Write();
 		}
 	}
 	H_eta_trigger     ->Write();
@@ -2078,6 +2090,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		H_eta_PVr         [TriggerID_in_TriggerList][2]->Fill(eta,VertexR);
 		H_eta_DVz         [TriggerID_in_TriggerList][2]->Fill(eta,DVz);
 		H_eta_triggerBIN  [TriggerID_in_TriggerList][2]->Fill(eta);
+		if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][2]->Fill(eta);}
 		if (track->charge() > 0) {
 			H_eta_nSigmaKaon  [TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaKaon());
 			H_eta_nSigmaPion  [TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaPion());
@@ -2087,6 +2100,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			H_eta_PVr         [TriggerID_in_TriggerList][0]->Fill(eta,VertexR);
 			H_eta_DVz         [TriggerID_in_TriggerList][0]->Fill(eta,DVz);
 			H_eta_triggerBIN  [TriggerID_in_TriggerList][0]->Fill(eta);
+			if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][0]->Fill(eta);}
 		}
 		if (track->charge() < 0) {
 			H_eta_nSigmaKaon  [TriggerID_in_TriggerList][1]->Fill(eta,track->nSigmaKaon());
@@ -2097,6 +2111,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			H_eta_PVr         [TriggerID_in_TriggerList][1]->Fill(eta,VertexR);
 			H_eta_DVz         [TriggerID_in_TriggerList][1]->Fill(eta,DVz);
 			H_eta_triggerBIN  [TriggerID_in_TriggerList][1]->Fill(eta);
+			if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][1]->Fill(eta);}
 		}
 		H_eta_trigger     ->Fill(eta,TriggerID_in_TriggerList);
 
