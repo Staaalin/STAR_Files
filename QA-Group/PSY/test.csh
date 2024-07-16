@@ -2,21 +2,22 @@
 #starver SL19b
 # starver DEV
 rm -r .sl73_x8664_gcc485
-setenv NODEBUG yes
-starver SL20d
 
 echo "If Source? 0:[NO] 1:[YES]"
 set IfSource = "$<"
-# if ($IfSource == 1) then
-#     cp /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh /star/u/svianping/STAR_Files/QA-Group/PSY/
-#     source setDEV2.csh
-# endif
+if ($IfSource == 1) then
+    cp /star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh /star/u/svianping/STAR_Files/QA-Group/PSY/
+    source setDEV2.csh
+endif
 echo "If Cons? 0:[NO] 1:[YES]"
 set IfCons = "$<"
 if ($IfCons == 1) then
     cons
 endif
 
+
+setenv NODEBUG yes
+starver SL20d
 
 ## pAu@200GeV or dAu@200GeV
 # inputs
