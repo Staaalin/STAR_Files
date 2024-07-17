@@ -74,6 +74,9 @@
 #define K0SPdgMassSigma    0.0056
 #define PhiPdgMassSigma    0.05
 
+#define IfQAMode           false // If Writing Hist of QA;
+#define IfTree             true  // If Writing Tree;
+
 // #define DEBUGGING
 
 
@@ -197,735 +200,717 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 	cout<<nDays<<" "<<mDayL<<" "<<mDayH<<" "<<nTims<<" "<<mStps<<endl;
 
-	hNRefMult = new TH1F("RefMult" , "Reference Multiplicity" , 1000, 0.0, 1000.0 ) ;
-	hNRefMultA= new TH1F("RefMultA", "Reference MultiplicityA", 1000, 0.0, 1000.0 ) ;
-	hNRefMultB= new TH1F("RefMultB", "Reference MultiplicityB", 1000, 0.0, 1000.0 ) ;
-	hVertexXY = new TH2F("VertexXY", "Vertex XY Position", 200, -10.0, 10.0 , 200, -10., 10 ) ;
-	hVertexZ  = new TH1F("VertexZ" , "Event Vertex Z Position", 200, -100.0, 100.0 ) ;
-	hVertex2D = new TH2F("Vertex2D", "VertexZ vs VPD Vz", 200, -100.0, 100.0 , 200, -100., 100 ) ;
-	hDiffVz   = new TH1F("VertexZdiff" , "VertexZ-VPDVz diff", 100, -10.0, 10.0 ) ;
-	hcent     = new TH1F("centrality","centrality"  ,nCent,0.,nCent);
-	hcentw    = new TH1F("centralityw","centralityw",nCent,0.,nCent);
-	hNch_per_VertexZ = new TH2F("hNch_per_VertexZ" , "Event Nch vs. Vertex Z Position", 100, -100.0, 100.0 , 200 , 0,200) ;
-	hNch_per_VertexZ->GetXaxis()->SetTitle("PVz [cm]");
-	hNch_per_VertexZ->GetYaxis()->SetTitle("Nch");
-
-	hcentRefM = new TProfile("hcentRefM","hcentRefM",nCent,0.,nCent,0,1000);
-	hcentRefW = new TProfile("hcentRefW","hcentRefW",nCent,0.,nCent,0,1000);
-
-	H_m2_KSigma_S = new TH2F("H_m2_KSigma_S" , "Kaon m2 vs. Pt for small nSigmaKaon" , 600 , 0 , 3 , 1000 , -1 , 4.5) ;
-	H_m2_KSigma_L = new TH2F("H_m2_KSigma_S" , "Kaon m2 vs. Pt for large nSigmaKaon" , 600 , 0 , 3 , 1000 , -1 , 4.5) ;
-
-    buffer_size = 5000000;
-    hadronTree = new TTree("hadronTree", "Tree_STAR");
-    // hadronTree->Branch("buffer_size"       ,&buffer_size         ,"buffer_size/I"                       );
-    hadronTree->Branch("PDGMult"            ,&PDGMult             ,"PDGMult/I"                           );
-    hadronTree->Branch("refMult"            ,&CrefMult            ,"refMult/I"                           );
-    hadronTree->Branch("grefMult"           ,&CgrefMult           ,"grefMult/I"                          );
-    hadronTree->Branch("EventID"            ,&evtID               ,"EventID/I"                           );
-    hadronTree->Branch("RunID"              ,&runID               ,"RunID/I"                             );
-    hadronTree->Branch("PDG"                ,&PDG                 );
-    hadronTree->Branch("mix_px"             ,&px                  );
-    hadronTree->Branch("mix_py"             ,&py                  );
-    hadronTree->Branch("mix_pz"             ,&pz                  );
-    hadronTree->Branch("InvariantMass"      ,&InvariantMass       );
-
-	// Used for QA
-    hadronTree->Branch("dEdx"               ,&QA_dEdx              );
-    hadronTree->Branch("m2"                 ,&QA_m2                );
-    hadronTree->Branch("dcatopv"            ,&QA_DCA_V0_PV         );
-    // hadronTree->Branch("hasTOF"             ,&QA_hasTOF            );
-    hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton      );
-    hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion        );
-    hadronTree->Branch("nSigmaKaon"         ,&QA_nSigmaKaon        );
-    // hadronTree->Branch("zTOF_proton"        ,&QA_zTOF_proton       );
-    // hadronTree->Branch("zTOF_pion"          ,&QA_zTOF_pion         );
-    // hadronTree->Branch("zTOF_kaon"          ,&QA_zTOF_kaon         );
-	// hadronTree->Branch("IfConfuse"          ,&QA_IfConfuse         );
-	hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length      );
-	hadronTree->Branch("Chi2"               ,&QA_Chi2              );
-	// hadronTree->Branch("IfBadReconstructed" ,&QA_IfBadReconstructed);
-	// hadronTree->Branch("DCA_Daughters"      ,&QA_DCA_Daughters     );
-	
-	hdEdx_pQ = new TH2F("hdEdx_p_NO_CUT","dE/dx vs. p*Q without cut",500,-5,5,500,0,50);
-	hdEdx_pQ->GetXaxis()->SetTitle("p*Q [GeV]");
-	hdEdx_pQ->GetYaxis()->SetTitle("dE/dx [keV/cm]");
-	
-	hdEdx_pQ_1cut = new TH2F("hdEdx_p_1_CUT","dE/dx vs. p*Q HITS cut",500,-5,5,500,0,50);
-	hdEdx_pQ_1cut->GetXaxis()->SetTitle("p*Q [GeV]");
-	hdEdx_pQ_1cut->GetYaxis()->SetTitle("dE/dx [keV/cm]");
-	
-	hdEdx_pQ_2cut = new TH2F("hdEdx_p_2_CUT","dE/dx vs. p*Q HITS & PID cut",500,-5,5,500,0,50);
-	hdEdx_pQ_2cut->GetXaxis()->SetTitle("p*Q [GeV]");
-	hdEdx_pQ_2cut->GetYaxis()->SetTitle("dE/dx [keV/cm]");
-	
-	hLN_M = new TH2D("hLN_M","",400,0,4,600,0,60);
-	hLN_M->GetXaxis()->SetTitle("Mass [GeV]");
-	hLN_M->GetYaxis()->SetTitle("HM");
-	
-	hXY = new TH2D("h_XY","h_ X&Y of PicoDST Tracks",200,0,10,200,0,10);
-	hXY->GetXaxis()->SetTitle("X [cm]");
-	hXY->GetYaxis()->SetTitle("Y [cm]");
-
-	hHXY = new TH2D("h_HXY","h_ X&Y of StHelix",     200,0,10,200,0,10);
-	hHXY->GetXaxis()->SetTitle("X [cm]");
-	hHXY->GetYaxis()->SetTitle("Y [cm]");
-
-	hHM_Chi2 = new TH2D("h_HM_Chi2","Mass vs. Chi2",     1000,0,10,500,0,10);
-	hHM_Chi2->GetXaxis()->SetTitle("Mass [GeV]");
-	hHM_Chi2->GetYaxis()->SetTitle("Chi2");
-
-	hHM_ParentDCA = new TH2D("hH_M_ParentDCA","The DCA between parent particles vs. Mass",     2000,0,5,500,0,5);
-	hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
-	hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
-
-	H_Total_Pz = new TH1F("H_Total_Pz","Total P_z for all tracks",     400,-100,100);
-	H_Total_Pz->GetXaxis()->SetTitle("P_z [GeV]");
-
-	H_Total_Pxy = new TH2F("H_Total_Pxy","Total P_xy for all tracks",     100,-10,10,100,-10,10);
-	H_Total_Pxy->GetXaxis()->SetTitle("P_x [GeV]");
-	H_Total_Pxy->GetYaxis()->SetTitle("P_y [GeV]");
-
-	H_Pt_m2 = new TH2F("H_Pt_m2","m2 vs. p_t",     400,0,10,500,-0.5,2);
-	H_Pt_m2->GetXaxis()->SetTitle("p_t [GeV]");
-	H_Pt_m2->GetYaxis()->SetTitle("m2 [Gev^2]");
-
-	H_Pt_nSigmaKaon = new TH2F("H_Pt_nSigmaKaon","nSigmaKaon vs. p_t",     400,0,10,800,-10,10);
-	H_Pt_nSigmaKaon->GetXaxis()->SetTitle("p_t [GeV]");
-	H_Pt_nSigmaKaon->GetYaxis()->SetTitle("nSigmaKaon");
-
-	H_Pt_nSigmaKaonTOF = new TH2F("H_Pt_nSigmaKaonTOF","nSigmaKaonTOF vs. p_t",     400,0,10,800,-10,10);
-	H_Pt_nSigmaKaonTOF->GetXaxis()->SetTitle("p_t [GeV]");
-	H_Pt_nSigmaKaonTOF->GetYaxis()->SetTitle("nSigmaKaonTOF");
-
-	TriggerList Trigger_List_Data(DataName);
-	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
-	int TriggerListLength = Trigger_List.size();
-	for (int TriggerItr = 0;TriggerItr < TriggerListLength;TriggerItr++){
-		TString ChargeName[3] = {"Positive","Negative","All"};
-		for (int Itr = 0;Itr < 3;Itr++){
-		
-			TString HistName1;
-			TString HistName2;
-			HistName1 = "H_eta_nSigmaKaon_";
-			HistName2 = ChargeName[Itr];
-			HistName2 += "Tracks ";
-			HistName2 += "nSigmaKaon vs. eta, Trigger: ";
-			HistName1 += ChargeName[Itr];
-			HistName1 += "_Trigger_";
-			HistName1 += TriggerItr;
-			HistName2 += Trigger_List[TriggerItr];
-			H_eta_nSigmaKaon[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
-			H_eta_nSigmaKaon[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
-			H_eta_nSigmaKaon[TriggerItr][Itr]->GetYaxis()->SetTitle("nSigmaKaon");
-
-			HistName1 = "H_eta_nSigmaPion_";
-			HistName2 = ChargeName[Itr];
-			HistName2 += "Tracks ";
-			HistName2 += "nSigmaPion vs. eta, Trigger: ";
-			HistName1 += ChargeName[Itr];
-			HistName1 += "_Trigger_";
-			HistName1 += TriggerItr;
-			HistName2 += Trigger_List[TriggerItr];
-			H_eta_nSigmaPion[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
-			H_eta_nSigmaPion[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
-			H_eta_nSigmaPion[TriggerItr][Itr]->GetYaxis()->SetTitle("nSigmaPion");
-			
-			HistName1 = "H_eta_nSigmaProton_";
-			HistName2 = ChargeName[Itr];
-			HistName2 += "Tracks ";
-			HistName2 += "nSigmaProton vs. eta, Trigger: ";
-			HistName1 += ChargeName[Itr];
-			HistName1 += "_Trigger_";
-			HistName1 += TriggerItr;
-			HistName2 += Trigger_List[TriggerItr];
-			H_eta_nSigmaProton[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
-			H_eta_nSigmaProton[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
-			H_eta_nSigmaProton[TriggerItr][Itr]->GetYaxis()->SetTitle("nSigmaProton");
-			
-			HistName1 = "H_eta_m2_";
-			HistName2 = ChargeName[Itr];
-			HistName2 += "Tracks ";
-			HistName2 += "m2 vs. eta, Trigger: ";
-			HistName1 += ChargeName[Itr];
-			HistName1 += "_Trigger_";
-			HistName1 += TriggerItr;
-			HistName2 += Trigger_List[TriggerItr];
-			H_eta_m2[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-0.5,2);
-			H_eta_m2[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
-			H_eta_m2[TriggerItr][Itr]->GetYaxis()->SetTitle("m2 [GeV^2]");
-			
-			HistName1 = "H_eta_PVz_";
-			HistName2 = ChargeName[Itr];
-			HistName2 += "Tracks ";
-			HistName2 += "Primary Vertex Z vs. eta, Trigger: ";
-			HistName1 += ChargeName[Itr];
-			HistName1 += "_Trigger_";
-			HistName1 += TriggerItr;
-			HistName2 += Trigger_List[TriggerItr];
-			H_eta_PVz[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-100,100);
-			H_eta_PVz[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
-			H_eta_PVz[TriggerItr][Itr]->GetYaxis()->SetTitle("PVz [cm]");
-			
-			HistName1 = "H_eta_PVr_";
-			HistName2 = ChargeName[Itr];
-			HistName2 += "Tracks ";
-			HistName2 += "Primary Vertex R vs. eta, Trigger: ";
-			HistName1 += ChargeName[Itr];
-			HistName1 += "_Trigger_";
-			HistName1 += TriggerItr;
-			HistName2 += Trigger_List[TriggerItr];
-			H_eta_PVr[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,100,0,5);
-			H_eta_PVr[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
-			H_eta_PVr[TriggerItr][Itr]->GetYaxis()->SetTitle("PVr [cm]");
-			
-			HistName1 = "H_eta_DVz_";
-			HistName2 = ChargeName[Itr];
-			HistName2 += "Tracks ";
-			HistName2 += "VertexZ-vpdVz vs. eta, Trigger: ";
-			HistName1 += ChargeName[Itr];
-			HistName1 += "_Trigger_";
-			HistName1 += TriggerItr;
-			HistName2 += Trigger_List[TriggerItr];
-			// H_eta_DVz[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-5,5);
-			H_eta_DVz[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,1000,-50,50); // band
-			H_eta_DVz[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
-			H_eta_DVz[TriggerItr][Itr]->GetYaxis()->SetTitle("DVz [cm]");
-			
-			HistName1 = "H_eta_triggerBIN_";
-			HistName2 = ChargeName[Itr];
-			HistName2 += "Tracks ";
-			HistName2 += "eta distribution, Trigger: ";
-			HistName1 += ChargeName[Itr];
-			HistName1 += "_Trigger_";
-			HistName1 += TriggerItr;
-			HistName2 += Trigger_List[TriggerItr];
-			H_eta_triggerBIN[TriggerItr][Itr] = new TH1F(HistName1,HistName2,     200,-2,2);
-			H_eta_triggerBIN[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
-			
-			HistName1 = "H_eta_triggerBIN_hasTOF_";
-			HistName2 = ChargeName[Itr];
-			HistName2 += "Tracks ";
-			HistName2 += "hasTOF eta distribution, Trigger: ";
-			HistName1 += ChargeName[Itr];
-			HistName1 += "_Trigger_";
-			HistName1 += TriggerItr;
-			HistName2 += Trigger_List[TriggerItr];
-			H_eta_triggerBIN_hasTOF[TriggerItr][Itr] = new TH1F(HistName1,HistName2,     200,-2,2);
-			H_eta_triggerBIN_hasTOF[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
-		}
-	}
-	H_eta_trigger = new TH2F("H_eta_trigger","trigger vs. eta",     200,-2,2,TriggerListLength,-0.5,TriggerListLength-0.5);
-	H_eta_trigger->GetXaxis()->SetTitle("eta");
-	H_eta_trigger->GetYaxis()->SetTitle("trigger");
-
-	H_m2_nSigmaKaon_Pt = new TH3F("H_m2_nSigmaKaon","m2 vs. nSigmaKaon vs. Pt",     400,-0.5,2 , 400,-10,10 , 18,0.2,2.0);
-	H_m2_nSigmaKaon_Pt->GetXaxis()->SetTitle("m2 [GeV^2]");
-	H_m2_nSigmaKaon_Pt->GetYaxis()->SetTitle("nSigmaKaon");
-	H_m2_nSigmaKaon_Pt->GetZaxis()->SetTitle("Pt [GeV]");
-
-	H_nSigmaKaon_Pt_AllTOF = new TH2F("H_nSigmaKaon_Pt_AllTOF","nSigmaKaon vs Pt wi noTOF",  500 , -5 , 5 , 18,0.2,2.0);
-	H_nSigmaKaon_Pt_AllTOF->GetXaxis()->SetTitle("nSigmaKaon");
-	H_nSigmaKaon_Pt_AllTOF->GetYaxis()->SetTitle("Pt");
-
-	H_nSigmaKaon_Pt_HasTOF = new TH2F("H_nSigmaKaon_Pt_HasTOF","nSigmaKaon vs Pt wo noTOF",  500 , -5 , 5 , 18,0.2,2.0);
-	H_nSigmaKaon_Pt_HasTOF->GetXaxis()->SetTitle("nSigmaKaon");
-	H_nSigmaKaon_Pt_HasTOF->GetYaxis()->SetTitle("Pt");
-
-	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion = new TH2F("H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion","nSigmaKaon vs Pt for noTOF & -3<nSigmaPion<3",  500 , -5 , 5 , 18,0.2,2.0);
-	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->GetXaxis()->SetTitle("nSigmaKaon");
-	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->GetYaxis()->SetTitle("Pt");
-
 	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
 
-	H_All_nSigmaKaon_y   = new TH2F("H_All_nSigmaKaon_y"  ,"nSigmaKaon vs. y for all tracks"  ,200,-2,2,200,0,6);
-	H_All_nSigmaKaon_eta = new TH2F("H_All_nSigmaKaon_eta","nSigmaKaon vs. eta for all tracks",200,-2,2,200,0,6);
-	H_All_nSigmaKaon_y->GetXaxis()->SetTitle("rapidity");
-	H_All_nSigmaKaon_y->GetYaxis()->SetTitle("nSigmaKaon");
-	H_All_nSigmaKaon_eta->GetXaxis()->SetTitle("eta");
-	H_All_nSigmaKaon_eta->GetYaxis()->SetTitle("nSigmaKaon");
+	if (IfQAMode) {
 
-	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,   333   };
-	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "Phi"  };
-	const int BPDGList[]         = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
-	const TString BNameList[]    = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
-	const float TBPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
-	const int TCPDGList[]      = {    321       ,    211    ,    2212   };
-	const TString TCNameList[] = {  "Kaon"      ,  "Pion"   ,  "Proton" };
-	for (int Itr = 0;Itr < PDG2NameSize3;Itr++){
-		CPDGList[Itr] = TCPDGList[Itr];
-		CNameList[Itr] = TCNameList[Itr];
+		hNRefMult = new TH1F("RefMult" , "Reference Multiplicity" , 1000, 0.0, 1000.0 ) ;
+		hNRefMultA= new TH1F("RefMultA", "Reference MultiplicityA", 1000, 0.0, 1000.0 ) ;
+		hNRefMultB= new TH1F("RefMultB", "Reference MultiplicityB", 1000, 0.0, 1000.0 ) ;
+		hVertexXY = new TH2F("VertexXY", "Vertex XY Position", 200, -10.0, 10.0 , 200, -10., 10 ) ;
+		hVertexZ  = new TH1F("VertexZ" , "Event Vertex Z Position", 200, -100.0, 100.0 ) ;
+		hVertex2D = new TH2F("Vertex2D", "VertexZ vs VPD Vz", 200, -100.0, 100.0 , 200, -100., 100 ) ;
+		hDiffVz   = new TH1F("VertexZdiff" , "VertexZ-VPDVz diff", 100, -10.0, 10.0 ) ;
+		hcent     = new TH1F("centrality","centrality"  ,nCent,0.,nCent);
+		hcentw    = new TH1F("centralityw","centralityw",nCent,0.,nCent);
+		hNch_per_VertexZ = new TH2F("hNch_per_VertexZ" , "Event Nch vs. Vertex Z Position", 100, -100.0, 100.0 , 200 , 0,200) ;
+		hNch_per_VertexZ->GetXaxis()->SetTitle("PVz [cm]");
+		hNch_per_VertexZ->GetYaxis()->SetTitle("Nch");
 
-	}
-	for (int Itr = 0;Itr < PDG2NameSize3;Itr++){
-		BPDGListMass[Itr]  = TBPDGListMass[Itr];
-	}
-	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
-		PDGList[Itr] = APDGList[Itr];NameList[Itr] = ANameList[Itr];
-
-		TString HistName1 = "HM_";
-		TString HistName2 = "The Mass of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_ALL_NO_CUT[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
-		H_ALL_NO_CUT[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
-
-		HistName1 = "HM_DaughtersDCA_";
-		HistName2 = "The Mass of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		HistName2 += " those DayghtersDCA < 0.6 [cm]";
-		H_DaughterDCA[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
-		H_DaughterDCA[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
-
-		HistName1 = "HM_WDaughter_";
-		HistName2 = "The Mass of (Wrong Daughter) ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_WrongDaughter[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
-		H_WrongDaughter[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
-
-		HistName1 = "HM_CDaughter_";
-		HistName2 = "The Mass of (Corect Daughter) ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_CrectDaughter[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
-		H_CrectDaughter[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
+		hcentRefM = new TProfile("hcentRefM","hcentRefM",nCent,0.,nCent,0,1000);
+		hcentRefW = new TProfile("hcentRefW","hcentRefW",nCent,0.,nCent,0,1000);
 		
-		HistName1 = "H_Hyperon_Rap_";
-		HistName2 = "The Rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_Hyperon_Rap[Itr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
-		H_Hyperon_Rap[Itr]->GetXaxis()->SetTitle("y");
-	}
-	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
-		int Jtr = Itr - PDG2NameSize;
-		PDGList[Itr] = BPDGList[Jtr];NameList[Itr] = BNameList[Jtr];
-
-		TString HistName1 = "HY_";
-		TString HistName2 = "The rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		// H_rapidity[Jtr] = new TH1F(HistName1,HistName2,30,-1.5,1.5); // KFP Setting
-		H_rapidity[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
-		H_rapidity[Jtr]->GetXaxis()->SetTitle("y");
+		hdEdx_pQ = new TH2F("hdEdx_p_NO_CUT","dE/dx vs. p*Q without cut",500,-5,5,500,0,50);
+		hdEdx_pQ->GetXaxis()->SetTitle("p*Q [GeV]");
+		hdEdx_pQ->GetYaxis()->SetTitle("dE/dx [keV/cm]");
 		
-		HistName1 = "HY_eTOF_";
-		HistName2 = "The eTOF rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_rapidity_eTOF[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
-		H_rapidity_eTOF[Jtr]->GetXaxis()->SetTitle("y");
+		hdEdx_pQ_1cut = new TH2F("hdEdx_p_1_CUT","dE/dx vs. p*Q HITS cut",500,-5,5,500,0,50);
+		hdEdx_pQ_1cut->GetXaxis()->SetTitle("p*Q [GeV]");
+		hdEdx_pQ_1cut->GetYaxis()->SetTitle("dE/dx [keV/cm]");
 		
-		HistName1 = "HY_eTOF_Only";
-		HistName2 = "The rapidity in eTOF contained event of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_rapidity_Only_eTOF[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
-		H_rapidity_Only_eTOF[Jtr]->GetXaxis()->SetTitle("y");
-
-		HistName1 = "HP_";
-		HistName2 = "The momentum of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_P[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
-		H_P[Jtr]->GetXaxis()->SetTitle("p [GeV]");
-
-		HistName1 = "HPt_";
-		HistName2 = "The momentum_t of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_Pt[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
-		H_Pt[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
-
-		HistName1 = "H_y_Pt_";
-		HistName2 = "The y vs. momentum_t of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_Pt[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,5);
-		H_y_Pt[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_Pt[Jtr]->GetYaxis()->SetTitle("Pt [GeV]");
-
-		HistName1 = "H_y_P_";
-		HistName2 = "The y vs. momentum of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_P[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,5);
-		H_y_P[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_P[Jtr]->GetYaxis()->SetTitle("P [GeV]");
-
-		HistName1 = "H_y_m2_";
-		HistName2 = "The y vs. m2 of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_m2[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,1);
-		H_y_m2[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_m2[Jtr]->GetYaxis()->SetTitle("m^2 [GeV^2]");
-
-		HistName1 = "H_y_nSigmaKaon_";
-		HistName2 = "The y vs. nSigmaKaon of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_nSigmaKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		H_y_nSigmaKaon[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_nSigmaKaon[Jtr]->GetYaxis()->SetTitle("nSigmaKaon");
-
-		HistName1 = "H_y_nSigmaPion_";
-		HistName2 = "The y vs. nSigmaPion of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_nSigmaPion[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		H_y_nSigmaPion[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_nSigmaPion[Jtr]->GetYaxis()->SetTitle("nSigmaPion");
-
-		HistName1 = "H_y_nSigmaElectron_";
-		HistName2 = "The y vs. nSigmaElectron of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_nSigmaElectron[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		H_y_nSigmaElectron[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_nSigmaElectron[Jtr]->GetYaxis()->SetTitle("nSigmaElectron");
-
-		HistName1 = "H_y_nHitsFit_";
-		HistName2 = "The y vs. nHitsFit of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_nHitsFit[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,70,0,70);
-		H_y_nHitsFit[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_nHitsFit[Jtr]->GetYaxis()->SetTitle("nHitsFit");
-
-		HistName1 = "H_y_nHitsDedx_";
-		HistName2 = "The y vs. nHitsDedx of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_nHitsDedx[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,70,0,70);
-		H_y_nHitsDedx[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_nHitsDedx[Jtr]->GetYaxis()->SetTitle("nHitsDedx");
-
-		HistName1 = "H_y_nHitsFit2nHitsMax_";
-		HistName2 = "The y vs. nHitsFit/nHitsMax of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_nHitsFit2nHitsMax[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,40,0.4,1.4);
-		H_y_nHitsFit2nHitsMax[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_nHitsFit2nHitsMax[Jtr]->GetYaxis()->SetTitle("nHitsFit/nHitsMax");
-
-		HistName1 = "H_y_eta_";
-		HistName2 = "The y vs. eta of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_eta[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-2,2);
-		H_y_eta[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_eta[Jtr]->GetYaxis()->SetTitle("eta");
+		hdEdx_pQ_2cut = new TH2F("hdEdx_p_2_CUT","dE/dx vs. p*Q HITS & PID cut",500,-5,5,500,0,50);
+		hdEdx_pQ_2cut->GetXaxis()->SetTitle("p*Q [GeV]");
+		hdEdx_pQ_2cut->GetYaxis()->SetTitle("dE/dx [keV/cm]");
 		
-		HistName1 = "H_dEdx_p";
-		HistName2 = "The dEdx vs. momentum of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_dEdx_p[Jtr] = new TH2F(HistName1,HistName2,2000,-10,10,1000,0,20);
-		H_dEdx_p[Jtr]->GetXaxis()->SetTitle("P [GeV]");
-		H_dEdx_p[Jtr]->GetYaxis()->SetTitle("dE/dx [keV/cm]");
+		hXY = new TH2D("h_XY","h_ X&Y of PicoDST Tracks",200,0,10,200,0,10);
+		hXY->GetXaxis()->SetTitle("X [cm]");
+		hXY->GetYaxis()->SetTitle("Y [cm]");
 
-		HistName1 = "hgbtofYlocal";
-		HistName2 = "The btofYlocal vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		hgbtofYlocal[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		hgbtofYlocal[Jtr]->GetXaxis()->SetTitle("y");
-		hgbtofYlocal[Jtr]->GetYaxis()->SetTitle("btofYlocal");
+		hHXY = new TH2D("h_HXY","h_ X&Y of StHelix",     200,0,10,200,0,10);
+		hHXY->GetXaxis()->SetTitle("X [cm]");
+		hHXY->GetYaxis()->SetTitle("Y [cm]");
 
-		HistName1 = "H_y_Vz";
-		HistName2 = "The Event Primary Vertex Z vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_Vz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,160,-80,80);
-		H_y_Vz[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_Vz[Jtr]->GetYaxis()->SetTitle("PVz [cm]");
-		
-		HistName1 = "H_y_Pz";
-		HistName2 = "The P_z vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_Pz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,-10,10);
-		H_y_Pz[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_Pz[Jtr]->GetYaxis()->SetTitle("p_z [GeV]");
-		
-		HistName1 = "H_y_Nch";
-		HistName2 = "The Nch vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_Nch[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,0,200);
-		H_y_Nch[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
-		
-		HistName1 = "H_Pz_Nch";
-		HistName2 = "The Nch vs. Pz of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_Pz_Nch[Jtr] = new TH2F(HistName1,HistName2,200,-10,10,200,0,200);
-		H_Pz_Nch[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
-		H_Pz_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
+		hHM_Chi2 = new TH2D("h_HM_Chi2","Mass vs. Chi2",     1000,0,10,500,0,10);
+		hHM_Chi2->GetXaxis()->SetTitle("Mass [GeV]");
+		hHM_Chi2->GetYaxis()->SetTitle("Chi2");
 
-		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
-			HistName1 = "H_Pt_nSigma";
-			HistName2 = "The P_t vs. nSigma";
-			HistName1 += CNameList[Ktr];HistName2 += CNameList[Ktr];
-			HistName1 += "_";HistName1 += NameList[Itr];
-			HistName2 += " of ";HistName2 += NameList[Itr];
-			H_Pt_nSigma[Jtr][Ktr] = new TH2F(HistName1,HistName2,1000,-10,10,1000,0,8);
-			HistName1 = "nSigma";HistName1 += CNameList[Ktr];
-			H_Pt_nSigma[Jtr][Ktr]->GetXaxis()->SetTitle(HistName1);
-			H_Pt_nSigma[Jtr][Ktr]->GetYaxis()->SetTitle("pT [GeV]");
+		hHM_ParentDCA = new TH2D("hH_M_ParentDCA","The DCA between parent particles vs. Mass",     2000,0,5,500,0,5);
+		hHM_ParentDCA->GetXaxis()->SetTitle("Mass [GeV]");
+		hHM_ParentDCA->GetYaxis()->SetTitle("DCA [cm]");
+
+		H_Total_Pz = new TH1F("H_Total_Pz","Total P_z for all tracks",     400,-100,100);
+		H_Total_Pz->GetXaxis()->SetTitle("P_z [GeV]");
+
+		H_Total_Pxy = new TH2F("H_Total_Pxy","Total P_xy for all tracks",     100,-10,10,100,-10,10);
+		H_Total_Pxy->GetXaxis()->SetTitle("P_x [GeV]");
+		H_Total_Pxy->GetYaxis()->SetTitle("P_y [GeV]");
+
+		H_Pt_m2 = new TH2F("H_Pt_m2","m2 vs. p_t",     400,0,10,500,-0.5,2);
+		H_Pt_m2->GetXaxis()->SetTitle("p_t [GeV]");
+		H_Pt_m2->GetYaxis()->SetTitle("m2 [Gev^2]");
+
+		H_Pt_nSigmaKaon = new TH2F("H_Pt_nSigmaKaon","nSigmaKaon vs. p_t",     400,0,10,800,-10,10);
+		H_Pt_nSigmaKaon->GetXaxis()->SetTitle("p_t [GeV]");
+		H_Pt_nSigmaKaon->GetYaxis()->SetTitle("nSigmaKaon");
+
+		H_Pt_nSigmaKaonTOF = new TH2F("H_Pt_nSigmaKaonTOF","nSigmaKaonTOF vs. p_t",     400,0,10,800,-10,10);
+		H_Pt_nSigmaKaonTOF->GetXaxis()->SetTitle("p_t [GeV]");
+		H_Pt_nSigmaKaonTOF->GetYaxis()->SetTitle("nSigmaKaonTOF");
+
+		TriggerList Trigger_List_Data(DataName);
+		std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
+		int TriggerListLength = Trigger_List.size();
+		for (int TriggerItr = 0;TriggerItr < TriggerListLength;TriggerItr++){
+			TString ChargeName[3] = {"Positive","Negative","All"};
+			for (int Itr = 0;Itr < 3;Itr++){
+			
+				TString HistName1;
+				TString HistName2;
+				HistName1 = "H_eta_nSigmaKaon_";
+				HistName2 = ChargeName[Itr];
+				HistName2 += "Tracks ";
+				HistName2 += "nSigmaKaon vs. eta, Trigger: ";
+				HistName1 += ChargeName[Itr];
+				HistName1 += "_Trigger_";
+				HistName1 += TriggerItr;
+				HistName2 += Trigger_List[TriggerItr];
+				H_eta_nSigmaKaon[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
+				H_eta_nSigmaKaon[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+				H_eta_nSigmaKaon[TriggerItr][Itr]->GetYaxis()->SetTitle("nSigmaKaon");
+
+				HistName1 = "H_eta_nSigmaPion_";
+				HistName2 = ChargeName[Itr];
+				HistName2 += "Tracks ";
+				HistName2 += "nSigmaPion vs. eta, Trigger: ";
+				HistName1 += ChargeName[Itr];
+				HistName1 += "_Trigger_";
+				HistName1 += TriggerItr;
+				HistName2 += Trigger_List[TriggerItr];
+				H_eta_nSigmaPion[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
+				H_eta_nSigmaPion[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+				H_eta_nSigmaPion[TriggerItr][Itr]->GetYaxis()->SetTitle("nSigmaPion");
+				
+				HistName1 = "H_eta_nSigmaProton_";
+				HistName2 = ChargeName[Itr];
+				HistName2 += "Tracks ";
+				HistName2 += "nSigmaProton vs. eta, Trigger: ";
+				HistName1 += ChargeName[Itr];
+				HistName1 += "_Trigger_";
+				HistName1 += TriggerItr;
+				HistName2 += Trigger_List[TriggerItr];
+				H_eta_nSigmaProton[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-8,8);
+				H_eta_nSigmaProton[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+				H_eta_nSigmaProton[TriggerItr][Itr]->GetYaxis()->SetTitle("nSigmaProton");
+				
+				HistName1 = "H_eta_m2_";
+				HistName2 = ChargeName[Itr];
+				HistName2 += "Tracks ";
+				HistName2 += "m2 vs. eta, Trigger: ";
+				HistName1 += ChargeName[Itr];
+				HistName1 += "_Trigger_";
+				HistName1 += TriggerItr;
+				HistName2 += Trigger_List[TriggerItr];
+				H_eta_m2[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,200,-0.5,2);
+				H_eta_m2[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+				H_eta_m2[TriggerItr][Itr]->GetYaxis()->SetTitle("m2 [GeV^2]");
+				
+				HistName1 = "H_eta_PVz_";
+				HistName2 = ChargeName[Itr];
+				HistName2 += "Tracks ";
+				HistName2 += "Primary Vertex Z vs. eta, Trigger: ";
+				HistName1 += ChargeName[Itr];
+				HistName1 += "_Trigger_";
+				HistName1 += TriggerItr;
+				HistName2 += Trigger_List[TriggerItr];
+				H_eta_PVz[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-100,100);
+				H_eta_PVz[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+				H_eta_PVz[TriggerItr][Itr]->GetYaxis()->SetTitle("PVz [cm]");
+				
+				HistName1 = "H_eta_PVr_";
+				HistName2 = ChargeName[Itr];
+				HistName2 += "Tracks ";
+				HistName2 += "Primary Vertex R vs. eta, Trigger: ";
+				HistName1 += ChargeName[Itr];
+				HistName1 += "_Trigger_";
+				HistName1 += TriggerItr;
+				HistName2 += Trigger_List[TriggerItr];
+				H_eta_PVr[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,100,0,5);
+				H_eta_PVr[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+				H_eta_PVr[TriggerItr][Itr]->GetYaxis()->SetTitle("PVr [cm]");
+				
+				HistName1 = "H_eta_DVz_";
+				HistName2 = ChargeName[Itr];
+				HistName2 += "Tracks ";
+				HistName2 += "VertexZ-vpdVz vs. eta, Trigger: ";
+				HistName1 += ChargeName[Itr];
+				HistName1 += "_Trigger_";
+				HistName1 += TriggerItr;
+				HistName2 += Trigger_List[TriggerItr];
+				// H_eta_DVz[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,100,-5,5);
+				H_eta_DVz[TriggerItr][Itr] = new TH2F(HistName1,HistName2,     200,-2,2,1000,-50,50); // band
+				H_eta_DVz[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+				H_eta_DVz[TriggerItr][Itr]->GetYaxis()->SetTitle("DVz [cm]");
+				
+				HistName1 = "H_eta_triggerBIN_";
+				HistName2 = ChargeName[Itr];
+				HistName2 += "Tracks ";
+				HistName2 += "eta distribution, Trigger: ";
+				HistName1 += ChargeName[Itr];
+				HistName1 += "_Trigger_";
+				HistName1 += TriggerItr;
+				HistName2 += Trigger_List[TriggerItr];
+				H_eta_triggerBIN[TriggerItr][Itr] = new TH1F(HistName1,HistName2,     200,-2,2);
+				H_eta_triggerBIN[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+				
+				HistName1 = "H_eta_triggerBIN_hasTOF_";
+				HistName2 = ChargeName[Itr];
+				HistName2 += "Tracks ";
+				HistName2 += "hasTOF eta distribution, Trigger: ";
+				HistName1 += ChargeName[Itr];
+				HistName1 += "_Trigger_";
+				HistName1 += TriggerItr;
+				HistName2 += Trigger_List[TriggerItr];
+				H_eta_triggerBIN_hasTOF[TriggerItr][Itr] = new TH1F(HistName1,HistName2,     200,-2,2);
+				H_eta_triggerBIN_hasTOF[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+			}
 		}
+		H_eta_trigger = new TH2F("H_eta_trigger","trigger vs. eta",     200,-2,2,TriggerListLength,-0.5,TriggerListLength-0.5);
+		H_eta_trigger->GetXaxis()->SetTitle("eta");
+		H_eta_trigger->GetYaxis()->SetTitle("trigger");
 
-		HistName1 = "H_DCAtoPV";
-		HistName2 = "The DCA(to PV) of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_DCAtoPV[Jtr] = new TH1F(HistName1,HistName2,500,0,5);
-		H_DCAtoPV[Jtr]->GetXaxis()->SetTitle("DCA [cm]");
+		H_m2_nSigmaKaon_Pt = new TH3F("H_m2_nSigmaKaon","m2 vs. nSigmaKaon vs. Pt",     400,-0.5,2 , 400,-10,10 , 18,0.2,2.0);
+		H_m2_nSigmaKaon_Pt->GetXaxis()->SetTitle("m2 [GeV^2]");
+		H_m2_nSigmaKaon_Pt->GetYaxis()->SetTitle("nSigmaKaon");
+		H_m2_nSigmaKaon_Pt->GetZaxis()->SetTitle("Pt [GeV]");
 
-		HistName1 = "H_eta";
-		HistName2 = "The eta of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_eta[Jtr] = new TH1F(HistName1,HistName2,200,-2,2);
-		H_eta[Jtr]->GetXaxis()->SetTitle("eta");
+		H_All_nSigmaKaon_y   = new TH2F("H_All_nSigmaKaon_y"  ,"nSigmaKaon vs. y for all tracks"  ,200,-2,2,200,0,6);
+		H_All_nSigmaKaon_eta = new TH2F("H_All_nSigmaKaon_eta","nSigmaKaon vs. eta for all tracks",200,-2,2,200,0,6);
+		H_All_nSigmaKaon_y->GetXaxis()->SetTitle("rapidity");
+		H_All_nSigmaKaon_y->GetYaxis()->SetTitle("nSigmaKaon");
+		H_All_nSigmaKaon_eta->GetXaxis()->SetTitle("eta");
+		H_All_nSigmaKaon_eta->GetYaxis()->SetTitle("nSigmaKaon");
 
-		HistName1 = "H_nHitsFit";
-		HistName2 = "The nHitsFit of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_nHitsFit_p[Jtr] = new TH2F(HistName1,HistName2,60,0,60,500,0,10);
-		H_nHitsFit_p[Jtr]->GetXaxis()->SetTitle("nHitsFit");
-		H_nHitsFit_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
+		const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,   333   };
+		const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "Phi"  };
+		const int BPDGList[]         = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
+		const TString BNameList[]    = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
+		const float TBPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
+		const int TCPDGList[]      = {    321       ,    211    ,    2212   };
+		const TString TCNameList[] = {  "Kaon"      ,  "Pion"   ,  "Proton" };
+		for (int Itr = 0;Itr < PDG2NameSize3;Itr++){
+			CPDGList[Itr] = TCPDGList[Itr];
+			CNameList[Itr] = TCNameList[Itr];
 
-		HistName1 = "H_nHitsFit_nHitsMax";
-		HistName2 = "The nHitsFit/nHitsMax of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_nHitsFit_nHitsMax[Jtr] = new TH1F(HistName1,HistName2,100,0,1);
-		H_nHitsFit_nHitsMax[Jtr]->GetXaxis()->SetTitle("nHitsFit/nHitsMax");
-
-		HistName1 = "H_ndEdx";
-		HistName2 = "The ndEdx of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_ndEdx[Jtr] = new TH1F(HistName1,HistName2,50,0,50);
-		H_ndEdx[Jtr]->GetXaxis()->SetTitle("ndEdx");
-
-		HistName1 = "H_nSigmaTOF_p_";
-		HistName2 = "The nSigmaTOFKaon vs p of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_nSigmaTOF_p[Jtr] = new TH2F(HistName1,HistName2,250,-10,10,250,0,10);
-		H_nSigmaTOF_p[Jtr]->GetXaxis()->SetTitle("nSigmaTOFKaon");
-		H_nSigmaTOF_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
-		
-		HistName1 = "H_y_nSigmaTOFKaon_";
-		HistName2 = "The nSigmaTOFKaon vs rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_y_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,250,-10,10);
-		H_y_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("y");
-		H_y_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
-		
-		HistName1 = "H_m2_nSigmaTOFKaon_";
-		HistName2 = "The nSigmaTOFKaon vs m^2 of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_m2_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-0.5,2,100,-10,10);
-		H_m2_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("m2");
-		H_m2_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
-		
-		HistName1 = "H_Pxy_";
-		HistName2 = "The Px vs Py of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_Pxy[Jtr] = new TH2F(HistName1,HistName2,100,-10,10,100,-10,10);
-		H_Pxy[Jtr]->GetXaxis()->SetTitle("Px [GeV]");
-		H_Pxy[Jtr]->GetYaxis()->SetTitle("Py [GeV]");
-		
-		HistName1 = "H_Pz_";
-		HistName2 = "The Pz of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_Pz[Jtr] = new TH1F(HistName1,HistName2,400,-10,10);
-		H_Pz[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
-
-		// KFP PID QA
-		HistName1 = "H_KFP_Y_";
-		HistName2 = "KFP: The rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_rapidity[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
-		H_KFP_rapidity[Jtr]->GetXaxis()->SetTitle("y");
-
-		HistName1 = "H_KFP_P_";
-		HistName2 = "KFP: The momentum of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_P[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
-		H_KFP_P[Jtr]->GetXaxis()->SetTitle("p [GeV]");
-
-		HistName1 = "H_KFP_Pt_";
-		HistName2 = "KFP: The momentum_t of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_Pt[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
-		H_KFP_Pt[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
-
-		HistName1 = "H_KFP_y_Pt_";
-		HistName2 = "KFP: The y vs. momentum_t of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_Pt[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,5);
-		H_KFP_y_Pt[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_Pt[Jtr]->GetYaxis()->SetTitle("Pt [GeV]");
-
-		HistName1 = "H_KFP_y_m2_";
-		HistName2 = "KFP: The y vs. m2 of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_m2[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,1);
-		H_KFP_y_m2[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_m2[Jtr]->GetYaxis()->SetTitle("m^2 [GeV^2]");
-
-		HistName1 = "H_KFP_y_nSigmaKaon_";
-		HistName2 = "KFP: The y vs. nSigmaKaon of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nSigmaKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		H_KFP_y_nSigmaKaon[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nSigmaKaon[Jtr]->GetYaxis()->SetTitle("nSigmaKaon");
-
-		HistName1 = "H_KFP_y_nSigmaPion_";
-		HistName2 = "KFP: The y vs. nSigmaPion of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nSigmaPion[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		H_KFP_y_nSigmaPion[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nSigmaPion[Jtr]->GetYaxis()->SetTitle("nSigmaPion");
-
-		HistName1 = "H_KFP_y_nSigmaElectron_";
-		HistName2 = "KFP: The y vs. nSigmaElectron of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nSigmaElectron[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		H_KFP_y_nSigmaElectron[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nSigmaElectron[Jtr]->GetYaxis()->SetTitle("nSigmaElectron");
-
-		HistName1 = "H_KFP_y_nHitsFit_";
-		HistName2 = "KFP: The y vs. nHitsFit of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nHitsFit[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,70,0,70);
-		H_KFP_y_nHitsFit[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nHitsFit[Jtr]->GetYaxis()->SetTitle("nHitsFit");
-
-		HistName1 = "H_KFP_y_nHitsDedx_";
-		HistName2 = "KFP: The y vs. nHitsDedx of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nHitsDedx[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,70,0,70);
-		H_KFP_y_nHitsDedx[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nHitsDedx[Jtr]->GetYaxis()->SetTitle("nHitsDedx");
-
-		HistName1 = "H_KFP_y_nHitsFit2nHitsMax_";
-		HistName2 = "KFP: The y vs. nHitsFit/nHitsMax of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nHitsFit2nHitsMax[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,40,0.4,1.4);
-		H_KFP_y_nHitsFit2nHitsMax[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nHitsFit2nHitsMax[Jtr]->GetYaxis()->SetTitle("nHitsFit/nHitsMax");
-
-		HistName1 = "H_KFP_y_eta_";
-		HistName2 = "KFP: The y vs. eta of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_eta[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-2,2);
-		H_KFP_y_eta[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_eta[Jtr]->GetYaxis()->SetTitle("eta");
-		
-		HistName1 = "H_KFP_dEdx_p";
-		HistName2 = "KFP: The dEdx vs. momentum of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_dEdx_p[Jtr] = new TH2F(HistName1,HistName2,2000,-10,10,1000,0,20);
-		H_KFP_dEdx_p[Jtr]->GetXaxis()->SetTitle("P [GeV]");
-		H_KFP_dEdx_p[Jtr]->GetYaxis()->SetTitle("dE/dx [keV/cm]");
-
-		HistName1 = "h_KFP_tofYlocal";
-		HistName2 = "KFP: The btofYlocal vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		h_KFP_tofYlocal[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
-		h_KFP_tofYlocal[Jtr]->GetXaxis()->SetTitle("y");
-		h_KFP_tofYlocal[Jtr]->GetYaxis()->SetTitle("btofYlocal");
-
-		HistName1 = "H_KFP_y_Vz";
-		HistName2 = "KFP: The Event Primary Vertex Z vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_Vz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,160,-80,80);
-		H_KFP_y_Vz[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_Vz[Jtr]->GetYaxis()->SetTitle("PVz [cm]");
-		
-		HistName1 = "H_KFP_y_Pz";
-		HistName2 = "KFP: The P_z vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_Pz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,-10,10);
-		H_KFP_y_Pz[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_Pz[Jtr]->GetYaxis()->SetTitle("p_z [GeV]");
-		
-		HistName1 = "H_KFP_y_Nch";
-		HistName2 = "KFP: The Nch vs. rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_Nch[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,0,200);
-		H_KFP_y_Nch[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
-		
-		HistName1 = "H_KFP_Pz_Nch";
-		HistName2 = "KFP: The Nch vs. Pz of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_Pz_Nch[Jtr] = new TH2F(HistName1,HistName2,200,-10,10,200,0,200);
-		H_KFP_Pz_Nch[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
-		H_KFP_Pz_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
-
-		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
-			HistName1 = "H_KFP_Pt_nSigma";
-			HistName2 = "KFP: The P_t vs. nSigma";
-			HistName1 += CNameList[Ktr];HistName2 += CNameList[Ktr];
-			HistName1 += "_";HistName1 += NameList[Itr];
-			HistName2 += " of ";HistName2 += NameList[Itr];
-			H_KFP_Pt_nSigma[Jtr][Ktr] = new TH2F(HistName1,HistName2,1000,-10,10,1000,0,8);
-			HistName1 = "nSigma";HistName1 += CNameList[Ktr];
-			H_KFP_Pt_nSigma[Jtr][Ktr]->GetXaxis()->SetTitle(HistName1);
-			H_KFP_Pt_nSigma[Jtr][Ktr]->GetYaxis()->SetTitle("pT [GeV]");
 		}
+		for (int Itr = 0;Itr < PDG2NameSize3;Itr++){
+			BPDGListMass[Itr]  = TBPDGListMass[Itr];
+		}
+		for (int Itr = 0;Itr < PDG2NameSize;Itr++){
+			PDGList[Itr] = APDGList[Itr];NameList[Itr] = ANameList[Itr];
 
-		HistName1 = "H_KFP_DCAtoPV";
-		HistName2 = "KFP: The DCA(to PV) of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_DCAtoPV[Jtr] = new TH1F(HistName1,HistName2,500,0,5);
-		H_KFP_DCAtoPV[Jtr]->GetXaxis()->SetTitle("DCA [cm]");
+			TString HistName1 = "HM_";
+			TString HistName2 = "The Mass of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_ALL_NO_CUT[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
+			H_ALL_NO_CUT[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
 
-		HistName1 = "H_KFP_eta";
-		HistName2 = "KFP: The eta of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_eta[Jtr] = new TH1F(HistName1,HistName2,200,-2,2);
-		H_KFP_eta[Jtr]->GetXaxis()->SetTitle("eta");
+			HistName1 = "HM_DaughtersDCA_";
+			HistName2 = "The Mass of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			HistName2 += " those DayghtersDCA < 0.6 [cm]";
+			H_DaughterDCA[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
+			H_DaughterDCA[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
 
-		HistName1 = "H_KFP_nHitsFit";
-		HistName2 = "KFP: The nHitsFit of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_nHitsFit_p[Jtr] = new TH2F(HistName1,HistName2,60,0,60,500,0,10);
-		H_KFP_nHitsFit_p[Jtr]->GetXaxis()->SetTitle("nHitsFit");
-		H_KFP_nHitsFit_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
+			HistName1 = "HM_WDaughter_";
+			HistName2 = "The Mass of (Wrong Daughter) ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_WrongDaughter[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
+			H_WrongDaughter[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
 
-		HistName1 = "H_KFP_nHitsFit_nHitsMax";
-		HistName2 = "KFP: The nHitsFit/nHitsMax of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_nHitsFit_nHitsMax[Jtr] = new TH1F(HistName1,HistName2,100,0,1);
-		H_KFP_nHitsFit_nHitsMax[Jtr]->GetXaxis()->SetTitle("nHitsFit/nHitsMax");
+			HistName1 = "HM_CDaughter_";
+			HistName2 = "The Mass of (Corect Daughter) ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_CrectDaughter[Itr] = new TH1F(HistName1,HistName2,6000,0,3);
+			H_CrectDaughter[Itr]->GetXaxis()->SetTitle("Mass [GeV]");
+			
+			HistName1 = "H_Hyperon_Rap_";
+			HistName2 = "The Rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_Hyperon_Rap[Itr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
+			H_Hyperon_Rap[Itr]->GetXaxis()->SetTitle("y");
+		}
+		for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+			int Jtr = Itr - PDG2NameSize;
+			PDGList[Itr] = BPDGList[Jtr];NameList[Itr] = BNameList[Jtr];
 
-		HistName1 = "H_KFP_ndEdx";
-		HistName2 = "KFP: The ndEdx of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_ndEdx[Jtr] = new TH1F(HistName1,HistName2,50,0,50);
-		H_KFP_ndEdx[Jtr]->GetXaxis()->SetTitle("ndEdx");
+			TString HistName1 = "HY_";
+			TString HistName2 = "The rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			// H_rapidity[Jtr] = new TH1F(HistName1,HistName2,30,-1.5,1.5); // KFP Setting
+			H_rapidity[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
+			H_rapidity[Jtr]->GetXaxis()->SetTitle("y");
+			
+			HistName1 = "HY_eTOF_";
+			HistName2 = "The eTOF rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_rapidity_eTOF[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
+			H_rapidity_eTOF[Jtr]->GetXaxis()->SetTitle("y");
+			
+			HistName1 = "HY_eTOF_Only";
+			HistName2 = "The rapidity in eTOF contained event of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_rapidity_Only_eTOF[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
+			H_rapidity_Only_eTOF[Jtr]->GetXaxis()->SetTitle("y");
 
-		HistName1 = "H_KFP_nSigmaTOF_p_";
-		HistName2 = "KFP: The nSigmaTOFKaon vs p of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_nSigmaTOF_p[Jtr] = new TH2F(HistName1,HistName2,250,-10,10,250,0,10);
-		H_KFP_nSigmaTOF_p[Jtr]->GetXaxis()->SetTitle("nSigmaTOFKaon");
-		H_KFP_nSigmaTOF_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
+			HistName1 = "HP_";
+			HistName2 = "The momentum of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_P[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
+			H_P[Jtr]->GetXaxis()->SetTitle("p [GeV]");
+
+			HistName1 = "HPt_";
+			HistName2 = "The momentum_t of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_Pt[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
+			H_Pt[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
+
+			HistName1 = "H_y_Pt_";
+			HistName2 = "The y vs. momentum_t of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_Pt[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,5);
+			H_y_Pt[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_Pt[Jtr]->GetYaxis()->SetTitle("Pt [GeV]");
+
+			HistName1 = "H_y_P_";
+			HistName2 = "The y vs. momentum of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_P[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,5);
+			H_y_P[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_P[Jtr]->GetYaxis()->SetTitle("P [GeV]");
+
+			HistName1 = "H_y_m2_";
+			HistName2 = "The y vs. m2 of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_m2[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,1);
+			H_y_m2[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_m2[Jtr]->GetYaxis()->SetTitle("m^2 [GeV^2]");
+
+			HistName1 = "H_y_nSigmaKaon_";
+			HistName2 = "The y vs. nSigmaKaon of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_nSigmaKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+			H_y_nSigmaKaon[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_nSigmaKaon[Jtr]->GetYaxis()->SetTitle("nSigmaKaon");
+
+			HistName1 = "H_y_nSigmaPion_";
+			HistName2 = "The y vs. nSigmaPion of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_nSigmaPion[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+			H_y_nSigmaPion[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_nSigmaPion[Jtr]->GetYaxis()->SetTitle("nSigmaPion");
+
+			HistName1 = "H_y_nSigmaElectron_";
+			HistName2 = "The y vs. nSigmaElectron of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_nSigmaElectron[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+			H_y_nSigmaElectron[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_nSigmaElectron[Jtr]->GetYaxis()->SetTitle("nSigmaElectron");
+
+			HistName1 = "H_y_nHitsFit_";
+			HistName2 = "The y vs. nHitsFit of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_nHitsFit[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,70,0,70);
+			H_y_nHitsFit[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_nHitsFit[Jtr]->GetYaxis()->SetTitle("nHitsFit");
+
+			HistName1 = "H_y_nHitsDedx_";
+			HistName2 = "The y vs. nHitsDedx of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_nHitsDedx[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,70,0,70);
+			H_y_nHitsDedx[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_nHitsDedx[Jtr]->GetYaxis()->SetTitle("nHitsDedx");
+
+			HistName1 = "H_y_nHitsFit2nHitsMax_";
+			HistName2 = "The y vs. nHitsFit/nHitsMax of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_nHitsFit2nHitsMax[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,40,0.4,1.4);
+			H_y_nHitsFit2nHitsMax[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_nHitsFit2nHitsMax[Jtr]->GetYaxis()->SetTitle("nHitsFit/nHitsMax");
+
+			HistName1 = "H_y_eta_";
+			HistName2 = "The y vs. eta of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_eta[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-2,2);
+			H_y_eta[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_eta[Jtr]->GetYaxis()->SetTitle("eta");
+			
+			HistName1 = "H_dEdx_p";
+			HistName2 = "The dEdx vs. momentum of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_dEdx_p[Jtr] = new TH2F(HistName1,HistName2,2000,-10,10,1000,0,20);
+			H_dEdx_p[Jtr]->GetXaxis()->SetTitle("P [GeV]");
+			H_dEdx_p[Jtr]->GetYaxis()->SetTitle("dE/dx [keV/cm]");
+
+			HistName1 = "hgbtofYlocal";
+			HistName2 = "The btofYlocal vs. rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			hgbtofYlocal[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+			hgbtofYlocal[Jtr]->GetXaxis()->SetTitle("y");
+			hgbtofYlocal[Jtr]->GetYaxis()->SetTitle("btofYlocal");
+
+			HistName1 = "H_y_Vz";
+			HistName2 = "The Event Primary Vertex Z vs. rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_Vz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,160,-80,80);
+			H_y_Vz[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_Vz[Jtr]->GetYaxis()->SetTitle("PVz [cm]");
+			
+			HistName1 = "H_y_Pz";
+			HistName2 = "The P_z vs. rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_Pz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,-10,10);
+			H_y_Pz[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_Pz[Jtr]->GetYaxis()->SetTitle("p_z [GeV]");
+			
+			HistName1 = "H_y_Nch";
+			HistName2 = "The Nch vs. rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_Nch[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,0,200);
+			H_y_Nch[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
+			
+			HistName1 = "H_Pz_Nch";
+			HistName2 = "The Nch vs. Pz of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_Pz_Nch[Jtr] = new TH2F(HistName1,HistName2,200,-10,10,200,0,200);
+			H_Pz_Nch[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
+			H_Pz_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
+
+			for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
+				HistName1 = "H_Pt_nSigma";
+				HistName2 = "The P_t vs. nSigma";
+				HistName1 += CNameList[Ktr];HistName2 += CNameList[Ktr];
+				HistName1 += "_";HistName1 += NameList[Itr];
+				HistName2 += " of ";HistName2 += NameList[Itr];
+				H_Pt_nSigma[Jtr][Ktr] = new TH2F(HistName1,HistName2,1000,-10,10,1000,0,8);
+				HistName1 = "nSigma";HistName1 += CNameList[Ktr];
+				H_Pt_nSigma[Jtr][Ktr]->GetXaxis()->SetTitle(HistName1);
+				H_Pt_nSigma[Jtr][Ktr]->GetYaxis()->SetTitle("pT [GeV]");
+			}
+
+			HistName1 = "H_DCAtoPV";
+			HistName2 = "The DCA(to PV) of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_DCAtoPV[Jtr] = new TH1F(HistName1,HistName2,500,0,5);
+			H_DCAtoPV[Jtr]->GetXaxis()->SetTitle("DCA [cm]");
+
+			HistName1 = "H_eta";
+			HistName2 = "The eta of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_eta[Jtr] = new TH1F(HistName1,HistName2,200,-2,2);
+			H_eta[Jtr]->GetXaxis()->SetTitle("eta");
+
+			HistName1 = "H_nHitsFit";
+			HistName2 = "The nHitsFit of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_nHitsFit_p[Jtr] = new TH2F(HistName1,HistName2,60,0,60,500,0,10);
+			H_nHitsFit_p[Jtr]->GetXaxis()->SetTitle("nHitsFit");
+			H_nHitsFit_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
+
+			HistName1 = "H_nHitsFit_nHitsMax";
+			HistName2 = "The nHitsFit/nHitsMax of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_nHitsFit_nHitsMax[Jtr] = new TH1F(HistName1,HistName2,100,0,1);
+			H_nHitsFit_nHitsMax[Jtr]->GetXaxis()->SetTitle("nHitsFit/nHitsMax");
+
+			HistName1 = "H_ndEdx";
+			HistName2 = "The ndEdx of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_ndEdx[Jtr] = new TH1F(HistName1,HistName2,50,0,50);
+			H_ndEdx[Jtr]->GetXaxis()->SetTitle("ndEdx");
+
+			HistName1 = "H_nSigmaTOF_p_";
+			HistName2 = "The nSigmaTOFKaon vs p of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_nSigmaTOF_p[Jtr] = new TH2F(HistName1,HistName2,250,-10,10,250,0,10);
+			H_nSigmaTOF_p[Jtr]->GetXaxis()->SetTitle("nSigmaTOFKaon");
+			H_nSigmaTOF_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
+			
+			HistName1 = "H_y_nSigmaTOFKaon_";
+			HistName2 = "The nSigmaTOFKaon vs rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_y_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,250,-10,10);
+			H_y_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("y");
+			H_y_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
+			
+			HistName1 = "H_m2_nSigmaTOFKaon_";
+			HistName2 = "The nSigmaTOFKaon vs m^2 of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_m2_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-0.5,2,100,-10,10);
+			H_m2_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("m2");
+			H_m2_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
+			
+			HistName1 = "H_Pxy_";
+			HistName2 = "The Px vs Py of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_Pxy[Jtr] = new TH2F(HistName1,HistName2,100,-10,10,100,-10,10);
+			H_Pxy[Jtr]->GetXaxis()->SetTitle("Px [GeV]");
+			H_Pxy[Jtr]->GetYaxis()->SetTitle("Py [GeV]");
+			
+			HistName1 = "H_Pz_";
+			HistName2 = "The Pz of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_Pz[Jtr] = new TH1F(HistName1,HistName2,400,-10,10);
+			H_Pz[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
+
+			// KFP PID QA
+			HistName1 = "H_KFP_Y_";
+			HistName2 = "KFP: The rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_rapidity[Jtr] = new TH1F(HistName1,HistName2,120,-1.5,1.5);
+			H_KFP_rapidity[Jtr]->GetXaxis()->SetTitle("y");
+
+			HistName1 = "H_KFP_P_";
+			HistName2 = "KFP: The momentum of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_P[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
+			H_KFP_P[Jtr]->GetXaxis()->SetTitle("p [GeV]");
+
+			HistName1 = "H_KFP_Pt_";
+			HistName2 = "KFP: The momentum_t of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_Pt[Jtr] = new TH1F(HistName1,HistName2,100,0,10);
+			H_KFP_Pt[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
+
+			HistName1 = "H_KFP_y_Pt_";
+			HistName2 = "KFP: The y vs. momentum_t of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_Pt[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,5);
+			H_KFP_y_Pt[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_Pt[Jtr]->GetYaxis()->SetTitle("Pt [GeV]");
+
+			HistName1 = "H_KFP_y_m2_";
+			HistName2 = "KFP: The y vs. m2 of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_m2[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,0,1);
+			H_KFP_y_m2[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_m2[Jtr]->GetYaxis()->SetTitle("m^2 [GeV^2]");
+
+			HistName1 = "H_KFP_y_nSigmaKaon_";
+			HistName2 = "KFP: The y vs. nSigmaKaon of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_nSigmaKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+			H_KFP_y_nSigmaKaon[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_nSigmaKaon[Jtr]->GetYaxis()->SetTitle("nSigmaKaon");
+
+			HistName1 = "H_KFP_y_nSigmaPion_";
+			HistName2 = "KFP: The y vs. nSigmaPion of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_nSigmaPion[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+			H_KFP_y_nSigmaPion[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_nSigmaPion[Jtr]->GetYaxis()->SetTitle("nSigmaPion");
+
+			HistName1 = "H_KFP_y_nSigmaElectron_";
+			HistName2 = "KFP: The y vs. nSigmaElectron of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_nSigmaElectron[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+			H_KFP_y_nSigmaElectron[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_nSigmaElectron[Jtr]->GetYaxis()->SetTitle("nSigmaElectron");
+
+			HistName1 = "H_KFP_y_nHitsFit_";
+			HistName2 = "KFP: The y vs. nHitsFit of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_nHitsFit[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,70,0,70);
+			H_KFP_y_nHitsFit[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_nHitsFit[Jtr]->GetYaxis()->SetTitle("nHitsFit");
+
+			HistName1 = "H_KFP_y_nHitsDedx_";
+			HistName2 = "KFP: The y vs. nHitsDedx of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_nHitsDedx[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,70,0,70);
+			H_KFP_y_nHitsDedx[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_nHitsDedx[Jtr]->GetYaxis()->SetTitle("nHitsDedx");
+
+			HistName1 = "H_KFP_y_nHitsFit2nHitsMax_";
+			HistName2 = "KFP: The y vs. nHitsFit/nHitsMax of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_nHitsFit2nHitsMax[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,40,0.4,1.4);
+			H_KFP_y_nHitsFit2nHitsMax[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_nHitsFit2nHitsMax[Jtr]->GetYaxis()->SetTitle("nHitsFit/nHitsMax");
+
+			HistName1 = "H_KFP_y_eta_";
+			HistName2 = "KFP: The y vs. eta of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_eta[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-2,2);
+			H_KFP_y_eta[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_eta[Jtr]->GetYaxis()->SetTitle("eta");
+			
+			HistName1 = "H_KFP_dEdx_p";
+			HistName2 = "KFP: The dEdx vs. momentum of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_dEdx_p[Jtr] = new TH2F(HistName1,HistName2,2000,-10,10,1000,0,20);
+			H_KFP_dEdx_p[Jtr]->GetXaxis()->SetTitle("P [GeV]");
+			H_KFP_dEdx_p[Jtr]->GetYaxis()->SetTitle("dE/dx [keV/cm]");
+
+			HistName1 = "h_KFP_tofYlocal";
+			HistName2 = "KFP: The btofYlocal vs. rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			h_KFP_tofYlocal[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,100,-5,5);
+			h_KFP_tofYlocal[Jtr]->GetXaxis()->SetTitle("y");
+			h_KFP_tofYlocal[Jtr]->GetYaxis()->SetTitle("btofYlocal");
+
+			HistName1 = "H_KFP_y_Vz";
+			HistName2 = "KFP: The Event Primary Vertex Z vs. rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_Vz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,160,-80,80);
+			H_KFP_y_Vz[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_Vz[Jtr]->GetYaxis()->SetTitle("PVz [cm]");
+			
+			HistName1 = "H_KFP_y_Pz";
+			HistName2 = "KFP: The P_z vs. rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_Pz[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,-10,10);
+			H_KFP_y_Pz[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_Pz[Jtr]->GetYaxis()->SetTitle("p_z [GeV]");
+			
+			HistName1 = "H_KFP_y_Nch";
+			HistName2 = "KFP: The Nch vs. rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_Nch[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,200,0,200);
+			H_KFP_y_Nch[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
+			
+			HistName1 = "H_KFP_Pz_Nch";
+			HistName2 = "KFP: The Nch vs. Pz of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_Pz_Nch[Jtr] = new TH2F(HistName1,HistName2,200,-10,10,200,0,200);
+			H_KFP_Pz_Nch[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
+			H_KFP_Pz_Nch[Jtr]->GetYaxis()->SetTitle("Nch");
+
+			for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
+				HistName1 = "H_KFP_Pt_nSigma";
+				HistName2 = "KFP: The P_t vs. nSigma";
+				HistName1 += CNameList[Ktr];HistName2 += CNameList[Ktr];
+				HistName1 += "_";HistName1 += NameList[Itr];
+				HistName2 += " of ";HistName2 += NameList[Itr];
+				H_KFP_Pt_nSigma[Jtr][Ktr] = new TH2F(HistName1,HistName2,1000,-10,10,1000,0,8);
+				HistName1 = "nSigma";HistName1 += CNameList[Ktr];
+				H_KFP_Pt_nSigma[Jtr][Ktr]->GetXaxis()->SetTitle(HistName1);
+				H_KFP_Pt_nSigma[Jtr][Ktr]->GetYaxis()->SetTitle("pT [GeV]");
+			}
+
+			HistName1 = "H_KFP_DCAtoPV";
+			HistName2 = "KFP: The DCA(to PV) of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_DCAtoPV[Jtr] = new TH1F(HistName1,HistName2,500,0,5);
+			H_KFP_DCAtoPV[Jtr]->GetXaxis()->SetTitle("DCA [cm]");
+
+			HistName1 = "H_KFP_eta";
+			HistName2 = "KFP: The eta of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_eta[Jtr] = new TH1F(HistName1,HistName2,200,-2,2);
+			H_KFP_eta[Jtr]->GetXaxis()->SetTitle("eta");
+
+			HistName1 = "H_KFP_nHitsFit";
+			HistName2 = "KFP: The nHitsFit of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_nHitsFit_p[Jtr] = new TH2F(HistName1,HistName2,60,0,60,500,0,10);
+			H_KFP_nHitsFit_p[Jtr]->GetXaxis()->SetTitle("nHitsFit");
+			H_KFP_nHitsFit_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
+
+			HistName1 = "H_KFP_nHitsFit_nHitsMax";
+			HistName2 = "KFP: The nHitsFit/nHitsMax of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_nHitsFit_nHitsMax[Jtr] = new TH1F(HistName1,HistName2,100,0,1);
+			H_KFP_nHitsFit_nHitsMax[Jtr]->GetXaxis()->SetTitle("nHitsFit/nHitsMax");
+
+			HistName1 = "H_KFP_ndEdx";
+			HistName2 = "KFP: The ndEdx of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_ndEdx[Jtr] = new TH1F(HistName1,HistName2,50,0,50);
+			H_KFP_ndEdx[Jtr]->GetXaxis()->SetTitle("ndEdx");
+
+			HistName1 = "H_KFP_nSigmaTOF_p_";
+			HistName2 = "KFP: The nSigmaTOFKaon vs p of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_nSigmaTOF_p[Jtr] = new TH2F(HistName1,HistName2,250,-10,10,250,0,10);
+			H_KFP_nSigmaTOF_p[Jtr]->GetXaxis()->SetTitle("nSigmaTOFKaon");
+			H_KFP_nSigmaTOF_p[Jtr]->GetYaxis()->SetTitle("p [GeV]");
+			
+			HistName1 = "H_KFP_y_nSigmaTOFKaon_";
+			HistName2 = "KFP: The nSigmaTOFKaon vs rapidity of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_y_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,250,-10,10);
+			H_KFP_y_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("y");
+			H_KFP_y_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
+			
+			HistName1 = "H_KFP_m2_nSigmaTOFKaon_";
+			HistName2 = "KFP: The nSigmaTOFKaon vs m^2 of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_m2_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-0.5,2,100,-10,10);
+			H_KFP_m2_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("m2");
+			H_KFP_m2_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
+			
+			HistName1 = "H_KFP_Pxy_";
+			HistName2 = "KFP: The Px vs Py of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_Pxy[Jtr] = new TH2F(HistName1,HistName2,100,-10,10,100,-10,10);
+			H_KFP_Pxy[Jtr]->GetXaxis()->SetTitle("Px [GeV]");
+			H_KFP_Pxy[Jtr]->GetYaxis()->SetTitle("Py [GeV]");
+			
+			HistName1 = "H_KFP_Pz_";
+			HistName2 = "KFP: The Pz of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_Pz[Jtr] = new TH1F(HistName1,HistName2,400,-10,10);
+			H_KFP_Pz[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
+			
+			HistName1 = "H_KFP_Pt_m2_";
+			HistName2 = "KFP: The m2 vs pt of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			H_KFP_Pt_m2[Jtr] = new TH2F(HistName1,HistName2,100,0,5,100,-0.5,2);
+			H_KFP_Pt_m2[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
+			H_KFP_Pt_m2[Jtr]->GetYaxis()->SetTitle("m2 [GeV^2]");
+			// KFP PID QA End
+		}
+	}
+
+	if (IfTree){
+		buffer_size = 5000000;
+		hadronTree = new TTree("hadronTree", "Tree_STAR");
+		// hadronTree->Branch("buffer_size"       ,&buffer_size         ,"buffer_size/I"                       );
+		hadronTree->Branch("PDGMult"            ,&PDGMult             ,"PDGMult/I"                           );
+		hadronTree->Branch("refMult"            ,&CrefMult            ,"refMult/I"                           );
+		hadronTree->Branch("grefMult"           ,&CgrefMult           ,"grefMult/I"                          );
+		hadronTree->Branch("EventID"            ,&evtID               ,"EventID/I"                           );
+		hadronTree->Branch("RunID"              ,&runID               ,"RunID/I"                             );
+		hadronTree->Branch("TriggerID"          ,&TriggerID           ,"TriggerID/I"                         );
+		hadronTree->Branch("PDG"                ,&PDG                 );
+		hadronTree->Branch("mix_px"             ,&px                  );
+		hadronTree->Branch("mix_py"             ,&py                  );
+		hadronTree->Branch("mix_pz"             ,&pz                  );
+
+		// Used for PID QA
+		hadronTree->Branch("dEdx"               ,&QA_dEdx              );
+		hadronTree->Branch("m2"                 ,&QA_m2                );
+		hadronTree->Branch("dcatopv"            ,&QA_DCA_V0_PV         );
+		hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton      );
+		hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion        );
+		hadronTree->Branch("nSigmaKaon"         ,&QA_nSigmaKaon        );
 		
-		HistName1 = "H_KFP_y_nSigmaTOFKaon_";
-		HistName2 = "KFP: The nSigmaTOFKaon vs rapidity of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_y_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-2,2,250,-10,10);
-		H_KFP_y_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("y");
-		H_KFP_y_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
-		
-		HistName1 = "H_KFP_m2_nSigmaTOFKaon_";
-		HistName2 = "KFP: The nSigmaTOFKaon vs m^2 of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_m2_nSigmaTOFKaon[Jtr] = new TH2F(HistName1,HistName2,100,-0.5,2,100,-10,10);
-		H_KFP_m2_nSigmaTOFKaon[Jtr]->GetXaxis()->SetTitle("m2");
-		H_KFP_m2_nSigmaTOFKaon[Jtr]->GetYaxis()->SetTitle("nSigmaTOFKaon");
-		
-		HistName1 = "H_KFP_Pxy_";
-		HistName2 = "KFP: The Px vs Py of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_Pxy[Jtr] = new TH2F(HistName1,HistName2,100,-10,10,100,-10,10);
-		H_KFP_Pxy[Jtr]->GetXaxis()->SetTitle("Px [GeV]");
-		H_KFP_Pxy[Jtr]->GetYaxis()->SetTitle("Py [GeV]");
-		
-		HistName1 = "H_KFP_Pz_";
-		HistName2 = "KFP: The Pz of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_Pz[Jtr] = new TH1F(HistName1,HistName2,400,-10,10);
-		H_KFP_Pz[Jtr]->GetXaxis()->SetTitle("Pz [GeV]");
-		
-		HistName1 = "H_KFP_Pt_m2_";
-		HistName2 = "KFP: The m2 vs pt of ";
-		HistName1 += NameList[Itr];HistName2 += NameList[Itr];
-		H_KFP_Pt_m2[Jtr] = new TH2F(HistName1,HistName2,100,0,5,100,-0.5,2);
-		H_KFP_Pt_m2[Jtr]->GetXaxis()->SetTitle("Pt [GeV]");
-		H_KFP_Pt_m2[Jtr]->GetYaxis()->SetTitle("m2 [GeV^2]");
-		// KFP PID QA End
+		// Used for Reconstruction QA
+		hadronTree->Branch("InvariantMass"      ,&InvariantMass       );
+		hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length      );
+		hadronTree->Branch("Chi2"               ,&QA_Chi2              );
 	}
 
 
@@ -939,189 +924,188 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 //-----------------------------------------------------------------------------
 void StKFParticleAnalysisMaker::WriteHistograms() {
 
-	folder_EventQA  = fout->mkdir("Event_QA");
-	folder_PIDQA    = fout->mkdir("PID_QA");
-	folder_ReconsQA = fout->mkdir("Reconstruction_QA");
-	KFPPIDQA        = fout->mkdir("KFP_PID_QA");
-
-	////////////////////////////////////// Event-QA //////////////////////////////////////
-	// hadronTree ->Write();
-
-	folder_EventQA->cd();
-	//-- Used for  test --
-	// hNRefMult ->Write();  
-	// hNRefMultA->Write();  
-	// hNRefMultB->Write();  
-	hVertexXY ->Write();  
-	hVertexZ  ->Write();  
-	hVertex2D ->Write();
-	hDiffVz   ->Write();
-	// hcent     ->Write();  
-	// hcentw    ->Write();  
-
-	// hcentRefM ->Write();
-	// hcentRefW ->Write();
 	hEventNum->Write();
-	H_Total_Pz->Write();
-	H_Total_Pxy->Write();
-	hNch_per_VertexZ->Write();
 
-	fout->cd();
+	if (IfTree){
+		hadronTree ->Write();
+	}
+
+	if (IfQAMode){
+
+		folder_EventQA  = fout->mkdir("Event_QA");
+		folder_PIDQA    = fout->mkdir("PID_QA");
+		folder_ReconsQA = fout->mkdir("Reconstruction_QA");
+		KFPPIDQA        = fout->mkdir("KFP_PID_QA");
+
+		////////////////////////////////////// Event-QA //////////////////////////////////////
 
 
-	////////////////////////////////////// PID-QA //////////////////////////////////////
+		folder_EventQA->cd();
+		//-- Used for  test --
+		// hNRefMult ->Write();  
+		// hNRefMultA->Write();  
+		// hNRefMultB->Write();  
+		hVertexXY ->Write();  
+		hVertexZ  ->Write();  
+		hVertex2D ->Write();
+		hDiffVz   ->Write();
+		// hcent     ->Write();  
+		// hcentw    ->Write();  
 
-	folder_PIDQA->cd();
-	// hdEdx_pQ->Write();
-	// hdEdx_pQ_1cut->Write();
-	// hdEdx_pQ_2cut->Write();
+		// hcentRefM ->Write();
+		// hcentRefW ->Write();
+		H_Total_Pz->Write();
+		H_Total_Pxy->Write();
+		hNch_per_VertexZ->Write();
 
-	// hLN_M->Write();
-	// hXY->Write();
-	// hHXY->Write();
-	// hHM_Chi2->Write();
-	// hHM_ParentDCA->Write();
+		fout->cd();
 
-	// H_m2_KSigma_L->Write();
-	// H_m2_KSigma_S->Write();
-	// H_All_nSigmaKaon_y  ->Write();
-	// H_All_nSigmaKaon_eta->Write();
-	// H_Pt_m2->Write();
-	// H_Pt_nSigmaKaon->Write();
-	// H_Pt_nSigmaKaonTOF->Write();
-	H_m2_nSigmaKaon_Pt->Write();
-	TriggerList Trigger_List_Data(DataName);
-	std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
-	int TriggerListLength = Trigger_List.size();
-	for (int TriggerItr = 0;TriggerItr < TriggerListLength;TriggerItr++){
-		for (int Itr = 0;Itr < 3;Itr++){
-			if (Itr != 2) continue; // Do not write specific charge bin
-			if (H_eta_nSigmaPion[TriggerItr][Itr]->Integral() == 0){continue;}
-			H_eta_nSigmaKaon         [TriggerItr][Itr]->Write();
-			H_eta_nSigmaPion         [TriggerItr][Itr]->Write();
-			H_eta_nSigmaProton       [TriggerItr][Itr]->Write();
-			H_eta_m2                 [TriggerItr][Itr]->Write();
-			H_eta_PVz                [TriggerItr][Itr]->Write();
-			// H_eta_PVr                [TriggerItr][Itr]->Write();
-			H_eta_DVz                [TriggerItr][Itr]->Write();
-			H_eta_triggerBIN         [TriggerItr][Itr]->Write();
-			H_eta_triggerBIN_hasTOF  [TriggerItr][Itr]->Write();
+
+		////////////////////////////////////// PID-QA //////////////////////////////////////
+
+		folder_PIDQA->cd();
+		// hdEdx_pQ->Write();
+		// hdEdx_pQ_1cut->Write();
+		// hdEdx_pQ_2cut->Write();
+
+		// hXY->Write();
+		// hHXY->Write();
+		// hHM_Chi2->Write();
+		// hHM_ParentDCA->Write();
+
+		// H_All_nSigmaKaon_y  ->Write();
+		// H_All_nSigmaKaon_eta->Write();
+		// H_Pt_m2->Write();
+		// H_Pt_nSigmaKaon->Write();
+		// H_Pt_nSigmaKaonTOF->Write();
+		H_m2_nSigmaKaon_Pt->Write();
+		TriggerList Trigger_List_Data(DataName);
+		std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
+		int TriggerListLength = Trigger_List.size();
+		for (int TriggerItr = 0;TriggerItr < TriggerListLength;TriggerItr++){
+			for (int Itr = 0;Itr < 3;Itr++){
+				if (Itr != 2) continue; // Do not write specific charge bin
+				if (H_eta_nSigmaPion[TriggerItr][Itr]->Integral() == 0){continue;}
+				H_eta_nSigmaKaon         [TriggerItr][Itr]->Write();
+				H_eta_nSigmaPion         [TriggerItr][Itr]->Write();
+				H_eta_nSigmaProton       [TriggerItr][Itr]->Write();
+				H_eta_m2                 [TriggerItr][Itr]->Write();
+				H_eta_PVz                [TriggerItr][Itr]->Write();
+				// H_eta_PVr                [TriggerItr][Itr]->Write();
+				H_eta_DVz                [TriggerItr][Itr]->Write();
+				H_eta_triggerBIN         [TriggerItr][Itr]->Write();
+				H_eta_triggerBIN_hasTOF  [TriggerItr][Itr]->Write();
+			}
 		}
-	}
-	H_eta_trigger     ->Write();
+		H_eta_trigger     ->Write();
 
-	H_nSigmaKaon_Pt_AllTOF->Write();
-	H_nSigmaKaon_Pt_HasTOF->Write();
-	H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->Write();
+	//////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
+		for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+			int Jtr = Itr - PDG2NameSize;
 
-	
+			// if (abs(PDGList[Itr]) != KaonPdg) {continue;}
 
-//////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
-	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
-		int Jtr = Itr - PDG2NameSize;
+			PID_Tracks[Jtr]  = folder_PIDQA->mkdir(NameList[Itr]);
+			PID_Tracks[Jtr] -> cd();
 
-		// if (abs(PDGList[Itr]) != KaonPdg) {continue;}
+			H_rapidity[Jtr] -> Write();
+			H_rapidity_eTOF[Jtr] -> Write();
 
-		PID_Tracks[Jtr]  = folder_PIDQA->mkdir(NameList[Itr]);
-		PID_Tracks[Jtr] -> cd();
+			H_P[Jtr] -> Write();
 
-		H_rapidity[Jtr] -> Write();
-		H_rapidity_eTOF[Jtr] -> Write();
-
-		H_P[Jtr] -> Write();
-
-		H_Pt[Jtr] -> Write();
-		H_dEdx_p[Jtr]->Write();
-		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
-			H_Pt_nSigma[Jtr][Ktr]->Write();
+			H_Pt[Jtr] -> Write();
+			H_dEdx_p[Jtr]->Write();
+			for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
+				H_Pt_nSigma[Jtr][Ktr]->Write();
+			}
+			H_DCAtoPV[Jtr]->Write();
+			H_eta[Jtr]->Write();
+			H_nHitsFit_p[Jtr]->Write();
+			H_nHitsFit_nHitsMax[Jtr]->Write();
+			H_ndEdx[Jtr]->Write();
+			H_nSigmaTOF_p[Jtr]->Write();
+			H_y_Pt[Jtr]->Write();
+			H_y_m2[Jtr]->Write();
+			H_y_nSigmaKaon[Jtr]->Write();
+			H_y_nSigmaPion[Jtr]->Write();
+			H_y_nSigmaElectron[Jtr]->Write();
+			H_y_nHitsFit[Jtr]->Write();
+			H_y_nHitsDedx[Jtr]->Write();
+			H_y_nHitsFit2nHitsMax[Jtr]->Write();
+			H_y_eta[Jtr]->Write();
+			hgbtofYlocal[Jtr]->Write();
+			H_y_Pz[Jtr]->Write();
+			H_y_P[Jtr]->Write();
+			H_Pxy[Jtr]->Write();
+			H_Pz[Jtr]->Write();
+			H_y_Nch[Jtr]->Write();
+			H_Pz_Nch[Jtr]->Write();
+			H_y_nSigmaTOFKaon[Jtr]->Write();
+			H_y_Vz[Jtr]->Write();
+			H_m2_nSigmaTOFKaon[Jtr]->Write();
 		}
-		H_DCAtoPV[Jtr]->Write();
-		H_eta[Jtr]->Write();
-		H_nHitsFit_p[Jtr]->Write();
-		H_nHitsFit_nHitsMax[Jtr]->Write();
-		H_ndEdx[Jtr]->Write();
-		H_nSigmaTOF_p[Jtr]->Write();
-		H_y_Pt[Jtr]->Write();
-		H_y_m2[Jtr]->Write();
-		H_y_nSigmaKaon[Jtr]->Write();
-		H_y_nSigmaPion[Jtr]->Write();
-		H_y_nSigmaElectron[Jtr]->Write();
-		H_y_nHitsFit[Jtr]->Write();
-		H_y_nHitsDedx[Jtr]->Write();
-		H_y_nHitsFit2nHitsMax[Jtr]->Write();
-		H_y_eta[Jtr]->Write();
-		hgbtofYlocal[Jtr]->Write();
-		H_y_Pz[Jtr]->Write();
-		H_y_P[Jtr]->Write();
-		H_Pxy[Jtr]->Write();
-		H_Pz[Jtr]->Write();
-		H_y_Nch[Jtr]->Write();
-		H_Pz_Nch[Jtr]->Write();
-		H_y_nSigmaTOFKaon[Jtr]->Write();
-		H_y_Vz[Jtr]->Write();
-		H_m2_nSigmaTOFKaon[Jtr]->Write();
-	}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	fout->cd();
+		fout->cd();
 
-// KFP PID
-	KFPPIDQA->cd();
-	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
-		int Jtr = Itr - PDG2NameSize;
-		if (abs(PDGList[Itr]) != KaonPdg) {continue;}
-		KFPPID[Jtr]  = KFPPIDQA->mkdir(NameList[Itr]);
-		KFPPID[Jtr] -> cd();
+	// KFP PID
+		KFPPIDQA->cd();
+		for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+			int Jtr = Itr - PDG2NameSize;
+			if (abs(PDGList[Itr]) != KaonPdg) {continue;}
+			KFPPID[Jtr]  = KFPPIDQA->mkdir(NameList[Itr]);
+			KFPPID[Jtr] -> cd();
 
-		H_KFP_rapidity[Jtr] -> Write();
-		H_KFP_P[Jtr] -> Write();
-		H_KFP_Pt[Jtr] -> Write();
-		H_KFP_dEdx_p[Jtr]->Write();
-		for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
-			H_KFP_Pt_nSigma[Jtr][Ktr]->Write();
+			H_KFP_rapidity[Jtr] -> Write();
+			H_KFP_P[Jtr] -> Write();
+			H_KFP_Pt[Jtr] -> Write();
+			H_KFP_dEdx_p[Jtr]->Write();
+			for (int Ktr=0;Ktr < PDG2NameSize3;Ktr++) {
+				H_KFP_Pt_nSigma[Jtr][Ktr]->Write();
+			}
+			H_KFP_DCAtoPV[Jtr]->Write();
+			H_KFP_eta[Jtr]->Write();
+			H_KFP_nHitsFit_p[Jtr]->Write();
+			H_KFP_nHitsFit_nHitsMax[Jtr]->Write();
+			H_KFP_ndEdx[Jtr]->Write();
+			H_KFP_nSigmaTOF_p[Jtr]->Write();
+			H_KFP_y_Pt[Jtr]->Write();
+			H_KFP_y_m2[Jtr]->Write();
+			H_KFP_y_nSigmaKaon[Jtr]->Write();
+			H_KFP_y_nSigmaPion[Jtr]->Write();
+			H_KFP_y_nSigmaElectron[Jtr]->Write();
+			H_KFP_y_nHitsFit[Jtr]->Write();
+			H_KFP_y_nHitsDedx[Jtr]->Write();
+			H_KFP_y_nHitsFit2nHitsMax[Jtr]->Write();
+			H_KFP_y_eta[Jtr]->Write();
+			h_KFP_tofYlocal[Jtr]->Write();
+			H_KFP_y_Pz[Jtr]->Write();
+			H_KFP_Pxy[Jtr]->Write();
+			H_KFP_Pz[Jtr]->Write();
+			H_KFP_y_Nch[Jtr]->Write();
+			H_KFP_Pz_Nch[Jtr]->Write();
+			H_KFP_y_nSigmaTOFKaon[Jtr]->Write();
+			H_KFP_y_Vz[Jtr]->Write();
+			H_KFP_m2_nSigmaTOFKaon[Jtr]->Write();
+			H_KFP_Pt_m2[Jtr]->Write();
+
 		}
-		H_KFP_DCAtoPV[Jtr]->Write();
-		H_KFP_eta[Jtr]->Write();
-		H_KFP_nHitsFit_p[Jtr]->Write();
-		H_KFP_nHitsFit_nHitsMax[Jtr]->Write();
-		H_KFP_ndEdx[Jtr]->Write();
-		H_KFP_nSigmaTOF_p[Jtr]->Write();
-		H_KFP_y_Pt[Jtr]->Write();
-		H_KFP_y_m2[Jtr]->Write();
-		H_KFP_y_nSigmaKaon[Jtr]->Write();
-		H_KFP_y_nSigmaPion[Jtr]->Write();
-		H_KFP_y_nSigmaElectron[Jtr]->Write();
-		H_KFP_y_nHitsFit[Jtr]->Write();
-		H_KFP_y_nHitsDedx[Jtr]->Write();
-		H_KFP_y_nHitsFit2nHitsMax[Jtr]->Write();
-		H_KFP_y_eta[Jtr]->Write();
-		h_KFP_tofYlocal[Jtr]->Write();
-		H_KFP_y_Pz[Jtr]->Write();
-		H_KFP_Pxy[Jtr]->Write();
-		H_KFP_Pz[Jtr]->Write();
-		H_KFP_y_Nch[Jtr]->Write();
-		H_KFP_Pz_Nch[Jtr]->Write();
-		H_KFP_y_nSigmaTOFKaon[Jtr]->Write();
-		H_KFP_y_Vz[Jtr]->Write();
-		H_KFP_m2_nSigmaTOFKaon[Jtr]->Write();
-		H_KFP_Pt_m2[Jtr]->Write();
+	// KFP PID end
 
+		fout->cd();
+
+		////////////////////////////////////// Reconstruction-QA //////////////////////////////////////
+		folder_ReconsQA->cd();
+		for (int i=0;i<PDG2NameSize;i++){
+			KFPRecons[i]  = folder_ReconsQA->mkdir(NameList[i]);
+			KFPRecons[i] -> cd();
+			H_ALL_NO_CUT[i]->Write();
+			// H_DaughterDCA[i]->Write();
+			H_Hyperon_Rap[i]->Write();
+
+		}
+		fout->cd();
 	}
-// KFP PID end
-
-	fout->cd();
-
-	////////////////////////////////////// Reconstruction-QA //////////////////////////////////////
-	folder_ReconsQA->cd();
-	for (int i=0;i<PDG2NameSize;i++){
-		KFPRecons[i]  = folder_ReconsQA->mkdir(NameList[i]);
-		KFPRecons[i] -> cd();
-		H_ALL_NO_CUT[i]->Write();
-		// H_DaughterDCA[i]->Write();
-		H_Hyperon_Rap[i]->Write();
-
-	}
-	fout->cd();
 	return;
 }
 
@@ -1345,6 +1329,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (mEvent->isTrigger(Trigger_List[i])) {
 			IfTriggerMatch = true;
 			TriggerID_in_TriggerList = i;
+			TriggerID = Trigger_List[i];
 			break;
 		}
 	}
@@ -1370,8 +1355,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// if (!(6.5<fabs(vpdVz-VertexZ) && fabs(vpdVz-VertexZ)<9.5 && fabs(vpdVz)<20)) return kStOK; // band test
 	// if (!(fabs(vpdVz-VertexZ)<3 && 20<fabs(vpdVz) && (DiffDVZCenter[0] <= vpdVz) && (vpdVz <= DiffDVZCenter[1]))) return kStOK; // center test
 
-	hVertex2D ->Fill(VertexZ,vpdVz);
-	hDiffVz   ->Fill(VertexZ-vpdVz); 
+	if (IfQAMode){
+		hVertex2D ->Fill(VertexZ,vpdVz);
+		hDiffVz   ->Fill(VertexZ-vpdVz); 
+	}
 
 	const double DVz = VertexZ-vpdVz;
 
@@ -1405,21 +1392,23 @@ Int_t StKFParticleAnalysisMaker::Make()
 	double mWght = refmultWght;
 	double mult_corr = refmultCorr;
 
-	///////////////////////////
-	hNRefMult ->Fill(grefMult);
-	hNRefMultA->Fill(mult_corr);
-	hNRefMultB->Fill(mult_corr,mWght);
-	hVertexXY ->Fill(VertexX,VertexY);
-	hVertexZ  ->Fill(VertexZ); 
-	hcent     ->Fill(cent);         // 1-9
-	hcentw    ->Fill(cent,mWght);   // 1-9
+	if (IfQAMode){
+		///////////////////////////
+		hNRefMult ->Fill(grefMult);
+		hNRefMultA->Fill(mult_corr);
+		hNRefMultB->Fill(mult_corr,mWght);
+		hVertexXY ->Fill(VertexX,VertexY);
+		hVertexZ  ->Fill(VertexZ); 
+		hcent     ->Fill(cent);         // 1-9
+		hcentw    ->Fill(cent,mWght);   // 1-9
 
-	///////////////
-	hcentRefM    ->Fill(cent,mult_corr);     
-	hcentRefW    ->Fill(cent,mult_corr,mWght);  
-	hcentRefM    ->Fill(0.,mult_corr);     
-	hcentRefW    ->Fill(0.,mult_corr,mWght);  
-	///////////////
+		///////////////
+		hcentRefM    ->Fill(cent,mult_corr);     
+		hcentRefW    ->Fill(cent,mult_corr,mWght);  
+		hcentRefM    ->Fill(0.,mult_corr);     
+		hcentRefW    ->Fill(0.,mult_corr,mWght);  
+		///////////////
+	}
 
 // ======= KFParticle ======= //
 	std::vector<StLambdaDecayPair> KFParticleLambdaDecayPair;
@@ -1430,16 +1419,22 @@ Int_t StKFParticleAnalysisMaker::Make()
 	float pT_trig_lo = 0.2;
 	float pT_trig_hi = 2.0;
 	float eta_trig_cut = 1.0;
-
+  
+	
 	CrefMult = refMult;CgrefMult = grefMult;
-	PDG.resize(0);px.resize(0);py.resize(0);pz.resize(0);InvariantMass.resize(0);
-	// QA
-	QA_dEdx.resize(0);QA_DCA_V0_PV.resize(0);QA_m2.resize(0);QA_nSigmaProton.resize(0);
-	QA_nSigmaPion.resize(0);QA_nSigmaKaon.resize(0);// QA_zTOF_proton.resize(0);QA_zTOF_pion.resize(0);QA_zTOF_kaon.resize(0);
-	QA_Decay_Length.resize(0);QA_Chi2.resize(0);// QA_IfBadReconstructed.resize(0);QA_IfConfuse.resize(0);QA_hasTOF.resize(0);
-	// QA_DCA_Daughters.resize(0);
-	// cout<<"2ac"<<endl;
-	// cout<<"In InterfaceCantProcessEvent"<<endl;
+	PDG            .resize(0);
+	px             .resize(0);
+	py             .resize(0);
+	pz             .resize(0);
+	QA_dEdx        .resize(0);
+	QA_m2          .resize(0);
+	QA_DCA_V0_PV   .resize(0);
+	QA_nSigmaProton.resize(0);
+	QA_nSigmaPion  .resize(0);
+	QA_nSigmaKaon  .resize(0);
+	InvariantMass  .resize(0);
+	QA_Decay_Length.resize(0);
+	QA_Chi2        .resize(0);
 
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	// Calculating Nch
@@ -1565,93 +1560,95 @@ Int_t StKFParticleAnalysisMaker::Make()
 			std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 			#endif
 			
-			// Fill track from KFP
-			if ((abs(particle.GetPDG()) == 2212) || (abs(particle.GetPDG()) == 211) || (abs(particle.GetPDG()) == 321)) { // Proton , Pion or Kaon
-				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
-					int Jtr = Itr - PDG2NameSize;
-					if (PDGList[Itr] != particle.GetPDG()) {continue;}
+			if (IfQAMode){
+				// Fill track from KFP
+				if ((abs(particle.GetPDG()) == 2212) || (abs(particle.GetPDG()) == 211) || (abs(particle.GetPDG()) == 321)) { // Proton , Pion or Kaon
+					for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+						int Jtr = Itr - PDG2NameSize;
+						if (PDGList[Itr] != particle.GetPDG()) {continue;}
 
-					// Find in PicoDST
-					int iTrack = 0;
-					const int globalTrackId = particle.DaughterIds()[0];
-					Int_t nTracks = mPicoDst->numberOfTracks();
-					Int_t iTrackStart = globalTrackId - 1;
-					if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-					for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
-						StPicoTrack *track = mPicoDst->track(jTrack);
-						if (track->id() == globalTrackId){
-							iTrack = jTrack;
-							break;
+						// Find in PicoDST
+						int iTrack = 0;
+						const int globalTrackId = particle.DaughterIds()[0];
+						Int_t nTracks = mPicoDst->numberOfTracks();
+						Int_t iTrackStart = globalTrackId - 1;
+						if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+						for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+							StPicoTrack *track = mPicoDst->track(jTrack);
+							if (track->id() == globalTrackId){
+								iTrack = jTrack;
+								break;
+							}
 						}
-					}
 
-					StPicoTrack *track = mPicoDst->track(iTrack);
-					float p = track->gMom().Mag();
-					float pt = track->gMom().Perp();
-					float phi = track->gMom().Phi();
-					float eta = track->gMom().Eta();
-					double track_px = track->gMom().X();
-					double track_py = track->gMom().Y();
-					double track_pz = track->gMom().Z();
-					if (pt < 0.4 || pt > 1.5) continue;
-					if (p < 0.4  || p > 2   ) continue;
-					H_KFP_Pt[Jtr] -> Fill(pt);
-					H_KFP_P[Jtr] -> Fill(p);
-					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(particle.GetPDG()),2),0.5);
-					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
-					H_KFP_rapidity[Jtr]->Fill(rap);
-					H_KFP_y_Pt[Jtr]->Fill(rap,pt);
-					H_KFP_y_nSigmaKaon[Jtr]->Fill(rap,track->nSigmaKaon());
-					H_KFP_y_nSigmaPion[Jtr]->Fill(rap,track->nSigmaPion());
-					H_KFP_y_nSigmaElectron[Jtr]->Fill(rap,track->nSigmaElectron());
-					H_KFP_y_nHitsFit[Jtr]->Fill(rap,track->nHitsFit());
-					H_KFP_y_nHitsDedx[Jtr]->Fill(rap,track->nHitsDedx());
-					H_KFP_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
-					H_KFP_y_eta[Jtr]->Fill(rap,eta);
-					H_KFP_y_Pz[Jtr]->Fill(rap,track_pz);
-					H_KFP_Pxy[Jtr]->Fill(track_px,track_py);
-					H_KFP_Pz[Jtr]->Fill(track_pz);
-					H_KFP_y_Vz[Jtr]->Fill(rap,VertexZ);
-					H_KFP_y_Nch[Jtr]->Fill(rap,NumCharge);
-					H_KFP_Pz_Nch[Jtr]->Fill(track_pz,NumCharge);
-					for (int Ntr=0;Ntr<PDG2NameSize3;Ntr++){
-						// cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
-						if ( CNameList[Ntr] == "Kaon"){H_KFP_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
-						if ( CNameList[Ntr] == "Pion"){H_KFP_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
-						if ( CNameList[Ntr] == "Proton"){H_KFP_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
-					}
-
-					H_KFP_dEdx_p[Jtr]->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
-					H_KFP_DCAtoPV[Jtr]->Fill(track->gDCA(Vertex3D).Mag());
-					H_KFP_eta[Jtr]->Fill(eta);
-					H_KFP_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
-					H_KFP_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
-					H_KFP_ndEdx[Jtr]->Fill((track->nHitsDedx()));
-					bool hasTOF = false;
-					int tofindex = track->bTofPidTraitsIndex();
-					if (tofindex >= 0) 
-					{
-						int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
-						float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
-						if((tofflag >= 1) && (tof > 0)) hasTOF = true;
-					}
-					if (hasTOF) {
-						StPicoPhysicalHelix helix = track->helix(magnet);
-						TVector3 pkaon = helix.momentum(magnet*kilogauss);
-						double beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
-						double m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
-						if(abs(PDGList[Itr])==321){
-							H_KFP_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
-							h_KFP_tofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
-							H_KFP_y_nSigmaTOFKaon[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
-							H_KFP_m2_nSigmaTOFKaon[Jtr]->Fill(m2,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
-							H_KFP_Pt_m2[Jtr]->Fill(pt,m2);
-							H_KFP_y_m2[Jtr]->Fill(rap,m2);
+						StPicoTrack *track = mPicoDst->track(iTrack);
+						float p = track->gMom().Mag();
+						float pt = track->gMom().Perp();
+						float phi = track->gMom().Phi();
+						float eta = track->gMom().Eta();
+						double track_px = track->gMom().X();
+						double track_py = track->gMom().Y();
+						double track_pz = track->gMom().Z();
+						if (pt < 0.4 || pt > 1.5) continue;
+						if (p < 0.4  || p > 2   ) continue;
+						H_KFP_Pt[Jtr] -> Fill(pt);
+						H_KFP_P[Jtr] -> Fill(p);
+						float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(particle.GetPDG()),2),0.5);
+						float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
+						H_KFP_rapidity[Jtr]->Fill(rap);
+						H_KFP_y_Pt[Jtr]->Fill(rap,pt);
+						H_KFP_y_nSigmaKaon[Jtr]->Fill(rap,track->nSigmaKaon());
+						H_KFP_y_nSigmaPion[Jtr]->Fill(rap,track->nSigmaPion());
+						H_KFP_y_nSigmaElectron[Jtr]->Fill(rap,track->nSigmaElectron());
+						H_KFP_y_nHitsFit[Jtr]->Fill(rap,track->nHitsFit());
+						H_KFP_y_nHitsDedx[Jtr]->Fill(rap,track->nHitsDedx());
+						H_KFP_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
+						H_KFP_y_eta[Jtr]->Fill(rap,eta);
+						H_KFP_y_Pz[Jtr]->Fill(rap,track_pz);
+						H_KFP_Pxy[Jtr]->Fill(track_px,track_py);
+						H_KFP_Pz[Jtr]->Fill(track_pz);
+						H_KFP_y_Vz[Jtr]->Fill(rap,VertexZ);
+						H_KFP_y_Nch[Jtr]->Fill(rap,NumCharge);
+						H_KFP_Pz_Nch[Jtr]->Fill(track_pz,NumCharge);
+						for (int Ntr=0;Ntr<PDG2NameSize3;Ntr++){
+							// cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
+							if ( CNameList[Ntr] == "Kaon"){H_KFP_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
+							if ( CNameList[Ntr] == "Pion"){H_KFP_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
+							if ( CNameList[Ntr] == "Proton"){H_KFP_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
 						}
+
+						H_KFP_dEdx_p[Jtr]->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+						H_KFP_DCAtoPV[Jtr]->Fill(track->gDCA(Vertex3D).Mag());
+						H_KFP_eta[Jtr]->Fill(eta);
+						H_KFP_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
+						H_KFP_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
+						H_KFP_ndEdx[Jtr]->Fill((track->nHitsDedx()));
+						bool hasTOF = false;
+						int tofindex = track->bTofPidTraitsIndex();
+						if (tofindex >= 0) 
+						{
+							int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
+							float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
+							if((tofflag >= 1) && (tof > 0)) hasTOF = true;
+						}
+						if (hasTOF) {
+							StPicoPhysicalHelix helix = track->helix(magnet);
+							TVector3 pkaon = helix.momentum(magnet*kilogauss);
+							double beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
+							double m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
+							if(abs(PDGList[Itr])==321){
+								H_KFP_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
+								h_KFP_tofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
+								H_KFP_y_nSigmaTOFKaon[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
+								H_KFP_m2_nSigmaTOFKaon[Jtr]->Fill(m2,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
+								H_KFP_Pt_m2[Jtr]->Fill(pt,m2);
+								H_KFP_y_m2[Jtr]->Fill(rap,m2);
+							}
+						}
+
 					}
 
 				}
-
 			}
 
 
@@ -1666,7 +1663,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			Recorded_Hyperon ++;
 
 			// Check if wrong daughters
-			bool IfCorrectDaughter = true;
+			// bool IfCorrectDaughter = true;
 			// for (int Itr = 0;Itr < MultyReconMather.size();Itr++) {
 			// 	if ( iKFParticle == MultyReconMather[Itr]) {
 			// 		for (int Jtr = 0;Jtr < PDG2NameSize;Jtr++){
@@ -1687,7 +1684,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// 		}
 			// 	}
 			// }
-			if (IfCorrectDaughter == false) {continue;}
+			// if (IfCorrectDaughter == false) {continue;}
 
 			//SCHEME 1: reconstruction of V0, the parent particle
 			int iTrack,kTrack;
@@ -1754,39 +1751,41 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// 		break;
 			// 	}
 			// }
-			for (int Itr = 0;Itr < PDG2NameSize;Itr++){
-				if (particle.GetPDG() == PDGList[Itr]){
-					float PPx = particle.GetPx();
-					float PPy = particle.GetPy();
-					float PPz = particle.GetPz();
-					if (StKFParticleAnalysisMaker::IfGoodDaughterDCA(mPicoDst , iKFParticle , magnet , 0.6 , 0.6)){
-						H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
-						H_DaughterDCA[Itr]->Fill(particle.GetMass());
-						// QA_IfBadReconstructed.emplace_back(0);
+			if (IfQAMode){
+				for (int Itr = 0;Itr < PDG2NameSize;Itr++){
+					if (particle.GetPDG() == PDGList[Itr]){
+						float PPx = particle.GetPx();
+						float PPy = particle.GetPy();
+						float PPz = particle.GetPz();
+						if (StKFParticleAnalysisMaker::IfGoodDaughterDCA(mPicoDst , iKFParticle , magnet , 0.6 , 0.6)){
+							H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
+							H_DaughterDCA[Itr]->Fill(particle.GetMass());
+							// QA_IfBadReconstructed.emplace_back(0);
+						}
+						else
+						{
+							H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
+							// IfWellConstrcuted = false;
+							// QA_IfBadReconstructed.emplace_back(1);
+						}
+						float PMass = 0.0;
+						if      ((abs(PDGList[Itr]) == K0SPdg   ) && (fabs(particle.GetMass() - K0SPdgMass   ) < K0SPdgMassSigma   )){ PMass = K0SPdgMass;}
+						else if ((abs(PDGList[Itr]) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) < LambdaPdgMassSigma)){ PMass = LambdaPdgMass;}
+						else if ((abs(PDGList[Itr]) == XiPdg    ) && (fabs(particle.GetMass() - XiPdgMass    ) < XiPdgMassSigma    )){ PMass = XiPdgMass;}
+						else if ((abs(PDGList[Itr]) == OmegaPdg ) && (fabs(particle.GetMass() - OmegaPdgMass ) < OmegaPdgMassSigma )){ PMass = OmegaPdgMass;}
+						else if ((abs(PDGList[Itr]) == PhiPdg   ) && (fabs(particle.GetMass() - PhiPdgMass   ) < PhiPdgMassSigma   )){ PMass = PhiPdgMass;}
+						else if ((abs(PDGList[Itr]) == LambdaPdg) || (abs(PDGList[Itr]) == XiPdg) || (abs(PDGList[Itr]) == OmegaPdg) || (abs(PDGList[Itr]) == K0SPdg) || (abs(PDGList[Itr]) == PhiPdg)) {break;}
+						else {
+							continue;
+						}
+						float PEnergy = pow(PPx*PPx + PPy*PPy + PPz*PPz + PMass*PMass , 0.5);
+						H_Hyperon_Rap[Itr]->Fill(0.5*log((PEnergy+PPz)/(PEnergy-PPz)));
+						
+						// hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
+						// QA_DCA_Daughters.emplace_back(-1.0);
+						// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
+						break;
 					}
-					else
-					{
-						H_ALL_NO_CUT[Itr]->Fill(particle.GetMass());
-						// IfWellConstrcuted = false;
-						// QA_IfBadReconstructed.emplace_back(1);
-					}
-					float PMass = 0.0;
-					if      ((abs(PDGList[Itr]) == K0SPdg   ) && (fabs(particle.GetMass() - K0SPdgMass   ) < K0SPdgMassSigma   )){ PMass = K0SPdgMass;}
-					else if ((abs(PDGList[Itr]) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) < LambdaPdgMassSigma)){ PMass = LambdaPdgMass;}
-					else if ((abs(PDGList[Itr]) == XiPdg    ) && (fabs(particle.GetMass() - XiPdgMass    ) < XiPdgMassSigma    )){ PMass = XiPdgMass;}
-					else if ((abs(PDGList[Itr]) == OmegaPdg ) && (fabs(particle.GetMass() - OmegaPdgMass ) < OmegaPdgMassSigma )){ PMass = OmegaPdgMass;}
-					else if ((abs(PDGList[Itr]) == PhiPdg   ) && (fabs(particle.GetMass() - PhiPdgMass   ) < PhiPdgMassSigma   )){ PMass = PhiPdgMass;}
-					else if ((abs(PDGList[Itr]) == LambdaPdg) || (abs(PDGList[Itr]) == XiPdg) || (abs(PDGList[Itr]) == OmegaPdg) || (abs(PDGList[Itr]) == K0SPdg) || (abs(PDGList[Itr]) == PhiPdg)) {break;}
-					else {
-						continue;
-					}
-					float PEnergy = pow(PPx*PPx + PPy*PPy + PPz*PPz + PMass*PMass , 0.5);
-					H_Hyperon_Rap[Itr]->Fill(0.5*log((PEnergy+PPz)/(PEnergy-PPz)));
-					
-					// hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
-					// QA_DCA_Daughters.emplace_back(-1.0);
-					// cout<<"DCA to Parent = "<<DistanceBetween(LTrackI , LTrackK)<<endl;
-					break;
 				}
 			}
 			
@@ -1803,62 +1802,65 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// dcav0toPV = sqrt(xv0toPV.Mag2() - dcav0toPV);
 			// double v0decaylength = xv0toPV.Mag();
 			// double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();// cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
-			//SCHEME 2:
-			KFParticle tempParticle(particle);
-			float l,dl;
-			KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
-			// pv += particle;
-			tempParticle.SetProductionVertex(pv);
-			tempParticle.GetDecayLength(l, dl);// cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
+			if (IfTree){
+				//SCHEME 2:
+				KFParticle tempParticle(particle);
+				float l,dl;
+				KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
+				// pv += particle;
+				tempParticle.SetProductionVertex(pv);
+				tempParticle.GetDecayLength(l, dl);// cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
 
-			if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg))) {
+				if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg))) {
 
-				// helix
-				TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
-				TVector3 PositionOfParticle(particle.GetX(), particle.GetY(), particle.GetZ());
-				TLorentzVector OmegaLorentz(MomentumOfParticle, particle.GetE());
-				StPicoPhysicalHelix heliPositionOfParticle(MomentumOfParticle, PositionOfParticle, magnet*kilogauss, particle.GetQ());
-				double pathlength = heliPositionOfParticle.pathLength(Vertex3D, false);
-				TVector3 MomentumOfParticle_tb = heliPositionOfParticle.momentumAt(pathlength, magnet*kilogauss); 
-				PDG.emplace_back(particle.GetPDG());
-				px.emplace_back(MomentumOfParticle_tb.X());
-				py.emplace_back(MomentumOfParticle_tb.Y());
-				pz.emplace_back(MomentumOfParticle_tb.Z());
-				InvariantMass.emplace_back(particle.GetMass());//cout<<"particle.GetAtProductionVertex() = "<<particle.GetAtProductionVertex()<<endl;
-				// float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);
-				QA_Decay_Length.emplace_back(l);
-				OmegaVec.push_back(particle);ParticleVec.push_back(particle);
-				QA_Chi2.emplace_back(particle.GetChi2());
-				QA_DCA_V0_PV.emplace_back(-1);
-				QA_dEdx.emplace_back(-999);
-				QA_nSigmaProton.emplace_back(-999);
-				QA_nSigmaPion.emplace_back(-999);
-				QA_nSigmaKaon.emplace_back(-999);
-				// cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
-				// cout<<"kilogauss = "<<kilogauss<<endl;
-				// cout<<"MomentumOfParticle_tb.Mag() = "<<MomentumOfParticle_tb.Mag()<<endl;
-				// cout<<"MomentumOfParticle.Mag() = "<<MomentumOfParticle.Mag()<<endl;
-			}
-			else if ((abs(particle.GetPDG()) == LambdaPdg))
-			{
-				PDG.emplace_back(particle.GetPDG());
-				px.emplace_back(particle.GetPx());
-				py.emplace_back(particle.GetPy());
-				pz.emplace_back(particle.GetPz());
-				InvariantMass.emplace_back(particle.GetMass());
-				QA_Chi2.emplace_back(particle.GetChi2());
-				QA_Decay_Length.emplace_back(l);
-				QA_DCA_V0_PV.emplace_back(-1);
-				QA_dEdx.emplace_back(-999);
-				QA_nSigmaProton.emplace_back(-999);
-				QA_nSigmaPion.emplace_back(-999);
-				QA_nSigmaKaon.emplace_back(-999);
+					// helix
+					TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
+					TVector3 PositionOfParticle(particle.GetX(), particle.GetY(), particle.GetZ());
+					TLorentzVector OmegaLorentz(MomentumOfParticle, particle.GetE());
+					StPicoPhysicalHelix heliPositionOfParticle(MomentumOfParticle, PositionOfParticle, magnet*kilogauss, particle.GetQ());
+					double pathlength = heliPositionOfParticle.pathLength(Vertex3D, false);
+					TVector3 MomentumOfParticle_tb = heliPositionOfParticle.momentumAt(pathlength, magnet*kilogauss); 
+					PDG.emplace_back(particle.GetPDG());
+					px.emplace_back(MomentumOfParticle_tb.X());
+					py.emplace_back(MomentumOfParticle_tb.Y());
+					pz.emplace_back(MomentumOfParticle_tb.Z());
+					InvariantMass.emplace_back(particle.GetMass());//cout<<"particle.GetAtProductionVertex() = "<<particle.GetAtProductionVertex()<<endl;
+					// float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);
+					QA_Decay_Length.emplace_back(l);
+					OmegaVec.push_back(particle);ParticleVec.push_back(particle);
+					QA_Chi2.emplace_back(particle.GetChi2());
+					QA_DCA_V0_PV.emplace_back(-999);
+					QA_dEdx.emplace_back(-999);
+					QA_nSigmaProton.emplace_back(-999);
+					QA_nSigmaPion.emplace_back(-999);
+					QA_nSigmaKaon.emplace_back(-999);
+					// cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
+					// cout<<"kilogauss = "<<kilogauss<<endl;
+					// cout<<"MomentumOfParticle_tb.Mag() = "<<MomentumOfParticle_tb.Mag()<<endl;
+					// cout<<"MomentumOfParticle.Mag() = "<<MomentumOfParticle.Mag()<<endl;
+					QA_m2.emplace_back(-999);
+				}
+				else if ((abs(particle.GetPDG()) == LambdaPdg))
+				{
+					PDG.emplace_back(particle.GetPDG());
+					px.emplace_back(particle.GetPx());
+					py.emplace_back(particle.GetPy());
+					pz.emplace_back(particle.GetPz());
+					InvariantMass.emplace_back(particle.GetMass());
+					QA_Chi2.emplace_back(particle.GetChi2());
+					QA_Decay_Length.emplace_back(l);
+					QA_DCA_V0_PV.emplace_back(-1);
+					QA_dEdx.emplace_back(-999);
+					QA_nSigmaProton.emplace_back(-999);
+					QA_nSigmaPion.emplace_back(-999);
+					QA_nSigmaKaon.emplace_back(-999);
+					QA_m2.emplace_back(-999);
 
+				}
 			}
 			// cout<<"CrefMult:"<<CrefMult<<endl;
 			// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 
-			hLN_M->Fill(particle.GetMass(),H_ProcessEventNum);
 			// cout<<"Here is good 1"<<endl;
 
 
@@ -2014,7 +2016,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// if (proton_cut + pion_cut + kaon_cut > 1){IfRecordThisTrack = true;QA_IfConfuse.emplace_back(1);}
 
 //////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
-		H_nSigmaKaon_Pt_AllTOF->Fill(track->nSigmaKaon(),pt);
 		// Raw Data bTOF
 		bool RawTOF = true;
 		bool hasTOF = false;
@@ -2041,13 +2042,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 			{
 				beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
 				m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
-				H_Pt_m2->Fill(track->gMom().Mag(),m2);
-				H_Pt_nSigmaKaonTOF->Fill(track->gMom().Mag(),(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon());
-				H_m2_nSigmaKaon_Pt->Fill(m2,track->nSigmaKaon(),pt);
-				H_nSigmaKaon_Pt_HasTOF->Fill(track->nSigmaKaon(),pt);
-				// cout<<"nsigmaTOF = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
-				if (fabs(1/beta-1)<0.03) {
-					hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+				if (IfQAMode) {
+					H_Pt_m2->Fill(track->gMom().Mag(),m2);
+					H_Pt_nSigmaKaonTOF->Fill(track->gMom().Mag(),(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon());
+					H_m2_nSigmaKaon_Pt->Fill(m2,track->nSigmaKaon(),pt);
+					// cout<<"nsigmaTOF = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
+					if (fabs(1/beta-1)<0.03) {
+						hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+					}
 				}
 			}
 		}
@@ -2071,49 +2073,52 @@ Int_t StKFParticleAnalysisMaker::Make()
 				IfeTof = true;
 				beta = (mPicoDst->etofPidTraits(tofindex))->beta();
 				m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
-				H_Pt_m2->Fill(track->gMom().Mag(),m2);
-				H_Pt_nSigmaKaonTOF->Fill(track->gMom().Mag(),(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon());
-				H_m2_nSigmaKaon_Pt->Fill(m2,track->nSigmaKaon(),pt);
-				H_nSigmaKaon_Pt_HasTOF->Fill(track->nSigmaKaon(),pt);
-				// cout<<"nsigmaTOF = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
-				if (fabs(1/beta-1)<0.03) {
-					hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+				if (IfQAMode) {
+					H_Pt_m2->Fill(track->gMom().Mag(),m2);
+					H_Pt_nSigmaKaonTOF->Fill(track->gMom().Mag(),(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon());
+					H_m2_nSigmaKaon_Pt->Fill(m2,track->nSigmaKaon(),pt);
+					// cout<<"nsigmaTOF = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
+					if (fabs(1/beta-1)<0.03) {
+						hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+					}
 				}
 			}
 		}
-		H_Pt_nSigmaKaon->Fill(track->gMom().Mag(),track->nSigmaKaon());
-		H_eta_nSigmaKaon  [TriggerID_in_TriggerList][2]->Fill(eta,track->nSigmaKaon());
-		H_eta_nSigmaPion  [TriggerID_in_TriggerList][2]->Fill(eta,track->nSigmaPion());
-		H_eta_nSigmaProton[TriggerID_in_TriggerList][2]->Fill(eta,track->nSigmaProton());
-		H_eta_m2          [TriggerID_in_TriggerList][2]->Fill(eta,m2);
-		H_eta_PVz         [TriggerID_in_TriggerList][2]->Fill(eta,VertexZ);
-		H_eta_PVr         [TriggerID_in_TriggerList][2]->Fill(eta,VertexR);
-		H_eta_DVz         [TriggerID_in_TriggerList][2]->Fill(eta,DVz);
-		H_eta_triggerBIN  [TriggerID_in_TriggerList][2]->Fill(eta);
-		if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][2]->Fill(eta);}
-		if (track->charge() > 0) {
-			H_eta_nSigmaKaon  [TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaKaon());
-			H_eta_nSigmaPion  [TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaPion());
-			H_eta_nSigmaProton[TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaProton());
-			H_eta_m2          [TriggerID_in_TriggerList][0]->Fill(eta,m2);
-			H_eta_PVz         [TriggerID_in_TriggerList][0]->Fill(eta,VertexZ);
-			H_eta_PVr         [TriggerID_in_TriggerList][0]->Fill(eta,VertexR);
-			H_eta_DVz         [TriggerID_in_TriggerList][0]->Fill(eta,DVz);
-			H_eta_triggerBIN  [TriggerID_in_TriggerList][0]->Fill(eta);
-			if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][0]->Fill(eta);}
+		if (IfQAMode) {
+			H_Pt_nSigmaKaon->Fill(track->gMom().Mag(),track->nSigmaKaon());
+			H_eta_nSigmaKaon  [TriggerID_in_TriggerList][2]->Fill(eta,track->nSigmaKaon());
+			H_eta_nSigmaPion  [TriggerID_in_TriggerList][2]->Fill(eta,track->nSigmaPion());
+			H_eta_nSigmaProton[TriggerID_in_TriggerList][2]->Fill(eta,track->nSigmaProton());
+			H_eta_m2          [TriggerID_in_TriggerList][2]->Fill(eta,m2);
+			H_eta_PVz         [TriggerID_in_TriggerList][2]->Fill(eta,VertexZ);
+			H_eta_PVr         [TriggerID_in_TriggerList][2]->Fill(eta,VertexR);
+			H_eta_DVz         [TriggerID_in_TriggerList][2]->Fill(eta,DVz);
+			H_eta_triggerBIN  [TriggerID_in_TriggerList][2]->Fill(eta);
+			if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][2]->Fill(eta);}
+			if (track->charge() > 0) {
+				H_eta_nSigmaKaon  [TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaKaon());
+				H_eta_nSigmaPion  [TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaPion());
+				H_eta_nSigmaProton[TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaProton());
+				H_eta_m2          [TriggerID_in_TriggerList][0]->Fill(eta,m2);
+				H_eta_PVz         [TriggerID_in_TriggerList][0]->Fill(eta,VertexZ);
+				H_eta_PVr         [TriggerID_in_TriggerList][0]->Fill(eta,VertexR);
+				H_eta_DVz         [TriggerID_in_TriggerList][0]->Fill(eta,DVz);
+				H_eta_triggerBIN  [TriggerID_in_TriggerList][0]->Fill(eta);
+				if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][0]->Fill(eta);}
+			}
+			if (track->charge() < 0) {
+				H_eta_nSigmaKaon  [TriggerID_in_TriggerList][1]->Fill(eta,track->nSigmaKaon());
+				H_eta_nSigmaPion  [TriggerID_in_TriggerList][1]->Fill(eta,track->nSigmaPion());
+				H_eta_nSigmaProton[TriggerID_in_TriggerList][1]->Fill(eta,track->nSigmaProton());
+				H_eta_m2          [TriggerID_in_TriggerList][1]->Fill(eta,m2);
+				H_eta_PVz         [TriggerID_in_TriggerList][1]->Fill(eta,VertexZ);
+				H_eta_PVr         [TriggerID_in_TriggerList][1]->Fill(eta,VertexR);
+				H_eta_DVz         [TriggerID_in_TriggerList][1]->Fill(eta,DVz);
+				H_eta_triggerBIN  [TriggerID_in_TriggerList][1]->Fill(eta);
+				if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][1]->Fill(eta);}
+			}
+			H_eta_trigger     ->Fill(eta,TriggerID_in_TriggerList);
 		}
-		if (track->charge() < 0) {
-			H_eta_nSigmaKaon  [TriggerID_in_TriggerList][1]->Fill(eta,track->nSigmaKaon());
-			H_eta_nSigmaPion  [TriggerID_in_TriggerList][1]->Fill(eta,track->nSigmaPion());
-			H_eta_nSigmaProton[TriggerID_in_TriggerList][1]->Fill(eta,track->nSigmaProton());
-			H_eta_m2          [TriggerID_in_TriggerList][1]->Fill(eta,m2);
-			H_eta_PVz         [TriggerID_in_TriggerList][1]->Fill(eta,VertexZ);
-			H_eta_PVr         [TriggerID_in_TriggerList][1]->Fill(eta,VertexR);
-			H_eta_DVz         [TriggerID_in_TriggerList][1]->Fill(eta,DVz);
-			H_eta_triggerBIN  [TriggerID_in_TriggerList][1]->Fill(eta);
-			if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][1]->Fill(eta);}
-		}
-		H_eta_trigger     ->Fill(eta,TriggerID_in_TriggerList);
 
 		if (pt > 1.4) {continue;}
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
@@ -2122,7 +2127,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 					int Jtr = Itr - PDG2NameSize;
 					if (NeedPDG[Ktr] != PDGList[Itr]){continue;}
-					if ((abs(PDGList[Itr])!=PionPdg) && (!hasTOF) ) {H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion->Fill(track->nSigmaKaon(),pt);}
 					//// For Kaon
 					if (abs(PDGList[Itr])==KaonPdg) {
 						// if (
@@ -2165,91 +2169,63 @@ Int_t StKFParticleAnalysisMaker::Make()
 						{continue;}
 					}
 					//// 
-					H_Pt[Jtr] -> Fill(pt);
-					H_P[Jtr] -> Fill(p);
-					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
-					PDG.emplace_back(NeedPDG[Ktr]);
-					px.emplace_back(track_px);
-					py.emplace_back(track_py);
-					pz.emplace_back(track_pz);
-					QA_Chi2.emplace_back(-999);
-					QA_Decay_Length.emplace_back(-99);
 					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
-					H_rapidity[Jtr]->Fill(rap);
-					if (IfeTof) H_rapidity_eTOF[Jtr]->Fill(rap);
-					H_y_Pt[Jtr]->Fill(rap,pt);
-					H_y_P[Jtr]->Fill(rap,p);
-					if (hasTOF) H_y_m2[Jtr]->Fill(rap,m2);
-					H_y_nSigmaKaon[Jtr]->Fill(rap,track->nSigmaKaon());
-					H_y_nSigmaPion[Jtr]->Fill(rap,track->nSigmaPion());
-					H_y_nSigmaElectron[Jtr]->Fill(rap,track->nSigmaElectron());
-					H_y_nHitsFit[Jtr]->Fill(rap,track->nHitsFit());
-					H_y_nHitsDedx[Jtr]->Fill(rap,track->nHitsDedx());
-					H_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
-					H_y_eta[Jtr]->Fill(rap,eta);
-					H_y_Pz[Jtr]->Fill(rap,track_pz);
-					H_Pxy[Jtr]->Fill(track_px,track_py);
-					H_Pz[Jtr]->Fill(track_pz);
-					H_y_Vz[Jtr]->Fill(rap,VertexZ);
-					H_y_Nch[Jtr]->Fill(rap,NumCharge);
-					H_Pz_Nch[Jtr]->Fill(track_pz,NumCharge);
-					if(abs(PDGList[Itr])==321 && hasTOF) {
-						H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
-						hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
-						H_y_nSigmaTOFKaon[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
-						H_m2_nSigmaTOFKaon[Jtr]->Fill(m2,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
+					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
+					if (IfTree) {
+						QA_Chi2.emplace_back(-999);
+						QA_Decay_Length.emplace_back(-999);
+						PDG.emplace_back(NeedPDG[Ktr]);
+						px.emplace_back(track_px);
+						py.emplace_back(track_py);
+						pz.emplace_back(track_pz);
+						QA_dEdx.emplace_back(track->dEdx());
+						QA_nSigmaProton.emplace_back(track->nSigmaProton());
+						QA_nSigmaPion.emplace_back(track->nSigmaPion());
+						QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
+						QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
+						QA_m2.emplace_back(m2);
+						InvariantMass.emplace_back(-999); 
 					}
-
-					QA_dEdx.emplace_back(track->dEdx());
-					QA_nSigmaProton.emplace_back(track->nSigmaProton());
-					QA_nSigmaPion.emplace_back(track->nSigmaPion());
-					QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
-					H_dEdx_p[Jtr]->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
-					H_DCAtoPV[Jtr]->Fill(track->gDCA(Vertex3D).Mag());
-					QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
-					H_eta[Jtr]->Fill(eta);
-					H_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
-					H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
-					H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
-					for (int Ntr=0;Ntr<PDG2NameSize3;Ntr++){
-						// cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
-						if ( CNameList[Ntr] == "Kaon"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaKaon(),track->gMom().Perp());InvariantMass.emplace_back(KaonPdgMass);}
-						if ( CNameList[Ntr] == "Pion"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaPion(),track->gMom().Perp());InvariantMass.emplace_back(PionPdgMass);}
-						if ( CNameList[Ntr] == "Proton"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());InvariantMass.emplace_back(ProtonPdgMass);}
-					}
-					// TOF Info
-					hasTOF = false;
-					int tofindex = track->bTofPidTraitsIndex();
-					m2 = -999.;
-					float beta = -999.;
-					if (tofindex >= 0) 
-					{
-						int tofflag = (mPicoDst->btofPidTraits(tofindex))->btofMatchFlag();
-						float tof = (mPicoDst->btofPidTraits(tofindex))->btof();
-						float BtofYLocal = (mPicoDst->btofPidTraits(tofindex))->btofYLocal();
-						// hgbtofYlocal->Fill(BtofYLocal);
-						if((tofflag >= 1) && (tof > 0) && (BtofYLocal > -1.8) && (BtofYLocal < 1.8)) hasTOF = true;
-					}
-					StPicoPhysicalHelix helix = track->helix(magnet);
-					TVector3 pkaon = helix.momentum(magnet*kilogauss);
-					if (hasTOF)
-					{
-						beta = (mPicoDst->btofPidTraits(tofindex))->btofBeta();
-						m2 = pkaon.Mag2()*(1.0 / beta / beta - 1.0);
-
-						float betaTheroy = 1/pow(pow(BPDGListMass[Jtr]/(track->gMom().Mag()),2)+1,0.5);
-						// some kaon QA
-						if (NeedPDG[Ktr] == 321){
-							if (track->nSigmaKaon() >  3) H_m2_KSigma_L->Fill(track->gMom().Perp(), m2);
-							if (track->nSigmaKaon() < -3) H_m2_KSigma_S->Fill(track->gMom().Perp(), m2);
+					if (IfQAMode) {
+						H_Pt[Jtr] -> Fill(pt);
+						H_P[Jtr] -> Fill(p);
+						H_rapidity[Jtr]->Fill(rap);
+						if (IfeTof) H_rapidity_eTOF[Jtr]->Fill(rap);
+						H_y_Pt[Jtr]->Fill(rap,pt);
+						H_y_P[Jtr]->Fill(rap,p);
+						if (hasTOF) H_y_m2[Jtr]->Fill(rap,m2);
+						H_y_nSigmaKaon[Jtr]->Fill(rap,track->nSigmaKaon());
+						H_y_nSigmaPion[Jtr]->Fill(rap,track->nSigmaPion());
+						H_y_nSigmaElectron[Jtr]->Fill(rap,track->nSigmaElectron());
+						H_y_nHitsFit[Jtr]->Fill(rap,track->nHitsFit());
+						H_y_nHitsDedx[Jtr]->Fill(rap,track->nHitsDedx());
+						H_y_nHitsFit2nHitsMax[Jtr]->Fill(rap,track->nHitsFit()*1.0 / track->nHitsMax());
+						H_y_eta[Jtr]->Fill(rap,eta);
+						H_y_Pz[Jtr]->Fill(rap,track_pz);
+						H_Pxy[Jtr]->Fill(track_px,track_py);
+						H_Pz[Jtr]->Fill(track_pz);
+						H_y_Vz[Jtr]->Fill(rap,VertexZ);
+						H_y_Nch[Jtr]->Fill(rap,NumCharge);
+						H_Pz_Nch[Jtr]->Fill(track_pz,NumCharge);
+						if(abs(PDGList[Itr])==321 && hasTOF) {
+							H_nSigmaTOF_p[Jtr]->Fill((mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon(),track->gMom().Mag());
+							hgbtofYlocal[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->btofYLocal());
+							H_y_nSigmaTOFKaon[Jtr]->Fill(rap,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
+							H_m2_nSigmaTOFKaon[Jtr]->Fill(m2,(mPicoDst->btofPidTraits(track->bTofPidTraitsIndex()))->nSigmaKaon());
 						}
-						float nSIgmaTOF = (1/beta-1/betaTheroy)/0.013;
-						// H_nSigmaTOF_p[Jtr]->Fill(nSIgmaTOF,track->gMom().Mag());
-						// zTOF_proton = 1/beta - sqrt(ProtonPdgMass*ProtonPdgMass/pkaon.Mag2()+1);
-						// zTOF_pion   = 1/beta - sqrt(PionPdgMass*PionPdgMass/pkaon.Mag2()+1);
-						// zTOF_kaon   = 1/beta - sqrt(KaonPdgMass*KaonPdgMass/pkaon.Mag2()+1);
+						H_dEdx_p[Jtr]->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+						H_DCAtoPV[Jtr]->Fill(track->gDCA(Vertex3D).Mag());
+						H_eta[Jtr]->Fill(eta);
+						H_nHitsFit_p[Jtr]->Fill(track->nHitsFit(),track->gMom().Mag());
+						H_nHitsFit_nHitsMax[Jtr]->Fill((track->nHitsFit()*1.0)/(track->nHitsMax()*1.0));
+						H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
+						for (int Ntr=0;Ntr<PDG2NameSize3;Ntr++){
+							// cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
+							if ( CNameList[Ntr] == "Kaon"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaKaon(),track->gMom().Perp());InvariantMass.emplace_back(KaonPdgMass);}
+							if ( CNameList[Ntr] == "Pion"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaPion(),track->gMom().Perp());InvariantMass.emplace_back(PionPdgMass);}
+							if ( CNameList[Ntr] == "Proton"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());InvariantMass.emplace_back(ProtonPdgMass);}
+						}
 					}
-					QA_m2.emplace_back(m2);
 					
 					break;
 				}
@@ -2285,12 +2261,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		// 	// Filling QA
 		// 	if (hasTOF) {
-		// 		QA_hasTOF.emplace_back(1);
 		// 		QA_zTOF_proton.emplace_back(zTOF_proton);QA_zTOF_pion.emplace_back(zTOF_pion);QA_zTOF_kaon.emplace_back(zTOF_kaon);
 		// 		QA_m2.emplace_back(m2);
 		// 	}
 		// 	else{
-		// 		QA_hasTOF.emplace_back(0);
 		// 		QA_zTOF_proton.emplace_back(0.);QA_zTOF_pion.emplace_back(0.);QA_zTOF_kaon.emplace_back(0.);
 		// 		QA_m2.emplace_back(0.);
 		// 	}
@@ -2306,8 +2280,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	}
 	// cout<<"Total_Pz = "<<Total_Pz<<endl;
-	H_Total_Pz->Fill(Total_Pz);
-	H_Total_Pxy->Fill(Total_Px,Total_Py);
+	if (IfQAMode) {
+		H_Total_Pz->Fill(Total_Pz);
+		H_Total_Pxy->Fill(Total_Px,Total_Py);
+	}
 
 // ======= KFParticle end ======= //
 

@@ -200,9 +200,6 @@ private:
 	TH2F *H_m2_KSigma_L;
 	TH2F *H_All_nSigmaKaon_y;
 	TH2F *H_All_nSigmaKaon_eta;
-	TH2F *H_nSigmaKaon_Pt_AllTOF;
-	TH2F *H_nSigmaKaon_Pt_HasTOF;
-	TH2F *H_nSigmaKaon_Pt_HasTOF_NoNsigmaPion;
 
 	// KFP PID QA
 	TDirectory* KFPPIDQA;
@@ -243,7 +240,6 @@ private:
 	TH2F *hdEdx_pQ;
 	TH2F *hdEdx_pQ_1cut;
 	TH2F *hdEdx_pQ_2cut;
-	TH2D *hLN_M;
 	TH2D *hXY;
 	TH2D *hHXY;
 	TH2D *hHM_Chi2;
@@ -254,14 +250,14 @@ private:
 	TProfile *hcentRefW ; 
 
 	TTree *hadronTree;
-	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult , Omega_Omegab_Num;
+	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult , Omega_Omegab_Num , TriggerID;
 	std::vector<int> PDG , ReCons_TrackID;
 	std::vector<float> px,py,pz,InvariantMass;
 	double zTOF_proton,zTOF_pion,zTOF_kaon;
 	// Used for QA
 	std::vector<float> QA_dEdx,QA_m2,QA_nSigmaProton,QA_nSigmaPion,QA_nSigmaKaon,QA_Chi2;
 	std::vector<double> QA_zTOF_proton,QA_zTOF_pion,QA_zTOF_kaon,QA_Decay_Length,QA_DCA_V0_PV,QA_DCA_Daughters;
-	std::vector<int> QA_hasTOF,QA_IfConfuse,QA_IfBadReconstructed;// Used as bool
+	std::vector<int> QA_IfConfuse,QA_IfBadReconstructed;// Used as bool
 
 	/////////////////////////////////////
 	int mStps;  
