@@ -1897,11 +1897,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 	std::vector<int> track_index;
 	double Total_Pz = 0.0, Total_Px = 0.0, Total_Py = 0.0;
 	// Filling Track
-	hNch_per_VertexZ->Fill(VertexZ,NumCharge);
+	if (IfQAMode) {
+		hNch_per_VertexZ->Fill(VertexZ,NumCharge);
+	}
 	
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 		StPicoTrack *track = mPicoDst->track(iTrack);
-		hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
+		if (IfQAMode) {hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());}
     	if (! track)            continue;
     	if (! track->charge())  continue;
     	if (  track->nHitsFit() < 15) continue;
