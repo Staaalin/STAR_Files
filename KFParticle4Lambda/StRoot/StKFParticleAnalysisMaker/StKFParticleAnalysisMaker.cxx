@@ -1427,7 +1427,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	px             .resize(0);
 	py             .resize(0);
 	pz             .resize(0);
-	eta            .resize(0);
+	QA_eta         .resize(0);
 	QA_dEdx        .resize(0);
 	QA_m2          .resize(0);
 	QA_DCA_V0_PV   .resize(0);
@@ -2176,8 +2176,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 						{continue;}
 					}
 					//// 
-					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
 					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
+					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
 					if (IfTree) {
 						QA_Chi2.emplace_back(-999);
 						QA_Decay_Length.emplace_back(-999);
