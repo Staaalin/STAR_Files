@@ -898,6 +898,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("mix_px"             ,&px                  );
 		hadronTree->Branch("mix_py"             ,&py                  );
 		hadronTree->Branch("mix_pz"             ,&pz                  );
+		hadronTree->Branch("QA_eta"             ,&QA_eta                 );
 
 		// Used for PID QA
 		hadronTree->Branch("dEdx"               ,&QA_dEdx              );
@@ -1426,6 +1427,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	px             .resize(0);
 	py             .resize(0);
 	pz             .resize(0);
+	eta            .resize(0);
 	QA_dEdx        .resize(0);
 	QA_m2          .resize(0);
 	QA_DCA_V0_PV   .resize(0);
@@ -1824,6 +1826,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 					px.emplace_back(MomentumOfParticle_tb.X());
 					py.emplace_back(MomentumOfParticle_tb.Y());
 					pz.emplace_back(MomentumOfParticle_tb.Z());
+					float pt = pow(pow(MomentumOfParticle_tb.X(),2) + pow(MomentumOfParticle_tb.Y(),2),0.5);
+					float TanTheta = 1.0*pt/fabs(MomentumOfParticle_tb.Z());
+					float Theta = atan(TanTheta);
+					QA_eta.emplace_back(-log(tan(0.5*Theta)) * fabs(MomentumOfParticle_tb.Z())/MomentumOfParticle_tb.Z());
 					InvariantMass.emplace_back(particle.GetMass());//cout<<"particle.GetAtProductionVertex() = "<<particle.GetAtProductionVertex()<<endl;
 					// float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);
 					QA_Decay_Length.emplace_back(l);
@@ -1846,6 +1852,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					px.emplace_back(particle.GetPx());
 					py.emplace_back(particle.GetPy());
 					pz.emplace_back(particle.GetPz());
+					QA_eta.emplace_back(particle.GetEta());
 					InvariantMass.emplace_back(particle.GetMass());
 					QA_Chi2.emplace_back(particle.GetChi2());
 					QA_Decay_Length.emplace_back(l);
@@ -2178,6 +2185,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						px.emplace_back(track_px);
 						py.emplace_back(track_py);
 						pz.emplace_back(track_pz);
+						QA_eta.emplace_back(eta);
 						QA_dEdx.emplace_back(track->dEdx());
 						QA_nSigmaProton.emplace_back(track->nSigmaProton());
 						QA_nSigmaPion.emplace_back(track->nSigmaPion());
