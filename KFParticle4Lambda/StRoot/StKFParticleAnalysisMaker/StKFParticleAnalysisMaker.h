@@ -251,7 +251,7 @@ private:
 
 	TTree *hadronTree;
 	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult , Omega_Omegab_Num , TriggerID;
-	std::vector<int> PDG , ReCons_TrackID;
+	std::vector<int> PDG , ReCons_TrackID , Nch;
 	std::vector<float> px,py,pz,InvariantMass,QA_eta;
 	double zTOF_proton,zTOF_pion,zTOF_kaon;
 	// Used for QA

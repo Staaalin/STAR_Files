@@ -894,6 +894,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("EventID"            ,&evtID               ,"EventID/I"                           );
 		hadronTree->Branch("RunID"              ,&runID               ,"RunID/I"                             );
 		hadronTree->Branch("TriggerID"          ,&TriggerID           ,"TriggerID/I"                         );
+		hadronTree->Branch("Nch"                ,&Nch                 ,"Nch/I"                               );
 		hadronTree->Branch("PDG"                ,&PDG                 );
 		hadronTree->Branch("mix_px"             ,&px                  );
 		hadronTree->Branch("mix_py"             ,&py                  );
@@ -1452,6 +1453,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (! track->isPrimary()) continue;
 		NumCharge++;
 	}
+	Nch = NumCharge;
 
 	if (!(DataName == "pp_200_15")){
 		SetupKFParticle();
