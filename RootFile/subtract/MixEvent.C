@@ -42,7 +42,9 @@ using namespace std;
 // #define DataName           "pp_200_15"
 // #define DataName           "OO_200_21"
 
-Double_t massList(int PID , TString DataName)
+int CentralityBin[] = {0,10,20,40,60,80,100};// %
+
+Double_t massList(int PID)
 {
     Double_t Result;
     if (DataName == "dAu_200_21"){
@@ -85,7 +87,7 @@ Double_t massList(int PID , TString DataName)
     return Result;
 }
 
-Double_t massListSigma(int PID , TString DataName)
+Double_t massListSigma(int PID)
 {
     Double_t Result;
     if (DataName == "dAu_200_21"){
@@ -111,6 +113,26 @@ Double_t massListSigma(int PID , TString DataName)
                 break;
             default :
                 Result = 0;
+        }
+    }
+    return Result;
+}
+
+std::vector<int> GetNchList(int CentralityList[])
+{
+    std::vector<int> Result;Result.resize(0);
+    int CentralityListSize = sizeof(CentralityList)/sizeof(CentralityList[0]);
+    if (DataName == "dAu_200_21") {
+        // data from https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
+        int NchTable[21] = [ 10000 , 55 , 47 , 42 , 38 , 35 , 32 , 29 , 26 , 24 , 21 , 19 , 17 , 15 , 13 , 11 , 9 , 7 , 6 , 4 ,  0];
+        int CenTable[21] = [     0 ,  5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 55 , 60 , 65 , 70 , 75 ,80 ,85 ,90 ,95 ,100];
+        for (int i=0;i<CentralityListSize;i++) {
+            for (int j=0;j<21;j++){
+                if (CenTable[j] == CentralityList[i]) {
+                    Result.push_back(NchTable[j]);
+                    break;
+                }
+            }
         }
     }
     return Result;
@@ -302,6 +324,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TVector3 BetaTemp;
 
     int KaonpPID = 321,KaonmPID = -321,PionpPID = 211,PionmPID = -211,LambdaPID = 3122,LambdabPID = -3122,XiPID = 3312,XibPID = -3312,OmegaPID = 3334,OmegabPID = -3334;
+
+    std::vector<int> NchList = GetNchList(CentralityBin);     // centrality
+    std::vector<int> TriggerBin;                              // trigger
+    float PtBin[] = {0 , 0.5 , 1.0 , 1.5 , 2.0 , 3.0 , 10.0}; // Pt
+    //                        centrality    trigger     Pt
+    std::vector<Float_t> A_Px    [25]        [30]      [30];
 
     for (int i=0;i<nentries;i++){
         // if (i > 15) {break;}
