@@ -30,6 +30,7 @@
 #include <fstream>
 #include <map>
 #include <stdio.h>
+#include "../../KFParticle4Lambda/StRoot/StKFParticleAnalysisMaker/TriggerList.h"
 using namespace std;
 
 // #define DataName           "pAu_200_15"
@@ -43,6 +44,10 @@ using namespace std;
 // #define DataName           "OO_200_21"
 
 int CentralityBin[] = {0,10,20,40,60,80,100};// %
+#define CentralityBinNum 6
+
+float PtBin[] = {0 , 0.5 , 1.0 , 1.5 , 2.0 , 3.0 , 10.0}; // Pt
+#define PtBinNum 6
 
 Double_t massList(int PID)
 {
@@ -143,146 +148,140 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 {
 
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
-        std::vector<Int_t>   *id              = nullptr;
-        std::vector<Int_t>   *evtID           = nullptr;
-        std::vector<Int_t>   *runID           = nullptr;
-        std::vector<Float_t> *px              = nullptr;
-        std::vector<Float_t> *py              = nullptr;
-        std::vector<Float_t> *pz              = nullptr;
-        std::vector<Float_t> *mass            = nullptr;
-        std::vector<Float_t> *energy          = nullptr;
+        std::vector<Int_t> *PDGMult              = nullptr;
+        std::vector<Int_t> *refMult              = nullptr;
+        std::vector<Int_t> *grefMult             = nullptr;
+        std::vector<Int_t> *EventID              = nullptr;
+        std::vector<Int_t> *RunID                = nullptr;
+        std::vector<Int_t> *TriggerID            = nullptr;
         
-        TBranch *bid              = nullptr;
-        TBranch *bevtID           = nullptr;
-        TBranch *brunID           = nullptr;
-        TBranch *bpx              = nullptr;
-        TBranch *bpy              = nullptr;
-        TBranch *bpz              = nullptr;
-        TBranch *bmass            = nullptr;
-        TBranch *benergy          = nullptr;
+        TBranch *bPDGMult                        = nullptr;
+        TBranch *brefMult                        = nullptr;
+        TBranch *bgrefMult                       = nullptr;
+        TBranch *bEventID                        = nullptr;
+        TBranch *bRunID                          = nullptr;
+        TBranch *bTriggerID                      = nullptr;
 
+        std::vector<int>     *PDG                = nullptr;
+        std::vector<Float_t> *mix_px             = nullptr;
+        std::vector<Float_t> *mix_py             = nullptr;
+        std::vector<Float_t> *mix_pz             = nullptr;
+        std::vector<Float_t> *QA_eta             = nullptr;
         std::vector<Float_t> *dEdx               = nullptr;
         std::vector<Float_t> *m2                 = nullptr;
         std::vector<Float_t> *dcatopv            = nullptr;
-        std::vector<int>     *hasTOF             = nullptr;
         std::vector<Float_t> *nSigmaProton       = nullptr;
         std::vector<Float_t> *nSigmaPion         = nullptr;
         std::vector<Float_t> *nSigmaKaon         = nullptr;
-        std::vector<double>  *zTOF_proton        = nullptr;
-        std::vector<double>  *zTOF_pion          = nullptr;
-        std::vector<double>  *zTOF_kaon          = nullptr;
-	    std::vector<int>     *IfConfuse          = nullptr;
-        std::vector<double>  *Decay_Length       = nullptr;
-	    std::vector<int>     *IfBadReconstructed = nullptr;
+        std::vector<Float_t> *InvariantMass      = nullptr;
+        std::vector<Float_t> *Decay_Length       = nullptr;
+        std::vector<Float_t> *Chi2               = nullptr;
 
-        TBranch *bdEdx               = nullptr;
-        TBranch *bm2                 = nullptr;
-        TBranch *bdcatopv            = nullptr;
-        TBranch *bhasTOF             = nullptr;
-        TBranch *bnSigmaProton       = nullptr;
-        TBranch *bnSigmaPion         = nullptr;
-        TBranch *bnSigmaKaon         = nullptr;
-        TBranch *bzTOF_proton        = nullptr;
-        TBranch *bzTOF_pion          = nullptr;
-        TBranch *bzTOF_kaon          = nullptr;
-	    TBranch *bIfConfuse          = nullptr;
-	    TBranch *bDecay_Length       = nullptr;
-	    TBranch *bIfBadReconstructed = nullptr;
+        TBranch *bPDG                            = nullptr;
+        TBranch *bmix_px                         = nullptr;
+        TBranch *bmix_py                         = nullptr;
+        TBranch *bmix_pz                         = nullptr;
+        TBranch *bQA_eta                         = nullptr;
+        TBranch *bdEdx                           = nullptr;
+        TBranch *bm2                             = nullptr;
+        TBranch *bdcatopv                        = nullptr;
+        TBranch *bnSigmaProton                   = nullptr;
+        TBranch *bnSigmaPion                     = nullptr;
+        TBranch *bnSigmaKaon                     = nullptr;
+        TBranch *bInvariantMass                  = nullptr;
+        TBranch *bDecay_Length                   = nullptr;
+        TBranch *bChi2                           = nullptr;
     
     #else
         #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
-            std::vector<Int_t>   *id              = NULL;
-            std::vector<Int_t>   *evtID           = NULL;
-            std::vector<Int_t>   *runID           = NULL;
-            std::vector<Float_t> *px              = NULL;
-            std::vector<Float_t> *py              = NULL;
-            std::vector<Float_t> *pz              = NULL;
-            std::vector<Float_t> *mass            = NULL;
-            std::vector<Float_t> *energy          = NULL;
-            
-            TBranch *bid              = NULL;
-            TBranch *bevtID           = NULL;
-            TBranch *brunID           = NULL;
-            TBranch *bpx              = NULL;
-            TBranch *bpy              = NULL;
-            TBranch *bpz              = NULL;
-            TBranch *bmass            = NULL;
-            TBranch *benergy          = NULL;
-        
+            std::vector<Int_t> *PDGMult              = NULL;
+            std::vector<Int_t> *refMult              = NULL;
+            std::vector<Int_t> *grefMult             = NULL;
+            std::vector<Int_t> *EventID              = NULL;
+            std::vector<Int_t> *RunID                = NULL;
+            std::vector<Int_t> *TriggerID            = NULL;
+
+            TBranch *bPDGMult                        = NULL;
+            TBranch *brefMult                        = NULL;
+            TBranch *bgrefMult                       = NULL;
+            TBranch *bEventID                        = NULL;
+            TBranch *bRunID                          = NULL;
+            TBranch *bTriggerID                      = NULL;
+
+            std::vector<int>     *PDG                = NULL;
+            std::vector<Float_t> *mix_px             = NULL;
+            std::vector<Float_t> *mix_py             = NULL;
+            std::vector<Float_t> *mix_pz             = NULL;
+            std::vector<Float_t> *QA_eta             = NULL;
             std::vector<Float_t> *dEdx               = NULL;
             std::vector<Float_t> *m2                 = NULL;
             std::vector<Float_t> *dcatopv            = NULL;
-            std::vector<int>     *hasTOF             = NULL;
             std::vector<Float_t> *nSigmaProton       = NULL;
             std::vector<Float_t> *nSigmaPion         = NULL;
             std::vector<Float_t> *nSigmaKaon         = NULL;
-            std::vector<double>  *zTOF_proton        = NULL;
-            std::vector<double>  *zTOF_pion          = NULL;
-            std::vector<double>  *zTOF_kaon          = NULL;
-            std::vector<int>     *IfConfuse          = NULL;
-            std::vector<double>  *Decay_Length       = NULL;
-	        std::vector<int>     *IfBadReconstructed = NULL;
+            std::vector<Float_t> *InvariantMass      = NULL;
+            std::vector<Float_t> *Decay_Length       = NULL;
+            std::vector<Float_t> *Chi2               = NULL;
 
-            TBranch *bdEdx               = NULL;
-            TBranch *bm2                 = NULL;
-            TBranch *bdcatopv            = NULL;
-            TBranch *bhasTOF             = NULL;
-            TBranch *bnSigmaProton       = NULL;
-            TBranch *bnSigmaPion         = NULL;
-            TBranch *bnSigmaKaon         = NULL;
-            TBranch *bzTOF_proton        = NULL;
-            TBranch *bzTOF_pion          = NULL;
-            TBranch *bzTOF_kaon          = NULL;
-            TBranch *bIfConfuse          = NULL;
-            TBranch *bDecay_Length       = NULL;
-	        TBranch *bIfBadReconstructed = NULL;
+            TBranch *bPDG                            = NULL;
+            TBranch *bmix_px                         = NULL;
+            TBranch *bmix_py                         = NULL;
+            TBranch *bmix_pz                         = NULL;
+            TBranch *bQA_eta                         = NULL;
+            TBranch *bdEdx                           = NULL;
+            TBranch *bm2                             = NULL;
+            TBranch *bdcatopv                        = NULL;
+            TBranch *bnSigmaProton                   = NULL;
+            TBranch *bnSigmaPion                     = NULL;
+            TBranch *bnSigmaKaon                     = NULL;
+            TBranch *bInvariantMass                  = NULL;
+            TBranch *bDecay_Length                   = NULL;
+            TBranch *bChi2                           = NULL;
 
         #else
-            std::vector<Int_t>   *id              = 0;
-            std::vector<Int_t>   *evtID           = 0;
-            std::vector<Int_t>   *runID           = 0;
-            std::vector<Float_t> *px              = 0;
-            std::vector<Float_t> *py              = 0;
-            std::vector<Float_t> *pz              = 0;
-            std::vector<Float_t> *mass            = 0;
-            std::vector<Float_t> *energy          = 0;
+            std::vector<Int_t> *PDGMult              = 0;
+            std::vector<Int_t> *refMult              = 0;
+            std::vector<Int_t> *grefMult             = 0;
+            std::vector<Int_t> *EventID              = 0;
+            std::vector<Int_t> *RunID                = 0;
+            std::vector<Int_t> *TriggerID            = 0;
             
-            TBranch *bid              = 0;
-            TBranch *bevtID           = 0;
-            TBranch *brunID           = 0;
-            TBranch *bpx              = 0;
-            TBranch *bpy              = 0;
-            TBranch *bpz              = 0;
-            TBranch *bmass            = 0;
-            TBranch *benergy          = 0;
-
+            TBranch *bPDGMult                        = 0;
+            TBranch *brefMult                        = 0;
+            TBranch *bgrefMult                       = 0;
+            TBranch *bEventID                        = 0;
+            TBranch *bRunID                          = 0;
+            TBranch *bTriggerID                      = 0;
+    
+            std::vector<int>     *PDG                = 0;
+            std::vector<Float_t> *mix_px             = 0;
+            std::vector<Float_t> *mix_py             = 0;
+            std::vector<Float_t> *mix_pz             = 0;
+            std::vector<Float_t> *QA_eta             = 0;
             std::vector<Float_t> *dEdx               = 0;
             std::vector<Float_t> *m2                 = 0;
             std::vector<Float_t> *dcatopv            = 0;
-            std::vector<int>     *hasTOF             = 0;
             std::vector<Float_t> *nSigmaProton       = 0;
             std::vector<Float_t> *nSigmaPion         = 0;
             std::vector<Float_t> *nSigmaKaon         = 0;
-            std::vector<double>  *zTOF_proton        = 0;
-            std::vector<double>  *zTOF_pion          = 0;
-            std::vector<double>  *zTOF_kaon          = 0;
-            std::vector<int>     *IfConfuse          = 0;
-            std::vector<double>  *Decay_Length       = 0;
-	        std::vector<int>     *IfBadReconstructed = 0;
-
-            TBranch *bdEdx               = 0;
-            TBranch *bm2                 = 0;
-            TBranch *bdcatopv            = 0;
-            TBranch *bhasTOF             = 0;
-            TBranch *bnSigmaProton       = 0;
-            TBranch *bnSigmaPion         = 0;
-            TBranch *bnSigmaKaon         = 0;
-            TBranch *bzTOF_proton        = 0;
-            TBranch *bzTOF_pion          = 0;
-            TBranch *bzTOF_kaon          = 0;
-            TBranch *bIfConfuse          = 0;
-            TBranch *bDecay_Length       = 0;
-	        TBranch *bIfBadReconstructed = 0;
+            std::vector<Float_t> *InvariantMass      = 0;
+            std::vector<Float_t> *Decay_Length       = 0;
+            std::vector<Float_t> *Chi2               = 0;
+    
+            TBranch *bPDG                            = 0;
+            TBranch *bmix_px                         = 0;
+            TBranch *bmix_py                         = 0;
+            TBranch *bmix_pz                         = 0;
+            TBranch *bQA_eta                         = 0;
+            TBranch *bdEdx                           = 0;
+            TBranch *bm2                             = 0;
+            TBranch *bdcatopv                        = 0;
+            TBranch *bnSigmaProton                   = 0;
+            TBranch *bnSigmaPion                     = 0;
+            TBranch *bnSigmaKaon                     = 0;
+            TBranch *bInvariantMass                  = 0;
+            TBranch *bDecay_Length                   = 0;
+            TBranch *bChi2                           = 0;
 
         #endif
     #endif
@@ -306,15 +305,27 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     
     Int_t mult,npart;
 
-    hadronTree->SetBranchAddress("PDGMult",&mult);
-    hadronTree->SetBranchAddress("PDG",&id,&bid);
-    hadronTree->SetBranchAddress("mix_px",&px,&bpx);
-    hadronTree->SetBranchAddress("mix_py",&py,&bpy);
-    hadronTree->SetBranchAddress("mix_pz",&pz,&bpz);
-    hadronTree->SetBranchAddress("InvariantMass",&mass,&bmass);
-    hadronTree->SetBranchAddress("nSigmaProton",&nSigmaProton,&bnSigmaProton);
-    hadronTree->SetBranchAddress("nSigmaPion"  ,&nSigmaPion  ,&bnSigmaPion  );
-    hadronTree->SetBranchAddress("nSigmaKaon"  ,&nSigmaKaon  ,&bnSigmaKaon  );
+    hadronTree->SetBranchAddress("PDGMult"  ,&PDGMult  );
+    hadronTree->SetBranchAddress("refMult"  ,&refMult  );
+    hadronTree->SetBranchAddress("grefMult" ,&grefMult );
+    hadronTree->SetBranchAddress("EventID"  ,&EventID  );
+    hadronTree->SetBranchAddress("RunID"    ,&RunID    );
+    hadronTree->SetBranchAddress("TriggerID",&TriggerID);
+    
+    hadronTree->SetBranchAddress("PDG"          ,&PDG          ,&bPDG          );
+    hadronTree->SetBranchAddress("mix_px"       ,&mix_px       ,&bmix_px       );
+    hadronTree->SetBranchAddress("mix_py"       ,&mix_py       ,&bmix_py       );
+    hadronTree->SetBranchAddress("mix_pz"       ,&mix_pz       ,&bmix_pz       );
+    hadronTree->SetBranchAddress("QA_eta"       ,&QA_eta       ,&bQA_eta       );
+    hadronTree->SetBranchAddress("dEdx"         ,&dEdx         ,&bdEdx         );
+    hadronTree->SetBranchAddress("m2"           ,&m2           ,&bm2           );
+    hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
+    hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
+    hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
+    hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
+    hadronTree->SetBranchAddress("InvariantMass",&InvariantMass,&bInvariantMass);
+    hadronTree->SetBranchAddress("Decay_Length" ,&Decay_Length ,&bDecay_Length );
+    hadronTree->SetBranchAddress("Chi2"         ,&Chi2         ,&bChi2         );
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
@@ -328,8 +339,35 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     std::vector<int> NchList = GetNchList(CentralityBin);     // centrality
     std::vector<int> TriggerBin;                              // trigger
     float PtBin[] = {0 , 0.5 , 1.0 , 1.5 , 2.0 , 3.0 , 10.0}; // Pt
-    //                        centrality    trigger     Pt
-    std::vector<Float_t> A_Px    [25]        [30]      [30];
+    //                                   centrality       trigger      Pt
+    std::vector<Float_t> A_Px        [CentralityBinNum]    [30]    [PtBinNum];
+    std::vector<Float_t> A_Py        [CentralityBinNum]    [30]    [PtBinNum];
+    std::vector<Float_t> A_Pz        [CentralityBinNum]    [30]    [PtBinNum];
+    std::vector<Float_t> B_Px        [CentralityBinNum]    [30]    [PtBinNum];
+    std::vector<Float_t> B_Py        [CentralityBinNum]    [30]    [PtBinNum];
+    std::vector<Float_t> B_Pz        [CentralityBinNum]    [30]    [PtBinNum];
+    std::vector<Float_t> Mix_A_Px    [CentralityBinNum]    [30]    [PtBinNum];
+    std::vector<Float_t> Mix_A_Py    [CentralityBinNum]    [30]    [PtBinNum];
+    std::vector<Float_t> Mix_A_Pz    [CentralityBinNum]    [30]    [PtBinNum];
+    std::vector<Float_t> Mix_B_Px    [CentralityBinNum]    [30]    [PtBinNum];
+    std::vector<Float_t> Mix_B_Py    [CentralityBinNum]    [30]    [PtBinNum];
+    std::vector<Float_t> Mix_B_Pz    [CentralityBinNum]    [30]    [PtBinNum];
+    TH1D* H_Kstar                    [CentralityBinNum]    [30]    [PtBinNum];
+    TH1D* H_Mix_Kstar                [CentralityBinNum]    [30]    [PtBinNum];
+
+    for (int i=0;i<CentralityBinNum;i++){
+        TString HistName1 = "H_";
+        TString HistName2 = "Cen: [";
+        HistName1 += i;HistName1 += "_";
+        HistName2 += CentralityBin[i];HistName2 += "% , ";
+        HistName2 += CentralityBin[i+1];HistName2 += "%]";
+        for (int j=0;i<30;j++){
+            HistName1 += j;HistName1 += "_";
+            HistName2 += CentralityBin[i];HistName2 += "% , ";
+            HistName2 += CentralityBin[i+1];HistName2 += "%]";
+            for (int k=0;k<=PtBinNum;k++)
+        }
+    }
 
     for (int i=0;i<nentries;i++){
         // if (i > 15) {break;}
