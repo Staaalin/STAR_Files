@@ -331,7 +331,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 HistName1 += j;HistName1 += "_";
                 HistName2 += yBin[j];HistName2 += " < y";HistName2 += B_PDG;HistName2 += " <  ";
                 HistName2 += yBin[j+1];HistName2 += ", ";
-                HistName1 += k;HistName1 += "_";
+                HistName1 += k;
                 HistName2 += PtBin[k];HistName2 += " < Pt";HistName2 += B_PDG;HistName2 += " <  ";
                 HistName2 += PtBin[k+1];
                 TString HistName1s = HistName1;
@@ -366,6 +366,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
 
+        cout<<"B_Px.size() = "<<B_Px.size()<<endl;
         if (B_Px.size() == 1){
 
             int CenIndex = -1;
@@ -396,6 +397,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
 
             if ((CenIndex == -1) || (RapIndex == -1) || (PtIndex == -1)) {
+                cout<<"OUT!!!"<<endl;
                 continue;
             }
 
