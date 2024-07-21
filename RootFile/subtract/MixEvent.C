@@ -413,6 +413,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
 
             // Fill Single Event
+            cout<<"B_Px.size() = "<<B_Px.size()<<" , "<<"A_Px.size() = "<<A_Px.size()<<endl;
             for (int j=0;j<B_Px.size();j++){
                 TLorentzVector p1;
                 p1.SetXYZM(B_Px[j],B_Py[j],B_Pz[j],massList(B_PDG));
@@ -423,7 +424,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                     kstar = 0.5 * (p4 - p2).Rho();
                     H_Kstar[CenIndex][RapIndex][PtIndex]->Fill(kstar);
-                    cout<<"Fill "<<kstar<<endl;
                 }
             }
 
