@@ -355,14 +355,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
-                A_Px.emplace_back(mix_px->at(j));
-                A_Py.emplace_back(mix_py->at(j));
-                A_Pz.emplace_back(mix_pz->at(j));
+                A_Px.push_back(mix_px->at(j));
+                A_Py.push_back(mix_py->at(j));
+                A_Pz.push_back(mix_pz->at(j));
             }
             if (PDG->at(j) == B_PDG) {
-                B_Px.emplace_back(mix_px->at(j));
-                B_Py.emplace_back(mix_py->at(j));
-                B_Pz.emplace_back(mix_pz->at(j));
+                B_Px.push_back(mix_px->at(j));
+                B_Py.push_back(mix_py->at(j));
+                B_Pz.push_back(mix_pz->at(j));
             }
         }
 
@@ -415,14 +415,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
             // Fill Mix Event
             for (int j=0;j<B_Px.size();j++){
-                Mix_B_Px[CenIndex][RapIndex][PtIndex].emplace_back(B_Px[j]);
-                Mix_B_Py[CenIndex][RapIndex][PtIndex].emplace_back(B_Py[j]);
-                Mix_B_Pz[CenIndex][RapIndex][PtIndex].emplace_back(B_Pz[j]);
+                Mix_B_Px[CenIndex][RapIndex][PtIndex].push_back(B_Px[j]);
+                Mix_B_Py[CenIndex][RapIndex][PtIndex].push_back(B_Py[j]);
+                Mix_B_Pz[CenIndex][RapIndex][PtIndex].push_back(B_Pz[j]);
             }
             for (int j=0;j<A_Px.size();j++){
-                Mix_A_Px[CenIndex][RapIndex][PtIndex].emplace_back(A_Px[j]);
-                Mix_A_Py[CenIndex][RapIndex][PtIndex].emplace_back(A_Py[j]);
-                Mix_A_Pz[CenIndex][RapIndex][PtIndex].emplace_back(A_Pz[j]);
+                Mix_A_Px[CenIndex][RapIndex][PtIndex].push_back(A_Px[j]);
+                Mix_A_Py[CenIndex][RapIndex][PtIndex].push_back(A_Py[j]);
+                Mix_A_Pz[CenIndex][RapIndex][PtIndex].push_back(A_Pz[j]);
             }
             Mix_Num[CenIndex][RapIndex][PtIndex]++;
 
