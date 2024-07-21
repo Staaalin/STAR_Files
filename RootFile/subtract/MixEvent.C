@@ -348,7 +348,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     for (int i=0;i<nentries;i++){
         // if (i > 15) {break;}
         hadronTree->GetEntry(i);
-        cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
+        if (i%100 == 0) cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
         // cout<<mult<<endl;
         // if(b>7){continue;}
         // cout<<"There OK"<<endl;
@@ -366,8 +366,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
 
-        cout<<"B_Px.size() = "<<B_Px.size()<<endl;
+        // cout<<"B_Px.size() = "<<B_Px.size()<<endl;
         if (B_Px.size() == 1){
+            cout<<"FOUND"<<endl;
 
             int CenIndex = -1;
             for (int k=0;k<CentralityBinNum;k++){
@@ -397,7 +398,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
 
             if ((CenIndex == -1) || (RapIndex == -1) || (PtIndex == -1)) {
-                cout<<"OUT!!!"<<endl;
+                // cout<<"OUT!!!"<<endl;
                 continue;
             }
 

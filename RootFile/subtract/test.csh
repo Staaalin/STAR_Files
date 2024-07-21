@@ -3,7 +3,7 @@
 
 set Energy = 62.0
 set midname = "/star/data01/pwg/svianping/output/output_"
-set StartFileIndex = 500
+set StartFileIndex = 450
 set EndFileIndex = 500
 set OutputFileIndex = 0
 set A_PDG = 321
