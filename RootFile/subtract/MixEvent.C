@@ -341,6 +341,13 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 HistName2 += ", Mix";
                 H_Kstar[i][j][k] = new TH1D(HistName1s,HistName2s,500,0,10);
                 H_Mix_Kstar[i][j][k] = new TH1D(HistName1,HistName2,500,0,10);
+                Mix_Num[i][j][k] = 0;
+                Mix_A_Px[i][j][k].resize(0);
+                Mix_A_Py[i][j][k].resize(0);
+                Mix_A_Pz[i][j][k].resize(0);
+                Mix_B_Px[i][j][k].resize(0);
+                Mix_B_Py[i][j][k].resize(0);
+                Mix_B_Pz[i][j][k].resize(0);
             }
         }
     }
@@ -352,6 +359,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         // cout<<mult<<endl;
         // if(b>7){continue;}
         // cout<<"There OK"<<endl;
+        A_Px.resize(0);B_Px.resize(0);
+        A_Py.resize(0);B_Py.resize(0);
+        A_Pz.resize(0);B_Pz.resize(0);
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
@@ -449,9 +459,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 Mix_A_Px[CenIndex][RapIndex][PtIndex].resize(0);Mix_A_Py[CenIndex][RapIndex][PtIndex].resize(0);Mix_A_Pz[CenIndex][RapIndex][PtIndex].resize(0);
             }
         }
-        A_Px.resize(0);B_Px.resize(0);
-        A_Py.resize(0);B_Py.resize(0);
-        A_Pz.resize(0);B_Pz.resize(0);
         
     }
 
