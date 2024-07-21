@@ -30,7 +30,6 @@
 #include <fstream>
 #include <map>
 #include <stdio.h>
-#include "../../KFParticle4Lambda/StRoot/StKFParticleAnalysisMaker/TriggerList.h"
 using namespace std;
 
 // #define DataName           "pAu_200_15"
@@ -43,11 +42,14 @@ using namespace std;
 // #define DataName           "pp_200_15"
 // #define DataName           "OO_200_21"
 
-int CentralityBin[] = {0,10,20,40,60,80,100};// %
-#define CentralityBinNum 6
+int CentralityBin[] = {0,25,50,75,100};// %
+#define CentralityBinNum 4
 
-float PtBin[] = {0 , 0.5 , 1.0 , 1.5 , 2.0 , 3.0 , 10.0}; // Pt
-#define PtBinNum 6
+float PtBin[] = {0 , 1.0 , 2.0 , 10.0}; // Pt
+#define PtBinNum 3
+
+float yBin[] = {-1.0 , -0.5, 0.0 , 0.5, 1.0}; // B_y
+#define yBinNum 4
 
 Double_t massList(int PID)
 {
@@ -144,23 +146,10 @@ std::vector<int> GetNchList(int CentralityList[])
 }
 
 void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
-              float Energy)
+              int A_PDG,int B_PDG)
 {
 
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
-        std::vector<Int_t> *PDGMult              = nullptr;
-        std::vector<Int_t> *refMult              = nullptr;
-        std::vector<Int_t> *grefMult             = nullptr;
-        std::vector<Int_t> *EventID              = nullptr;
-        std::vector<Int_t> *RunID                = nullptr;
-        std::vector<Int_t> *TriggerID            = nullptr;
-        
-        TBranch *bPDGMult                        = nullptr;
-        TBranch *brefMult                        = nullptr;
-        TBranch *bgrefMult                       = nullptr;
-        TBranch *bEventID                        = nullptr;
-        TBranch *bRunID                          = nullptr;
-        TBranch *bTriggerID                      = nullptr;
 
         std::vector<int>     *PDG                = nullptr;
         std::vector<Float_t> *mix_px             = nullptr;
@@ -194,19 +183,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     
     #else
         #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
-            std::vector<Int_t> *PDGMult              = NULL;
-            std::vector<Int_t> *refMult              = NULL;
-            std::vector<Int_t> *grefMult             = NULL;
-            std::vector<Int_t> *EventID              = NULL;
-            std::vector<Int_t> *RunID                = NULL;
-            std::vector<Int_t> *TriggerID            = NULL;
-
-            TBranch *bPDGMult                        = NULL;
-            TBranch *brefMult                        = NULL;
-            TBranch *bgrefMult                       = NULL;
-            TBranch *bEventID                        = NULL;
-            TBranch *bRunID                          = NULL;
-            TBranch *bTriggerID                      = NULL;
 
             std::vector<int>     *PDG                = NULL;
             std::vector<Float_t> *mix_px             = NULL;
@@ -239,19 +215,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             TBranch *bChi2                           = NULL;
 
         #else
-            std::vector<Int_t> *PDGMult              = 0;
-            std::vector<Int_t> *refMult              = 0;
-            std::vector<Int_t> *grefMult             = 0;
-            std::vector<Int_t> *EventID              = 0;
-            std::vector<Int_t> *RunID                = 0;
-            std::vector<Int_t> *TriggerID            = 0;
-            
-            TBranch *bPDGMult                        = 0;
-            TBranch *brefMult                        = 0;
-            TBranch *bgrefMult                       = 0;
-            TBranch *bEventID                        = 0;
-            TBranch *bRunID                          = 0;
-            TBranch *bTriggerID                      = 0;
     
             std::vector<int>     *PDG                = 0;
             std::vector<Float_t> *mix_px             = 0;
@@ -302,8 +265,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         hadronTree->Add(filename);
         // cout<<"Add "<<filename<<" Successfully"<<endl;
     }
-    
-    Int_t mult,npart;
+    Int_t PDGMult  ;
+    Int_t refMult  ;
+    Int_t grefMult ;
+    Int_t EventID  ;
+    Int_t RunID    ;
+    Int_t TriggerID;
 
     hadronTree->SetBranchAddress("PDGMult"  ,&PDGMult  );
     hadronTree->SetBranchAddress("refMult"  ,&refMult  );
@@ -330,42 +297,51 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
     
-    TLorentzVector p0,p3;
     double kstar, rap;
     TVector3 BetaTemp;
 
     int KaonpPID = 321,KaonmPID = -321,PionpPID = 211,PionmPID = -211,LambdaPID = 3122,LambdabPID = -3122,XiPID = 3312,XibPID = -3312,OmegaPID = 3334,OmegabPID = -3334;
 
     std::vector<int> NchList = GetNchList(CentralityBin);     // centrality
-    std::vector<int> TriggerBin;                              // trigger
-    float PtBin[] = {0 , 0.5 , 1.0 , 1.5 , 2.0 , 3.0 , 10.0}; // Pt
-    //                                   centrality       trigger      Pt
-    std::vector<Float_t> A_Px        [CentralityBinNum]    [30]    [PtBinNum];
-    std::vector<Float_t> A_Py        [CentralityBinNum]    [30]    [PtBinNum];
-    std::vector<Float_t> A_Pz        [CentralityBinNum]    [30]    [PtBinNum];
-    std::vector<Float_t> B_Px        [CentralityBinNum]    [30]    [PtBinNum];
-    std::vector<Float_t> B_Py        [CentralityBinNum]    [30]    [PtBinNum];
-    std::vector<Float_t> B_Pz        [CentralityBinNum]    [30]    [PtBinNum];
-    std::vector<Float_t> Mix_A_Px    [CentralityBinNum]    [30]    [PtBinNum];
-    std::vector<Float_t> Mix_A_Py    [CentralityBinNum]    [30]    [PtBinNum];
-    std::vector<Float_t> Mix_A_Pz    [CentralityBinNum]    [30]    [PtBinNum];
-    std::vector<Float_t> Mix_B_Px    [CentralityBinNum]    [30]    [PtBinNum];
-    std::vector<Float_t> Mix_B_Py    [CentralityBinNum]    [30]    [PtBinNum];
-    std::vector<Float_t> Mix_B_Pz    [CentralityBinNum]    [30]    [PtBinNum];
-    TH1D* H_Kstar                    [CentralityBinNum]    [30]    [PtBinNum];
-    TH1D* H_Mix_Kstar                [CentralityBinNum]    [30]    [PtBinNum];
+    //                                   centrality          B_y        B_Pt
+    std::vector<Float_t> A_Px        ;
+    std::vector<Float_t> A_Py        ;
+    std::vector<Float_t> A_Pz        ;
+    std::vector<Float_t> B_Px        ;
+    std::vector<Float_t> B_Py        ;
+    std::vector<Float_t> B_Pz        ;
+    std::vector<Float_t> Mix_A_Px    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t> Mix_A_Py    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t> Mix_A_Pz    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t> Mix_B_Px    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t> Mix_B_Py    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t> Mix_B_Pz    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    int                  Mix_Num     [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    TH1D* H_Kstar                    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    TH1D* H_Mix_Kstar                [CentralityBinNum]   [yBinNum]  [PtBinNum];
 
     for (int i=0;i<CentralityBinNum;i++){
-        TString HistName1 = "H_";
-        TString HistName2 = "Cen: [";
-        HistName1 += i;HistName1 += "_";
-        HistName2 += CentralityBin[i];HistName2 += "% , ";
-        HistName2 += CentralityBin[i+1];HistName2 += "%]";
-        for (int j=0;i<30;j++){
-            HistName1 += j;HistName1 += "_";
-            HistName2 += CentralityBin[i];HistName2 += "% , ";
-            HistName2 += CentralityBin[i+1];HistName2 += "%]";
-            for (int k=0;k<=PtBinNum;k++)
+        for (int j=0;i<yBinNum;j++){
+            for (int k=0;k<=PtBinNum;k++){
+                TString HistName1 = "H_";
+                TString HistName2 = "Cen: [";
+                HistName1 += i;HistName1 += "_";
+                HistName2 += CentralityBin[i];HistName2 += "% , ";
+                HistName2 += CentralityBin[i+1];HistName2 += "%], ";
+                HistName1 += j;HistName1 += "_";
+                HistName2 += yBin[j];HistName2 += " < y";HistName2 += B_PDG;HistName2 += " <  ";
+                HistName2 += yBin[j+1];HistName2 += ", ";
+                HistName1 += k;HistName1 += "_";
+                HistName2 += PtBin[k];HistName2 += " < Pt";HistName2 += B_PDG;HistName2 += " <  ";
+                HistName2 += PtBin[k+1];
+                TString HistName1s = HistName1;
+                TString HistName2s = HistName2;
+                HistName1s += "_S";
+                HistName1 += "_M";
+                HistName2 += ", Mix";
+                H_Kstar[i][j][k] = new TH1D(HistName1s,HistName2s,500,0,10);
+                H_Mix_Kstar[i][j][k] = new TH1D(HistName1,HistName2,500,0,10);
+            }
         }
     }
 
@@ -377,6 +353,101 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         // if(b>7){continue;}
         // cout<<"There OK"<<endl;
 
+        for (int j=0;j<PDGMult;j++){
+            if (PDG->at(j) == A_PDG) {
+                A_Px.emplace_back(mix_px->at(j));
+                A_Py.emplace_back(mix_py->at(j));
+                A_Pz.emplace_back(mix_pz->at(j));
+            }
+            if (PDG->at(j) == B_PDG) {
+                B_Px.emplace_back(mix_px->at(j));
+                B_Py.emplace_back(mix_py->at(j));
+                B_Pz.emplace_back(mix_pz->at(j));
+            }
+        }
+
+        if (B_Px.size() == 1){
+
+            int CenIndex = -1;
+            for (int k=0;k<CentralityBinNum;k++){
+                if ((NchList[k] <= refMult) && (refMult < NchList[k+1])) {
+                    CenIndex = k;
+                    break;
+                }
+            }
+
+            float tEnergy = pow(pow(B_Px[0],2) + pow(B_Py[0],2) + pow(B_Pz[0],2) + pow(massList(B_PDG),2),0.5);
+            float rap = 0.5*log((tEnergy+B_Pz[0])/(tEnergy-B_Pz[0]));
+            int RapIndex = -1;
+            for (int k=0;k<yBinNum;k++){
+                if ((yBin[k] <= rap) && (rap < yBin[k+1])) {
+                    RapIndex = k;
+                    break;
+                }
+            }
+
+            float B_Pt = pow(pow(B_Px[0],2) + pow(B_Py[0],2),0.5);
+            int PtIndex = -1;
+            for (int k=0;k<PtBinNum;k++){
+                if ((PtBin[k] <= B_Pt) && (B_Pt < PtBin[k+1])) {
+                    PtIndex = k;
+                    break;
+                }
+            }
+
+            if ((CenIndex == -1) || (RapIndex == -1) || (PtIndex == -1)) {
+                continue;
+            }
+
+            // Fill Single Event
+            for (int j=0;j<B_Px.size();j++){
+                TLorentzVector p1;
+                p1.SetXYZM(B_Px[j],B_Py[j],B_Pz[j],massList(B_PDG));
+                for (int k=0;k<A_Px.size();k++){
+                    TLorentzVector p2,p3,p4 = p1;
+                    p2.SetXYZM(A_Px[k],A_Py[k],A_Pz[k],massList(A_PDG));
+                    p3 = p4 + p2;
+                    p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
+                    kstar = 0.5 * (p4 - p2).Rho();
+                    H_Kstar[CenIndex][RapIndex][PtIndex]->Fill(kstar);
+                }
+            }
+
+            // Fill Mix Event
+            for (int j=0;j<B_Px.size();j++){
+                Mix_B_Px[CenIndex][RapIndex][PtIndex].emplace_back(B_Px[j]);
+                Mix_B_Py[CenIndex][RapIndex][PtIndex].emplace_back(B_Py[j]);
+                Mix_B_Pz[CenIndex][RapIndex][PtIndex].emplace_back(B_Pz[j]);
+            }
+            for (int j=0;j<A_Px.size();j++){
+                Mix_A_Px[CenIndex][RapIndex][PtIndex].emplace_back(A_Px[j]);
+                Mix_A_Py[CenIndex][RapIndex][PtIndex].emplace_back(A_Py[j]);
+                Mix_A_Pz[CenIndex][RapIndex][PtIndex].emplace_back(A_Pz[j]);
+            }
+            Mix_Num[CenIndex][RapIndex][PtIndex]++;
+
+            if (Mix_Num[CenIndex][RapIndex][PtIndex] == 10){
+                for (int j=0;j<Mix_B_Px[CenIndex][RapIndex][PtIndex].size();j++){
+                    TLorentzVector p1;
+                    p1.SetXYZM(Mix_B_Px[CenIndex][RapIndex][PtIndex][j],Mix_B_Py[CenIndex][RapIndex][PtIndex][j],Mix_B_Pz[CenIndex][RapIndex][PtIndex][j],massList(B_PDG));
+                    for (int k=0;k<Mix_A_Px[CenIndex][RapIndex][PtIndex].size();k++){
+                        TLorentzVector p2,p3,p4 = p1;
+                        p2.SetXYZM(Mix_A_Px[CenIndex][RapIndex][PtIndex][k],Mix_A_Py[CenIndex][RapIndex][PtIndex][k],Mix_A_Pz[CenIndex][RapIndex][PtIndex][k],massList(A_PDG));
+                        p3 = p4 + p2;
+                        p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
+                        kstar = 0.5 * (p4 - p2).Rho();
+                        H_Mix_Kstar[CenIndex][RapIndex][PtIndex]->Fill(kstar);
+                    }
+                }
+                Mix_Num[CenIndex][RapIndex][PtIndex] = 0;
+                Mix_B_Px[CenIndex][RapIndex][PtIndex].resize(0);Mix_B_Py[CenIndex][RapIndex][PtIndex].resize(0);Mix_B_Pz[CenIndex][RapIndex][PtIndex].resize(0);
+                Mix_A_Px[CenIndex][RapIndex][PtIndex].resize(0);Mix_A_Py[CenIndex][RapIndex][PtIndex].resize(0);Mix_A_Pz[CenIndex][RapIndex][PtIndex].resize(0);
+            }
+        }
+        A_Px.resize(0);B_Px.resize(0);
+        A_Py.resize(0);B_Py.resize(0);
+        A_Pz.resize(0);B_Pz.resize(0);
+        
     }
 
     TString OutputFileName = "Cor_";
@@ -384,47 +455,13 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     OutputFileName += ".root";
     TFile *file = new TFile(OutputFileName, "RECREATE");
 
-    for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
-        dNdy_Kaonp[Itr]->Write();
-        dNdy_Kaonm[Itr]->Write();
-        dNdy_Pionp[Itr]->Write();
-        dNdy_Pionm[Itr]->Write();
-    }
-    for (int Itr = 0;Itr < HyperonPhaseNum;Itr++) {
-        dNdy_Lambda[Itr]  ->Write();
-        dNdy_Lambdab[Itr] ->Write();
-        dNdy_Omega[Itr]   ->Write();
-        dNdy_Omegab[Itr]  ->Write();
-        dNdy_Xi[Itr]      ->Write();
-        dNdy_Xib[Itr]     ->Write();
-    }
-    for (int Itr = 0;Itr < MesonPhaseNum;Itr++) {
-        for (int Jtr = 0;Jtr < HyperonPhaseNum;Jtr++) {
 
-            k_Kp_Omega   [Itr][Jtr]->Write();
-            k_Kp_Omegab  [Itr][Jtr]->Write();
-            k_Km_Omega   [Itr][Jtr]->Write();
-            k_Km_Omegab  [Itr][Jtr]->Write();
-            k_Kp_Xi      [Itr][Jtr]->Write();
-            k_Kp_Xib     [Itr][Jtr]->Write();
-            k_Km_Xi      [Itr][Jtr]->Write();
-            k_Km_Xib     [Itr][Jtr]->Write();
-            k_Kp_Lambda  [Itr][Jtr]->Write();
-            k_Kp_Lambdab [Itr][Jtr]->Write();
-            k_Km_Lambda  [Itr][Jtr]->Write();
-            k_Km_Lambdab [Itr][Jtr]->Write();
-            k_Pip_Omega  [Itr][Jtr]->Write();
-            k_Pip_Omegab [Itr][Jtr]->Write();
-            k_Pim_Omega  [Itr][Jtr]->Write();
-            k_Pim_Omegab [Itr][Jtr]->Write();
-            k_Pip_Xi     [Itr][Jtr]->Write();
-            k_Pip_Xib    [Itr][Jtr]->Write();
-            k_Pim_Xi     [Itr][Jtr]->Write();
-            k_Pim_Xib    [Itr][Jtr]->Write();
-            k_Pip_Lambda [Itr][Jtr]->Write();
-            k_Pip_Lambdab[Itr][Jtr]->Write();
-            k_Pim_Lambda [Itr][Jtr]->Write();
-            k_Pim_Lambdab[Itr][Jtr]->Write();
+    for (int i=0;i<CentralityBinNum;i++){
+        for (int j=0;i<yBinNum;j++){
+            for (int k=0;k<=PtBinNum;k++){
+                H_Kstar[i][j][k]->Write();
+                H_Mix_Kstar[i][j][k]->Write();
+            }
         }
     }
 
