@@ -131,8 +131,8 @@ std::vector<int> GetNchList(int CentralityList[])
     int CentralityListSize = sizeof(CentralityList)/sizeof(CentralityList[0]);
     if (DataName == "dAu_200_21") {
         // data from https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
-        int NchTable[21] = [ 10000 , 55 , 47 , 42 , 38 , 35 , 32 , 29 , 26 , 24 , 21 , 19 , 17 , 15 , 13 , 11 , 9 , 7 , 6 , 4 ,  0];
-        int CenTable[21] = [     0 ,  5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 55 , 60 , 65 , 70 , 75 ,80 ,85 ,90 ,95 ,100];
+        int NchTable[21] = { 10000 , 55 , 47 , 42 , 38 , 35 , 32 , 29 , 26 , 24 , 21 , 19 , 17 , 15 , 13 , 11 , 9 , 7 , 6 , 4 ,  0};
+        int CenTable[21] = {     0 ,  5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 55 , 60 , 65 , 70 , 75 ,80 ,85 ,90 ,95 ,100};
         for (int i=0;i<CentralityListSize;i++) {
             for (int j=0;j<21;j++){
                 if (CenTable[j] == CentralityList[i]) {
