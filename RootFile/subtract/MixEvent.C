@@ -388,8 +388,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
             float tEnergy = pow(pow(B_Px[0],2) + pow(B_Py[0],2) + pow(B_Pz[0],2) + pow(massList(B_PDG),2),0.5);
             rap = 0.5*log((tEnergy+B_Pz[0])/(tEnergy-B_Pz[0]));
-            cout<<"px = "<<B_Px[0]<<" , py = "<<B_Py[0]<<" , pz = "<<B_Pz[0]<<endl;
-            cout<<"rap = "<<rap<<endl;
+            // cout<<"px = "<<B_Px[0]<<" , py = "<<B_Py[0]<<" , pz = "<<B_Pz[0]<<endl;
+            // cout<<"rap = "<<rap<<endl;
             int RapIndex = -1;
             for (int k=0;k<yBinNum;k++){
                 if ((yBin[k] <= rap) && (rap < yBin[k+1])) {
@@ -407,7 +407,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
 
-            cout<<"CenIndex = "<<CenIndex<<" , "<<"RapIndex = "<<RapIndex<<" , "<<"PtIndex = "<<PtIndex<<endl;
+            // cout<<"CenIndex = "<<CenIndex<<" , "<<"RapIndex = "<<RapIndex<<" , "<<"PtIndex = "<<PtIndex<<endl;
             if ((CenIndex == -1) || (RapIndex == -1) || (PtIndex == -1)) {
                 continue;
             }
@@ -473,7 +473,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     for (int i=0;i<CentralityBinNum;i++){
         for (int j=0;j<yBinNum;j++){
             for (int k=0;k<=PtBinNum;k++){
-                if (Mix_Num[i][j][k] != 0) cout<<"["<<i<<","<<j<<","<<k<<"] remain "<<Mix_Num[i][j][k]<<endl;
+                if (Mix_event_Num[i][j][k] != 0) cout<<"["<<i<<","<<j<<","<<k<<"] remain "<<Mix_event_Num[i][j][k]<<endl;
                 H_Kstar[i][j][k]->Write();
                 H_Mix_Kstar[i][j][k]->Write();
             }
