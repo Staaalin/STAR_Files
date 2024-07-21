@@ -368,7 +368,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
         // cout<<"B_Px.size() = "<<B_Px.size()<<endl;
         if (B_Px.size() == 1){
-            cout<<"FOUND"<<endl;
+            // cout<<"FOUND"<<endl;
 
             int CenIndex = -1;
             for (int k=0;k<CentralityBinNum;k++){
@@ -398,7 +398,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
 
             if ((CenIndex == -1) || (RapIndex == -1) || (PtIndex == -1)) {
-                // cout<<"OUT!!!"<<endl;
+                cout<<"OUT!!!"<<endl;
                 continue;
             }
 
@@ -462,6 +462,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     for (int i=0;i<CentralityBinNum;i++){
         for (int j=0;j<yBinNum;j++){
             for (int k=0;k<=PtBinNum;k++){
+                if (Mix_Num[i][j][k] != 0) cout<<"["<<i<<","<<j<<","<<k<<"] remain "<<Mix_Num[i][j][k]<<endl;
                 H_Kstar[i][j][k]->Write();
                 H_Mix_Kstar[i][j][k]->Write();
             }
