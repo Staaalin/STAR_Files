@@ -321,7 +321,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TH1D* H_Mix_Kstar                [CentralityBinNum]   [yBinNum]  [PtBinNum];
 
     for (int i=0;i<CentralityBinNum;i++){
-        for (int j=0;i<yBinNum;j++){
+        for (int j=0;j<yBinNum;j++){
             for (int k=0;k<=PtBinNum;k++){
                 TString HistName1 = "H_";
                 TString HistName2 = "Cen: [";
@@ -457,7 +457,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
 
     for (int i=0;i<CentralityBinNum;i++){
-        for (int j=0;i<yBinNum;j++){
+        for (int j=0;j<yBinNum;j++){
             for (int k=0;k<=PtBinNum;k++){
                 H_Kstar[i][j][k]->Write();
                 H_Mix_Kstar[i][j][k]->Write();
