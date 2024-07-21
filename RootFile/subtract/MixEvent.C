@@ -398,7 +398,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
 
             if ((CenIndex == -1) || (RapIndex == -1) || (PtIndex == -1)) {
-                cout<<"OUT!!!"<<endl;
+                cout<<"CenIndex = "<<CenIndex<<" , "<<"RapIndex = "<<RapIndex<<"PtIndex = "<<PtIndex<<endl;
                 continue;
             }
 
