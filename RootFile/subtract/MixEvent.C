@@ -429,15 +429,15 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // Fill Mix Event
             // cout<<"Here is OK 1"<<endl;
             for (int j=0;j<B_Px.size();j++){
-                Mix_B_Px[CenIndex][RapIndex][PtIndex][Mix_B_Num] = B_Px[j];
-                Mix_B_Py[CenIndex][RapIndex][PtIndex][Mix_B_Num] = B_Py[j];
-                Mix_B_Pz[CenIndex][RapIndex][PtIndex][Mix_B_Num] = B_Pz[j];
+                Mix_B_Px[CenIndex][RapIndex][PtIndex][Mix_B_Num[CenIndex][RapIndex][PtIndex]] = B_Px[j];
+                Mix_B_Py[CenIndex][RapIndex][PtIndex][Mix_B_Num[CenIndex][RapIndex][PtIndex]] = B_Py[j];
+                Mix_B_Pz[CenIndex][RapIndex][PtIndex][Mix_B_Num[CenIndex][RapIndex][PtIndex]] = B_Pz[j];
                 Mix_B_Num[CenIndex][RapIndex][PtIndex]++;
             }
             for (int j=0;j<A_Px.size();j++){
-                Mix_A_Px[CenIndex][RapIndex][PtIndex][Mix_A_Num] = A_Px[j];
-                Mix_A_Py[CenIndex][RapIndex][PtIndex][Mix_A_Num] = A_Py[j];
-                Mix_A_Pz[CenIndex][RapIndex][PtIndex][Mix_A_Num] = A_Pz[j];
+                Mix_A_Px[CenIndex][RapIndex][PtIndex][Mix_A_Num[CenIndex][RapIndex][PtIndex]] = A_Px[j];
+                Mix_A_Py[CenIndex][RapIndex][PtIndex][Mix_A_Num[CenIndex][RapIndex][PtIndex]] = A_Py[j];
+                Mix_A_Pz[CenIndex][RapIndex][PtIndex][Mix_A_Num[CenIndex][RapIndex][PtIndex]] = A_Pz[j];
                 Mix_A_Num[CenIndex][RapIndex][PtIndex]++;
             }
             Mix_event_Num[CenIndex][RapIndex][PtIndex]++;
