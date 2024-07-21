@@ -303,24 +303,22 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     int KaonpPID = 321,KaonmPID = -321,PionpPID = 211,PionmPID = -211,LambdaPID = 3122,LambdabPID = -3122,XiPID = 3312,XibPID = -3312,OmegaPID = 3334,OmegabPID = -3334;
 
     std::vector<int> NchList = GetNchList(CentralityBin);     // centrality
-    //                                        centrality          B_y        B_Pt
+    //                                   centrality          B_y        B_Pt
     std::vector<Float_t> A_Px        ;
     std::vector<Float_t> A_Py        ;
     std::vector<Float_t> A_Pz        ;
     std::vector<Float_t> B_Px        ;
     std::vector<Float_t> B_Py        ;
     std::vector<Float_t> B_Pz        ;
-    float                Mix_A_Px         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_A_Py         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_A_Pz         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_B_Px         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_B_Py         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_B_Pz         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    int                  Mix_event_Num    [CentralityBinNum]   [yBinNum]  [PtBinNum];
-    int                  Mix_A_Num        [CentralityBinNum]   [yBinNum]  [PtBinNum];
-    int                  Mix_B_Num        [CentralityBinNum]   [yBinNum]  [PtBinNum];
-    TH1D* H_Kstar                         [CentralityBinNum]   [yBinNum]  [PtBinNum];
-    TH1D* H_Mix_Kstar                     [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t> Mix_A_Px    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t> Mix_A_Py    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t> Mix_A_Pz    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t> Mix_B_Px    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t> Mix_B_Py    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t> Mix_B_Pz    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    int                  Mix_Num     [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    TH1D* H_Kstar                    [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    TH1D* H_Mix_Kstar                [CentralityBinNum]   [yBinNum]  [PtBinNum];
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int j=0;j<yBinNum;j++){
@@ -343,9 +341,13 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 HistName2 += ", Mix";
                 H_Kstar[i][j][k] = new TH1D(HistName1s,HistName2s,500,0,10);
                 H_Mix_Kstar[i][j][k] = new TH1D(HistName1,HistName2,500,0,10);
-                Mix_event_Num[i][j][k] = 0;
-                Mix_A_Num[i][j][k] = 0;
-                Mix_B_Num[i][j][k] = 0;
+                Mix_Num[i][j][k] = 0;
+                Mix_A_Px[i][j][k].resize(0);
+                Mix_A_Py[i][j][k].resize(0);
+                Mix_A_Pz[i][j][k].resize(0);
+                Mix_B_Px[i][j][k].resize(0);
+                Mix_B_Py[i][j][k].resize(0);
+                Mix_B_Pz[i][j][k].resize(0);
             }
         }
     }
@@ -427,27 +429,26 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
 
             // Fill Mix Event
-            // cout<<"Here is OK 1"<<endl;
+            cout<<"Here is OK 1"<<endl;
+            cout<<"Mix_B_Px[CenIndex][RapIndex][PtIndex].size() = "<<(Mix_B_Px[CenIndex][RapIndex][PtIndex]).size()<<endl;
             for (int j=0;j<B_Px.size();j++){
-                Mix_B_Px[CenIndex][RapIndex][PtIndex][Mix_B_Num] = B_Px[j];
-                Mix_B_Py[CenIndex][RapIndex][PtIndex][Mix_B_Num] = B_Py[j];
-                Mix_B_Pz[CenIndex][RapIndex][PtIndex][Mix_B_Num] = B_Pz[j];
-                Mix_B_Num[CenIndex][RapIndex][PtIndex]++;
+                Mix_B_Px[CenIndex][RapIndex][PtIndex].push_back(B_Px[j]);
+                Mix_B_Py[CenIndex][RapIndex][PtIndex].push_back(B_Py[j]);
+                Mix_B_Pz[CenIndex][RapIndex][PtIndex].push_back(B_Pz[j]);
             }
             for (int j=0;j<A_Px.size();j++){
-                Mix_A_Px[CenIndex][RapIndex][PtIndex][Mix_A_Num] = A_Px[j];
-                Mix_A_Py[CenIndex][RapIndex][PtIndex][Mix_A_Num] = A_Py[j];
-                Mix_A_Pz[CenIndex][RapIndex][PtIndex][Mix_A_Num] = A_Pz[j];
-                Mix_A_Num[CenIndex][RapIndex][PtIndex]++;
+                Mix_A_Px[CenIndex][RapIndex][PtIndex].push_back(A_Px[j]);
+                Mix_A_Py[CenIndex][RapIndex][PtIndex].push_back(A_Py[j]);
+                Mix_A_Pz[CenIndex][RapIndex][PtIndex].push_back(A_Pz[j]);
             }
-            Mix_event_Num[CenIndex][RapIndex][PtIndex]++;
-            // cout<<"Here is OK 2"<<endl;
+            Mix_Num[CenIndex][RapIndex][PtIndex]++;
+            cout<<"Here is OK 2"<<endl;
 
-            if (Mix_event_Num[CenIndex][RapIndex][PtIndex] == 10){
-                for (int j=0;j<Mix_B_Num[CenIndex][RapIndex][PtIndex];j++){
+            if (Mix_Num[CenIndex][RapIndex][PtIndex] == 10){
+                for (int j=0;j<Mix_B_Px[CenIndex][RapIndex][PtIndex].size();j++){
                     TLorentzVector p1;
                     p1.SetXYZM(Mix_B_Px[CenIndex][RapIndex][PtIndex][j],Mix_B_Py[CenIndex][RapIndex][PtIndex][j],Mix_B_Pz[CenIndex][RapIndex][PtIndex][j],massList(B_PDG));
-                    for (int k=0;k<Mix_A_Num[CenIndex][RapIndex][PtIndex];k++){
+                    for (int k=0;k<Mix_A_Px[CenIndex][RapIndex][PtIndex].size();k++){
                         TLorentzVector p2,p3,p4 = p1;
                         p2.SetXYZM(Mix_A_Px[CenIndex][RapIndex][PtIndex][k],Mix_A_Py[CenIndex][RapIndex][PtIndex][k],Mix_A_Pz[CenIndex][RapIndex][PtIndex][k],massList(A_PDG));
                         p3 = p4 + p2;
@@ -456,9 +457,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Mix_Kstar[CenIndex][RapIndex][PtIndex]->Fill(kstar);
                     }
                 }
-                Mix_event_Num[CenIndex][RapIndex][PtIndex] = 0;
-                Mix_A_Num[CenIndex][RapIndex][PtIndex] = 0;
-                Mix_B_Num[CenIndex][RapIndex][PtIndex] = 0;
+                Mix_Num[CenIndex][RapIndex][PtIndex] = 0;
+                Mix_B_Px[CenIndex][RapIndex][PtIndex].resize(0);Mix_B_Py[CenIndex][RapIndex][PtIndex].resize(0);Mix_B_Pz[CenIndex][RapIndex][PtIndex].resize(0);
+                Mix_A_Px[CenIndex][RapIndex][PtIndex].resize(0);Mix_A_Py[CenIndex][RapIndex][PtIndex].resize(0);Mix_A_Pz[CenIndex][RapIndex][PtIndex].resize(0);
             }
         }
         
