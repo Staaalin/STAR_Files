@@ -377,7 +377,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
 
             float tEnergy = pow(pow(B_Px[0],2) + pow(B_Py[0],2) + pow(B_Pz[0],2) + pow(massList(B_PDG),2),0.5);
-            float rap = 0.5*log((tEnergy+B_Pz[0])/(tEnergy-B_Pz[0]));
+            rap = 0.5*log((tEnergy+B_Pz[0])/(tEnergy-B_Pz[0]));
             int RapIndex = -1;
             for (int k=0;k<yBinNum;k++){
                 if ((yBin[k] <= rap) && (rap < yBin[k+1])) {
