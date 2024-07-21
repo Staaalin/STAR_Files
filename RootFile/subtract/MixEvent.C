@@ -415,6 +415,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
 
             // Fill Single Event
+            cout<<"Here is OK 1"<<endl;
             for (int j=0;j<B_Px.size();j++){
                 TLorentzVector p1;
                 p1.SetXYZM(B_Px[j],B_Py[j],B_Pz[j],massList(B_PDG));
@@ -427,6 +428,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     H_Kstar[CenIndex][RapIndex][PtIndex]->Fill(kstar);
                 }
             }
+            cout<<"Here is OK 2"<<endl;
 
             // Fill Mix Event
             for (int j=0;j<B_Px.size();j++){
