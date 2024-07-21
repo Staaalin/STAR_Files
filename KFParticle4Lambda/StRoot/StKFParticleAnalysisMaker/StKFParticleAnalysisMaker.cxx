@@ -1848,7 +1848,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					// cout<<"MomentumOfParticle.Mag() = "<<MomentumOfParticle.Mag()<<endl;
 					QA_m2.emplace_back(-999);
 				}
-				else if ((abs(particle.GetPDG()) == LambdaPdg))
+				else if ((abs(particle.GetPDG()) == LambdaPdg) || (abs(particle.GetPDG()) == K0SPdg) || (abs(particle.GetPDG()) == PhiPdg))
 				{
 					PDG.emplace_back(particle.GetPDG());
 					px.emplace_back(particle.GetPx());
