@@ -430,7 +430,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
             // Fill Mix Event
             cout<<"Here is OK 1"<<endl;
-            cout<<"Mix_B_Px[CenIndex][RapIndex][PtIndex] = "<<Mix_B_Px[CenIndex][RapIndex][PtIndex]<<endl;
+            cout<<"Mix_B_Px[CenIndex][RapIndex][PtIndex].size() = "<<Mix_B_Px[CenIndex][RapIndex][PtIndex].size()<<endl;
             for (int j=0;j<B_Px.size();j++){
                 Mix_B_Px[CenIndex][RapIndex][PtIndex].push_back(B_Px[j]);
                 Mix_B_Py[CenIndex][RapIndex][PtIndex].push_back(B_Py[j]);
