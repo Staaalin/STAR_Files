@@ -324,7 +324,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int j=0;j<yBinNum;j++){
-            for (int k=0;k<=PtBinNum;k++){
+            for (int k=0;k<PtBinNum;k++){
                 TString HistName1 = "H_";
                 TString HistName2 = "Cen: [";
                 HistName1 += i;HistName1 += "_";
@@ -423,6 +423,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                     kstar = 0.5 * (p4 - p2).Rho();
                     H_Kstar[CenIndex][RapIndex][PtIndex]->Fill(kstar);
+                    cout<<"Fill "<<kstar<<endl;
                 }
             }
 
@@ -472,7 +473,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int j=0;j<yBinNum;j++){
-            for (int k=0;k<=PtBinNum;k++){
+            for (int k=0;k<PtBinNum;k++){
                 if (Mix_event_Num[i][j][k] != 0) cout<<"["<<i<<","<<j<<","<<k<<"] remain "<<Mix_event_Num[i][j][k]<<endl;
                 H_Kstar[i][j][k]->Write();
                 H_Mix_Kstar[i][j][k]->Write();
