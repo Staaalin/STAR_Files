@@ -74,7 +74,7 @@
 #define K0SPdgMassSigma    0.0056
 #define PhiPdgMassSigma    0.05
 
-#define IfQAMode           true // If Writing Hist of QA;
+#define IfQAMode           false // If Writing Hist of QA;
 #define IfTree             true  // If Writing Tree;
 
 // #define DEBUGGING
@@ -1574,7 +1574,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 						// Find in PicoDST
 						int iTrack = 0;
 						const int globalTrackId = particle.DaughterIds()[0];
-						Int_t nTracks = mPicoDst->numberOfTracks();
 						Int_t iTrackStart = globalTrackId - 1;
 						if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
 						for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
@@ -1710,7 +1709,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 				// cout<<"Here is good 4"<<endl;
 				const int globalTrackId = daughter.DaughterIds()[0];
-				Int_t nTracks = mPicoDst->numberOfTracks();
 				Int_t iTrackStart = globalTrackId - 1;
 				if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
 				for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
