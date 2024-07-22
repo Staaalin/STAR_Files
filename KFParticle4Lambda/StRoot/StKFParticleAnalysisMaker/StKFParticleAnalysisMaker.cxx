@@ -1902,7 +1902,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 	}
 	
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
-		cout<<"here"<<endl;
 		StPicoTrack *track = mPicoDst->track(iTrack);
 		if (IfQAMode) {hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());}
     	if (! track)            continue;
@@ -2063,6 +2062,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
+		cout<<"here"<<endl;
 		// Raw Data eTOF
 		if (!hasTOF && RawTOF){
 			int tofindex = track->eTofPidTraitsIndex();
