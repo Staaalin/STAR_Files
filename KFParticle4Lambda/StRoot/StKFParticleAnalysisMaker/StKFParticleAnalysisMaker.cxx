@@ -1416,7 +1416,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		///////////////
 	}
 
-// ======= KFParticle ======= //
+	// ======= KFParticle ======= //
 	std::vector<StLambdaDecayPair> KFParticleLambdaDecayPair;
 	std::vector<KFParticle> ParticleVec , OmegaVec , LambdaVec;
 	ParticleVec.resize(0);OmegaVec.resize(0);LambdaVec.resize(0);
@@ -1850,11 +1850,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 					(fabs(particle.GetPDG()) == PhiPdg) || 
 					(fabs(particle.GetPDG()) == K0SPdg)) 
 				{
-					if      ((fabs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 3*PhiPdgMassSigma)) {continue};
-					else if ((fabs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 3*K0SPdgMassSigma)) {continue};
-					else if ((fabs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 3*LambdaPdgMassSigma)) {continue};
-					else if ((fabs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 3*XiPdgMassSigma)) {continue};
-					else if ((fabs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 3*OmegaPdgMassSigma)) {continue};
+					if      ((fabs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 3*PhiPdgMassSigma)) {continue;}
+					else if ((fabs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 3*K0SPdgMassSigma)) {continue;}
+					else if ((fabs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 3*LambdaPdgMassSigma)) {continue;}
+					else if ((fabs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 3*XiPdgMassSigma)) {continue;}
+					else if ((fabs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 3*OmegaPdgMassSigma)) {continue;}
 					// cout<<"###############################################"<<endl;
 					// cout<<"iKFParticle = "<<iKFParticle<<endl;
 					// cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
