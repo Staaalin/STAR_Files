@@ -475,6 +475,21 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                 Eweight = refmultCorrUtil->getWeight();
                 if((i+1)%1000==0) cout<<"centraility = "<<Centrality<<" Eweight = "<<Eweight<<endl;
 */
+                // PSY: Loop for Nch to check refmult
+                Int_t nTracks = dst->numberOfTracks();
+                int NumCharge = 0;
+                for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
+                        StPicoTrack *track = dst->track(iTrack);
+                        if (! track)            continue;
+                        if (! track->charge())  continue;
+                        if (  track->nHitsFit() < 10) continue;
+                        if (! track->isPrimary()) continue;
+                        if (  track->gDCA(pV) > 3.0) continue;
+                        if (  fabs(track->gMom().Eta()) > 1.5) continue;
+                        if (  (0.06 > track->gMom().Perp()) || (track->gMom().Perp() > 2.0)) continue;
+                        NumCharge++;
+                }
+                cout<<"NumCharge = "<<NumCharge<<" meanwhile Refmult = "<<Refmult<<endl;
 
 
 ///temp add
