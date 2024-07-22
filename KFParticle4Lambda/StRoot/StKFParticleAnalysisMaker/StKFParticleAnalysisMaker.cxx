@@ -2136,8 +2136,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		if (pt > 1.4) {continue;}
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
-		cout<<"here"<<endl;
-		cout<<"PDGBool.size() = "<<PDGBool.size()<<endl;
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
 				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
@@ -2188,7 +2186,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
 					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
 					if (IfTree) {
-						cout<<"TR"<<endl;
 						QA_Chi2.emplace_back(-999);
 						QA_Decay_Length.emplace_back(-999);
 						PDG.emplace_back(NeedPDG[Ktr]);
@@ -2205,7 +2202,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 						InvariantMass.emplace_back(-999); 
 					}
 					if (IfQAMode) {
-						cout<<"QA"<<endl;
 						H_Pt[Jtr] -> Fill(pt);
 						H_P[Jtr] -> Fill(p);
 						H_rapidity[Jtr]->Fill(rap);
