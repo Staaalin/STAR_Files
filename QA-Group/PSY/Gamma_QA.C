@@ -489,7 +489,7 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                         if (  (0.06 > track->gMom().Perp()) || (track->gMom().Perp() > 2.0)) continue;
                         NumCharge++;
                 }
-                cout<<"NumCharge = "<<NumCharge<<" meanwhile Refmult = "<<RefMult<<endl;
+                RefMult = NumCharge;
 
 
 ///temp add
