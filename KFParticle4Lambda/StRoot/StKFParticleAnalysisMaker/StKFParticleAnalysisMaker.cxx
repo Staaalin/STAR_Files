@@ -2093,7 +2093,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
-		cout<<"here"<<endl;
 		if (IfQAMode) {
 			H_Pt_nSigmaKaon->Fill(track->gMom().Mag(),track->nSigmaKaon());
 			H_eta_nSigmaKaon  [TriggerID_in_TriggerList][2]->Fill(eta,track->nSigmaKaon());
@@ -2129,6 +2128,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 			H_eta_trigger     ->Fill(eta,TriggerID_in_TriggerList);
 		}
+		cout<<"here"<<endl;
 
 		if (pt > 1.4) {continue;}
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
