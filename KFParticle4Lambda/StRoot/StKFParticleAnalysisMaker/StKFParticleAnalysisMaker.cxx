@@ -2062,7 +2062,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
-		cout<<"here"<<endl;
 		// Raw Data eTOF
 		if (!hasTOF && RawTOF){
 			int tofindex = track->eTofPidTraitsIndex();
@@ -2094,6 +2093,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
+		cout<<"here"<<endl;
 		if (IfQAMode) {
 			H_Pt_nSigmaKaon->Fill(track->gMom().Mag(),track->nSigmaKaon());
 			H_eta_nSigmaKaon  [TriggerID_in_TriggerList][2]->Fill(eta,track->nSigmaKaon());
