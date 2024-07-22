@@ -2128,9 +2128,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 			H_eta_trigger     ->Fill(eta,TriggerID_in_TriggerList);
 		}
-		cout<<"here"<<endl;
 
 		if (pt > 1.4) {continue;}
+		cout<<"here"<<endl;
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
