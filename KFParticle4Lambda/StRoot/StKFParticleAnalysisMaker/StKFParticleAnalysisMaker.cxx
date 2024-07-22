@@ -2130,13 +2130,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 
 		if (pt > 1.4) {continue;}
-		cout<<"here"<<endl;
 		std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(NeedPDG , track , Vertex3D);
 		for (int Ktr = 0;Ktr < PDGBool.size();Ktr++) {
 			if (PDGBool[Ktr] == true) {
 				for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 					int Jtr = Itr - PDG2NameSize;
 					if (NeedPDG[Ktr] != PDGList[Itr]){continue;}
+		cout<<"here"<<endl;
 					//// For Kaon
 					if (abs(PDGList[Itr])==KaonPdg) {
 						// if (
