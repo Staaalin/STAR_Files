@@ -50,14 +50,13 @@
 // #define DataName           "OO_200_21"
 #define pi                 TMath::Pi()
 #define OmegaPdgMass	   1.67245
-#define XiPdgMass	       1.1972
-//#define OmegaMassSigma     0.0021
+#define XiPdgMass	       1.3223
 #define LambdaPdgMass      1.11568
 #define ProtonPdgMass      0.938272
 #define PionPdgMass        0.139570
 #define KaonPdgMass		   0.493677
-#define K0SPdgMass		   0.49765
-#define PhiPdgMass		   1.019
+#define K0SPdgMass		   0.49794
+#define PhiPdgMass		   1.01926
 #define LambdaPdg          3122
 #define XiPdg              3312
 #define OmegaPdg           3334
@@ -68,11 +67,11 @@
 #define PhiPdg			   333
 #define Xi1530Pdg		   3324
 #define PionPdg            211
-#define LambdaPdgMassSigma 0.0019
-#define XiPdgMassSigma     0.0024
+#define LambdaPdgMassSigma 0.0014
+#define XiPdgMassSigma     0.0018
 #define OmegaPdgMassSigma  0.0027
-#define K0SPdgMassSigma    0.0056
-#define PhiPdgMassSigma    0.05
+#define K0SPdgMassSigma    0.0043
+#define PhiPdgMassSigma    0.0031
 
 #define IfQAMode           true // If Writing Hist of QA;
 #define IfTree             true  // If Writing Tree;
@@ -1460,6 +1459,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	}
 	Nch = NumCharge;
 
+
+	std::vector<int> DaughterParticle,MatherPartiecle;DaughterParticle.resize(0);MatherPartiecle.resize(0);
 	if (!(DataName == "pp_200_15")){
 		SetupKFParticle();
 		// cout<<"2b"<<endl;
@@ -1520,43 +1521,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// 	}
 		// }
 
-		
-		// HighLight Reconstructed Track
-		// cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
-		std::vector<int> DaughterParticle,MatherPartiecle;DaughterParticle.resize(0);MatherPartiecle.resize(0);
-		for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
-			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
-			if ( (fabs(particle.GetPDG()) == OmegaPdg) || 
-				(fabs(particle.GetPDG()) == XiPdg) || 
-				(fabs(particle.GetPDG()) == LambdaPdg)) 
-			{
-				// cout<<"###############################################"<<endl;
-				// cout<<"iKFParticle = "<<iKFParticle<<endl;
-				// cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
-				for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-					const int daughterId = particle.DaughterIds()[iDaughter];
-					const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-					// cout<<"daughterId = "<<daughterId<<endl;
-					// cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
-					if (daughter.GetPDG() != -1) {
-						DaughterParticle.push_back(daughterId);
-						MatherPartiecle.push_back(iKFParticle);
-					}
-					else {
-						for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
-							const int GdaughterId = daughter.DaughterIds()[jDaughter];
-							DaughterParticle.push_back(GdaughterId);
-							MatherPartiecle.push_back(iKFParticle);
-							// cout<<"GrandDaughterId = "<<GdaughterId<<endl;
-							// cout<<"GrandDaughter.GetPDG() = "<<(KFParticleInterface->GetParticles()[GdaughterId]).GetPDG()<<endl;
-						}
-					}
-				}
-			}
-		}
-		// cout<<DaughterParticle.size()<<endl;
-
-		
 		Omega_Omegab_Num = 0;
 		for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
@@ -1876,6 +1840,63 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// cout<<"Here is good 1"<<endl;
 
 
+			// HighLight Reconstructed Track
+			// cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
+			for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
+				KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+				if ( (fabs(particle.GetPDG()) == OmegaPdg) || 
+					(fabs(particle.GetPDG()) == XiPdg) || 
+					(fabs(particle.GetPDG()) == LambdaPdg) || 
+					(fabs(particle.GetPDG()) == PhiPdg) || 
+					(fabs(particle.GetPDG()) == K0SPdg)) 
+				{
+					if      ((fabs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 3*PhiPdgMassSigma)) {continue};
+					else if ((fabs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 3*K0SPdgMassSigma)) {continue};
+					else if ((fabs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 3*LambdaPdgMassSigma)) {continue};
+					else if ((fabs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 3*XiPdgMassSigma)) {continue};
+					else if ((fabs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 3*OmegaPdgMassSigma)) {continue};
+					// cout<<"###############################################"<<endl;
+					// cout<<"iKFParticle = "<<iKFParticle<<endl;
+					// cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
+					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+						const int daughterId = particle.DaughterIds()[iDaughter];
+						const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+						// cout<<"daughterId = "<<daughterId<<endl;
+						// cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
+						if (daughter.GetPDG() != -1) {
+							DaughterParticle.push_back(daughterId);
+							MatherPartiecle.push_back(iKFParticle);
+						}
+						else {
+							for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
+								const int GdaughterId = daughter.DaughterIds()[jDaughter];
+								DaughterParticle.push_back(GdaughterId);
+								MatherPartiecle.push_back(iKFParticle);
+								// cout<<"GrandDaughterId = "<<GdaughterId<<endl;
+								// cout<<"GrandDaughter.GetPDG() = "<<(KFParticleInterface->GetParticles()[GdaughterId]).GetPDG()<<endl;
+							}
+						}
+					}
+				}
+			}
+			for (int iDaughter = 0;iDaughter<DaughterParticle.size();iDaughter++){
+				int iTrack = 0;
+				const int globalTrackId = (KFParticleInterface->GetParticles()[DaughterParticle[iDaughter]]).DaughterIds()[0];
+				Int_t iTrackStart = globalTrackId - 1;
+				if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+				for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+					StPicoTrack *track = mPicoDst->track(jTrack);
+					if (track->id() == globalTrackId){
+						iTrack = jTrack;
+						break;
+					}
+				}
+				StPicoTrack *track = mPicoDst->track(iTrack);
+				track->setNHitsFit(0);
+			}
+			// cout<<DaughterParticle.size()<<endl;
+
+
 			int upQ; // cout<<"Here is good 2"<<endl;
 			if (particle.GetPDG() == LambdaPdg) {upQ = 1;} 
 			else if (particle.GetPDG() == -1*LambdaPdg) {upQ = -1;} 
@@ -1893,7 +1914,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 		} // End loop over KFParticles
 	}
-
 
 
 	std::vector<int> NeedPDG; NeedPDG.resize(0);
