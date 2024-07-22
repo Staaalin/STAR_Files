@@ -202,6 +202,28 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
 
+	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,   333   };
+	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "Phi"  };
+	const int BPDGList[]         = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
+	const TString BNameList[]    = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
+	const float TBPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
+	const int TCPDGList[]      = {    321       ,    211    ,    2212   };
+	const TString TCNameList[] = {  "Kaon"      ,  "Pion"   ,  "Proton" };
+	for (int Itr = 0;Itr < PDG2NameSize3;Itr++){
+		CPDGList[Itr] = TCPDGList[Itr];
+		CNameList[Itr] = TCNameList[Itr];
+	}
+	for (int Itr = 0;Itr < PDG2NameSize3;Itr++){
+		BPDGListMass[Itr]  = TBPDGListMass[Itr];
+	}
+	for (int Itr = 0;Itr < PDG2NameSize;Itr++){
+		PDGList[Itr] = APDGList[Itr];NameList[Itr] = ANameList[Itr];
+	}
+	for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
+		int Jtr = Itr - PDG2NameSize;
+		PDGList[Itr] = BPDGList[Jtr];NameList[Itr] = BNameList[Jtr];
+	}
+
 	if (IfQAMode) {
 
 		hNRefMult = new TH1F("RefMult" , "Reference Multiplicity" , 1000, 0.0, 1000.0 ) ;
@@ -400,23 +422,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_All_nSigmaKaon_eta->GetXaxis()->SetTitle("eta");
 		H_All_nSigmaKaon_eta->GetYaxis()->SetTitle("nSigmaKaon");
 
-		const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,   333   };
-		const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "Phi"  };
-		const int BPDGList[]         = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
-		const TString BNameList[]    = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
-		const float TBPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
-		const int TCPDGList[]      = {    321       ,    211    ,    2212   };
-		const TString TCNameList[] = {  "Kaon"      ,  "Pion"   ,  "Proton" };
-		for (int Itr = 0;Itr < PDG2NameSize3;Itr++){
-			CPDGList[Itr] = TCPDGList[Itr];
-			CNameList[Itr] = TCNameList[Itr];
-
-		}
-		for (int Itr = 0;Itr < PDG2NameSize3;Itr++){
-			BPDGListMass[Itr]  = TBPDGListMass[Itr];
-		}
 		for (int Itr = 0;Itr < PDG2NameSize;Itr++){
-			PDGList[Itr] = APDGList[Itr];NameList[Itr] = ANameList[Itr];
 
 			TString HistName1 = "HM_";
 			TString HistName2 = "The Mass of ";
@@ -451,7 +457,6 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		}
 		for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 			int Jtr = Itr - PDG2NameSize;
-			PDGList[Itr] = BPDGList[Jtr];NameList[Itr] = BNameList[Jtr];
 
 			TString HistName1 = "HY_";
 			TString HistName2 = "The rapidity of ";
