@@ -1001,7 +1001,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		}
 		H_eta_trigger     ->Write();
 
-	//////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////// Used for test //////////////////////////////////////////////////////////////////////////////////////
 		for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 			int Jtr = Itr - PDG2NameSize;
 
@@ -1046,11 +1046,11 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 			H_y_Vz[Jtr]->Write();
 			H_m2_nSigmaTOFKaon[Jtr]->Write();
 		}
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		fout->cd();
 
-	// KFP PID
+		// KFP PID
 		KFPPIDQA->cd();
 		for (int Itr = PDG2NameSize;Itr < PDG2NameSize + PDG2NameSize2;Itr++){
 			int Jtr = Itr - PDG2NameSize;
@@ -1092,7 +1092,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 			H_KFP_Pt_m2[Jtr]->Write();
 
 		}
-	// KFP PID end
+		// KFP PID end
 
 		fout->cd();
 
@@ -1902,6 +1902,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	}
 	
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
+		cout<<"here"<<endl;
 		StPicoTrack *track = mPicoDst->track(iTrack);
 		if (IfQAMode) {hdEdx_pQ->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());}
     	if (! track)            continue;
