@@ -74,7 +74,7 @@
 #define K0SPdgMassSigma    0.0056
 #define PhiPdgMassSigma    0.05
 
-#define IfQAMode           false // If Writing Hist of QA;
+#define IfQAMode           true // If Writing Hist of QA;
 #define IfTree             true  // If Writing Tree;
 
 // #define DEBUGGING
