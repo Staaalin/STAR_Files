@@ -528,7 +528,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     BhadronTree->Branch("EventID"            ,&BevtID               ,"EventID/I"                           );
     BhadronTree->Branch("RunID"              ,&BrunID               ,"RunID/I"                             );
     BhadronTree->Branch("TriggerID"          ,&BTriggerID           ,"TriggerID/I"                         );
-    BhadronTree->Branch("Nch"                ,&BNch                 ,"Nch/I"                               );
     BhadronTree->Branch("PDG"                ,&BPDG                 );
     BhadronTree->Branch("mix_px"             ,&Bpx                  );
     BhadronTree->Branch("mix_py"             ,&Bpy                  );
