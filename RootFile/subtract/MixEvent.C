@@ -598,20 +598,20 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         BrunID     = RunID    ;
         BTriggerID = TriggerID;
         for (int j=0;j<Mix_TreID[i].size();j++){
-            BPDG            .emplace_back(PDG            [Mix_TreID[i][j]]);
-            Bpx             .emplace_back(px             [Mix_TreID[i][j]]);
-            Bpy             .emplace_back(py             [Mix_TreID[i][j]]);
-            Bpz             .emplace_back(pz             [Mix_TreID[i][j]]);
-            BQA_eta         .emplace_back(QA_eta         [Mix_TreID[i][j]]);
-            BQA_dEdx        .emplace_back(QA_dEdx        [Mix_TreID[i][j]]);
-            BQA_m2          .emplace_back(QA_m2          [Mix_TreID[i][j]]);
-            BQA_DCA_V0_PV   .emplace_back(QA_DCA_V0_PV   [Mix_TreID[i][j]]);
-            BQA_nSigmaProton.emplace_back(QA_nSigmaProton[Mix_TreID[i][j]]);
-            BQA_nSigmaPion  .emplace_back(QA_nSigmaPion  [Mix_TreID[i][j]]);
-            BQA_nSigmaKaon  .emplace_back(QA_nSigmaKaon  [Mix_TreID[i][j]]);
-            BInvariantMass  .emplace_back(InvariantMass  [Mix_TreID[i][j]]);
-            BQA_Decay_Length.emplace_back(QA_Decay_Length[Mix_TreID[i][j]]);
-            BQA_Chi2        .emplace_back(QA_Chi2        [Mix_TreID[i][j]]);
+            BPDG            .emplace_back(PDG            ->(Mix_TreID[i][j]));
+            Bpx             .emplace_back(px             ->(Mix_TreID[i][j]));
+            Bpy             .emplace_back(py             ->(Mix_TreID[i][j]));
+            Bpz             .emplace_back(pz             ->(Mix_TreID[i][j]));
+            BQA_eta         .emplace_back(QA_eta         ->(Mix_TreID[i][j]));
+            BQA_dEdx        .emplace_back(QA_dEdx        ->(Mix_TreID[i][j]));
+            BQA_m2          .emplace_back(QA_m2          ->(Mix_TreID[i][j]));
+            BQA_DCA_V0_PV   .emplace_back(QA_DCA_V0_PV   ->(Mix_TreID[i][j]));
+            BQA_nSigmaProton.emplace_back(QA_nSigmaProton->(Mix_TreID[i][j]));
+            BQA_nSigmaPion  .emplace_back(QA_nSigmaPion  ->(Mix_TreID[i][j]));
+            BQA_nSigmaKaon  .emplace_back(QA_nSigmaKaon  ->(Mix_TreID[i][j]));
+            BInvariantMass  .emplace_back(InvariantMass  ->(Mix_TreID[i][j]));
+            BQA_Decay_Length.emplace_back(QA_Decay_Length->(Mix_TreID[i][j]));
+            BQA_Chi2        .emplace_back(QA_Chi2        ->(Mix_TreID[i][j]));
         }
         BhadronTree->Fill();
     }
