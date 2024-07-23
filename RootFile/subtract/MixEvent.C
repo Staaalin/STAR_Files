@@ -598,6 +598,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         BrunID     = RunID    ;
         BTriggerID = TriggerID;
         for (int j=0;j<Mix_TreID[i].size();j++){
+            BPDG            .emplace_back(111);
+            cout<<"Mix_TreID[i][j] = "<<Mix_TreID[i][j]<<endl;
             BPDG            .emplace_back(PDG            ->at(Mix_TreID[i][j]));
             Bpx             .emplace_back(px             ->at(Mix_TreID[i][j]));
             Bpy             .emplace_back(py             ->at(Mix_TreID[i][j]));
