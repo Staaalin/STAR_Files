@@ -598,20 +598,20 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         BrunID     = RunID    ;
         BTriggerID = TriggerID;
         for (int j=0;j<Mix_TreID[i].size();j++){
-            BPDG            .push_back(PDG            ->at(Mix_TreID[i][j]));
-            Bpx             .push_back(px             ->at(Mix_TreID[i][j]));
-            Bpy             .push_back(py             ->at(Mix_TreID[i][j]));
-            Bpz             .push_back(pz             ->at(Mix_TreID[i][j]));
-            BQA_eta         .push_back(QA_eta         ->at(Mix_TreID[i][j]));
-            BQA_dEdx        .push_back(QA_dEdx        ->at(Mix_TreID[i][j]));
-            BQA_m2          .push_back(QA_m2          ->at(Mix_TreID[i][j]));
-            BQA_DCA_V0_PV   .push_back(QA_DCA_V0_PV   ->at(Mix_TreID[i][j]));
-            BQA_nSigmaProton.push_back(QA_nSigmaProton->at(Mix_TreID[i][j]));
-            BQA_nSigmaPion  .push_back(QA_nSigmaPion  ->at(Mix_TreID[i][j]));
-            BQA_nSigmaKaon  .push_back(QA_nSigmaKaon  ->at(Mix_TreID[i][j]));
-            BInvariantMass  .push_back(InvariantMass  ->at(Mix_TreID[i][j]));
-            BQA_Decay_Length.push_back(QA_Decay_Length->at(Mix_TreID[i][j]));
-            BQA_Chi2        .push_back(QA_Chi2        ->at(Mix_TreID[i][j]));
+            BPDG            .push_back(PDG          ->at(Mix_TreID[i][j]));
+            Bpx             .push_back(mix_px       ->at(Mix_TreID[i][j]));
+            Bpy             .push_back(mix_py       ->at(Mix_TreID[i][j]));
+            Bpz             .push_back(mix_pz       ->at(Mix_TreID[i][j]));
+            BQA_eta         .push_back(QA_eta       ->at(Mix_TreID[i][j]));
+            BQA_dEdx        .push_back(dEdx         ->at(Mix_TreID[i][j]));
+            BQA_m2          .push_back(m2           ->at(Mix_TreID[i][j]));
+            BQA_DCA_V0_PV   .push_back(dcatopv      ->at(Mix_TreID[i][j]));
+            BQA_nSigmaProton.push_back(nSigmaProton ->at(Mix_TreID[i][j]));
+            BQA_nSigmaPion  .push_back(nSigmaPion   ->at(Mix_TreID[i][j]));
+            BQA_nSigmaKaon  .push_back(nSigmaKaon   ->at(Mix_TreID[i][j]));
+            BInvariantMass  .push_back(InvariantMass->at(Mix_TreID[i][j]));
+            BQA_Decay_Length.push_back(Decay_Length ->at(Mix_TreID[i][j]));
+            BQA_Chi2        .push_back(Chi2         ->at(Mix_TreID[i][j]));
         }
         BhadronTree->Fill();
     }
