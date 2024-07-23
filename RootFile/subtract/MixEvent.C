@@ -547,40 +547,73 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     BhadronTree->Branch("Decay_Length"       ,&BQA_Decay_Length      );
     BhadronTree->Branch("Chi2"               ,&BQA_Chi2              );
 
+    std::vector<Int_t> Mix_EvtID;
+    std::vector<std::vector<Int_t> > Mix_TreID;
     for (int i=0;i<CentralityBinNum;i++){
         for (int j=0;j<yBinNum;j++){
             for (int k=0;k<PtBinNum;k++){
-                Int_t EventIndex = -1;
-                for (int m=0;m<Mix_event_Num[i][j][k];m++){
-                    if (EventIndex != Mix_B_EvtID[i][j][k][m]){
-                        if (EventIndex != -1) BhadronTree->Fill();
-                        EventIndex = Mix_B_EvtID[i][j][k][m];
-                        hadronTree->GetEntry(EventIndex);
-                        BPDGMult   = PDGMult  ;
-                        BCrefMult  = refMult  ;
-                        BCgrefMult = grefMult ;
-                        BevtID     = EventID  ;
-                        BrunID     = RunID    ;
-                        BTriggerID = TriggerID;
+
+                for (int m=0;m<Mix_B_Num[i][j][k];m++){
+                    int nIndex = -1;
+                    for (int n=0;n<Mix_EvtID.size();n++){
+                        if (Mix_B_EvtID[i][j][k][m] == Mix_EvtID[n]){
+                            nIndex = n;
+                            break;
+                        }
                     }
-                    BPDG            .emplace_back(PDG            []);
-                    Bpx             .emplace_back(px             []);
-                    Bpy             .emplace_back(py             []);
-                    Bpz             .emplace_back(pz             []);
-                    BQA_eta         .emplace_back(QA_eta         []);
-                    BQA_dEdx        .emplace_back(QA_dEdx        []);
-                    BQA_m2          .emplace_back(QA_m2          []);
-                    BQA_DCA_V0_PV   .emplace_back(QA_DCA_V0_PV   []);
-                    BQA_nSigmaProton.emplace_back(QA_nSigmaProton[]);
-                    BQA_nSigmaPion  .emplace_back(QA_nSigmaPion  []);
-                    BQA_nSigmaKaon  .emplace_back(QA_nSigmaKaon  []);
-                    BInvariantMass  .emplace_back(InvariantMass  []);
-                    BQA_Decay_Length.emplace_back(QA_Decay_Length[]);
-                    BQA_Chi2        .emplace_back(QA_Chi2        []);
+                    if (nIndex == -1){
+                        Mix_EvtID.push_back(Mix_B_EvtID[i][j][k][m]);
+                        std::vector<Int_t> Temp;
+                        Mix_TreID.push_back(Temp);
+                        nIndex = Mix_EvtID.size() - 1;
+                    }
+                    Mix_TreID[nIndex].push_back(Mix_B_TreID[i][j][k][m]);
                 }
-                if (Mix_event_Num[i][j][k] != 0) BhadronTree->Fill();
+                for (int m=0;m<Mix_A_Num[i][j][k];m++){
+                    int nIndex = -1;
+                    for (int n=0;n<Mix_EvtID.size();n++){
+                        if (Mix_A_EvtID[i][j][k][m] == Mix_EvtID[n]){
+                            nIndex = n;
+                            break;
+                        }
+                    }
+                    if (nIndex == -1){
+                        Mix_EvtID.push_back(Mix_A_EvtID[i][j][k][m]);
+                        std::vector<Int_t> Temp;
+                        Mix_TreID.push_back(Temp);
+                        nIndex = Mix_EvtID.size() - 1;
+                    }
+                    Mix_TreID[nIndex].push_back(Mix_A_TreID[i][j][k][m]);
+                }
+
             }
         }
+    }
+    for (int i=0;i<Mix_EvtID.size();i++){
+        hadronTree->GetEntry(Mix_EvtID[i]);
+        BPDGMult   = PDGMult  ;
+        BCrefMult  = refMult  ;
+        BCgrefMult = grefMult ;
+        BevtID     = EventID  ;
+        BrunID     = RunID    ;
+        BTriggerID = TriggerID;
+        for (int j=0;j<Mix_TreID[i].size();j++){
+            BPDG            .emplace_back(PDG            [Mix_TreID[i][j]]);
+            Bpx             .emplace_back(px             [Mix_TreID[i][j]]);
+            Bpy             .emplace_back(py             [Mix_TreID[i][j]]);
+            Bpz             .emplace_back(pz             [Mix_TreID[i][j]]);
+            BQA_eta         .emplace_back(QA_eta         [Mix_TreID[i][j]]);
+            BQA_dEdx        .emplace_back(QA_dEdx        [Mix_TreID[i][j]]);
+            BQA_m2          .emplace_back(QA_m2          [Mix_TreID[i][j]]);
+            BQA_DCA_V0_PV   .emplace_back(QA_DCA_V0_PV   [Mix_TreID[i][j]]);
+            BQA_nSigmaProton.emplace_back(QA_nSigmaProton[Mix_TreID[i][j]]);
+            BQA_nSigmaPion  .emplace_back(QA_nSigmaPion  [Mix_TreID[i][j]]);
+            BQA_nSigmaKaon  .emplace_back(QA_nSigmaKaon  [Mix_TreID[i][j]]);
+            BInvariantMass  .emplace_back(InvariantMass  [Mix_TreID[i][j]]);
+            BQA_Decay_Length.emplace_back(QA_Decay_Length[Mix_TreID[i][j]]);
+            BQA_Chi2        .emplace_back(QA_Chi2        [Mix_TreID[i][j]]);
+        }
+        BhadronTree->Fill();
     }
 
     BhadronTree->Write();
