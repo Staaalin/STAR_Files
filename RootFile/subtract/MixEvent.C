@@ -557,10 +557,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         EventIndex = Mix_B_EvtID[i][j][k][m];
                         hadronTree->GetEntry(EventIndex);
                         BPDGMult   = PDGMult  ;
-                        BCrefMult  = CrefMult ;
-                        BCgrefMult = CgrefMult;
-                        BevtID     = evtID    ;
-                        BrunID     = runID    ;
+                        BCrefMult  = refMult  ;
+                        BCgrefMult = grefMult ;
+                        BevtID     = EventID  ;
+                        BrunID     = RunID    ;
                         BTriggerID = TriggerID;
                     }
                     BPDG            .emplace_back(PDG            []);
