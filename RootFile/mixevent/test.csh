@@ -9,5 +9,4 @@ set OutputFileIndex = 0
 set A_PDG = 321
 set B_PDG = 3312
 
-# root4star -b Subtract.C\(\"$midname\",$StartFileIndex,$EndFileIndex,$OutputFileIndex,$Energy\)
 root4star -b MixEvent.C\(\"$midname\",$StartFileIndex,$EndFileIndex,$OutputFileIndex,$A_PDG,$B_PDG\)
