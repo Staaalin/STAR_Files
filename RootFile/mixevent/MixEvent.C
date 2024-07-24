@@ -493,7 +493,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             for (int k=0;k<PtBinNum;k++){
                 if (Mix_event_Num[i][j][k] != 0) {
                     cout<<"["<<i<<","<<j<<","<<k<<"] remain "<<Mix_event_Num[i][j][k]<<" events, "<<endl; 
-                    cout<<"     contains "<<Mix_A_Num[i][j][k]<<" A particles, and "<<Mix_B_Num[i][j][k]<<" B particles."<<endl;
+                    cout<<"     contains "<<Mix_A_Num[i][j][k]<<" particles A, and "<<Mix_B_Num[i][j][k]<<" particles B."<<endl;
                 }
                 H_Kstar[i][j][k]->Write();
                 H_Mix_Kstar[i][j][k]->Write();
@@ -617,6 +617,20 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             BQA_Chi2        .push_back(Chi2         ->at(Mix_TreID[i][j]));
         }
         BhadronTree->Fill();
+        BPDG            .resize(0);
+        Bpx             .resize(0);
+        Bpy             .resize(0);
+        Bpz             .resize(0);
+        BQA_eta         .resize(0);
+        BQA_dEdx        .resize(0);
+        BQA_m2          .resize(0);
+        BQA_DCA_V0_PV   .resize(0);
+        BQA_nSigmaProton.resize(0);
+        BQA_nSigmaPion  .resize(0);
+        BQA_nSigmaKaon  .resize(0);
+        BInvariantMass  .resize(0);
+        BQA_Decay_Length.resize(0);
+        BQA_Chi2        .resize(0);
     }
 
     BhadronTree->Write();
