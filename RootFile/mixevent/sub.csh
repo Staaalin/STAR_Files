@@ -121,7 +121,8 @@ while ($i <= $numFiles)
     set ARM = " > "
     echo ll >> $SubXml
     echo echo \"000000000000000000000000000000000000000\" >> $SubXml
-    echo set midname = \"output\_\" >> $SubXml
+    echo set midname = \"$InputName\" >> $SubXml
+    echo set outmidname = \"$OutputName\" >> $SubXml
     set Jnum = 0
     @ Jnum = $FileStart + $i * $FilesPerJob
     echo set StartFileIndex = $Jnum >> $SubXml
@@ -132,8 +133,9 @@ while ($i <= $numFiles)
     echo set B_PDG = $B_PDG >> $SubXml
     set LeftBrackets = "\("
     set RightBrackets = "\)"
-    echo root4star \-b MixEvent\.C$LeftBrackets\$midname,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
+    echo root4star \-b MixEvent\.C$LeftBrackets\$midname,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,\$outmidname,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
     # echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'$ARM$i".log" >> $SubXml
+    echo ls  >> $SubXml
     echo \</command\> >> $SubXml
 
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml

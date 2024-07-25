@@ -145,7 +145,7 @@ std::vector<int> GetNchList(int CentralityList[])
     return Result;
 }
 
-void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
+void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
               int A_PDG,int B_PDG)
 {
 
@@ -484,7 +484,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         
     }
 
-    TString OutputFileName = "HADD_";
+    TString OutputFileName = OutMidName;
     OutputFileName += OutputFileIndex;
     OutputFileName += ".root";
     TFile *file = new TFile(OutputFileName, "RECREATE");
