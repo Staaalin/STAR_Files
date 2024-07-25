@@ -130,7 +130,9 @@ while ($i <= $numFiles)
     echo set OutputFileIndex = $i >> $SubXml
     echo set A_PDG = $A_PDG >> $SubXml
     echo set B_PDG = $B_PDG >> $SubXml
-    echo root4star \-b MixEvent\.C\\(\$midname,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,\$A_PDG,\$B_PDG\\) >> $SubXml
+    set LeftBrackets = "\("
+    set RightBrackets = "\)"
+    echo root4star \-b MixEvent\.C$LeftBrackets\$midname,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
     # echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'$ARM$i".log" >> $SubXml
     echo \</command\> >> $SubXml
 
