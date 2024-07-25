@@ -484,7 +484,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         
     }
 
-    TString OutputFileName = "Cor_";
+    TString OutputFileName = "HADD_";
     OutputFileName += OutputFileIndex;
     OutputFileName += ".root";
     TFile *file = new TFile(OutputFileName, "RECREATE");

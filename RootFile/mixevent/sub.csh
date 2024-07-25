@@ -5,6 +5,22 @@
 # set FileStart = 1
 # set FileEnd = 66389
 
+echo "Particle PDG List:"
+echo "+-2212    Proton"
+echo "+-321     Kaon"
+echo "+-211     Pion"
+echo "  310     K0S"
+echo "  333     Phi"
+echo "+-3122    Lambda"
+echo "+-3312    Xi"
+echo "+-3334    Omega"
+
+echo "Please enter particle A PDG:"
+set A_PDG = "$<"
+echo "Please enter particle B PDG:"
+set B_PDG = "$<"
+
+
 echo "Please enter which location:"
 echo "SCHEME 1: /star/data01/pwg/svianping/output/output_*.root"
 echo "SCHEME 2: /star/data01/pwg/svianping/HADD/HADD_*.root"
@@ -112,9 +128,9 @@ while ($i <= $numFiles)
     @ Jnum = $FileStart + ( $i + 1 ) * $FilesPerJob - 1
     echo set EndFileIndex = $Jnum >> $SubXml
     echo set OutputFileIndex = $i >> $SubXml
-    echo set A_PDG = 321 >> $SubXml
-    echo set B_PDG = 3312 >> $SubXml
-    echo root4star \-b MixEvent.C\(\"$midname\",$StartFileIndex,$EndFileIndex,$OutputFileIndex,$A_PDG,$B_PDG\) >> $SubXml
+    echo set A_PDG = $A_PDG >> $SubXml
+    echo set B_PDG = $B_PDG >> $SubXml
+    echo root4star \-b MixEvent\.C\(\"$midname\",$StartFileIndex,$EndFileIndex,$OutputFileIndex,$A_PDG,$B_PDG\) >> $SubXml
     # echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'$ARM$i".log" >> $SubXml
     echo \</command\> >> $SubXml
 
