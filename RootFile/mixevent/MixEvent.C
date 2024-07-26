@@ -360,6 +360,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     for (int i=0;i<nentries;i++){
         // if (i > 15) {break;}
+        cout<<"Here"<<endl;
         hadronTree->GetEntry(i);
         if ((i+1)%200 == 0) cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
         // cout<<mult<<endl;
