@@ -390,6 +390,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         }
 
         if ((A_Px.size() == 0) || (B_Px.size() == 0)) continue;
+        cout<<"There"<<endl;
 
         // cout<<"B_Px.size() = "<<B_Px.size()<<endl;
         if (B_Px.size() == 1){
