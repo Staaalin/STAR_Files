@@ -371,6 +371,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         A_Pz.resize(0);B_Pz.resize(0);
         A_EvtID.resize(0);B_EvtID.resize(0);
         A_TreID.resize(0);B_TreID.resize(0);
+        cout<<"Fair"<<endl;
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
