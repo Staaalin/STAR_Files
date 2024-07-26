@@ -360,9 +360,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     for (int i=0;i<nentries;i++){
         // if (i > 15) {break;}
-        cout<<"Here"<<endl;
         hadronTree->GetEntry(i);
-        if ((i+1)%200 == 0) cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
+        if ((i+1)%500 == 0) cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
         // cout<<mult<<endl;
         // if(b>7){continue;}
         // cout<<"There OK"<<endl;
@@ -371,7 +370,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         A_Pz.resize(0);B_Pz.resize(0);
         A_EvtID.resize(0);B_EvtID.resize(0);
         A_TreID.resize(0);B_TreID.resize(0);
-        cout<<"Fair"<<endl;
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
@@ -391,7 +389,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         }
 
         if ((A_Px.size() == 0) || (B_Px.size() == 0)) continue;
-        cout<<"There"<<endl;
 
         // cout<<"B_Px.size() = "<<B_Px.size()<<endl;
         if (B_Px.size() == 1){
