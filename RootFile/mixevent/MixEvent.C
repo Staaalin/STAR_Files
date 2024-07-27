@@ -390,7 +390,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
         else{
-            cout<<"mix_px->size() = "<<mix_px->size()<<endl;
             for (int j=0;j<mix_px->size();j++){
                 if (PDG->at(j) == A_PDG) {
                     A_Px.push_back(mix_px->at(j));
@@ -398,6 +397,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     A_Pz.push_back(mix_pz->at(j));
                     A_EvtID.push_back(i);
                     A_TreID.push_back(j);
+                    cout<<"A"<<endl;
                 }
                 if (PDG->at(j) == B_PDG) {
                     B_Px.push_back(mix_px->at(j));
@@ -405,6 +405,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     B_Pz.push_back(mix_pz->at(j));
                     B_EvtID.push_back(i);
                     B_TreID.push_back(j);
+                    cout<<"B"<<endl;
                 }
             }
         }
