@@ -390,6 +390,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
         else{
+            cout<<"mix_px->size() = "<<mix_px->size()<<endl;
             for (int j=0;j<mix_px->size();j++){
                 if (PDG->at(j) == A_PDG) {
                     A_Px.push_back(mix_px->at(j));
