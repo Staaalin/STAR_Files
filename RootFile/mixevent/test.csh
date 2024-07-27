@@ -11,4 +11,8 @@ set OutputFileIndex = 0
 set A_PDG = 321
 set B_PDG = 3312
 
+<<<<<<< HEAD
 root4star -b MixEvent.C\(\"$midname\",$StartFileIndex,$EndFileIndex,$OutputFileIndex,\"$outname\",$A_PDG,$B_PDG,0\)
+=======
+root4star -b MixEvent.C\(\"$midname\",$StartFileIndex,$EndFileIndex,$OutputFileIndex,\"$outname\",$A_PDG,$B_PDG\)
+>>>>>>> parent of 13ac31b2 (upcode)

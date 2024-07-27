@@ -146,7 +146,7 @@ std::vector<int> GetNchList(int CentralityList[])
 }
 
 void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
-              int A_PDG,int B_PDG,int Mode = 0) // Mode = 0 从output读取，即从KFP一手数据读取
+              int A_PDG,int B_PDG)
 {
 
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
@@ -371,40 +371,20 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         A_EvtID.resize(0);B_EvtID.resize(0);
         A_TreID.resize(0);B_TreID.resize(0);
 
-        if (Mode == 0){
-            for (int j=0;j<PDGMult;j++){
-                if (PDG->at(j) == A_PDG) {
-                    A_Px.push_back(mix_px->at(j));
-                    A_Py.push_back(mix_py->at(j));
-                    A_Pz.push_back(mix_pz->at(j));
-                    A_EvtID.push_back(i);
-                    A_TreID.push_back(j);
-                }
-                if (PDG->at(j) == B_PDG) {
-                    B_Px.push_back(mix_px->at(j));
-                    B_Py.push_back(mix_py->at(j));
-                    B_Pz.push_back(mix_pz->at(j));
-                    B_EvtID.push_back(i);
-                    B_TreID.push_back(j);
-                }
+        for (int j=0;j<PDGMult;j++){
+            if (PDG->at(j) == A_PDG) {
+                A_Px.push_back(mix_px->at(j));
+                A_Py.push_back(mix_py->at(j));
+                A_Pz.push_back(mix_pz->at(j));
+                A_EvtID.push_back(i);
+                A_TreID.push_back(j);
             }
-        }
-        else{
-            for (int j=0;j<PDGMult;j++){
-                if (PDG->at(j) == A_PDG) {
-                    A_Px.push_back(mix_px[j]);
-                    A_Py.push_back(mix_py[j]);
-                    A_Pz.push_back(mix_pz[j]);
-                    A_EvtID.push_back(i);
-                    A_TreID.push_back(j);
-                }
-                if (PDG->at(j) == B_PDG) {
-                    B_Px.push_back(mix_px[j]);
-                    B_Py.push_back(mix_py[j]);
-                    B_Pz.push_back(mix_pz[j]);
-                    B_EvtID.push_back(i);
-                    B_TreID.push_back(j);
-                }
+            if (PDG->at(j) == B_PDG) {
+                B_Px.push_back(mix_px->at(j));
+                B_Py.push_back(mix_py->at(j));
+                B_Pz.push_back(mix_pz->at(j));
+                B_EvtID.push_back(i);
+                B_TreID.push_back(j);
             }
         }
 
@@ -614,89 +594,45 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
     }
-    if (Mode == 0){
-        for (int i=0;i<Mix_EvtID.size();i++){
-            hadronTree->GetEntry(Mix_EvtID[i]);
-            BPDGMult   = PDGMult  ;
-            BCrefMult  = refMult  ;
-            BCgrefMult = grefMult ;
-            BevtID     = EventID  ;
-            BrunID     = RunID    ;
-            BTriggerID = TriggerID;
-            for (int j=0;j<Mix_TreID[i].size();j++){
-                BPDG            .push_back(PDG          ->at(Mix_TreID[i][j]));
-                Bpx             .push_back(mix_px       ->at(Mix_TreID[i][j]));
-                Bpy             .push_back(mix_py       ->at(Mix_TreID[i][j]));
-                Bpz             .push_back(mix_pz       ->at(Mix_TreID[i][j]));
-                BQA_eta         .push_back(QA_eta       ->at(Mix_TreID[i][j]));
-                BQA_dEdx        .push_back(dEdx         ->at(Mix_TreID[i][j]));
-                BQA_m2          .push_back(m2           ->at(Mix_TreID[i][j]));
-                BQA_DCA_V0_PV   .push_back(dcatopv      ->at(Mix_TreID[i][j]));
-                BQA_nSigmaProton.push_back(nSigmaProton ->at(Mix_TreID[i][j]));
-                BQA_nSigmaPion  .push_back(nSigmaPion   ->at(Mix_TreID[i][j]));
-                BQA_nSigmaKaon  .push_back(nSigmaKaon   ->at(Mix_TreID[i][j]));
-                BInvariantMass  .push_back(InvariantMass->at(Mix_TreID[i][j]));
-                BQA_Decay_Length.push_back(Decay_Length ->at(Mix_TreID[i][j]));
-                BQA_Chi2        .push_back(Chi2         ->at(Mix_TreID[i][j]));
-            }
-            BhadronTree->Fill();
-            BPDG            .resize(0);
-            Bpx             .resize(0);
-            Bpy             .resize(0);
-            Bpz             .resize(0);
-            BQA_eta         .resize(0);
-            BQA_dEdx        .resize(0);
-            BQA_m2          .resize(0);
-            BQA_DCA_V0_PV   .resize(0);
-            BQA_nSigmaProton.resize(0);
-            BQA_nSigmaPion  .resize(0);
-            BQA_nSigmaKaon  .resize(0);
-            BInvariantMass  .resize(0);
-            BQA_Decay_Length.resize(0);
-            BQA_Chi2        .resize(0);
+    for (int i=0;i<Mix_EvtID.size();i++){
+        hadronTree->GetEntry(Mix_EvtID[i]);
+        BPDGMult   = PDGMult  ;
+        BCrefMult  = refMult  ;
+        BCgrefMult = grefMult ;
+        BevtID     = EventID  ;
+        BrunID     = RunID    ;
+        BTriggerID = TriggerID;
+        for (int j=0;j<Mix_TreID[i].size();j++){
+            BPDG            .push_back(PDG          ->at(Mix_TreID[i][j]));
+            Bpx             .push_back(mix_px       ->at(Mix_TreID[i][j]));
+            Bpy             .push_back(mix_py       ->at(Mix_TreID[i][j]));
+            Bpz             .push_back(mix_pz       ->at(Mix_TreID[i][j]));
+            BQA_eta         .push_back(QA_eta       ->at(Mix_TreID[i][j]));
+            BQA_dEdx        .push_back(dEdx         ->at(Mix_TreID[i][j]));
+            BQA_m2          .push_back(m2           ->at(Mix_TreID[i][j]));
+            BQA_DCA_V0_PV   .push_back(dcatopv      ->at(Mix_TreID[i][j]));
+            BQA_nSigmaProton.push_back(nSigmaProton ->at(Mix_TreID[i][j]));
+            BQA_nSigmaPion  .push_back(nSigmaPion   ->at(Mix_TreID[i][j]));
+            BQA_nSigmaKaon  .push_back(nSigmaKaon   ->at(Mix_TreID[i][j]));
+            BInvariantMass  .push_back(InvariantMass->at(Mix_TreID[i][j]));
+            BQA_Decay_Length.push_back(Decay_Length ->at(Mix_TreID[i][j]));
+            BQA_Chi2        .push_back(Chi2         ->at(Mix_TreID[i][j]));
         }
-    }
-    else{
-        for (int i=0;i<Mix_EvtID.size();i++){
-            hadronTree->GetEntry(Mix_EvtID[i]);
-            BPDGMult   = PDGMult  ;
-            BCrefMult  = refMult  ;
-            BCgrefMult = grefMult ;
-            BevtID     = EventID  ;
-            BrunID     = RunID    ;
-            BTriggerID = TriggerID;
-            for (int j=0;j<Mix_TreID[i].size();j++){
-                BPDG            .push_back(PDG          [Mix_TreID[i][j]]);
-                Bpx             .push_back(mix_px       [Mix_TreID[i][j]]);
-                Bpy             .push_back(mix_py       [Mix_TreID[i][j]]);
-                Bpz             .push_back(mix_pz       [Mix_TreID[i][j]]);
-                BQA_eta         .push_back(QA_eta       [Mix_TreID[i][j]]);
-                BQA_dEdx        .push_back(dEdx         [Mix_TreID[i][j]]);
-                BQA_m2          .push_back(m2           [Mix_TreID[i][j]]);
-                BQA_DCA_V0_PV   .push_back(dcatopv      [Mix_TreID[i][j]]);
-                BQA_nSigmaProton.push_back(nSigmaProton [Mix_TreID[i][j]]);
-                BQA_nSigmaPion  .push_back(nSigmaPion   [Mix_TreID[i][j]]);
-                BQA_nSigmaKaon  .push_back(nSigmaKaon   [Mix_TreID[i][j]]);
-                BInvariantMass  .push_back(InvariantMass[Mix_TreID[i][j]]);
-                BQA_Decay_Length.push_back(Decay_Length [Mix_TreID[i][j]]);
-                BQA_Chi2        .push_back(Chi2         [Mix_TreID[i][j]]);
-            }
-            BhadronTree->Fill();
-            BPDG            .resize(0);
-            Bpx             .resize(0);
-            Bpy             .resize(0);
-            Bpz             .resize(0);
-            BQA_eta         .resize(0);
-            BQA_dEdx        .resize(0);
-            BQA_m2          .resize(0);
-            BQA_DCA_V0_PV   .resize(0);
-            BQA_nSigmaProton.resize(0);
-            BQA_nSigmaPion  .resize(0);
-            BQA_nSigmaKaon  .resize(0);
-            BInvariantMass  .resize(0);
-            BQA_Decay_Length.resize(0);
-            BQA_Chi2        .resize(0);
-        }
+        BhadronTree->Fill();
+        BPDG            .resize(0);
+        Bpx             .resize(0);
+        Bpy             .resize(0);
+        Bpz             .resize(0);
+        BQA_eta         .resize(0);
+        BQA_dEdx        .resize(0);
+        BQA_m2          .resize(0);
+        BQA_DCA_V0_PV   .resize(0);
+        BQA_nSigmaProton.resize(0);
+        BQA_nSigmaPion  .resize(0);
+        BQA_nSigmaKaon  .resize(0);
+        BInvariantMass  .resize(0);
+        BQA_Decay_Length.resize(0);
+        BQA_Chi2        .resize(0);
     }
 
     BhadronTree->Write();
