@@ -390,7 +390,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
         else{
-            for (int j=0;j<mix_px.size();j++){
+            for (int j=0;j<mix_px->size();j++){
                 if (PDG->at(j) == A_PDG) {
                     A_Px.push_back(mix_px->at(j));
                     A_Py.push_back(mix_py->at(j));
