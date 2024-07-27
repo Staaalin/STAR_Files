@@ -405,9 +405,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     B_EvtID.push_back(i);
                     B_TreID.push_back(j);
                 }
-                cout<<"PDG->at(j) = "<<PDG->at(j)<<endl;
             }
-            cout<<"End event"<<endl;
         }
 
         if ((A_Px.size() == 0) || (B_Px.size() == 0)) continue;
