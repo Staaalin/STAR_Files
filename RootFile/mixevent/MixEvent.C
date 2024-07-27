@@ -398,16 +398,16 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     A_EvtID.push_back(i);
                     A_TreID.push_back(j);
                 }
-                cout<<"B_PDG = "<<B_PDG<<endl;
                 if (PDG->at(j) == B_PDG) {
                     B_Px.push_back(mix_px->at(j));
                     B_Py.push_back(mix_py->at(j));
                     B_Pz.push_back(mix_pz->at(j));
                     B_EvtID.push_back(i);
                     B_TreID.push_back(j);
-                    cout<<"B"<<endl;
                 }
+                cout<<"PDG->at(j) = "<<PDG->at(j)<<endl;
             }
+            cout<<"End event"<<endl;
         }
 
         if ((A_Px.size() == 0) || (B_Px.size() == 0)) continue;
