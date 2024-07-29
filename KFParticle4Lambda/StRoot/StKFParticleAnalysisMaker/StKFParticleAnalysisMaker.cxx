@@ -1368,8 +1368,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	const double DVz = VertexZ-vpdVz;
 
-	if(fabs(VertexZ) > 80) return kStOK; // AuAu27 80 ; dAu@39 25
-	if(sqrt(pow(VertexX,2.)+pow(VertexY,2.))>2.0) return kStOK; 
+	// d+Au@200GeV RUN21 https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
+	if(fabs(VertexZ - 5) > 80) return kStOK; // AuAu27 80 ; dAu@39 25
+	if(sqrt(pow(VertexX + 0.4,2.)+pow(VertexY,2.))>2.0) return kStOK; 
 	if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
 
 	//check run number
@@ -1451,10 +1452,13 @@ Int_t StKFParticleAnalysisMaker::Make()
     	if (! track)            continue;
     	if (! track->charge())  continue;
     	if (  track->nHitsFit() < 15) continue;
-		if (  track->nHitsDedx() < 15) continue;
-		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
-		if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
-		if (! track->isPrimary()) continue;
+		// if (  track->nHitsDedx() < 15) continue;
+		// if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
+		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52) continue;
+		// if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
+		// if (! track->isPrimary()) continue;
+		if (track->gMom().Perp() < 0.2 || track->gMom().Perp() > 2.0) continue;
+		if (track->gDCA(Vertex3D).Mag() > 3) continue;
 		NumCharge++;
 	}
 	Nch = NumCharge;

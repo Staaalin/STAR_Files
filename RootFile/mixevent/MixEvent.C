@@ -271,6 +271,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     Int_t EventID  ;
     Int_t RunID    ;
     Int_t TriggerID;
+    Int_t Nch;
 
     hadronTree->SetBranchAddress("PDGMult"  ,&PDGMult  );
     hadronTree->SetBranchAddress("refMult"  ,&refMult  );
@@ -278,6 +279,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     hadronTree->SetBranchAddress("EventID"  ,&EventID  );
     hadronTree->SetBranchAddress("RunID"    ,&RunID    );
     hadronTree->SetBranchAddress("TriggerID",&TriggerID);
+    hadronTree->SetBranchAddress("Nch"      ,&Nch      );
     
     hadronTree->SetBranchAddress("PDG"          ,&PDG          ,&bPDG          );
     hadronTree->SetBranchAddress("mix_px"       ,&mix_px       ,&bmix_px       );
@@ -416,7 +418,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
             int CenIndex = -1;
             for (int k=0;k<CentralityBinNum;k++){
-                if ((NchList[k] <= refMult) && (refMult < NchList[k+1])) {
+                // if ((NchList[k] <= refMult) && (refMult < NchList[k+1])) {
+                if ((NchList[k] <= Nch) && (Nch < NchList[k+1])) {
                     CenIndex = k;
                     break;
                 }
