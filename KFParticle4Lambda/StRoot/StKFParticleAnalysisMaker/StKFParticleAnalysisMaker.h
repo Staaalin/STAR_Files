@@ -81,6 +81,7 @@ private:
 	StPicoDst *PicoDst;
 	StPicoTrack *ProtonTrack, *PionTrack, *KaonTrack;
 	void BookVertexPlots();
+	vector<vector<int> > Recorded_KFP_ID;
 
 	StPicoDstMaker *mPicoDstMaker;
 	StRefMultCorr *mRefMultCorr;
