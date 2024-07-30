@@ -75,7 +75,7 @@ const int nFitHits_trig = 10;
 const int nFitRatio_trig_lo = 0.52;  //0.52
 const int nFitRatio_trig_up = 1.05;  //1.05
 
-const Float_t Vz_cut = 1000;    	//30, Vz
+const Float_t Vz_cut = 2;    	//30, Vz
 const Float_t Vr_cut = 2;	//2, Vr
 const float Vz_diff = 10;        //5, difference between Vz{TPC} and Vz{VPD}
 const int cenDef[9] = {6,11,21,38,61,95,141,205,249}; //Updated 19June 2023 for 11GeV v1
@@ -167,7 +167,7 @@ const float PP2[9] = {4.82547e+00,7.87162e+00,1.72209e+01,1.18083e+01,1.37230e+0
         TH1D *hTrigger = new TH1D("hTrigger","hTrigger",200, 0.5, 200.5);
         TH1D *hCentrality = new TH1D("hCentrality","hCentrality",11,-1.5,9.5);
 	TH2D *hVertexXY = new TH2D("hVertexXY","hVertexXY",300,-3,3, 300,-3,3);
-        TH1D *hVertexZ = new TH1D("hVertexZ","hVertexZ",100,-100,100);
+        TH1D *hVertexZ = new TH1D("hVertexZ","hVertexZ",500,-250,250);
 	TH1D *hVzDiff = new TH1D("hVzDiff","hVzDiff",500,-250,250);
         TH2D *hMult_Vz = new TH2D("hMult_Vz","hMult_Vz",1000,-0.5,999.5,500,-250,250);
         TH2D *hMult_Vz_new = new TH2D("hMult_Vz_new","hMult_Vz_new",1000,-0.5,999.5,500,-250,250);
@@ -482,7 +482,7 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                         StPicoTrack *track = dst->track(iTrack);
                         if (! track)            continue;
                         if (! track->charge())  continue;
-                        if (  track->nHitsFit() < 10) continue;
+                        // if (  track->nHitsFit() < 10) continue;
                         if (! track->isPrimary()) continue;
                         // if (  (track->gDCA(pV)).Mag() > 3.0) continue;
                         // if (  fabs(track->gMom().Eta()) > 1.5) continue;
@@ -598,14 +598,14 @@ if((opt_useEPD == 1 || opt_useEPD == 11) && (EPD_EP_east == EPD_EP_west || (EPD_
 bool IsGoodEvent(int c) {
         hZDCcoin->Fill(ZDCcoin);
 	hVertexXY->Fill(pVx, pVy);
-	if(sqrt((pVx)*(pVx)+(pVy)*(pVy)) > Vr_cut) return false;
+	if(sqrt((pVx)*(pVx)+(pVy+2)*(pVy+2)) > Vr_cut) return false;
 hTally->Fill(3);
         hVzDiff->Fill(pVz-VPDvz);
         //if(TMath::Abs(pVz-VPDvz)> Vz_diff) return false;
         hMult_Vz->Fill(RefMult,pVz);
         hVertexZ->Fill(pVz);
 hTally->Fill(4);
-        if(TMath::Abs(pVz) > Vz_cut) return false;        
+        if(TMath::Abs(pVz-200) > Vz_cut) return false;        
 //	if(pVz<0) return false;
         hMult_Vz_new->Fill(RefMult,pVz,Eweight);
 	Ref_TOF->Fill(RefMult,TOFMult);
