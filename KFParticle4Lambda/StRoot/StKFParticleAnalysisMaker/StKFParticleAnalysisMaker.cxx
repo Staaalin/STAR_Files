@@ -1398,6 +1398,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	double mWght = refmultWght;
 	double mult_corr = refmultCorr;
+	bool IfHelix = true;
 
 	if (IfQAMode){
 		///////////////////////////
@@ -1531,7 +1532,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
 			bool IfWellConstrcuted = true;
-			bool IfHelix = true;
 
 			#ifdef DEBUGGING
 			std::cout << "Parsing refMult : " << refMult <<std::endl;
