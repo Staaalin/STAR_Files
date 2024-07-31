@@ -1461,6 +1461,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// if (! track->isPrimary()) continue;
 		if (track->gMom().Perp() < 0.2 || track->gMom().Perp() > 2.0) continue;
 		if (track->gDCA(Vertex3D).Mag() > 3) continue;
+		if (fabs(track->gMom().Eta()) > 1.5) continue;
 		NumCharge++;
 	}
 	Nch = NumCharge;
