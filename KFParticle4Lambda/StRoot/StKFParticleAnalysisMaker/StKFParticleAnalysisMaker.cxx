@@ -1779,22 +1779,30 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// double v0decaylength = xv0toPV.Mag();
 			// double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();// cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
 			if (IfTree){
-				vector<int> Temp;Temp.resize(0);Temp.push_back(iKFParticle);
-				for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-					Temp.push_back(particle.DaughterIds()[iDaughter]);
-				}
 				bool CheckPass = true;
-				for (int i = 0;i<Recorded_KFP_ID.size();i++){
-					for (int j=0;j<Recorded_KFP_ID[i].size();j++){
-						for (int k=0;k<Temp.size();k++){
-							if (Recorded_KFP_ID[i][j] == Temp[k]){
-								CheckPass = false;
-								break;
+				vector<int> Temp;Temp.resize(0);Temp.push_back(iKFParticle);
+				if      ((fabs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 3*PhiPdgMassSigma)) {CheckPass = false;}
+				else if ((fabs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 3*K0SPdgMassSigma)) {CheckPass = false;}
+				else if ((fabs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 3*LambdaPdgMassSigma)) {CheckPass = false;}
+				else if ((fabs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 3*XiPdgMassSigma)) {CheckPass = false;}
+				else if ((fabs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 3*OmegaPdgMassSigma)) {CheckPass = false;}
+				if (CheckPass == true) {
+					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+						Temp.push_back(particle.DaughterIds()[iDaughter]);
+					}
+				
+					for (int i = 0;i<Recorded_KFP_ID.size();i++){
+						for (int j=0;j<Recorded_KFP_ID[i].size();j++){
+							for (int k=0;k<Temp.size();k++){
+								if (Recorded_KFP_ID[i][j] == Temp[k]){
+									CheckPass = false;
+									break;
+								}
 							}
+							if (CheckPass == false) break;
 						}
 						if (CheckPass == false) break;
 					}
-					if (CheckPass == false) break;
 				}
 				if (CheckPass == true) {
 					for (int i = 0;i<Temp.size();i++){
