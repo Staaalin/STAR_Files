@@ -1369,7 +1369,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	const double DVz = VertexZ-vpdVz;
 
 	// d+Au@200GeV RUN21 https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
-	if(fabs(VertexZ - 5) > 40) return kStOK; // AuAu27 80 ; dAu@39 25
+	if(fabs(VertexZ - 5) > 50) return kStOK; // AuAu27 80 ; dAu@39 25
 	if(sqrt(pow(VertexX + 0.4,2.)+pow(VertexY,2.))>2.0) return kStOK; 
 	if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
 
@@ -1812,6 +1812,26 @@ Int_t StKFParticleAnalysisMaker::Make()
 								CheckPass = false;
 								break;
 							}
+						}
+					}
+				}
+				if (CheckPass == true) {
+					KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
+					if ((NKFParticle.GetPDG() == 310) && ((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG() == 211)) {
+						for (int iDaughter = 1;iDaughter<Temp.size();iDaughter++){
+							int iTrack = 0;
+							const int globalTrackId = (KFParticleInterface->GetParticles()[Temp[iDaughter]]).DaughterIds()[0];
+							Int_t iTrackStart = globalTrackId - 1;
+							if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+							for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+								StPicoTrack *track = mPicoDst->track(jTrack);
+								if (track->id() == globalTrackId){
+									iTrack = jTrack;
+									break;
+								}
+							}
+							StPicoTrack *track = mPicoDst->track(iTrack);
+							track->setNHitsFit(0);
 						}
 					}
 				}
