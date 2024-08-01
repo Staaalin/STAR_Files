@@ -1817,8 +1817,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 				if (CheckPass == true) {
 					KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
-					if ((NKFParticle.GetPDG() == 310) && ((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG() == 211)) {
+					if ((NKFParticle.GetPDG() == 310)) {
 						for (int iDaughter = 1;iDaughter<Temp.size();iDaughter++){
+							if (fabs((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG()) != 211) continue;
 							int iTrack = 0;
 							const int globalTrackId = (KFParticleInterface->GetParticles()[Temp[iDaughter]]).DaughterIds()[0];
 							Int_t iTrackStart = globalTrackId - 1;
