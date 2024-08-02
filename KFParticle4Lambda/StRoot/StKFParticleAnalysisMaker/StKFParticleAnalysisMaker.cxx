@@ -1779,9 +1779,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 							}
 						}
 						if (IfPass == false) continue;
+						//
 						float PEnergy = pow(PPx*PPx + PPy*PPy + PPz*PPz + PMass*PMass , 0.5);
 						H_Hyperon_Rap[Itr]->Fill(0.5*log((PEnergy+PPz)/(PEnergy-PPz)));
-						//
 						
 						// hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
 						// QA_DCA_Daughters.emplace_back(-1.0);
@@ -2277,8 +2277,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 					if (abs(PDGList[Itr])==PionPdg) {
 						if (
 							(
-								// true
-								((-0.012 <= m2)&&(m2 <= 0.049)) // Tight 0.5 < $p_t$ < 0.6 GeV
+								true
+								// ((-0.012 <= m2)&&(m2 <= 0.049)) // Tight 0.5 < $p_t$ < 0.6 GeV
 								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
 							) == false
 						)
