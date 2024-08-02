@@ -1756,12 +1756,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 							continue;
 						}
 						// 
+						bool IfPass = true;
 						if ((particle.GetPDG() == 310)) {
 							for (int iDaughter = 1;iDaughter<particle.NDaughters();iDaughter++){
 								const int daughterId = particle.DaughterIds()[iDaughter];
 								// cout<<"daughterId = "<<daughterId<<endl;
 								const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-								if (fabs(daughter.GetPDG()) != 211) continue;
+								if (abs(daughter.GetPDG()) != 211) continue;
 								int iTrack = 0;
 								const int globalTrackId = (KFParticleInterface->GetParticles()[daughterId]).DaughterIds()[0];
 								Int_t iTrackStart = globalTrackId - 1;
@@ -1774,9 +1775,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 									}
 								}
 								StPicoTrack *track = mPicoDst->track(iTrack);
-								if(fabs(track->nSigmaPion()) > 2.5) continue;
+								if(fabs(track->nSigmaPion()) > 2.5) IfPass = false;
 							}
 						}
+						if (IfPass == false) continue;
 						float PEnergy = pow(PPx*PPx + PPy*PPy + PPz*PPz + PMass*PMass , 0.5);
 						H_Hyperon_Rap[Itr]->Fill(0.5*log((PEnergy+PPz)/(PEnergy-PPz)));
 						//
