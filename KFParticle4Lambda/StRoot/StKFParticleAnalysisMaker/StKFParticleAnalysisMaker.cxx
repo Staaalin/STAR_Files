@@ -1775,7 +1775,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 									}
 								}
 								StPicoTrack *track = mPicoDst->track(iTrack);
-								if(fabs(track->nSigmaPion()) > 2.5) IfPass = false;
+								std::vector<int> TestPDG;TestPDG.push_back((KFParticleInterface->GetParticles()[daughterId]).GetPDG());
+								std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(TestPDG , track , Vertex3D);
+								if(PDGBool[0] == false) IfPass = false;
 							}
 						}
 						if (IfPass == false) continue;
@@ -1844,7 +1846,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
 					if ((NKFParticle.GetPDG() == 310)) {
 						for (int iDaughter = 1;iDaughter<Temp.size();iDaughter++){
-							if (fabs((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG()) != 211) continue;
+							if (abs((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG()) != 211) continue;
 							int iTrack = 0;
 							const int globalTrackId = (KFParticleInterface->GetParticles()[Temp[iDaughter]]).DaughterIds()[0];
 							Int_t iTrackStart = globalTrackId - 1;
@@ -1857,7 +1859,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 								}
 							}
 							StPicoTrack *track = mPicoDst->track(iTrack);
-							if(fabs(track->nSigmaPion()) > 2.5) CheckPass = false;
+							std::vector<int> TestPDG;TestPDG.push_back((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG());
+							std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(TestPDG , track , Vertex3D);
+							if(PDGBool[0] == false) CheckPass = false;
 						}
 					}
 				}
