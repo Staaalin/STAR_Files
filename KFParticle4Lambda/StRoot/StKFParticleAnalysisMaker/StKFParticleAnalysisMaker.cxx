@@ -1832,7 +1832,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 								}
 							}
 							StPicoTrack *track = mPicoDst->track(iTrack);
-							track->setNHitsFit(0);
+							if(fabs(track->nSigmaPion()) > 2.5) CheckPass = false;
 						}
 					}
 				}
