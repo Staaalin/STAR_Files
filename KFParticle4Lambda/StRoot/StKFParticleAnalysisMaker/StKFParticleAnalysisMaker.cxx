@@ -1746,17 +1746,40 @@ Int_t StKFParticleAnalysisMaker::Make()
 							// QA_IfBadReconstructed.emplace_back(1);
 						}
 						float PMass = 0.0;
-						if      ((abs(PDGList[Itr]) == K0SPdg   ) && (fabs(particle.GetMass() - K0SPdgMass   ) < K0SPdgMassSigma   )){ PMass = K0SPdgMass;}
-						else if ((abs(PDGList[Itr]) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) < LambdaPdgMassSigma)){ PMass = LambdaPdgMass;}
-						else if ((abs(PDGList[Itr]) == XiPdg    ) && (fabs(particle.GetMass() - XiPdgMass    ) < XiPdgMassSigma    )){ PMass = XiPdgMass;}
-						else if ((abs(PDGList[Itr]) == OmegaPdg ) && (fabs(particle.GetMass() - OmegaPdgMass ) < OmegaPdgMassSigma )){ PMass = OmegaPdgMass;}
-						else if ((abs(PDGList[Itr]) == PhiPdg   ) && (fabs(particle.GetMass() - PhiPdgMass   ) < PhiPdgMassSigma   )){ PMass = PhiPdgMass;}
+						if      ((abs(PDGList[Itr]) == K0SPdg   ) && (fabs(particle.GetMass() - K0SPdgMass   ) < 3*K0SPdgMassSigma   )){ PMass = K0SPdgMass;}
+						else if ((abs(PDGList[Itr]) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) < 3*LambdaPdgMassSigma)){ PMass = LambdaPdgMass;}
+						else if ((abs(PDGList[Itr]) == XiPdg    ) && (fabs(particle.GetMass() - XiPdgMass    ) < 3*XiPdgMassSigma    )){ PMass = XiPdgMass;}
+						else if ((abs(PDGList[Itr]) == OmegaPdg ) && (fabs(particle.GetMass() - OmegaPdgMass ) < 3*OmegaPdgMassSigma )){ PMass = OmegaPdgMass;}
+						else if ((abs(PDGList[Itr]) == PhiPdg   ) && (fabs(particle.GetMass() - PhiPdgMass   ) < 3*PhiPdgMassSigma   )){ PMass = PhiPdgMass;}
 						else if ((abs(PDGList[Itr]) == LambdaPdg) || (abs(PDGList[Itr]) == XiPdg) || (abs(PDGList[Itr]) == OmegaPdg) || (abs(PDGList[Itr]) == K0SPdg) || (abs(PDGList[Itr]) == PhiPdg)) {break;}
 						else {
 							continue;
 						}
+						// 
+						if ((particle.GetPDG() == 310)) {
+							for (int iDaughter = 1;iDaughter<particle.NDaughters();iDaughter++){
+								const int daughterId = particle.DaughterIds()[iDaughter];
+								// cout<<"daughterId = "<<daughterId<<endl;
+								const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+								if (fabs(daughter.GetPDG()) != 211) continue;
+								int iTrack = 0;
+								const int globalTrackId = (KFParticleInterface->GetParticles()[daughterId]).DaughterIds()[0];
+								Int_t iTrackStart = globalTrackId - 1;
+								if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+								for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+									StPicoTrack *track = mPicoDst->track(jTrack);
+									if (track->id() == globalTrackId){
+										iTrack = jTrack;
+										break;
+									}
+								}
+								StPicoTrack *track = mPicoDst->track(iTrack);
+								if(fabs(track->nSigmaPion()) > 2.5) continue;
+							}
+						}
 						float PEnergy = pow(PPx*PPx + PPy*PPy + PPz*PPz + PMass*PMass , 0.5);
 						H_Hyperon_Rap[Itr]->Fill(0.5*log((PEnergy+PPz)/(PEnergy-PPz)));
+						//
 						
 						// hHM_ParentDCA->Fill(particle.GetMass(),TrackDCA);
 						// QA_DCA_Daughters.emplace_back(-1.0);
