@@ -63,6 +63,9 @@ Double_t massList(int PID)
             case -321 :
                 Result = 0.493677;
                 break;
+            case 310 :
+                Result = 0.49794;
+                break;
             case 211 :
                 Result = 0.13957;
                 break;
