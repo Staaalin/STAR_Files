@@ -508,11 +508,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     }
 
     TString OutputFileName = OutMidName;
+    OutputFileName += "_H";
     OutputFileName += OutputFileIndex;
     OutputFileName += ".root";
-    TFile *file = new TFile(OutputFileName, "RECREATE");
+    TFile *fileA = new TFile(OutputFileName, "RECREATE");
 
-
+    fileA->cd();
     for (int i=0;i<CentralityBinNum;i++){
         for (int j=0;j<yBinNum;j++){
             for (int k=0;k<PtBinNum;k++){
@@ -525,9 +526,15 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
     }
+    fileA.Close();
 
     // Writing remaining pool
 
+    OutputFileName = OutMidName;
+    OutputFileName += "_T";
+    OutputFileName += OutputFileIndex;
+    OutputFileName += ".root";
+    TFile *fileB = new TFile(OutputFileName, "RECREATE");
     if (Mode == 0){
         int buffer_size = 5000000;
         int BPDGMult  ;
@@ -659,9 +666,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             BQA_Chi2        .resize(0);
         }
 
+        fileB->cd();
         BhadronTree->Write();
     }
-    file->Write();
+    fileB->Write();
+    fileB->Close();
 
     return;
 }
