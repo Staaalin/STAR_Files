@@ -511,7 +511,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     }
 
     TString OutputFileName = OutMidName;
-    OutputFileName += "_H";
+    OutputFileName += "H_";
     OutputFileName += OutputFileIndex;
     OutputFileName += ".root";
     TFile *fileA = new TFile(OutputFileName, "RECREATE");
@@ -534,7 +534,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     // Writing remaining pool
 
     OutputFileName = OutMidName;
-    OutputFileName += "_T";
+    OutputFileName += "T_";
     OutputFileName += OutputFileIndex;
     OutputFileName += ".root";
     TFile *fileB = new TFile(OutputFileName, "RECREATE");

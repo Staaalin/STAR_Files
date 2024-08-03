@@ -166,7 +166,10 @@ while ($i <= $numFiles)
     echo \</SandBox\> >> $SubXml
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/HADD/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"$i.log\" toURL=\"file:$OutputURL\" /\> >> $SubXml
-    echo \<output fromScratch=\"$OutputName$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
+    set HC = "H_"
+    set TC = "T_"
+    echo \<output fromScratch=\"$OutputName$HC$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
+    echo \<output fromScratch=\"$OutputName$TC$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     echo \</job\> >> $SubXml
 
     star-submit $SubXml
