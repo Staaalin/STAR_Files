@@ -546,6 +546,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         int BevtID    ;
         int BrunID    ;
         int BTriggerID;
+        int BNch      ;
         std::vector<int> BPDG               ;BPDG            .resize(0);
         std::vector<float> Bpx              ;Bpx             .resize(0);
         std::vector<float> Bpy              ;Bpy             .resize(0);
@@ -567,6 +568,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         BhadronTree->Branch("EventID"            ,&BevtID               ,"EventID/I"                           );
         BhadronTree->Branch("RunID"              ,&BrunID               ,"RunID/I"                             );
         BhadronTree->Branch("TriggerID"          ,&BTriggerID           ,"TriggerID/I"                         );
+        BhadronTree->Branch("Nch"                ,&BNch                 ,"Nch/I"                               );
         BhadronTree->Branch("PDG"                ,&BPDG                 );
         BhadronTree->Branch("mix_px"             ,&Bpx                  );
         BhadronTree->Branch("mix_py"             ,&Bpy                  );
@@ -636,6 +638,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             BevtID     = EventID  ;
             BrunID     = RunID    ;
             BTriggerID = TriggerID;
+            BNch       = Nch      ;
             for (int j=0;j<Mix_TreID[i].size();j++){
                 BPDG            .push_back(PDG          ->at(Mix_TreID[i][j]));
                 Bpx             .push_back(mix_px       ->at(Mix_TreID[i][j]));
