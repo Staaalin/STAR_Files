@@ -274,7 +274,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     Int_t EventID  ;
     Int_t RunID    ;
     Int_t TriggerID;
-    Int_t Nch;
+    Int_t Nch      ;
 
     hadronTree->SetBranchAddress("PDGMult"  ,&PDGMult  );
     hadronTree->SetBranchAddress("refMult"  ,&refMult  );

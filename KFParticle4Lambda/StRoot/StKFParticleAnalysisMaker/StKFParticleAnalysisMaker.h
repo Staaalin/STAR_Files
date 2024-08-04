@@ -185,6 +185,7 @@ private:
 	TH2F *H_eta_DVz                [30][3];// Trigger Num not larger than 30
 	TH1F *H_eta_triggerBIN         [30][3];// Trigger Num not larger than 30
 	TH1F *H_eta_triggerBIN_hasTOF  [30][3];// Trigger Num not larger than 30
+	TH1F *H_Nch_triggerBIN         [30][3];// Trigger Num not larger than 30
 	TH2F *H_eta_trigger;
 
 	TH2F *H_nHitsFit_p[PDG2NameSize2];

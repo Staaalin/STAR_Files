@@ -403,6 +403,17 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 				HistName2 += Trigger_List[TriggerItr];
 				H_eta_triggerBIN_hasTOF[TriggerItr][Itr] = new TH1F(HistName1,HistName2,     200,-2,2);
 				H_eta_triggerBIN_hasTOF[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
+				
+				HistName1 = "H_Nch_triggerBIN_";
+				HistName2 = ChargeName[Itr];
+				HistName2 += "Tracks ";
+				HistName2 += "N_Charge distribution, Trigger: ";
+				HistName1 += ChargeName[Itr];
+				HistName1 += "_Trigger_";
+				HistName1 += TriggerItr;
+				HistName2 += Trigger_List[TriggerItr];
+				H_Nch_triggerBIN[TriggerItr][Itr] = new TH1F(HistName1,HistName2,     400,0,400);
+				H_Nch_triggerBIN[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
 			}
 		}
 		H_eta_trigger = new TH2F("H_eta_trigger","trigger vs. eta",     200,-2,2,TriggerListLength,-0.5,TriggerListLength-0.5);
@@ -1001,6 +1012,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 				H_eta_DVz                [TriggerItr][Itr]->Write();
 				H_eta_triggerBIN         [TriggerItr][Itr]->Write();
 				H_eta_triggerBIN_hasTOF  [TriggerItr][Itr]->Write();
+				H_Nch_triggerBIN         [TriggerItr][Itr]->Write();
 			}
 		}
 		H_eta_trigger     ->Write();
@@ -2224,6 +2236,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			H_eta_PVr         [TriggerID_in_TriggerList][2]->Fill(eta,VertexR);
 			H_eta_DVz         [TriggerID_in_TriggerList][2]->Fill(eta,DVz);
 			H_eta_triggerBIN  [TriggerID_in_TriggerList][2]->Fill(eta);
+			H_Nch_triggerBIN  [TriggerID_in_TriggerList][2]->Fill(Nch);
 			if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][2]->Fill(eta);}
 			if (track->charge() > 0) {
 				H_eta_nSigmaKaon  [TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaKaon());
