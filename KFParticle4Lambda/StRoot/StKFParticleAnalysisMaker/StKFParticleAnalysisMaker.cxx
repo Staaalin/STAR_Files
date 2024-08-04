@@ -2032,6 +2032,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// Filling Track
 	if (IfQAMode) {
 		hNch_per_VertexZ->Fill(VertexZ,NumCharge);
+		H_Nch_triggerBIN[TriggerID_in_TriggerList][2]->Fill(Nch);
 	}
 	
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
@@ -2236,7 +2237,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			H_eta_PVr         [TriggerID_in_TriggerList][2]->Fill(eta,VertexR);
 			H_eta_DVz         [TriggerID_in_TriggerList][2]->Fill(eta,DVz);
 			H_eta_triggerBIN  [TriggerID_in_TriggerList][2]->Fill(eta);
-			H_Nch_triggerBIN  [TriggerID_in_TriggerList][2]->Fill(Nch);
 			if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][2]->Fill(eta);}
 			if (track->charge() > 0) {
 				H_eta_nSigmaKaon  [TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaKaon());
