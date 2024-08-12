@@ -2438,16 +2438,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 			Correlatted_ID_End.emplace_back(Correlatted_ID_List_Size);
 		}
-		if (Correlatted_ID_Sta.size() != PDG.size()) {
-			cout<<"_____________________________________________"<<endl;
-			cout<<"Final Check not pass"<<endl;
-			cout<<"Recorded_KFP_ID.size()       = "<<Recorded_KFP_ID.size()<<endl;
-			cout<<"PDG.size()                   = "<<PDG.size()<<endl;
-			cout<<"Correlatted_ID_List_T.size() = "<<Correlatted_ID_List_T.size()<<endl;
-			cout<<"Correlatted_ID_Sta.size()    = "<<Correlatted_ID_Sta.size()<<endl;
-			cout<<"Correlatted_ID_End.size()    = "<<Correlatted_ID_End.size()<<endl;
-			cout<<"_____________________________________________"<<endl;
-		}
+		cout<<"_____________________________________________"<<endl;
+		cout<<"Recorded_KFP_ID.size()       = "<<Recorded_KFP_ID.size()<<endl;
+		cout<<"PDG.size()                   = "<<PDG.size()<<endl;
+		cout<<"Correlatted_ID_List_T.size() = "<<Correlatted_ID_List_T.size()<<endl;
+		cout<<"Correlatted_ID_List.size()   = "<<Correlatted_ID_List.size()<<endl;
+		cout<<"Correlatted_ID_Sta.size()    = "<<Correlatted_ID_Sta.size()<<endl;
+		cout<<"Correlatted_ID_End.size()    = "<<Correlatted_ID_End.size()<<endl;
+		cout<<"_____________________________________________"<<endl;
 	}
 	// cout<<"Total_Pz = "<<Total_Pz<<endl;
 	if (IfQAMode) {
