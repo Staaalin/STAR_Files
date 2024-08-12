@@ -2417,7 +2417,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
 				bool IfCorrelated = false;
 				for (int kRecorded_KFP=1;kRecorded_KFP < Recorded_KFP_ID[iRecorded_KFP].size();kRecorded_KFP++){
-					if (!IfCorrelated) break;
+					if (IfCorrelated == true) break;
 					for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
 						if ( Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP] ){
 							Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
@@ -2445,7 +2445,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			for (int j=0;j<Recorded_KFP_ID[i].size();j++) {cout<<Recorded_KFP_ID[i][j];if (j<(Recorded_KFP_ID[i].size()-1)) cout<<" , ";}
 			cout<<" }"<<endl;
 		}
-		cout<<"                                    }"<<endl;
+		cout<<"                                }"<<endl;
 		cout<<"PDG.size()                   = "<<PDG.size()<<endl;
 		cout<<"Correlatted_ID_List_T        = {"<<endl;
 		for (int i=0;i<Correlatted_ID_List_T.size();i++) {
@@ -2453,7 +2453,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			for (int j=0;j<Correlatted_ID_List_T[i].size();j++) {cout<<Correlatted_ID_List_T[i][j];if (j<(Correlatted_ID_List_T[i].size()-1)) cout<<" , ";}
 			cout<<" }"<<endl;
 		}
-		cout<<"                                    }"<<endl;
+		cout<<"                                }"<<endl;
 		cout<<"Correlatted_ID_List.size()   = "<<Correlatted_ID_List.size()<<endl;
 		cout<<"Correlatted_ID_Sta.size()    = "<<Correlatted_ID_Sta.size()<<endl;
 		cout<<"Correlatted_ID_End.size()    = "<<Correlatted_ID_End.size()<<endl;
