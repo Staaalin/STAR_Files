@@ -82,6 +82,7 @@ private:
 	StPicoTrack *ProtonTrack, *PionTrack, *KaonTrack;
 	void BookVertexPlots();
 	vector<vector<int> > Recorded_KFP_ID;
+	int Recorded_KFP_ID_KFPSize;
 
 	StPicoDstMaker *mPicoDstMaker;
 	StRefMultCorr *mRefMultCorr;
@@ -260,6 +261,9 @@ private:
 	std::vector<float> QA_dEdx,QA_m2,QA_nSigmaProton,QA_nSigmaPion,QA_nSigmaKaon,QA_Chi2;
 	std::vector<double> QA_zTOF_proton,QA_zTOF_pion,QA_zTOF_kaon,QA_Decay_Length,QA_DCA_V0_PV,QA_DCA_Daughters;
 	std::vector<int> QA_IfConfuse,QA_IfBadReconstructed;// Used as bool
+
+	std::vector<vector<int> > Correlatted_ID_List_T;
+	std::vector<int> Correlatted_ID_List , Correlatted_ID_Sta , Correlatted_ID_End;
 
 	/////////////////////////////////////
 	int mStps;  

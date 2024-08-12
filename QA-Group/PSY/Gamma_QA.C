@@ -482,12 +482,13 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                         StPicoTrack *track = dst->track(iTrack);
                         if (! track)            continue;
                         if (! track->charge())  continue;
-                        // if (  track->nHitsFit() < 10) continue;
                         if (! track->isPrimary()) continue;
-                        // if (  (track->gDCA(pV)).Mag() > 3.0) continue;
-                        // if (  fabs(track->gMom().Eta()) > 1.5) continue;
-                        // if (  (0.06 > track->gMom().Perp()) || (track->gMom().Perp() > 2.0)) continue;
                         NumCharge++;
+                        if (  track->nHitsFit() < 10) continue;
+                        if (  (track->gDCA(pV)).Mag() > 3.0) continue;
+                        // if (  fabs(track->gMom().Eta()) > 1.5) continue;
+                        runidvsavgeta->Fill(Run,pTemp_track->GetBinContent(2));
+                        if (  (0.06 > track->gMom().Perp()) || (track->gMom().Perp() > 2.0)) continue;
                 }
                 RefMult = NumCharge;
 
