@@ -1457,7 +1457,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	QA_Decay_Length.resize(0);
 	QA_Chi2        .resize(0);
 
-	Recorded_KFP_ID.resize(0);Recorded_DST_ID.resize(0);
+	Recorded_KFP_ID.resize(0);
 	Correlatted_ID_List.resize(0);
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	// Calculating Nch
