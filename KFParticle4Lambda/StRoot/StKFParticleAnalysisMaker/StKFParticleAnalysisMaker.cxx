@@ -928,6 +928,12 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("InvariantMass"      ,&InvariantMass       );
 		hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length      );
 		hadronTree->Branch("Chi2"               ,&QA_Chi2              );
+
+		// Used for restore corralated information
+		hadronTree->Branch("Correlatted_ID_List"      ,&Correlatted_ID_List     );
+		hadronTree->Branch("Correlatted_ID_Sta"       ,&Correlatted_ID_Sta      );
+		hadronTree->Branch("Correlatted_ID_End"       ,&Correlatted_ID_End      );
+
 	}
 
 
@@ -1459,6 +1465,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	Recorded_KFP_ID.resize(0);
 	Correlatted_ID_List.resize(0);
+	Correlatted_ID_Sta.resize(0);
+	Correlatted_ID_End.resize(0);
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	// Calculating Nch
 	int NumCharge = 0;
@@ -2423,12 +2431,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		Correlatted_ID_List.resize(0);int Correlatted_ID_List_Size = -1;
 		for (int iRecorded_KFP=0;iRecorded_KFP<Correlatted_ID_List_T.size();iRecorded_KFP++){
-			Correlatted_ID_Sta.push_back(Correlatted_ID_List_Size+1);
+			Correlatted_ID_Sta.emplace_back(Correlatted_ID_List_Size+1);
 			for (int jRecorded_KFP=0;jRecorded_KFP<Correlatted_ID_List_T[iRecorded_KFP].size();jRecorded_KFP++){
-				Correlatted_ID_List.push_back(Correlatted_ID_List_T[iRecorded_KFP][jRecorded_KFP]);
+				Correlatted_ID_List.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][jRecorded_KFP]);
 				Correlatted_ID_List_Size++;
 			}
-			Correlatted_ID_End.push_back(Correlatted_ID_List_Size);
+			Correlatted_ID_End.emplace_back(Correlatted_ID_List_Size);
 		}
 		if (Correlatted_ID_Sta.size() != PDG.size()) {
 			cout<<"_____________________________________________"<<endl;
