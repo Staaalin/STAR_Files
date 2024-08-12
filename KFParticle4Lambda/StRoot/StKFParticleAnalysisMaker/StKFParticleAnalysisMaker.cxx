@@ -2442,7 +2442,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		cout<<"Recorded_KFP_ID              = {"<<endl;
 		for (int i=0;i<Recorded_KFP_ID.size();i++) {
 			cout<<"                             { ";
-			for (int j=0;j<Recorded_KFP_ID[i].size();j++) {cout<<Recorded_KFP_ID[i][j];if (j<(Recorded_KFP_ID[i].size()-1)) cout<<" , "}
+			for (int j=0;j<Recorded_KFP_ID[i].size();j++) {cout<<Recorded_KFP_ID[i][j];if (j<(Recorded_KFP_ID[i].size()-1)) cout<<" , ";}
 			cout<<" }"<<endl;
 		}
 		cout<<"                               }"<<endl;
