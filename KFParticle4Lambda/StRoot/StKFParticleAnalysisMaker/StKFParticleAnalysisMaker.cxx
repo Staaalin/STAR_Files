@@ -1782,6 +1782,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (IfTree){
 				bool CheckPass = true;
 				vector<int> Temp;Temp.resize(0);Temp.push_back(iKFParticle);
+				vector<int> TempT;TempT.resize(0);
 				if      ((abs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 9*PhiPdgMassSigma))    {CheckPass = false;}
 				else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 9*K0SPdgMassSigma))    {CheckPass = false;}
 				else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 9*LambdaPdgMassSigma)) {CheckPass = false;}
@@ -1791,7 +1792,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 						Temp.push_back(particle.DaughterIds()[iDaughter]);
 					}
-					int Itr = 0;vector<int> TempT;TempT.resize(0);
+					int Itr = 0;
 					while (Itr < Temp.size()) {
 						if ((KFParticleInterface->GetParticles()[Temp[Itr]]).GetPDG() == -1){
 							KFParticle daughter = KFParticleInterface->GetParticles()[Temp[Itr]];
