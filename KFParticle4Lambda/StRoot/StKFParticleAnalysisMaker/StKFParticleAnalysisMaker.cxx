@@ -1812,9 +1812,19 @@ Int_t StKFParticleAnalysisMaker::Make()
 								cout<<" "<<Temp[i]<<" ";
 							}
 							cout<<"}"<<endl;
-							cout<<"TempT        = {";
+							cout<<"(KFP)Temp    = {";
 							for (int i = 0;i<20;i++) {
+								cout<<" "<<(KFParticleInterface->GetParticles()[Temp[i]]).GetPDG()<<" ";
+							}
+							cout<<"}"<<endl;
+							cout<<"TempT        = {";
+							for (int i = 0;i<TempT.size();i++) {
 								cout<<" "<<TempT[i]<<" ";
+							}
+							cout<<"}"<<endl;
+							cout<<"(KFP)TempT   = {";
+							for (int i = 0;i<TempT.size();i++) {
+								cout<<" "<<(KFParticleInterface->GetParticles()[TempT[i]]).GetPDG()<<" ";
 							}
 							cout<<"}"<<endl;
 
