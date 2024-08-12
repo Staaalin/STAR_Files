@@ -1804,34 +1804,34 @@ Int_t StKFParticleAnalysisMaker::Make()
 							TempT.push_back(Temp[Itr]);
 						}
 						Itr++;
-						if (Itr > 1000) {
-							cout<<"Previous Temp size "<<TempSize1<<endl;
-							cout<<"Itr          = "<<Itr<<endl;
-							cout<<"Temp.size()  = "<<Temp.size()<<endl;
-							cout<<"TempT.size() = "<<TempT.size()<<endl;
-							cout<<"Temp         = {";
-							for (int i = 0;i<20;i++) {
-								cout<<" "<<Temp[i]<<" ";
-							}
-							cout<<"}"<<endl;
-							cout<<"(KFP)Temp    = {";
-							for (int i = 0;i<20;i++) {
-								cout<<" "<<(KFParticleInterface->GetParticles()[Temp[i]]).GetPDG()<<" ";
-							}
-							cout<<"}"<<endl;
-							cout<<"TempT        = {";
-							for (int i = 0;i<TempT.size();i++) {
-								cout<<" "<<TempT[i]<<" ";
-							}
-							cout<<"}"<<endl;
-							cout<<"(KFP)TempT   = {";
-							for (int i = 0;i<TempT.size();i++) {
-								cout<<" "<<(KFParticleInterface->GetParticles()[TempT[i]]).GetPDG()<<" ";
-							}
-							cout<<"}"<<endl;
-
-							break;
+					}
+					if (TempT.size() > 1) {
+						cout<<"Previous Temp size "<<TempSize1<<endl;
+						cout<<"Itr          = "<<Itr<<endl;
+						cout<<"Temp.size()  = "<<Temp.size()<<endl;
+						cout<<"TempT.size() = "<<TempT.size()<<endl;
+						cout<<"Temp         = {";
+						for (int i = 0;i<Temp.size();i++) {
+							cout<<" "<<Temp[i]<<" ";
 						}
+						cout<<"}"<<endl;
+						cout<<"(KFP)Temp    = {";
+						for (int i = 0;i<Temp.size();i++) {
+							cout<<" "<<(KFParticleInterface->GetParticles()[Temp[i]]).GetPDG()<<" ";
+						}
+						cout<<"}"<<endl;
+						cout<<"TempT        = {";
+						for (int i = 0;i<TempT.size();i++) {
+							cout<<" "<<TempT[i]<<" ";
+						}
+						cout<<"}"<<endl;
+						cout<<"(KFP)TempT   = {";
+						for (int i = 0;i<TempT.size();i++) {
+							cout<<" "<<(KFParticleInterface->GetParticles()[TempT[i]]).GetPDG()<<" ";
+						}
+						cout<<"}"<<endl;
+
+						break;
 					}
 					//
 					for (int i = 0;i<TempT.size();i++){
