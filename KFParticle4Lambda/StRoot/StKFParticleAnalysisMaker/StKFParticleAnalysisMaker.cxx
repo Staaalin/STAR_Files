@@ -1829,7 +1829,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					}
 				}
 				if (CheckPass == true){
-					Recorded_KFP_ID.push_back(TempT);
+					Recorded_KFP_ID.push_back(Temp);
 				}
 				// if (CheckPass == true) { // cuts for Pions used to reconstruct K0S
 				// 	KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
