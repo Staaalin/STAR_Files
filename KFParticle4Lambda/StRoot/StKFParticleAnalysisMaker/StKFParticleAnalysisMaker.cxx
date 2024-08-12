@@ -2429,11 +2429,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
-		Correlatted_ID_List.resize(0);int Correlatted_ID_List_Size = -1;
+		int Correlatted_ID_List_Size = -1;
 		for (int iRecorded_KFP=0;iRecorded_KFP<Correlatted_ID_List_T.size();iRecorded_KFP++){
 			Correlatted_ID_Sta.emplace_back(Correlatted_ID_List_Size+1);
 			for (int jRecorded_KFP=0;jRecorded_KFP<Correlatted_ID_List_T[iRecorded_KFP].size();jRecorded_KFP++){
-				Correlatted_ID_List.push_back(Correlatted_ID_List_T[iRecorded_KFP][jRecorded_KFP]);
+				Correlatted_ID_List.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][jRecorded_KFP]);
 				Correlatted_ID_List_Size++;
 			}
 			Correlatted_ID_End.emplace_back(Correlatted_ID_List_Size);
