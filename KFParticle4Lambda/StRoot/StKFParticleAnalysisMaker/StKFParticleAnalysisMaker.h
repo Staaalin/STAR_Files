@@ -253,7 +253,7 @@ private:
 
 	TTree *hadronTree;
 	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult , Omega_Omegab_Num , TriggerID , Nch;
-	std::vector<int> PDG , ReCons_TrackID;
+	std::vector<int> PDG , ReCons_TrackID , ParentA , ParentB , ParentC , ParentD , ParentE;
 	std::vector<float> px,py,pz,InvariantMass,QA_eta;
 	double zTOF_proton,zTOF_pion,zTOF_kaon;
 	// Used for QA
@@ -261,8 +261,6 @@ private:
 	std::vector<double> QA_zTOF_proton,QA_zTOF_pion,QA_zTOF_kaon,QA_Decay_Length,QA_DCA_V0_PV,QA_DCA_Daughters;
 	std::vector<int> QA_IfConfuse,QA_IfBadReconstructed;// Used as bool
 
-	std::vector<vector<int> > Correlatted_ID_List_T;
-	std::vector<int> Correlatted_ID_List , Correlatted_ID_Sta , Correlatted_ID_End;
 
 	/////////////////////////////////////
 	int mStps;  

@@ -930,9 +930,11 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("Chi2"               ,&QA_Chi2              );
 
 		// Used for restore corralated information
-		// hadronTree->Branch("Correlatted_ID_List"      ,&Correlatted_ID_List     );
-		hadronTree->Branch("Correlatted_ID_Sta"       ,&Correlatted_ID_Sta      );
-		hadronTree->Branch("Correlatted_ID_End"       ,&Correlatted_ID_End      );
+		hadronTree->Branch("ParentA"       ,&ParentA      );
+		hadronTree->Branch("ParentB"       ,&ParentB      );
+		hadronTree->Branch("ParentC"       ,&ParentC      );
+		hadronTree->Branch("ParentD"       ,&ParentD      );
+		hadronTree->Branch("ParentE"       ,&ParentE      );
 
 	}
 
@@ -946,7 +948,6 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 //-----------------------------------------------------------------------------
 void StKFParticleAnalysisMaker::WriteHistograms() {
-	cout<<"^V^:";
 
 	hEventNum->Write();
 
@@ -1448,7 +1449,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	float pT_trig_hi = 2.0;
 	float eta_trig_cut = 1.0;
   
-	
+	std::vector<vector<int> > Correlatted_ID_List_T;
 	CrefMult = refMult;CgrefMult = grefMult;
 	PDG            .resize(0);
 	px             .resize(0);
@@ -1466,9 +1467,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 	QA_Chi2        .resize(0);
 
 	Recorded_KFP_ID.resize(0);
-	Correlatted_ID_List.resize(0);
-	Correlatted_ID_Sta.resize(0);
-	Correlatted_ID_End.resize(0);
+	ParentA.resize(0);
+	ParentB.resize(0);
+	ParentC.resize(0);
+	ParentD.resize(0);
+	ParentE.resize(0);
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	// Calculating Nch
 	int NumCharge = 0;
@@ -2430,14 +2433,51 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
-		int Correlatted_ID_List_Size = -1;
 		for (int iRecorded_KFP=0;iRecorded_KFP<Correlatted_ID_List_T.size();iRecorded_KFP++){
-			Correlatted_ID_Sta.emplace_back(Correlatted_ID_List_Size+1);
-			for (int jRecorded_KFP=0;jRecorded_KFP<Correlatted_ID_List_T[iRecorded_KFP].size();jRecorded_KFP++){
-				Correlatted_ID_List.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][jRecorded_KFP]);
-				Correlatted_ID_List_Size++;
+			switch (Correlatted_ID_List_T[iRecorded_KFP].size()){
+				case 0:
+					ParentA.emplace_back(-1);
+					ParentB.emplace_back(-1);
+					ParentC.emplace_back(-1);
+					ParentD.emplace_back(-1);
+					ParentE.emplace_back(-1);
+					break;
+				case 1:
+					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
+					ParentB.emplace_back(-1);
+					ParentC.emplace_back(-1);
+					ParentD.emplace_back(-1);
+					ParentE.emplace_back(-1);
+					break;
+				case 2:
+					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
+					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
+					ParentC.emplace_back(-1);
+					ParentD.emplace_back(-1);
+					ParentE.emplace_back(-1);
+					break;
+				case 3:
+					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
+					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
+					ParentC.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][2]);
+					ParentD.emplace_back(-1);
+					ParentE.emplace_back(-1);
+					break;
+				case 4:
+					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
+					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
+					ParentC.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][2]);
+					ParentD.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][3]);
+					ParentE.emplace_back(-1);
+					break;
+				default:
+					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
+					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
+					ParentC.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][2]);
+					ParentD.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][3]);
+					ParentE.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][4]);
+					break;
 			}
-			Correlatted_ID_End.emplace_back(Correlatted_ID_List_Size);
 		}
 		// cout<<"_____________________________________________"<<endl;
 		// cout<<"Recorded_KFP_ID              = {"<<endl;
