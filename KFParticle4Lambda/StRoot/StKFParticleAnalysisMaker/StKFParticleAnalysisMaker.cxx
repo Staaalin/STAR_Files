@@ -946,6 +946,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 //-----------------------------------------------------------------------------
 void StKFParticleAnalysisMaker::WriteHistograms() {
+	cout<<"^V^:";
 
 	hEventNum->Write();
 
@@ -1130,6 +1131,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		}
 		fout->cd();
 	}
+	cout<<"T_T:"<<endl;
 	return;
 }
 
@@ -1247,7 +1249,6 @@ void StKFParticleAnalysisMaker::Clear(Option_t *opt) {
 //----------------------------------------------------------------------------- 
 Int_t StKFParticleAnalysisMaker::Make() 
 {
-	cout<<"1";
 	// cout<<"Start Make"<<endl;
 	PicoDst = StPicoDst::instance(); 		
 	StPicoDst* mPicoDst = PicoDst;
@@ -2547,7 +2548,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		// hadronTree->Fill();
 	}
-	cout<<"2"<<endl;
 	/////////////////////////////////////////////////////////
 	return kStOK;
 
