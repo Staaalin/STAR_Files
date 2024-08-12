@@ -1803,6 +1803,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 							TempT.push_back(Temp[Itr]);
 						}
 						Itr++;
+						if (Itr > 100 && Itr % 100 == 0) {cout<<Itr<<endl;}
 					}
 					//
 					for (int i = 0;i<TempT.size();i++){
