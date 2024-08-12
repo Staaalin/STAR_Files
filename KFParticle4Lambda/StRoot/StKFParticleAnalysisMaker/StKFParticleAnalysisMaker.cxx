@@ -1805,9 +1805,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 						Itr++;
 					}
 					//
-					for (int i = 0;i<Temp.size();i++){
-						for (int j = i+1;j<Temp.size();j++){
-							if (Temp[i] == Temp[j]) {
+					for (int i = 0;i<TempT.size();i++){
+						for (int j = i+1;j<TempT.size();j++){
+							if (TempT[i] == TempT[j]) {
 								CheckPass = false;
 								break;
 							}
