@@ -1792,7 +1792,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 						Temp.push_back(particle.DaughterIds()[iDaughter]);
 					}
-					int Itr = 0;
+					int Itr = 0 , TempSize1 = Temp.size();
 					while (Itr < Temp.size()) {
 						if ((KFParticleInterface->GetParticles()[Temp[Itr]]).GetPDG() == -1){
 							KFParticle daughter = KFParticleInterface->GetParticles()[Temp[Itr]];
@@ -1804,6 +1804,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						}
 						Itr++;
 						if (Itr > 1000) {
+							cout<<"Previous Temp size "<<TempSize1<<endl;
 							cout<<"Itr          = "<<Itr<<endl;
 							cout<<"Temp.size()  = "<<Temp.size()<<endl;
 							cout<<"TempT.size() = "<<TempT.size()<<endl;
