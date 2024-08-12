@@ -1782,30 +1782,29 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (IfTree){
 				bool CheckPass = true;
 				vector<int> Temp;Temp.resize(0);Temp.push_back(iKFParticle);
-				if      ((fabs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 3*PhiPdgMassSigma)) {CheckPass = false;}
-				else if ((fabs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 3*K0SPdgMassSigma)) {CheckPass = false;}
-				else if ((fabs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 3*LambdaPdgMassSigma)) {CheckPass = false;}
-				else if ((fabs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 3*XiPdgMassSigma)) {CheckPass = false;}
-				else if ((fabs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 3*OmegaPdgMassSigma)) {CheckPass = false;}
+				if      ((abs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 9*PhiPdgMassSigma))    {CheckPass = false;}
+				else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 9*K0SPdgMassSigma))    {CheckPass = false;}
+				else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 9*LambdaPdgMassSigma)) {CheckPass = false;}
+				else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 9*XiPdgMassSigma))     {CheckPass = false;}
+				else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 9*OmegaPdgMassSigma))  {CheckPass = false;}
 				if (CheckPass == true) {
 					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 						Temp.push_back(particle.DaughterIds()[iDaughter]);
 					}
-				
-					for (int i = 0;i<Recorded_KFP_ID.size();i++){
-						for (int j=0;j<Recorded_KFP_ID[i].size();j++){
-							for (int k=0;k<Temp.size();k++){
-								if (Recorded_KFP_ID[i][j] == Temp[k]){
-									CheckPass = false;
-									break;
-								}
+					vector<int>::iterator itr = Temp.begin();
+					while (itr != Temp.end()){
+						if ((KFParticleInterface->GetParticles()[*itr]).GetPDG() == -1) {
+							KFParticle daughter = KFParticleInterface->GetParticles()[*itr];
+							for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
+								Temp.push_back(daughter.DaughterIds()[iDaughter]);
 							}
-							if (CheckPass == false) break;
+							itr = Temp.erase(itr);
+							break;
 						}
-						if (CheckPass == false) break;
+						else{
+							++itr;
+						}
 					}
-				}
-				if (CheckPass == true) {
 					for (int i = 0;i<Temp.size();i++){
 						for (int j = i+1;j<Temp.size();j++){
 							if (Temp[i] == Temp[j]) {
@@ -1815,28 +1814,32 @@ Int_t StKFParticleAnalysisMaker::Make()
 						}
 					}
 				}
-				if (CheckPass == true) {
-					KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
-					if ((NKFParticle.GetPDG() == 310)) {
-						for (int iDaughter = 1;iDaughter<Temp.size();iDaughter++){
-							if (fabs((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG()) != 211) continue;
-							int iTrack = 0;
-							const int globalTrackId = (KFParticleInterface->GetParticles()[Temp[iDaughter]]).DaughterIds()[0];
-							Int_t iTrackStart = globalTrackId - 1;
-							if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-							for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
-								StPicoTrack *track = mPicoDst->track(jTrack);
-								if (track->id() == globalTrackId){
-									iTrack = jTrack;
-									break;
-								}
-							}
-							StPicoTrack *track = mPicoDst->track(iTrack);
-							track->setNHitsFit(0);
-						}
-					}
+				if (CheckPass == true){
+					Recorded_KFP_ID.push_back(Temp);
 				}
-				if (CheckPass == true) Recorded_KFP_ID.push_back(Temp);
+				// if (CheckPass == true) { // cuts for Pions used to reconstruct K0S
+				// 	KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
+				// 	if ((NKFParticle.GetPDG() == 310)) {
+				// 		for (int iDaughter = 1;iDaughter<Temp.size();iDaughter++){
+				// 			if (abs((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG()) != 211) continue;
+				// 			int iTrack = 0;
+				// 			const int globalTrackId = (KFParticleInterface->GetParticles()[Temp[iDaughter]]).DaughterIds()[0];
+				// 			Int_t iTrackStart = globalTrackId - 1;
+				// 			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+				// 			for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+				// 				StPicoTrack *track = mPicoDst->track(jTrack);
+				// 				if (track->id() == globalTrackId){
+				// 					iTrack = jTrack;
+				// 					break;
+				// 				}
+				// 			}
+				// 			StPicoTrack *track = mPicoDst->track(iTrack);
+				// 			std::vector<int> TestPDG;TestPDG.push_back((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG());
+				// 			std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(TestPDG , track , Vertex3D);
+				// 			if(PDGBool[0] == false) CheckPass = false;
+				// 		}
+				// 	}
+				// }
 			}
 			// cout<<"CrefMult:"<<CrefMult<<endl;
 			// cout<<"PDG:"<<particle.GetPDG()<<endl; 
