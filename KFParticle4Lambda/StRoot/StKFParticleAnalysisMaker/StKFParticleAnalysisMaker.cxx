@@ -1791,33 +1791,18 @@ Int_t StKFParticleAnalysisMaker::Make()
 					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 						Temp.push_back(particle.DaughterIds()[iDaughter]);
 					}
-					//
-					vector<int>::iterator itr = Temp.begin();
-					while (itr != Temp.end()){
-						if ((KFParticleInterface->GetParticles()[*itr]).GetPDG() == -1) {
-							KFParticle daughter = KFParticleInterface->GetParticles()[*itr];
+					int Itr = 0;vector<int> TempT;TempT.resize(0);
+					while (Itr < Temp.size()) {
+						if ((KFParticleInterface->GetParticles()[Temp[Itr]]).GetPDG() == -1){
+							KFParticle daughter = KFParticleInterface->GetParticles()[Temp[Itr]];
 							for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
 								Temp.push_back(daughter.DaughterIds()[iDaughter]);
 							}
-							itr = Temp.erase(itr);
-							// break;
+						}else{
+							TempT.push_back(Temp[Itr]);
 						}
-						else{
-							++itr;
-						}
+						Itr++;
 					}
-					//
-					// int Index_Start = 0;vector<int> TempT;TempT.resize(0);
-					// while (Index_Start < Temp.size()) {
-					// 	if ((KFParticleInterface->GetParticles()[Temp[Index_Start]]).GetPDG() == -1){
-					// 		KFParticle daughter = KFParticleInterface->GetParticles()[Temp[Index_Start]];
-					// 		for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
-					// 			Temp.push_back(daughter.DaughterIds()[iDaughter]);
-					// 		}
-					// 		itr = Temp.erase(itr);
-					// 	}
-					// 	Index_Start++;
-					// }
 					//
 					for (int i = 0;i<Temp.size();i++){
 						for (int j = i+1;j<Temp.size();j++){
@@ -1829,7 +1814,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					}
 				}
 				if (CheckPass == true){
-					Recorded_KFP_ID.push_back(Temp);
+					Recorded_KFP_ID.push_back(TempT);
 				}
 				// if (CheckPass == true) { // cuts for Pions used to reconstruct K0S
 				// 	KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
