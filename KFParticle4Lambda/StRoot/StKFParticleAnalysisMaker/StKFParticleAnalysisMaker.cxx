@@ -2441,13 +2441,19 @@ Int_t StKFParticleAnalysisMaker::Make()
 		cout<<"_____________________________________________"<<endl;
 		cout<<"Recorded_KFP_ID              = {"<<endl;
 		for (int i=0;i<Recorded_KFP_ID.size();i++) {
-			cout<<"                             { ";
+			cout<<"                                  { ";
 			for (int j=0;j<Recorded_KFP_ID[i].size();j++) {cout<<Recorded_KFP_ID[i][j];if (j<(Recorded_KFP_ID[i].size()-1)) cout<<" , ";}
 			cout<<" }"<<endl;
 		}
-		cout<<"                               }"<<endl;
+		cout<<"                                    }"<<endl;
 		cout<<"PDG.size()                   = "<<PDG.size()<<endl;
-		cout<<"Correlatted_ID_List_T.size() = "<<Correlatted_ID_List_T.size()<<endl;
+		cout<<"Correlatted_ID_List_T        = {"<<endl;
+		for (int i=0;i<Correlatted_ID_List_T.size();i++) {
+			cout<<"                                  { ";
+			for (int j=0;j<Correlatted_ID_List_T[i].size();j++) {cout<<Correlatted_ID_List_T[i][j];if (j<(Correlatted_ID_List_T[i].size()-1)) cout<<" , ";}
+			cout<<" }"<<endl;
+		}
+		cout<<"                                    }"<<endl;
 		cout<<"Correlatted_ID_List.size()   = "<<Correlatted_ID_List.size()<<endl;
 		cout<<"Correlatted_ID_Sta.size()    = "<<Correlatted_ID_Sta.size()<<endl;
 		cout<<"Correlatted_ID_End.size()    = "<<Correlatted_ID_End.size()<<endl;
