@@ -1803,7 +1803,23 @@ Int_t StKFParticleAnalysisMaker::Make()
 							TempT.push_back(Temp[Itr]);
 						}
 						Itr++;
-						if (Itr > 100 && Itr % 100 == 0) {cout<<Itr<<endl;}
+						if (Itr > 1000) {
+							cout<<"Itr          = "<<Itr<<endl;
+							cout<<"Temp.size()  = "<<Temp.size()<<endl;
+							cout<<"TempT.size() = "<<TempT.size()<<endl;
+							cout<<"Temp         = {";
+							for (int i = 0;i<20;i++) {
+								cout<<" "<<Temp[i]<<" ";
+							}
+							cout<<"}"<<endl;
+							cout<<"TempT        = {";
+							for (int i = 0;i<20;i++) {
+								cout<<" "<<TempT[i]<<" ";
+							}
+							cout<<"}"<<endl;
+
+							break;
+						}
 					}
 					//
 					for (int i = 0;i<TempT.size();i++){
