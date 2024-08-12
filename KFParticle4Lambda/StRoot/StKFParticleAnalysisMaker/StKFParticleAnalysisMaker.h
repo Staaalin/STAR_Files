@@ -185,7 +185,6 @@ private:
 	TH2F *H_eta_DVz                [30][3];// Trigger Num not larger than 30
 	TH1F *H_eta_triggerBIN         [30][3];// Trigger Num not larger than 30
 	TH1F *H_eta_triggerBIN_hasTOF  [30][3];// Trigger Num not larger than 30
-	TH1F *H_Nch_triggerBIN         [30][3];// Trigger Num not larger than 30
 	TH2F *H_eta_trigger;
 
 	TH2F *H_nHitsFit_p[PDG2NameSize2];
@@ -253,14 +252,13 @@ private:
 
 	TTree *hadronTree;
 	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult , Omega_Omegab_Num , TriggerID , Nch;
-	std::vector<int> PDG , ReCons_TrackID , ParentA , ParentB , ParentC , ParentD , ParentE;
+	std::vector<int> PDG , ReCons_TrackID;
 	std::vector<float> px,py,pz,InvariantMass,QA_eta;
 	double zTOF_proton,zTOF_pion,zTOF_kaon;
 	// Used for QA
 	std::vector<float> QA_dEdx,QA_m2,QA_nSigmaProton,QA_nSigmaPion,QA_nSigmaKaon,QA_Chi2;
 	std::vector<double> QA_zTOF_proton,QA_zTOF_pion,QA_zTOF_kaon,QA_Decay_Length,QA_DCA_V0_PV,QA_DCA_Daughters;
 	std::vector<int> QA_IfConfuse,QA_IfBadReconstructed;// Used as bool
-
 
 	/////////////////////////////////////
 	int mStps;  
