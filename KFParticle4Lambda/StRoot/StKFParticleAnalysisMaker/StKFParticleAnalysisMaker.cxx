@@ -73,8 +73,8 @@
 #define K0SPdgMassSigma    0.0043
 #define PhiPdgMassSigma    0.0031
 
-#define IfQAMode           false // If Writing Hist of QA;
-#define IfTree             true  // If Writing Tree;
+#define IfQAMode           true // If Writing Hist of QA;
+#define IfTree             false  // If Writing Tree;
 
 // #define DEBUGGING
 
@@ -413,7 +413,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 				HistName1 += TriggerItr;
 				HistName2 += Trigger_List[TriggerItr];
 				H_Nch_triggerBIN[TriggerItr][Itr] = new TH1F(HistName1,HistName2,     400,0,400);
-				H_Nch_triggerBIN[TriggerItr][Itr]->GetXaxis()->SetTitle("Nch");
+				H_Nch_triggerBIN[TriggerItr][Itr]->GetXaxis()->SetTitle("eta");
 			}
 		}
 		H_eta_trigger = new TH2F("H_eta_trigger","trigger vs. eta",     200,-2,2,TriggerListLength,-0.5,TriggerListLength-0.5);
@@ -928,14 +928,6 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("InvariantMass"      ,&InvariantMass       );
 		hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length      );
 		hadronTree->Branch("Chi2"               ,&QA_Chi2              );
-
-		// Used for restore corralated information
-		hadronTree->Branch("ParentA"       ,&ParentA      );
-		hadronTree->Branch("ParentB"       ,&ParentB      );
-		hadronTree->Branch("ParentC"       ,&ParentC      );
-		hadronTree->Branch("ParentD"       ,&ParentD      );
-		hadronTree->Branch("ParentE"       ,&ParentE      );
-
 	}
 
 
@@ -1132,7 +1124,6 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		}
 		fout->cd();
 	}
-	cout<<"T_T:"<<endl;
 	return;
 }
 
@@ -1449,7 +1440,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	float pT_trig_hi = 2.0;
 	float eta_trig_cut = 1.0;
   
-	std::vector<vector<int> > Correlatted_ID_List_T;
+	
 	CrefMult = refMult;CgrefMult = grefMult;
 	PDG            .resize(0);
 	px             .resize(0);
@@ -1467,11 +1458,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 	QA_Chi2        .resize(0);
 
 	Recorded_KFP_ID.resize(0);
-	ParentA.resize(0);
-	ParentB.resize(0);
-	ParentC.resize(0);
-	ParentD.resize(0);
-	ParentE.resize(0);
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	// Calculating Nch
 	int NumCharge = 0;
@@ -1835,29 +1821,30 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (IfTree){
 				bool CheckPass = true;
 				vector<int> Temp;Temp.resize(0);Temp.push_back(iKFParticle);
-				if      ((abs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 9*PhiPdgMassSigma))    {CheckPass = false;}
-				else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 9*K0SPdgMassSigma))    {CheckPass = false;}
-				else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 9*LambdaPdgMassSigma)) {CheckPass = false;}
-				else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 9*XiPdgMassSigma))     {CheckPass = false;}
-				else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 9*OmegaPdgMassSigma))  {CheckPass = false;}
+				if      ((fabs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 3*PhiPdgMassSigma)) {CheckPass = false;}
+				else if ((fabs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 3*K0SPdgMassSigma)) {CheckPass = false;}
+				else if ((fabs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 3*LambdaPdgMassSigma)) {CheckPass = false;}
+				else if ((fabs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 3*XiPdgMassSigma)) {CheckPass = false;}
+				else if ((fabs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 3*OmegaPdgMassSigma)) {CheckPass = false;}
 				if (CheckPass == true) {
 					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 						Temp.push_back(particle.DaughterIds()[iDaughter]);
 					}
-					vector<int>::iterator itr = Temp.begin();
-					while (itr != Temp.end()){
-						if ((KFParticleInterface->GetParticles()[*itr]).GetPDG() == -1) {
-							KFParticle daughter = KFParticleInterface->GetParticles()[*itr];
-							for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
-								Temp.push_back(daughter.DaughterIds()[iDaughter]);
+				
+					for (int i = 0;i<Recorded_KFP_ID.size();i++){
+						for (int j=0;j<Recorded_KFP_ID[i].size();j++){
+							for (int k=0;k<Temp.size();k++){
+								if (Recorded_KFP_ID[i][j] == Temp[k]){
+									CheckPass = false;
+									break;
+								}
 							}
-							itr = Temp.erase(itr);
-							break;
+							if (CheckPass == false) break;
 						}
-						else{
-							++itr;
-						}
+						if (CheckPass == false) break;
 					}
+				}
+				if (CheckPass == true) {
 					for (int i = 0;i<Temp.size();i++){
 						for (int j = i+1;j<Temp.size();j++){
 							if (Temp[i] == Temp[j]) {
@@ -1867,32 +1854,30 @@ Int_t StKFParticleAnalysisMaker::Make()
 						}
 					}
 				}
-				if (CheckPass == true){
-					Recorded_KFP_ID.push_back(Temp);
+				if (CheckPass == true) {
+					KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
+					if ((NKFParticle.GetPDG() == 310)) {
+						for (int iDaughter = 1;iDaughter<Temp.size();iDaughter++){
+							if (abs((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG()) != 211) continue;
+							int iTrack = 0;
+							const int globalTrackId = (KFParticleInterface->GetParticles()[Temp[iDaughter]]).DaughterIds()[0];
+							Int_t iTrackStart = globalTrackId - 1;
+							if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+							for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+								StPicoTrack *track = mPicoDst->track(jTrack);
+								if (track->id() == globalTrackId){
+									iTrack = jTrack;
+									break;
+								}
+							}
+							StPicoTrack *track = mPicoDst->track(iTrack);
+							std::vector<int> TestPDG;TestPDG.push_back((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG());
+							std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(TestPDG , track , Vertex3D);
+							if(PDGBool[0] == false) CheckPass = false;
+						}
+					}
 				}
-				// if (CheckPass == true) { // cuts for Pions used to reconstruct K0S
-				// 	KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
-				// 	if ((NKFParticle.GetPDG() == 310)) {
-				// 		for (int iDaughter = 1;iDaughter<Temp.size();iDaughter++){
-				// 			if (abs((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG()) != 211) continue;
-				// 			int iTrack = 0;
-				// 			const int globalTrackId = (KFParticleInterface->GetParticles()[Temp[iDaughter]]).DaughterIds()[0];
-				// 			Int_t iTrackStart = globalTrackId - 1;
-				// 			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-				// 			for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
-				// 				StPicoTrack *track = mPicoDst->track(jTrack);
-				// 				if (track->id() == globalTrackId){
-				// 					iTrack = jTrack;
-				// 					break;
-				// 				}
-				// 			}
-				// 			StPicoTrack *track = mPicoDst->track(iTrack);
-				// 			std::vector<int> TestPDG;TestPDG.push_back((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG());
-				// 			std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(TestPDG , track , Vertex3D);
-				// 			if(PDGBool[0] == false) CheckPass = false;
-				// 		}
-				// 	}
-				// }
+				if (CheckPass == true) Recorded_KFP_ID.push_back(Temp);
 			}
 			// cout<<"CrefMult:"<<CrefMult<<endl;
 			// cout<<"PDG:"<<particle.GetPDG()<<endl; 
@@ -1915,33 +1900,62 @@ Int_t StKFParticleAnalysisMaker::Make()
 			StLambdaDecayPair TmpLambdaDecayPair(p4Pair, p4Proton, ProtonTrackIndex, PionTrackIndex, (eLambda==0), dmass);
 			KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 		} // End loop over KFParticles
-		if (IfTree) {
-			for (int i=0;i<Recorded_KFP_ID.size();i++) {
-				for (int j=1;j<Recorded_KFP_ID[i].size();j++) {
-					const KFParticle particle = KFParticleInterface->GetParticles()[Recorded_KFP_ID[i][j]];
-					if ( (abs(particle.GetPDG()) == 211)  || 
-						 (abs(particle.GetPDG()) == 2212) || 
-						 (abs(particle.GetPDG()) == 321) ) {
-						int iTrack = 0;
-						const int globalTrackId = (particle).DaughterIds()[0];
-						Int_t iTrackStart = globalTrackId - 1;
-						if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-						for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
-							StPicoTrack *track = mPicoDst->track(jTrack);
-							if (track->id() == globalTrackId){
-								iTrack = jTrack;
-								break;
-							}
-						}
-						Recorded_KFP_ID[i][j] = iTrack;
+
+		// HighLight Reconstructed Track
+		// cout<<"KFParticlePerformanceInterface->GetNReconstructedParticles() = "<<KFParticlePerformanceInterface->GetNReconstructedParticles()<<endl;
+		for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){
+			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+			if ( (fabs(particle.GetPDG()) == OmegaPdg) || 
+				(fabs(particle.GetPDG()) == XiPdg) || 
+				(fabs(particle.GetPDG()) == LambdaPdg) || 
+				(fabs(particle.GetPDG()) == PhiPdg) || 
+				(fabs(particle.GetPDG()) == K0SPdg)) 
+			{
+				if      ((fabs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 3*PhiPdgMassSigma)) {continue;}
+				else if ((fabs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 3*K0SPdgMassSigma)) {continue;}
+				else if ((fabs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 3*LambdaPdgMassSigma)) {continue;}
+				else if ((fabs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 3*XiPdgMassSigma)) {continue;}
+				else if ((fabs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 3*OmegaPdgMassSigma)) {continue;}
+				// cout<<"###############################################"<<endl;
+				// cout<<"iKFParticle = "<<iKFParticle<<endl;
+				// cout<<"particle.GetPDG() = "<<particle.GetPDG()<<endl;
+				for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+					const int daughterId = particle.DaughterIds()[iDaughter];
+					const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+					// cout<<"daughterId = "<<daughterId<<endl;
+					// cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
+					if (daughter.GetPDG() != -1) {
+						DaughterParticle.push_back(daughterId);
+						MatherPartiecle.push_back(iKFParticle);
 					}
-					else{
-						Recorded_KFP_ID[i][j] = -1;
+					else {
+						for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
+							const int GdaughterId = daughter.DaughterIds()[jDaughter];
+							DaughterParticle.push_back(GdaughterId);
+							MatherPartiecle.push_back(iKFParticle);
+							// cout<<"GrandDaughterId = "<<GdaughterId<<endl;
+							// cout<<"GrandDaughter.GetPDG() = "<<(KFParticleInterface->GetParticles()[GdaughterId]).GetPDG()<<endl;
+						}
 					}
 				}
 			}
-		}// 自此，Recorded_KFP_ID[:][0]是KFP中的位置，其余为DST中的位置或者标识错误的-1
-
+		}
+		for (int iDaughter = 0;iDaughter<DaughterParticle.size();iDaughter++){
+			int iTrack = 0;
+			const int globalTrackId = (KFParticleInterface->GetParticles()[DaughterParticle[iDaughter]]).DaughterIds()[0];
+			Int_t iTrackStart = globalTrackId - 1;
+			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+			for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+				StPicoTrack *track = mPicoDst->track(jTrack);
+				if (track->id() == globalTrackId){
+					iTrack = jTrack;
+					break;
+				}
+			}
+			StPicoTrack *track = mPicoDst->track(iTrack);
+			track->setNHitsFit(0);
+		}
+		// cout<<DaughterParticle.size()<<endl;
 	}
 	
 	for (int iKFParticle = 0;iKFParticle<Recorded_KFP_ID.size();iKFParticle++){
@@ -2009,6 +2023,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 	}
 
+
 	std::vector<int> NeedPDG; NeedPDG.resize(0);
 	NeedPDG.push_back( 2212);NeedPDG.push_back( 211);NeedPDG.push_back( 321);
 	NeedPDG.push_back(-2212);NeedPDG.push_back(-211);NeedPDG.push_back(-321);
@@ -2017,6 +2032,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// Filling Track
 	if (IfQAMode) {
 		hNch_per_VertexZ->Fill(VertexZ,NumCharge);
+		H_Nch_triggerBIN[TriggerID_in_TriggerList][2]->Fill(Nch);
 	}
 	
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
@@ -2221,7 +2237,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			H_eta_PVr         [TriggerID_in_TriggerList][2]->Fill(eta,VertexR);
 			H_eta_DVz         [TriggerID_in_TriggerList][2]->Fill(eta,DVz);
 			H_eta_triggerBIN  [TriggerID_in_TriggerList][2]->Fill(eta);
-			H_Nch_triggerBIN  [TriggerID_in_TriggerList][2]->Fill(Nch);
 			if (hasTOF) {H_eta_triggerBIN_hasTOF[TriggerID_in_TriggerList][2]->Fill(eta);}
 			if (track->charge() > 0) {
 				H_eta_nSigmaKaon  [TriggerID_in_TriggerList][0]->Fill(eta,track->nSigmaKaon());
@@ -2300,9 +2315,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
 					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
 					if (IfTree) {
-						std::vector<int> Temp;Temp.resize(0);
-						Temp.push_back(iTrack);Temp.push_back(iTrack);
-						Recorded_KFP_ID.push_back(Temp);
 						QA_Chi2.emplace_back(-999);
 						QA_Decay_Length.emplace_back(-999);
 						PDG.emplace_back(NeedPDG[Ktr]);
@@ -2410,95 +2422,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// 	QA_DCA_Daughters.emplace_back(-1.0);
 		// }
 
-	}
-	if (IfTree) {
-		Correlatted_ID_List_T.resize(0);
-		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
-			std::vector<int> Temp;Temp.resize(0);
-			Correlatted_ID_List_T.push_back(Temp);
-		}
-		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
-			for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
-				bool IfCorrelated = false;
-				for (int kRecorded_KFP=1;kRecorded_KFP < Recorded_KFP_ID[iRecorded_KFP].size();kRecorded_KFP++){
-					if (IfCorrelated == true) break;
-					for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
-						if ( Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP] ){
-							Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
-							Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
-							IfCorrelated = true;
-							break;
-						}
-					}
-				}
-			}
-		}
-		for (int iRecorded_KFP=0;iRecorded_KFP<Correlatted_ID_List_T.size();iRecorded_KFP++){
-			switch (Correlatted_ID_List_T[iRecorded_KFP].size()){
-				case 0:
-					ParentA.emplace_back(-1);
-					ParentB.emplace_back(-1);
-					ParentC.emplace_back(-1);
-					ParentD.emplace_back(-1);
-					ParentE.emplace_back(-1);
-					break;
-				case 1:
-					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
-					ParentB.emplace_back(-1);
-					ParentC.emplace_back(-1);
-					ParentD.emplace_back(-1);
-					ParentE.emplace_back(-1);
-					break;
-				case 2:
-					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
-					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
-					ParentC.emplace_back(-1);
-					ParentD.emplace_back(-1);
-					ParentE.emplace_back(-1);
-					break;
-				case 3:
-					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
-					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
-					ParentC.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][2]);
-					ParentD.emplace_back(-1);
-					ParentE.emplace_back(-1);
-					break;
-				case 4:
-					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
-					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
-					ParentC.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][2]);
-					ParentD.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][3]);
-					ParentE.emplace_back(-1);
-					break;
-				default:
-					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
-					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
-					ParentC.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][2]);
-					ParentD.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][3]);
-					ParentE.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][4]);
-					break;
-			}
-		}
-		// cout<<"_____________________________________________"<<endl;
-		// cout<<"Recorded_KFP_ID              = {"<<endl;
-		// for (int i=0;i<Recorded_KFP_ID.size();i++) {
-		// 	cout<<"                                  { ";
-		// 	for (int j=0;j<Recorded_KFP_ID[i].size();j++) {cout<<Recorded_KFP_ID[i][j];if (j<(Recorded_KFP_ID[i].size()-1)) cout<<" , ";}
-		// 	cout<<" }"<<endl;
-		// }
-		// cout<<"                                }"<<endl;
-		// cout<<"PDG.size()                   = "<<PDG.size()<<endl;
-		// cout<<"Correlatted_ID_List_T        = {"<<endl;
-		// for (int i=0;i<Correlatted_ID_List_T.size();i++) {
-		// 	cout<<"                                  { ";
-		// 	for (int j=0;j<Correlatted_ID_List_T[i].size();j++) {cout<<Correlatted_ID_List_T[i][j];if (j<(Correlatted_ID_List_T[i].size()-1)) cout<<" , ";}
-		// 	cout<<" }"<<endl;
-		// }
-		// cout<<"                                }"<<endl;
-		// cout<<"Correlatted_ID_List.size()   = "<<Correlatted_ID_List.size()<<endl;
-		// cout<<"Correlatted_ID_Sta.size()    = "<<Correlatted_ID_Sta.size()<<endl;
-		// cout<<"Correlatted_ID_End.size()    = "<<Correlatted_ID_End.size()<<endl;
-		// cout<<"_____________________________________________"<<endl;
 	}
 	// cout<<"Total_Pz = "<<Total_Pz<<endl;
 	if (IfQAMode) {
