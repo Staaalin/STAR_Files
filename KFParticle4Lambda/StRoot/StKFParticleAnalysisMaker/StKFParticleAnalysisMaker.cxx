@@ -1247,6 +1247,7 @@ void StKFParticleAnalysisMaker::Clear(Option_t *opt) {
 //----------------------------------------------------------------------------- 
 Int_t StKFParticleAnalysisMaker::Make() 
 {
+	cout<<"1";
 	// cout<<"Start Make"<<endl;
 	PicoDst = StPicoDst::instance(); 		
 	StPicoDst* mPicoDst = PicoDst;
@@ -2004,7 +2005,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 	}
 
-	if(IfTree){Recorded_KFP_ID_KFPSize = Recorded_KFP_ID.size();}
 	std::vector<int> NeedPDG; NeedPDG.resize(0);
 	NeedPDG.push_back( 2212);NeedPDG.push_back( 211);NeedPDG.push_back( 321);
 	NeedPDG.push_back(-2212);NeedPDG.push_back(-211);NeedPDG.push_back(-321);
@@ -2408,7 +2408,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	}
 	if (IfTree) {
-		cout<<"1";
 		Correlatted_ID_List_T.resize(0);
 		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
 			std::vector<int> Temp;Temp.resize(0);
@@ -2439,7 +2438,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 			Correlatted_ID_End.emplace_back(Correlatted_ID_List_Size);
 		}
-		cout<<"2"<<endl;
 		// cout<<"_____________________________________________"<<endl;
 		// cout<<"Recorded_KFP_ID              = {"<<endl;
 		// for (int i=0;i<Recorded_KFP_ID.size();i++) {
@@ -2549,6 +2547,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		// hadronTree->Fill();
 	}
+	cout<<"2"<<endl;
 	/////////////////////////////////////////////////////////
 	return kStOK;
 
