@@ -1846,7 +1846,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 						TempT.push_back(particle.DaughterIds()[iDaughter]);
 					}
 					int Itr = 1;
-					cout<<"_____________________________________________________"<<endl;
 					while (Itr < TempT.size()) {
 						if ((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG() == -1){
 							KFParticle daughter = KFParticleInterface->GetParticles()[TempT[Itr]];
