@@ -1834,7 +1834,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();// cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
 			if (IfTree){
 				bool CheckPass = true;
-				vector<int> Temp;Temp.resize(0);
+				vector<int> Temp;Temp.resize(0);Temp.push_back(iKFParticle);
 				vector<int> TempT;TempT.resize(0);TempT.push_back(iKFParticle);
 				if      ((abs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 9*PhiPdgMassSigma))    {CheckPass = false;}
 				else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 9*K0SPdgMassSigma))    {CheckPass = false;}
@@ -1852,11 +1852,25 @@ Int_t StKFParticleAnalysisMaker::Make()
 							for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
 								if (daughter.DaughterIds()[iDaughter] == TempT[Itr]) continue;
 								TempT.push_back(daughter.DaughterIds()[iDaughter]);
-								if (Itr > 2) {cout<<"TempT = ";StKFParticleAnalysisMaker::print(TempT);}
+								if (Itr > 2) {
+									cout<<"TempT      = ";StKFParticleAnalysisMaker::print(TempT);
+									vector<int> Temp1;Temp1.resize(0);
+									for (int i = 0;i<TempT.size();i++){
+										Temp1.push_back((KFParticleInterface->GetParticles()[TempT[i]]).GetPDG());
+									}
+									cout<<"TempT(KFP) = ";StKFParticleAnalysisMaker::print(Temp1);
+								}
 							}
 						}else{
 							Temp.push_back(TempT[Itr]);
-							if (Itr > 2) {cout<<"Temp = ";StKFParticleAnalysisMaker::print(Temp);}
+							if (Itr > 2) {
+								cout<<"Temp       = ";StKFParticleAnalysisMaker::print(Temp);
+								vector<int> Temp1;Temp1.resize(0);
+								for (int i = 0;i<Temp.size();i++){
+									Temp1.push_back((KFParticleInterface->GetParticles()[Temp[i]]).GetPDG());
+								}
+								cout<<"Temp(KFP)  = ";StKFParticleAnalysisMaker::print(Temp1);
+							}
 						}
 						Itr++;
 					}
