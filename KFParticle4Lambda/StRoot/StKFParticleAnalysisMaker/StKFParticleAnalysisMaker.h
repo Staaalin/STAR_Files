@@ -75,6 +75,8 @@ private:
 	bool StKFParticleAnalysisMaker::IfGoodDaughterDCA(StPicoDst* mPicoDst , int iKFParticle , double magnet , double Gen1_DCALim , double Gen2_DCALim);
 	std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG , StPicoTrack *track , TVector3 Vertex3D);
 	Double_t StKFParticleAnalysisMaker::massList(int PID);
+	void StKFParticleAnalysisMaker::print(std::vector<int> Temp);
+	void StKFParticleAnalysisMaker::print(std::vector<std::vector<int> > Temp);
 	bool InterfaceCantProcessEvent;
 	int ProtonTrackIndex, PionTrackIndex, KaonTrackIndex;
 	vector<int> trackMap;

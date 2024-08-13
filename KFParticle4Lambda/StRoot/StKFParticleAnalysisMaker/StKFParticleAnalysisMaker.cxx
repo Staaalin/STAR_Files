@@ -1842,39 +1842,27 @@ Int_t StKFParticleAnalysisMaker::Make()
 				else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 9*XiPdgMassSigma))     {CheckPass = false;}
 				else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 9*OmegaPdgMassSigma))  {CheckPass = false;}
 				if (CheckPass == true) {
+					cout<<"====================================================="<<endl;
 					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 						TempT.push_back(particle.DaughterIds()[iDaughter]);
+						cout<<"TempT = ";StKFParticleAnalysisMaker::print(TempT);
 					}
-					//
-					// vector<int>::iterator itr = Temp.begin();
-					// while (itr != Temp.end()){
-					// 	if ((KFParticleInterface->GetParticles()[*itr]).GetPDG() == -1) {
-					// 		KFParticle daughter = KFParticleInterface->GetParticles()[*itr];
-					// 		for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
-					// 			Temp.push_back(daughter.DaughterIds()[iDaughter]);
-					// 		}
-					// 		itr = Temp.erase(itr);
-					// 		break;
-					// 	}
-					// 	else{
-					// 		++itr;
-					// 	}
-					// }
-					//
 					int Itr = 1;
+					cout<<"_____________________________________________________"<<endl;
 					while (Itr < TempT.size()) {
 						if ((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG() == -1){
 							KFParticle daughter = KFParticleInterface->GetParticles()[TempT[Itr]];
 							for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
 								if (daughter.DaughterIds()[iDaughter] == TempT[Itr]) continue;
 								TempT.push_back(daughter.DaughterIds()[iDaughter]);
+								cout<<"TempT = ";StKFParticleAnalysisMaker::print(TempT);
 							}
 						}else{
 							Temp.push_back(TempT[Itr]);
+							cout<<"Temp = ";StKFParticleAnalysisMaker::print(Temp);
 						}
 						Itr++;
 					}
-					//
 					for (int i = 0;i<Temp.size();i++){
 						for (int j = i+1;j<Temp.size();j++){
 							if (Temp[i] == Temp[j]) {
@@ -1883,6 +1871,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 							}
 						}
 					}
+					cout<<"====================================================="<<endl;
 				}
 				if (CheckPass == true){
 					Recorded_KFP_ID.push_back(Temp);
@@ -2943,6 +2932,27 @@ Double_t StKFParticleAnalysisMaker::massList(int PID)
 			Result = 0;
 	}
     return Result;
+}
+
+void StKFParticleAnalysisMaker::print(std::vector<int> Temp)
+{
+	cout<<"{";
+    for (int i = 0;i<Temp.size();i++){
+		cout<<" "<<Temp[i];
+		if (i != (Temp.size() - 1)) cout<<" ,"; 
+	}
+	cout<<" }"<<endl;
+    return ;
+}
+
+void StKFParticleAnalysisMaker::print(std::vector<std::vector<int> > Temp)
+{
+	cout<<"{"<<endl;
+    for (int i = 0;i<Temp.size();i++){
+		StKFParticleAnalysisMaker::print(Temp[i]);
+	}
+	cout<<"}"<<endl;
+    return ;
 }
 
 // StPicoHelix StKFParticleAnalysisMaker::StPicoTrack2StPicoHelix(StPicoTrack* Track){
