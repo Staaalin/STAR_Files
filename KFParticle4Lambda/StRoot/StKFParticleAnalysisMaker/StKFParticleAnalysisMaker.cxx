@@ -930,11 +930,9 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("Chi2"               ,&QA_Chi2              );
 
 		// Used for restore corralated information
-		hadronTree->Branch("ParentA"       ,&ParentA      );
-		hadronTree->Branch("ParentB"       ,&ParentB      );
-		hadronTree->Branch("ParentC"       ,&ParentC      );
-		hadronTree->Branch("ParentD"       ,&ParentD      );
-		hadronTree->Branch("ParentE"       ,&ParentE      );
+		hadronTree->Branch("ParentList"      ,&ParentList     );
+		hadronTree->Branch("ParentSta"       ,&ParentSta      );
+		hadronTree->Branch("ParentEnd"       ,&ParentEnd      );
 
 	}
 
@@ -1467,11 +1465,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 	QA_Chi2        .resize(0);
 
 	Recorded_KFP_ID.resize(0);
-	ParentA.resize(0);
-	ParentB.resize(0);
-	ParentC.resize(0);
-	ParentD.resize(0);
-	ParentE.resize(0);
+	ParentList.resize(0);
+	ParentSta.resize(0);
+	ParentEnd.resize(0);
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	// Calculating Nch
 	int NumCharge = 0;
@@ -1852,25 +1848,25 @@ Int_t StKFParticleAnalysisMaker::Make()
 							for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
 								if (daughter.DaughterIds()[iDaughter] == TempT[Itr]) continue;
 								TempT.push_back(daughter.DaughterIds()[iDaughter]);
-								if (Itr > 2) {
-									cout<<"TempT      = ";StKFParticleAnalysisMaker::print(TempT);
-									vector<int> Temp1;Temp1.resize(0);
-									for (int i = 0;i<TempT.size();i++){
-										Temp1.push_back((KFParticleInterface->GetParticles()[TempT[i]]).GetPDG());
-									}
-									cout<<"TempT(KFP) = ";StKFParticleAnalysisMaker::print(Temp1);
-								}
+								// if (Itr > 2) {
+								// 	cout<<"TempT      = ";StKFParticleAnalysisMaker::print(TempT);
+								// 	vector<int> Temp1;Temp1.resize(0);
+								// 	for (int i = 0;i<TempT.size();i++){
+								// 		Temp1.push_back((KFParticleInterface->GetParticles()[TempT[i]]).GetPDG());
+								// 	}
+								// 	cout<<"TempT(KFP) = ";StKFParticleAnalysisMaker::print(Temp1);
+								// }
 							}
 						}else{
 							Temp.push_back(TempT[Itr]);
-							if (Itr > 2) {
-								cout<<"Temp       = ";StKFParticleAnalysisMaker::print(Temp);
-								vector<int> Temp1;Temp1.resize(0);
-								for (int i = 0;i<Temp.size();i++){
-									Temp1.push_back((KFParticleInterface->GetParticles()[Temp[i]]).GetPDG());
-								}
-								cout<<"Temp(KFP)  = ";StKFParticleAnalysisMaker::print(Temp1);
-							}
+							// if (Itr > 2) {
+							// 	cout<<"Temp       = ";StKFParticleAnalysisMaker::print(Temp);
+							// 	vector<int> Temp1;Temp1.resize(0);
+							// 	for (int i = 0;i<Temp.size();i++){
+							// 		Temp1.push_back((KFParticleInterface->GetParticles()[Temp[i]]).GetPDG());
+							// 	}
+							// 	cout<<"Temp(KFP)  = ";StKFParticleAnalysisMaker::print(Temp1);
+							// }
 						}
 						Itr++;
 					}
@@ -1882,7 +1878,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 							}
 						}
 					}
-					if (Itr > 3) cout<<"====================================================="<<endl;
+					// if (Itr > 3) cout<<"====================================================="<<endl;
 				}
 				if (CheckPass == true){
 					Recorded_KFP_ID.push_back(Temp);
@@ -2439,6 +2435,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				bool IfCorrelated = false;
 				for (int kRecorded_KFP=1;kRecorded_KFP < Recorded_KFP_ID[iRecorded_KFP].size();kRecorded_KFP++){
 					if (IfCorrelated == true) break;
+					if (Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == -1) continue;
 					for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
 						if ( Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP] ){
 							Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
@@ -2450,51 +2447,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
-		for (int iRecorded_KFP=0;iRecorded_KFP<Correlatted_ID_List_T.size();iRecorded_KFP++){
-			switch (Correlatted_ID_List_T[iRecorded_KFP].size()){
-				case 0:
-					ParentA.emplace_back(-1);
-					ParentB.emplace_back(-1);
-					ParentC.emplace_back(-1);
-					ParentD.emplace_back(-1);
-					ParentE.emplace_back(-1);
-					break;
-				case 1:
-					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
-					ParentB.emplace_back(-1);
-					ParentC.emplace_back(-1);
-					ParentD.emplace_back(-1);
-					ParentE.emplace_back(-1);
-					break;
-				case 2:
-					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
-					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
-					ParentC.emplace_back(-1);
-					ParentD.emplace_back(-1);
-					ParentE.emplace_back(-1);
-					break;
-				case 3:
-					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
-					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
-					ParentC.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][2]);
-					ParentD.emplace_back(-1);
-					ParentE.emplace_back(-1);
-					break;
-				case 4:
-					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
-					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
-					ParentC.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][2]);
-					ParentD.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][3]);
-					ParentE.emplace_back(-1);
-					break;
-				default:
-					ParentA.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][0]);
-					ParentB.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][1]);
-					ParentC.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][2]);
-					ParentD.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][3]);
-					ParentE.emplace_back(Correlatted_ID_List_T[iRecorded_KFP][4]);
-					break;
+		int Index_Sum = 0;
+		for (int Itr=0;Itr<Correlatted_ID_List_T.size();Itr++){
+			ParentSta.emplace_back(Index_Sum);
+			for (int Jtr = 0;Jtr < Correlatted_ID_List_T[Itr].size();Jtr++) {
+				ParentList.emplace_back(Correlatted_ID_List_T[Itr][Jtr]);
+				Index_Sum++;
 			}
+			ParentEnd.emplace_back(Index_Sum-1);
 		}
 		// cout<<"_____________________________________________"<<endl;
 		// cout<<"Recorded_KFP_ID              = {"<<endl;
