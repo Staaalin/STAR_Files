@@ -1853,11 +1853,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 							for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
 								if (daughter.DaughterIds()[iDaughter] == TempT[Itr]) continue;
 								TempT.push_back(daughter.DaughterIds()[iDaughter]);
-								if (Itr > 2) cout<<"TempT = ";StKFParticleAnalysisMaker::print(TempT);
+								if (Itr > 2) {cout<<"TempT = ";StKFParticleAnalysisMaker::print(TempT);}
 							}
 						}else{
 							Temp.push_back(TempT[Itr]);
-							if (Itr > 2) cout<<"Temp = ";StKFParticleAnalysisMaker::print(Temp);
+							if (Itr > 2) {cout<<"Temp = ";StKFParticleAnalysisMaker::print(Temp);}
 						}
 						Itr++;
 					}
@@ -1869,7 +1869,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 							}
 						}
 					}
-					if (Itr > 2) cout<<"====================================================="<<endl;
+					if (Itr > 3) cout<<"====================================================="<<endl;
 				}
 				if (CheckPass == true){
 					Recorded_KFP_ID.push_back(Temp);
