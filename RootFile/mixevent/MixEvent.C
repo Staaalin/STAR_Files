@@ -168,6 +168,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         std::vector<Float_t> *InvariantMass      = nullptr;
         std::vector<Float_t> *Decay_Length       = nullptr;
         std::vector<Float_t> *Chi2               = nullptr;
+        std::vector<int>     *ParentList         = nullptr;
+        std::vector<int>     *ParentSta          = nullptr;
+        std::vector<int>     *ParentEnd          = nullptr;
 
         TBranch *bPDG                            = nullptr;
         TBranch *bmix_px                         = nullptr;
@@ -183,6 +186,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         TBranch *bInvariantMass                  = nullptr;
         TBranch *bDecay_Length                   = nullptr;
         TBranch *bChi2                           = nullptr;
+        TBranch *bParentList                     = nullptr;
+        TBranch *bParentSta                      = nullptr;
+        TBranch *bParentEnd                      = nullptr;
     
     #else
         #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
@@ -201,6 +207,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             std::vector<Float_t> *InvariantMass      = NULL;
             std::vector<Float_t> *Decay_Length       = NULL;
             std::vector<Float_t> *Chi2               = NULL;
+            std::vector<int>     *ParentList         = NULL;
+            std::vector<int>     *ParentSta          = NULL;
+            std::vector<int>     *ParentEnd          = NULL;
 
             TBranch *bPDG                            = NULL;
             TBranch *bmix_px                         = NULL;
@@ -216,6 +225,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             TBranch *bInvariantMass                  = NULL;
             TBranch *bDecay_Length                   = NULL;
             TBranch *bChi2                           = NULL;
+            TBranch *bParentList                     = NULL;
+            TBranch *bParentSta                      = NULL;
+            TBranch *bParentEnd                      = NULL;
 
         #else
     
@@ -233,6 +245,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             std::vector<Float_t> *InvariantMass      = 0;
             std::vector<Float_t> *Decay_Length       = 0;
             std::vector<Float_t> *Chi2               = 0;
+            std::vector<int>     *ParentList         = 0;
+            std::vector<int>     *ParentSta          = 0;
+            std::vector<int>     *ParentEnd          = 0;
     
             TBranch *bPDG                            = 0;
             TBranch *bmix_px                         = 0;
@@ -248,6 +263,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             TBranch *bInvariantMass                  = 0;
             TBranch *bDecay_Length                   = 0;
             TBranch *bChi2                           = 0;
+            TBranch *bParentList                     = 0;
+            TBranch *bParentSta                      = 0;
+            TBranch *bParentEnd                      = 0;
 
         #endif
     #endif
@@ -298,6 +316,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     hadronTree->SetBranchAddress("InvariantMass",&InvariantMass,&bInvariantMass);
     hadronTree->SetBranchAddress("Decay_Length" ,&Decay_Length ,&bDecay_Length );
     hadronTree->SetBranchAddress("Chi2"         ,&Chi2         ,&bChi2         );
+    hadronTree->SetBranchAddress("ParentList"   ,&ParentList   ,&bParentList   );
+    hadronTree->SetBranchAddress("ParentSta"    ,&ParentSta    ,&bParentSta    );
+    hadronTree->SetBranchAddress("ParentEnd"    ,&ParentEnd    ,&bParentEnd    );
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
@@ -376,40 +397,26 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         A_EvtID.resize(0);B_EvtID.resize(0);
         A_TreID.resize(0);B_TreID.resize(0);
 
+        int LoopSize;
         if (Mode == 0){
-            for (int j=0;j<PDGMult;j++){
-                if (PDG->at(j) == A_PDG) {
-                    A_Px.push_back(mix_px->at(j));
-                    A_Py.push_back(mix_py->at(j));
-                    A_Pz.push_back(mix_pz->at(j));
-                    A_EvtID.push_back(i);
-                    A_TreID.push_back(j);
-                }
-                if (PDG->at(j) == B_PDG) {
-                    B_Px.push_back(mix_px->at(j));
-                    B_Py.push_back(mix_py->at(j));
-                    B_Pz.push_back(mix_pz->at(j));
-                    B_EvtID.push_back(i);
-                    B_TreID.push_back(j);
-                }
-            }
+            LoopSize = PDGMult;
+        }else{
+            LoopSize = mix_px->size();
         }
-        else{
-            for (int j=0;j<mix_px->size();j++){
-                if (PDG->at(j) == A_PDG) {
-                    A_Px.push_back(mix_px->at(j));
-                    A_Py.push_back(mix_py->at(j));
-                    A_Pz.push_back(mix_pz->at(j));
-                    A_EvtID.push_back(i);
-                    A_TreID.push_back(j);
-                }
-                if (PDG->at(j) == B_PDG) {
-                    B_Px.push_back(mix_px->at(j));
-                    B_Py.push_back(mix_py->at(j));
-                    B_Pz.push_back(mix_pz->at(j));
-                    B_EvtID.push_back(i);
-                    B_TreID.push_back(j);
-                }
+        for (int j=0;j<LoopSize;j++){
+            if (PDG->at(j) == A_PDG) {
+                A_Px.push_back(mix_px->at(j));
+                A_Py.push_back(mix_py->at(j));
+                A_Pz.push_back(mix_pz->at(j));
+                A_EvtID.push_back(i);
+                A_TreID.push_back(j);
+            }
+            if (PDG->at(j) == B_PDG) {
+                B_Px.push_back(mix_px->at(j));
+                B_Py.push_back(mix_py->at(j));
+                B_Pz.push_back(mix_pz->at(j));
+                B_EvtID.push_back(i);
+                B_TreID.push_back(j);
             }
         }
 
