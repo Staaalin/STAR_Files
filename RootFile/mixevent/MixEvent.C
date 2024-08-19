@@ -439,8 +439,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             HistName2 += ", Mix";
             TH2D* H_Kstar_Bphi     [i][l] = new TH2D(HistName1,HistName2, 100 , 0 , 2      ,   4  , 0 , 2*Pi);
             TH2D* H_Mix_Kstar_Bphi [i][l] = new TH2D(HistName1,HistName2, 100 , 0 , 2      ,   4  , 0 , 2*Pi);
-            TH2D* H_ABphi_Bphi     [i][l] = new TH2D(HistName1,HistName2, 50  , 0 , 2*Pi   ,   20 , 0 , 2*Pi);
-            TH2D* H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1,HistName2, 50  , 0 , 2*Pi   ,   20 , 0 , 2*Pi);
+            TH2D* H_ABphi_Bphi     [i][l] = new TH2D(HistName1,HistName2, 50  , 0 , Pi     ,   20 , 0 , 2*Pi);
+            TH2D* H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1,HistName2, 50  , 0 , Pi     ,   20 , 0 , 2*Pi);
         }
     }
 
