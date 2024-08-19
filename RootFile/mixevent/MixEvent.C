@@ -42,6 +42,8 @@ using namespace std;
 // #define DataName           "pp_200_15"
 // #define DataName           "OO_200_21"
 
+#define Pi 3.1415926535898
+
 int CentralityBin[] = {0,25,50,75,100};// %
 #define CentralityBinNum 4
 
@@ -50,6 +52,9 @@ float PtBin[] = {0 , 1.0 , 10.0}; // Pt
 
 float yBin[] = {-1.0 , 0.0 , 1.0}; // B_y
 #define yBinNum 2
+
+TString PatternBin[3] = {"AMBM","AMBS","ASBM"}
+#define Pattern 3 // 1:A middle B middle , 2:A middle B sideband , 3:A sideband B middle
 
 Double_t massList(int PID)
 {
@@ -126,6 +131,30 @@ Double_t massListSigma(int PID)
         }
     }
     return Result;
+}
+
+bool IfInVector(int Num , std::vector<int> V)
+{
+    for (int i=0;i<V.size();i++) {
+        if (Num == V[i]){
+            return true;
+        }
+    }
+    return false;
+}
+
+void DltElement(std::vector<int> &V , int ID)
+{
+    std::vector<int> V_T;V_T.resize(0);
+    for (int i=0;i<V.size();i++){
+        V_T.push_back(V[i]);
+    }
+    V.resize(0);
+    for (int i=0;i<V_T.size();i++){
+        if (i == ID) continue;
+        V.push_back(V_T[i]);
+    }
+    return;
 }
 
 std::vector<int> GetNchList(int CentralityList[])
@@ -330,57 +359,88 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     std::vector<int> NchList = GetNchList(CentralityBin);     // centrality
     //                                        centrality          B_y        B_Pt
-    std::vector<Float_t> A_Px        ;
-    std::vector<Float_t> A_Py        ;
-    std::vector<Float_t> A_Pz        ;
-    std::vector<Float_t> A_EvtID     ;
-    std::vector<Float_t> A_TreID     ;
-    std::vector<Float_t> B_Px        ;
-    std::vector<Float_t> B_Py        ;
-    std::vector<Float_t> B_Pz        ;
-    std::vector<Float_t> B_EvtID     ;
-    std::vector<Float_t> B_TreID     ;
-    float                Mix_A_Px         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_A_Py         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_A_Pz         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_A_EvtID      [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_A_TreID      [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_B_Px         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_B_Py         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_B_Pz         [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_B_EvtID      [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    float                Mix_B_TreID      [CentralityBinNum]   [yBinNum]  [PtBinNum] [500];
-    int                  Mix_event_Num    [CentralityBinNum]   [yBinNum]  [PtBinNum];
-    int                  Mix_A_Num        [CentralityBinNum]   [yBinNum]  [PtBinNum];
-    int                  Mix_B_Num        [CentralityBinNum]   [yBinNum]  [PtBinNum];
-    TH1D* H_Kstar                         [CentralityBinNum]   [yBinNum]  [PtBinNum];
-    TH1D* H_Mix_Kstar                     [CentralityBinNum]   [yBinNum]  [PtBinNum];
+    std::vector<Float_t>              A_Px        ;
+    std::vector<Float_t>              A_Py        ;
+    std::vector<Float_t>              A_Pz        ;
+    std::vector<Float_t>              A_EvtID     ;
+    std::vector<Float_t>              A_TreID     ;
+    std::vector<std::vector<Int_t> >  A_ParID     ;
+    std::vector<Int_t>                A_ID        ;
+    std::vector<Float_t>              B_Px        ;
+    std::vector<Float_t>              B_Py        ;
+    std::vector<Float_t>              B_Pz        ;
+    std::vector<Float_t>              B_EvtID     ;
+    std::vector<Float_t>              B_TreID     ;
+    std::vector<std::vector<Int_t> >  B_ParID     ;
+    std::vector<Int_t>                B_ID        ;
+    float Mix_A_Px                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
+    float Mix_A_Py                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
+    float Mix_A_Pz                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
+    float Mix_A_EvtID                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
+    float Mix_A_TreID                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
+    float Mix_B_Px                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
+    float Mix_B_Py                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
+    float Mix_B_Pz                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
+    float Mix_B_EvtID                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
+    float Mix_B_TreID                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
+    int   Mix_event_Num                   [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    int   Mix_A_Num                       [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    int   Mix_B_Num                       [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    TH1D* H_Kstar                         [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    TH1D* H_Mix_Kstar                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    TH2D* H_Kstar_Bphi                    [CentralityBinNum]                         [Pattern];
+    TH2D* H_Mix_Kstar_Bphi                [CentralityBinNum]                         [Pattern];
+    TH2D* H_ABphi_Bphi                    [CentralityBinNum]                         [Pattern];
 
     for (int i=0;i<CentralityBinNum;i++){
-        for (int j=0;j<yBinNum;j++){
+        for (int l=0;l<Pattern;l++){
             for (int k=0;k<PtBinNum;k++){
-                TString HistName1 = "H_";
-                TString HistName2 = "Cen: [";
-                HistName1 += i;HistName1 += "_";
-                HistName2 += CentralityBin[i];HistName2 += "% , ";
-                HistName2 += CentralityBin[i+1];HistName2 += "%], ";
-                HistName1 += j;HistName1 += "_";
-                HistName2 += yBin[j];HistName2 += " < y";HistName2 += B_PDG;HistName2 += " <  ";
-                HistName2 += yBin[j+1];HistName2 += ", ";
-                HistName1 += k;
-                HistName2 += PtBin[k];HistName2 += " < Pt";HistName2 += B_PDG;HistName2 += " <  ";
-                HistName2 += PtBin[k+1];
-                TString HistName1s = HistName1;
-                TString HistName2s = HistName2;
-                HistName1s += "_S";
-                HistName1 += "_M";
-                HistName2 += ", Mix";
-                H_Kstar[i][j][k] = new TH1D(HistName1s,HistName2s,500,0,10);
-                H_Mix_Kstar[i][j][k] = new TH1D(HistName1,HistName2,500,0,10);
-                Mix_event_Num[i][j][k] = 0;
-                Mix_A_Num[i][j][k] = 0;
-                Mix_B_Num[i][j][k] = 0;
+                for (int j=0;j<yBinNum;j++){
+                    TString HistName1 = "H_";
+                    TString HistName2 = "Cen: [";
+                    HistName1 += i;HistName1 += "_";
+                    HistName2 += CentralityBin[i];HistName2 += "% , ";
+                    HistName2 += CentralityBin[i+1];HistName2 += "%], ";
+                    HistName1 += j;HistName1 += "_";
+                    HistName2 += yBin[j];HistName2 += " < y";HistName2 += B_PDG;HistName2 += " <  ";
+                    HistName2 += yBin[j+1];HistName2 += ", ";
+                    HistName1 += k;
+                    HistName2 += PtBin[k];HistName2 += " < Pt";HistName2 += B_PDG;HistName2 += " <  ";
+                    HistName2 += PtBin[k+1];
+                    TString HistName1s = HistName1;
+                    TString HistName2s = HistName2;
+                    HistName1s += "_S_";
+                    HistName1 += "_M_";
+                    HistName1 += PatternBin[l];
+                    HistName1s += PatternBin[l];
+                    HistName2 += ", Mix, ";
+                    HistName2 += PatternBin[l];
+                    HistName2s += PatternBin[l];
+                    H_Kstar[i][j][k][l] = new TH1D(HistName1s,HistName2s,500,0,10);
+                    H_Mix_Kstar[i][j][k][l] = new TH1D(HistName1,HistName2,500,0,10);
+                    Mix_event_Num[i][j][k][l] = 0;
+                    Mix_A_Num[i][j][k][l] = 0;
+                    Mix_B_Num[i][j][k][l] = 0;
+                }
             }
+            TString HistName1;
+            TString HistName2;
+            HistName1 = "HKB_";
+            HistName2 = "Cen: [";
+            HistName1 += i;HistName1 += "_";
+            HistName2 += CentralityBin[i];HistName2 += "% , ";
+            HistName2 += CentralityBin[i+1];HistName2 += "%], ";
+            HistName1 += l;HistName1 += "_";
+            HistName2 += PatternBin[l];HistName2 += ", ";
+            TString HistName1s = HistName1;
+            TString HistName2s = HistName2;
+            HistName1s += "_S";
+            HistName1 += "_M";
+            HistName2 += ", Mix";
+            TH2D* H_Kstar_Bphi     [i][l] = new TH2D(HistName1,HistName2, 100 , 0 , 2      ,   4  , 0 , 2*Pi);
+            TH2D* H_Mix_Kstar_Bphi [i][l] = new TH2D(HistName1,HistName2, 100 , 0 , 2      ,   4  , 0 , 2*Pi);
+            TH2D* H_ABphi_Bphi     [i][l] = new TH2D(HistName1,HistName2, 50  , 0 , 2*Pi   ,   20 , 0 , 2*Pi);
+            TH2D* H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1,HistName2, 50  , 0 , 2*Pi   ,   20 , 0 , 2*Pi);
         }
     }
 
@@ -396,27 +456,57 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         A_Pz.resize(0);B_Pz.resize(0);
         A_EvtID.resize(0);B_EvtID.resize(0);
         A_TreID.resize(0);B_TreID.resize(0);
+        A_ParID.resize(0);B_ParID.resize(0);
+        A_ID.resize(0);   B_ID.resize(0);
 
         int LoopSize;
         if (Mode == 0){
             LoopSize = PDGMult;
+            for (int j=0;j<LoopSize;j++){
+                if (PDG->at(j) == A_PDG) {
+                    A_Px.push_back(mix_px->at(j));
+                    A_Py.push_back(mix_py->at(j));
+                    A_Pz.push_back(mix_pz->at(j));
+                    A_EvtID.push_back(i);
+                    A_TreID.push_back(j);
+                    A_ID.push_back(j);
+                    std::vector<Int_t> Temp;Temp.resize(0);
+                    for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
+                        Temp.push_back(ParentList->at(k));
+                    }
+                    A_ParID.push_back(Temp);
+                }
+                if (PDG->at(j) == B_PDG) {
+                    B_Px.push_back(mix_px->at(j));
+                    B_Py.push_back(mix_py->at(j));
+                    B_Pz.push_back(mix_pz->at(j));
+                    B_EvtID.push_back(i);
+                    B_TreID.push_back(j);
+                    B_ID.push_back(j);
+                    std::vector<Int_t> Temp;Temp.resize(0);
+                    for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
+                        Temp.push_back(ParentList->at(k));
+                    }
+                    B_ParID.push_back(Temp);
+                }
+            }
         }else{
             LoopSize = mix_px->size();
-        }
-        for (int j=0;j<LoopSize;j++){
-            if (PDG->at(j) == A_PDG) {
-                A_Px.push_back(mix_px->at(j));
-                A_Py.push_back(mix_py->at(j));
-                A_Pz.push_back(mix_pz->at(j));
-                A_EvtID.push_back(i);
-                A_TreID.push_back(j);
-            }
-            if (PDG->at(j) == B_PDG) {
-                B_Px.push_back(mix_px->at(j));
-                B_Py.push_back(mix_py->at(j));
-                B_Pz.push_back(mix_pz->at(j));
-                B_EvtID.push_back(i);
-                B_TreID.push_back(j);
+            for (int j=0;j<LoopSize;j++){
+                if (PDG->at(j) == A_PDG) {
+                    A_Px.push_back(mix_px->at(j));
+                    A_Py.push_back(mix_py->at(j));
+                    A_Pz.push_back(mix_pz->at(j));
+                    A_EvtID.push_back(i);
+                    A_TreID.push_back(j);
+                }
+                if (PDG->at(j) == B_PDG) {
+                    B_Px.push_back(mix_px->at(j));
+                    B_Py.push_back(mix_py->at(j));
+                    B_Pz.push_back(mix_pz->at(j));
+                    B_EvtID.push_back(i);
+                    B_TreID.push_back(j);
+                }
             }
         }
 
@@ -580,7 +670,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         BhadronTree->Branch("mix_px"             ,&Bpx                  );
         BhadronTree->Branch("mix_py"             ,&Bpy                  );
         BhadronTree->Branch("mix_pz"             ,&Bpz                  );
-        BhadronTree->Branch("QA_eta"             ,&BQA_eta                 );
+        BhadronTree->Branch("QA_eta"             ,&BQA_eta              );
 
         // Used for PID QA
         BhadronTree->Branch("dEdx"               ,&BQA_dEdx              );
