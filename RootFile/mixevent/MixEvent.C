@@ -190,7 +190,6 @@ std::vector<int> GetNchList(int CentralityList[])
 void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
               int A_PDG,int B_PDG,int Mode = 0) // Mode = 0: PDGMult 为vector长度
 {
-    cout<<"Start"<<endl;
 
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
 
@@ -459,10 +458,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             HistName1s += "_S";
             HistName1 += "_M";
             HistName2 += ", Mix";
-            cout<<"1"<<endl;
             H_ABphi_Bphi     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , 0 , Pi);
             H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , 0 , Pi);
-            cout<<"2"<<endl;
             HistName1 = "HPhiRap_";
             HistName2 = "Cen: [";
             HistName1 += i;HistName1 += "_";
@@ -480,7 +477,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         }
     }
 
-    cout<<"There is OK"<<endl;
 
     for (int i=0;i<nentries;i++){
         // if (i > 15) {break;}
