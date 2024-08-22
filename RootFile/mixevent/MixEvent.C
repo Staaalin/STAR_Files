@@ -53,8 +53,8 @@ float PtBin[] = {0 , 1.0 , 10.0}; // Pt
 float yBin[] = {-5.0 , -0.5 , 0.0 , 0.5 , 5.0}; // B_y
 #define yBinNum 4
 
-TString PatternBin[] = {"AMBM","AMBS","ASBM"}
-#define Pattern 3 // 1:A middle B middle , 2:A middle B sideband , 3:A sideband B middle
+TString PatternBin[] = {"AMBM","AMBS","ASBM"};
+#define Pattern 3 // 0:A middle B middle , 1:A middle B sideband , 2:A sideband B middle
 
 Double_t massList(int PID)
 {
