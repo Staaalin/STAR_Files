@@ -458,8 +458,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             TString HistName2s = HistName2;
             HistName1s += "_S";
             HistName1 += "_M";
-            cout<<"1"<<endl;
             HistName2 += ", Mix";
+            cout<<"1"<<endl;
             TH2D* H_ABphi_Bphi     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , 0 , Pi);
             TH2D* H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , 0 , Pi);
             cout<<"2"<<endl;
