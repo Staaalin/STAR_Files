@@ -614,12 +614,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 float CosBZ = DotBZ/B_rho;
                 if ((B_IfMid == true) && (B_IfSide == false)){
                     if ((A_IfMid == true) && (A_IfSide == false)) {
+                        cout<<"Pattern_Index = 0"<<endl;
                         H_Kstar[CenIndex][RapIndex][PtIndex][0]->Fill(kstar);
                         H_ABphi_Bphi[CenIndex][0]->Fill(acos(CosAB),acos(CosBZ));
                         H_ABphi_By  [CenIndex][0]->Fill(acos(CosAB),rap);
                         Pattern_Index = 0;
                     }
                     if ((A_IfMid == false) && (A_IfSide == true)) {
+                        cout<<"Pattern_Index = 2"<<endl;
                         H_Kstar[CenIndex][RapIndex][PtIndex][2]->Fill(kstar);
                         H_ABphi_Bphi[CenIndex][2]->Fill(acos(CosAB),acos(CosBZ));
                         H_ABphi_By  [CenIndex][2]->Fill(acos(CosAB),rap);
@@ -628,6 +630,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
                 if ((B_IfMid == false) && (B_IfSide == true)){
                     if ((A_IfMid == true) && (A_IfSide == false)) {
+                        cout<<"Pattern_Index = 1"<<endl;
                         H_Kstar[CenIndex][RapIndex][PtIndex][1]->Fill(kstar);
                         H_ABphi_Bphi[CenIndex][1]->Fill(acos(CosAB),acos(CosBZ));
                         H_ABphi_By  [CenIndex][1]->Fill(acos(CosAB),rap);
