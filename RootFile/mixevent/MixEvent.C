@@ -595,7 +595,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             TLorentzVector p1;
             p1.SetXYZM(B_Px[B_index],B_Py[B_index],B_Pz[B_index],massList(B_PDG));
             for (int k=0;k<A_Px.size();k++){
-                if (IfCommonElement(A_ParID , B_ParID)) continue;
+                if (IfCommonElement(A_ParID[k] , B_ParID[B_index])) continue;
                 if (fabs(A_Mass[k] - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_IfMid = true;A_IfSide = false;}
                 else if(fabs(A_Mass[k] - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_IfMid = false;A_IfSide = true;}
                 TLorentzVector p2,p3,p4 = p1;
