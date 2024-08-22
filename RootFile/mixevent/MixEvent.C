@@ -374,14 +374,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     std::vector<Float_t>              A_Pz        ;
     std::vector<Int_t>                A_EvtID     ;
     std::vector<Int_t>                A_TreID     ;
-    std::vector<std::vector<Int_t> >  A_ParID     ;
+    std::vector<std::vector<int> >    A_ParID     ;
     std::vector<Float_t>              A_Mass      ;
     std::vector<Float_t>              B_Px        ;
     std::vector<Float_t>              B_Py        ;
     std::vector<Float_t>              B_Pz        ;
     std::vector<Int_t>                B_EvtID     ;
     std::vector<Int_t>                B_TreID     ;
-    std::vector<std::vector<Int_t> >  B_ParID     ;
+    std::vector<std::vector<int> >    B_ParID     ;
     std::vector<Float_t>              B_Mass      ;
     float Mix_A_Px                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
     float Mix_A_Py                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
