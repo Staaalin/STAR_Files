@@ -414,6 +414,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TH2D* H_ABphi_By                      [CentralityBinNum]                         [Pattern];
     TH2D* H_Mix_ABphi_By                  [CentralityBinNum]                         [Pattern];
 
+	cout<<"Here is OK"<<endl;
+
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
             for (int k=0;k<PtBinNum;k++){
@@ -459,8 +461,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             HistName1s += "_S";
             HistName1 += "_M";
             HistName2 += ", Mix";
-            TH2D* H_ABphi_Bphi     [i][l] = new TH2D(HistName1,HistName2, 50  , 0 , Pi     ,   20 , 0 , Pi);
-            TH2D* H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1,HistName2, 50  , 0 , Pi     ,   20 , 0 , Pi);
+            TH2D* H_ABphi_Bphi     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , 0 , Pi);
+            TH2D* H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , 0 , Pi);
             HistName1 = "HPhiRap_";
             HistName2 = "Cen: [";
             HistName1 += i;HistName1 += "_";
@@ -473,10 +475,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             HistName1s += "_S";
             HistName1 += "_M";
             HistName2 += ", Mix";
-            TH2D* H_ABphi_By     [i][l] = new TH2D(HistName1,HistName2, 50  , 0 , Pi     ,   20 , -2 , 2);
-            TH2D* H_Mix_ABphi_By [i][l] = new TH2D(HistName1,HistName2, 50  , 0 , Pi     ,   20 , -2 , 2);
+            TH2D* H_ABphi_By     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , -2 , 2);
+            TH2D* H_Mix_ABphi_By [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , -2 , 2);
         }
     }
+
+cout<<"There is OK"<<endl;
 
     for (int i=0;i<nentries;i++){
         // if (i > 15) {break;}
