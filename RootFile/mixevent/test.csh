@@ -4,7 +4,8 @@
 set Energy = 62.0
 set midname = "/star/data01/pwg/svianping/output/output_"
 # set midname = "/star/data01/pwg/svianping/HADD/HADD_T_"
-set outname = "~/Result/K0SXiMix/HADDr_"
+# set outname = "~/Result/K0SXiMix/HADDr_"
+set outname = "~/Result/Cor_"
 set StartFileIndex = 0
 set EndFileIndex = 341
 set OutputFileIndex = 1
