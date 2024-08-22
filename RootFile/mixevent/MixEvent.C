@@ -143,6 +143,16 @@ bool IfInVector(int Num , std::vector<int> V)
     return false;
 }
 
+bool IfCommonElement(std::vector<int> A , std::vector<int> B)
+{
+    for (int i=0;i<A.size();i++){
+        for (int j=0;j<B.size();j++){
+            if (A[i] == B[j]) return true;
+        }
+    }
+    return false;
+}
+
 void DltElement(std::vector<int> &V , int ID)
 {
     std::vector<int> V_T;V_T.resize(0);
@@ -386,6 +396,16 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     int   Mix_event_Num                   [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     int   Mix_A_Num                       [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     int   Mix_B_Num                       [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    //
+    float Phi_Mix_A_Px                    [CentralityBinNum]                         [Pattern] [500];
+    float Phi_Mix_A_Py                    [CentralityBinNum]                         [Pattern] [500];
+    float Phi_Mix_A_Pz                    [CentralityBinNum]                         [Pattern] [500];
+    float Phi_Mix_B_Px                    [CentralityBinNum]                         [Pattern] [500];
+    float Phi_Mix_B_Py                    [CentralityBinNum]                         [Pattern] [500];
+    float Phi_Mix_B_Pz                    [CentralityBinNum]                         [Pattern] [500];
+    int   Phi_Mix_event_Num               [CentralityBinNum]                         [Pattern];
+    int   Phi_Mix_A_Num                   [CentralityBinNum]                         [Pattern];
+    int   Phi_Mix_B_Num                   [CentralityBinNum]                         [Pattern];
     TH1D* H_Kstar                         [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     TH1D* H_Mix_Kstar                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     TH2D* H_ABphi_Bphi                    [CentralityBinNum]                         [Pattern];
@@ -473,7 +493,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         A_Mass.resize(0); B_Mass.resize(0);
 
         int LoopSize;
-        if (Mode == 0){
+        if (true){
             LoopSize = PDGMult;
             for (int j=0;j<LoopSize;j++){
                 if (PDG->at(j) == A_PDG) {
@@ -483,7 +503,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     A_Mass.push_back(InvariantMass->at(j));
                     A_EvtID.push_back(i);
                     A_TreID.push_back(j);
-                    std::vector<Int_t> Temp;Temp.resize(0);
+                    std::vector<Int_t> Temp;Temp.resize(0);Temp.push_back(j);
                     for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
                     }
@@ -496,7 +516,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     B_Mass.push_back(InvariantMass->at(j));
                     B_EvtID.push_back(i);
                     B_TreID.push_back(j);
-                    std::vector<Int_t> Temp;Temp.resize(0);
+                    std::vector<Int_t> Temp;Temp.resize(0);Temp.push_back(j);
                     for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
                     }
@@ -526,7 +546,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         if ((A_Px.size() == 0) || (B_Px.size() == 0)) continue;
 
         // cout<<"B_Px.size() = "<<B_Px.size()<<endl;
-        if (B_Px.size() == 1){
+        for (int B_index = 0;B_index < B_Px.size();B_index++){
             // cout<<"FOUND"<<endl;
 
             int CenIndex = -1;
@@ -538,8 +558,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
 
-            float tEnergy = pow(pow(B_Px[0],2) + pow(B_Py[0],2) + pow(B_Pz[0],2) + pow(massList(B_PDG),2),0.5);
-            rap = 0.5*log((tEnergy+B_Pz[0])/(tEnergy-B_Pz[0]));
+            float tEnergy = pow(pow(B_Px[B_index],2) + pow(B_Py[B_index],2) + pow(B_Pz[B_index],2) + pow(massList(B_PDG),2),0.5);
+            rap = 0.5*log((tEnergy+B_Pz[B_index])/(tEnergy-B_Pz[B_index]));
             // cout<<"px = "<<B_Px[0]<<" , py = "<<B_Py[0]<<" , pz = "<<B_Pz[0]<<endl;
             // cout<<"rap = "<<rap<<endl;
             int RapIndex = -1;
@@ -550,7 +570,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
 
-            float B_Pt = pow(pow(B_Px[0],2) + pow(B_Py[0],2),0.5);
+            float B_Pt = pow(pow(B_Px[B_index],2) + pow(B_Py[B_index],2),0.5);
             int PtIndex = -1;
             for (int k=0;k<PtBinNum;k++){
                 if ((PtBin[k] <= B_Pt) && (B_Pt < PtBin[k+1])) {
@@ -559,71 +579,130 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
 
-            float B_Pt = pow(pow(B_Px[0],2) + pow(B_Py[0],2),0.5);
-            int PatternIndex = -1;
-            for (int k=0;k<Pattern;k++){
-                if ((PtBin[k] <= B_Pt) && (B_Pt < PtBin[k+1])) {
-                    PtIndex = k;
-                    break;
-                }
-            }
+            int Pattern_Index = -1;
+            bool B_IfMid = false;bool B_IfSide = false;
+            if (fabs(B_Mass[B_index] - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_IfMid = true;B_IfSide = false;}
+            else (fabs(B_Mass[B_index] - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {B_IfMid = false;B_IfSide = true;}
 
             // cout<<"CenIndex = "<<CenIndex<<" , "<<"RapIndex = "<<RapIndex<<" , "<<"PtIndex = "<<PtIndex<<endl;
-            if ((CenIndex == -1) || (RapIndex == -1) || (PtIndex == -1)) {
+            if ((CenIndex == -1) || (RapIndex == -1) || (PtIndex == -1) || ((B_IfMid == false) && (B_IfSide == false))) {
                 continue;
             }
 
             // Fill Single Event
-            for (int j=0;j<B_Px.size();j++){
-                TLorentzVector p1;
-                p1.SetXYZM(B_Px[j],B_Py[j],B_Pz[j],massList(B_PDG));
-                for (int k=0;k<A_Px.size();k++){
-                    TLorentzVector p2,p3,p4 = p1;
-                    p2.SetXYZM(A_Px[k],A_Py[k],A_Pz[k],massList(A_PDG));
-                    p3 = p4 + p2;
-                    p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
-                    kstar = 0.5 * (p4 - p2).Rho();
-                    H_Kstar[CenIndex][RapIndex][PtIndex]->Fill(kstar);
+            bool A_IfMid = false;bool A_IfSide = false;
+            TLorentzVector p1;
+            p1.SetXYZM(B_Px[B_index],B_Py[B_index],B_Pz[B_index],massList(B_PDG));
+            for (int k=0;k<A_Px.size();k++){
+                if (IfCommonElement(A_ParID , B_ParID)) continue;
+                if (fabs(A_Mass[k] - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_IfMid = true;A_IfSide = false;}
+                else (fabs(A_Mass[k] - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_IfMid = false;A_IfSide = true;}
+                TLorentzVector p2,p3,p4 = p1;
+                p2.SetXYZM(A_Px[k],A_Py[k],A_Pz[k],massList(A_PDG));
+                p3 = p4 + p2;
+                p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
+                kstar = 0.5 * (p4 - p2).Rho();
+                float DotAB = A_Px[k]*B_Px[B_index] + A_Py[k]*B_Py[B_index] + A_Pz[k]*B_Pz[B_index];
+                float A_rho = pow((A_Px[k]*A_Px[k] + A_Py[k]*A_Py[k] + A_Pz[k]*A_Pz[k]) , 0.5);
+                float B_rho = pow((B_Px[B_index]*B_Px[B_index] + B_Py[B_index]*B_Py[B_index] + B_Pz[B_index]*B_Pz[B_index]) , 0.5);
+                float CosAB = DotAB/(A_rho*B_rho);
+                float DotBZ = B_Pz[B_index];
+                float CosBZ = DotBZ/B_rho;
+                if ((B_IfMid == true) && (B_IfSide == false)){
+                    if ((A_IfMid == true) && (A_IfSide == false)) {
+                        H_Kstar[CenIndex][RapIndex][PtIndex][0]->Fill(kstar);
+                        H_ABphi_Bphi[CenIndex][0]->Fill(acos(CosAB),acos(CosBZ));
+                        H_ABphi_By  [CenIndex][0]->Fill(acos(CosAB),rap);
+                        Pattern_Index = 0;
+                    }
+                    if ((A_IfMid == false) && (A_IfSide == true)) {
+                        H_Kstar[CenIndex][RapIndex][PtIndex][2]->Fill(kstar);
+                        H_ABphi_Bphi[CenIndex][2]->Fill(acos(CosAB),acos(CosBZ));
+                        H_ABphi_By  [CenIndex][2]->Fill(acos(CosAB),rap);
+                        Pattern_Index = 2;
+                    }
+                }
+                if ((B_IfMid == false) && (B_IfSide == true)){
+                    if ((A_IfMid == true) && (A_IfSide == false)) (
+                        H_Kstar[CenIndex][RapIndex][PtIndex][1]->Fill(kstar);
+                        H_ABphi_Bphi[CenIndex][1]->Fill(acos(CosAB),acos(CosBZ));
+                        H_ABphi_By  [CenIndex][1]->Fill(acos(CosAB),rap);
+                        Pattern_Index = 1;
+                    )
                 }
             }
 
             // Fill Mix Event
             // cout<<"Here is OK 1"<<endl;
             for (int j=0;j<B_Px.size();j++){
-                Mix_B_Px[CenIndex][RapIndex][PtIndex][Mix_B_Num[CenIndex][RapIndex][PtIndex]] = B_Px[j];
-                Mix_B_Py[CenIndex][RapIndex][PtIndex][Mix_B_Num[CenIndex][RapIndex][PtIndex]] = B_Py[j];
-                Mix_B_Pz[CenIndex][RapIndex][PtIndex][Mix_B_Num[CenIndex][RapIndex][PtIndex]] = B_Pz[j];
-                Mix_B_EvtID[CenIndex][RapIndex][PtIndex][Mix_B_Num[CenIndex][RapIndex][PtIndex]] = B_EvtID[j];
-                Mix_B_TreID[CenIndex][RapIndex][PtIndex][Mix_B_Num[CenIndex][RapIndex][PtIndex]] = B_TreID[j];
-                Mix_B_Num[CenIndex][RapIndex][PtIndex]++;
+                Mix_B_Px[CenIndex][RapIndex][PtIndex][Pattern_Index][Mix_B_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]] = B_Px[j];
+                Mix_B_Py[CenIndex][RapIndex][PtIndex][Pattern_Index][Mix_B_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]] = B_Py[j];
+                Mix_B_Pz[CenIndex][RapIndex][PtIndex][Pattern_Index][Mix_B_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]] = B_Pz[j];
+                Mix_B_EvtID[CenIndex][RapIndex][PtIndex][Pattern_Index][Mix_B_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]] = B_EvtID[j];
+                Mix_B_TreID[CenIndex][RapIndex][PtIndex][Pattern_Index][Mix_B_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]] = B_TreID[j];
+                Mix_B_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]++;
+                Phi_Mix_B_Px[CenIndex][Pattern_Index][Phi_Mix_B_Num[CenIndex][Pattern_Index]] = B_Px[j];
+                Phi_Mix_B_Py[CenIndex][Pattern_Index][Phi_Mix_B_Num[CenIndex][Pattern_Index]] = B_Py[j];
+                Phi_Mix_B_Pz[CenIndex][Pattern_Index][Phi_Mix_B_Num[CenIndex][Pattern_Index]] = B_Pz[j];
+                Phi_Mix_B_Num[CenIndex][Pattern_Index]++;
             }
             for (int j=0;j<A_Px.size();j++){
-                Mix_A_Px[CenIndex][RapIndex][PtIndex][Mix_A_Num[CenIndex][RapIndex][PtIndex]] = A_Px[j];
-                Mix_A_Py[CenIndex][RapIndex][PtIndex][Mix_A_Num[CenIndex][RapIndex][PtIndex]] = A_Py[j];
-                Mix_A_Pz[CenIndex][RapIndex][PtIndex][Mix_A_Num[CenIndex][RapIndex][PtIndex]] = A_Pz[j];
-                Mix_A_EvtID[CenIndex][RapIndex][PtIndex][Mix_A_Num[CenIndex][RapIndex][PtIndex]] = A_EvtID[j];
-                Mix_A_TreID[CenIndex][RapIndex][PtIndex][Mix_A_Num[CenIndex][RapIndex][PtIndex]] = A_TreID[j];
-                Mix_A_Num[CenIndex][RapIndex][PtIndex]++;
+                Mix_A_Px[CenIndex][RapIndex][PtIndex][Pattern_Index][Mix_A_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]] = A_Px[j];
+                Mix_A_Py[CenIndex][RapIndex][PtIndex][Pattern_Index][Mix_A_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]] = A_Py[j];
+                Mix_A_Pz[CenIndex][RapIndex][PtIndex][Pattern_Index][Mix_A_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]] = A_Pz[j];
+                Mix_A_EvtID[CenIndex][RapIndex][PtIndex][Pattern_Index][Mix_A_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]] = A_EvtID[j];
+                Mix_A_TreID[CenIndex][RapIndex][PtIndex][Pattern_Index][Mix_A_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]] = A_TreID[j];
+                Mix_A_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]++;
+                Phi_Mix_A_Px[CenIndex][Pattern_Index][Phi_Mix_A_Num[CenIndex][Pattern_Index]] = A_Px[j];
+                Phi_Mix_A_Py[CenIndex][Pattern_Index][Phi_Mix_A_Num[CenIndex][Pattern_Index]] = A_Py[j];
+                Phi_Mix_A_Pz[CenIndex][Pattern_Index][Phi_Mix_A_Num[CenIndex][Pattern_Index]] = A_Pz[j];
+                Phi_Mix_A_Num[CenIndex][Pattern_Index]++;
             }
-            Mix_event_Num[CenIndex][RapIndex][PtIndex]++;
+            Mix_event_Num[CenIndex][RapIndex][PtIndex][Pattern_Index]++;
+            Phi_Mix_event_Num[CenIndex][Pattern_Index]++;
             // cout<<"Here is OK 2"<<endl;
 
-            if (Mix_event_Num[CenIndex][RapIndex][PtIndex] == 10){
-                for (int j=0;j<Mix_B_Num[CenIndex][RapIndex][PtIndex];j++){
+            if (Mix_event_Num[CenIndex][RapIndex][PtIndex][Pattern_Index] == 10){
+                for (int j=0;j<Mix_B_Num[CenIndex][RapIndex][PtIndex][Pattern_Index];j++){
                     TLorentzVector p1;
-                    p1.SetXYZM(Mix_B_Px[CenIndex][RapIndex][PtIndex][j],Mix_B_Py[CenIndex][RapIndex][PtIndex][j],Mix_B_Pz[CenIndex][RapIndex][PtIndex][j],massList(B_PDG));
-                    for (int k=0;k<Mix_A_Num[CenIndex][RapIndex][PtIndex];k++){
+                    p1.SetXYZM(Mix_B_Px[CenIndex][RapIndex][PtIndex][Pattern_Index][j],Mix_B_Py[CenIndex][RapIndex][PtIndex][Pattern_Index][j],Mix_B_Pz[CenIndex][RapIndex][PtIndex][Pattern_Index][j],massList(B_PDG));
+                    for (int k=0;k<Mix_A_Num[CenIndex][RapIndex][PtIndex][Pattern_Index];k++){
                         TLorentzVector p2,p3,p4 = p1;
-                        p2.SetXYZM(Mix_A_Px[CenIndex][RapIndex][PtIndex][k],Mix_A_Py[CenIndex][RapIndex][PtIndex][k],Mix_A_Pz[CenIndex][RapIndex][PtIndex][k],massList(A_PDG));
+                        p2.SetXYZM(Mix_A_Px[CenIndex][RapIndex][PtIndex][Pattern_Index][k],Mix_A_Py[CenIndex][RapIndex][PtIndex][Pattern_Index][k],Mix_A_Pz[CenIndex][RapIndex][PtIndex][Pattern_Index][k],massList(A_PDG));
                         p3 = p4 + p2;
                         p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                         kstar = 0.5 * (p4 - p2).Rho();
-                        H_Mix_Kstar[CenIndex][RapIndex][PtIndex]->Fill(kstar);
+                        H_Mix_Kstar[CenIndex][RapIndex][PtIndex][Pattern_Index]->Fill(kstar);
                     }
                 }
-                Mix_event_Num[CenIndex][RapIndex][PtIndex] = 0;
-                Mix_A_Num[CenIndex][RapIndex][PtIndex] = 0;
-                Mix_B_Num[CenIndex][RapIndex][PtIndex] = 0;
+                Mix_event_Num[CenIndex][RapIndex][PtIndex][Pattern_Index] = 0;
+                Mix_A_Num[CenIndex][RapIndex][PtIndex][Pattern_Index] = 0;
+                Mix_B_Num[CenIndex][RapIndex][PtIndex][Pattern_Index] = 0;
+            }
+            if (Phi_Mix_event_Num[CenIndex][Pattern_Index] == 10){
+                for (int j=0;j<Phi_Mix_B_Num[CenIndex][Pattern_Index];j++){
+                    float BPx = Phi_Mix_B_Px[CenIndex][Pattern_Index][j];
+                    float BPy = Phi_Mix_B_Py[CenIndex][Pattern_Index][j];
+                    float BPz = Phi_Mix_B_Pz[CenIndex][Pattern_Index][j];
+                    for (int k=0;k<Phi_Mix_A_Num[CenIndex][Pattern_Index];k++){
+                        float APx = Phi_Mix_A_Px[CenIndex][Pattern_Index][k];
+                        float APy = Phi_Mix_A_Py[CenIndex][Pattern_Index][k];
+                        float APz = Phi_Mix_A_Pz[CenIndex][Pattern_Index][k];
+                        float DotAB = APx*BPx + APy*BPy + APz*BPz;
+                        float A_rho = pow((APx*APx + APy*APy + APz*APz) , 0.5);
+                        float B_rho = pow((BPx*BPx + BPy*BPy + BPz*BPz) , 0.5);
+                        float CosAB = DotAB/(A_rho*B_rho);
+                        float DotBZ = BPz;
+                        float CosBZ = DotBZ/B_rho;
+                        float tEnergy = pow(B_rho*B_rho + pow(massList(B_PDG),2),0.5);
+                        rap = 0.5*log((tEnergy+BPz)/(tEnergy-BPz));
+                        H_Mix_ABphi_Bphi[CenIndex][Pattern_Index]->Fill(acos(CosAB),acos(CosBZ));
+                        H_Mix_ABphi_By  [CenIndex][Pattern_Index]->Fill(acos(CosAB),rap);
+                    }
+                }
+                Phi_Mix_event_Num[CenIndex][Pattern_Index] = 0;
+                Phi_Mix_A_Num[CenIndex][Pattern_Index] = 0;
+                Phi_Mix_B_Num[CenIndex][Pattern_Index] = 0;
             }
         }
         
@@ -637,15 +716,19 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     fileA->cd();
     for (int i=0;i<CentralityBinNum;i++){
-        for (int j=0;j<yBinNum;j++){
-            for (int k=0;k<PtBinNum;k++){
-                if (Mix_event_Num[i][j][k] != 0) {
-                    cout<<"["<<i<<","<<j<<","<<k<<"] remain "<<Mix_event_Num[i][j][k]<<" events, "<<endl; 
-                    cout<<"     contains "<<Mix_A_Num[i][j][k]<<" particles A, and "<<Mix_B_Num[i][j][k]<<" particles B."<<endl;
+        for (int l=0;l<Pattern;l++){
+            for (int j=0;j<yBinNum;j++){
+                for (int k=0;k<PtBinNum;k++){
+                    if (Mix_event_Num[i][j][k][l] != 0) {
+                        cout<<"["<<i<<","<<j<<","<<k<<","<<l<<"] remain "<<Mix_event_Num[i][j][k][l]<<" events, "<<endl; 
+                        cout<<"     contains "<<Mix_A_Num[i][j][k][l]<<" particles A, and "<<Mix_B_Num[i][j][k][l]<<" particles B."<<endl;
+                    }
+                    H_Kstar[i][j][k][l]->Write();
+                    H_Mix_Kstar[i][j][k][l]->Write();
                 }
-                H_Kstar[i][j][k]->Write();
-                H_Mix_Kstar[i][j][k]->Write();
             }
+            H_Mix_ABphi_Bphi[i][l]->Write();
+            H_Mix_ABphi_By  [i][l]->Write();
         }
     }
     fileA.Close();
@@ -706,46 +789,44 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         BhadronTree->Branch("InvariantMass"      ,&BInvariantMass        );
         BhadronTree->Branch("Decay_Length"       ,&BQA_Decay_Length      );
         BhadronTree->Branch("Chi2"               ,&BQA_Chi2              );
+        
+        // Used for restore corralated information
+		BhadronTree->Branch("ParentList"         ,&ParentList     );
+		BhadronTree->Branch("ParentSta"          ,&ParentSta      );
+		BhadronTree->Branch("ParentEnd"          ,&ParentEnd      );
 
         std::vector<Int_t> Mix_EvtID;
-        std::vector<std::vector<Int_t> > Mix_TreID;
         for (int i=0;i<CentralityBinNum;i++){
             for (int j=0;j<yBinNum;j++){
                 for (int k=0;k<PtBinNum;k++){
-
-                    for (int m=0;m<Mix_B_Num[i][j][k];m++){
-                        int nIndex = -1;
-                        for (int n=0;n<Mix_EvtID.size();n++){
-                            if (Mix_B_EvtID[i][j][k][m] == Mix_EvtID[n]){
-                                nIndex = n;
-                                break;
+                    for (int l=0;l<Pattern;l++){
+                        for (int m=0;m<Mix_B_Num[i][j][k][l];m++){
+                            int nIndex = -1;
+                            for (int n=0;n<Mix_EvtID.size();n++){
+                                if (Mix_B_EvtID[i][j][k][l][m] == Mix_EvtID[n]){
+                                    nIndex = n;
+                                    break;
+                                }
+                            }
+                            if (nIndex == -1){
+                                Mix_EvtID.push_back(Mix_B_EvtID[i][j][k][l][m]);
+                                nIndex = Mix_EvtID.size() - 1;
                             }
                         }
-                        if (nIndex == -1){
-                            Mix_EvtID.push_back(Mix_B_EvtID[i][j][k][m]);
-                            std::vector<Int_t> Temp;
-                            Mix_TreID.push_back(Temp);
-                            nIndex = Mix_EvtID.size() - 1;
-                        }
-                        Mix_TreID[nIndex].push_back(Mix_B_TreID[i][j][k][m]);
-                    }
-                    for (int m=0;m<Mix_A_Num[i][j][k];m++){
-                        int nIndex = -1;
-                        for (int n=0;n<Mix_EvtID.size();n++){
-                            if (Mix_A_EvtID[i][j][k][m] == Mix_EvtID[n]){
-                                nIndex = n;
-                                break;
+                        for (int m=0;m<Mix_A_Num[i][j][k][l];m++){
+                            int nIndex = -1;
+                            for (int n=0;n<Mix_EvtID.size();n++){
+                                if (Mix_A_EvtID[i][j][k][l][m] == Mix_EvtID[n]){
+                                    nIndex = n;
+                                    break;
+                                }
+                            }
+                            if (nIndex == -1){
+                                Mix_EvtID.push_back(Mix_A_EvtID[i][j][k][l][m]);
+                                nIndex = Mix_EvtID.size() - 1;
                             }
                         }
-                        if (nIndex == -1){
-                            Mix_EvtID.push_back(Mix_A_EvtID[i][j][k][m]);
-                            std::vector<Int_t> Temp;
-                            Mix_TreID.push_back(Temp);
-                            nIndex = Mix_EvtID.size() - 1;
-                        }
-                        Mix_TreID[nIndex].push_back(Mix_A_TreID[i][j][k][m]);
                     }
-
                 }
             }
         }
@@ -758,21 +839,26 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             BrunID     = RunID    ;
             BTriggerID = TriggerID;
             BNch       = Nch      ;
-            for (int j=0;j<Mix_TreID[i].size();j++){
-                BPDG            .push_back(PDG          ->at(Mix_TreID[i][j]));
-                Bpx             .push_back(mix_px       ->at(Mix_TreID[i][j]));
-                Bpy             .push_back(mix_py       ->at(Mix_TreID[i][j]));
-                Bpz             .push_back(mix_pz       ->at(Mix_TreID[i][j]));
-                BQA_eta         .push_back(QA_eta       ->at(Mix_TreID[i][j]));
-                BQA_dEdx        .push_back(dEdx         ->at(Mix_TreID[i][j]));
-                BQA_m2          .push_back(m2           ->at(Mix_TreID[i][j]));
-                BQA_DCA_V0_PV   .push_back(dcatopv      ->at(Mix_TreID[i][j]));
-                BQA_nSigmaProton.push_back(nSigmaProton ->at(Mix_TreID[i][j]));
-                BQA_nSigmaPion  .push_back(nSigmaPion   ->at(Mix_TreID[i][j]));
-                BQA_nSigmaKaon  .push_back(nSigmaKaon   ->at(Mix_TreID[i][j]));
-                BInvariantMass  .push_back(InvariantMass->at(Mix_TreID[i][j]));
-                BQA_Decay_Length.push_back(Decay_Length ->at(Mix_TreID[i][j]));
-                BQA_Chi2        .push_back(Chi2         ->at(Mix_TreID[i][j]));
+            for (int j=0;j<PDGMult;j++){
+                BPDG            .push_back(PDG          ->at(j));
+                Bpx             .push_back(mix_px       ->at(j));
+                Bpy             .push_back(mix_py       ->at(j));
+                Bpz             .push_back(mix_pz       ->at(j));
+                BQA_eta         .push_back(QA_eta       ->at(j));
+                BQA_dEdx        .push_back(dEdx         ->at(j));
+                BQA_m2          .push_back(m2           ->at(j));
+                BQA_DCA_V0_PV   .push_back(dcatopv      ->at(j));
+                BQA_nSigmaProton.push_back(nSigmaProton ->at(j));
+                BQA_nSigmaPion  .push_back(nSigmaPion   ->at(j));
+                BQA_nSigmaKaon  .push_back(nSigmaKaon   ->at(j));
+                BInvariantMass  .push_back(InvariantMass->at(j));
+                BQA_Decay_Length.push_back(Decay_Length ->at(j));
+                BQA_Chi2        .push_back(Chi2         ->at(j));
+                BParentSta      .push_back(ParentSta    ->at(j));
+                BParentEnd      .push_back(ParentEnd    ->at(j));
+            }
+            for (int j=0;j<ParentList.size();j++){
+                BParentList     .push_back(ParentList   ->at(j));
             }
             BhadronTree->Fill();
             BPDG            .resize(0);
@@ -789,6 +875,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             BInvariantMass  .resize(0);
             BQA_Decay_Length.resize(0);
             BQA_Chi2        .resize(0);
+            BParentList     .resize(0);
+            BParentSta      .resize(0);
+            BParentEnd      .resize(0);
         }
 
         fileB->cd();
