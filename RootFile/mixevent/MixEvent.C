@@ -477,6 +477,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         }
     }
 
+    cout<<"480"<endl;
+
     for (int i=0;i<nentries;i++){
         // if (i > 15) {break;}
         hadronTree->GetEntry(i);
