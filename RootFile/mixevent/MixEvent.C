@@ -583,7 +583,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             int Pattern_Index = -1;
             bool B_IfMid = false;bool B_IfSide = false;
             if (fabs(B_Mass[B_index] - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_IfMid = true;B_IfSide = false;}
-            else (fabs(B_Mass[B_index] - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {B_IfMid = false;B_IfSide = true;}
+            else if(fabs(B_Mass[B_index] - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {B_IfMid = false;B_IfSide = true;}
 
             // cout<<"CenIndex = "<<CenIndex<<" , "<<"RapIndex = "<<RapIndex<<" , "<<"PtIndex = "<<PtIndex<<endl;
             if ((CenIndex == -1) || (RapIndex == -1) || (PtIndex == -1) || ((B_IfMid == false) && (B_IfSide == false))) {
@@ -597,7 +597,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             for (int k=0;k<A_Px.size();k++){
                 if (IfCommonElement(A_ParID , B_ParID)) continue;
                 if (fabs(A_Mass[k] - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_IfMid = true;A_IfSide = false;}
-                else (fabs(A_Mass[k] - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_IfMid = false;A_IfSide = true;}
+                else if(fabs(A_Mass[k] - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_IfMid = false;A_IfSide = true;}
                 TLorentzVector p2,p3,p4 = p1;
                 p2.SetXYZM(A_Px[k],A_Py[k],A_Pz[k],massList(A_PDG));
                 p3 = p4 + p2;
