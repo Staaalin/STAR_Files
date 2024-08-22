@@ -42,7 +42,7 @@ using namespace std;
 // #define DataName           "pp_200_15"
 // #define DataName           "OO_200_21"
 
-double Pi = 3.1415926535898;
+#define Pi = 3.1415926535898
 
 int CentralityBin[] = {0,25,50,75,100};// %
 #define CentralityBinNum 4
@@ -460,8 +460,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             HistName1 += "_M";
             HistName2 += ", Mix";
             cout<<"1"<<endl;
-            TH2D* H_ABphi_Bphi     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , 0 , Pi);
-            TH2D* H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , 0 , Pi);
+            H_ABphi_Bphi     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , 0 , Pi);
+            H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , 0 , Pi);
             cout<<"2"<<endl;
             HistName1 = "HPhiRap_";
             HistName2 = "Cen: [";
@@ -475,8 +475,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             HistName1s += "_S";
             HistName1 += "_M";
             HistName2 += ", Mix";
-            TH2D* H_ABphi_By     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , -2 , 2);
-            TH2D* H_Mix_ABphi_By [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , -2 , 2);
+            H_ABphi_By     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , -2 , 2);
+            H_Mix_ABphi_By [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , -2 , 2);
         }
     }
 
