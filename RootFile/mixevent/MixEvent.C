@@ -474,6 +474,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             HistName2 += ", Mix";
             H_ABphi_By     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , -2 , 2);
             H_Mix_ABphi_By [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , -2 , 2);
+            Phi_Mix_event_Num[i][l] = 0;
+            Phi_Mix_A_Num    [i][l] = 0;
+            Phi_Mix_B_Num    [i][l] = 0;
         }
     }
 
