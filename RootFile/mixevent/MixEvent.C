@@ -624,12 +624,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
                 if ((B_IfMid == false) && (B_IfSide == true)){
-                    if ((A_IfMid == true) && (A_IfSide == false)) (
+                    if ((A_IfMid == true) && (A_IfSide == false)) {
                         H_Kstar[CenIndex][RapIndex][PtIndex][1]->Fill(kstar);
                         H_ABphi_Bphi[CenIndex][1]->Fill(acos(CosAB),acos(CosBZ));
                         H_ABphi_By  [CenIndex][1]->Fill(acos(CosAB),rap);
                         Pattern_Index = 1;
-                    )
+                    }
                 }
             }
 
