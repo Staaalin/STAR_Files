@@ -557,7 +557,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
 
-        if ((A_Px.size() == 0) || (B_Px.size() == 0)) continue;
+        if ((A_Px.size() == 0) || (B_Px.size() == 0)) {cout<<"可惜了"<<endl;continue;}
         //                  mid   sid      used as binary bool
         int A_Pattern[] = {  0  ,  0  };
         int B_Pattern[] = {  0  ,  0  };
