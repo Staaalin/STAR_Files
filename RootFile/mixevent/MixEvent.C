@@ -519,8 +519,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     Temp.push_back(ParentList->at(k));
                 }
                 A_ParID.push_back(Temp);
-                if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_Kind.push_back("Mid");cout<<"Found Mid "<<A_PDG<<endl;FoundAB++;}
-                else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_Kind.push_back("Sid");cout<<"Found Sid "<<A_PDG<<endl;FoundAB++;}
+                if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_Kind.push_back("Mid");FoundAB++;}
+                else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_Kind.push_back("Sid");FoundAB++;}
                 else {
                     A_Px   .resize(A_Px   .size() - 1);
                     A_Py   .resize(A_Py   .size() - 1);
@@ -543,8 +543,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     Temp.push_back(ParentList->at(k));
                 }
                 B_ParID.push_back(Temp);
-                if      (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_Kind.push_back("Mid");cout<<"Found Mid "<<B_PDG<<endl;FoundAB++;}
-                else if (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {B_Kind.push_back("Sid");cout<<"Found Sid "<<B_PDG<<endl;FoundAB++;}
+                if      (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_Kind.push_back("Mid");FoundAB++;}
+                else if (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {B_Kind.push_back("Sid");FoundAB++;}
                 else {
                     B_Px   .resize(B_Px   .size() - 1);
                     B_Py   .resize(B_Py   .size() - 1);
@@ -723,7 +723,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
         }
-        if (FoundAB > 0) {cout<<"________________________________________"<<endl;}
+        // if (FoundAB > 0) {cout<<"________________________________________"<<endl;}
     }
 
     TString OutputFileName = OutMidName;
