@@ -557,7 +557,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
 
-        cout<<"A_Px.size() = "<<A_Px.size()<<" , B_Px.size() = "<<B_Px.size()<<endl;
+        if ((A_Px.size() != 0) || (B_Px.size() != 0)) cout<<"A_Px.size() = "<<A_Px.size()<<" , B_Px.size() = "<<B_Px.size()<<endl;
+        
         if ((A_Px.size() == 0) || (B_Px.size() == 0)) continue;
         //                  mid   sid      used as binary bool
         int A_Pattern[] = {  0  ,  0  };
