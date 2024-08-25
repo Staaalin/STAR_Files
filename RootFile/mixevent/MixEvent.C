@@ -132,7 +132,7 @@ Double_t massListSigma(int PID)
                 Result = 0.0020;
                 break;
             default :
-                Result = 0;
+                Result = 100;
         }
     }
     return Result;
@@ -505,74 +505,54 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         A_Kind.resize(0); B_Kind.resize(0);
 
         int LoopSize;
-        if (true){
-            LoopSize = PDGMult;
-            for (int j=0;j<LoopSize;j++){
-                if (PDG->at(j) == A_PDG) {
-                    A_Px.push_back(mix_px->at(j));
-                    A_Py.push_back(mix_py->at(j));
-                    A_Pz.push_back(mix_pz->at(j));
-                    A_Mass.push_back(InvariantMass->at(j));
-                    A_EvtID.push_back(i);
-                    A_TreID.push_back(j);
-                    std::vector<Int_t> Temp;Temp.resize(0);Temp.push_back(j);
-                    for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
-                        Temp.push_back(ParentList->at(k));
-                    }
-                    A_ParID.push_back(Temp);
-                    if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_Kind.push_back("Mid");cout<<"Found Mid "<<A_PDG<<endl;FoundAB++;}
-                    else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_Kind.push_back("Sid");cout<<"Found Sid "<<A_PDG<<endl;FoundAB++;}
-                    else {
-                        A_Px   .resize(A_Px   .size() - 1);
-                        A_Py   .resize(A_Py   .size() - 1);
-                        A_Pz   .resize(A_Pz   .size() - 1);
-                        A_Mass .resize(A_Mass .size() - 1);
-                        A_EvtID.resize(A_EvtID.size() - 1);
-                        A_TreID.resize(A_TreID.size() - 1);
-                        A_ParID.resize(A_ParID.size() - 1);
-                    }
+        LoopSize = PDGMult;
+        for (int j=0;j<LoopSize;j++){
+            if (PDG->at(j) == A_PDG) {
+                A_Px.push_back(mix_px->at(j));
+                A_Py.push_back(mix_py->at(j));
+                A_Pz.push_back(mix_pz->at(j));
+                A_Mass.push_back(InvariantMass->at(j));
+                A_EvtID.push_back(i);
+                A_TreID.push_back(j);
+                std::vector<Int_t> Temp;Temp.resize(0);Temp.push_back(j);
+                for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
+                    Temp.push_back(ParentList->at(k));
                 }
-                if (PDG->at(j) == B_PDG) {
-                    B_Px.push_back(mix_px->at(j));
-                    B_Py.push_back(mix_py->at(j));
-                    B_Pz.push_back(mix_pz->at(j));
-                    B_Mass.push_back(InvariantMass->at(j));
-                    B_EvtID.push_back(i);
-                    B_TreID.push_back(j);
-                    std::vector<Int_t> Temp;Temp.resize(0);Temp.push_back(j);
-                    for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
-                        Temp.push_back(ParentList->at(k));
-                    }
-                    B_ParID.push_back(Temp);
-                    if      (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_Kind.push_back("Mid");}
-                    else if (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {B_Kind.push_back("Sid");}
-                    else {
-                        B_Px   .resize(B_Px   .size() - 1);
-                        B_Py   .resize(B_Py   .size() - 1);
-                        B_Pz   .resize(B_Pz   .size() - 1);
-                        B_Mass .resize(B_Mass .size() - 1);
-                        B_EvtID.resize(B_EvtID.size() - 1);
-                        B_TreID.resize(B_TreID.size() - 1);
-                        B_ParID.resize(B_ParID.size() - 1);
-                    }
+                A_ParID.push_back(Temp);
+                if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_Kind.push_back("Mid");cout<<"Found Mid "<<A_PDG<<endl;FoundAB++;}
+                else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_Kind.push_back("Sid");cout<<"Found Sid "<<A_PDG<<endl;FoundAB++;}
+                else {
+                    A_Px   .resize(A_Px   .size() - 1);
+                    A_Py   .resize(A_Py   .size() - 1);
+                    A_Pz   .resize(A_Pz   .size() - 1);
+                    A_Mass .resize(A_Mass .size() - 1);
+                    A_EvtID.resize(A_EvtID.size() - 1);
+                    A_TreID.resize(A_TreID.size() - 1);
+                    A_ParID.resize(A_ParID.size() - 1);
                 }
             }
-        }else{
-            LoopSize = mix_px->size();
-            for (int j=0;j<LoopSize;j++){
-                if (PDG->at(j) == A_PDG) {
-                    A_Px.push_back(mix_px->at(j));
-                    A_Py.push_back(mix_py->at(j));
-                    A_Pz.push_back(mix_pz->at(j));
-                    A_EvtID.push_back(i);
-                    A_TreID.push_back(j);
+            if (PDG->at(j) == B_PDG) {
+                B_Px.push_back(mix_px->at(j));
+                B_Py.push_back(mix_py->at(j));
+                B_Pz.push_back(mix_pz->at(j));
+                B_Mass.push_back(InvariantMass->at(j));
+                B_EvtID.push_back(i);
+                B_TreID.push_back(j);
+                std::vector<Int_t> Temp;Temp.resize(0);Temp.push_back(j);
+                for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
+                    Temp.push_back(ParentList->at(k));
                 }
-                if (PDG->at(j) == B_PDG) {
-                    B_Px.push_back(mix_px->at(j));
-                    B_Py.push_back(mix_py->at(j));
-                    B_Pz.push_back(mix_pz->at(j));
-                    B_EvtID.push_back(i);
-                    B_TreID.push_back(j);
+                B_ParID.push_back(Temp);
+                if      (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_Kind.push_back("Mid");cout<<"Found Mid "<<B_PDG<<endl;FoundAB++;}
+                else if (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {B_Kind.push_back("Sid");cout<<"Found Sid "<<B_PDG<<endl;FoundAB++;}
+                else {
+                    B_Px   .resize(B_Px   .size() - 1);
+                    B_Py   .resize(B_Py   .size() - 1);
+                    B_Pz   .resize(B_Pz   .size() - 1);
+                    B_Mass .resize(B_Mass .size() - 1);
+                    B_EvtID.resize(B_EvtID.size() - 1);
+                    B_TreID.resize(B_TreID.size() - 1);
+                    B_ParID.resize(B_ParID.size() - 1);
                 }
             }
         }
