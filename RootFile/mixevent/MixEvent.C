@@ -320,7 +320,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     // cout<<EndFileIndex<<endl;
 
 
-
     //load data  
     TChain *hadronTree = new TChain("hadronTree");
     for(int i=StartFileIndex;i <= EndFileIndex;i++){
@@ -489,6 +488,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
 
     for (int i=0;i<nentries;i++){
+        int FoundAB = 0;
         // if (i > 15) {break;}
         hadronTree->GetEntry(i);
         if ((i+1)%500 == 0) cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
@@ -520,8 +520,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         Temp.push_back(ParentList->at(k));
                     }
                     A_ParID.push_back(Temp);
-                    if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_Kind.push_back("Mid");}
-                    else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_Kind.push_back("Sid");}
+                    if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_Kind.push_back("Mid");cout<<"Found Mid "<<A_PDG<<endl;FoundAB++;}
+                    else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_Kind.push_back("Sid");cout<<"Found Sid "<<A_PDG<<endl;FoundAB++;}
                     else {
                         A_Px   .resize(A_Px   .size() - 1);
                         A_Py   .resize(A_Py   .size() - 1);
@@ -743,7 +743,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
         }
-        
+        if (FoundAB > 0) {cout<<"________________________________________"<<endl;}
     }
 
     TString OutputFileName = OutMidName;
