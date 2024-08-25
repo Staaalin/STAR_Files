@@ -2329,7 +2329,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
 						QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
 						QA_m2.emplace_back(m2);
-						InvariantMass.emplace_back(-999); 
+						InvariantMass.emplace_back(massList(NeedPDG[Ktr])); 
 					}
 					if (IfQAMode) {
 						H_Pt[Jtr] -> Fill(pt);
@@ -2366,9 +2366,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 						H_ndEdx[Jtr]->Fill((track->nHitsDedx()));
 						for (int Ntr=0;Ntr<PDG2NameSize3;Ntr++){
 							// cout<<"CNameList["<<Ktr<<"] = "<<CNameList[Ktr]<<endl;
-							if ( CNameList[Ntr] == "Kaon"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaKaon(),track->gMom().Perp());InvariantMass.emplace_back(KaonPdgMass);}
-							if ( CNameList[Ntr] == "Pion"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaPion(),track->gMom().Perp());InvariantMass.emplace_back(PionPdgMass);}
-							if ( CNameList[Ntr] == "Proton"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());InvariantMass.emplace_back(ProtonPdgMass);}
+							if ( CNameList[Ntr] == "Kaon"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaKaon(),track->gMom().Perp());}
+							if ( CNameList[Ntr] == "Pion"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
+							if ( CNameList[Ntr] == "Proton"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
 						}
 					}
 					
@@ -2886,6 +2886,9 @@ Double_t StKFParticleAnalysisMaker::massList(int PID)
 			break;
 		case 321 :
 			Result = 0.493677;
+			break;
+		case 310 :
+			Result = 0.49794;
 			break;
 		case 211 :
 			Result = 0.13957;
