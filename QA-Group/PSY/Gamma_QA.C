@@ -312,7 +312,8 @@ TH1D* Hist_mEpdHits = new TH1D("Hist_mEpdHits", "Hist_mEpdHits", 1000,0,1000);
 
 //defining variables
 float pVx, pVy, pVz, VPDvz, BBCco, ZDCcoin, net_Nch_Asym, mQx, mQy;                   //run, event info
-int   Run, Day, Day2, Day3, Trigger, RefMult, FxtMult, TOFMult, Ntofmatch, Centrality, NPTracks, Fcount, Scount, POIcount;   //
+int   Run, Day, Day2, Day3, Trigger, RefMult, TOFMult, Ntofmatch, Centrality, NPTracks, Fcount, Scount, POIcount;   //
+UShort_t FxtMult;
 int   Charge, Charge2, ChargeAsso;
 float ndEdx, nSigma_p, nSigma_pi, DCAGlobal, Eta, Theta, Phi, Pt, eff, TOFflag;             //track info    
 float ndEdx2, nSigma_p2, nSigma_pi2, DCAGlobal2, Eta2, Theta2, Phi2, Pt2, eff2, TOFflag2;   //2nd track info
