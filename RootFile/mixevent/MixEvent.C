@@ -651,7 +651,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 if ( (k == 2) ){
                     if ((A_Pattern[1] != 0) && (B_Pattern[0] != 0)) continue;
                 }
-                cout<<"Matched !"<<endl;
                 for (int j=0;j<B_Px.size();j++){
                     if ( ((k == 0) && (B_Kind[j] == "Mid")) || 
                          ((k == 1) && (B_Kind[j] == "Sid")) || 
