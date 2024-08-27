@@ -312,7 +312,7 @@ TH1D* Hist_mEpdHits = new TH1D("Hist_mEpdHits", "Hist_mEpdHits", 1000,0,1000);
 
 //defining variables
 float pVx, pVy, pVz, VPDvz, BBCco, ZDCcoin, net_Nch_Asym, mQx, mQy;                   //run, event info
-int   Run, Day, Day2, Day3, Trigger, RefMult, TOFMult, Ntofmatch, Centrality, NPTracks, Fcount, Scount, POIcount;   //
+int   Run, Day, Day2, Day3, Trigger, RefMult, FxtMult, TOFMult, Ntofmatch, Centrality, NPTracks, Fcount, Scount, POIcount;   //
 int   Charge, Charge2, ChargeAsso;
 float ndEdx, nSigma_p, nSigma_pi, DCAGlobal, Eta, Theta, Phi, Pt, eff, TOFflag;             //track info    
 float ndEdx2, nSigma_p2, nSigma_pi2, DCAGlobal2, Eta2, Theta2, Phi2, Pt2, eff2, TOFflag2;   //2nd track info
@@ -454,6 +454,7 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
 		pVy	= pV.Y();
 		VPDvz   = event->vzVpd();
 		RefMult = event->refMult();
+		FxtMult = event->fxtMult();
 		TOFMult = event->btofTrayMultiplicity();
 		Ntofmatch = event->nBTOFMatch();
 		NPTracks= dst->numberOfTracks();
@@ -490,7 +491,8 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                         runidvsavgeta->Fill(Run,pTemp_track->GetBinContent(2));
                         if (  (0.06 > track->gMom().Perp()) || (track->gMom().Perp() > 2.0)) continue;
                 }
-                RefMult = NumCharge;
+                // RefMult = NumCharge;
+                RefMult = FxtMult;
 
 
 ///temp add
