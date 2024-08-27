@@ -492,9 +492,9 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                         runidvsavgeta->Fill(Run,pTemp_track->GetBinContent(2));
                         if (  (0.06 > track->gMom().Perp()) || (track->gMom().Perp() > 2.0)) continue;
                 }
-                RefMult = NumCharge;
-                // RefMult = FxtMult;
-                // cout<<"FxtMult = "<<FxtMult<<endl;
+                // RefMult = NumCharge;
+                RefMult = FxtMult;
+                cout<<"FxtMult = "<<FxtMult<<endl;
 
 
 ///temp add
