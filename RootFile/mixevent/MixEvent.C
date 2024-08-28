@@ -490,8 +490,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 HistName1s += "_S";
                 HistName1 += "_M";
                 HistName2 += ", Mix";
-                H_ABphi_By     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , -2 , 2);
-                H_Mix_ABphi_By [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , -2 , 2);
+                H_ABphi_By       [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , -2 , 2);
+                H_Mix_ABphi_By   [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , -2 , 2);
                 Phi_Mix_event_Num[i][l] = 0;
                 Phi_Mix_A_Num    [i][l] = 0;
                 Phi_Mix_B_Num    [i][l] = 0;
@@ -520,15 +520,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             LoopSize = PDGMult;
             for (int j=0;j<LoopSize;j++){
                 if (PDG->at(j) == A_PDG) {
-                    if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {
-                        if (Mode == 0) {
-                            if (ReadTreeID == 0)
-                        }
-                        A_Kind.push_back("Mid");FoundAB++;
-                    }
-                    else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {
-                        A_Kind.push_back("Sid");FoundAB++;
-                    }
+                    if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_Kind.push_back("Mid");FoundAB++;}
+                    else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_Kind.push_back("Sid");FoundAB++;}
+                    else{continue;}
                     A_Mass.push_back(InvariantMass->at(j));
                     A_Px.push_back(mix_px->at(j));
                     A_Py.push_back(mix_py->at(j));
@@ -540,23 +534,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         Temp.push_back(ParentList->at(k));
                     }
                     A_ParID.push_back(Temp);
-                    else {
-                        A_Px   .resize(A_Px   .size() - 1);
-                        A_Py   .resize(A_Py   .size() - 1);
-                        A_Pz   .resize(A_Pz   .size() - 1);
-                        A_Mass .resize(A_Mass .size() - 1);
-                        A_EvtID.resize(A_EvtID.size() - 1);
-                        A_TreID.resize(A_TreID.size() - 1);
-                        A_ParID.resize(A_ParID.size() - 1);
-                    }
                 }
                 if (PDG->at(j) == B_PDG) {
-                    if      (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {
-                        B_Kind.push_back("Mid");FoundAB++;
-                    }
-                    else if (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {
-                        B_Kind.push_back("Sid");FoundAB++;
-                    }
+                    if      (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_Kind.push_back("Mid");FoundAB++;}
+                    else if (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {B_Kind.push_back("Sid");FoundAB++;}
+                    else{continue;}
                     B_Mass.push_back(InvariantMass->at(j));
                     B_Px.push_back(mix_px->at(j));
                     B_Py.push_back(mix_py->at(j));
@@ -568,16 +550,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         Temp.push_back(ParentList->at(k));
                     }
                     B_ParID.push_back(Temp);
-                    else {
-                        B_Px   .resize(B_Px   .size() - 1);
-                        B_Py   .resize(B_Py   .size() - 1);
-                        B_Pz   .resize(B_Pz   .size() - 1);
-                        B_Mass .resize(B_Mass .size() - 1);
-                        B_EvtID.resize(B_EvtID.size() - 1);
-                        B_TreID.resize(B_TreID.size() - 1);
-                        B_ParID.resize(B_ParID.size() - 1);
-                    }
                 }
+            }
+            if (Mode != 0) {
+                for (int j=0;j<A_PDG.size();j++)
             }
 
             // if ((A_Px.size() != 0) || (B_Px.size() != 0)) cout<<"A_Px.size() = "<<A_Px.size()<<" , B_Px.size() = "<<B_Px.size()<<endl;
