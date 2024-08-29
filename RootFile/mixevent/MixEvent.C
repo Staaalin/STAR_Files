@@ -517,7 +517,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             A_Kind.resize(0); B_Kind.resize(0);
 
             //                               A              B
-            TString KindSample[2][2] = {{"Mid","Sid"},{"Mid","Sid"}};
+            TString KindSample[2][2] /*= {{"Mid","Sid"},{"Mid","Sid"}}*/;
+            KindSample[0][0] = "Mid";KindSample[0][1] = "Sid";
+            KindSample[1][0] = "Mid";KindSample[1][1] = "Sid";
             if (Mode != 0) {
                 if (ReadTreeID == 0) {KindSample[0][1] = "Mid";KindSample[1][1] = "Mid";}
                 if (ReadTreeID == 1) {KindSample[0][1] = "Mid";KindSample[1][0] = "Sid";}
