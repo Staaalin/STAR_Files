@@ -516,6 +516,13 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             A_Mass.resize(0); B_Mass.resize(0);
             A_Kind.resize(0); B_Kind.resize(0);
 
+            //                               A              B
+            TString KindSample[2][2] = {{"Mid","Sid"},{"Mid","Sid"}};
+            if (Mode != 0) {
+                if (ReadTreeID == 0) {KindSample[0][1] = "Mid";KindSample[1][1] = "Mid";}
+                if (ReadTreeID == 1) {KindSample[0][1] = "Mid";KindSample[1][0] = "Sid";}
+                if (ReadTreeID == 2) {KindSample[0][0] = "Sid";KindSample[1][1] = "Mid";}
+            }
             int LoopSize;
             LoopSize = PDGMult;
             for (int j=0;j<LoopSize;j++){
@@ -523,6 +530,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_Kind.push_back("Mid");FoundAB++;}
                     else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_Kind.push_back("Sid");FoundAB++;}
                     else{continue;}
+                    bool IfStore = false;
+                    for (int k = 0;k<2;k++) {
+                        if (KindSample[0][k] == A_Kind[A_Kind.size()-1]) {IfStore = true;break;}
+                    }
+                    if (!IfStore) {A_Kind.resize(A_Kind.size()-1);continue;}
                     A_Mass.push_back(InvariantMass->at(j));
                     A_Px.push_back(mix_px->at(j));
                     A_Py.push_back(mix_py->at(j));
@@ -539,6 +551,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     if      (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_Kind.push_back("Mid");FoundAB++;}
                     else if (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {B_Kind.push_back("Sid");FoundAB++;}
                     else{continue;}
+                    bool IfStore = false;
+                    for (int k = 0;k<2;k++) {
+                        if (KindSample[1][k] == B_Kind[B_Kind.size()-1]) {IfStore = true;break;}
+                    }
+                    if (!IfStore) {B_Kind.resize(B_Kind.size()-1);continue;}
                     B_Mass.push_back(InvariantMass->at(j));
                     B_Px.push_back(mix_px->at(j));
                     B_Py.push_back(mix_py->at(j));
@@ -551,9 +568,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     B_ParID.push_back(Temp);
                 }
-            }
-            if (Mode != 0) {
-                for (int j=0;j<A_PDG.size();j++)
             }
 
             // if ((A_Px.size() != 0) || (B_Px.size() != 0)) cout<<"A_Px.size() = "<<A_Px.size()<<" , B_Px.size() = "<<B_Px.size()<<endl;
