@@ -505,11 +505,13 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             int FoundAB = 0;
             // if (i > 15) {break;}
             hadronTree->GetEntry(i);
-            if ((i+1)%500 == 0) cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
-			time(&time_now);
-			int time_diff = (int)difftime(time_now, time_start);
-            time_diff = time_diff/500;
-            cout << time_diff/60 << "min " << time_diff%60 << "s: " << endl;
+            if ((i+1)%500 == 0) {
+                cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
+			    time(&time_now);
+			    int time_diff = (int)difftime(time_now, time_start);
+                time_diff = time_diff/500;
+                cout << time_diff/60 << "min " << time_diff%60 << "s: " << endl;
+            }
             // cout<<mult<<endl;
             // if(b>7){continue;}
             // cout<<"There OK"<<endl;
