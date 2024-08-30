@@ -403,26 +403,26 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
         hadronTree->SetBranchAddress("PDGMult"  ,&PDGMult  );
         hadronTree->SetBranchAddress("refMult"  ,&refMult  );
-        hadronTree->SetBranchAddress("grefMult" ,&grefMult );
+        // hadronTree->SetBranchAddress("grefMult" ,&grefMult );
         hadronTree->SetBranchAddress("EventID"  ,&EventID  );
-        hadronTree->SetBranchAddress("RunID"    ,&RunID    );
-        hadronTree->SetBranchAddress("TriggerID",&TriggerID);
-        hadronTree->SetBranchAddress("Nch"      ,&Nch      );
+        // hadronTree->SetBranchAddress("RunID"    ,&RunID    );
+        // hadronTree->SetBranchAddress("TriggerID",&TriggerID);
+        // hadronTree->SetBranchAddress("Nch"      ,&Nch      );
         
         hadronTree->SetBranchAddress("PDG"          ,&PDG          ,&bPDG          );
         hadronTree->SetBranchAddress("mix_px"       ,&mix_px       ,&bmix_px       );
         hadronTree->SetBranchAddress("mix_py"       ,&mix_py       ,&bmix_py       );
         hadronTree->SetBranchAddress("mix_pz"       ,&mix_pz       ,&bmix_pz       );
-        hadronTree->SetBranchAddress("QA_eta"       ,&QA_eta       ,&bQA_eta       );
-        hadronTree->SetBranchAddress("dEdx"         ,&dEdx         ,&bdEdx         );
-        hadronTree->SetBranchAddress("m2"           ,&m2           ,&bm2           );
-        hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
-        hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
-        hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
-        hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
+        // hadronTree->SetBranchAddress("QA_eta"       ,&QA_eta       ,&bQA_eta       );
+        // hadronTree->SetBranchAddress("dEdx"         ,&dEdx         ,&bdEdx         );
+        // hadronTree->SetBranchAddress("m2"           ,&m2           ,&bm2           );
+        // hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
+        // hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
+        // hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
+        // hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
         hadronTree->SetBranchAddress("InvariantMass",&InvariantMass,&bInvariantMass);
-        hadronTree->SetBranchAddress("Decay_Length" ,&Decay_Length ,&bDecay_Length );
-        hadronTree->SetBranchAddress("Chi2"         ,&Chi2         ,&bChi2         );
+        // hadronTree->SetBranchAddress("Decay_Length" ,&Decay_Length ,&bDecay_Length );
+        // hadronTree->SetBranchAddress("Chi2"         ,&Chi2         ,&bChi2         );
         hadronTree->SetBranchAddress("ParentList"   ,&ParentList   ,&bParentList   );
         hadronTree->SetBranchAddress("ParentSta"    ,&ParentSta    ,&bParentSta    );
         hadronTree->SetBranchAddress("ParentEnd"    ,&ParentEnd    ,&bParentEnd    );
@@ -837,29 +837,29 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 BhadronTree = new TTree("hadronTree", "Tree_STAR");
                 BhadronTree->Branch("PDGMult"            ,&BPDGMult             ,"PDGMult/I"                           );
                 BhadronTree->Branch("refMult"            ,&BCrefMult            ,"refMult/I"                           );
-                BhadronTree->Branch("grefMult"           ,&BCgrefMult           ,"grefMult/I"                          );
+                // BhadronTree->Branch("grefMult"           ,&BCgrefMult           ,"grefMult/I"                          );
                 BhadronTree->Branch("EventID"            ,&BevtID               ,"EventID/I"                           );
-                BhadronTree->Branch("RunID"              ,&BrunID               ,"RunID/I"                             );
-                BhadronTree->Branch("TriggerID"          ,&BTriggerID           ,"TriggerID/I"                         );
-                BhadronTree->Branch("Nch"                ,&BNch                 ,"Nch/I"                               );
+                // BhadronTree->Branch("RunID"              ,&BrunID               ,"RunID/I"                             );
+                // BhadronTree->Branch("TriggerID"          ,&BTriggerID           ,"TriggerID/I"                         );
+                // BhadronTree->Branch("Nch"                ,&BNch                 ,"Nch/I"                               );
                 BhadronTree->Branch("PDG"                ,&BPDG                 );
                 BhadronTree->Branch("mix_px"             ,&Bpx                  );
                 BhadronTree->Branch("mix_py"             ,&Bpy                  );
                 BhadronTree->Branch("mix_pz"             ,&Bpz                  );
-                BhadronTree->Branch("QA_eta"             ,&BQA_eta              );
+                // BhadronTree->Branch("QA_eta"             ,&BQA_eta              );
 
                 // Used for PID QA
-                BhadronTree->Branch("dEdx"               ,&BQA_dEdx              );
-                BhadronTree->Branch("m2"                 ,&BQA_m2                );
-                BhadronTree->Branch("dcatopv"            ,&BQA_DCA_V0_PV         );
-                BhadronTree->Branch("nSigmaProton"       ,&BQA_nSigmaProton      );
-                BhadronTree->Branch("nSigmaPion"         ,&BQA_nSigmaPion        );
-                BhadronTree->Branch("nSigmaKaon"         ,&BQA_nSigmaKaon        );
+                // BhadronTree->Branch("dEdx"               ,&BQA_dEdx              );
+                // BhadronTree->Branch("m2"                 ,&BQA_m2                );
+                // BhadronTree->Branch("dcatopv"            ,&BQA_DCA_V0_PV         );
+                // BhadronTree->Branch("nSigmaProton"       ,&BQA_nSigmaProton      );
+                // BhadronTree->Branch("nSigmaPion"         ,&BQA_nSigmaPion        );
+                // BhadronTree->Branch("nSigmaKaon"         ,&BQA_nSigmaKaon        );
                 
                 // Used for Reconstruction QA
                 BhadronTree->Branch("InvariantMass"      ,&BInvariantMass        );
-                BhadronTree->Branch("Decay_Length"       ,&BQA_Decay_Length      );
-                BhadronTree->Branch("Chi2"               ,&BQA_Chi2              );
+                // BhadronTree->Branch("Decay_Length"       ,&BQA_Decay_Length      );
+                // BhadronTree->Branch("Chi2"               ,&BQA_Chi2              );
                 
                 // Used for restore corralated information
                 BhadronTree->Branch("ParentList"         ,&BParentList     );
