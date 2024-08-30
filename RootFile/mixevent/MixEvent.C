@@ -47,11 +47,11 @@ using namespace std;
 int CentralityBin[] = {0,25,50,75,100};// %
 #define CentralityBinNum 4
 
-float PtBin[] = {0 , 1.0 , 10.0}; // Pt
-#define PtBinNum 2
+float PtBin[] = {0 , 10.0}; // Pt
+#define PtBinNum 1
 
-float yBin[] = {-5.0 , -0.5 , 0.0 , 0.5 , 5.0}; // B_y
-#define yBinNum 4
+float yBin[] = {-5.0 , 0.0 , 0.5 , 5.0}; // B_y
+#define yBinNum 3
 
 TString KindBin[] = {"Mid","Sid"}
 #define KindNum 2
