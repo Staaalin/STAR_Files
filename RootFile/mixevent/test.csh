@@ -7,9 +7,9 @@ set midname = "/star/data01/pwg/svianping/output/output_"
 # set midname = "~/Result/Cor_T_"
 # set outname = "~/Result/K0SXiMix/HADDr_"
 set outname = "~/Result/Cor_"
-set StartFileIndex = 342
+set StartFileIndex = 330
 set EndFileIndex = 352
-set OutputFileIndex = 2
+set OutputFileIndex = 1
 set A_PDG = 321
 set B_PDG = 3312
 
