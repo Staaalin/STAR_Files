@@ -509,7 +509,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
 			    time(&time_now);
 			    int time_diff = (int)difftime(time_now, time_start);
-                time_diff = time_diff/500;
                 cout << time_diff/60 << "min " << time_diff%60 << "s: " << endl;
             }
             // cout<<mult<<endl;
