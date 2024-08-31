@@ -1258,7 +1258,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	//     pass event  
 	/////////////////////////////////////////////////////////
-	int Recorded_Hyperon = 0;
+	int Recorded_PDG[] = { LambdaPdg , XiPdg , OmegaPdg } // Only those events reconstruct these particles will be recorded.
+	int Recorded_PDG_Size = sizeof(Recorded_PDG)/sizeof(Recorded_PDG[0]);
+	bool IfRecordThisEventInTree = false;
 	StPicoEvent* mEvent= (StPicoEvent*) mPicoDst->event(); 
 	if(!mEvent)return kStOK;
 
@@ -1660,7 +1662,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				(fabs(particle.GetPDG()) != K0SPdg   ) && 
 				(fabs(particle.GetPDG()) != PhiPdg)
 			) {continue;}
-			Recorded_Hyperon ++;
 
 			// Check if wrong daughters
 			// bool IfCorrectDaughter = true;
@@ -2018,6 +2019,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 				QA_nSigmaKaon.emplace_back(-999);
 				QA_m2.emplace_back(-999);
 
+			}
+			if (!IfRecordThisEventInTree) {
+				for (int TI = 0;TI < Recorded_PDG_Size;TI++) {
+					if (abs(particle.GetPDG()) == Recorded_PDG[TI]) {
+						IfRecordThisEventInTree = true;
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -2559,7 +2568,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	if (PDG.size()>0){
 		PDGMult = PDG.size(); // This is multiplicity of Recorded Particles
-		if (Recorded_Hyperon != 0){
+		if (IfRecordThisEventInTree){
 			// cout<<"Found Hyperon"<<endl;
 			hadronTree->Fill();
 		}
