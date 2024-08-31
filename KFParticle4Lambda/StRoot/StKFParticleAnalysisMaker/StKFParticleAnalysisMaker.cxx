@@ -1258,7 +1258,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	//     pass event  
 	/////////////////////////////////////////////////////////
-	int Recorded_PDG[] = { LambdaPdg , XiPdg , OmegaPdg } // Only those events reconstruct these particles will be recorded.
+	int Recorded_PDG[] = { LambdaPdg , XiPdg , OmegaPdg }; // Only those events reconstruct these particles will be recorded.
 	int Recorded_PDG_Size = sizeof(Recorded_PDG)/sizeof(Recorded_PDG[0]);
 	bool IfRecordThisEventInTree = false;
 	StPicoEvent* mEvent= (StPicoEvent*) mPicoDst->event(); 
