@@ -1258,8 +1258,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	//     pass event  
 	/////////////////////////////////////////////////////////
-	int Recorded_PDG[] = { LambdaPdg , XiPdg , OmegaPdg }; // Only those events reconstruct these particles will be recorded.
-	int Recorded_PDG_Size = sizeof(Recorded_PDG)/sizeof(Recorded_PDG[0]);
+	// Only those events reconstruct particles A and B simultaneously will be recorded.
+	int Recorded_A_PDG[] = { LambdaPdg , XiPdg , OmegaPdg };
+	int Recorded_A_PDG_Size = sizeof(Recorded_A_PDG)/sizeof(Recorded_A_PDG[0]);
+	int Recorded_B_PDG[] = { KaonPdg , K0SPdg };
+	int Recorded_B_PDG_Size = sizeof(Recorded_B_PDG)/sizeof(Recorded_B_PDG[0]);
+	bool IfRecorded_A_Matched = false;
+	bool IfRecorded_B_Matched = false;
 	bool IfRecordThisEventInTree = false;
 	StPicoEvent* mEvent= (StPicoEvent*) mPicoDst->event(); 
 	if(!mEvent)return kStOK;
@@ -2021,12 +2026,23 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 			}
 			if (!IfRecordThisEventInTree) {
-				for (int TI = 0;TI < Recorded_PDG_Size;TI++) {
-					if (abs(particle.GetPDG()) == Recorded_PDG[TI]) {
-						IfRecordThisEventInTree = true;
-						break;
+				if (!IfRecorded_A_Matched) {
+					for (int TI = 0;TI < Recorded_A_PDG_Size;TI++) {
+						if (abs(particle.GetPDG()) == Recorded_A_PDG[TI]) {
+							IfRecorded_A_Matched = true;
+							break;
+						}
 					}
 				}
+				if (!IfRecorded_B_Matched) {
+					for (int TI = 0;TI < Recorded_B_PDG_Size;TI++) {
+						if (abs(particle.GetPDG()) == Recorded_B_PDG[TI]) {
+							IfRecorded_B_Matched = true;
+							break;
+						}
+					}
+				}
+				if (IfRecorded_A_Matched && IfRecorded_B_Matched) IfRecordThisEventInTree = true;
 			}
 		}
 	}
