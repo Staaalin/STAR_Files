@@ -723,7 +723,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         for (int j=0;j<Mix_B_Num[CenIndex][RapIndex][PtIndex][k];j++){
                             TLorentzVector p1;
                             p1.SetXYZM(Mix_B_Px[CenIndex][RapIndex][PtIndex][k][j],Mix_B_Py[CenIndex][RapIndex][PtIndex][k][j],Mix_B_Pz[CenIndex][RapIndex][PtIndex][k][j],massList(B_PDG));
-                            for (int l=0;l<Mix_A_Num[CenIndex][RapIndex][PtIndex][l];l++){
+                            for (int l=0;l<Mix_A_Num[CenIndex][RapIndex][PtIndex][k];l++){
                                 TLorentzVector p2,p3,p4 = p1;
                                 p2.SetXYZM(Mix_A_Px[CenIndex][RapIndex][PtIndex][k][l],Mix_A_Py[CenIndex][RapIndex][PtIndex][k][l],Mix_A_Pz[CenIndex][RapIndex][PtIndex][k][l],massList(A_PDG));
                                 p3 = p4 + p2;
