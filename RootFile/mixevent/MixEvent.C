@@ -781,14 +781,20 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             cout<<"["<<i<<","<<j<<","<<k<<","<<l<<"] remain "<<Mix_event_Num[i][j][k][l]<<" events, "<<endl; 
                             cout<<"     contains "<<Mix_A_Num[i][j][k][l]<<" particles A, and "<<Mix_B_Num[i][j][k][l]<<" particles B."<<endl;
                         }
-                        if ((H_Kstar[i][j][k][l]->Integral())>0) H_Kstar[i][j][k][l]->Write();
-                        if ((H_Mix_Kstar[i][j][k][l]->Integral())>0) H_Mix_Kstar[i][j][k][l]->Write();
+                        // if ((H_Kstar[i][j][k][l]->Integral())>0) H_Kstar[i][j][k][l]->Write();
+                        // if ((H_Mix_Kstar[i][j][k][l]->Integral())>0) H_Mix_Kstar[i][j][k][l]->Write();
+                        H_Kstar[i][j][k][l]->Write();
+                        H_Mix_Kstar[i][j][k][l]->Write();
                     }
                 }
-                if ((H_ABphi_Bphi    [i][l]->Integral())>0) H_ABphi_Bphi    [i][l]->Write();
-                if ((H_ABphi_By      [i][l]->Integral())>0) H_ABphi_By      [i][l]->Write();
-                if ((H_Mix_ABphi_Bphi[i][l]->Integral())>0) H_Mix_ABphi_Bphi[i][l]->Write();
-                if ((H_Mix_ABphi_By  [i][l]->Integral())>0) H_Mix_ABphi_By  [i][l]->Write();
+                // if ((H_ABphi_Bphi    [i][l]->Integral())>0) H_ABphi_Bphi    [i][l]->Write();
+                // if ((H_ABphi_By      [i][l]->Integral())>0) H_ABphi_By      [i][l]->Write();
+                // if ((H_Mix_ABphi_Bphi[i][l]->Integral())>0) H_Mix_ABphi_Bphi[i][l]->Write();
+                // if ((H_Mix_ABphi_By  [i][l]->Integral())>0) H_Mix_ABphi_By  [i][l]->Write();
+                H_ABphi_Bphi    [i][l]->Write();
+                H_ABphi_By      [i][l]->Write();
+                H_Mix_ABphi_Bphi[i][l]->Write();
+                H_Mix_ABphi_By  [i][l]->Write();
             }
         }
         fileA.Close();
