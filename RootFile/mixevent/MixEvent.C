@@ -675,13 +675,13 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 // cout<<"Here is OK 1"<<endl;
                 for (int k=0;k<Pattern;k++){
                     if ( (k == 0) ){
-                        if ((A_Pattern[0] != 0) && (B_Pattern[0] != 0)) continue;
+                        if (!((A_Pattern[0] != 0) && (B_Pattern[0] != 0))) continue;
                     }
                     if ( (k == 1) ){
-                        if ((A_Pattern[0] != 0) && (B_Pattern[1] != 0)) continue;
+                        if (!((A_Pattern[0] != 0) && (B_Pattern[1] != 0))) continue;
                     }
                     if ( (k == 2) ){
-                        if ((A_Pattern[1] != 0) && (B_Pattern[0] != 0)) continue;
+                        if (!((A_Pattern[1] != 0) && (B_Pattern[0] != 0))) continue;
                     }
                     for (int j=0;j<B_Px.size();j++){
                         if ( ((k == 0) && (B_Kind[j] == "Mid")) || 
