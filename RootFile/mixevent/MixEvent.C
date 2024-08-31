@@ -685,8 +685,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int j=0;j<B_Px.size();j++){
                         if ( ((k == 0) && (B_Kind[j] == "Mid")) || 
-                            ((k == 1) && (B_Kind[j] == "Sid")) || 
-                            ((k == 2) && (B_Kind[j] == "Mid")) )
+                             ((k == 1) && (B_Kind[j] == "Sid")) || 
+                             ((k == 2) && (B_Kind[j] == "Mid")) )
                         else {continue;}
                         Mix_B_Px[CenIndex][RapIndex][PtIndex][k][Mix_B_Num[CenIndex][RapIndex][PtIndex][k]] = B_Px[j];
                         Mix_B_Py[CenIndex][RapIndex][PtIndex][k][Mix_B_Num[CenIndex][RapIndex][PtIndex][k]] = B_Py[j];
@@ -701,8 +701,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     for (int j=0;j<A_Px.size();j++){
                         if ( ((k == 0) && (A_Kind[j] == "Mid")) || 
-                            ((k == 1) && (A_Kind[j] == "Mid")) || 
-                            ((k == 2) && (A_Kind[j] == "Sid")) )
+                             ((k == 1) && (A_Kind[j] == "Mid")) || 
+                             ((k == 2) && (A_Kind[j] == "Sid")) )
                         else {continue;}
                         Mix_A_Px[CenIndex][RapIndex][PtIndex][k][Mix_A_Num[CenIndex][RapIndex][PtIndex][k]] = A_Px[j];
                         Mix_A_Py[CenIndex][RapIndex][PtIndex][k][Mix_A_Num[CenIndex][RapIndex][PtIndex][k]] = A_Py[j];
@@ -723,9 +723,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         for (int j=0;j<Mix_B_Num[CenIndex][RapIndex][PtIndex][k];j++){
                             TLorentzVector p1;
                             p1.SetXYZM(Mix_B_Px[CenIndex][RapIndex][PtIndex][k][j],Mix_B_Py[CenIndex][RapIndex][PtIndex][k][j],Mix_B_Pz[CenIndex][RapIndex][PtIndex][k][j],massList(B_PDG));
-                            for (int k=0;k<Mix_A_Num[CenIndex][RapIndex][PtIndex][k];k++){
+                            for (int l=0;l<Mix_A_Num[CenIndex][RapIndex][PtIndex][l];l++){
                                 TLorentzVector p2,p3,p4 = p1;
-                                p2.SetXYZM(Mix_A_Px[CenIndex][RapIndex][PtIndex][k][k],Mix_A_Py[CenIndex][RapIndex][PtIndex][k][k],Mix_A_Pz[CenIndex][RapIndex][PtIndex][k][k],massList(A_PDG));
+                                p2.SetXYZM(Mix_A_Px[CenIndex][RapIndex][PtIndex][k][l],Mix_A_Py[CenIndex][RapIndex][PtIndex][k][l],Mix_A_Pz[CenIndex][RapIndex][PtIndex][k][l],massList(A_PDG));
                                 p3 = p4 + p2;
                                 p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
                                 kstar = 0.5 * (p4 - p2).Rho();
