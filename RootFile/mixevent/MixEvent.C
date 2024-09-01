@@ -59,6 +59,17 @@ TString PatternBin[] = {"AMBM","AMBS","ASBM"};
 #define Pattern 3 // 0:A middle B middle , 1:A middle B sideband , 2:A sideband B middle
 // Pattern应当大于KindNum
 
+void print(std::vector<int> Temp)
+{
+	cout<<"{";
+    for (int i = 0;i<Temp.size();i++){
+		cout<<" "<<Temp[i];
+		if (i != (Temp.size() - 1)) cout<<" ,"; 
+	}
+	cout<<" }"<<endl;
+    return ;
+}
+
 Double_t massList(int PID)
 {
     Double_t Result;
@@ -324,6 +335,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     int KaonpPID = 321,KaonmPID = -321,PionpPID = 211,PionmPID = -211,LambdaPID = 3122,LambdabPID = -3122,XiPID = 3312,XibPID = -3312,OmegaPID = 3334,OmegabPID = -3334;
 
     std::vector<int> NchList = GetNchList(CentralityBin);     // centrality
+    cout<<"NchList = ";
+    print(NchList);
+    cout<<" "<<endl;
     //                                        centrality          B_y        B_Pt
     std::vector<Float_t>              A_Px        ;
     std::vector<Float_t>              A_Py        ;
