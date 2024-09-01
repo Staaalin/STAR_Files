@@ -59,8 +59,6 @@ TString PatternBin[] = {"AMBM","AMBS","ASBM"};
 #define Pattern 3 // 0:A middle B middle , 1:A middle B sideband , 2:A sideband B middle
 // Pattern应当大于KindNum
 
-int BannedCo[] = {310 , 3122 , 3312 , 3334};// 在这列表中的粒子（包括绝对值，即正反粒子），如果其中有两个（含以上）在一个事件中被同时重建，则丢弃。
-
 Double_t massList(int PID)
 {
     Double_t Result;
@@ -579,7 +577,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
 
-            // if ((A_Px.size() != 0) || (B_Px.size() != 0)) cout<<"A_Px.size() = "<<A_Px.size()<<" , B_Px.size() = "<<B_Px.size()<<endl;
+            if ((A_Px.size() != A_Kind.size()) || (B_Px.size() != B_Kind.size())) cout<<"FUCK"<<endl;
             
             if ((A_Px.size() == 0) || (B_Px.size() == 0)) continue;
 
