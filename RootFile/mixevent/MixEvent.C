@@ -44,14 +44,14 @@ using namespace std;
 
 #define Pi 3.1415926535898
 
-int CentralityBin[] = {0,25,50,75,100};// %
-#define CentralityBinNum 4
+int CentralityBin[] = {0,10,20,40,80};// %
+#define CentralityBinNum 4 // -1
 
 float PtBin[] = {0 , 10.0}; // Pt
-#define PtBinNum 1
+#define PtBinNum 1 // -1
 
 float yBin[] = {-5.0 , 0.0 , 0.5 , 5.0}; // B_y
-#define yBinNum 3
+#define yBinNum 3 // -1
 
 TString KindBin[] = {"Mid","Sid"}
 #define KindNum 2
