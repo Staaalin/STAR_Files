@@ -181,10 +181,10 @@ void DltElement(std::vector<int> &V , int ID)
     return;
 }
 
-std::vector<int> GetNchList(int CentralityList[])
+std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
 {
     std::vector<int> Result;Result.resize(0);
-    int CentralityListSize = sizeof(CentralityList)/sizeof(CentralityList[0]);
+    // int CentralityListSize = sizeof(CentralityList)/sizeof(CentralityList[0]);
     if (DataName == "dAu_200_21") {
         // data from https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
         int NchTable[21] = { 10000 , 55 , 47 , 42 , 38 , 35 , 32 , 29 , 26 , 24 , 21 , 19 , 17 , 15 , 13 , 11 , 9 , 7 , 6 , 4 ,  0};
@@ -334,7 +334,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     int KaonpPID = 321,KaonmPID = -321,PionpPID = 211,PionmPID = -211,LambdaPID = 3122,LambdabPID = -3122,XiPID = 3312,XibPID = -3312,OmegaPID = 3334,OmegabPID = -3334;
 
-    std::vector<int> NchList = GetNchList(CentralityBin);     // centrality
+    std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
     print(NchList);
     cout<<" "<<endl;
