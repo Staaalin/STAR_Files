@@ -576,8 +576,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     B_ParID.push_back(Temp);
                 }
             }
-
-            if ((A_Px.size() != A_Kind.size()) || (B_Px.size() != B_Kind.size())) cout<<"FUCK"<<endl;
             
             if ((A_Px.size() == 0) || (B_Px.size() == 0)) continue;
 
@@ -632,6 +630,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 if ((CenIndex == -1) || (RapIndex == -1) || (PtIndex == -1)) {
                     continue;
                 }
+
+                A_Pattern[0] = 0;A_Pattern[1] = 0;
+                B_Pattern[0] = 0;B_Pattern[1] = 0;
 
                 // Fill Single Event
                 TLorentzVector p1;
