@@ -613,7 +613,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 int CenIndex = -1;
                 for (int k=0;k<CentralityBinNum;k++){
                     // if ((NchList[k] <= refMult) && (refMult < NchList[k+1])) {
-                    if ((NchList[k] <= Nch) && (Nch < NchList[k+1])) {
+                    if ((NchList[k] >= Nch) && (Nch > NchList[k+1])) {
                         CenIndex = k;
                         break;
                     }
