@@ -669,49 +669,52 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         A_Pattern[0] += 1;B_Pattern[1] += 1;
                     }
                 }
+                cout<<"Nch = "<<Nch<<endl;
 
                 // Fill Mix Event
                 // cout<<"Here is OK 1"<<endl;
                 for (int k=0;k<Pattern;k++){
+                    TString A_Sample , B_Sample;
                     if ( (k == 0) ){
                         if (!((A_Pattern[0] != 0) && (B_Pattern[0] != 0))) continue;
+                        A_Sample = "Mid";B_Sample = "Mid";
                     }
                     if ( (k == 1) ){
                         if (!((A_Pattern[0] != 0) && (B_Pattern[1] != 0))) continue;
+                        A_Sample = "Mid";B_Sample = "Sid";
                     }
                     if ( (k == 2) ){
                         if (!((A_Pattern[1] != 0) && (B_Pattern[0] != 0))) continue;
+                        A_Sample = "Sid";B_Sample = "Mid";
                     }
                     for (int j=0;j<B_Px.size();j++){
-                        if ( ((k == 0) && (B_Kind[j] == "Mid")) || 
-                             ((k == 1) && (B_Kind[j] == "Sid")) || 
-                             ((k == 2) && (B_Kind[j] == "Mid")) )
-                        else {continue;}
-                        Mix_B_Px[CenIndex][RapIndex][PtIndex][k][Mix_B_Num[CenIndex][RapIndex][PtIndex][k]] = B_Px[j];
-                        Mix_B_Py[CenIndex][RapIndex][PtIndex][k][Mix_B_Num[CenIndex][RapIndex][PtIndex][k]] = B_Py[j];
-                        Mix_B_Pz[CenIndex][RapIndex][PtIndex][k][Mix_B_Num[CenIndex][RapIndex][PtIndex][k]] = B_Pz[j];
-                        Mix_B_EvtID[CenIndex][RapIndex][PtIndex][k][Mix_B_Num[CenIndex][RapIndex][PtIndex][k]] = B_EvtID[j];
-                        Mix_B_TreID[CenIndex][RapIndex][PtIndex][k][Mix_B_Num[CenIndex][RapIndex][PtIndex][k]] = B_TreID[j];
+                        if (B_Kind[j] != B_Sample) continue;
+                        int TI = Mix_B_Num[CenIndex][RapIndex][PtIndex][k];
+                        Mix_B_Px[CenIndex][RapIndex][PtIndex][k][TI] = B_Px[j];
+                        Mix_B_Py[CenIndex][RapIndex][PtIndex][k][TI] = B_Py[j];
+                        Mix_B_Pz[CenIndex][RapIndex][PtIndex][k][TI] = B_Pz[j];
+                        Mix_B_EvtID[CenIndex][RapIndex][PtIndex][k][TI] = B_EvtID[j];
+                        Mix_B_TreID[CenIndex][RapIndex][PtIndex][k][TI] = B_TreID[j];
                         Mix_B_Num[CenIndex][RapIndex][PtIndex][k]++;
-                        Phi_Mix_B_Px[CenIndex][k][Phi_Mix_B_Num[CenIndex][k]] = B_Px[j];
-                        Phi_Mix_B_Py[CenIndex][k][Phi_Mix_B_Num[CenIndex][k]] = B_Py[j];
-                        Phi_Mix_B_Pz[CenIndex][k][Phi_Mix_B_Num[CenIndex][k]] = B_Pz[j];
+                        TI = Phi_Mix_B_Num[CenIndex][k];
+                        Phi_Mix_B_Px[CenIndex][k][TI] = B_Px[j];
+                        Phi_Mix_B_Py[CenIndex][k][TI] = B_Py[j];
+                        Phi_Mix_B_Pz[CenIndex][k][TI] = B_Pz[j];
                         Phi_Mix_B_Num[CenIndex][k]++;
                     }
                     for (int j=0;j<A_Px.size();j++){
-                        if ( ((k == 0) && (A_Kind[j] == "Mid")) || 
-                             ((k == 1) && (A_Kind[j] == "Mid")) || 
-                             ((k == 2) && (A_Kind[j] == "Sid")) )
-                        else {continue;}
-                        Mix_A_Px[CenIndex][RapIndex][PtIndex][k][Mix_A_Num[CenIndex][RapIndex][PtIndex][k]] = A_Px[j];
-                        Mix_A_Py[CenIndex][RapIndex][PtIndex][k][Mix_A_Num[CenIndex][RapIndex][PtIndex][k]] = A_Py[j];
-                        Mix_A_Pz[CenIndex][RapIndex][PtIndex][k][Mix_A_Num[CenIndex][RapIndex][PtIndex][k]] = A_Pz[j];
-                        Mix_A_EvtID[CenIndex][RapIndex][PtIndex][k][Mix_A_Num[CenIndex][RapIndex][PtIndex][k]] = A_EvtID[j];
-                        Mix_A_TreID[CenIndex][RapIndex][PtIndex][k][Mix_A_Num[CenIndex][RapIndex][PtIndex][k]] = A_TreID[j];
+                        if (A_Kind[j] != A_Sample) continue;
+                        int TI = Mix_A_Num[CenIndex][RapIndex][PtIndex][k];
+                        Mix_A_Px[CenIndex][RapIndex][PtIndex][k][TI] = A_Px[j];
+                        Mix_A_Py[CenIndex][RapIndex][PtIndex][k][TI] = A_Py[j];
+                        Mix_A_Pz[CenIndex][RapIndex][PtIndex][k][TI] = A_Pz[j];
+                        Mix_A_EvtID[CenIndex][RapIndex][PtIndex][k][TI] = A_EvtID[j];
+                        Mix_A_TreID[CenIndex][RapIndex][PtIndex][k][TI] = A_TreID[j];
                         Mix_A_Num[CenIndex][RapIndex][PtIndex][k]++;
-                        Phi_Mix_A_Px[CenIndex][k][Phi_Mix_A_Num[CenIndex][k]] = A_Px[j];
-                        Phi_Mix_A_Py[CenIndex][k][Phi_Mix_A_Num[CenIndex][k]] = A_Py[j];
-                        Phi_Mix_A_Pz[CenIndex][k][Phi_Mix_A_Num[CenIndex][k]] = A_Pz[j];
+                        TI = Phi_Mix_A_Num[CenIndex][k];
+                        Phi_Mix_A_Px[CenIndex][k][TI] = A_Px[j];
+                        Phi_Mix_A_Py[CenIndex][k][TI] = A_Py[j];
+                        Phi_Mix_A_Pz[CenIndex][k][TI] = A_Pz[j];
                         Phi_Mix_A_Num[CenIndex][k]++;
                     }
                     Mix_event_Num[CenIndex][RapIndex][PtIndex][k]++;
