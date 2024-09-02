@@ -385,6 +385,73 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TH2D* H_ABphi_By                      [CentralityBinNum]                         [Pattern];
     TH2D* H_Mix_ABphi_By                  [CentralityBinNum]                         [Pattern];
 
+    for (int i=0;i<CentralityBinNum;i++){
+        for (int l=0;l<Pattern;l++){
+            for (int k=0;k<PtBinNum;k++){
+                for (int j=0;j<yBinNum;j++){
+                    TString HistName1 = "H_";
+                    TString HistName2 = "Cen: [";
+                    HistName1 += i;HistName1 += "_";
+                    HistName2 += CentralityBin[i];HistName2 += "% , ";
+                    HistName2 += CentralityBin[i+1];HistName2 += "%], ";
+                    HistName1 += j;HistName1 += "_";
+                    HistName2 += yBin[j];HistName2 += " < y";HistName2 += B_PDG;HistName2 += " <  ";
+                    HistName2 += yBin[j+1];HistName2 += ", ";
+                    HistName1 += k;
+                    HistName2 += PtBin[k];HistName2 += " < Pt";HistName2 += B_PDG;HistName2 += " <  ";
+                    HistName2 += PtBin[k+1];
+                    TString HistName1s = HistName1;
+                    TString HistName2s = HistName2;
+                    HistName1s += "_S_";
+                    HistName1 += "_M_";
+                    HistName1 += PatternBin[l];
+                    HistName1s += PatternBin[l];
+                    HistName2 += ", Mix, ";
+                    HistName2 += PatternBin[l];
+                    HistName2s += PatternBin[l];
+                    H_Kstar[i][j][k][l] = new TH1D(HistName1s,HistName2s,500,0,10);
+                    H_Mix_Kstar[i][j][k][l] = new TH1D(HistName1,HistName2,500,0,10);
+                    Mix_event_Num[i][j][k][l] = 0;
+                    Mix_A_Num[i][j][k][l] = 0;
+                    Mix_B_Num[i][j][k][l] = 0;
+                }
+            }
+            TString HistName1;
+            TString HistName2;
+            HistName1 = "HPhiPhi_";
+            HistName2 = "Cen: [";
+            HistName1 += i;HistName1 += "_";
+            HistName2 += CentralityBin[i];HistName2 += "% , ";
+            HistName2 += CentralityBin[i+1];HistName2 += "%], ";
+            HistName1 += l;HistName1 += "_";
+            HistName2 += PatternBin[l];HistName2 += ", ";
+            TString HistName1s = HistName1;
+            TString HistName2s = HistName2;
+            HistName1s += "_S";
+            HistName1 += "_M";
+            HistName2 += ", Mix";
+            H_ABphi_Bphi     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , 0 , Pi);
+            H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , 0 , Pi);
+            HistName1 = "HPhiRap_";
+            HistName2 = "Cen: [";
+            HistName1 += i;HistName1 += "_";
+            HistName2 += CentralityBin[i];HistName2 += "% , ";
+            HistName2 += CentralityBin[i+1];HistName2 += "%], ";
+            HistName1 += l;HistName1 += "_";
+            HistName2 += PatternBin[l];HistName2 += ", ";
+            HistName1s = HistName1;
+            HistName2s = HistName2;
+            HistName1s += "_S";
+            HistName1 += "_M";
+            HistName2 += ", Mix";
+            H_ABphi_By       [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , -2 , 2);
+            H_Mix_ABphi_By   [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , -2 , 2);
+            Phi_Mix_event_Num[i][l] = 0;
+            Phi_Mix_A_Num    [i][l] = 0;
+            Phi_Mix_B_Num    [i][l] = 0;
+        }
+    }
+
     int ReadTreeIDMax;
     if (Mode == 0) {ReadTreeIDMax = 1;}
     else           {ReadTreeIDMax = Pattern;}
@@ -443,72 +510,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         cout << "file number: " << nentries << endl;
         
 
-        for (int i=0;i<CentralityBinNum;i++){
-            for (int l=0;l<Pattern;l++){
-                for (int k=0;k<PtBinNum;k++){
-                    for (int j=0;j<yBinNum;j++){
-                        TString HistName1 = "H_";
-                        TString HistName2 = "Cen: [";
-                        HistName1 += i;HistName1 += "_";
-                        HistName2 += CentralityBin[i];HistName2 += "% , ";
-                        HistName2 += CentralityBin[i+1];HistName2 += "%], ";
-                        HistName1 += j;HistName1 += "_";
-                        HistName2 += yBin[j];HistName2 += " < y";HistName2 += B_PDG;HistName2 += " <  ";
-                        HistName2 += yBin[j+1];HistName2 += ", ";
-                        HistName1 += k;
-                        HistName2 += PtBin[k];HistName2 += " < Pt";HistName2 += B_PDG;HistName2 += " <  ";
-                        HistName2 += PtBin[k+1];
-                        TString HistName1s = HistName1;
-                        TString HistName2s = HistName2;
-                        HistName1s += "_S_";
-                        HistName1 += "_M_";
-                        HistName1 += PatternBin[l];
-                        HistName1s += PatternBin[l];
-                        HistName2 += ", Mix, ";
-                        HistName2 += PatternBin[l];
-                        HistName2s += PatternBin[l];
-                        H_Kstar[i][j][k][l] = new TH1D(HistName1s,HistName2s,500,0,10);
-                        H_Mix_Kstar[i][j][k][l] = new TH1D(HistName1,HistName2,500,0,10);
-                        Mix_event_Num[i][j][k][l] = 0;
-                        Mix_A_Num[i][j][k][l] = 0;
-                        Mix_B_Num[i][j][k][l] = 0;
-                    }
-                }
-                TString HistName1;
-                TString HistName2;
-                HistName1 = "HPhiPhi_";
-                HistName2 = "Cen: [";
-                HistName1 += i;HistName1 += "_";
-                HistName2 += CentralityBin[i];HistName2 += "% , ";
-                HistName2 += CentralityBin[i+1];HistName2 += "%], ";
-                HistName1 += l;HistName1 += "_";
-                HistName2 += PatternBin[l];HistName2 += ", ";
-                TString HistName1s = HistName1;
-                TString HistName2s = HistName2;
-                HistName1s += "_S";
-                HistName1 += "_M";
-                HistName2 += ", Mix";
-                H_ABphi_Bphi     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , 0 , Pi);
-                H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , 0 , Pi);
-                HistName1 = "HPhiRap_";
-                HistName2 = "Cen: [";
-                HistName1 += i;HistName1 += "_";
-                HistName2 += CentralityBin[i];HistName2 += "% , ";
-                HistName2 += CentralityBin[i+1];HistName2 += "%], ";
-                HistName1 += l;HistName1 += "_";
-                HistName2 += PatternBin[l];HistName2 += ", ";
-                HistName1s = HistName1;
-                HistName2s = HistName2;
-                HistName1s += "_S";
-                HistName1 += "_M";
-                HistName2 += ", Mix";
-                H_ABphi_By       [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , -2 , 2);
-                H_Mix_ABphi_By   [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , -2 , 2);
-                Phi_Mix_event_Num[i][l] = 0;
-                Phi_Mix_A_Num    [i][l] = 0;
-                Phi_Mix_B_Num    [i][l] = 0;
-            }
-        }
+
 
         time_t time_start;
         time_t time_now;
@@ -691,14 +693,17 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     TString A_Sample , B_Sample;
                     if ( (k == 0) ){
                         if (!((A_Pattern[0] != 0) && (B_Pattern[0] != 0))) continue;
+                        if ((TreeName == "AMBS/hadronTree") || (TreeName == "ASBM/hadronTree")) continue;
                         A_Sample = "Mid";B_Sample = "Mid";
                     }
                     if ( (k == 1) ){
                         if (!((A_Pattern[0] != 0) && (B_Pattern[1] != 0))) continue;
+                        if ((TreeName == "AMBM/hadronTree") || (TreeName == "ASBM/hadronTree")) continue;
                         A_Sample = "Mid";B_Sample = "Sid";
                     }
                     if ( (k == 2) ){
                         if (!((A_Pattern[1] != 0) && (B_Pattern[0] != 0))) continue;
+                        if ((TreeName == "AMBS/hadronTree") || (TreeName == "AMBM/hadronTree")) continue;
                         A_Sample = "Sid";B_Sample = "Mid";
                     }
                     for (int j=0;j<B_Px.size();j++){
@@ -799,7 +804,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         }
                         // if ((H_Kstar[i][j][k][l]->Integral())>0) H_Kstar[i][j][k][l]->Write();
                         // if ((H_Mix_Kstar[i][j][k][l]->Integral())>0) H_Mix_Kstar[i][j][k][l]->Write();
-                        H_Kstar[i][j][k][l]->Write();
+                        if (Mode == 0) H_Kstar[i][j][k][l]->Write();
                         H_Mix_Kstar[i][j][k][l]->Write();
                     }
                 }
@@ -807,8 +812,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 // if ((H_ABphi_By      [i][l]->Integral())>0) H_ABphi_By      [i][l]->Write();
                 // if ((H_Mix_ABphi_Bphi[i][l]->Integral())>0) H_Mix_ABphi_Bphi[i][l]->Write();
                 // if ((H_Mix_ABphi_By  [i][l]->Integral())>0) H_Mix_ABphi_By  [i][l]->Write();
-                H_ABphi_Bphi    [i][l]->Write();
-                H_ABphi_By      [i][l]->Write();
+                if (Mode == 0) H_ABphi_Bphi[i][l]->Write();
+                if (Mode == 0) H_ABphi_By  [i][l]->Write();
                 H_Mix_ABphi_Bphi[i][l]->Write();
                 H_Mix_ABphi_By  [i][l]->Write();
             }
