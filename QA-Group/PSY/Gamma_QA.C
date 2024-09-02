@@ -42,6 +42,22 @@ using namespace std;
 // #include "/star/u/svianping/STAR_Files/QA-Group/PSY/StRoot/StPicoEvent/StPicoEpdHit.h"
 // #include "/star/u/svianping/STAR_Files/QA-Group/PSY/StRoot/StEpdUtil//StEpdGeom.h"
 
+/// PicoDst headers
+#include "StRoot/StPicoEvent/StPicoDstReader.h"
+#include "StRoot/StPicoEvent/StPicoDst.h"
+#include "StRoot/StPicoEvent/StPicoEvent.h"
+#include "StRoot/StPicoEvent/StPicoTrack.h"
+#include "StRoot/StPicoEvent/StPicoBTofHit.h"
+#include "StRoot/StPicoEvent/StPicoBTowHit.h"
+#include "StRoot/StPicoEvent/StPicoEmcTrigger.h"
+#include "StRoot/StPicoEvent/StPicoBTofPidTraits.h"
+#include "StRoot/StPicoEvent/StPicoTrackCovMatrix.h"
+#include "StRoot/StEpdUtil/StEpdEpFinder.h"
+#include "StRoot/StRefMultCorr/StRefMultCorr.h"
+#include "StRoot/StRefMultCorr/CentralityMaker.h"
+#include "StRoot/StPicoEvent/StPicoEpdHit.h"
+#include "StRoot/StEpdUtil//StEpdGeom.h"
+
 //class StRefMultCorr;
 //class CentralityMaker;
 
