@@ -14,8 +14,14 @@ set Quo = '\"'
 set cen = 1
 set opt_weight = 1
 
-set numFiles = 1
-@ numFiles = ( $FileEnd - $FileStart ) / $FilesPerJob
+
+
+# 生成filelist
+set input_file = "/star/u/svianping/STAR_Files/QA-Group/PSY/AuAu26p5_hpss_new.list"
+set output_file = "modified_list.list"
+set prefix = "root://xrdstar.rcf.bnl.gov:1095/"
+set line_count = `wc -l < $input_file`
+
 
 cd /star/data01/pwg/svianping/QA/
 set i = 0
@@ -27,11 +33,6 @@ while ($i <= $numFiles)
     if(-e $SubXml) rm $SubXml
     touch $SubXml
 
-    # 生成filelist
-    set input_file = "AuAu26p5_hpss_new.list"
-    set output_file = "modified_list.txt"
-    set prefix = "root://xrdstar.rcf.bnl.gov:1095/"
-
     # 读取第一行内容
     set first_line = `head -n 1 $input_file`
 
@@ -40,6 +41,8 @@ while ($i <= $numFiles)
 
     # 写入新文件
     echo $modified_line > $output_file
+
+    set FILELIST = $output_file
 
     # print xml file
     echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
@@ -75,8 +78,6 @@ while ($i <= $numFiles)
 
     set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEvent.C"
     echo \<File\>file:$MixEventPWD\</File\> >> $SubXml
-    set SourceFilePWD = "/star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh"
-    echo \<File\>file:$SourceFilePWD\</File\> >> $SubXml
 
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml

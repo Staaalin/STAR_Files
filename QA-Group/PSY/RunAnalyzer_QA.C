@@ -24,7 +24,7 @@
 #include "TSystem.h"
 #include "TString.h"
 
-#include "/star/u/svianping/STAR_Files/QA-Group/PSY/StRoot/StPicoEvent/StPicoDst.h"
+// #include "/star/u/svianping/STAR_Files/QA-Group/PSY/StRoot/StPicoEvent/StPicoDst.h"
 
 class StRefMultCorr;
 class CentralityMaker;
