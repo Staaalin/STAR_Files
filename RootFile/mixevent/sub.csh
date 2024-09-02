@@ -23,7 +23,7 @@ set B_PDG = "$<"
 
 echo "Please enter which location:"
 echo "SCHEME 1: /star/data01/pwg/svianping/output/output_*.root"
-echo "SCHEME 2: /star/data01/pwg/svianping/HADD/HADD_*.root"
+echo "SCHEME 2: /star/data01/pwg/svianping/HADD/HADD_T_*.root"
 echo "SCHEME 3: /star/data01/pwg/svianping/HADD/HADDrA_*.root"
 set InputNameIndex = "$<"
 
@@ -35,7 +35,7 @@ if ($InputNameIndex == 1) then
 else if ($InputNameIndex == 2) then
 
     cd /star/data01/pwg/svianping/HADD/
-    set numFiles = `find . -maxdepth 1 -name "HADD_*.root" -type f | wc -l`
+    set numFiles = `find . -maxdepth 1 -name "HADD_T_*.root" -type f | wc -l`
 
 endif
 

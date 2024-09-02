@@ -61,20 +61,9 @@ while ($i <= $numFiles)
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
     echo \<Package name=\"ZIP\_File\_$i\"\> >> $SubXml
     # echo \<File\>file:/star/u/svianping/STAR\_Files/RootFile/HADDr\_xml\.C\</File\> >> $SubXml
-    @ k = 0
-    while ($k < $FilesPerJob)
-        @ j = $FileStart + $i * $FilesPerJob + $k
-        if ($j > $FileEnd) then
-            break
-        endif
-
-        set FileName = $ObvInputName$j".root"
-        if (-e $FileName) then
-            echo \<File\>file:$FileName\</File\> >> $SubXml
-        endif
-
-        @ k = $k + 1
-    end
+    
+    set StRootPWD = "/star/u/svianping/STAR_Files/QA-Group/PSY/StRoot"
+    echo \<File\>file:$StRootPWD\</File\> >> $SubXml
 
     set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEvent.C"
     echo \<File\>file:$MixEventPWD\</File\> >> $SubXml
