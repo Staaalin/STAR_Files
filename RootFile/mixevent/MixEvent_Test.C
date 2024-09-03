@@ -686,6 +686,16 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
                             }
                         }
                         Mix_event_Num[CenIndex][RapIndex][PtIndex][k] = 0;
+                        Mix_B_Px[CenIndex][RapIndex][PtIndex][k]   .resize(0);
+                        Mix_B_Py[CenIndex][RapIndex][PtIndex][k]   .resize(0);
+                        Mix_B_Pz[CenIndex][RapIndex][PtIndex][k]   .resize(0);
+                        Mix_B_EvtID[CenIndex][RapIndex][PtIndex][k].resize(0);
+                        Mix_B_TreID[CenIndex][RapIndex][PtIndex][k].resize(0);
+                        Mix_A_Px[CenIndex][RapIndex][PtIndex][k]   .resize(0);
+                        Mix_A_Py[CenIndex][RapIndex][PtIndex][k]   .resize(0);
+                        Mix_A_Pz[CenIndex][RapIndex][PtIndex][k]   .resize(0);
+                        Mix_A_EvtID[CenIndex][RapIndex][PtIndex][k].resize(0);
+                        Mix_A_TreID[CenIndex][RapIndex][PtIndex][k].resize(0);
                     }
                 }
             }
