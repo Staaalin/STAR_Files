@@ -1,7 +1,8 @@
 #!/bin/csh
 
 
-set midname = "/star/data01/pwg/svianping/HADD/HADD_T_"
+set midname = "/star/data01/pwg/svianping/output/output_"
+# set midname = "/star/data01/pwg/svianping/HADD/HADD_T_"
 set outname = "~/Result/Cor_"
 set StartFileIndex = 0
 set EndFileIndex = 341
