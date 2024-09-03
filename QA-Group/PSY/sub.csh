@@ -20,10 +20,8 @@ set OutputName = "cen1.v2.root"
 
 # 生成filelist
 set input_file = "/star/u/svianping/STAR_Files/QA-Group/PSY/AuAu26p5_hpss_new.list"
-set FILELIST = "modified_list.list"
-set output_file = "/star/data01/pwg/svianping/QA/"$FILELIST
-set prefix = "root://xrdstar.rcf.bnl.gov:1095/"
 set line_count = `wc -l < $input_file`
+set prefix = "root://xrdstar.rcf.bnl.gov:1095/"
 set OutputURL = "/star/data01/pwg/svianping/QA/cen"
 set OutputLogURL = "/star/data01/pwg/svianping/QA/log"
 
@@ -38,8 +36,10 @@ while ($i <= $numFiles)
     if(-e $SubXml) rm $SubXml
     touch $SubXml
 
+    set FILELIST = "modified_list_"$i".list"
+    set output_file = "/star/data01/pwg/svianping/QA/"$FILELIST
     # 读取第一行内容
-    set first_line = `head -n 1 $input_file`
+    set first_line = `head -n $i $input_file`
 
     # 添加前缀
     set modified_line = $prefix$first_line
@@ -77,6 +77,9 @@ while ($i <= $numFiles)
 
     set ResolutionPWD = "/star/u/svianping/STAR_Files/QA-Group/PSY/Resolution_cen1.weight_112_QA_new.root"
     echo \<File\>file:$ResolutionPWD\</File\> >> $SubXml
+
+    set FILELISTPWD = $output_file
+    echo \<File\>file:$FILELISTPWD\</File\> >> $SubXml
 
     echo \<File\>file:$output_file\</File\> >> $SubXml
 
