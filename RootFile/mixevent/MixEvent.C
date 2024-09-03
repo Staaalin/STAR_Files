@@ -519,7 +519,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             int FoundAB = 0;
             // if (i > 15) {break;}
             hadronTree->GetEntry(i);
-            if ((i+1)%500 == 0) {
+            if ((i+1)%50 == 0) {
                 cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
 			    time(&time_now);
 			    int time_diff = (int)difftime(time_now, time_start);
