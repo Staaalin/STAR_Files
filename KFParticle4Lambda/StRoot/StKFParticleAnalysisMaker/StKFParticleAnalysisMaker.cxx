@@ -1266,6 +1266,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 	bool IfRecorded_A_Matched = false;
 	bool IfRecorded_B_Matched = false;
 	bool IfRecordThisEventInTree = false;
+	////////////////////////////////////////////////////////
+	int Recorded_Particle[] = { KaonPdg , K0SPdg , LambdaPdg , XiPdg , OmegaPdg }; // Record which particle
+	int Recorded_Particle_Size = sizeof(Recorded_Particle)/sizeof(Recorded_Particle[0]);
 	StPicoEvent* mEvent= (StPicoEvent*) mPicoDst->event(); 
 	if(!mEvent)return kStOK;
 
