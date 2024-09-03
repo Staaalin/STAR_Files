@@ -201,7 +201,7 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
     return Result;
 }
 
-void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
+void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
               int A_PDG,int B_PDG,int Mode = 0) // Mode = 0: PDGMult 为vector长度
 {
 
