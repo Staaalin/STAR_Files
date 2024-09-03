@@ -11,6 +11,7 @@ set MainDir=`pwd`
 set LeftBrackets = "\("
 set RightBrackets = "\)"
 set Quo = '\"'
+set FilesPerJob = 1
 
 set cen = 1
 set opt_weight = 1
