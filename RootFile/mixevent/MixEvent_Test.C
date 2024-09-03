@@ -145,7 +145,7 @@ std::vector<int> GetNchList(int CentralityList[])
     return Result;
 }
 
-void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
+void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
               int A_PDG,int B_PDG)
 {
 
