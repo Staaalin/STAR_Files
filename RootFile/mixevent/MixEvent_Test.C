@@ -324,9 +324,6 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
         hadronTree->GetEntry(i);
         if ((i+1)%500 == 0) {
             cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
-            time(&time_now);
-            int time_diff = (int)difftime(time_now, time_start);
-            cout << time_diff/60 << "min " << time_diff%60 << "s: " << endl;
         }
         A_Px.resize(0);
         for (int j=0;j<PDGMult;j++) {
