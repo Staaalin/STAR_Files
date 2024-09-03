@@ -685,7 +685,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         A_Pattern[0] += 1;B_Pattern[1] += 1;
                     }
                 }
-                cout<<"Nch = "<<Nch<<endl;
+                // cout<<"Nch = "<<Nch<<endl;
 
                 // Fill Mix Event
                 // cout<<"Here is OK 1"<<endl;
