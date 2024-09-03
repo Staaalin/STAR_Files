@@ -1838,6 +1838,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// double v0decaylength = xv0toPV.Mag();
 			// double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();// cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
 			if (IfTree){
+				bool IfRecordThisTrack = false;
+				for (int Mtr = 0;Mtr < Recorded_Particle_Size;Mtr++) {
+					if (Recorded_Particle[Mtr] == abs(particle.GetPDG())) {
+						IfRecordThisTrack = true;
+						break;
+					}
+				}
+				if (!IfRecordThisTrack) continue;
 				bool CheckPass = true;
 				vector<int> Temp;Temp.resize(0);Temp.push_back(iKFParticle);
 				vector<int> TempT;TempT.resize(0);TempT.push_back(iKFParticle);
@@ -2027,25 +2035,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				QA_nSigmaKaon.emplace_back(-999);
 				QA_m2.emplace_back(-999);
 
-			}
-			if (!IfRecordThisEventInTree) {
-				if (!IfRecorded_A_Matched) {
-					for (int TI = 0;TI < Recorded_A_PDG_Size;TI++) {
-						if (abs(particle.GetPDG()) == Recorded_A_PDG[TI]) {
-							IfRecorded_A_Matched = true;
-							break;
-						}
-					}
-				}
-				if (!IfRecorded_B_Matched) {
-					for (int TI = 0;TI < Recorded_B_PDG_Size;TI++) {
-						if (abs(particle.GetPDG()) == Recorded_B_PDG[TI]) {
-							IfRecorded_B_Matched = true;
-							break;
-						}
-					}
-				}
-				if (IfRecorded_A_Matched && IfRecorded_B_Matched) IfRecordThisEventInTree = true;
 			}
 		}
 	}
@@ -2338,6 +2327,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 						{continue;}
 					}
 					//// 
+					bool IfRecordThisTrack = false;
+					for (int Mtr = 0;Mtr < Recorded_Particle_Size;Mtr++) {
+						if (Recorded_Particle[Mtr] == abs(NeedPDG[Ktr])) {
+							IfRecordThisTrack = true;
+							break;
+						}
+					}
+					if (!IfRecordThisTrack) continue;
 					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
 					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
 					if (IfTree) {
@@ -2584,6 +2581,29 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// 	double phiPair  = p4Pair.Phi();
 	// }
 // ======= Lambda loop ends ======= //
+
+	for (int Itr = 0;Itr < PDG.size();Itr++) {
+		if (!IfRecorded_A_Matched) {
+			for (int TI = 0;TI < Recorded_A_PDG_Size;TI++) {
+				if (abs(PDG->at(TI)) == Recorded_A_PDG[TI]) {
+					IfRecorded_A_Matched = true;
+					break;
+				}
+			}
+		}
+		if (!IfRecorded_B_Matched) {
+			for (int TI = 0;TI < Recorded_B_PDG_Size;TI++) {
+				if (abs(PDG->at(TI)) == Recorded_B_PDG[TI]) {
+					IfRecorded_B_Matched = true;
+					break;
+				}
+			}
+		}
+		if (IfRecorded_A_Matched && IfRecorded_B_Matched) {
+			IfRecordThisEventInTree = true;
+			break;
+		}
+	}
 
 	if (PDG.size()>0){
 		PDGMult = PDG.size(); // This is multiplicity of Recorded Particles
