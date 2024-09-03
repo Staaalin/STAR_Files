@@ -762,10 +762,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             float BPx = Phi_Mix_B_Px[CenIndex][k][j];
                             float BPy = Phi_Mix_B_Py[CenIndex][k][j];
                             float BPz = Phi_Mix_B_Pz[CenIndex][k][j];
-                            for (int k=0;k<Phi_Mix_A_Num[CenIndex][k];k++){
-                                float APx = Phi_Mix_A_Px[CenIndex][k][k];
-                                float APy = Phi_Mix_A_Py[CenIndex][k][k];
-                                float APz = Phi_Mix_A_Pz[CenIndex][k][k];
+                            for (int l=0;l<Phi_Mix_A_Num[CenIndex][k];l++){
+                                float APx = Phi_Mix_A_Px[CenIndex][k][l];
+                                float APy = Phi_Mix_A_Py[CenIndex][k][l];
+                                float APz = Phi_Mix_A_Pz[CenIndex][k][l];
                                 float DotAB = APx*BPx + APy*BPy + APz*BPz;
                                 float A_rho = pow((APx*APx + APy*APy + APz*APz) , 0.5);
                                 float B_rho = pow((BPx*BPx + BPy*BPy + BPz*BPz) , 0.5);
