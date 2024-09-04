@@ -262,7 +262,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
     Float_t kmax = 10;
 
 
-    TH1::SetDefaultSumw2("kTRUE");
+    // TH1::SetDefaultSumw2("kTRUE");
     TH1D *Ak = new TH1D("Ak", "Ak number", kBinNum, kmin, kmax);
     TH1D *Bk = new TH1D("Bk", "Bk number", kBinNum, kmin, kmax);
     TH1D *Ck = (TH1D *) Ak->Clone();
