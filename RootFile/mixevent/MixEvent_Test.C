@@ -120,46 +120,46 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
 {
 
 
-    #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
+    // #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
 
-        std::vector<int>     *PDG                = nullptr;
-        std::vector<Float_t> *mix_px             = nullptr;
-        std::vector<Float_t> *mix_py             = nullptr;
-        std::vector<Float_t> *mix_pz             = nullptr;
-        std::vector<Float_t> *QA_eta             = nullptr;
-        std::vector<Float_t> *dEdx               = nullptr;
-        std::vector<Float_t> *m2                 = nullptr;
-        std::vector<Float_t> *dcatopv            = nullptr;
-        std::vector<Float_t> *nSigmaProton       = nullptr;
-        std::vector<Float_t> *nSigmaPion         = nullptr;
-        std::vector<Float_t> *nSigmaKaon         = nullptr;
-        std::vector<Float_t> *InvariantMass      = nullptr;
-        std::vector<Float_t> *Decay_Length       = nullptr;
-        std::vector<Float_t> *Chi2               = nullptr;
-        std::vector<int>     *ParentList         = nullptr;
-        std::vector<int>     *ParentSta          = nullptr;
-        std::vector<int>     *ParentEnd          = nullptr;
+    //     std::vector<int>     *PDG                = nullptr;
+    //     std::vector<Float_t> *mix_px             = nullptr;
+    //     std::vector<Float_t> *mix_py             = nullptr;
+    //     std::vector<Float_t> *mix_pz             = nullptr;
+    //     std::vector<Float_t> *QA_eta             = nullptr;
+    //     std::vector<Float_t> *dEdx               = nullptr;
+    //     std::vector<Float_t> *m2                 = nullptr;
+    //     std::vector<Float_t> *dcatopv            = nullptr;
+    //     std::vector<Float_t> *nSigmaProton       = nullptr;
+    //     std::vector<Float_t> *nSigmaPion         = nullptr;
+    //     std::vector<Float_t> *nSigmaKaon         = nullptr;
+    //     std::vector<Float_t> *InvariantMass      = nullptr;
+    //     std::vector<Float_t> *Decay_Length       = nullptr;
+    //     std::vector<Float_t> *Chi2               = nullptr;
+    //     std::vector<int>     *ParentList         = nullptr;
+    //     std::vector<int>     *ParentSta          = nullptr;
+    //     std::vector<int>     *ParentEnd          = nullptr;
 
-        TBranch *bPDG                            = nullptr;
-        TBranch *bmix_px                         = nullptr;
-        TBranch *bmix_py                         = nullptr;
-        TBranch *bmix_pz                         = nullptr;
-        TBranch *bQA_eta                         = nullptr;
-        TBranch *bdEdx                           = nullptr;
-        TBranch *bm2                             = nullptr;
-        TBranch *bdcatopv                        = nullptr;
-        TBranch *bnSigmaProton                   = nullptr;
-        TBranch *bnSigmaPion                     = nullptr;
-        TBranch *bnSigmaKaon                     = nullptr;
-        TBranch *bInvariantMass                  = nullptr;
-        TBranch *bDecay_Length                   = nullptr;
-        TBranch *bChi2                           = nullptr;
-        TBranch *bParentList                     = nullptr;
-        TBranch *bParentSta                      = nullptr;
-        TBranch *bParentEnd                      = nullptr;
+    //     TBranch *bPDG                            = nullptr;
+    //     TBranch *bmix_px                         = nullptr;
+    //     TBranch *bmix_py                         = nullptr;
+    //     TBranch *bmix_pz                         = nullptr;
+    //     TBranch *bQA_eta                         = nullptr;
+    //     TBranch *bdEdx                           = nullptr;
+    //     TBranch *bm2                             = nullptr;
+    //     TBranch *bdcatopv                        = nullptr;
+    //     TBranch *bnSigmaProton                   = nullptr;
+    //     TBranch *bnSigmaPion                     = nullptr;
+    //     TBranch *bnSigmaKaon                     = nullptr;
+    //     TBranch *bInvariantMass                  = nullptr;
+    //     TBranch *bDecay_Length                   = nullptr;
+    //     TBranch *bChi2                           = nullptr;
+    //     TBranch *bParentList                     = nullptr;
+    //     TBranch *bParentSta                      = nullptr;
+    //     TBranch *bParentEnd                      = nullptr;
     
-    #else
-        #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
+    // #else
+    //     #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
 
             std::vector<int>     *PDG                = NULL;
             std::vector<Float_t> *mix_px             = NULL;
@@ -197,46 +197,46 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
             TBranch *bParentSta                      = NULL;
             TBranch *bParentEnd                      = NULL;
 
-        #else
+    //     #else
     
-            std::vector<int>     *PDG                = 0;
-            std::vector<Float_t> *mix_px             = 0;
-            std::vector<Float_t> *mix_py             = 0;
-            std::vector<Float_t> *mix_pz             = 0;
-            std::vector<Float_t> *QA_eta             = 0;
-            std::vector<Float_t> *dEdx               = 0;
-            std::vector<Float_t> *m2                 = 0;
-            std::vector<Float_t> *dcatopv            = 0;
-            std::vector<Float_t> *nSigmaProton       = 0;
-            std::vector<Float_t> *nSigmaPion         = 0;
-            std::vector<Float_t> *nSigmaKaon         = 0;
-            std::vector<Float_t> *InvariantMass      = 0;
-            std::vector<Float_t> *Decay_Length       = 0;
-            std::vector<Float_t> *Chi2               = 0;
-            std::vector<int>     *ParentList         = 0;
-            std::vector<int>     *ParentSta          = 0;
-            std::vector<int>     *ParentEnd          = 0;
+    //         std::vector<int>     *PDG                = 0;
+    //         std::vector<Float_t> *mix_px             = 0;
+    //         std::vector<Float_t> *mix_py             = 0;
+    //         std::vector<Float_t> *mix_pz             = 0;
+    //         std::vector<Float_t> *QA_eta             = 0;
+    //         std::vector<Float_t> *dEdx               = 0;
+    //         std::vector<Float_t> *m2                 = 0;
+    //         std::vector<Float_t> *dcatopv            = 0;
+    //         std::vector<Float_t> *nSigmaProton       = 0;
+    //         std::vector<Float_t> *nSigmaPion         = 0;
+    //         std::vector<Float_t> *nSigmaKaon         = 0;
+    //         std::vector<Float_t> *InvariantMass      = 0;
+    //         std::vector<Float_t> *Decay_Length       = 0;
+    //         std::vector<Float_t> *Chi2               = 0;
+    //         std::vector<int>     *ParentList         = 0;
+    //         std::vector<int>     *ParentSta          = 0;
+    //         std::vector<int>     *ParentEnd          = 0;
     
-            TBranch *bPDG                            = 0;
-            TBranch *bmix_px                         = 0;
-            TBranch *bmix_py                         = 0;
-            TBranch *bmix_pz                         = 0;
-            TBranch *bQA_eta                         = 0;
-            TBranch *bdEdx                           = 0;
-            TBranch *bm2                             = 0;
-            TBranch *bdcatopv                        = 0;
-            TBranch *bnSigmaProton                   = 0;
-            TBranch *bnSigmaPion                     = 0;
-            TBranch *bnSigmaKaon                     = 0;
-            TBranch *bInvariantMass                  = 0;
-            TBranch *bDecay_Length                   = 0;
-            TBranch *bChi2                           = 0;
-            TBranch *bParentList                     = 0;
-            TBranch *bParentSta                      = 0;
-            TBranch *bParentEnd                      = 0;
+    //         TBranch *bPDG                            = 0;
+    //         TBranch *bmix_px                         = 0;
+    //         TBranch *bmix_py                         = 0;
+    //         TBranch *bmix_pz                         = 0;
+    //         TBranch *bQA_eta                         = 0;
+    //         TBranch *bdEdx                           = 0;
+    //         TBranch *bm2                             = 0;
+    //         TBranch *bdcatopv                        = 0;
+    //         TBranch *bnSigmaProton                   = 0;
+    //         TBranch *bnSigmaPion                     = 0;
+    //         TBranch *bnSigmaKaon                     = 0;
+    //         TBranch *bInvariantMass                  = 0;
+    //         TBranch *bDecay_Length                   = 0;
+    //         TBranch *bChi2                           = 0;
+    //         TBranch *bParentList                     = 0;
+    //         TBranch *bParentSta                      = 0;
+    //         TBranch *bParentEnd                      = 0;
 
-        #endif
-    #endif
+    //     #endif
+    // #endif
 
     // Int_t Aid = -3122, Bid = 3334;
     const Int_t MultBin39[]   = { 10000 , 47 , 38 , 26 , 0};
