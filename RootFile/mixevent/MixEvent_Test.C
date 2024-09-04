@@ -711,7 +711,6 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
                     for (int k=0;k<PtBinNum;k++){
                         if (Mix_event_Num[i][j][k][l] != 0) {
                             cout<<"["<<i<<","<<j<<","<<k<<","<<l<<"] remain "<<Mix_event_Num[i][j][k][l]<<" events, "<<endl; 
-                            cout<<"     contains "<<Mix_A_Num[i][j][k][l]<<" particles A, and "<<Mix_B_Num[i][j][k][l]<<" particles B."<<endl;
                         }
                         // if ((H_Kstar[i][j][k][l]->Integral())>0) H_Kstar[i][j][k][l]->Write();
                         // if ((H_Mix_Kstar[i][j][k][l]->Integral())>0) H_Mix_Kstar[i][j][k][l]->Write();
