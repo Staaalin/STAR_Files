@@ -169,11 +169,11 @@ bool IfCommonElement(std::vector<int> A , std::vector<int> B)
 
 void DltElement(std::vector<int> &V , int ID)
 {
-    std::vector<int> V_T;V_T.resize(0);
+    std::vector<int> V_T;V_T.clear();
     for (int i=0;i<V.size();i++){
         V_T.push_back(V[i]);
     }
-    V.resize(0);
+    V.clear();
     for (int i=0;i<V_T.size();i++){
         if (i == ID) continue;
         V.push_back(V_T[i]);
@@ -183,7 +183,7 @@ void DltElement(std::vector<int> &V , int ID)
 
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
 {
-    std::vector<int> Result;Result.resize(0);
+    std::vector<int> Result;Result.clear();
     // int CentralityListSize = sizeof(CentralityList)/sizeof(CentralityList[0]);
     if (DataName == "dAu_200_21") {
         // data from https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
@@ -528,14 +528,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // cout<<mult<<endl;
             // if(b>7){continue;}
             // cout<<"There OK"<<endl;
-            A_Px.resize(0);   B_Px.resize(0);
-            A_Py.resize(0);   B_Py.resize(0);
-            A_Pz.resize(0);   B_Pz.resize(0);
-            A_EvtID.resize(0);B_EvtID.resize(0);
-            A_TreID.resize(0);B_TreID.resize(0);
-            A_ParID.resize(0);B_ParID.resize(0);
-            A_Mass.resize(0); B_Mass.resize(0);
-            A_Kind.resize(0); B_Kind.resize(0);
+            A_Px.clear();   B_Px.clear();
+            A_Py.clear();   B_Py.clear();
+            A_Pz.clear();   B_Pz.clear();
+            A_EvtID.clear();B_EvtID.clear();
+            A_TreID.clear();B_TreID.clear();
+            A_ParID.clear();B_ParID.clear();
+            A_Mass.clear(); B_Mass.clear();
+            A_Kind.clear(); B_Kind.clear();
 
             //                               A              B
             TString KindSample[2][2] /*= {{"Mid","Sid"},{"Mid","Sid"}}*/;
@@ -564,7 +564,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     A_Pz.push_back(mix_pz->at(j));
                     A_EvtID.push_back(i);
                     A_TreID.push_back(j);
-                    std::vector<Int_t> Temp;Temp.resize(0);Temp.push_back(j);
+                    std::vector<Int_t> Temp;Temp.clear();Temp.push_back(j);
                     for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
                     }
@@ -585,7 +585,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     B_Pz.push_back(mix_pz->at(j));
                     B_EvtID.push_back(i);
                     B_TreID.push_back(j);
-                    std::vector<Int_t> Temp;Temp.resize(0);Temp.push_back(j);
+                    std::vector<Int_t> Temp;Temp.clear();Temp.push_back(j);
                     for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
                     }
@@ -844,23 +844,23 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 int BrunID    ;
                 int BTriggerID;
                 int BNch      ;
-                std::vector<int> BPDG               ;BPDG            .resize(0);
-                std::vector<float> Bpx              ;Bpx             .resize(0);
-                std::vector<float> Bpy              ;Bpy             .resize(0);
-                std::vector<float> Bpz              ;Bpz             .resize(0);
-                std::vector<float> BQA_eta          ;BQA_eta         .resize(0);
-                std::vector<float> BQA_dEdx         ;BQA_dEdx        .resize(0);
-                std::vector<float> BQA_m2           ;BQA_m2          .resize(0);
-                std::vector<float> BQA_DCA_V0_PV    ;BQA_DCA_V0_PV   .resize(0);
-                std::vector<float> BQA_nSigmaProton ;BQA_nSigmaProton.resize(0);
-                std::vector<float> BQA_nSigmaPion   ;BQA_nSigmaPion  .resize(0);
-                std::vector<float> BQA_nSigmaKaon   ;BQA_nSigmaKaon  .resize(0);
-                std::vector<float> BInvariantMass   ;BInvariantMass  .resize(0);
-                std::vector<float> BQA_Decay_Length ;BQA_Decay_Length.resize(0);
-                std::vector<float> BQA_Chi2         ;BQA_Chi2        .resize(0);
-                std::vector<int> BParentList        ;BParentList     .resize(0);
-                std::vector<int> BParentSta         ;BParentSta      .resize(0);
-                std::vector<int> BParentEnd         ;BParentEnd      .resize(0);
+                std::vector<int> BPDG               ;BPDG            .clear();
+                std::vector<float> Bpx              ;Bpx             .clear();
+                std::vector<float> Bpy              ;Bpy             .clear();
+                std::vector<float> Bpz              ;Bpz             .clear();
+                std::vector<float> BQA_eta          ;BQA_eta         .clear();
+                std::vector<float> BQA_dEdx         ;BQA_dEdx        .clear();
+                std::vector<float> BQA_m2           ;BQA_m2          .clear();
+                std::vector<float> BQA_DCA_V0_PV    ;BQA_DCA_V0_PV   .clear();
+                std::vector<float> BQA_nSigmaProton ;BQA_nSigmaProton.clear();
+                std::vector<float> BQA_nSigmaPion   ;BQA_nSigmaPion  .clear();
+                std::vector<float> BQA_nSigmaKaon   ;BQA_nSigmaKaon  .clear();
+                std::vector<float> BInvariantMass   ;BInvariantMass  .clear();
+                std::vector<float> BQA_Decay_Length ;BQA_Decay_Length.clear();
+                std::vector<float> BQA_Chi2         ;BQA_Chi2        .clear();
+                std::vector<int> BParentList        ;BParentList     .clear();
+                std::vector<int> BParentSta         ;BParentSta      .clear();
+                std::vector<int> BParentEnd         ;BParentEnd      .clear();
                 BhadronTree = new TTree("hadronTree", "Tree_STAR");
                 BhadronTree->Branch("PDGMult"            ,&BPDGMult             ,"PDGMult/I"                           );
                 BhadronTree->Branch("refMult"            ,&BCrefMult            ,"refMult/I"                           );
@@ -958,23 +958,23 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         BParentList     .push_back(ParentList   ->at(j));
                     }
                     BhadronTree->Fill();
-                    BPDG            .resize(0);
-                    Bpx             .resize(0);
-                    Bpy             .resize(0);
-                    Bpz             .resize(0);
-                    BQA_eta         .resize(0);
-                    BQA_dEdx        .resize(0);
-                    BQA_m2          .resize(0);
-                    BQA_DCA_V0_PV   .resize(0);
-                    BQA_nSigmaProton.resize(0);
-                    BQA_nSigmaPion  .resize(0);
-                    BQA_nSigmaKaon  .resize(0);
-                    BInvariantMass  .resize(0);
-                    BQA_Decay_Length.resize(0);
-                    BQA_Chi2        .resize(0);
-                    BParentList     .resize(0);
-                    BParentSta      .resize(0);
-                    BParentEnd      .resize(0);
+                    BPDG            .clear();
+                    Bpx             .clear();
+                    Bpy             .clear();
+                    Bpz             .clear();
+                    BQA_eta         .clear();
+                    BQA_dEdx        .clear();
+                    BQA_m2          .clear();
+                    BQA_DCA_V0_PV   .clear();
+                    BQA_nSigmaProton.clear();
+                    BQA_nSigmaPion  .clear();
+                    BQA_nSigmaKaon  .clear();
+                    BInvariantMass  .clear();
+                    BQA_Decay_Length.clear();
+                    BQA_Chi2        .clear();
+                    BParentList     .clear();
+                    BParentSta      .clear();
+                    BParentEnd      .clear();
                 }
 
                 BhadronTree->Write();
