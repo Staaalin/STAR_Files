@@ -402,6 +402,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         }
     }
 
+    TString TreeName = "hadronTree";
     TChain *hadronTree = new TChain(TreeName);
     for(int i=StartFileIndex;i <= EndFileIndex;i++){
         TString filename = MidName;
