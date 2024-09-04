@@ -339,22 +339,16 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
     std::vector<float> A_rap,B_rap;
     std::vector<float> A_mass,B_mass;
     std::vector<TString> A_Kind,B_Kind;
-    cout<<"Thi is 346"<<endl;
     std::vector<float> Sum_A_px  [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],   Sum_B_px[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     std::vector<float> Sum_A_py  [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],   Sum_B_py[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     std::vector<float> Sum_A_pz  [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],   Sum_B_pz[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
-    std::vector<float> Sum_A_x   [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],    Sum_B_x[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
-    std::vector<float> Sum_A_y   [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],    Sum_B_y[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
-    std::vector<float> Sum_A_z   [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],    Sum_B_z[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     std::vector<float> Sum_A_rap [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],  Sum_B_rap[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     std::vector<float> Sum_A_mass[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1], Sum_B_mass[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
-    cout<<"Thi is 355"<<endl;
 
 
 
     Int_t NumA = 0, NumB = 0, SumNumA = 0, SumNumB = 0, BP[5];
     std::vector<Int_t> SumNum[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
-    cout<<"Thi is 361"<<endl;
     for(int i=0;i<MultBinSize-1;i++){
         for(int k=0;k<A_NumBinSize-1;k++){
             for(int m=0;m<B_NumBinSize-1;m++){
@@ -472,9 +466,6 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
         }
         
         for(int j=0;j<NumA;j++){
-            Sum_A_x   [BP[0]][BP[1]][BP[2]].push_back(A_x[j]);
-            Sum_A_y   [BP[0]][BP[1]][BP[2]].push_back(A_y[j]);
-            Sum_A_z   [BP[0]][BP[1]][BP[2]].push_back(A_z[j]);
             Sum_A_px  [BP[0]][BP[1]][BP[2]].push_back(A_px[j]);
             Sum_A_py  [BP[0]][BP[1]][BP[2]].push_back(A_py[j]);
             Sum_A_pz  [BP[0]][BP[1]][BP[2]].push_back(A_pz[j]);
@@ -482,9 +473,6 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
             Sum_A_mass[BP[0]][BP[1]][BP[2]].push_back(A_mass[j]);
         }
         for(int j=0;j<NumB;j++){
-            Sum_B_x   [BP[0]][BP[1]][BP[2]].push_back(B_x[j]);
-            Sum_B_y   [BP[0]][BP[1]][BP[2]].push_back(B_y[j]);
-            Sum_B_z   [BP[0]][BP[1]][BP[2]].push_back(B_z[j]);
             Sum_B_px  [BP[0]][BP[1]][BP[2]].push_back(B_px[j]);
             Sum_B_py  [BP[0]][BP[1]][BP[2]].push_back(B_py[j]);
             Sum_B_pz  [BP[0]][BP[1]][BP[2]].push_back(B_pz[j]);
