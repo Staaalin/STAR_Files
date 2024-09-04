@@ -331,9 +331,6 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
 
     double kstar, rap;
     TVector3 BetaTemp;
-
-    int KaonpPID = 321,KaonmPID = -321,PionpPID = 211,PionmPID = -211,LambdaPID = 3122,LambdabPID = -3122,XiPID = 3312,XibPID = -3312,OmegaPID = 3334,OmegabPID = -3334;
-
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
     print(NchList);

@@ -27,6 +27,8 @@
         "test.C": "cpp",
         "HADDr_Fit.C": "cpp",
         "Subtract.C": "cpp",
-        "MixEvent.C": "cpp"
+        "MixEvent.C": "cpp",
+        "MixEvent_Vector.C": "cpp",
+        "MixEvent_Test.C": "cpp"
     }
 }
