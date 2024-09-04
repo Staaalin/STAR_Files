@@ -357,6 +357,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
         }
     }
 
+    cout<<"This is 360"<<endl;
     //read data; if the nst event contains particle A, then record n in A_Loc, px in A_px ……; so do B particle
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
