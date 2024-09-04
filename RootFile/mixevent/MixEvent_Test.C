@@ -396,7 +396,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
                     A_mass.push_back(InvariantMass->at(j));
                     NumA++;
                 }
-                else if(PDG->at(j)==B_PDG && rap > B_RapMin && rap < B_RapMax){
+                else if(PDG->at(j)==B_PDG && rap > -5 && rap < 5){
                     if      (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_Kind.push_back("Mid");}
                     else if (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {continue;}
                     B_px.push_back(mix_px->at(j));
