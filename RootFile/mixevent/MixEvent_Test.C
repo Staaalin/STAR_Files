@@ -357,7 +357,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
 
 
     Int_t NumA = 0, NumB = 0, SumNumA = 0, SumNumB = 0, BP[5];
-    Int_t SumNum[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
+    std::vector<Int_t> SumNum[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     cout<<"Thi is 361"<<endl;
     for(int i=0;i<MultBinSize-1;i++){
         for(int k=0;k<A_NumBinSize-1;k++){
