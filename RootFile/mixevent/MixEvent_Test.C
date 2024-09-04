@@ -397,8 +397,6 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
                     H_Kstar[i][j][k][l] = new TH1D(HistName1s,HistName2s,500,0,10);
                     H_Mix_Kstar[i][j][k][l] = new TH1D(HistName1,HistName2,500,0,10);
                     Mix_event_Num[i][j][k][l] = 0;
-                    Mix_A_Num[i][j][k][l] = 0;
-                    Mix_B_Num[i][j][k][l] = 0;
                 }
             }
         }
@@ -656,7 +654,6 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
                     }
                     for (int j=0;j<A_Px.size();j++){
                         if (A_Kind[j] != A_Sample) continue;
-                        int TI = Mix_A_Num[CenIndex][RapIndex][PtIndex][k];
                         Mix_A_Px[CenIndex][RapIndex][PtIndex][k]   .push_back(A_Px[j]   );
                         Mix_A_Py[CenIndex][RapIndex][PtIndex][k]   .push_back(A_Py[j]   );
                         Mix_A_Pz[CenIndex][RapIndex][PtIndex][k]   .push_back(A_Pz[j]   );
@@ -807,7 +804,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
                 for (int i=0;i<CentralityBinNum;i++){
                     for (int j=0;j<yBinNum;j++){
                         for (int k=0;k<PtBinNum;k++){
-                            for (int m=0;m<Mix_B_Num[i][j][k][WriteTreeIndex];m++){
+                            for (int m=0;m<Mix_B_Px[i][j][k][WriteTreeIndex].size();m++){
                                 int nIndex = -1;
                                 for (int n=0;n<Mix_EvtID.size();n++){
                                     if (Mix_B_EvtID[i][j][k][WriteTreeIndex][m] == Mix_EvtID[n]){
@@ -820,7 +817,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
                                     nIndex = Mix_EvtID.size() - 1;
                                 }
                             }
-                            for (int m=0;m<Mix_A_Num[i][j][k][WriteTreeIndex];m++){
+                            for (int m=0;m<Mix_A_Px[i][j][k][WriteTreeIndex].size();m++){
                                 int nIndex = -1;
                                 for (int n=0;n<Mix_EvtID.size();n++){
                                     if (Mix_A_EvtID[i][j][k][WriteTreeIndex][m] == Mix_EvtID[n]){
