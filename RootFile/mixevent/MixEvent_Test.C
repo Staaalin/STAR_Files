@@ -36,56 +36,215 @@ const float kaonMass = 0.493677;
 const int maxTrack = 30000;
 using namespace std;
 
-void MixEvent_Test(Int_t Aid,Int_t Bid,float Energy,float B_RapMin,float B_RapMax)
+Double_t massList(int PID)
 {
-    map<int, float> massList;
-    massList.insert(pair<int, float>(321, 0.493677));//Kaon
-    massList.insert(pair<int, float>(-321, 0.493677));
+    Double_t Result;
+    if (DataName == "dAu_200_21"){
+        switch (PID)
+        {
+            case 321 :
+                Result = 0.493677;
+                break;
+            case -321 :
+                Result = 0.493677;
+                break;
+            case 310 :
+                Result = 0.49794;
+                break;
+            case 211 :
+                Result = 0.13957;
+                break;
+            case -211 :
+                Result = 0.13957;
+                break;
+            case 3334 :// OmegaFitMass
+                Result = 1.6725;
+                break;
+            case -3334 :// OmegaBarFitMass
+                Result = 1.6727;
+                break;
+            case 3312 :// XiFitMass
+                Result = 1.3223;
+                break;
+            case -3312 :// XiBarFitMass
+                Result = 1.3223;
+                break;
+            case 3122 :// LambdaFitMass
+                Result = 1.1161;
+                break;
+            case -3122 :// LambdaBarFitMass
+                Result = 1.1161;
+                break;
+            default :
+                Result = 0;
+        }
+    }
+    return Result;
+}
 
-    massList.insert(pair<int, float>(3334, 1.67245));//Omega
-    massList.insert(pair<int, float>(-3334, 1.67245));
+Double_t massListSigma(int PID)
+{
+    Double_t Result;
+    if (DataName == "dAu_200_21"){
+        switch (PID)
+        {
+            case 3334 :// OmegaFitMass
+                Result = 0.0029;
+                break;
+            case -3334 :// OmegaBarFitMass
+                Result = 0.0024;
+                break;
+            case 3312 :// XiFitMass
+                Result = 0.0024;
+                break;
+            case -3312 :// XiBarFitMass
+                Result = 0.0024;
+                break;
+            case 3122 :// LambdaFitMass
+                Result = 0.0020;
+                break;
+            case -3122 :// LambdaBarFitMass
+                Result = 0.0020;
+                break;
+            default :
+                Result = 100;
+        }
+    }
+    return Result;
+}
 
-    massList.insert(pair<int, float>(3312, 1.32171));//Xi^-
-    massList.insert(pair<int, float>(-3312, 1.32171));
+// void MixEvent_Test(Int_t Aid,Int_t Bid,float Energy,float B_RapMin,float B_RapMax)
 
-    massList.insert(pair<int, float>(3322, 1.3148));//Xi^0
-    massList.insert(pair<int, float>(-3322, 1.3148));
+void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,int A_PDG,int B_PDG,int Mode = 0)
+{
 
-    massList.insert(pair<int, float>(3122, 1.11568));//Lambda
-    massList.insert(pair<int, float>(-3122, 1.11568));
 
-    massList.insert(pair<int, float>(3222, 1.18937));//Sigma^+
-    massList.insert(pair<int, float>(-3222, 1.18937));
+    #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
 
-    massList.insert(pair<int, float>(3112, 1.19745));//Sigma^-
-    massList.insert(pair<int, float>(-3112, 1.19745));
+        std::vector<int>     *PDG                = nullptr;
+        std::vector<Float_t> *mix_px             = nullptr;
+        std::vector<Float_t> *mix_py             = nullptr;
+        std::vector<Float_t> *mix_pz             = nullptr;
+        std::vector<Float_t> *QA_eta             = nullptr;
+        std::vector<Float_t> *dEdx               = nullptr;
+        std::vector<Float_t> *m2                 = nullptr;
+        std::vector<Float_t> *dcatopv            = nullptr;
+        std::vector<Float_t> *nSigmaProton       = nullptr;
+        std::vector<Float_t> *nSigmaPion         = nullptr;
+        std::vector<Float_t> *nSigmaKaon         = nullptr;
+        std::vector<Float_t> *InvariantMass      = nullptr;
+        std::vector<Float_t> *Decay_Length       = nullptr;
+        std::vector<Float_t> *Chi2               = nullptr;
+        std::vector<int>     *ParentList         = nullptr;
+        std::vector<int>     *ParentSta          = nullptr;
+        std::vector<int>     *ParentEnd          = nullptr;
+
+        TBranch *bPDG                            = nullptr;
+        TBranch *bmix_px                         = nullptr;
+        TBranch *bmix_py                         = nullptr;
+        TBranch *bmix_pz                         = nullptr;
+        TBranch *bQA_eta                         = nullptr;
+        TBranch *bdEdx                           = nullptr;
+        TBranch *bm2                             = nullptr;
+        TBranch *bdcatopv                        = nullptr;
+        TBranch *bnSigmaProton                   = nullptr;
+        TBranch *bnSigmaPion                     = nullptr;
+        TBranch *bnSigmaKaon                     = nullptr;
+        TBranch *bInvariantMass                  = nullptr;
+        TBranch *bDecay_Length                   = nullptr;
+        TBranch *bChi2                           = nullptr;
+        TBranch *bParentList                     = nullptr;
+        TBranch *bParentSta                      = nullptr;
+        TBranch *bParentEnd                      = nullptr;
+    
+    #else
+        #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
+
+            std::vector<int>     *PDG                = NULL;
+            std::vector<Float_t> *mix_px             = NULL;
+            std::vector<Float_t> *mix_py             = NULL;
+            std::vector<Float_t> *mix_pz             = NULL;
+            std::vector<Float_t> *QA_eta             = NULL;
+            std::vector<Float_t> *dEdx               = NULL;
+            std::vector<Float_t> *m2                 = NULL;
+            std::vector<Float_t> *dcatopv            = NULL;
+            std::vector<Float_t> *nSigmaProton       = NULL;
+            std::vector<Float_t> *nSigmaPion         = NULL;
+            std::vector<Float_t> *nSigmaKaon         = NULL;
+            std::vector<Float_t> *InvariantMass      = NULL;
+            std::vector<Float_t> *Decay_Length       = NULL;
+            std::vector<Float_t> *Chi2               = NULL;
+            std::vector<int>     *ParentList         = NULL;
+            std::vector<int>     *ParentSta          = NULL;
+            std::vector<int>     *ParentEnd          = NULL;
+
+            TBranch *bPDG                            = NULL;
+            TBranch *bmix_px                         = NULL;
+            TBranch *bmix_py                         = NULL;
+            TBranch *bmix_pz                         = NULL;
+            TBranch *bQA_eta                         = NULL;
+            TBranch *bdEdx                           = NULL;
+            TBranch *bm2                             = NULL;
+            TBranch *bdcatopv                        = NULL;
+            TBranch *bnSigmaProton                   = NULL;
+            TBranch *bnSigmaPion                     = NULL;
+            TBranch *bnSigmaKaon                     = NULL;
+            TBranch *bInvariantMass                  = NULL;
+            TBranch *bDecay_Length                   = NULL;
+            TBranch *bChi2                           = NULL;
+            TBranch *bParentList                     = NULL;
+            TBranch *bParentSta                      = NULL;
+            TBranch *bParentEnd                      = NULL;
+
+        #else
+    
+            std::vector<int>     *PDG                = 0;
+            std::vector<Float_t> *mix_px             = 0;
+            std::vector<Float_t> *mix_py             = 0;
+            std::vector<Float_t> *mix_pz             = 0;
+            std::vector<Float_t> *QA_eta             = 0;
+            std::vector<Float_t> *dEdx               = 0;
+            std::vector<Float_t> *m2                 = 0;
+            std::vector<Float_t> *dcatopv            = 0;
+            std::vector<Float_t> *nSigmaProton       = 0;
+            std::vector<Float_t> *nSigmaPion         = 0;
+            std::vector<Float_t> *nSigmaKaon         = 0;
+            std::vector<Float_t> *InvariantMass      = 0;
+            std::vector<Float_t> *Decay_Length       = 0;
+            std::vector<Float_t> *Chi2               = 0;
+            std::vector<int>     *ParentList         = 0;
+            std::vector<int>     *ParentSta          = 0;
+            std::vector<int>     *ParentEnd          = 0;
+    
+            TBranch *bPDG                            = 0;
+            TBranch *bmix_px                         = 0;
+            TBranch *bmix_py                         = 0;
+            TBranch *bmix_pz                         = 0;
+            TBranch *bQA_eta                         = 0;
+            TBranch *bdEdx                           = 0;
+            TBranch *bm2                             = 0;
+            TBranch *bdcatopv                        = 0;
+            TBranch *bnSigmaProton                   = 0;
+            TBranch *bnSigmaPion                     = 0;
+            TBranch *bnSigmaKaon                     = 0;
+            TBranch *bInvariantMass                  = 0;
+            TBranch *bDecay_Length                   = 0;
+            TBranch *bChi2                           = 0;
+            TBranch *bParentList                     = 0;
+            TBranch *bParentSta                      = 0;
+            TBranch *bParentEnd                      = 0;
+
+        #endif
+    #endif
 
     // Int_t Aid = -3122, Bid = 3334;
-    const Int_t MultBin39[]   = {0, 8, 12, 16, 20, 25, 31, 42, 300};// 39
-    const Int_t MultBin62[]   = {0, 9, 13, 17, 22, 27, 33, 43, 300};// 62
-    const Int_t MultBin14p6[] = {398, 448, 498, 548, 598, 1000};// AuAu14.6
+    const Int_t MultBin39[]   = { 10000 , 47 , 38 , 26 , 0};
     const Int_t MultBinSize39 = sizeof(MultBin39)/sizeof(MultBin39[0]);
-    const Int_t MultBinSize62 = sizeof(MultBin62)/sizeof(MultBin62[0]);
-    const Int_t MultBinSize14p6 = sizeof(MultBin14p6)/sizeof(MultBin14p6[0]);
     Int_t MultBinSize,FileMax;
     std::vector<int> MultBin;
-    if (fabs(Energy - 39.0)<=0.01) {
-        MultBinSize = MultBinSize39;
-        for(int i=0;i<MultBinSize39;i++){
-            MultBin.push_back(MultBin39[i]);
-        }
-    }
-    if (fabs(Energy - 62.0)<=0.01) {
-        MultBinSize = MultBinSize62;
-        for(int i=0;i<MultBinSize62;i++){
-            MultBin.push_back(MultBin62[i]);
-        }
-    }
-    if (fabs(Energy - 14.6)<=0.01) {
-        MultBinSize = MultBinSize14p6;
-        for(int i=0;i<MultBinSize14p6;i++){
-            MultBin.push_back(MultBin14p6[i]);
-        }
+    MultBinSize = MultBinSize39;
+    for(int i=0;i<MultBinSize39;i++){
+        MultBin.push_back(MultBin39[i]);
     }
     const Int_t A_NumBin[] = {0,1,2,3,4,5,6,200};
     const Int_t B_NumBin[] = {0,1,2,3,4,200};
@@ -97,29 +256,11 @@ void MixEvent_Test(Int_t Aid,Int_t Bid,float Energy,float B_RapMin,float B_RapMa
 
     cout<<"Energy = "<<Energy<<endl;
     TString midname = "";
-    if (fabs(Energy - 39.0)<=0.01) {
-        midname = "/home/siyuanping/ampt_public/data39_String/Split/SplitFile_";
-        // midname = "/home/siyuanping/ampt_public/data39_String/afterART7.7a_";
-        FileMax = 9027;
-    }
-    if (fabs(Energy - 62.0)<=0.01) {
-        midname = "/home/siyuanping/ampt_public/data62_String/Split/SplitFile_";
-        // midname = "/home/siyuanping/ampt_public/data62_String/afterART7.7a_";
-        FileMax = 6280;
-    }
-    if (fabs(Energy - 14.6)<=0.01) {
-        midname = "/home/siyuanping/ampt_public/data14p6_AuAu_String/afterART7.7a_";
-        FileMax = 202;
-    }
+    midname = MidName;
     Int_t kBinNum = 1000;
     Float_t kmin = 0;
     Float_t kmax = 10;
 
-    const Int_t maxMultiplicity = 20000;
-    Int_t mult,npart,OriginMult,MultL;
-    Int_t id[maxMultiplicity];
-    Float_t px[maxMultiplicity],py[maxMultiplicity],pz[maxMultiplicity];
-    Float_t x[maxMultiplicity],y[maxMultiplicity],z[maxMultiplicity],t[maxMultiplicity],mass[maxMultiplicity],energy[maxMultiplicity],b;
 
     TH1::SetDefaultSumw2("kTRUE");
     TH1D *Ak = new TH1D("Ak", "Ak number", kBinNum, kmin, kmax);
@@ -141,7 +282,7 @@ void MixEvent_Test(Int_t Aid,Int_t Bid,float Energy,float B_RapMin,float B_RapMa
     cout<<"FileMax = "<<FileMax<<endl;
     //load data  
     TChain *hadronTree = new TChain("hadronTree");
-    for(int i=1;i <= FileMax;i++){//62 6280; 39 9027
+    for(int i=StartFileIndex;i <= EndFileIndex;i++){//62 6280; 39 9027
         //TString filename = "data39_Default/afterART7.7a_";//path of data 
         //TString filename = "data39_String/afterART7.7a_";//path of data 
         //TString filename = "data39_Hardon/afterART7.7a_";//path of data 
@@ -153,19 +294,39 @@ void MixEvent_Test(Int_t Aid,Int_t Bid,float Energy,float B_RapMin,float B_RapMa
         cout<<filename<<endl;
     }
     
-    hadronTree->SetBranchAddress("nMultiplicityTree",&mult);
-    hadronTree->SetBranchAddress("b",&b);
-    hadronTree->SetBranchAddress("id",&id);
-    hadronTree->SetBranchAddress("px",&px);
-    hadronTree->SetBranchAddress("py",&py);
-    hadronTree->SetBranchAddress("pz",&pz);
-    hadronTree->SetBranchAddress("mass",&mass);
-    hadronTree->SetBranchAddress("energy",&energy); 
-    hadronTree->SetBranchAddress("t",t); 
-    if ((fabs(Energy - 39.0)<=0.01) || (fabs(Energy - 62.0)<=0.01)) {
-        hadronTree->SetBranchAddress("OriginMult",&OriginMult); 
-        hadronTree->SetBranchAddress("MultL",&MultL); 
-    }
+    Int_t PDGMult  ;
+    Int_t refMult  ;
+    Int_t grefMult ;
+    Int_t EventID  ;
+    Int_t RunID    ;
+    Int_t TriggerID;
+    Int_t Nch      ;
+
+    hadronTree->SetBranchAddress("PDGMult"  ,&PDGMult  );
+    hadronTree->SetBranchAddress("refMult"  ,&refMult  );
+    hadronTree->SetBranchAddress("grefMult" ,&grefMult );
+    hadronTree->SetBranchAddress("EventID"  ,&EventID  );
+    hadronTree->SetBranchAddress("RunID"    ,&RunID    );
+    hadronTree->SetBranchAddress("TriggerID",&TriggerID);
+    hadronTree->SetBranchAddress("Nch"      ,&Nch      );
+    
+    hadronTree->SetBranchAddress("PDG"          ,&PDG          ,&bPDG          );
+    hadronTree->SetBranchAddress("mix_px"       ,&mix_px       ,&bmix_px       );
+    hadronTree->SetBranchAddress("mix_py"       ,&mix_py       ,&bmix_py       );
+    hadronTree->SetBranchAddress("mix_pz"       ,&mix_pz       ,&bmix_pz       );
+    hadronTree->SetBranchAddress("QA_eta"       ,&QA_eta       ,&bQA_eta       );
+    hadronTree->SetBranchAddress("dEdx"         ,&dEdx         ,&bdEdx         );
+    hadronTree->SetBranchAddress("m2"           ,&m2           ,&bm2           );
+    hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
+    hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
+    hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
+    hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
+    hadronTree->SetBranchAddress("InvariantMass",&InvariantMass,&bInvariantMass);
+    hadronTree->SetBranchAddress("Decay_Length" ,&Decay_Length ,&bDecay_Length );
+    hadronTree->SetBranchAddress("Chi2"         ,&Chi2         ,&bChi2         );
+    hadronTree->SetBranchAddress("ParentList"   ,&ParentList   ,&bParentList   );
+    hadronTree->SetBranchAddress("ParentSta"    ,&ParentSta    ,&bParentSta    );
+    hadronTree->SetBranchAddress("ParentEnd"    ,&ParentEnd    ,&bParentEnd    );
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
@@ -181,6 +342,7 @@ void MixEvent_Test(Int_t Aid,Int_t Bid,float Energy,float B_RapMin,float B_RapMa
     std::vector<float> A_z,B_z;
     std::vector<float> A_rap,B_rap;
     std::vector<float> A_mass,B_mass;
+    std::vector<TString> A_Kind,B_Kind;
     std::vector<float> Sum_A_px  [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],   Sum_B_px[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     std::vector<float> Sum_A_py  [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],   Sum_B_py[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     std::vector<float> Sum_A_pz  [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],   Sum_B_pz[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
@@ -205,48 +367,44 @@ void MixEvent_Test(Int_t Aid,Int_t Bid,float Energy,float B_RapMin,float B_RapMa
     //read data; if the nst event contains particle A, then record n in A_Loc, px in A_px ……; so do B particle
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
-        if ((i+1)%500 == 0) {
+        if ((i+1)%50 == 0) {
             cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
         }
         // if (b >= 1.7){
         //     continue;
         // }
-        A_x.clear();B_x.clear();
-        A_y.clear();B_y.clear();
-        A_z.clear();B_z.clear();
+        A_Kind.clear();B_Kind.clear();
         A_px.clear();B_px.clear();
         A_py.clear();B_py.clear();
         A_pz.clear();B_pz.clear();
         A_rap.clear();B_rap.clear();
         A_mass.clear();B_mass.clear();
         NumA = 0;NumB = 0;
-        for (int j=0;j < mult;j++){
+        for (int j=0;j < PDGMult;j++){
             
-            p0.SetXYZM(px[j],py[j],pz[j],mass[j]);
+            p0.SetXYZM(mix_px->at(j),mix_py->at(j),mix_pz->at(j),massList(PDG->at(j)));
             rap = p0.Rapidity();
 
-            if(id[j]==Aid || id[j]==Bid){
+            if(PDG->at(j)==A_PDG || PDG->at(j)==B_PDG){
                 //&& rap > 0
-                if(id[j]==Aid){
-                    A_x.push_back(x[j]);
-                    A_y.push_back(y[j]);
-                    A_z.push_back(z[j]);
-                    A_px.push_back(px[j]);
-                    A_py.push_back(py[j]);
-                    A_pz.push_back(pz[j]);
+                if(PDG->at(j)==A_PDG){
+                    if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_Kind.push_back("Mid");}
+                    else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {continue;}
+                    A_px.push_back(mix_px->at(j));
+                    A_py.push_back(mix_py->at(j));
+                    A_pz.push_back(mix_pz->at(j));
                     A_rap.push_back(rap);
-                    A_mass.push_back(mass[j]);
+                    A_mass.push_back(InvariantMass->at(j));
                     NumA++;
                 }
-                else if(id[j]==Bid && rap > B_RapMin && rap < B_RapMax){
-                    B_x.push_back(x[j]);
-                    B_y.push_back(y[j]);
-                    B_z.push_back(z[j]);
-                    B_px.push_back(px[j]);
-                    B_py.push_back(py[j]);
-                    B_pz.push_back(pz[j]);
+                else if(PDG->at(j)==B_PDG && rap > B_RapMin && rap < B_RapMax){
+                    if      (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_Kind.push_back("Mid");}
+                    else if (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {continue;}
+                    B_px.push_back(mix_px->at(j));
+                    B_py.push_back(mix_py->at(j));
+                    B_pz.push_back(mix_pz->at(j));
                     B_rap.push_back(rap);
-                    B_mass.push_back(mass[j]);
+                    B_mass.push_back(InvariantMass->at(j));
                     NumB++;
                 }
                 // cout<<NumA<<","<<NumB<<endl;
@@ -296,17 +454,9 @@ void MixEvent_Test(Int_t Aid,Int_t Bid,float Energy,float B_RapMin,float B_RapMa
         }
         //mix
         for (int j=1;j<MultBinSize;j++){
-            if ((fabs(Energy - 39.0)<=0.01) || (fabs(Energy - 62.0)<=0.01)) {
-                if (MultBin[j-1] <= MultL && MultL < MultBin[j]){
-                    BP[0] = j-1;
-                    break;
-                }
-            }
-            else{
-                if (MultBin[j-1] <= mult && mult < MultBin[j]){
-                    BP[0] = j-1;
-                    break;
-                }
+            if (MultBin[j-1] <= PDGMult && PDGMult < MultBin[j]){
+                BP[0] = j-1;
+                break;
             }
         }
         for (int j=1;j<A_NumBinSize;j++){
@@ -385,7 +535,11 @@ void MixEvent_Test(Int_t Aid,Int_t Bid,float Energy,float B_RapMin,float B_RapMa
         }
     }
 
-    TFile *file = new TFile("Cor.root", "RECREATE");
+    TString OutputName = OutMidName;
+    OutputName += OutputFileIndex;
+    OutputName += ".root";
+
+    TFile *file = new TFile(OutputName, "RECREATE");
 
     Int_t binNorm[2];
     binNorm[0] = Ak->FindBin(3);
