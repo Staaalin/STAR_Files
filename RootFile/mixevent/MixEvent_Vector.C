@@ -169,11 +169,11 @@ bool IfCommonElement(std::vector<int> A , std::vector<int> B)
 
 void DltElement(std::vector<int> &V , int ID)
 {
-    std::vector<int> V_T;V_T.resize(0);
+    std::vector<int> V_T;V_T.clear();
     for (int i=0;i<V.size();i++){
         V_T.push_back(V[i]);
     }
-    V.resize(0);
+    V.clear();
     for (int i=0;i<V_T.size();i++){
         if (i == ID) continue;
         V.push_back(V_T[i]);
@@ -183,7 +183,7 @@ void DltElement(std::vector<int> &V , int ID)
 
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
 {
-    std::vector<int> Result;Result.resize(0);
+    std::vector<int> Result;Result.clear();
     // int CentralityListSize = sizeof(CentralityList)/sizeof(CentralityList[0]);
     if (DataName == "dAu_200_21") {
         // data from https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
@@ -201,7 +201,7 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
     return Result;
 }
 
-void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
+void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
               int A_PDG,int B_PDG,int Mode = 0) // Mode = 0: PDGMult 为vector长度
 {
 
@@ -461,14 +461,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         // cout<<mult<<endl;
         // if(b>7){continue;}
         // cout<<"There OK"<<endl;
-        A_Px.resize(0);   B_Px.resize(0);
-        A_Py.resize(0);   B_Py.resize(0);
-        A_Pz.resize(0);   B_Pz.resize(0);
-        A_EvtID.resize(0);B_EvtID.resize(0);
-        A_TreID.resize(0);B_TreID.resize(0);
-        A_ParID.resize(0);B_ParID.resize(0);
-        A_Mass.resize(0); B_Mass.resize(0);
-        A_Kind.resize(0); B_Kind.resize(0);
+        A_Px.clear();   B_Px.clear();
+        A_Py.clear();   B_Py.clear();
+        A_Pz.clear();   B_Pz.clear();
+        A_EvtID.clear();B_EvtID.clear();
+        A_TreID.clear();B_TreID.clear();
+        A_ParID.clear();B_ParID.clear();
+        A_Mass.clear(); B_Mass.clear();
+        A_Kind.clear(); B_Kind.clear();
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
@@ -481,7 +481,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 A_Pz.push_back(mix_pz->at(j));
                 A_EvtID.push_back(i);
                 A_TreID.push_back(j);
-                std::vector<Int_t> Temp;Temp.resize(0);Temp.push_back(j);
+                std::vector<Int_t> Temp;Temp.clear();Temp.push_back(j);
                 for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                     Temp.push_back(ParentList->at(k));
                 }
@@ -497,7 +497,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 B_Pz.push_back(mix_pz->at(j));
                 B_EvtID.push_back(i);
                 B_TreID.push_back(j);
-                std::vector<Int_t> Temp;Temp.resize(0);Temp.push_back(j);
+                std::vector<Int_t> Temp;Temp.clear();Temp.push_back(j);
                 for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                     Temp.push_back(ParentList->at(k));
                 }
