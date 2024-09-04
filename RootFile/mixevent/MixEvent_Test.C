@@ -631,64 +631,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
                 // Fill Mix Event
                 // cout<<"Here is OK 1"<<endl;
-                for (int k=0;k<Pattern;k++){
-                    TString A_Sample , B_Sample;
-                    if ( (k == 0) ){
-                        if (!((A_Pattern[0] != 0) && (B_Pattern[0] != 0))) continue;
-                        if ((TreeName == "AMBS/hadronTree") || (TreeName == "ASBM/hadronTree")) continue;
-                        A_Sample = "Mid";B_Sample = "Mid";
-                    }
-                    if ( (k == 1) ){
-                        if (!((A_Pattern[0] != 0) && (B_Pattern[1] != 0))) continue;
-                        if ((TreeName == "AMBM/hadronTree") || (TreeName == "ASBM/hadronTree")) continue;
-                        A_Sample = "Mid";B_Sample = "Sid";
-                    }
-                    if ( (k == 2) ){
-                        if (!((A_Pattern[1] != 0) && (B_Pattern[0] != 0))) continue;
-                        if ((TreeName == "AMBS/hadronTree") || (TreeName == "AMBM/hadronTree")) continue;
-                        A_Sample = "Sid";B_Sample = "Mid";
-                    }
-                    for (int j=0;j<B_Px.size();j++){
-                        if (B_Kind[j] != B_Sample) continue;
-                        int TI = Mix_B_Num[CenIndex][RapIndex][PtIndex][k];
-                        Mix_B_Px[CenIndex][RapIndex][PtIndex][k][TI] = B_Px[j];
-                        Mix_B_Py[CenIndex][RapIndex][PtIndex][k][TI] = B_Py[j];
-                        Mix_B_Pz[CenIndex][RapIndex][PtIndex][k][TI] = B_Pz[j];
-                        Mix_B_EvtID[CenIndex][RapIndex][PtIndex][k][TI] = B_EvtID[j];
-                        Mix_B_TreID[CenIndex][RapIndex][PtIndex][k][TI] = B_TreID[j];
-                        Mix_B_Num[CenIndex][RapIndex][PtIndex][k]++;
-                    }
-                    for (int j=0;j<A_Px.size();j++){
-                        if (A_Kind[j] != A_Sample) continue;
-                        int TI = Mix_A_Num[CenIndex][RapIndex][PtIndex][k];
-                        Mix_A_Px[CenIndex][RapIndex][PtIndex][k][TI] = A_Px[j];
-                        Mix_A_Py[CenIndex][RapIndex][PtIndex][k][TI] = A_Py[j];
-                        Mix_A_Pz[CenIndex][RapIndex][PtIndex][k][TI] = A_Pz[j];
-                        Mix_A_EvtID[CenIndex][RapIndex][PtIndex][k][TI] = A_EvtID[j];
-                        Mix_A_TreID[CenIndex][RapIndex][PtIndex][k][TI] = A_TreID[j];
-                        Mix_A_Num[CenIndex][RapIndex][PtIndex][k]++;
-                    }
-                    Mix_event_Num[CenIndex][RapIndex][PtIndex][k]++;
-                    // cout<<"Here is OK 2"<<endl;
-
-                    if (Mix_event_Num[CenIndex][RapIndex][PtIndex][k] == 10){
-                        for (int j=0;j<Mix_B_Num[CenIndex][RapIndex][PtIndex][k];j++){
-                            TLorentzVector p1;
-                            p1.SetXYZM(Mix_B_Px[CenIndex][RapIndex][PtIndex][k][j],Mix_B_Py[CenIndex][RapIndex][PtIndex][k][j],Mix_B_Pz[CenIndex][RapIndex][PtIndex][k][j],massList(B_PDG));
-                            for (int l=0;l<Mix_A_Num[CenIndex][RapIndex][PtIndex][k];l++){
-                                TLorentzVector p2,p3,p4 = p1;
-                                p2.SetXYZM(Mix_A_Px[CenIndex][RapIndex][PtIndex][k][l],Mix_A_Py[CenIndex][RapIndex][PtIndex][k][l],Mix_A_Pz[CenIndex][RapIndex][PtIndex][k][l],massList(A_PDG));
-                                p3 = p4 + p2;
-                                p4.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
-                                kstar = 0.5 * (p4 - p2).Rho();
-                                H_Mix_Kstar[CenIndex][RapIndex][PtIndex][k]->Fill(kstar);
-                            }
-                        }
-                        Mix_event_Num[CenIndex][RapIndex][PtIndex][k] = 0;
-                        Mix_A_Num[CenIndex][RapIndex][PtIndex][k] = 0;
-                        Mix_B_Num[CenIndex][RapIndex][PtIndex][k] = 0;
-                    }
-                }
             }
             // if (FoundAB > 0) {cout<<"________________________________________"<<endl;}
         }
