@@ -448,17 +448,17 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
 
-    time_t time_start;
-    time_t time_now;
-    time(&time_start);
+    // time_t time_start;
+    // time_t time_now;
+    // time(&time_start);
     for (int EventID = 0 ; EventID < nentries ; EventID++){
         cout<<"EventID = "<<EventID<<endl;
         hadronTree->GetEntry(EventID);
         if ((EventID+1)%50 == 0) {
             cout<<"Calculating Event "<<(EventID+1)<<"/"<<nentries<<endl;
-            time(&time_now);
-            int time_diff = (int)difftime(time_now, time_start);
-            cout << time_diff/60 << "min " << time_diff%60 << "s: " << endl;
+            // time(&time_now);
+            // int time_diff = (int)difftime(time_now, time_start);
+            // cout << time_diff/60 << "min " << time_diff%60 << "s: " << endl;
         }
         // cout<<mult<<endl;
         // if(b>7){continue;}
