@@ -332,8 +332,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     double kstar, rap;
     TVector3 BetaTemp;
 
-    int KaonpPID = 321,KaonmPID = -321,PionpPID = 211,PionmPID = -211,LambdaPID = 3122,LambdabPID = -3122,XiPID = 3312,XibPID = -3312,OmegaPID = 3334,OmegabPID = -3334;
-
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
     print(NchList);
@@ -355,35 +353,22 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     std::vector<std::vector<int> >    B_ParID     ;
     std::vector<Float_t>              B_Mass      ;
     std::vector<TString>              B_Kind      ;
-    float Mix_A_Px                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
-    float Mix_A_Py                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
-    float Mix_A_Pz                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
-    float Mix_A_EvtID                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
-    float Mix_A_TreID                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
-    float Mix_B_Px                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
-    float Mix_B_Py                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
-    float Mix_B_Pz                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
-    float Mix_B_EvtID                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
-    float Mix_B_TreID                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
-    int   Mix_event_Num                   [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    int   Mix_A_Num                       [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    int   Mix_B_Num                       [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    // used as array
+    std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    std::vector<float> Mix_A_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    std::vector<float> Mix_A_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    std::vector<float> Mix_A_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    std::vector<float> Mix_A_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    std::vector<float> Mix_B_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    std::vector<float> Mix_B_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    std::vector<float> Mix_B_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    std::vector<float> Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    std::vector<float> Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    // used as value, ***[0] must be used
+    std::vector<int>   Mix_event_Num      [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     //
-    float Phi_Mix_A_Px                    [CentralityBinNum]                         [Pattern] [500];
-    float Phi_Mix_A_Py                    [CentralityBinNum]                         [Pattern] [500];
-    float Phi_Mix_A_Pz                    [CentralityBinNum]                         [Pattern] [500];
-    float Phi_Mix_B_Px                    [CentralityBinNum]                         [Pattern] [500];
-    float Phi_Mix_B_Py                    [CentralityBinNum]                         [Pattern] [500];
-    float Phi_Mix_B_Pz                    [CentralityBinNum]                         [Pattern] [500];
-    int   Phi_Mix_event_Num               [CentralityBinNum]                         [Pattern];
-    int   Phi_Mix_A_Num                   [CentralityBinNum]                         [Pattern];
-    int   Phi_Mix_B_Num                   [CentralityBinNum]                         [Pattern];
     TH1D* H_Kstar                         [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     TH1D* H_Mix_Kstar                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    TH2D* H_ABphi_Bphi                    [CentralityBinNum]                         [Pattern];
-    TH2D* H_Mix_ABphi_Bphi                [CentralityBinNum]                         [Pattern];
-    TH2D* H_ABphi_By                      [CentralityBinNum]                         [Pattern];
-    TH2D* H_Mix_ABphi_By                  [CentralityBinNum]                         [Pattern];
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
@@ -411,44 +396,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     HistName2s += PatternBin[l];
                     H_Kstar[i][j][k][l] = new TH1D(HistName1s,HistName2s,500,0,10);
                     H_Mix_Kstar[i][j][k][l] = new TH1D(HistName1,HistName2,500,0,10);
-                    Mix_event_Num[i][j][k][l] = 0;
-                    Mix_A_Num[i][j][k][l] = 0;
-                    Mix_B_Num[i][j][k][l] = 0;
+                    Mix_event_Num[i][j][k][l].push_back(0);
                 }
             }
-            TString HistName1;
-            TString HistName2;
-            HistName1 = "HPhiPhi_";
-            HistName2 = "Cen: [";
-            HistName1 += i;HistName1 += "_";
-            HistName2 += CentralityBin[i];HistName2 += "% , ";
-            HistName2 += CentralityBin[i+1];HistName2 += "%], ";
-            HistName1 += l;HistName1 += "_";
-            HistName2 += PatternBin[l];HistName2 += ", ";
-            TString HistName1s = HistName1;
-            TString HistName2s = HistName2;
-            HistName1s += "_S";
-            HistName1 += "_M";
-            HistName2 += ", Mix";
-            H_ABphi_Bphi     [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , 0 , Pi);
-            H_Mix_ABphi_Bphi [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , 0 , Pi);
-            HistName1 = "HPhiRap_";
-            HistName2 = "Cen: [";
-            HistName1 += i;HistName1 += "_";
-            HistName2 += CentralityBin[i];HistName2 += "% , ";
-            HistName2 += CentralityBin[i+1];HistName2 += "%], ";
-            HistName1 += l;HistName1 += "_";
-            HistName2 += PatternBin[l];HistName2 += ", ";
-            HistName1s = HistName1;
-            HistName2s = HistName2;
-            HistName1s += "_S";
-            HistName1 += "_M";
-            HistName2 += ", Mix";
-            H_ABphi_By       [i][l] = new TH2D(HistName1s,HistName2s, 50  , 0 , Pi     ,   20 , -2 , 2);
-            H_Mix_ABphi_By   [i][l] = new TH2D(HistName1 ,HistName2,  50  , 0 , Pi     ,   20 , -2 , 2);
-            Phi_Mix_event_Num[i][l] = 0;
-            Phi_Mix_A_Num    [i][l] = 0;
-            Phi_Mix_B_Num    [i][l] = 0;
         }
     }
 
