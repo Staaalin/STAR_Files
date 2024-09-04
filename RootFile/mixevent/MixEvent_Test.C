@@ -241,9 +241,9 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
     // Int_t Aid = -3122, Bid = 3334;
     const Int_t MultBin39[]   = { 10000 , 47 , 38 , 26 , 0};
     const Int_t MultBinSize39 = sizeof(MultBin39)/sizeof(MultBin39[0]);
-    Int_t MultBinSize,FileMax;
+    Int_t FileMax;
     std::vector<int> MultBin;
-    MultBinSize = MultBinSize39;
+    const Int_t MultBinSize = MultBinSize39;
     for(int i=0;i<MultBinSize39;i++){
         MultBin.push_back(MultBin39[i]);
     }
