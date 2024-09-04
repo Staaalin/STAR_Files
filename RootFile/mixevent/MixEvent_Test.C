@@ -352,7 +352,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
     for(int i=0;i<MultBinSize-1;i++){
         for(int k=0;k<A_NumBinSize-1;k++){
             for(int m=0;m<B_NumBinSize-1;m++){
-                SumNum[i][k][m] = 0;
+                SumNum[i][k][m].push_back(0);
             }
         }
     }
@@ -479,9 +479,9 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
             Sum_B_rap [BP[0]][BP[1]][BP[2]].push_back(B_rap[j]);
             Sum_B_mass[BP[0]][BP[1]][BP[2]].push_back(B_mass[j]);
         }
-        SumNum[BP[0]][BP[1]][BP[2]]++;
+        SumNum[BP[0]][BP[1]][BP[2]][0]++;
 
-        if(SumNum[BP[0]][BP[1]][BP[2]] == 10){
+        if(SumNum[BP[0]][BP[1]][BP[2]][0] == 10){
             SumNumA = Sum_A_px[BP[0]][BP[1]][BP[2]].size(); SumNumB = Sum_B_px[BP[0]][BP[1]][BP[2]].size();
             for(int j=0;j<SumNumA;j++){
                 for(int k=0;k<SumNumB;k++){
@@ -518,7 +518,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
             Sum_A_pz  [BP[0]][BP[1]][BP[2]].clear();   Sum_B_pz[BP[0]][BP[1]][BP[2]].clear();
             Sum_A_rap [BP[0]][BP[1]][BP[2]].clear();  Sum_B_rap[BP[0]][BP[1]][BP[2]].clear();
             Sum_A_mass[BP[0]][BP[1]][BP[2]].clear(); Sum_B_mass[BP[0]][BP[1]][BP[2]].clear();
-            SumNum[BP[0]][BP[1]][BP[2]] = 0;
+            SumNum[BP[0]][BP[1]][BP[2]][0] = 0;
         }
     }
 
