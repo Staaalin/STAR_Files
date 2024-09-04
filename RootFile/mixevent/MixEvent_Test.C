@@ -1,12 +1,12 @@
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <random>
+// #include <sys/types.h>
+// #include <sys/stat.h>
+// #include <dirent.h>
+// #include <random>
 #include "math.h"
 #include "string.h"
 #include <vector>
-#ifndef __CINT__
+// #ifndef __CINT__
 #include "TROOT.h"
 #include "TFile.h"
 #include "TGraph.h"
@@ -25,10 +25,12 @@
 #include "TLegend.h"
 #include "TUnixSystem.h"
 #include "TRandom3.h"
-#endif
+// #endif
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <stdio.h>
+using namespace std;
 const float omegaMass = 1.67245;
 const float lambdaMass = 1.11568;
 const float xiMass = 1.32171;
