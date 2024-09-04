@@ -471,7 +471,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         A_ParID.clear();B_ParID.clear();
         A_Mass.clear(); B_Mass.clear();
         A_Kind.clear(); B_Kind.clear();
-        cout<<"5"<<endl;
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
@@ -507,10 +506,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 B_ParID.push_back(Temp);
             }
         }
-        cout<<"4"<<endl;
 
-        if ((A_Px.size() == 0) || (B_Px.size() == 0)) {cout<<"yes"<<endl;continue;}
-        cout<<"3"<<endl;
+        if ((A_Px.size() == 0) || (B_Px.size() == 0)) {cout<<"yes"<<endl;}
 
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
