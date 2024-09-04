@@ -343,6 +343,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
     std::vector<float> A_rap,B_rap;
     std::vector<float> A_mass,B_mass;
     std::vector<TString> A_Kind,B_Kind;
+    cout<<"Thi is 346"<<endl;
     std::vector<float> Sum_A_px  [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],   Sum_B_px[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     std::vector<float> Sum_A_py  [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],   Sum_B_py[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     std::vector<float> Sum_A_pz  [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],   Sum_B_pz[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
@@ -351,6 +352,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
     std::vector<float> Sum_A_z   [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],    Sum_B_z[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     std::vector<float> Sum_A_rap [MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1],  Sum_B_rap[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     std::vector<float> Sum_A_mass[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1], Sum_B_mass[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
+    cout<<"Thi is 355"<<endl;
 
 
 
