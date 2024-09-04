@@ -357,9 +357,9 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
         }
     }
 
-    cout<<"This is 360"<<endl;
     //read data; if the nst event contains particle A, then record n in A_Loc, px in A_px ……; so do B particle
     for (int i=0;i<nentries;i++){
+        cout<<"This is 362"<<endl;
         hadronTree->GetEntry(i);
         if ((i+1)%50 == 0) {
             cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
@@ -465,6 +465,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
                 break;
             }
         }
+        cout<<"BP = [ "<<BP[0]<<" , "<<BP[1]<<" , "<<BP[2]<<" , "<<BP[3]<<" , "<<BP[4]<<" , "<<BP[5]<<" ]"<<endl;
         
         for(int j=0;j<NumA;j++){
             Sum_A_px  [BP[0]][BP[1]][BP[2]].push_back(A_px[j]);
