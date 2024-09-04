@@ -348,7 +348,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
 
 
     Int_t NumA = 0, NumB = 0, SumNumA = 0, SumNumB = 0, BP[5];
-    std::vector<Int_t> SumNum[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
+    std::vector<int> SumNum[MultBinSize-1][A_NumBinSize-1][B_NumBinSize-1];
     for(int i=0;i<MultBinSize-1;i++){
         for(int k=0;k<A_NumBinSize-1;k++){
             for(int m=0;m<B_NumBinSize-1;m++){
@@ -480,6 +480,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
             Sum_B_mass[BP[0]][BP[1]][BP[2]].push_back(B_mass[j]);
         }
         SumNum[BP[0]][BP[1]][BP[2]][0]++;
+        cout<<"SumNum[BP[0]][BP[1]][BP[2]][0] = "<<SumNum[BP[0]][BP[1]][BP[2]][0]<<endl;
 
         if(SumNum[BP[0]][BP[1]][BP[2]][0] == 10){
             SumNumA = Sum_A_px[BP[0]][BP[1]][BP[2]].size(); SumNumB = Sum_B_px[BP[0]][BP[1]][BP[2]].size();
@@ -519,6 +520,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
             Sum_A_rap [BP[0]][BP[1]][BP[2]].clear();  Sum_B_rap[BP[0]][BP[1]][BP[2]].clear();
             Sum_A_mass[BP[0]][BP[1]][BP[2]].clear(); Sum_B_mass[BP[0]][BP[1]][BP[2]].clear();
             SumNum[BP[0]][BP[1]][BP[2]][0] = 0;
+            cout<<"(523)SumNum[BP[0]][BP[1]][BP[2]][0] = "<<SumNum[BP[0]][BP[1]][BP[2]][0]<<endl;
         }
     }
 
