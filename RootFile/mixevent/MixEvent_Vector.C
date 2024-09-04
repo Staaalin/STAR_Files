@@ -452,7 +452,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     time_t time_now;
     time(&time_start);
     for (int EventID = 0 ; EventID < nentries ; EventID++){
-        cout<<"6"<<endl;
+        cout<<nentries<<endl;
         hadronTree->GetEntry(EventID);
         if ((EventID+1)%50 == 0) {
             cout<<"Calculating Event "<<(EventID+1)<<"/"<<nentries<<endl;
