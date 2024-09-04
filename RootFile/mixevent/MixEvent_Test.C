@@ -359,7 +359,6 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
 
     //read data; if the nst event contains particle A, then record n in A_Loc, px in A_px ……; so do B particle
     for (int i=0;i<nentries;i++){
-        cout<<"This is 362"<<endl;
         hadronTree->GetEntry(i);
         if ((i+1)%50 == 0) {
             cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
@@ -465,7 +464,6 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
                 break;
             }
         }
-        cout<<"BP = [ "<<BP[0]<<" , "<<BP[1]<<" , "<<BP[2]<<" , "<<BP[3]<<" , "<<BP[4]<<" , "<<BP[5]<<" ]"<<endl;
         
         for(int j=0;j<NumA;j++){
             Sum_A_px  [BP[0]][BP[1]][BP[2]].push_back(A_px[j]);
@@ -482,7 +480,6 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
             Sum_B_mass[BP[0]][BP[1]][BP[2]].push_back(B_mass[j]);
         }
         SumNum[BP[0]][BP[1]][BP[2]][0]++;
-        cout<<"SumNum[BP[0]][BP[1]][BP[2]][0] = "<<SumNum[BP[0]][BP[1]][BP[2]][0]<<endl;
 
         if(SumNum[BP[0]][BP[1]][BP[2]][0] == 10){
             SumNumA = Sum_A_px[BP[0]][BP[1]][BP[2]].size(); SumNumB = Sum_B_px[BP[0]][BP[1]][BP[2]].size();
@@ -513,16 +510,12 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
                 }
             }
             MIX_Con->Fill(BP[0],BP[1]);
-            Sum_A_x   [BP[0]][BP[1]][BP[2]].clear();    Sum_B_x[BP[0]][BP[1]][BP[2]].clear();
-            Sum_A_y   [BP[0]][BP[1]][BP[2]].clear();    Sum_B_y[BP[0]][BP[1]][BP[2]].clear();
-            Sum_A_z   [BP[0]][BP[1]][BP[2]].clear();    Sum_B_z[BP[0]][BP[1]][BP[2]].clear();
             Sum_A_px  [BP[0]][BP[1]][BP[2]].clear();   Sum_B_px[BP[0]][BP[1]][BP[2]].clear();
             Sum_A_py  [BP[0]][BP[1]][BP[2]].clear();   Sum_B_py[BP[0]][BP[1]][BP[2]].clear();
             Sum_A_pz  [BP[0]][BP[1]][BP[2]].clear();   Sum_B_pz[BP[0]][BP[1]][BP[2]].clear();
             Sum_A_rap [BP[0]][BP[1]][BP[2]].clear();  Sum_B_rap[BP[0]][BP[1]][BP[2]].clear();
             Sum_A_mass[BP[0]][BP[1]][BP[2]].clear(); Sum_B_mass[BP[0]][BP[1]][BP[2]].clear();
             SumNum[BP[0]][BP[1]][BP[2]][0] = 0;
-            cout<<"(523)SumNum[BP[0]][BP[1]][BP[2]][0] = "<<SumNum[BP[0]][BP[1]][BP[2]][0]<<endl;
         }
     }
 
