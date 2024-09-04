@@ -448,7 +448,7 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
         }
         //mix
         for (int j=1;j<MultBinSize;j++){
-            if (MultBin[j-1] <= PDGMult && PDGMult < MultBin[j]){
+            if (MultBin[j-1] >= PDGMult && PDGMult > MultBin[j]){
                 BP[0] = j-1;
                 break;
             }
