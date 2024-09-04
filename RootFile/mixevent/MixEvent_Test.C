@@ -36,7 +36,6 @@ const float lambdaMass = 1.11568;
 const float xiMass = 1.32171;
 const float kaonMass = 0.493677;
 const int maxTrack = 30000;
-using namespace std;
 
 Double_t massList(int PID)
 {
@@ -256,7 +255,6 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
     const Int_t A_NumBinSize = sizeof(A_NumBin)/sizeof(A_NumBin[0]);
     const Int_t B_NumBinSize = sizeof(B_NumBin)/sizeof(B_NumBin[0]);
 
-    cout<<"Energy = "<<Energy<<endl;
     TString midname = "";
     midname = MidName;
     Int_t kBinNum = 1000;
