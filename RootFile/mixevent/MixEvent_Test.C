@@ -357,12 +357,18 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
         }
     }
 
+    time_t time_start;
+    time_t time_now;
+    time(&time_start);
     //read data; if the nst event contains particle A, then record n in A_Loc, px in A_px ……; so do B particle
     for (int i=0;i<nentries;i++){
         hadronTree->GetEntry(i);
-        if ((i+1)%50 == 0) {
-            cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
-        }
+            if ((i+1)%50 == 0) {
+                cout<<"Calculating Event "<<(i+1)<<"/"<<nentries<<endl;
+			    time(&time_now);
+			    int time_diff = (int)difftime(time_now, time_start);
+                cout << time_diff/60 << "min " << time_diff%60 << "s: " << endl;
+            }
         // if (b >= 1.7){
         //     continue;
         // }
