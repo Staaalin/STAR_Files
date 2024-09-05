@@ -556,14 +556,17 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
                 p4 = p1 + p2;
                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
-                if (B_Kind[Aid] == "Mid") {
-                    if (A_Kind[Bid] == "MId") {
+                if (B_Kind[Bid] == "Mid") {
+                    if (A_Kind[Aid] == "MId") {
+                        float C = 0.5 * (p3 - p2).Rho();
                         // H_Kstar[CenIndex][RapIndex][PtIndex][0].push_back(0.5 * (p3 - p2).Rho());
                     }else{
+                        float C = 0.5 * (p3 - p2).Rho();
                         // H_Kstar[CenIndex][RapIndex][PtIndex][2].push_back(0.5 * (p3 - p2).Rho());
                     }
                 }else{
-                    if (A_Kind[Bid] == "MId") {
+                    if (A_Kind[Aid] == "MId") {
+                        float C = 0.5 * (p3 - p2).Rho();
                         // H_Kstar[CenIndex][RapIndex][PtIndex][1].push_back(0.5 * (p3 - p2).Rho());
                     }else{
                         continue;
