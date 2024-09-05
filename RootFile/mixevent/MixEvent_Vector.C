@@ -546,8 +546,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 continue;
             }
 
+            bool IfHaveRecordedB = false;
             p2.SetXYZM(B_px[Bid],B_py[Bid],B_pz[Bid],B_mass[Bid]);
-            for (int Bid = 0;Bid < B_Px.size();Bid++) {
+            for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
                 p3 = p2;
                 p1.SetXYZM(A_px[Aid],A_py[Aid],A_pz[Aid],A_mass[Aid]);
@@ -557,11 +558,11 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     if (A_Kind[Bid] == "MId") {
                         H_Kstar[CenIndex][RapIndex][PtIndex][0].push_back(0.5 * (p3 - p2).Rho());
                     }else{
-                        H_Kstar[CenIndex][RapIndex][PtIndex][1].push_back(0.5 * (p3 - p2).Rho());
+                        H_Kstar[CenIndex][RapIndex][PtIndex][2].push_back(0.5 * (p3 - p2).Rho());
                     }
                 }else{
                     if (A_Kind[Bid] == "MId") {
-                        H_Kstar[CenIndex][RapIndex][PtIndex][2].push_back(0.5 * (p3 - p2).Rho());
+                        H_Kstar[CenIndex][RapIndex][PtIndex][1].push_back(0.5 * (p3 - p2).Rho());
                     }else{
                         continue;
                     }
