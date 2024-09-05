@@ -506,7 +506,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
         }
 
-        if ((A_Px.size() == 0) || (B_Px.size() == 0)) {cout<<"yes"<<endl;}
+        if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
 
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
