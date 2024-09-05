@@ -44,14 +44,13 @@ using namespace std;
 
 #define Pi 3.1415926535898
 
-int CentralityBin[] = {0,10,20,40,80};// %
-#define CentralityBinNum 4 // -1
+const int CentralityBin[] = {0,10,20,40,80};// %
+const float PtBin[] = {0 , 10.0}; // Pt
+const float yBin[] = {-5.0 , 0.0 , 0.5 , 5.0}; // B_y
 
-float PtBin[] = {0 , 10.0}; // Pt
-#define PtBinNum 1 // -1
-
-float yBin[] = {-5.0 , 0.0 , 0.5 , 5.0}; // B_y
-#define yBinNum 3 // -1
+const int CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
+const int PtBinNum = sizeof(PtBin)/sizeof(PtBin[0]) - 1; // -1
+const int yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
 
 TString KindBin[] = {"Mid","Sid"}
 #define KindNum 2
@@ -331,6 +330,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
 
     double kstar, rap;
     TVector3 BetaTemp;
+    TLorentzVector p1 , p2 , p3 , p4 , p5;
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -353,6 +353,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<std::vector<int> >    B_ParID     ;
     std::vector<Float_t>              B_Mass      ;
     std::vector<TString>              B_Kind      ;
+    std::vector<Float_t>              Same_Value[Pattern];
     // used as array
     std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     std::vector<float> Mix_A_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
@@ -469,6 +470,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         A_TreID.clear();B_TreID.clear();
         A_ParID.clear();B_ParID.clear();
         A_Kind.clear(); B_Kind.clear();
+        for (int j=0;j<Pattern;j++) {
+            Same_Value[j].clear();
+        }
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
@@ -503,22 +507,37 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
         }
 
+        if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
+
+        
         int NumABCal = 0;// 这是实际上每个事件会进行相对动量计算的次数
         for (int j=0;j<B_Px.size();j++) {
+            p1.SetXYZM(A_px[j],A_py[j],A_pz[j],A_mass[j]);
             for (int k=0;k<A_Px.size();k++) {
-                if (IfCommonElement(A_ParID[k] , B_ParID[j])) {
-                    A_Kind[k] = "Bad";
-                    continue;
+                if (IfCommonElement(A_ParID[k] , B_ParID[j])) continue;
+                p3 = p1;
+                p2.SetXYZM(B_px[k],B_py[k],B_pz[k],B_mass[k]);
+                p4 = p1 + p2;
+                p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
+                if (B_Kind[j] == "Mid") {
+                    if (A_Kind[k] == "MId") {
+                        Same_Value[0].push_back(0.5 * (p3 - p2).Rho());
+                    }else{
+                        Same_Value[1].push_back(0.5 * (p3 - p2).Rho());
+                    }
+                }else{
+                    if (A_Kind[k] == "MId") {
+                        Same_Value[2].push_back(0.5 * (p3 - p2).Rho());
+                    }else{
+                        continue;
+                    }
                 }
                 NumABCal++;
             }
         }
         if (NumABCal == 0) continue;
 
-        if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
-
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
-
             int CenIndex = -1;
             for (int k=0;k<CentralityBinNum;k++){
                 // if ((NchList[k] <= refMult) && (refMult < NchList[k+1])) {
