@@ -470,9 +470,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         A_TreID.clear();B_TreID.clear();
         A_ParID.clear();B_ParID.clear();
         A_Kind.clear(); B_Kind.clear();
-        for (int j=0;j<Pattern;j++) {
-            Same_Value[j].clear();
-        }
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
@@ -508,45 +505,21 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         }
 
         if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
-
         
-        int NumABCal = 0;// 这是实际上每个事件会进行相对动量计算的次数
-        for (int j=0;j<B_Px.size();j++) {
-            p1.SetXYZM(A_px[j],A_py[j],A_pz[j],A_mass[j]);
-            for (int k=0;k<A_Px.size();k++) {
-                if (IfCommonElement(A_ParID[k] , B_ParID[j])) continue;
-                p3 = p1;
-                p2.SetXYZM(B_px[k],B_py[k],B_pz[k],B_mass[k]);
-                p4 = p1 + p2;
-                p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
-                if (B_Kind[j] == "Mid") {
-                    if (A_Kind[k] == "MId") {
-                        Same_Value[0].push_back(0.5 * (p3 - p2).Rho());
-                    }else{
-                        Same_Value[1].push_back(0.5 * (p3 - p2).Rho());
-                    }
-                }else{
-                    if (A_Kind[k] == "MId") {
-                        Same_Value[2].push_back(0.5 * (p3 - p2).Rho());
-                    }else{
-                        continue;
-                    }
-                }
-                NumABCal++;
+        // Event Index
+        int CenIndex = -1;
+        for (int k=0;k<CentralityBinNum;k++){
+            // if ((NchList[k] <= refMult) && (refMult < NchList[k+1])) {
+            if ((NchList[k] >= Nch) && (Nch > NchList[k+1])) {
+                CenIndex = k;
+                break;
             }
         }
-        if (NumABCal == 0) continue;
+        if (CenIndex == -1) continue;
 
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
-            int CenIndex = -1;
-            for (int k=0;k<CentralityBinNum;k++){
-                // if ((NchList[k] <= refMult) && (refMult < NchList[k+1])) {
-                if ((NchList[k] >= Nch) && (Nch > NchList[k+1])) {
-                    CenIndex = k;
-                    break;
-                }
-            }
 
+            // B Index
             float tEnergy = pow(pow(B_Px[Bid],2) + pow(B_Py[Bid],2) + pow(B_Pz[Bid],2) + pow(massList(B_PDG),2),0.5);
             rap = 0.5*log((tEnergy+B_Pz[Bid])/(tEnergy-B_Pz[Bid]));
             // cout<<"px = "<<B_Px[0]<<" , py = "<<B_Py[0]<<" , pz = "<<B_Pz[0]<<endl;
@@ -569,9 +542,32 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
 
             // cout<<"CenIndex = "<<CenIndex<<" , "<<"RapIndex = "<<RapIndex<<" , "<<"PtIndex = "<<PtIndex<<endl;
-            if ((CenIndex == -1) || (RapIndex == -1) || (PtIndex == -1)) {
+            if ((RapIndex == -1) || (PtIndex == -1)) {
                 continue;
             }
+
+            p2.SetXYZM(B_px[Bid],B_py[Bid],B_pz[Bid],B_mass[Bid]);
+            for (int Bid = 0;Bid < B_Px.size();Bid++) {
+                if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
+                p3 = p2;
+                p1.SetXYZM(A_px[Aid],A_py[Aid],A_pz[Aid],A_mass[Aid]);
+                p4 = p1 + p2;
+                p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
+                if (B_Kind[Aid] == "Mid") {
+                    if (A_Kind[Bid] == "MId") {
+                        H_Kstar[CenIndex][RapIndex][PtIndex][0].push_back(0.5 * (p3 - p2).Rho());
+                    }else{
+                        H_Kstar[CenIndex][RapIndex][PtIndex][1].push_back(0.5 * (p3 - p2).Rho());
+                    }
+                }else{
+                    if (A_Kind[Bid] == "MId") {
+                        H_Kstar[CenIndex][RapIndex][PtIndex][2].push_back(0.5 * (p3 - p2).Rho());
+                    }else{
+                        continue;
+                    }
+                }
+            }
+            
 
         }
     }
