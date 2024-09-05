@@ -449,7 +449,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
     
-    float BMass = massList(B_PDG) , AMass = massList(A_PDG);
+    float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
+    float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
 
     time_t time_start;
     time_t time_now;
@@ -475,8 +476,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
-                if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_Kind.push_back("Mid");}
-                else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_Kind.push_back("Sid");}
+                if      (fabs(InvariantMass->at(j) - AMass) <= 3*AMassSigma) {A_Kind.push_back("Mid");}
+                else if (fabs(InvariantMass->at(j) - AMass) <= 6*AMassSigma) {A_Kind.push_back("Sid");}
                 else{continue;}
                 A_Px.push_back(mix_px->at(j));
                 A_Py.push_back(mix_py->at(j));
@@ -490,8 +491,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 A_ParID.push_back(Temp);
             }
             if (PDG->at(j) == B_PDG) {
-                if      (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_Kind.push_back("Mid");}
-                else if (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {B_Kind.push_back("Sid");}
+                if      (fabs(InvariantMass->at(j) - BMass) <= 3*BMassSigma) {B_Kind.push_back("Mid");}
+                else if (fabs(InvariantMass->at(j) - BMass) <= 6*BMassSigma) {B_Kind.push_back("Sid");}
                 else{continue;}
                 B_Px.push_back(mix_px->at(j));
                 B_Py.push_back(mix_py->at(j));
@@ -522,7 +523,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
             // B Index
-            float tEnergy = pow(pow(B_Px[Bid],2) + pow(B_Py[Bid],2) + pow(B_Pz[Bid],2) + pow(massList(B_PDG),2),0.5);
+            float tEnergy = pow(pow(B_Px[Bid],2) + pow(B_Py[Bid],2) + pow(B_Pz[Bid],2) + pow(BMass,2),0.5);
             rap = 0.5*log((tEnergy+B_Pz[Bid])/(tEnergy-B_Pz[Bid]));
             // cout<<"px = "<<B_Px[0]<<" , py = "<<B_Py[0]<<" , pz = "<<B_Pz[0]<<endl;
             // cout<<"rap = "<<rap<<endl;
