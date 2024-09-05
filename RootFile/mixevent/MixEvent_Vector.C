@@ -365,15 +365,11 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<float> Mix_B_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     std::vector<float> Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     std::vector<float> Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    cout<<"This is 368"<<endl;
     // used as value, ***[0] must be used
     std::vector<int>   Mix_event_Num      [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    cout<<"This is 371"<<endl;
     //
-    TH1D* H_Kstar                         [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    cout<<"This is 374"<<endl;
-    TH1D* H_Mix_Kstar                     [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    cout<<"This is 376"<<endl;
+    TH1D* H_Kstar                         [50];
+    TH1D* H_Mix_Kstar                     [50];
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
@@ -399,8 +395,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     HistName2 += ", Mix, ";
                     HistName2 += PatternBin[l];
                     HistName2s += PatternBin[l];
-                    H_Kstar[i][j][k][l] = new TH1D(HistName1s,HistName2s,500,0,10);
-                    H_Mix_Kstar[i][j][k][l] = new TH1D(HistName1,HistName2,500,0,10);
+                    // H_Kstar[i][j][k][l] = new TH1D(HistName1s,HistName2s,500,0,10);
+                    // H_Mix_Kstar[i][j][k][l] = new TH1D(HistName1,HistName2,500,0,10);
                     Mix_event_Num[i][j][k][l].push_back(0);
                 }
             }
@@ -560,13 +556,13 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
                 if (B_Kind[Aid] == "Mid") {
                     if (A_Kind[Bid] == "MId") {
-                        H_Kstar[CenIndex][RapIndex][PtIndex][0].push_back(0.5 * (p3 - p2).Rho());
+                        // H_Kstar[CenIndex][RapIndex][PtIndex][0].push_back(0.5 * (p3 - p2).Rho());
                     }else{
-                        H_Kstar[CenIndex][RapIndex][PtIndex][2].push_back(0.5 * (p3 - p2).Rho());
+                        // H_Kstar[CenIndex][RapIndex][PtIndex][2].push_back(0.5 * (p3 - p2).Rho());
                     }
                 }else{
                     if (A_Kind[Bid] == "MId") {
-                        H_Kstar[CenIndex][RapIndex][PtIndex][1].push_back(0.5 * (p3 - p2).Rho());
+                        // H_Kstar[CenIndex][RapIndex][PtIndex][1].push_back(0.5 * (p3 - p2).Rho());
                     }else{
                         continue;
                     }
