@@ -48,9 +48,9 @@ const int CentralityBin[] = {0,10,20,40,80};// %
 const float PtBin[] = {0 , 10.0}; // Pt
 const float yBin[] = {-5.0 , 0.0 , 0.5 , 5.0}; // B_y
 
-const int CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
-const int PtBinNum = sizeof(PtBin)/sizeof(PtBin[0]) - 1; // -1
-const int yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
+const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
+const Int_t PtBinNum = sizeof(PtBin)/sizeof(PtBin[0]) - 1; // -1
+const Int_t yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
 
 TString KindBin[] = {"Mid","Sid"}
 #define KindNum 2
