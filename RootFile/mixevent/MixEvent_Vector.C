@@ -420,10 +420,10 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     Int_t Nch      ;
 
     hadronTree->SetBranchAddress("PDGMult"  ,&PDGMult  );
-    hadronTree->SetBranchAddress("refMult"  ,&refMult  );
-    hadronTree->SetBranchAddress("grefMult" ,&grefMult );
+    // hadronTree->SetBranchAddress("refMult"  ,&refMult  );
+    // hadronTree->SetBranchAddress("grefMult" ,&grefMult );
     hadronTree->SetBranchAddress("EventID"  ,&EventID  );
-    hadronTree->SetBranchAddress("RunID"    ,&RunID    );
+    // hadronTree->SetBranchAddress("RunID"    ,&RunID    );
     hadronTree->SetBranchAddress("TriggerID",&TriggerID);
     hadronTree->SetBranchAddress("Nch"      ,&Nch      );
     
@@ -431,16 +431,16 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     hadronTree->SetBranchAddress("mix_px"       ,&mix_px       ,&bmix_px       );
     hadronTree->SetBranchAddress("mix_py"       ,&mix_py       ,&bmix_py       );
     hadronTree->SetBranchAddress("mix_pz"       ,&mix_pz       ,&bmix_pz       );
-    hadronTree->SetBranchAddress("QA_eta"       ,&QA_eta       ,&bQA_eta       );
-    hadronTree->SetBranchAddress("dEdx"         ,&dEdx         ,&bdEdx         );
-    hadronTree->SetBranchAddress("m2"           ,&m2           ,&bm2           );
-    hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
-    hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
-    hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
-    hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
+    // hadronTree->SetBranchAddress("QA_eta"       ,&QA_eta       ,&bQA_eta       );
+    // hadronTree->SetBranchAddress("dEdx"         ,&dEdx         ,&bdEdx         );
+    // hadronTree->SetBranchAddress("m2"           ,&m2           ,&bm2           );
+    // hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
+    // hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
+    // hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
+    // hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
     hadronTree->SetBranchAddress("InvariantMass",&InvariantMass,&bInvariantMass);
-    hadronTree->SetBranchAddress("Decay_Length" ,&Decay_Length ,&bDecay_Length );
-    hadronTree->SetBranchAddress("Chi2"         ,&Chi2         ,&bChi2         );
+    // hadronTree->SetBranchAddress("Decay_Length" ,&Decay_Length ,&bDecay_Length );
+    // hadronTree->SetBranchAddress("Chi2"         ,&Chi2         ,&bChi2         );
     hadronTree->SetBranchAddress("ParentList"   ,&ParentList   ,&bParentList   );
     hadronTree->SetBranchAddress("ParentSta"    ,&ParentSta    ,&bParentSta    );
     hadronTree->SetBranchAddress("ParentEnd"    ,&ParentEnd    ,&bParentEnd    );
