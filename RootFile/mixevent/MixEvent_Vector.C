@@ -520,11 +520,14 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         }
         if (CenIndex == -1) continue;
 
+        
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
+            float BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
+
             // B Index
-            float tEnergy = pow(pow(B_Px[Bid],2) + pow(B_Py[Bid],2) + pow(B_Pz[Bid],2) + pow(BMass,2),0.5);
-            rap = 0.5*log((tEnergy+B_Pz[Bid])/(tEnergy-B_Pz[Bid]));
+            float tEnergy = pow(pow(BPx,2) + pow(BPy,2) + pow(BPz,2) + pow(BMass,2),0.5);
+            rap = 0.5*log((tEnergy+BPz)/(tEnergy-BPz));
             // cout<<"px = "<<B_Px[0]<<" , py = "<<B_Py[0]<<" , pz = "<<B_Pz[0]<<endl;
             // cout<<"rap = "<<rap<<endl;
             int RapIndex = -1;
@@ -535,7 +538,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 }
             }
 
-            float B_Pt = pow(pow(B_Px[Bid],2) + pow(B_Py[Bid],2),0.5);
+            float B_Pt = pow(pow(BPx,2) + pow(BPy,2),0.5);
             int PtIndex = -1;
             for (int k=0;k<PtBinNum;k++){
                 if ((PtBin[k] <= B_Pt) && (B_Pt < PtBin[k+1])) {
@@ -550,7 +553,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
 
             bool IfHaveRecordedB = false;
-            p2.SetXYZM(B_Px[Bid],B_Py[Bid],B_Pz[Bid],BMass);
+            p2.SetXYZM(BPx,BPy,BPz,BMass);
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
                 p3 = p2;
