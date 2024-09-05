@@ -468,7 +468,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         A_EvtID.clear();B_EvtID.clear();
         A_TreID.clear();B_TreID.clear();
         A_ParID.clear();B_ParID.clear();
-        A_Mass.clear(); B_Mass.clear();
         A_Kind.clear(); B_Kind.clear();
 
         for (int j=0;j<PDGMult;j++){
@@ -476,7 +475,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 if      (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 3*massListSigma(A_PDG)) {A_Kind.push_back("Mid");}
                 else if (fabs(InvariantMass->at(j) - massList(A_PDG)) <= 6*massListSigma(A_PDG)) {A_Kind.push_back("Sid");}
                 else{continue;}
-                A_Mass.push_back(InvariantMass->at(j));
                 A_Px.push_back(mix_px->at(j));
                 A_Py.push_back(mix_py->at(j));
                 A_Pz.push_back(mix_pz->at(j));
@@ -492,7 +490,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 if      (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 3*massListSigma(B_PDG)) {B_Kind.push_back("Mid");}
                 else if (fabs(InvariantMass->at(j) - massList(B_PDG)) <= 6*massListSigma(B_PDG)) {B_Kind.push_back("Sid");}
                 else{continue;}
-                B_Mass.push_back(InvariantMass->at(j));
                 B_Px.push_back(mix_px->at(j));
                 B_Py.push_back(mix_py->at(j));
                 B_Pz.push_back(mix_pz->at(j));
@@ -505,6 +502,18 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 B_ParID.push_back(Temp);
             }
         }
+
+        int NumABCal = 0;// 这是实际上每个事件会进行相对动量计算的次数
+        for (int j=0;j<B_Px.size();j++) {
+            for (int k=0;k<A_Px.size();k++) {
+                if (IfCommonElement(A_ParID[k] , B_ParID[j])) {
+                    A_Kind[k] = "Bad";
+                    continue;
+                }
+                NumABCal++;
+            }
+        }
+        if (NumABCal == 0) continue;
 
         if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
 
