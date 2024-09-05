@@ -448,6 +448,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
+    
+    float BMass = massList(B_PDG) , AMass = massList(A_PDG);
 
     time_t time_start;
     time_t time_now;
@@ -547,11 +549,11 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
 
             bool IfHaveRecordedB = false;
-            p2.SetXYZM(B_px[Bid],B_py[Bid],B_pz[Bid],B_mass[Bid]);
+            p2.SetXYZM(B_Px[Bid],B_Py[Bid],B_Pz[Bid],BMass);
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
                 p3 = p2;
-                p1.SetXYZM(A_px[Aid],A_py[Aid],A_pz[Aid],A_mass[Aid]);
+                p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
                 p4 = p1 + p2;
                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
                 if (B_Kind[Aid] == "Mid") {
