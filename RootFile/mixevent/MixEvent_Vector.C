@@ -459,8 +459,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<Int_t>                    B_TreID     ;
     std::vector<std::vector<int> >        B_ParID     ;
     std::vector<int>                      B_Kind      ;
-    std::vector<bool>                     A_Recorded [2] [2] ;
-    std::vector<bool>                     B_Recorded [2] [2] ;
+    std::vector<int>                      A_Recorded [2] [2] ; // used as bool
+    std::vector<int>                      B_Recorded [2] [2] ; // used as bool
     // used as array
     std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_A_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
@@ -611,9 +611,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     Temp.push_back(ParentList->at(k));
                 }
                 A_ParID.push_back(Temp);
-                A_Recorded[0][0].push_Back(false);
-                A_Recorded[0][1].push_Back(false);
-                A_Recorded[1][0].push_Back(false);
+                A_Recorded[0][0].push_Back(0);
+                A_Recorded[0][1].push_Back(0);
+                A_Recorded[1][0].push_Back(0);
             }
             if (PDG->at(j) == B_PDG) {
                 if      (fabs(InvariantMass->at(j) - BMass) <= 3*BMassSigma) {B_Kind.push_back(0);}
@@ -629,9 +629,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     Temp.push_back(ParentList->at(k));
                 }
                 B_ParID.push_back(Temp);
-                B_Recorded[0][0].push_Back(false);
-                B_Recorded[0][1].push_Back(false);
-                B_Recorded[1][0].push_Back(false);
+                B_Recorded[0][0].push_Back(0);
+                B_Recorded[0][1].push_Back(0);
+                B_Recorded[1][0].push_Back(0);
             }
         }
 
@@ -685,8 +685,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
                 int A_Kid = A_Kind[Aid];
-                A_Recorded [A_Kid] [B_Kid] [Aid]= true;
-                B_Recorded [A_Kid] [B_Kid] [Bid]= true;
+                A_Recorded [A_Kid] [B_Kid] [Aid] = 1;
+                B_Recorded [A_Kid] [B_Kid] [Bid] = 1;
                 p3 = p2;
                 p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
                 p4 = p1 + p2;
