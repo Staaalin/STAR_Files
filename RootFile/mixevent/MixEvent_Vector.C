@@ -52,6 +52,114 @@ const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 
 const Int_t PtBinNum = sizeof(PtBin)/sizeof(PtBin[0]) - 1; // -1
 const Int_t yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
 
+switch (CentralityBinNum)
+{
+case 1:
+    #define DCentralityBinNum 1
+    break;
+case 2:
+    #define DCentralityBinNum 2
+    break;
+case 3:
+    #define DCentralityBinNum 3
+    break;
+case 4:
+    #define DCentralityBinNum 4
+    break;
+case 5:
+    #define DCentralityBinNum 5
+    break;
+case 6:
+    #define DCentralityBinNum 6
+    break;
+case 7:
+    #define DCentralityBinNum 7
+    break;
+case 8:
+    #define DCentralityBinNum 8
+    break;
+case 9:
+    #define DCentralityBinNum 9
+    break;
+case 10:
+    #define DCentralityBinNum 10
+    break;
+default:
+    break;
+}
+
+switch (PtBinNum)
+{
+case 1:
+    #define DPtBinNum 1
+    break;
+case 2:
+    #define DPtBinNum 2
+    break;
+case 3:
+    #define DPtBinNum 3
+    break;
+case 4:
+    #define DPtBinNum 4
+    break;
+case 5:
+    #define DPtBinNum 5
+    break;
+case 6:
+    #define DPtBinNum 6
+    break;
+case 7:
+    #define DPtBinNum 7
+    break;
+case 8:
+    #define DPtBinNum 8
+    break;
+case 9:
+    #define DPtBinNum 9
+    break;
+case 10:
+    #define DPtBinNum 10
+    break;
+default:
+    break;
+}
+
+switch (yBinNum)
+{
+case 1:
+    #define DyBinNum 1
+    break;
+case 2:
+    #define DyBinNum 2
+    break;
+case 3:
+    #define DyBinNum 3
+    break;
+case 4:
+    #define DyBinNum 4
+    break;
+case 5:
+    #define DyBinNum 5
+    break;
+case 6:
+    #define DyBinNum 6
+    break;
+case 7:
+    #define DyBinNum 7
+    break;
+case 8:
+    #define DyBinNum 8
+    break;
+case 9:
+    #define DyBinNum 9
+    break;
+case 10:
+    #define DyBinNum 10
+    break;
+default:
+    break;
+}
+
 TString KindBin[] = {"Mid","Sid"}
 #define KindNum 2
 TString PatternBin[] = {"AMBM","AMBS","ASBM"};
@@ -368,8 +476,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     // used as value, ***[0] must be used
     std::vector<int>   Mix_event_Num      [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     //
-    TH1D* H_Kstar                         [50];
-    TH1D* H_Mix_Kstar                     [50];
+    TH1D* H_Kstar                         [DCentralityBinNum]  [DyBinNum] [DPtBinNum][Pattern];
+    TH1D* H_Mix_Kstar                     [DCentralityBinNum]  [DyBinNum] [DPtBinNum][Pattern];
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
@@ -395,8 +503,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     HistName2 += ", Mix, ";
                     HistName2 += PatternBin[l];
                     HistName2s += PatternBin[l];
-                    // H_Kstar[i][j][k][l] = new TH1D(HistName1s,HistName2s,500,0,10);
-                    // H_Mix_Kstar[i][j][k][l] = new TH1D(HistName1,HistName2,500,0,10);
+                    H_Kstar[i][j][k][l] = new TH1D(HistName1s,HistName2s,500,0,10);
+                    H_Mix_Kstar[i][j][k][l] = new TH1D(HistName1,HistName2,500,0,10);
                     Mix_event_Num[i][j][k][l].push_back(0);
                 }
             }
@@ -562,16 +670,13 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
                 if (B_Kind[Bid] == "Mid") {
                     if (A_Kind[Aid] == "MId") {
-                        float C = 0.5 * (p3 - p2).Rho();
-                        // H_Kstar[CenIndex][RapIndex][PtIndex][0].push_back(0.5 * (p3 - p2).Rho());
+                        H_Kstar[CenIndex][RapIndex][PtIndex][0].push_back(0.5 * (p3 - p2).Rho());
                     }else{
-                        float C = 0.5 * (p3 - p2).Rho();
-                        // H_Kstar[CenIndex][RapIndex][PtIndex][2].push_back(0.5 * (p3 - p2).Rho());
+                        H_Kstar[CenIndex][RapIndex][PtIndex][2].push_back(0.5 * (p3 - p2).Rho());
                     }
                 }else{
                     if (A_Kind[Aid] == "MId") {
-                        float C = 0.5 * (p3 - p2).Rho();
-                        // H_Kstar[CenIndex][RapIndex][PtIndex][1].push_back(0.5 * (p3 - p2).Rho());
+                        H_Kstar[CenIndex][RapIndex][PtIndex][1].push_back(0.5 * (p3 - p2).Rho());
                     }else{
                         continue;
                     }
