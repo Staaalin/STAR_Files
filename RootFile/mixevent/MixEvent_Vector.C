@@ -611,9 +611,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     Temp.push_back(ParentList->at(k));
                 }
                 A_ParID.push_back(Temp);
-                A_Recorded[0][0].push_Back(0);
-                A_Recorded[0][1].push_Back(0);
-                A_Recorded[1][0].push_Back(0);
+                A_Recorded[0][0].push_back(0);
+                A_Recorded[0][1].push_back(0);
+                A_Recorded[1][0].push_back(0);
             }
             if (PDG->at(j) == B_PDG) {
                 if      (fabs(InvariantMass->at(j) - BMass) <= 3*BMassSigma) {B_Kind.push_back(0);}
@@ -629,9 +629,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     Temp.push_back(ParentList->at(k));
                 }
                 B_ParID.push_back(Temp);
-                B_Recorded[0][0].push_Back(0);
-                B_Recorded[0][1].push_Back(0);
-                B_Recorded[1][0].push_Back(0);
+                B_Recorded[0][0].push_back(0);
+                B_Recorded[0][1].push_back(0);
+                B_Recorded[1][0].push_back(0);
             }
         }
 
