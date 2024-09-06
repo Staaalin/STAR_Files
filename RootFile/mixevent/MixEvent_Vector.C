@@ -452,7 +452,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<Int_t>                A_TreID     ;
     std::vector<std::vector<int> >    A_ParID     ;
     std::vector<Float_t>              A_Mass      ;
-    std::vector<TString>              A_Kind      ;
+    std::vector<int>                  A_Kind      ;
     std::vector<Float_t>              B_Px        ;
     std::vector<Float_t>              B_Py        ;
     std::vector<Float_t>              B_Pz        ;
@@ -460,7 +460,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<Int_t>                B_TreID     ;
     std::vector<std::vector<int> >    B_ParID     ;
     std::vector<Float_t>              B_Mass      ;
-    std::vector<TString>              B_Kind      ;
+    std::vector<int>                  B_Kind      ;
     std::vector<Float_t>              Same_Value[Pattern];
     // used as array
     std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
@@ -474,10 +474,10 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<float> Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     std::vector<float> Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
     // used as value, ***[0] must be used
-    std::vector<int>   Mix_event_Num      [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    std::vector<int>   Mix_event_Num      [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2];
     //
-    TH1D* H_Kstar                         [DCentralityBinNum]  [DyBinNum] [DPtBinNum][Pattern];
-    TH1D* H_Mix_Kstar                     [DCentralityBinNum]  [DyBinNum] [DPtBinNum][Pattern];
+    TH1D* H_Kstar                         [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2];
+    TH1D* H_Mix_Kstar                     [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2];
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
@@ -503,9 +503,21 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     HistName2 += ", Mix, ";
                     HistName2 += PatternBin[l];
                     HistName2s += PatternBin[l];
-                    H_Kstar[i][j][k][l] = new TH1D(HistName1s,HistName2s,500,0,10);
-                    H_Mix_Kstar[i][j][k][l] = new TH1D(HistName1,HistName2,500,0,10);
-                    Mix_event_Num[i][j][k][l].push_back(0);
+                    if (l == 0) { // AMBM
+                        H_Kstar      [i][j][k][0][0] = new TH1D(HistName1s,HistName2s,500,0,10);
+                        H_Mix_Kstar  [i][j][k][0][0] = new TH1D(HistName1,HistName2,500,0,10);
+                        Mix_event_Num[i][j][k][0][0].push_back(0);
+                    }
+                    if (l == 1) { // AMBS
+                        H_Kstar      [i][j][k][0][1] = new TH1D(HistName1s,HistName2s,500,0,10);
+                        H_Mix_Kstar  [i][j][k][0][1] = new TH1D(HistName1,HistName2,500,0,10);
+                        Mix_event_Num[i][j][k][0][1].push_back(0);
+                    }
+                    if (l == 2) { // ASBM
+                        H_Kstar      [i][j][k][1][0] = new TH1D(HistName1s,HistName2s,500,0,10);
+                        H_Mix_Kstar  [i][j][k][1][0] = new TH1D(HistName1,HistName2,500,0,10);
+                        Mix_event_Num[i][j][k][1][0].push_back(0);
+                    }
                 }
             }
         }
@@ -584,8 +596,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
-                if      (fabs(InvariantMass->at(j) - AMass) <= 3*AMassSigma) {A_Kind.push_back("Mid");}
-                else if (fabs(InvariantMass->at(j) - AMass) <= 6*AMassSigma) {A_Kind.push_back("Sid");}
+                if      (fabs(InvariantMass->at(j) - AMass) <= 3*AMassSigma) {A_Kind.push_back(0);}
+                else if (fabs(InvariantMass->at(j) - AMass) <= 6*AMassSigma) {A_Kind.push_back(1);}
                 else{continue;}
                 A_Px.push_back(mix_px->at(j));
                 A_Py.push_back(mix_py->at(j));
@@ -599,8 +611,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 A_ParID.push_back(Temp);
             }
             if (PDG->at(j) == B_PDG) {
-                if      (fabs(InvariantMass->at(j) - BMass) <= 3*BMassSigma) {B_Kind.push_back("Mid");}
-                else if (fabs(InvariantMass->at(j) - BMass) <= 6*BMassSigma) {B_Kind.push_back("Sid");}
+                if      (fabs(InvariantMass->at(j) - BMass) <= 3*BMassSigma) {B_Kind.push_back(0);}
+                else if (fabs(InvariantMass->at(j) - BMass) <= 6*BMassSigma) {B_Kind.push_back(1);}
                 else{continue;}
                 B_Px.push_back(mix_px->at(j));
                 B_Py.push_back(mix_py->at(j));
@@ -668,19 +680,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
                 p4 = p1 + p2;
                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
-                if (B_Kind[Bid] == "Mid") {
-                    if (A_Kind[Aid] == "MId") {
-                        H_Kstar[CenIndex][RapIndex][PtIndex][0]->Fill(0.5 * (p3 - p2).Rho());
-                    }else{
-                        H_Kstar[CenIndex][RapIndex][PtIndex][2]->Fill(0.5 * (p3 - p2).Rho());
-                    }
-                }else{
-                    if (A_Kind[Aid] == "MId") {
-                        H_Kstar[CenIndex][RapIndex][PtIndex][1]->Fill(0.5 * (p3 - p2).Rho());
-                    }else{
-                        continue;
-                    }
-                }
+                H_Kstar[CenIndex][RapIndex][PtIndex][A_Kind[Aid]][B_Kind[Bid]]->Fill(0.5 * (p3 - p2).Rho());
             }
             
 
