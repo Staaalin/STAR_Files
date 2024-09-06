@@ -683,8 +683,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
                 int A_Kid = A_Kind[Aid];
-                A_Recorded [A_Kid] [B_Kid] = true;
-                B_Recorded [A_Kid] [B_Kid] = true;
+                A_Recorded [A_Kid] [B_Kid] [Aid]= true;
+                B_Recorded [A_Kid] [B_Kid] [Bid]= true;
                 p3 = p2;
                 p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
                 p4 = p1 + p2;
