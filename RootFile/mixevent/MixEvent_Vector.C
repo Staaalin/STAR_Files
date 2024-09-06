@@ -670,13 +670,13 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
                 if (B_Kind[Bid] == "Mid") {
                     if (A_Kind[Aid] == "MId") {
-                        H_Kstar[CenIndex][RapIndex][PtIndex][0].push_back(0.5 * (p3 - p2).Rho());
+                        H_Kstar[CenIndex][RapIndex][PtIndex][0].Fill(0.5 * (p3 - p2).Rho());
                     }else{
-                        H_Kstar[CenIndex][RapIndex][PtIndex][2].push_back(0.5 * (p3 - p2).Rho());
+                        H_Kstar[CenIndex][RapIndex][PtIndex][2].Fill(0.5 * (p3 - p2).Rho());
                     }
                 }else{
                     if (A_Kind[Aid] == "MId") {
-                        H_Kstar[CenIndex][RapIndex][PtIndex][1].push_back(0.5 * (p3 - p2).Rho());
+                        H_Kstar[CenIndex][RapIndex][PtIndex][1].Fill(0.5 * (p3 - p2).Rho());
                     }else{
                         continue;
                     }
