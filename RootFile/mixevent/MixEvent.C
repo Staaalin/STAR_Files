@@ -345,7 +345,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     std::vector<Int_t>                A_EvtID     ;
     std::vector<Int_t>                A_TreID     ;
     std::vector<std::vector<int> >    A_ParID     ;
-    std::vector<Float_t>              A_Mass      ;
     std::vector<TString>              A_Kind      ;
     std::vector<Float_t>              B_Px        ;
     std::vector<Float_t>              B_Py        ;
@@ -353,7 +352,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     std::vector<Int_t>                B_EvtID     ;
     std::vector<Int_t>                B_TreID     ;
     std::vector<std::vector<int> >    B_ParID     ;
-    std::vector<Float_t>              B_Mass      ;
     std::vector<TString>              B_Kind      ;
     float Mix_A_Px                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
     float Mix_A_Py                        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern] [500];
@@ -534,7 +532,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             A_EvtID.clear();B_EvtID.clear();
             A_TreID.clear();B_TreID.clear();
             A_ParID.clear();B_ParID.clear();
-            A_Mass.clear(); B_Mass.clear();
             A_Kind.clear(); B_Kind.clear();
 
             //                               A              B
@@ -558,7 +555,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         if (KindSample[0][k] == A_Kind[A_Kind.size()-1]) {IfStore = true;break;}
                     }
                     if (!IfStore) {A_Kind.resize(A_Kind.size()-1);continue;}
-                    A_Mass.push_back(InvariantMass->at(j));
                     A_Px.push_back(mix_px->at(j));
                     A_Py.push_back(mix_py->at(j));
                     A_Pz.push_back(mix_pz->at(j));
@@ -579,7 +575,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         if (KindSample[1][k] == B_Kind[B_Kind.size()-1]) {IfStore = true;break;}
                     }
                     if (!IfStore) {B_Kind.resize(B_Kind.size()-1);continue;}
-                    B_Mass.push_back(InvariantMass->at(j));
                     B_Px.push_back(mix_px->at(j));
                     B_Py.push_back(mix_py->at(j));
                     B_Pz.push_back(mix_pz->at(j));

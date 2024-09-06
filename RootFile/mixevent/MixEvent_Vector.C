@@ -445,39 +445,38 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     print(NchList);
     cout<<" "<<endl;
     //                                        centrality          B_y        B_Pt
-    std::vector<Float_t>              A_Px        ;
-    std::vector<Float_t>              A_Py        ;
-    std::vector<Float_t>              A_Pz        ;
-    std::vector<Int_t>                A_EvtID     ;
-    std::vector<Int_t>                A_TreID     ;
-    std::vector<std::vector<int> >    A_ParID     ;
-    std::vector<Float_t>              A_Mass      ;
-    std::vector<int>                  A_Kind      ;
-    std::vector<Float_t>              B_Px        ;
-    std::vector<Float_t>              B_Py        ;
-    std::vector<Float_t>              B_Pz        ;
-    std::vector<Int_t>                B_EvtID     ;
-    std::vector<Int_t>                B_TreID     ;
-    std::vector<std::vector<int> >    B_ParID     ;
-    std::vector<Float_t>              B_Mass      ;
-    std::vector<int>                  B_Kind      ;
-    std::vector<Float_t>              Same_Value[Pattern];
+    std::vector<Float_t>                  A_Px        ;
+    std::vector<Float_t>                  A_Py        ;
+    std::vector<Float_t>                  A_Pz        ;
+    std::vector<Int_t>                    A_EvtID     ;
+    std::vector<Int_t>                    A_TreID     ;
+    std::vector<std::vector<int> >        A_ParID     ;
+    std::vector<int>                      A_Kind      ;
+    std::vector<Float_t>                  B_Px        ;
+    std::vector<Float_t>                  B_Py        ;
+    std::vector<Float_t>                  B_Pz        ;
+    std::vector<Int_t>                    B_EvtID     ;
+    std::vector<Int_t>                    B_TreID     ;
+    std::vector<std::vector<int> >        B_ParID     ;
+    std::vector<int>                      B_Kind      ;
+    std::vector<bool>                     A_Recorded [2] [2] ;
+    std::vector<bool>                     B_Recorded [2] [2] ;
     // used as array
-    std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    std::vector<float> Mix_A_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    std::vector<float> Mix_A_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    std::vector<float> Mix_A_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    std::vector<float> Mix_A_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    std::vector<float> Mix_B_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    std::vector<float> Mix_B_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    std::vector<float> Mix_B_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    std::vector<float> Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
-    std::vector<float> Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum] [Pattern];
+    std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_A_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_A_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_A_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_A_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_B_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_B_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_B_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     // used as value, ***[0] must be used
-    std::vector<int>   Mix_event_Num      [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2];
+    std::vector<int>   Mix_event_Num      [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     //
-    TH1D* H_Kstar                         [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2];
-    TH1D* H_Mix_Kstar                     [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2];
+    TH1D* H_Kstar                         [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
+    TH1D* H_Mix_Kstar                     [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
@@ -593,6 +592,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         A_TreID.clear();B_TreID.clear();
         A_ParID.clear();B_ParID.clear();
         A_Kind.clear(); B_Kind.clear();
+        A_Recorded.clear();B_Recorded.clear();
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
@@ -609,6 +609,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     Temp.push_back(ParentList->at(k));
                 }
                 A_ParID.push_back(Temp);
+                A_Recorded[0][0].push_Back(false);
+                A_Recorded[0][1].push_Back(false);
+                A_Recorded[1][0].push_Back(false);
             }
             if (PDG->at(j) == B_PDG) {
                 if      (fabs(InvariantMass->at(j) - BMass) <= 3*BMassSigma) {B_Kind.push_back(0);}
@@ -624,6 +627,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     Temp.push_back(ParentList->at(k));
                 }
                 B_ParID.push_back(Temp);
+                B_Recorded[0][0].push_Back(false);
+                B_Recorded[0][1].push_Back(false);
+                B_Recorded[1][0].push_Back(false);
             }
         }
 
@@ -672,18 +678,20 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 continue;
             }
 
-            bool IfHaveRecordedB = false;
             p2.SetXYZM(BPx,BPy,BPz,BMass);
+            int B_Kid = B_Kind[Bid];
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
+                int A_Kid = A_Kind[Aid];
+                A_Recorded [A_Kid] [B_Kid] = true;
+                B_Recorded [A_Kid] [B_Kid] = true;
                 p3 = p2;
                 p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
                 p4 = p1 + p2;
                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
-                H_Kstar[CenIndex][RapIndex][PtIndex][A_Kind[Aid]][B_Kind[Bid]]->Fill(0.5 * (p3 - p2).Rho());
+                H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p2).Rho());
             }
             
-
         }
     }
 
