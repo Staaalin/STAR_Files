@@ -592,7 +592,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         A_TreID.clear();B_TreID.clear();
         A_ParID.clear();B_ParID.clear();
         A_Kind.clear(); B_Kind.clear();
-        A_Recorded.clear();B_Recorded.clear();
+        A_Recorded[0][0].clear();B_Recorded[0][0].clear();
+        A_Recorded[0][1].clear();B_Recorded[0][1].clear();
+        A_Recorded[1][0].clear();B_Recorded[1][0].clear();
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
