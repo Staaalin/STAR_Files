@@ -605,7 +605,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 A_Py.push_back(mix_py->at(j));
                 A_Pz.push_back(mix_pz->at(j));
                 A_TreID.push_back(j);
-                std::vector<Int_t> Temp;Temp.clear();Temp.push_back(j);
+                std::vector<int> Temp;Temp.clear();Temp.push_back(j);
                 for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                     Temp.push_back(ParentList->at(k));
                 }
@@ -619,7 +619,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 B_Py.push_back(mix_py->at(j));
                 B_Pz.push_back(mix_pz->at(j));
                 B_TreID.push_back(j);
-                std::vector<Int_t> Temp;Temp.clear();Temp.push_back(j);
+                std::vector<int> Temp;Temp.clear();Temp.push_back(j);
                 for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                     Temp.push_back(ParentList->at(k));
                 }
@@ -699,7 +699,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
                 p4 = p1 + p2;
                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
-                // H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p2).Rho());
+                H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p2).Rho());
 
                 TestSum++;
                 // bool IfRecord = true;
