@@ -699,9 +699,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p4 = p1 + p2;
                 // auto BetaV = p4.BoostToCM();
                 // p3.Boost(-p4.BoostToCM());p1.Boost(-p4.BoostToCM());
-                Double_t bx = -p4.BoostX();
-                Double_t by = -p4.BoostY();
-                Double_t bz = -p4.BoostZ();
+                Double_t bx = -p4.Boost().X();
+                Double_t by = -p4.Boost().Y();
+                Double_t bz = -p4.Boost().Z();
                 ROOT::Math::Boost boost(bx , by , bz);
                 p3.Boost(boost);p1.Boost(boost);
                 H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p1).Rho());
