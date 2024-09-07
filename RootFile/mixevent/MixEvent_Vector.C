@@ -589,12 +589,12 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             TestSum = 0;
         }
 
-        A_Px.clear();   B_Px.clear();
-        A_Py.clear();   B_Py.clear();
-        A_Pz.clear();   B_Pz.clear();
-        A_TreID.clear();B_TreID.clear();
-        A_ParID.clear();B_ParID.clear();
-        A_Kind.clear(); B_Kind.clear();
+        A_Px   .resize(0);   B_Px.resize(0);
+        A_Py   .resize(0);   B_Py.resize(0);
+        A_Pz   .resize(0);   B_Pz.resize(0);
+        A_TreID.resize(0);B_TreID.resize(0);
+        A_ParID.resize(0);B_ParID.resize(0);
+        A_Kind .resize(0); B_Kind.resize(0);
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
