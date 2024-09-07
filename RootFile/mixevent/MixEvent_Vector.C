@@ -481,6 +481,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     //
     TH1D* H_Kstar                         [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
     TH1D* H_Mix_Kstar                     [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
+    int EventPatternMatch                 [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
@@ -655,8 +656,17 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         }
         if (CenIndex == -1) continue;
 
-        int EventPatternMatch[DCentralityBinNum]  [DyBinNum] [DPtBinNum][2][2];
-        if (EventPatternMatch[0]  [0] [0][0][0] !=0) {cout<<"EventPatternMatch[0]  [0] [0][0][0] = "<<EventPatternMatch[0]  [0] [0][0][0]<<endl;cout<<"FUCK"<<endl;}
+        for (int i = 0;i < CentralityBinNum;i++) {
+            for (int j = 0;j < yBinNum;j++) {
+                for (int k = 0;k < PtBinNum;k++) {
+                    for (int A_Kid = 0;A_Kid < 2;A_Kid++) {
+                        for (int B_Kid = 0;B_Kid < 2;B_Kid++) {
+                            EventPatternMatch[i]  [j] [k][A_Kid][B_Kid] = 0;
+                        }
+                    }
+                }
+            }
+        }
         
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
@@ -736,11 +746,11 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                                 std::vector<float> Sum_B_Pz(   Mix_B_Pz[CenIndex][i][j][Aid][Bid].begin(),   Mix_B_Pz[CenIndex][i][j][Aid][Bid].end());
                                 std::vector<float> Sum_A_EI(Mix_A_EvtID[CenIndex][i][j][Aid][Bid].begin(),Mix_A_EvtID[CenIndex][i][j][Aid][Bid].end());
                                 std::vector<float> Sum_B_EI(Mix_B_EvtID[CenIndex][i][j][Aid][Bid].begin(),Mix_B_EvtID[CenIndex][i][j][Aid][Bid].end());
-                                for (int Aindex = 0;Aindex < Mix_A_Size;A_index++) {
-                                    int A_EID = Sum_A_EI[A_index];
+                                for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
+                                    int A_EID = Sum_A_EI[Aindex];
                                     p2.SetXYZM(Sum_A_Px[Aindex],Sum_A_Py[Aindex],Sum_A_Pz[Aindex],AMass);
-                                    for (int Bindex = 0;Bindex < Mix_B_Size;B_index++) {
-                                        if (A_EID == Sum_B_EI[B_index]) continue;
+                                    for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
+                                        if (A_EID == Sum_B_EI[Bindex]) continue;
                                         p3 = p2;
                                         p1.SetXYZM(Sum_B_Px[Bindex],Sum_B_Py[Bindex],Sum_B_Pz[Bindex],BMass);
                                         p4 = p1 + p2;
