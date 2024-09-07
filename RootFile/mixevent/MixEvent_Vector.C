@@ -576,16 +576,15 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
 
-    time_t time_start;
-    time_t time_now;
-    time(&time_start);
+    auto TimeA = std::chrono::high_resolution_clock::now();
     for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++){
         hadronTree->GetEntry(EntriesID);
         if ((EntriesID+1)%50 == 0) {
             cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
-            time(&time_now);
-            int time_diff = (int)difftime(time_now, time_start);
-            cout << time_diff/60 << "min " << time_diff%60 << "s: " << endl;
+            auto TimeB = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(TimeB - TimeA);
+            TimeA = (auto) std::chrono::high_resolution_clock::now();
+            cout << "times: " << duration.count() << " ms " << endl;
             cout << "Test/Events = " << 1.0*TestSum/50 << endl;
             TestSum = 0;
         }
