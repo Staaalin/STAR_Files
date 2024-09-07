@@ -654,10 +654,10 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         
         for (int i = 0;i < yBinNum;i++) {
             for (int j = 0;j < PtBinNum;j++) {
-                Mix_A_ID[i][j] [0][0].clear();
-                Mix_A_ID[i][j] [1][0].clear();
-                Mix_A_ID[i][j] [0][1].clear();
-                Mix_A_ID[i][j] [1][1].clear();
+                Mix_A_ID[i][j] [0][0].resize(0);
+                Mix_A_ID[i][j] [1][0].resize(0);
+                Mix_A_ID[i][j] [0][1].resize(0);
+                Mix_A_ID[i][j] [1][1].resize(0);
             }
         }
 
