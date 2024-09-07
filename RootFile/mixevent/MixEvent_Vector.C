@@ -592,8 +592,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             cout << time_diff/60 << "min " << time_diff%60 << "s: " << endl;
         }
         if ((EntriesID+1)%200 == 0) {
-            cout<<"Mix_A_Px.size() = "<<Mix_A_Px.size()<<endl;
-            cout<<"Mix_B_Px.size() = "<<Mix_B_Px.size()<<endl;
+            cout<<"Mix_A_Px.size() = "<<sizeof(Mix_A_Px)<<endl;
+            cout<<"Mix_B_Px.size() = "<<sizeof(Mix_B_Px)<<endl;
         }
         // cout<<mult<<endl;
         // if(b>7){continue;}
