@@ -738,21 +738,33 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                             if (Mix_event_Num[CenIndex][i][j][Aid][Bid] == HowMuchEventMixing+1) {
                                 int Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
                                 int Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
-                                std::vector<float> Sum_A_Px(   Mix_A_Px[CenIndex][i][j][Aid][Bid].begin(),   Mix_A_Px[CenIndex][i][j][Aid][Bid].end());
-                                std::vector<float> Sum_B_Px(   Mix_B_Px[CenIndex][i][j][Aid][Bid].begin(),   Mix_B_Px[CenIndex][i][j][Aid][Bid].end());
-                                std::vector<float> Sum_A_Py(   Mix_A_Py[CenIndex][i][j][Aid][Bid].begin(),   Mix_A_Py[CenIndex][i][j][Aid][Bid].end());
-                                std::vector<float> Sum_B_Py(   Mix_B_Py[CenIndex][i][j][Aid][Bid].begin(),   Mix_B_Py[CenIndex][i][j][Aid][Bid].end());
-                                std::vector<float> Sum_A_Pz(   Mix_A_Pz[CenIndex][i][j][Aid][Bid].begin(),   Mix_A_Pz[CenIndex][i][j][Aid][Bid].end());
-                                std::vector<float> Sum_B_Pz(   Mix_B_Pz[CenIndex][i][j][Aid][Bid].begin(),   Mix_B_Pz[CenIndex][i][j][Aid][Bid].end());
-                                std::vector<float> Sum_A_EI(Mix_A_EvtID[CenIndex][i][j][Aid][Bid].begin(),Mix_A_EvtID[CenIndex][i][j][Aid][Bid].end());
-                                std::vector<float> Sum_B_EI(Mix_B_EvtID[CenIndex][i][j][Aid][Bid].begin(),Mix_B_EvtID[CenIndex][i][j][Aid][Bid].end());
+                                // std::vector<float> Sum_A_Px(   Mix_A_Px[CenIndex][i][j][Aid][Bid].begin(),   Mix_A_Px[CenIndex][i][j][Aid][Bid].end());
+                                // std::vector<float> Sum_B_Px(   Mix_B_Px[CenIndex][i][j][Aid][Bid].begin(),   Mix_B_Px[CenIndex][i][j][Aid][Bid].end());
+                                // std::vector<float> Sum_A_Py(   Mix_A_Py[CenIndex][i][j][Aid][Bid].begin(),   Mix_A_Py[CenIndex][i][j][Aid][Bid].end());
+                                // std::vector<float> Sum_B_Py(   Mix_B_Py[CenIndex][i][j][Aid][Bid].begin(),   Mix_B_Py[CenIndex][i][j][Aid][Bid].end());
+                                // std::vector<float> Sum_A_Pz(   Mix_A_Pz[CenIndex][i][j][Aid][Bid].begin(),   Mix_A_Pz[CenIndex][i][j][Aid][Bid].end());
+                                // std::vector<float> Sum_B_Pz(   Mix_B_Pz[CenIndex][i][j][Aid][Bid].begin(),   Mix_B_Pz[CenIndex][i][j][Aid][Bid].end());
+                                // std::vector<float> Sum_A_EI(Mix_A_EvtID[CenIndex][i][j][Aid][Bid].begin(),Mix_A_EvtID[CenIndex][i][j][Aid][Bid].end());
+                                // std::vector<float> Sum_B_EI(Mix_B_EvtID[CenIndex][i][j][Aid][Bid].begin(),Mix_B_EvtID[CenIndex][i][j][Aid][Bid].end());
+                                // for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
+                                //     int A_EID = Sum_A_EI[Aindex];
+                                //     p2.SetXYZM(Sum_A_Px[Aindex],Sum_A_Py[Aindex],Sum_A_Pz[Aindex],AMass);
+                                //     for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
+                                //         if (A_EID == Sum_B_EI[Bindex]) continue;
+                                //         p3 = p2;
+                                //         p1.SetXYZM(Sum_B_Px[Bindex],Sum_B_Py[Bindex],Sum_B_Pz[Bindex],BMass);
+                                //         p4 = p1 + p2;
+                                //         p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
+                                //         H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p3 - p2).Rho());
+                                //     }
+                                // }
                                 for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
                                     int A_EID = Sum_A_EI[Aindex];
-                                    p2.SetXYZM(Sum_A_Px[Aindex],Sum_A_Py[Aindex],Sum_A_Pz[Aindex],AMass);
+                                    p2.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
                                     for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
                                         if (A_EID == Sum_B_EI[Bindex]) continue;
                                         p3 = p2;
-                                        p1.SetXYZM(Sum_B_Px[Bindex],Sum_B_Py[Bindex],Sum_B_Pz[Bindex],BMass);
+                                        p1.SetXYZM(Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex],BMass);
                                         p4 = p1 + p2;
                                         p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
                                         H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p3 - p2).Rho());
