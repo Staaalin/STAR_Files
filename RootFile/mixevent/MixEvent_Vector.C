@@ -640,134 +640,131 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         }
         if (CenIndex == -1) continue;
 
-        for (int i = 0;i < CentralityBinNum;i++) {
-            for (int j = 0;j < yBinNum;j++) {
-                for (int k = 0;k < PtBinNum;k++) {
-                    for (int A_Kid = 0;A_Kid < 2;A_Kid++) {
-                        for (int B_Kid = 0;B_Kid < 2;B_Kid++) {
-                            EventPatternMatch[i]  [j] [k][A_Kid][B_Kid] = 0;
-                        }
-                    }
-                }
-            }
-        }
+        // for (int i = 0;i < CentralityBinNum;i++) {
+        //     for (int j = 0;j < yBinNum;j++) {
+        //         for (int k = 0;k < PtBinNum;k++) {
+        //             for (int A_Kid = 0;A_Kid < 2;A_Kid++) {
+        //                 for (int B_Kid = 0;B_Kid < 2;B_Kid++) {
+        //                     EventPatternMatch[i]  [j] [k][A_Kid][B_Kid] = 0;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
         
-        for (int i = 0;i < yBinNum;i++) {
-            for (int j = 0;j < PtBinNum;j++) {
-                Mix_A_ID[i][j] [0][0].clear();
-                Mix_A_ID[i][j] [1][0].clear();
-                Mix_A_ID[i][j] [0][1].clear();
-                Mix_A_ID[i][j] [1][1].clear();
-            }
-        }
+        // for (int i = 0;i < yBinNum;i++) {
+        //     for (int j = 0;j < PtBinNum;j++) {
+        //         Mix_A_ID[i][j] [0][0].clear();
+        //         Mix_A_ID[i][j] [1][0].clear();
+        //         Mix_A_ID[i][j] [0][1].clear();
+        //         Mix_A_ID[i][j] [1][1].clear();
+        //     }
+        // }
 
-        for (int Bid = 0;Bid < B_Px.size();Bid++) {
+        // for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
-            float BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
+        //     float BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
 
-            // B Index
-            float tEnergy = pow(pow(BPx,2) + pow(BPy,2) + pow(BPz,2) + pow(BMass,2),0.5);
-            rap = 0.5*log((tEnergy+BPz)/(tEnergy-BPz));
-            // cout<<"px = "<<B_Px[0]<<" , py = "<<B_Py[0]<<" , pz = "<<B_Pz[0]<<endl;
-            // cout<<"rap = "<<rap<<endl;
-            int RapIndex = -1;
-            for (int k=0;k<yBinNum;k++){
-                if ((yBin[k] <= rap) && (rap < yBin[k+1])) {
-                    RapIndex = k;
-                    break;
-                }
-            }
+        //     // B Index
+        //     float tEnergy = pow(pow(BPx,2) + pow(BPy,2) + pow(BPz,2) + pow(BMass,2),0.5);
+        //     rap = 0.5*log((tEnergy+BPz)/(tEnergy-BPz));
+        //     int RapIndex = -1;
+        //     for (int k=0;k<yBinNum;k++){
+        //         if ((yBin[k] <= rap) && (rap < yBin[k+1])) {
+        //             RapIndex = k;
+        //             break;
+        //         }
+        //     }
 
-            float B_Pt = pow(pow(BPx,2) + pow(BPy,2),0.5);
-            int PtIndex = -1;
-            for (int k=0;k<PtBinNum;k++){
-                if ((PtBin[k] <= B_Pt) && (B_Pt < PtBin[k+1])) {
-                    PtIndex = k;
-                    break;
-                }
-            }
+        //     float B_Pt = pow(pow(BPx,2) + pow(BPy,2),0.5);
+        //     int PtIndex = -1;
+        //     for (int k=0;k<PtBinNum;k++){
+        //         if ((PtBin[k] <= B_Pt) && (B_Pt < PtBin[k+1])) {
+        //             PtIndex = k;
+        //             break;
+        //         }
+        //     }
 
-            // cout<<"CenIndex = "<<CenIndex<<" , "<<"RapIndex = "<<RapIndex<<" , "<<"PtIndex = "<<PtIndex<<endl;
-            if ((RapIndex == -1) || (PtIndex == -1)) {
-                continue;
-            }
+        //     if ((RapIndex == -1) || (PtIndex == -1)) {
+        //         continue;
+        //     }
 
-            p2.SetXYZM(BPx,BPy,BPz,BMass);
-            int B_Kid = B_Kind[Bid];
-            bool IfBFilled = false;
-            for (int Aid = 0;Aid < A_Px.size();Aid++) {
-                if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
-                int A_Kid = A_Kind[Aid];
-                p3 = p2;
-                p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
-                p4 = p1 + p2;
-                p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
-                H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p2).Rho());
+        //     p2.SetXYZM(BPx,BPy,BPz,BMass);
+        //     int B_Kid = B_Kind[Bid];
+        //     bool IfBFilled = false;
+        //     for (int Aid = 0;Aid < A_Px.size();Aid++) {
+        //         if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
+        //         int A_Kid = A_Kind[Aid];
+        //         p3 = p2;
+        //         p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
+        //         p4 = p1 + p2;
+        //         p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
+        //         H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p2).Rho());
 
-                TestSum++;
-                bool IfRecord = true;
-                for (int Cid = 0;Cid < Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].size();Cid++) {
-                    if (Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid][Cid] == Aid) {
-                        IfRecord = false;
-                        break;
-                    }
-                }
-                if (IfRecord) {
-                    Mix_A_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Px[Aid]);
-                    Mix_A_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Py[Aid]);
-                    Mix_A_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Pz[Aid]);
-                    Mix_A_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
-                    EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
-                    Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].push_back(Aid);
-                }
-                if (!IfBFilled) {
-                    Mix_B_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Px[Bid]);
-                    Mix_B_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Py[Bid]);
-                    Mix_B_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Pz[Bid]);
-                    Mix_B_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
-                    EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
-                    IfBFilled = true;
-                }
-            }
-        }
+        //         TestSum++;
+        //         bool IfRecord = true;
+        //         for (int Cid = 0;Cid < Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].size();Cid++) {
+        //             if (Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid][Cid] == Aid) {
+        //                 IfRecord = false;
+        //                 break;
+        //             }
+        //         }
+        //         if (IfRecord) {
+        //             Mix_A_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Px[Aid]);
+        //             Mix_A_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Py[Aid]);
+        //             Mix_A_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Pz[Aid]);
+        //             Mix_A_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
+        //             EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
+        //             Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].push_back(Aid);
+        //         }
+        //         if (!IfBFilled) {
+        //             Mix_B_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Px[Bid]);
+        //             Mix_B_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Py[Bid]);
+        //             Mix_B_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Pz[Bid]);
+        //             Mix_B_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
+        //             EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
+        //             IfBFilled = true;
+        //         }
+        //     }
+        // }
 
-        for (int i = 0;i < yBinNum;i++) {
-            for (int j = 0;j < PtBinNum;j++) {
-                for (int Aid = 0;Aid < 2;Aid++) {
-                    for (int Bid = 0;Bid < 2;Bid++) {
-                        if (EventPatternMatch[CenIndex][i][j][Aid][Bid] != 0) {
-                            Mix_event_Num[CenIndex][i][j][Aid][Bid]++;
-                            if (Mix_event_Num[CenIndex][i][j][Aid][Bid] == HowMuchEventMixing+1) {
-                                int Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
-                                int Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
-                                for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
-                                    int A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
-                                    p2.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
-                                    for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
-                                        if (A_EID == Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]) continue;
-                                        p3 = p2;
-                                        p1.SetXYZM(Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex],BMass);
-                                        p4 = p1 + p2;
-                                        p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
-                                        H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p3 - p2).Rho());
-                                    }
-                                }
-                                Mix_event_Num[CenIndex][i][j][Aid][Bid] = 0;
-                                Mix_A_Px[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_B_Px[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_A_Py[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_B_Py[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_A_Pz[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_B_Pz[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_A_EvtID[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_B_EvtID[CenIndex][i][j][Aid][Bid].clear();
-                            }
-                        }
-                    }
-                }
-            }
+        // for (int i = 0;i < yBinNum;i++) {
+        //     for (int j = 0;j < PtBinNum;j++) {
+        //         for (int Aid = 0;Aid < 2;Aid++) {
+        //             for (int Bid = 0;Bid < 2;Bid++) {
+        //                 if (EventPatternMatch[CenIndex][i][j][Aid][Bid] != 0) {
+        //                     Mix_event_Num[CenIndex][i][j][Aid][Bid]++;
+        //                     if (Mix_event_Num[CenIndex][i][j][Aid][Bid] == HowMuchEventMixing+1) {
+        //                         int Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
+        //                         int Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
+        //                         for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
+        //                             int A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
+        //                             p2.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
+        //                             for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
+        //                                 if (A_EID == Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]) continue;
+        //                                 p3 = p2;
+        //                                 p1.SetXYZM(Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex],BMass);
+        //                                 p4 = p1 + p2;
+        //                                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
+        //                                 H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p3 - p2).Rho());
+        //                             }
+        //                         }
+        //                         Mix_event_Num[CenIndex][i][j][Aid][Bid] = 0;
+        //                         Mix_A_Px[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_B_Px[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_A_Py[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_B_Py[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_A_Pz[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_B_Pz[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_A_EvtID[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_B_EvtID[CenIndex][i][j][Aid][Bid].clear();
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
 
-        }
+        // }
 
 
     }
