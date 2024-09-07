@@ -662,9 +662,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
         }
 
-        TestSum++;
-
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
+            TestSum++;
 
             float BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
 
