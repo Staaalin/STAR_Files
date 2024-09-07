@@ -30,7 +30,6 @@
 #include <fstream>
 #include <map>
 #include <stdio.h>
-#include <chrono>
 using namespace std;
 
 // #define DataName           "pAu_200_15"
@@ -577,14 +576,12 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
 
-    auto TimeA = std::chrono::high_resolution_clock::now();
     for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++){
+        auto TimeA = std::chrono::high_resolution_clock::now();
         hadronTree->GetEntry(EntriesID);
         if ((EntriesID+1)%50 == 0) {
             cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
-            auto TimeB = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(TimeB - TimeA);
-            TimeA = std::chrono::high_resolution_clock::now();
             cout << "times: " << duration.count() << " ms " << endl;
             cout << "Test/Events = " << 1.0*TestSum/50 << endl;
             TestSum = 0;
@@ -769,7 +766,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
 
         }
-
+        
+        auto TimeB = std::chrono::high_resolution_clock::now();
 
 
     }
