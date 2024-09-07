@@ -698,7 +698,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p3 = p2;
                 p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
                 p4 = p1 + p2;
-                p3.Boost(-p4.BoostVector());p1.Boost(-p4.BoostVector());
+                // p3.Boost(-p4.BoostVector());p1.Boost(-p4.BoostVector());
                 // float TTT = 0.5 * (p3 - p1).Rho();
                 H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p1).Rho());
 
