@@ -463,15 +463,15 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_A_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_A_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
-    std::vector<float> Mix_A_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
-    std::vector<float> Mix_A_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
-    std::vector<float> Mix_A_ID                                [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<int>   Mix_A_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<int>   Mix_A_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<int>   Mix_A_ID                                [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
-    std::vector<float> Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
-    std::vector<float> Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
-    std::vector<float> Mix_B_ID                                [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<int>   Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<int>   Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<int>   Mix_B_ID                                [yBinNum]  [PtBinNum]  [2] [2] ;
     int                Mix_event_Num      [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
     //
     TH1D* H_Kstar                         [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
