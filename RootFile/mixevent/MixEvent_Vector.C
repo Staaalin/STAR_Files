@@ -466,10 +466,12 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<float> Mix_A_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_A_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_A_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_A_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     int                Mix_A_Id           [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
     int                Mix_B_Id           [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
     // Mix_A/B_Event_LIst record the Sta and End for Mix_A/B_Px for each event
@@ -654,7 +656,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         if (CenIndex == -1) continue;
 
         int EventPatternMatch[DCentralityBinNum]  [DyBinNum] [DPtBinNum][2][2];
-        if (EventPatternMatch[0]  [0] [0][0][0] !=0) {cout<<"FUCK"<<endl;}
+        if (EventPatternMatch[0]  [0] [0][0][0] !=0) {cout<<"EventPatternMatch[0]  [0] [0][0][0] = "<<EventPatternMatch[0]  [0] [0][0][0]<<endl;cout<<"FUCK"<<endl;}
         
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
