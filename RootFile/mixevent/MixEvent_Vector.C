@@ -472,8 +472,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<float> Mix_B_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
-    int                Mix_A_Id           [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
-    int                Mix_B_Id           [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
     // Mix_A/B_Event_LIst record the Sta and End for Mix_A/B_Px for each event
     std::vector<int>   Mix_A_Event_List   [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<int>   Mix_B_Event_List   [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
@@ -511,8 +509,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         H_Kstar         [i][j][k][0][0] = new TH1D(HistName1s,HistName2s,500,0,10);
                         H_Mix_Kstar     [i][j][k][0][0] = new TH1D(HistName1,HistName2,500,0,10);
                         Mix_event_Num   [i][j][k][0][0] = 0;
-                        Mix_A_Id        [i][j][k][0][0] = 0;
-                        Mix_B_Id        [i][j][k][0][0] = 0;
                         Mix_A_Event_List[i][j][k][0][0].push_back(0);
                         Mix_B_Event_List[i][j][k][0][0].push_back(0);
                     }
@@ -520,8 +516,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         H_Kstar         [i][j][k][0][1] = new TH1D(HistName1s,HistName2s,500,0,10);
                         H_Mix_Kstar     [i][j][k][0][1] = new TH1D(HistName1,HistName2,500,0,10);
                         Mix_event_Num   [i][j][k][0][1] = 0;
-                        Mix_A_Id        [i][j][k][0][1] = 0;
-                        Mix_B_Id        [i][j][k][0][1] = 0;
                         Mix_A_Event_List[i][j][k][0][1].push_back(0);
                         Mix_B_Event_List[i][j][k][0][1].push_back(0);
                     }
@@ -529,8 +523,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         H_Kstar         [i][j][k][1][0] = new TH1D(HistName1s,HistName2s,500,0,10);
                         H_Mix_Kstar     [i][j][k][1][0] = new TH1D(HistName1,HistName2,500,0,10);
                         Mix_event_Num   [i][j][k][1][0] = 0;
-                        Mix_A_Id        [i][j][k][1][0] = 0;
-                        Mix_B_Id        [i][j][k][1][0] = 0;
                         Mix_A_Event_List[i][j][k][1][0].push_back(0);
                         Mix_B_Event_List[i][j][k][1][0].push_back(0);
                     }
@@ -598,6 +590,10 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             time(&time_now);
             int time_diff = (int)difftime(time_now, time_start);
             cout << time_diff/60 << "min " << time_diff%60 << "s: " << endl;
+        }
+        if ((EntriesID+1)%200 == 0) {
+            cout<<"Mix_A_Px.size() = "<<Mix_A_Px.size()<<endl;
+            cout<<"Mix_B_Px.size() = "<<Mix_B_Px.size()<<endl;
         }
         // cout<<mult<<endl;
         // if(b>7){continue;}
@@ -738,26 +734,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                             if (Mix_event_Num[CenIndex][i][j][Aid][Bid] == HowMuchEventMixing+1) {
                                 int Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
                                 int Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
-                                // std::vector<float> Sum_A_Px(   Mix_A_Px[CenIndex][i][j][Aid][Bid].begin(),   Mix_A_Px[CenIndex][i][j][Aid][Bid].end());
-                                // std::vector<float> Sum_B_Px(   Mix_B_Px[CenIndex][i][j][Aid][Bid].begin(),   Mix_B_Px[CenIndex][i][j][Aid][Bid].end());
-                                // std::vector<float> Sum_A_Py(   Mix_A_Py[CenIndex][i][j][Aid][Bid].begin(),   Mix_A_Py[CenIndex][i][j][Aid][Bid].end());
-                                // std::vector<float> Sum_B_Py(   Mix_B_Py[CenIndex][i][j][Aid][Bid].begin(),   Mix_B_Py[CenIndex][i][j][Aid][Bid].end());
-                                // std::vector<float> Sum_A_Pz(   Mix_A_Pz[CenIndex][i][j][Aid][Bid].begin(),   Mix_A_Pz[CenIndex][i][j][Aid][Bid].end());
-                                // std::vector<float> Sum_B_Pz(   Mix_B_Pz[CenIndex][i][j][Aid][Bid].begin(),   Mix_B_Pz[CenIndex][i][j][Aid][Bid].end());
-                                // std::vector<float> Sum_A_EI(Mix_A_EvtID[CenIndex][i][j][Aid][Bid].begin(),Mix_A_EvtID[CenIndex][i][j][Aid][Bid].end());
-                                // std::vector<float> Sum_B_EI(Mix_B_EvtID[CenIndex][i][j][Aid][Bid].begin(),Mix_B_EvtID[CenIndex][i][j][Aid][Bid].end());
-                                // for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
-                                //     int A_EID = Sum_A_EI[Aindex];
-                                //     p2.SetXYZM(Sum_A_Px[Aindex],Sum_A_Py[Aindex],Sum_A_Pz[Aindex],AMass);
-                                //     for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
-                                //         if (A_EID == Sum_B_EI[Bindex]) continue;
-                                //         p3 = p2;
-                                //         p1.SetXYZM(Sum_B_Px[Bindex],Sum_B_Py[Bindex],Sum_B_Pz[Bindex],BMass);
-                                //         p4 = p1 + p2;
-                                //         p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
-                                //         H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p3 - p2).Rho());
-                                //     }
-                                // }
                                 for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
                                     int A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
                                     p2.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
