@@ -434,15 +434,12 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         #endif
     #endif
 
-    // TString FileName = "output_";
-    // cout<<"Start Running"<<endl;
-    // cout<<StartFileIndex<<endl;
-    // cout<<EndFileIndex<<endl;
 
 
     double kstar, rap;
     TVector3 BetaTemp;
-    ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
+    // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
+    ROOT::Math::PxPyPzMVector p1 , p2 , p3 , p4 , p5;
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
