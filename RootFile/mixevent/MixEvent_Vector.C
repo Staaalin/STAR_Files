@@ -506,22 +506,22 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     HistName2 += PatternBin[l];
                     HistName2s += PatternBin[l];
                     if (l == 0) { // AMBM
-                        H_Kstar         [i][j][k][0][0] = new TH1D(HistName1s,HistName2s,500,0,10);
-                        H_Mix_Kstar     [i][j][k][0][0] = new TH1D(HistName1,HistName2,500,0,10);
-                        Mix_event_Num   [i][j][k][0][0] = 0;
-                        Mix_A_ID           [j][k][0][0].push_back(0);
+                        H_Kstar            [i][j][k][0][0] = new TH1D(HistName1s,HistName2s,500,0,10);
+                        H_Mix_Kstar        [i][j][k][0][0] = new TH1D(HistName1,HistName2,500,0,10);
+                        Mix_event_Num      [i][j][k][0][0] = 0;
+                        if(i==0) Mix_A_ID     [j][k][0][0].push_back(0);
                     }
                     if (l == 1) { // AMBS
-                        H_Kstar         [i][j][k][0][1] = new TH1D(HistName1s,HistName2s,500,0,10);
-                        H_Mix_Kstar     [i][j][k][0][1] = new TH1D(HistName1,HistName2,500,0,10);
-                        Mix_event_Num   [i][j][k][0][1] = 0;
-                        Mix_A_ID           [j][k][0][0].push_back(0);
+                        H_Kstar            [i][j][k][0][1] = new TH1D(HistName1s,HistName2s,500,0,10);
+                        H_Mix_Kstar        [i][j][k][0][1] = new TH1D(HistName1,HistName2,500,0,10);
+                        Mix_event_Num      [i][j][k][0][1] = 0;
+                        if(i==0) Mix_A_ID     [j][k][0][1].push_back(0);
                     }
                     if (l == 2) { // ASBM
-                        H_Kstar         [i][j][k][1][0] = new TH1D(HistName1s,HistName2s,500,0,10);
-                        H_Mix_Kstar     [i][j][k][1][0] = new TH1D(HistName1,HistName2,500,0,10);
-                        Mix_event_Num   [i][j][k][1][0] = 0;
-                        Mix_A_ID           [j][k][0][0].push_back(0);
+                        H_Kstar            [i][j][k][1][0] = new TH1D(HistName1s,HistName2s,500,0,10);
+                        H_Mix_Kstar        [i][j][k][1][0] = new TH1D(HistName1,HistName2,500,0,10);
+                        Mix_event_Num      [i][j][k][1][0] = 0;
+                        if(i==0) Mix_A_ID     [j][k][1][0].push_back(0);
                     }
                 }
             }
