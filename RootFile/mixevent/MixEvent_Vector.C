@@ -583,7 +583,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
             auto TimeB = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(TimeB - TimeA);
-            TimeA = (auto) std::chrono::high_resolution_clock::now();
+            TimeA = std::chrono::high_resolution_clock::now();
             cout << "times: " << duration.count() << " ms " << endl;
             cout << "Test/Events = " << 1.0*TestSum/50 << endl;
             TestSum = 0;
