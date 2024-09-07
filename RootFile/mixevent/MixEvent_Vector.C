@@ -442,7 +442,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
 
     double kstar, rap;
     TVector3 BetaTemp;
-    ROOT::Math::LorentzVector p1 , p2 , p3 , p4 , p5;
+    ROOT::Math::LorentzVector<ROOT::Math::PxPyPzM4D<double>> p1 , p2 , p3 , p4 , p5;
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -690,16 +690,16 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 continue;
             }
 
-            p2.PxPyPzMVector(BPx,BPy,BPz,BMass);
+            p2.SetPxPyPzM(BPx,BPy,BPz,BMass);
             int B_Kid = B_Kind[Bid];
             bool IfBFilled = false;
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
                 int A_Kid = A_Kind[Aid];
                 p3 = p2;
-                p1.PxPyPzMVector(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
+                p1.SetPxPyPzM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
                 p4 = p1 + p2;
-                p3.Boost(-p4.BoostToCM());p1.Boost(-p4.BoostToCM());
+                p3.Boost(-p4.BoostVector());p1.Boost(-p4.BoostVector());
                 H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p1).P());
 
                 TestSum++;
