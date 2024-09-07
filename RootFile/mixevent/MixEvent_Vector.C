@@ -442,7 +442,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
 
     double kstar, rap;
     TVector3 BetaTemp;
-    ROOT::Math::LorentzVector<ROOT::Math::PxPyPzM4E<double>> p1 , p2 , p3 , p4 , p5;
+    ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
