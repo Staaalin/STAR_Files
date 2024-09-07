@@ -759,10 +759,10 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                                 //     }
                                 // }
                                 for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
-                                    int A_EID = Sum_A_EI[Aindex];
+                                    int A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
                                     p2.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
                                     for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
-                                        if (A_EID == Sum_B_EI[Bindex]) continue;
+                                        if (A_EID == Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]) continue;
                                         p3 = p2;
                                         p1.SetXYZM(Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex],BMass);
                                         p4 = p1 + p2;
