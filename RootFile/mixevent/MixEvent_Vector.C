@@ -478,7 +478,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     TH1D* H_Mix_Kstar                     [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
     int EventPatternMatch                 [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
     // Used for testing
-    int KstarCalculating = 0;
+    int TestSum = 0;
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
@@ -586,8 +586,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             time(&time_now);
             int time_diff = (int)difftime(time_now, time_start);
             cout << time_diff/60 << "min " << time_diff%60 << "s: " << endl;
-            cout << "KstarCalculating/Event = " << 1.0*KstarCalculating/50 << endl;
-            KstarCalculating = 0;
+            cout << "Test/Events = " << 1.0*TestSum/50 << endl;
+            TestSum = 0;
         }
 
         A_Px.clear();   B_Px.clear();
@@ -662,6 +662,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
         }
 
+        TestSum++;
+
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
             float BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
@@ -704,7 +706,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p4 = p1 + p2;
                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
                 H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p2).Rho());
-                KstarCalculating++;
 
                 bool IfRecord = true;
                 for (int Cid = 0;Cid < Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].size();Cid++) {
@@ -751,7 +752,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                                         p4 = p1 + p2;
                                         p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
                                         H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p3 - p2).Rho());
-                                        KstarCalculating++;
                                     }
                                 }
                                 Mix_event_Num[CenIndex][i][j][Aid][Bid] = 0;
