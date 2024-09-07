@@ -689,16 +689,17 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 continue;
             }
 
-            // p2.SetXYZM(BPx,BPy,BPz,BMass);
+            p2.SetXYZM(BPx,BPy,BPz,BMass);
             int B_Kid = B_Kind[Bid];
             bool IfBFilled = false;
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
                 int A_Kid = A_Kind[Aid];
-                // p3 = p2;
-                // p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
-                // p4 = p1 + p2;
-                // p3.Boost(-p4.BoostVector());p1.Boost(-p4.BoostVector());
+                p3 = p2;
+                p1.SetXYZM(A_Px[Aid],A_Py[Aid],A_Pz[Aid],AMass);
+                p4 = p1 + p2;
+                p3.Boost(-p4.BoostVector());p1.Boost(-p4.BoostVector());
+                float TTT = 0.5 * (p3 - p1).Rho();
                 // H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p1).Rho());
 
                 TestSum++;
