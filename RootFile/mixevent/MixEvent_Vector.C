@@ -453,28 +453,25 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<Int_t>                    A_TreID        ;
     std::vector<std::vector<int> >        A_ParID        ;
     std::vector<int>                      A_Kind         ;
-    std::vector<int>                      A_IfFilledInMix                             [2] [2] ;
     std::vector<Float_t>                  B_Px           ;
     std::vector<Float_t>                  B_Py           ;
     std::vector<Float_t>                  B_Pz           ;
     std::vector<Int_t>                    B_TreID        ;
     std::vector<std::vector<int> >        B_ParID        ;
     std::vector<int>                      B_Kind         ;
-    std::vector<int>                      B_IfFilledInMix                             [2] [2] ;
     // used as array
     std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_A_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_A_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_A_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_A_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_A_ID                                [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_Px           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_Py           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_Pz           [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<float> Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
-    // Mix_A/B_Event_LIst record the Sta and End for Mix_A/B_Px for each event
-    std::vector<int>   Mix_A_Event_List   [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
-    std::vector<int>   Mix_B_Event_List   [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
+    std::vector<float> Mix_B_ID                                [yBinNum]  [PtBinNum]  [2] [2] ;
     int                Mix_event_Num      [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
     //
     TH1D* H_Kstar                         [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
@@ -509,22 +506,19 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         H_Kstar         [i][j][k][0][0] = new TH1D(HistName1s,HistName2s,500,0,10);
                         H_Mix_Kstar     [i][j][k][0][0] = new TH1D(HistName1,HistName2,500,0,10);
                         Mix_event_Num   [i][j][k][0][0] = 0;
-                        Mix_A_Event_List[i][j][k][0][0].push_back(0);
-                        Mix_B_Event_List[i][j][k][0][0].push_back(0);
+                        Mix_A_ID           [j][k][0][0].push_back(0);
                     }
                     if (l == 1) { // AMBS
                         H_Kstar         [i][j][k][0][1] = new TH1D(HistName1s,HistName2s,500,0,10);
                         H_Mix_Kstar     [i][j][k][0][1] = new TH1D(HistName1,HistName2,500,0,10);
                         Mix_event_Num   [i][j][k][0][1] = 0;
-                        Mix_A_Event_List[i][j][k][0][1].push_back(0);
-                        Mix_B_Event_List[i][j][k][0][1].push_back(0);
+                        Mix_A_ID           [j][k][0][0].push_back(0);
                     }
                     if (l == 2) { // ASBM
                         H_Kstar         [i][j][k][1][0] = new TH1D(HistName1s,HistName2s,500,0,10);
                         H_Mix_Kstar     [i][j][k][1][0] = new TH1D(HistName1,HistName2,500,0,10);
                         Mix_event_Num   [i][j][k][1][0] = 0;
-                        Mix_A_Event_List[i][j][k][1][0].push_back(0);
-                        Mix_B_Event_List[i][j][k][1][0].push_back(0);
+                        Mix_A_ID           [j][k][0][0].push_back(0);
                     }
                 }
             }
@@ -602,10 +596,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         A_TreID.clear();B_TreID.clear();
         A_ParID.clear();B_ParID.clear();
         A_Kind.clear(); B_Kind.clear();
-        A_IfFilledInMix[0][0].clear();B_IfFilledInMix[0][0].clear();
-        A_IfFilledInMix[0][1].clear();B_IfFilledInMix[0][1].clear();
-        A_IfFilledInMix[1][0].clear();B_IfFilledInMix[1][0].clear();
-        A_IfFilledInMix[1][1].clear();B_IfFilledInMix[1][1].clear();
 
         for (int j=0;j<PDGMult;j++){
             if (PDG->at(j) == A_PDG) {
@@ -616,10 +606,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 A_Py.push_back(mix_py->at(j));
                 A_Pz.push_back(mix_pz->at(j));
                 A_TreID.push_back(j);
-                A_IfFilledInMix[0][0].push_back(0);
-                A_IfFilledInMix[0][1].push_back(0);
-                A_IfFilledInMix[1][0].push_back(0);
-                A_IfFilledInMix[1][1].push_back(0);
                 std::vector<Int_t> Temp;Temp.clear();Temp.push_back(j);
                 for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                     Temp.push_back(ParentList->at(k));
@@ -634,10 +620,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 B_Py.push_back(mix_py->at(j));
                 B_Pz.push_back(mix_pz->at(j));
                 B_TreID.push_back(j);
-                B_IfFilledInMix[0][0].push_back(0);
-                B_IfFilledInMix[0][1].push_back(0);
-                B_IfFilledInMix[1][0].push_back(0);
-                B_IfFilledInMix[1][1].push_back(0);
                 std::vector<Int_t> Temp;Temp.clear();Temp.push_back(j);
                 for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                     Temp.push_back(ParentList->at(k));
@@ -671,6 +653,15 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
         }
         
+        for (int i = 0;i < yBinNum;i++) {
+            for (int j = 0;j < PtBinNum;j++) {
+                Mix_A_ID[i][j] [0][0].clear();
+                Mix_A_ID[i][j] [1][0].clear();
+                Mix_A_ID[i][j] [0][1].clear();
+                Mix_A_ID[i][j] [1][1].clear();
+            }
+        }
+
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
             float BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
@@ -704,6 +695,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
 
             p2.SetXYZM(BPx,BPy,BPz,BMass);
             int B_Kid = B_Kind[Bid];
+            bool IfBFilled = false;
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
                 int A_Kid = A_Kind[Aid];
@@ -713,21 +705,28 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
                 H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p2).Rho());
 
-                if (A_IfFilledInMix[A_Kid][B_Kid][Aid] == 0) {
+                bool IfRecord = true;
+                for (int Cid = 0;Cid < Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].size();Cid++) {
+                    if (Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid][Cid] == Aid) {
+                        IfRecord = false;
+                        break;
+                    }
+                }
+                if (IfRecord) {
                     Mix_A_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Px[Aid]);
                     Mix_A_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Py[Aid]);
                     Mix_A_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Pz[Aid]);
                     Mix_A_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
                     EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
-                    A_IfFilledInMix[A_Kid][B_Kid][Aid]++;
+                    Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].push_back(Aid);
                 }
-                if (B_IfFilledInMix[A_Kid][B_Kid][Bid] == 0) {
+                if (!IfBFilled) {
                     Mix_B_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Px[Bid]);
                     Mix_B_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Py[Bid]);
                     Mix_B_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Pz[Bid]);
                     Mix_B_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
                     EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
-                    B_IfFilledInMix[A_Kid][B_Kid][Bid]++;
+                    IfBFilled = true;
                 }
             }
         }
