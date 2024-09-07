@@ -584,7 +584,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
             cout << "Test/Events = " << 1.0*TestSum/50 << endl;
             TestSum = 0;
-            long long microseconds = (clock() - Tstart) * 1000000 / CLOCKS_PER_SEC;
+            long long microseconds = (clock() - Tstart);
             std::cout << "Microseconds: " << microseconds << std::endl;
             Tstart = clock();
         }
