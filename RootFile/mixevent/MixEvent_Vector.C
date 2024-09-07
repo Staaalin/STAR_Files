@@ -581,8 +581,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         hadronTree->GetEntry(EntriesID);
         if ((EntriesID+1)%50 == 0) {
             cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(TimeB - TimeA);
-            cout << "times: " << duration.count() << " ms " << endl;
             cout << "Test/Events = " << 1.0*TestSum/50 << endl;
             TestSum = 0;
         }
@@ -768,6 +766,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         }
         
         auto TimeB = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(TimeB - TimeA);
+        cout << "times: " << duration.count() << " ms " << endl;
 
 
     }
