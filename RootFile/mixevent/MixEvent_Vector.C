@@ -581,12 +581,12 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++){
         hadronTree->GetEntry(EntriesID);
         if ((EntriesID+1)%50 == 0) {
-            cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
-            cout << "Test/Events = " << 1.0*TestSum/50 << endl;
-            TestSum = 0;
             long long microseconds = (clock() - Tstart)/10000;
-            std::cout << "Microseconds: " << microseconds << std::endl;
+            std::cout << "Microseconds: " << microseconds;
+            cout << "Test/Events = " << 1.0*TestSum/50;
+            cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
             Tstart = clock();
+            TestSum = 0;
         }
 
         A_Px.clear();   B_Px.clear();
