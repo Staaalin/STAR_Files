@@ -663,7 +663,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         }
 
         for (int Bid = 0;Bid < B_Px.size();Bid++) {
-            TestSum++;
 
             float BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
 
@@ -693,6 +692,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             if ((RapIndex == -1) || (PtIndex == -1)) {
                 continue;
             }
+            TestSum++;
 
             p2.SetXYZM(BPx,BPy,BPz,BMass);
             int B_Kid = B_Kind[Bid];
