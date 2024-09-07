@@ -692,7 +692,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             if ((RapIndex == -1) || (PtIndex == -1)) {
                 continue;
             }
-            TestSum++;
 
             p2.SetXYZM(BPx,BPy,BPz,BMass);
             int B_Kid = B_Kind[Bid];
@@ -706,6 +705,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p3.Boost(-p4.BoostVector());p2.Boost(-p4.BoostVector());
                 H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p2).Rho());
 
+                TestSum++;
                 bool IfRecord = true;
                 for (int Cid = 0;Cid < Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].size();Cid++) {
                     if (Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid][Cid] == Aid) {
