@@ -49,7 +49,7 @@ using namespace std;
 #define Pi 3.1415926535898
 
 const int CentralityBin[] = {0,10,20,40,80};// %
-const float PVzBin[] = {-45.0 , -13.0 , 5.0 , 23 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
+const float PVzBin[] = {-45.0 , -13.0 , 5.0 , 23.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
 const float yBin[] = {-5.0 , 0.0 , 0.5 , 5.0}; // B_y
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
@@ -495,7 +495,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 Tstart = clock();
                 TestSum = 0;
             }
-            cout<<"2"<<endl;
+            cout<<"1";
 
             A_Px   .resize(0);   B_Px.resize(0);
             A_Py   .resize(0);   B_Py.resize(0);
@@ -555,6 +555,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     B_ParID.push_back(Temp);
                 }
             }
+            cout<<"2";
 
             if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
             
@@ -597,6 +598,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 Mix_A_ID[i] [0][1].resize(0);
                 Mix_A_ID[i] [1][1].resize(0);
             }
+            cout<<"3";
 
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
@@ -616,6 +618,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 if ((RapIndex == -1)) {
                     continue;
                 }
+                cout<<"4";
 
                 int B_Kid = B_Kind[Bid];
                 bool IfBFilled = false;
@@ -631,6 +634,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     auto BV = -p3.BoostVector();
                     p1.Boost( BV);p2.Boost( BV);
                     H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
+                    cout<<"5";
 
                     TestSum++;
                     bool IfRecord = true;
@@ -659,6 +663,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 }
             }
 
+            cout<<"6";
             for (int i = 0;i < yBinNum;i++) {
                 for (int j = 0;j < PVzBinNum;j++) {
                     for (int Aid = 0;Aid < 2;Aid++) {
@@ -700,6 +705,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 }
 
             }
+            cout<<"7";
 
         }
     }
