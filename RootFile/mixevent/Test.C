@@ -83,15 +83,15 @@ int Test() {
             if (true) {
                 // 定义两个四维矢量
                 std::vector<double> p1; // (px, py, pz, E)
-                p1.push_back(A_px[j]);
-                p1.push_back(A_py[j]);
-                p1.push_back(A_pz[j]);
-                p1.push_back(A_mass[j]);
+                p1.push_back(A_Px[j]);
+                p1.push_back(A_Py[j]);
+                p1.push_back(A_Pz[j]);
+                p1.push_back(A_M[j]);
                 std::vector<double> p2;
-                p2.push_back(B_px[k]);
-                p2.push_back(B_py[k]);
-                p2.push_back(B_pz[k]);
-                p2.push_back(B_mass[k]);
+                p2.push_back(B_Px[k]);
+                p2.push_back(B_Py[k]);
+                p2.push_back(B_Pz[k]);
+                p2.push_back(B_M[k]);
 
                 // 计算质心系速度矢量
                 auto beta = calculateBeta(p1, p2);
@@ -106,9 +106,9 @@ int Test() {
             }
             if (true) {
                 TLorentzVector p1;
-                p1.SetXYZM(A_px[j],A_py[j],A_pz[j],A_mass[j]);
+                p1.SetXYZM(A_Px[j],A_Py[j],A_Pz[j],A_M[j]);
                 TLorentzVector p2;
-                p2.SetXYZM(B_px[k],B_py[k],B_pz[k],B_mass[k]);
+                p2.SetXYZM(B_Px[k],B_Py[k],B_Pz[k],B_M[k]);
 
                 TLorentzVector p3 = p1 + p2;
                 p1.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
