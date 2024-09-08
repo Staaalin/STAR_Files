@@ -87,12 +87,12 @@ int Test() {
                 p1.push_back(A_Px[j]);
                 p1.push_back(A_Py[j]);
                 p1.push_back(A_Pz[j]);
-                p1.push_back(A_M[j]);
+                p1.push_back(pow(A_Px[j]*A_Px[j] + A_Py[j]*A_Py[j] + A_Pz[j]*A_Pz[j] + A_M[j]*A_M[j],0.5));
                 std::vector<double> p2;
                 p2.push_back(B_Px[k]);
                 p2.push_back(B_Py[k]);
                 p2.push_back(B_Pz[k]);
-                p2.push_back(B_M[k]);
+                p2.push_back(pow(B_Px[k]*B_Px[k] + B_Py[k]*B_Py[k] + B_Pz[k]*B_Pz[k] + B_M[k]*B_M[k],0.5));
 
                 // 计算质心系速度矢量
                 auto beta = calculateBeta(p1, p2);
