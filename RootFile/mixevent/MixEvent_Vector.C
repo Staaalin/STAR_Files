@@ -577,10 +577,16 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
 
+    time_t time_start;
+    time_t time_now;
+    time(&time_start);
     clock_t Tstart = clock();
     for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++){
         hadronTree->GetEntry(EntriesID);
         if ((EntriesID+1)%50 == 0) {
+            time(&time_now);
+            int time_diff = (int)difftime(time_now, time_start);
+            cout << time_diff/60 << "min " << time_diff%60 << "s: ";
             long long microseconds = (clock() - Tstart)/10000;
             std::cout << "Microseconds: " << microseconds << "  ";
             cout << "Test/Events = " << 1.0*TestSum/50 << "  ";
