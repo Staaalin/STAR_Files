@@ -613,7 +613,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     Mix_A_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Px[Aid]);
                     Mix_A_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Py[Aid]);
                     Mix_A_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Pz[Aid]);
-                    Mix_A_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
+                    Mix_A_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EntriesID);
                     EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
                     Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].push_back(Aid);
                 }
@@ -621,7 +621,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     Mix_B_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Px[Bid]);
                     Mix_B_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Py[Bid]);
                     Mix_B_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Pz[Bid]);
-                    Mix_B_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
+                    Mix_B_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EntriesID);
                     EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
                     IfBFilled = true;
                 }
@@ -819,7 +819,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
             for (int i=0;i<Mix_EvtID.size();i++){
                 hadronTree->GetEntry(Mix_EvtID[i]);
-                cout<<"PDGMult = "<<PDGMult<<endl;
                 BPDGMult   = PDGMult  ;
                 // BCrefMult  = refMult  ;
                 // BCgrefMult = grefMult ;
