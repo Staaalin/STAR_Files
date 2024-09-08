@@ -55,10 +55,10 @@ std::vector<double> boost(std::vector<double>& p, std::vector<double>& beta) {
     double gamma2 = (beta2 > 0) ? (gamma - 1.0) / beta2 : 0.0;
 
     std::vector<double> boosted;
-    boosted.push_back(p[0] + gamma2 * bp * beta[0] + gamma * beta[0] * p[3]);
-    boosted.push_back(p[1] + gamma2 * bp * beta[1] + gamma * beta[1] * p[3]);
-    boosted.push_back(p[2] + gamma2 * bp * beta[2] + gamma * beta[2] * p[3]);
-    boosted.push_back(gamma * (p[3] + bp));
+    boosted.push_back(p[0] + gamma2 * bp * beta[0] + gamma * beta[0] * p[0]);
+    boosted.push_back(p[1] + gamma2 * bp * beta[1] + gamma * beta[1] * p[1]);
+    boosted.push_back(p[2] + gamma2 * bp * beta[2] + gamma * beta[2] * p[2]);
+    boosted.push_back(gamma * (p[4] + bp));
 
     cout<<"boosted = ("<<boosted[0]<<" , "<<boosted[1]<<" , "<<boosted[2]<<" , "<<boosted[3]<<" )"<<endl;
     return boosted;
