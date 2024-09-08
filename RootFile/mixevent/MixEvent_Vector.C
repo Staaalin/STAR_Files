@@ -698,15 +698,16 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         }
                         if (Mode == 0) H_Kstar[i][j][k][A_Kid][B_Kid]->Write();
                         H_Mix_Kstar[i][j][k][A_Kid][B_Kid]->Write();
-                        cout<<"here"<<endl;
                     }
                 }
             }
         }
     }
-    cout<<"Finish storing Hist"<<endl;
     fileA.Close();
-    cout<<"Hist file closed"<<endl;
+
+    cout << "#######################" << endl;
+    cout << "# Finish storing Hist #" << endl;
+    cout << "#######################" << endl;
 
     // Writing remaining pool
 
@@ -756,7 +757,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             // BhadronTree->Branch("grefMult"           ,&BCgrefMult           ,"grefMult/I"                          );
             BhadronTree->Branch("EventID"            ,&BevtID               ,"EventID/I"                           );
             // BhadronTree->Branch("RunID"              ,&BrunID               ,"RunID/I"                             );
-            BhadronTree->Branch("TriggerID"          ,&BTriggerID           ,"TriggerID/I"                         );
+            // BhadronTree->Branch("TriggerID"          ,&BTriggerID           ,"TriggerID/I"                         );
             BhadronTree->Branch("Nch"                ,&BNch                 ,"Nch/I"                               );
             BhadronTree->Branch("PDG"                ,&BPDG                 );
             BhadronTree->Branch("mix_px"             ,&Bpx                  );
@@ -818,6 +819,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
             for (int i=0;i<Mix_EvtID.size();i++){
                 hadronTree->GetEntry(Mix_EvtID[i]);
+                cout<<"PDGMult = "<<PDGMult<<endl;
                 BPDGMult   = PDGMult  ;
                 // BCrefMult  = refMult  ;
                 // BCgrefMult = grefMult ;
