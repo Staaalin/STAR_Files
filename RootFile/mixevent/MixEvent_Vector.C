@@ -693,16 +693,16 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             bool IfBFilled = false;
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
-                TLorentzVector p1 , p2;
-                p2.SetXYZM(BPx,BPy,BPz,BMass);
-                int A_Kid = A_Kind[Aid];
-                float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
-                p1.SetXYZM(APx,APy,APz,AMass);
-                TLorentzVector p3;
-                p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
-                auto BV = -p3.BoostVector();
-                p1.Boost( BV);p2.Boost( BV);
-                H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
+                // TLorentzVector p1 , p2;
+                // p2.SetXYZM(BPx,BPy,BPz,BMass);
+                // int A_Kid = A_Kind[Aid];
+                // float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
+                // p1.SetXYZM(APx,APy,APz,AMass);
+                // TLorentzVector p3;
+                // p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
+                // auto BV = -p3.BoostVector();
+                // p1.Boost( BV);p2.Boost( BV);
+                // H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
 
                 TestSum++;
                 // bool IfRecord = true;
