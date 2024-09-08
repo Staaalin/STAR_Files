@@ -30,36 +30,35 @@
 #include <fstream>
 #include <map>
 #include <stdio.h>
-#include <cmath>
-#include <array>
 using namespace std;
 
-// 定义一个四维矢量类型
-using FourVector = std::vector<double>;
-
 // 计算质心系速度
-std::array<double, 3> calculateBeta(const FourVector& p1, const FourVector& p2) {
+std::vector<double> calculateBeta(std::vector<double>& p1, std::vector<double>& p2) {
+    std::vector<double> Result;
     double totalPx = p1[0] + p2[0];
     double totalPy = p1[1] + p2[1];
     double totalPz = p1[2] + p2[2];
     double totalE = p1[3] + p2[3];
+    Result.push_back(totalPx / totalE);
+    Result.push_back(totalPy / totalE);
+    Result.push_back(totalPz / totalE);
 
-    return {totalPx / totalE, totalPy / totalE, totalPz / totalE};
+    return Result;
 }
 
 // 计算 Lorentz boost
-FourVector boost(const FourVector& p, const std::array<double, 3>& beta) {
+std::vector<double> boost(std::vector<double>& p, std::vector<double>& beta) {
     double beta2 = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
     double gamma = 1.0 / std::sqrt(1.0 - beta2);
 
     double bp = beta[0]*p[0] + beta[1]*p[1] + beta[2]*p[2];
     double gamma2 = (beta2 > 0) ? (gamma - 1.0) / beta2 : 0.0;
 
-    FourVector boosted;
-    boosted[0] = p[0] + gamma2 * bp * beta[0] + gamma * beta[0] * p[3];
-    boosted[1] = p[1] + gamma2 * bp * beta[1] + gamma * beta[1] * p[3];
-    boosted[2] = p[2] + gamma2 * bp * beta[2] + gamma * beta[2] * p[3];
-    boosted[3] = gamma * (p[3] + bp);
+    std::vector<double> boosted;
+    boosted.push_back(p[0] + gamma2 * bp * beta[0] + gamma * beta[0] * p[3]);
+    boosted.push_back(p[1] + gamma2 * bp * beta[1] + gamma * beta[1] * p[3]);
+    boosted.push_back(p[2] + gamma2 * bp * beta[2] + gamma * beta[2] * p[3]);
+    boosted.push_back(gamma * (p[3] + bp));
 
     return boosted;
 }
@@ -83,15 +82,15 @@ int Test() {
             cout<<"################################################################"<<endl;
             if (true) {
                 // 定义两个四维矢量
-                FourVector p1 = {A_px[j],A_py[j],A_pz[j],A_mass[j]}; // (px, py, pz, E)
-                FourVector p2 = {B_px[k],B_py[k],B_pz[k],B_mass[k]};
+                std::vector<double> p1 = {A_px[j],A_py[j],A_pz[j],A_mass[j]}; // (px, py, pz, E)
+                std::vector<double> p2 = {B_px[k],B_py[k],B_pz[k],B_mass[k]};
 
                 // 计算质心系速度矢量
                 auto beta = calculateBeta(p1, p2);
 
                 // Boost 两个四维矢量到质心系
-                FourVector boostedP1 = boost(p1, beta);
-                FourVector boostedP2 = boost(p2, beta);
+                std::vector<double> boostedP1 = boost(p1, beta);
+                std::vector<double> boostedP2 = boost(p2, beta);
 
                 // 输出结果
                 std::cout << "Boosted p1: (" << boostedP1[0] << ", " << boostedP1[1] << ", " << boostedP1[2] << ", " << boostedP1[3] << ")\n";
