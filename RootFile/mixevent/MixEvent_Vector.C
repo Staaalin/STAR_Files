@@ -687,7 +687,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             for (int k=0;k<PtBinNum;k++){
                 for (int A_Kid=0;A_Kid<2;A_Kid++){
                     for (int B_Kid=0;B_Kid<2;B_Kid++) {
-                        if ((Mix_event_Num[i][j][k][A_Kid][B_Kid] != 0) || (Mix_event_Num_SUM[i][j][k][A_Kid][B_Kid] != 0)) {
+                        // if ((Mix_event_Num[i][j][k][A_Kid][B_Kid] != 0) || (Mix_event_Num_SUM[i][j][k][A_Kid][B_Kid] != 0)) {
+                        if (true) {
                             TString Name;
                             if (A_Kid == 0 && B_Kid == 0) Name = "AMBM";
                             if (A_Kid == 0 && B_Kid == 1) Name = "AMBS";
