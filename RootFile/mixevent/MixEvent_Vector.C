@@ -699,7 +699,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p1.SetXYZM(APx,APy,APz,pow(APx*APx + APy*APy + APz*APz + AMass*AMass,0.5));
                 TLorentzVector p3;
                 p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,p1.M() + p2.M());
-                p1.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
+                auto BV = -p3.BoostVector();
+                p1.Boost( BV);p2.Boost( BV);
                 H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
 
                 TestSum++;
