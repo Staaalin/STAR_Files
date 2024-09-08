@@ -113,7 +113,7 @@ void Test() {
 
                 TLorentzVector p3 = Pp1 + Pp2;
                 auto BoostV = p3.BoostVector();
-                std::cout << "BoostedVec: (" << BoostV.Px() << ", " << BoostV.Py() << ", " << BoostV.Pz() << ", " << BoostV.E() << ")\n";
+                std::cout << "BoostedVec: (" << BoostV.Px() << ", " << BoostV.Py() << ", " << BoostV.Pz() << ")\n";
                 Pp1.Boost(-p3.BoostVector());Pp2.Boost(-p3.BoostVector());
 
                 std::cout << "Boosted p1: (" << Pp1.Px() << ", " << Pp1.Py() << ", " << Pp1.Pz() << ", " << Pp1.E() << ")\n";
