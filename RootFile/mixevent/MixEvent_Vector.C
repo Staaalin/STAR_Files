@@ -730,48 +730,46 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
         }
 
-        for (int i = 0;i < yBinNum;i++) {
-            for (int j = 0;j < PtBinNum;j++) {
-                for (int Aid = 0;Aid < 2;Aid++) {
-                    for (int Bid = 0;Bid < 2;Bid++) {
-                        if (EventPatternMatch[CenIndex][i][j][Aid][Bid] != 0) {
-                            Mix_event_Num[CenIndex][i][j][Aid][Bid]++;
-                            if (Mix_event_Num[CenIndex][i][j][Aid][Bid] == HowMuchEventMixing+1) {
-                                cout<<"1"<<endl;
-                                int Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
-                                int Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
-                                for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
-                                    int A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
-                                    for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
-                                        if (A_EID == Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]) continue;
+        // for (int i = 0;i < yBinNum;i++) {
+        //     for (int j = 0;j < PtBinNum;j++) {
+        //         for (int Aid = 0;Aid < 2;Aid++) {
+        //             for (int Bid = 0;Bid < 2;Bid++) {
+        //                 if (EventPatternMatch[CenIndex][i][j][Aid][Bid] != 0) {
+        //                     Mix_event_Num[CenIndex][i][j][Aid][Bid]++;
+        //                     if (Mix_event_Num[CenIndex][i][j][Aid][Bid] == HowMuchEventMixing+1) {
+        //                         int Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
+        //                         int Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
+        //                         for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
+        //                             int A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
+        //                             for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
+        //                                 if (A_EID == Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]) continue;
 
-                                        TLorentzVector p1 , p2;
-                                        p2.SetXYZM(Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex],BMass);
-                                        p1.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
-                                        TLorentzVector p3;
-                                        p3 = p1 + p2;
-                                        auto BV = -p3.BoostVector();
-                                        p1.Boost( BV);p2.Boost( BV);
-                                        H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
-                                    }
-                                }
-                                Mix_event_Num[CenIndex][i][j][Aid][Bid] = 0;
-                                Mix_A_Px[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_B_Px[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_A_Py[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_B_Py[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_A_Pz[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_B_Pz[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_A_EvtID[CenIndex][i][j][Aid][Bid].clear();
-                                Mix_B_EvtID[CenIndex][i][j][Aid][Bid].clear();
-                                cout<<"2"<<endl;
-                            }
-                        }
-                    }
-                }
-            }
+        //                                 TLorentzVector p1 , p2;
+        //                                 p2.SetXYZM(Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex],BMass);
+        //                                 p1.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
+        //                                 TLorentzVector p3;
+        //                                 p3 = p1 + p2;
+        //                                 auto BV = -p3.BoostVector();
+        //                                 p1.Boost( BV);p2.Boost( BV);
+        //                                 H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
+        //                             }
+        //                         }
+        //                         Mix_event_Num[CenIndex][i][j][Aid][Bid] = 0;
+        //                         Mix_A_Px[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_B_Px[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_A_Py[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_B_Py[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_A_Pz[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_B_Pz[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_A_EvtID[CenIndex][i][j][Aid][Bid].clear();
+        //                         Mix_B_EvtID[CenIndex][i][j][Aid][Bid].clear();
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
 
-        }
+        // }
 
 
     }
