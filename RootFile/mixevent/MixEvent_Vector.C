@@ -474,6 +474,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<int>   Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<int>   Mix_B_ID                                [yBinNum]  [PtBinNum]  [2] [2] ;
     int                Mix_event_Num      [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
+    int                Mix_event_Num_SUM  [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
     //
     TH1D* H_Kstar                         [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
     TH1D* H_Mix_Kstar                     [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
@@ -509,18 +510,21 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         H_Kstar            [i][j][k][0][0] = new TH1D(HistName1s,HistName2s,500,0,10);
                         H_Mix_Kstar        [i][j][k][0][0] = new TH1D(HistName1,HistName2,500,0,10);
                         Mix_event_Num      [i][j][k][0][0] = 0;
+                        Mix_event_Num_SUM  [i][j][k][0][0] = 0;
                         if(i==0) Mix_A_ID     [j][k][0][0].push_back(0);
                     }
                     if (l == 1) { // AMBS
                         H_Kstar            [i][j][k][0][1] = new TH1D(HistName1s,HistName2s,500,0,10);
                         H_Mix_Kstar        [i][j][k][0][1] = new TH1D(HistName1,HistName2,500,0,10);
                         Mix_event_Num      [i][j][k][0][1] = 0;
+                        Mix_event_Num_SUM  [i][j][k][0][1] = 0;
                         if(i==0) Mix_A_ID     [j][k][0][1].push_back(0);
                     }
                     if (l == 2) { // ASBM
                         H_Kstar            [i][j][k][1][0] = new TH1D(HistName1s,HistName2s,500,0,10);
                         H_Mix_Kstar        [i][j][k][1][0] = new TH1D(HistName1,HistName2,500,0,10);
                         Mix_event_Num      [i][j][k][1][0] = 0;
+                        Mix_event_Num_SUM  [i][j][k][1][0] = 0;
                         if(i==0) Mix_A_ID     [j][k][1][0].push_back(0);
                     }
                 }
@@ -758,7 +762,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                                         H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                     }
                                 }
-                                Mix_event_Num[CenIndex][i][j][Aid][Bid] = 0;
+                                Mix_event_Num    [CenIndex][i][j][Aid][Bid] = 0;
+                                Mix_event_Num_SUM[CenIndex][i][j][Aid][Bid]++;
                                 Mix_A_Px[CenIndex][i][j][Aid][Bid].clear();
                                 Mix_B_Px[CenIndex][i][j][Aid][Bid].clear();
                                 Mix_A_Py[CenIndex][i][j][Aid][Bid].clear();
@@ -792,13 +797,12 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             for (int k=0;k<PtBinNum;k++){
                 for (int A_Kid=0;A_Kid<2;A_Kid++){
                     for (int B_Kid=0;B_Kid<2;B_Kid++) {
-                        if (Mix_event_Num[i][j][k][A_Kid][B_Kid] != 0) {
+                        if ((Mix_event_Num[i][j][k][A_Kid][B_Kid] != 0) || (Mix_event_Num_SUM[i][j][k][A_Kid][B_Kid] != 0)) {
                             TString Name;
                             if (A_Kid == 0 && B_Kid == 0) Name = "AMBM";
                             if (A_Kid == 0 && B_Kid == 1) Name = "AMBS";
                             if (A_Kid == 1 && B_Kid == 0) Name = "ASBM";
-                            cout<<"["<<i<<","<<j<<","<<k<<","<<Name<<"] remain "<<Mix_event_Num[i][j][k][A_Kid][B_Kid]<<" events, "<<endl; 
-                            cout<<"     contains "<<Mix_A_Px[i][j][k][A_Kid][B_Kid]<<" particles A, and "<<Mix_B_Px[i][j][k][A_Kid][B_Kid]<<" particles B."<<endl;
+                            cout<<"["<<i<<","<<j<<","<<k<<","<<Name<<"] Filled " << Mix_event_Num_SUM[i][j][k][A_Kid][B_Kid] * 10 << "events, and remain "<<Mix_event_Num[i][j][k][A_Kid][B_Kid]<<" events, "<<endl; 
                         }
                         if (Mode == 0) H_Kstar[i][j][k][A_Kid][B_Kid]->Write();
                         H_Mix_Kstar[i][j][k][A_Kid][B_Kid]->Write();
