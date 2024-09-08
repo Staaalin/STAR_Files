@@ -806,6 +806,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         }
                         if (Mode == 0) H_Kstar[i][j][k][A_Kid][B_Kid]->Write();
                         H_Mix_Kstar[i][j][k][A_Kid][B_Kid]->Write();
+                        cout<<"here"<<endl;
                     }
                 }
             }
@@ -813,7 +814,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     }
     cout<<"Finish storing Hist"<<endl;
     fileA.Close();
-    cout<<"Hist file colsed"<<endl;
+    cout<<"Hist file closed"<<endl;
 
     // Writing remaining pool
 
