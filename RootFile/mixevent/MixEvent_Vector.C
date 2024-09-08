@@ -793,6 +793,10 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 for (int A_Kid=0;A_Kid<2;A_Kid++){
                     for (int B_Kid=0;B_Kid<2;B_Kid++) {
                         if (Mix_event_Num[i][j][k][A_Kid][B_Kid] != 0) {
+                            TString l;
+                            if (A_Kid == 0 && B_Kid == 0) l = "AMBM";
+                            if (A_Kid == 0 && B_Kid == 1) l = "AMBS";
+                            if (A_Kid == 1 && B_Kid == 0) l = "ASBM";
                             cout<<"["<<i<<","<<j<<","<<k<<","<<l<<"] remain "<<Mix_event_Num[i][j][k][A_Kid][B_Kid]<<" events, "<<endl; 
                             cout<<"     contains "<<Mix_A_Px[i][j][k][A_Kid][B_Kid]<<" particles A, and "<<Mix_B_Px[i][j][k][A_Kid][B_Kid]<<" particles B."<<endl;
                         }
