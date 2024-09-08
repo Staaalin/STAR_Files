@@ -30,6 +30,8 @@
 #include <fstream>
 #include <map>
 #include <stdio.h>
+#include <cmath>
+#include <array>
 using namespace std;
 
 // 定义一个四维矢量类型
