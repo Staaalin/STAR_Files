@@ -746,8 +746,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
 
                                         TLorentzVector p1 , p2;
                                         p2.SetXYZM(Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex],BMass);
-                                        int A_Kid = A_Kind[Aid];
-                                        float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
                                         p1.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
                                         TLorentzVector p3;
                                         p3 = p1 + p2;
