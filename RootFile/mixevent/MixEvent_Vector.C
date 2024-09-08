@@ -437,7 +437,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         #endif
     #endif
 
-
+    cout<<"DCentralityBinNum = "<<DCentralityBinNum<<endl;
+    cout<<"DPtBinNum = "<<DPtBinNum<<endl;
+    cout<<"DyBinNum = "<<DyBinNum<<endl;
 
     double kstar, rap;
     TVector3 BetaTemp;
