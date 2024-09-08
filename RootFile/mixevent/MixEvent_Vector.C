@@ -598,7 +598,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         A_Px   .resize(0);   B_Px.resize(0);
         A_Py   .resize(0);   B_Py.resize(0);
         A_Pz   .resize(0);   B_Pz.resize(0);
-        A_TreID.resize(0);B_TreID.resize(0);
         A_ParID.resize(0);B_ParID.resize(0);
         A_Kind .resize(0); B_Kind.resize(0);
 
@@ -610,7 +609,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 A_Px.push_back(mix_px->at(j));
                 A_Py.push_back(mix_py->at(j));
                 A_Pz.push_back(mix_pz->at(j));
-                A_TreID.push_back(j);
                 std::vector<int> Temp;Temp.clear();Temp.push_back(j);
                 for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                     Temp.push_back(ParentList->at(k));
@@ -624,7 +622,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 B_Px.push_back(mix_px->at(j));
                 B_Py.push_back(mix_py->at(j));
                 B_Pz.push_back(mix_pz->at(j));
-                B_TreID.push_back(j);
                 std::vector<int> Temp;Temp.clear();Temp.push_back(j);
                 for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                     Temp.push_back(ParentList->at(k));
@@ -778,8 +775,199 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
 
         }
 
-
     }
+    
+    TString OutputFileName = OutMidName;
+    OutputFileName += "H_";
+    OutputFileName += OutputFileIndex;
+    OutputFileName += ".root";
+    TFile *fileA = new TFile(OutputFileName, "RECREATE");
+
+    cout << "#######################" << endl;
+    cout << "# Calculating Summary #" << endl;
+    cout << "#######################" << endl;
+    fileA->cd();
+    for (int i=0;i<CentralityBinNum;i++){
+        for (int j=0;j<yBinNum;j++){
+            for (int k=0;k<PtBinNum;k++){
+                for (int A_Kid=0;A_Kid<2;A_Kid++){
+                    for (int B_Kid=0;B_Kid<2;B_Kid++) {
+                        if (Mix_event_Num[i][j][k][A_Kid][B_Kid] != 0) {
+                            cout<<"["<<i<<","<<j<<","<<k<<","<<l<<"] remain "<<Mix_event_Num[i][j][k][A_Kid][B_Kid]<<" events, "<<endl; 
+                            cout<<"     contains "<<Mix_A_Px[i][j][k][A_Kid][B_Kid]<<" particles A, and "<<Mix_B_Px[i][j][k][A_Kid][B_Kid]<<" particles B."<<endl;
+                        }
+                        if (Mode == 0) H_Kstar[i][j][k][A_Kid][B_Kid]->Write();
+                        H_Mix_Kstar[i][j][k][A_Kid][B_Kid]->Write();
+                    }
+                }
+            }
+        }
+    }
+    fileA.Close();
+
+    // Writing remaining pool
+
+    OutputFileName = OutMidName;
+    OutputFileName += "T_";
+    OutputFileName += OutputFileIndex;
+    OutputFileName += ".root";
+    TFile *fileB = new TFile(OutputFileName, "RECREATE");
+    folder_AMBM = fileB->mkdir("AMBM");
+    folder_AMBS = fileB->mkdir("AMBS");
+    folder_ASBM = fileB->mkdir("ASBM");
+    fileB->cd();
+    if (Mode == 0){
+        int A_Kid , B_Kid;
+        for (int WriteTreeIndex = 0;WriteTreeIndex < Pattern;WriteTreeIndex++) {
+            if (WriteTreeIndex == 0) {folder_AMBM->cd();A_Kid = 0;B_Kid = 0;}
+            if (WriteTreeIndex == 1) {folder_AMBS->cd();A_Kid = 0;B_Kid = 1;}
+            if (WriteTreeIndex == 2) {folder_ASBM->cd();A_Kid = 1;B_Kid = 0;}
+            int buffer_size = 5000000;
+            int BPDGMult  ;
+            int BCrefMult ;
+            int BCgrefMult;
+            int BevtID    ;
+            int BrunID    ;
+            int BTriggerID;
+            int BNch      ;
+            std::vector<int> BPDG               ;BPDG            .clear();
+            std::vector<float> Bpx              ;Bpx             .clear();
+            std::vector<float> Bpy              ;Bpy             .clear();
+            std::vector<float> Bpz              ;Bpz             .clear();
+            std::vector<float> BQA_eta          ;BQA_eta         .clear();
+            std::vector<float> BQA_dEdx         ;BQA_dEdx        .clear();
+            std::vector<float> BQA_m2           ;BQA_m2          .clear();
+            std::vector<float> BQA_DCA_V0_PV    ;BQA_DCA_V0_PV   .clear();
+            std::vector<float> BQA_nSigmaProton ;BQA_nSigmaProton.clear();
+            std::vector<float> BQA_nSigmaPion   ;BQA_nSigmaPion  .clear();
+            std::vector<float> BQA_nSigmaKaon   ;BQA_nSigmaKaon  .clear();
+            std::vector<float> BInvariantMass   ;BInvariantMass  .clear();
+            std::vector<float> BQA_Decay_Length ;BQA_Decay_Length.clear();
+            std::vector<float> BQA_Chi2         ;BQA_Chi2        .clear();
+            std::vector<int> BParentList        ;BParentList     .clear();
+            std::vector<int> BParentSta         ;BParentSta      .clear();
+            std::vector<int> BParentEnd         ;BParentEnd      .clear();
+            BhadronTree = new TTree("hadronTree", "Tree_STAR");
+            BhadronTree->Branch("PDGMult"            ,&BPDGMult             ,"PDGMult/I"                           );
+            // BhadronTree->Branch("refMult"            ,&BCrefMult            ,"refMult/I"                           );
+            // BhadronTree->Branch("grefMult"           ,&BCgrefMult           ,"grefMult/I"                          );
+            BhadronTree->Branch("EventID"            ,&BevtID               ,"EventID/I"                           );
+            // BhadronTree->Branch("RunID"              ,&BrunID               ,"RunID/I"                             );
+            BhadronTree->Branch("TriggerID"          ,&BTriggerID           ,"TriggerID/I"                         );
+            BhadronTree->Branch("Nch"                ,&BNch                 ,"Nch/I"                               );
+            BhadronTree->Branch("PDG"                ,&BPDG                 );
+            BhadronTree->Branch("mix_px"             ,&Bpx                  );
+            BhadronTree->Branch("mix_py"             ,&Bpy                  );
+            BhadronTree->Branch("mix_pz"             ,&Bpz                  );
+            // BhadronTree->Branch("QA_eta"             ,&BQA_eta              );
+
+            // Used for PID QA
+            // BhadronTree->Branch("dEdx"               ,&BQA_dEdx              );
+            // BhadronTree->Branch("m2"                 ,&BQA_m2                );
+            // BhadronTree->Branch("dcatopv"            ,&BQA_DCA_V0_PV         );
+            // BhadronTree->Branch("nSigmaProton"       ,&BQA_nSigmaProton      );
+            // BhadronTree->Branch("nSigmaPion"         ,&BQA_nSigmaPion        );
+            // BhadronTree->Branch("nSigmaKaon"         ,&BQA_nSigmaKaon        );
+            
+            // Used for Reconstruction QA
+            BhadronTree->Branch("InvariantMass"      ,&BInvariantMass        );
+            // BhadronTree->Branch("Decay_Length"       ,&BQA_Decay_Length      );
+            // BhadronTree->Branch("Chi2"               ,&BQA_Chi2              );
+            
+            // Used for restore corralated information
+            // BhadronTree->Branch("ParentList"         ,&BParentList     );
+            // BhadronTree->Branch("ParentSta"          ,&BParentSta      );
+            // BhadronTree->Branch("ParentEnd"          ,&BParentEnd      );
+
+            std::vector<Int_t> Mix_EvtID;
+            for (int i=0;i<CentralityBinNum;i++){
+                for (int j=0;j<yBinNum;j++){
+                    for (int k=0;k<PtBinNum;k++){
+                        for (int m=0;m<Mix_B_EvtID[i][j][k][A_Kid][B_Kid].size();m++){
+                            int nIndex = -1;
+                            for (int n=0;n<Mix_EvtID.size();n++){
+                                if (Mix_B_EvtID[i][j][k][A_Kid][B_Kid][m] == Mix_EvtID[n]){
+                                    nIndex = n;
+                                    break;
+                                }
+                            }
+                            if (nIndex == -1){
+                                Mix_EvtID.push_back(Mix_B_EvtID[i][j][k][A_Kid][B_Kid][m]);
+                                nIndex = Mix_EvtID.size() - 1;
+                            }
+                        }
+                        for (int m=0;m<Mix_A_EvtID[i][j][k][A_Kid][B_Kid].size();m++){
+                            int nIndex = -1;
+                            for (int n=0;n<Mix_EvtID.size();n++){
+                                if (Mix_A_EvtID[i][j][k][A_Kid][B_Kid][m] == Mix_EvtID[n]){
+                                    nIndex = n;
+                                    break;
+                                }
+                            }
+                            if (nIndex == -1){
+                                Mix_EvtID.push_back(Mix_A_EvtID[i][j][k][A_Kid][B_Kid][m]);
+                                nIndex = Mix_EvtID.size() - 1;
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            for (int i=0;i<Mix_EvtID.size();i++){
+                hadronTree->GetEntry(Mix_EvtID[i]);
+                BPDGMult   = PDGMult  ;
+                // BCrefMult  = refMult  ;
+                // BCgrefMult = grefMult ;
+                BevtID     = EventID  ;
+                // BrunID     = RunID    ;
+                // BTriggerID = TriggerID;
+                BNch       = Nch      ;
+                for (int j=0;j<PDGMult;j++){
+                    BPDG            .push_back(PDG          ->at(j));
+                    Bpx             .push_back(mix_px       ->at(j));
+                    Bpy             .push_back(mix_py       ->at(j));
+                    Bpz             .push_back(mix_pz       ->at(j));
+                    // BQA_eta         .push_back(QA_eta       ->at(j));
+                    // BQA_dEdx        .push_back(dEdx         ->at(j));
+                    // BQA_m2          .push_back(m2           ->at(j));
+                    // BQA_DCA_V0_PV   .push_back(dcatopv      ->at(j));
+                    // BQA_nSigmaProton.push_back(nSigmaProton ->at(j));
+                    // BQA_nSigmaPion  .push_back(nSigmaPion   ->at(j));
+                    // BQA_nSigmaKaon  .push_back(nSigmaKaon   ->at(j));
+                    BInvariantMass  .push_back(InvariantMass->at(j));
+                    // BQA_Decay_Length.push_back(Decay_Length ->at(j));
+                    // BQA_Chi2        .push_back(Chi2         ->at(j));
+                    BParentSta      .push_back(ParentSta    ->at(j));
+                    BParentEnd      .push_back(ParentEnd    ->at(j));
+                }
+                for (int j=0;j<ParentList.size();j++){
+                    BParentList     .push_back(ParentList   ->at(j));
+                }
+                BhadronTree->Fill();
+                BPDG            .clear();
+                Bpx             .clear();
+                Bpy             .clear();
+                Bpz             .clear();
+                // BQA_eta         .clear();
+                // BQA_dEdx        .clear();
+                // BQA_m2          .clear();
+                // BQA_DCA_V0_PV   .clear();
+                // BQA_nSigmaProton.clear();
+                // BQA_nSigmaPion  .clear();
+                // BQA_nSigmaKaon  .clear();
+                BInvariantMass  .clear();
+                // BQA_Decay_Length.clear();
+                // BQA_Chi2        .clear();
+                BParentList     .clear();
+                BParentSta      .clear();
+                BParentEnd      .clear();
+            }
+
+            BhadronTree->Write();
+        }
+    }
+    fileB->Write();
+    fileB->Close();
 
     return;
 }
