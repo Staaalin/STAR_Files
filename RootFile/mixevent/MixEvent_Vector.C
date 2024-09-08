@@ -626,15 +626,10 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
                     p1.SetXYZM(APx,APy,APz,AMass);
                     TLorentzVector p3;
-                    cout<<"1";
                     p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
-                    cout<<"2";
                     TVector3 BV = -p3.BoostVector();
-                    cout<<"3";
                     p1.Boost( BV);p2.Boost( BV);
-                    cout<<"4";
                     H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
-                    cout<<"5";
 
                     TestSum++;
                     bool IfRecord = true;
