@@ -35,7 +35,7 @@
 using namespace std;
 
 // 定义一个四维矢量类型
-using FourVector = std::array<double, 4>;
+using FourVector = std::vector<double>;
 
 // 计算质心系速度
 std::array<double, 3> calculateBeta(const FourVector& p1, const FourVector& p2) {
