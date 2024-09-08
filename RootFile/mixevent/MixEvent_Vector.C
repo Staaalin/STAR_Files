@@ -442,7 +442,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     TVector3 BetaTemp;
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
     // ROOT::Math::PxPyPzMVector p1 , p2 , p3 , p4 , p5;
-    ROOT::Math::PtEtaPhiM4D<double> p1 , p2 , p3 , p4 , p5;
+    ROOT::Math::PtEtaPhiM4D<double> p1 , p2 , p3;
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -699,7 +699,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p3 = p2;
                 float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
                 p1.SetPxPyPzE(APx,APy,APz,pow(APx*APx + APy*APy + APz*APz + AMass*AMass,0.5));
-                p4 = p1 + p2;
+                cout<<"1"<<endl;
+                auto p4 = p1 + p2;
+                cout<<"2"<<endl;
                 auto BetaV = p4.BoostToCM();
                 // p3.Boost(-p4.BoostToCM());p1.Boost(-p4.BoostToCM());
                 ROOT::Math::Boost boost(BetaV);
