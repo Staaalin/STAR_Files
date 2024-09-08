@@ -495,6 +495,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 Tstart = clock();
                 TestSum = 0;
             }
+            cout<<"2"<<endl;
 
             A_Px   .resize(0);   B_Px.resize(0);
             A_Py   .resize(0);   B_Py.resize(0);
