@@ -42,7 +42,7 @@ std::vector<double> calculateBeta(std::vector<double>& p1, std::vector<double>& 
     Result.push_back(totalPx / totalE);
     Result.push_back(totalPy / totalE);
     Result.push_back(totalPz / totalE);
-
+    cout<<"Result = ("<<Result[0]<<" , "<<Result[1]<<" , "<<Result[2]<<" )"<<endl;
     return Result;
 }
 
@@ -60,6 +60,7 @@ std::vector<double> boost(std::vector<double>& p, std::vector<double>& beta) {
     boosted.push_back(p[2] + gamma2 * bp * beta[2] + gamma * beta[2] * p[3]);
     boosted.push_back(gamma * (p[3] + bp));
 
+    cout<<"boosted = ("<<boosted[0]<<" , "<<boosted[1]<<" , "<<boosted[2]<<" , "<<boosted[3]<<" )"<<endl;
     return boosted;
 }
 
@@ -105,16 +106,16 @@ int Test() {
                 std::cout << "Boosted p2: (" << boostedP2[0] << ", " << boostedP2[1] << ", " << boostedP2[2] << ", " << boostedP2[3] << ")\n";
             }
             if (true) {
-                TLorentzVector p1;
-                p1.SetXYZM(A_Px[j],A_Py[j],A_Pz[j],A_M[j]);
-                TLorentzVector p2;
-                p2.SetXYZM(B_Px[k],B_Py[k],B_Pz[k],B_M[k]);
+                TLorentzVector Pp1;
+                Pp1.SetXYZM(A_Px[j],A_Py[j],A_Pz[j],A_M[j]);
+                TLorentzVector Pp2;
+                Pp2.SetXYZM(B_Px[k],B_Py[k],B_Pz[k],B_M[k]);
 
-                TLorentzVector p3 = p1 + p2;
-                p1.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
+                TLorentzVector p3 = Pp1 + Pp2;
+                Pp1.Boost(-p3.BoostVector());Pp2.Boost(-p3.BoostVector());
 
-                std::cout << "Boosted p1: (" << p1.Px() << ", " << p1.Py() << ", " << p1.Pz() << ", " << p1.E() << ")\n";
-                std::cout << "Boosted p2: (" << p2.Px() << ", " << p2.Py() << ", " << p2.Pz() << ", " << p2.E() << ")\n";
+                std::cout << "Boosted p1: (" << Pp1.Px() << ", " << Pp1.Py() << ", " << Pp1.Pz() << ", " << Pp1.E() << ")\n";
+                std::cout << "Boosted p2: (" << Pp2.Px() << ", " << Pp2.Py() << ", " << Pp2.Pz() << ", " << Pp2.E() << ")\n";
             }
         }
     }
