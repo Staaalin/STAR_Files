@@ -1381,7 +1381,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 	const double VertexR = sqrt(VertexX*VertexX + VertexY*VertexY);
 	const double vpdVz   = mEvent->vzVpd();
 
-	TPVz = VertexZ;
 
 	//event cut
 	//if(refMult <=2 || refMult > 1000) return kStOK;
@@ -1404,6 +1403,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	if(fabs(VertexZ - 5) > 50) return kStOK; // AuAu27 80 ; dAu@39 25
 	if(sqrt(pow(VertexX + 0.4,2.)+pow(VertexY,2.))>2.0) return kStOK; 
 	if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
+	
+	TPVz = VertexZ;
 
 	//check run number
 	int runnumberPointer = -999;
