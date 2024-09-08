@@ -909,6 +909,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("EventID"            ,&evtID               ,"EventID/I"                           );
 		hadronTree->Branch("RunID"              ,&runID               ,"RunID/I"                             );
 		hadronTree->Branch("TriggerID"          ,&TriggerID           ,"TriggerID/I"                         );
+		hadronTree->Branch("PVz"                ,&TPVz                ,"PVz/F"                               );
 		hadronTree->Branch("Nch"                ,&Nch                 ,"Nch/I"                               );
 		hadronTree->Branch("PDG"                ,&PDG                 );
 		hadronTree->Branch("mix_px"             ,&px                  );
@@ -1379,6 +1380,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	const double VertexZ = Vertex3D.z(); 
 	const double VertexR = sqrt(VertexX*VertexX + VertexY*VertexY);
 	const double vpdVz   = mEvent->vzVpd();
+
+	TPVz = VertexZ;
 
 	//event cut
 	//if(refMult <=2 || refMult > 1000) return kStOK;
