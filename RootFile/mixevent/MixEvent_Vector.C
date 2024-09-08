@@ -697,9 +697,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 p3 = p2;
                 float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
                 p1.SetPxPyPzE(APx,APy,APz,pow(APx*APx + APy*APy + APz*APz + AMass*AMass,0.5));
-                cout<<"1"<<endl;
                 p4 = p1 + p2;
-                cout<<"2"<<endl;
                 auto BetaV = p4.BoostToCM();
                 // p3.Boost(-p4.BoostToCM());p1.Boost(-p4.BoostToCM());
                 ROOT::Math::Boost boost(BetaV);
