@@ -737,6 +737,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         if (EventPatternMatch[CenIndex][i][j][Aid][Bid] != 0) {
                             Mix_event_Num[CenIndex][i][j][Aid][Bid]++;
                             if (Mix_event_Num[CenIndex][i][j][Aid][Bid] == HowMuchEventMixing+1) {
+                                cout<<"1"<<endl;
                                 int Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
                                 int Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
                                 for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
@@ -763,6 +764,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                                 Mix_B_Pz[CenIndex][i][j][Aid][Bid].clear();
                                 Mix_A_EvtID[CenIndex][i][j][Aid][Bid].clear();
                                 Mix_B_EvtID[CenIndex][i][j][Aid][Bid].clear();
+                                cout<<"2"<<endl;
                             }
                         }
                     }
