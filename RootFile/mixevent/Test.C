@@ -82,8 +82,16 @@ int Test() {
             cout<<"################################################################"<<endl;
             if (true) {
                 // 定义两个四维矢量
-                std::vector<double> p1 = {A_px[j],A_py[j],A_pz[j],A_mass[j]}; // (px, py, pz, E)
-                std::vector<double> p2 = {B_px[k],B_py[k],B_pz[k],B_mass[k]};
+                std::vector<double> p1; // (px, py, pz, E)
+                p1.push_back(A_px[j]);
+                p1.push_back(A_py[j]);
+                p1.push_back(A_pz[j]);
+                p1.push_back(A_mass[j]);
+                std::vector<double> p2;
+                p2.push_back(B_px[k]);
+                p2.push_back(B_py[k]);
+                p2.push_back(B_pz[k]);
+                p2.push_back(B_mass[k]);
 
                 // 计算质心系速度矢量
                 auto beta = calculateBeta(p1, p2);
