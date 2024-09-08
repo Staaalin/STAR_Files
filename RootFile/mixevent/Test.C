@@ -60,7 +60,7 @@ std::vector<double> boost(std::vector<double>& p, std::vector<double>& beta) {
     boosted.push_back(p[2] + gamma2 * bp * beta[2] + gamma * beta[2] * p[3]);
     boosted.push_back(gamma * (p[3] + bp));
 
-    cout<<"boosted = ("<<boosted[0]<<" , "<<boosted[1]<<" , "<<boosted[2]<<" , "<<boosted[3]<<" )"<<endl;
+    // cout<<"boosted = ("<<boosted[0]<<" , "<<boosted[1]<<" , "<<boosted[2]<<" , "<<boosted[3]<<" )"<<endl;
     return boosted;
 }
 
@@ -100,9 +100,12 @@ void Test() {
                 beta[1] = -beta[1]
                 beta[2] = -beta[2]
 
+                cout<<"1"<<endl;
                 // Boost 两个四维矢量到质心系
                 std::vector<double> boostedP1 = boost(p1, beta);
+                cout<<"2"<<endl;
                 std::vector<double> boostedP2 = boost(p2, beta);
+                cout<<"3"<<endl;
 
                 // 输出结果
                 std::cout << "Boosted p1: (" << boostedP1[0] << ", " << boostedP1[1] << ", " << boostedP1[2] << ", " << boostedP1[3] << ")\n";
