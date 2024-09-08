@@ -64,6 +64,37 @@ TString PatternBin[] = {"AMBM","AMBS","ASBM"};
 
 int HowMuchEventMixing = 10;
 
+// 计算质心系速度
+std::vector<float> calculateBeta(std::vector<float>& p1, std::vector<float>& p2) {
+    std::vector<float> Result;
+    double totalPx = p1[0] + p2[0];
+    double totalPy = p1[1] + p2[1];
+    double totalPz = p1[2] + p2[2];
+    double totalE = p1[3] + p2[3];
+    Result.push_back(totalPx / totalE);
+    Result.push_back(totalPy / totalE);
+    Result.push_back(totalPz / totalE);
+    return Result;
+}
+
+// 计算 Lorentz boost
+std::vector<float> boost(std::vector<float>& p, std::vector<float>& beta) {
+    double beta2 = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+    double gamma = 1.0 / std::sqrt(1.0 - beta2);
+
+    double bp = beta[0]*p[0] + beta[1]*p[1] + beta[2]*p[2];
+    double gamma2 = (beta2 > 0) ? (gamma - 1.0) / beta2 : 0.0;
+
+    std::vector<float> boosted;
+    boosted.push_back(p[0] + gamma2 * bp * beta[0] + gamma * beta[0] * p[3]);
+    boosted.push_back(p[1] + gamma2 * bp * beta[1] + gamma * beta[1] * p[3]);
+    boosted.push_back(p[2] + gamma2 * bp * beta[2] + gamma * beta[2] * p[3]);
+    boosted.push_back(gamma * (p[3] + bp));
+
+    // cout<<"boosted = ("<<boosted[0]<<" , "<<boosted[1]<<" , "<<boosted[2]<<" , "<<boosted[3]<<" )"<<endl;
+    return boosted;
+}
+
 void print(std::vector<int> Temp)
 {
 	cout<<"{";
@@ -620,6 +651,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 bool IfBFilled = false;
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
                     if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
+
                     TLorentzVector p1 , p2;
                     p2.SetXYZM(BPx,BPy,BPz,BMass);
                     int A_Kid = A_Kind[Aid];
@@ -629,6 +661,11 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
                     TVector3 BV = -p3.BoostVector();
                     p1.Boost( BV);p2.Boost( BV);
+
+                    std::vector<float> p1 , p2 , p3;
+                    p1.push_back(APx);p1.push_back(APy);p1.push_back(APz);p1.push_back(pow(APx*APx + APy*APy + APz*APz + AMass*AMass , 0.5));
+                    p2.push_back(BPx);p1.push_back(BPy);p1.push_back(BPz);p1.push_back(pow(BPx*BPx + BPy*BPy + BPz*BPz + BMass*BMass , 0.5));
+                    p3.push_back(p1[0]+p2[0]);p1.push_back(p1[1]+p2[1]);p1.push_back(p1[2]+p2[2]);p1.push_back(p1[3]+p2[3]);
                     H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
 
                     TestSum++;
