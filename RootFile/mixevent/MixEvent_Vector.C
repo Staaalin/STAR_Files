@@ -634,6 +634,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
                     auto BV = -p3.BoostVector();
                     p1.Boost( BV);p2.Boost( BV);
+                    cout<<"PVzIndex = "<<PVzIndex<<endl;
                     H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
                     cout<<"6";
 
