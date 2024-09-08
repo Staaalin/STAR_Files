@@ -296,6 +296,7 @@ void DltElement(std::vector<int> &V , int ID)
 
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
 {
+    cout<;
     std::vector<int> Result;Result.clear();
     // int CentralityListSize = sizeof(CentralityList)/sizeof(CentralityList[0]);
     if (DataName == "dAu_200_21") {
