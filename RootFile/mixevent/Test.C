@@ -112,6 +112,8 @@ int Test() {
                 Pp2.SetXYZM(B_Px[k],B_Py[k],B_Pz[k],B_M[k]);
 
                 TLorentzVector p3 = Pp1 + Pp2;
+                auto BoostV = p3.BoostVector();
+                std::cout << "BoostedVec: (" << BoostV.Px() << ", " << BoostV.Py() << ", " << BoostV.Pz() << ", " << BoostV.E() << ")\n";
                 Pp1.Boost(-p3.BoostVector());Pp2.Boost(-p3.BoostVector());
 
                 std::cout << "Boosted p1: (" << Pp1.Px() << ", " << Pp1.Py() << ", " << Pp1.Pz() << ", " << Pp1.E() << ")\n";
