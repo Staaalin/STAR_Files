@@ -56,114 +56,6 @@ const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 
 const Int_t PtBinNum = sizeof(PtBin)/sizeof(PtBin[0]) - 1; // -1
 const Int_t yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
 
-switch (CentralityBinNum)
-{
-case 1:
-    #define DCentralityBinNum 1
-    break;
-case 2:
-    #define DCentralityBinNum 2
-    break;
-case 3:
-    #define DCentralityBinNum 3
-    break;
-case 4:
-    #define DCentralityBinNum 4
-    break;
-case 5:
-    #define DCentralityBinNum 5
-    break;
-case 6:
-    #define DCentralityBinNum 6
-    break;
-case 7:
-    #define DCentralityBinNum 7
-    break;
-case 8:
-    #define DCentralityBinNum 8
-    break;
-case 9:
-    #define DCentralityBinNum 9
-    break;
-case 10:
-    #define DCentralityBinNum 10
-    break;
-default:
-    break;
-}
-
-switch (PtBinNum)
-{
-case 1:
-    #define DPtBinNum 1
-    break;
-case 2:
-    #define DPtBinNum 2
-    break;
-case 3:
-    #define DPtBinNum 3
-    break;
-case 4:
-    #define DPtBinNum 4
-    break;
-case 5:
-    #define DPtBinNum 5
-    break;
-case 6:
-    #define DPtBinNum 6
-    break;
-case 7:
-    #define DPtBinNum 7
-    break;
-case 8:
-    #define DPtBinNum 8
-    break;
-case 9:
-    #define DPtBinNum 9
-    break;
-case 10:
-    #define DPtBinNum 10
-    break;
-default:
-    break;
-}
-
-switch (yBinNum)
-{
-case 1:
-    #define DyBinNum 1
-    break;
-case 2:
-    #define DyBinNum 2
-    break;
-case 3:
-    #define DyBinNum 3
-    break;
-case 4:
-    #define DyBinNum 4
-    break;
-case 5:
-    #define DyBinNum 5
-    break;
-case 6:
-    #define DyBinNum 6
-    break;
-case 7:
-    #define DyBinNum 7
-    break;
-case 8:
-    #define DyBinNum 8
-    break;
-case 9:
-    #define DyBinNum 9
-    break;
-case 10:
-    #define DyBinNum 10
-    break;
-default:
-    break;
-}
-
 TString KindBin[] = {"Mid","Sid"}
 #define KindNum 2
 TString PatternBin[] = {"AMBM","AMBS","ASBM"};
@@ -437,10 +329,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
         #endif
     #endif
 
-    cout<<"DCentralityBinNum = "<<DCentralityBinNum<<endl;
-    cout<<"DPtBinNum = "<<DPtBinNum<<endl;
-    cout<<"DyBinNum = "<<DyBinNum<<endl;
-
     double kstar, rap;
     TVector3 BetaTemp;
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
@@ -475,12 +363,12 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     std::vector<int>   Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<int>   Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PtBinNum]  [2] [2] ;
     std::vector<int>   Mix_B_ID                                [yBinNum]  [PtBinNum]  [2] [2] ;
-    int                Mix_event_Num      [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
-    int                Mix_event_Num_SUM  [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
-    //
-    TH1D* H_Kstar                         [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
-    TH1D* H_Mix_Kstar                     [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
-    int EventPatternMatch                 [DCentralityBinNum]  [DyBinNum] [DPtBinNum] [2] [2] ;
+    int                Mix_event_Num      [10]                 [10]       [10]        [2] [2] ;
+    int                Mix_event_Num_SUM  [10]                 [10]       [10]        [2] [2] ;
+    //       
+    TH1D* H_Kstar                         [10]                 [10]       [10]        [2] [2] ;
+    TH1D* H_Mix_Kstar                     [10]                 [10]       [10]        [2] [2] ;
+    int EventPatternMatch                 [10]                 [10]       [10]        [2] [2] ;
     // Used for testing
     int TestSum = 0;
 
