@@ -629,7 +629,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     cout<<"1";
                     p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
                     cout<<"2";
-                    auto BV = -p3.BoostVector();
+                    TVector3 BV = -p3.BoostVector();
                     cout<<"3";
                     p1.Boost( BV);p2.Boost( BV);
                     cout<<"4";
