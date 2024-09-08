@@ -437,7 +437,9 @@ void MixEvent_Test(TString MidName,int StartFileIndex,int EndFileIndex,int Outpu
                     // testPz->Fill((p1-p2).Z());
 
                     TLorentzVector p3 = p1 + p2;
-                    p1.Boost(-p3.BoostVector());p2.Boost(-p3.BoostVector());
+                    TLorentzVector p4;
+                    p4.SetXYZM(A_px[j] + B_px[k],A_py[j] + B_py[k],A_pz[j] + B_pz[k],A_mass[j] + B_mass[k]);
+                    p1.Boost(-p3.BoostVector());p2.Boost(-p4.BoostVector());
                     // testPx->Fill((p1-p2).X());
                     // testPy->Fill((p1-p2).Y());
                     // testPz->Fill((p1-p2).Z());
