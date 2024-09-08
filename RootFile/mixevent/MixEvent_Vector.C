@@ -31,7 +31,9 @@
 #include <map>
 #include <stdio.h>
 #include <ctime>
-#include "Math/Vector4D.h"
+// #include "Math/Vector4D.h"
+#include <Math/PtEtaPhiM4D.h>
+#include <Math/Boost.h>
 using namespace std;
 
 // #define DataName           "pAu_200_15"
@@ -438,8 +440,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
 
     double kstar, rap;
     TVector3 BetaTemp;
-    ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
+    // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
     // ROOT::Math::PxPyPzMVector p1 , p2 , p3 , p4 , p5;
+    ROOT::Math::PtEtaPhiM4D<double> p1 , p2 , p3 , p4 , p5;
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -697,14 +700,11 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
                 p1.SetPxPyPzE(APx,APy,APz,pow(APx*APx + APy*APy + APz*APz + AMass*AMass,0.5));
                 p4 = p1 + p2;
-                // auto BetaV = p4.BoostToCM();
+                auto BetaV = p4.BoostToCM();
                 // p3.Boost(-p4.BoostToCM());p1.Boost(-p4.BoostToCM());
-                Double_t bx = -p4.Boost().X();
-                Double_t by = -p4.Boost().Y();
-                Double_t bz = -p4.Boost().Z();
-                ROOT::Math::Boost boost(bx , by , bz);
-                p3.Boost(boost);p1.Boost(boost);
-                H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p3 - p1).Rho());
+                ROOT::Math::Boost boost(BetaV);
+                auto Np3=boost(p3) , Np1=boost(p1);
+                H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (Np3 - Np1).Rho());
 
                 TestSum++;
                 // bool IfRecord = true;
