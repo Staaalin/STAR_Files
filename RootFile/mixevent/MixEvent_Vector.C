@@ -385,8 +385,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     HistName2 += yBin[j];HistName2 += " < y";HistName2 += B_PDG;HistName2 += " <  ";
                     HistName2 += yBin[j+1];HistName2 += ", ";
                     HistName1 += k;
-                    HistName2 += PtBin[k];HistName2 += " < PVz";HistName2 += B_PDG;HistName2 += " <  ";
-                    HistName2 += PtBin[k+1];
+                    HistName2 += PVzBin[k];HistName2 += " < PVz";HistName2 += B_PDG;HistName2 += " <  ";
+                    HistName2 += PVzBin[k+1];
                     TString HistName1s = HistName1;
                     TString HistName2s = HistName2;
                     HistName1s += "_S_";
