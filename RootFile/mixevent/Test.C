@@ -64,7 +64,7 @@ std::vector<double> boost(std::vector<double>& p, std::vector<double>& beta) {
     return boosted;
 }
 
-int Test() {
+void Test() {
 
     int Num = 6;
 
@@ -122,5 +122,5 @@ int Test() {
         }
     }
 
-    return 0;
+    return;
 }
