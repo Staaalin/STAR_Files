@@ -98,8 +98,8 @@ void Test() {
                 auto beta = calculateBeta(p1, p2);
 
                 // Boost 两个四维矢量到质心系
-                std::vector<double> boostedP1 = boost(p1, beta);
-                std::vector<double> boostedP2 = boost(p2, beta);
+                std::vector<double> boostedP1 = boost(p1, -beta);
+                std::vector<double> boostedP2 = boost(p2, -beta);
 
                 // 输出结果
                 std::cout << "Boosted p1: (" << boostedP1[0] << ", " << boostedP1[1] << ", " << boostedP1[2] << ", " << boostedP1[3] << ")\n";
