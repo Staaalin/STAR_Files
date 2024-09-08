@@ -615,28 +615,26 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 if ((RapIndex == -1)) {
                     continue;
                 }
-                cout<<"1";
 
                 int B_Kid = B_Kind[Bid];
                 bool IfBFilled = false;
-                cout<<"2";
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
-                    cout<<"3";
                     if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
-                    cout<<"4";
                     TLorentzVector p1 , p2;
                     p2.SetXYZM(BPx,BPy,BPz,BMass);
                     int A_Kid = A_Kind[Aid];
                     float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
                     p1.SetXYZM(APx,APy,APz,AMass);
                     TLorentzVector p3;
-                    cout<<"5";
+                    cout<<"1";
                     p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
+                    cout<<"2";
                     auto BV = -p3.BoostVector();
+                    cout<<"3";
                     p1.Boost( BV);p2.Boost( BV);
-                    cout<<"PVzIndex = "<<PVzIndex<<endl;
+                    cout<<"4";
                     H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
-                    cout<<"6";
+                    cout<<"5";
 
                     TestSum++;
                     bool IfRecord = true;
