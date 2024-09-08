@@ -802,7 +802,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                             if (A_Kid == 0 && B_Kid == 0) Name = "AMBM";
                             if (A_Kid == 0 && B_Kid == 1) Name = "AMBS";
                             if (A_Kid == 1 && B_Kid == 0) Name = "ASBM";
-                            cout<<"["<<i<<","<<j<<","<<k<<","<<Name<<"] Filled " << Mix_event_Num_SUM[i][j][k][A_Kid][B_Kid] * 10 << "events, and remain "<<Mix_event_Num[i][j][k][A_Kid][B_Kid]<<" events, "<<endl; 
+                            cout<<"["<<i<<","<<j<<","<<k<<","<<Name<<"] Filled " << Mix_event_Num_SUM[i][j][k][A_Kid][B_Kid] * HowMuchEventMixing << " events, and remain "<<Mix_event_Num[i][j][k][A_Kid][B_Kid]<<" events, "<<endl; 
                         }
                         if (Mode == 0) H_Kstar[i][j][k][A_Kid][B_Kid]->Write();
                         H_Mix_Kstar[i][j][k][A_Kid][B_Kid]->Write();
@@ -811,7 +811,9 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             }
         }
     }
+    cout<<"Finish storing Hist"<<endl;
     fileA.Close();
+    cout<<"Hist file colsed"<<endl;
 
     // Writing remaining pool
 
