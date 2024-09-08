@@ -62,7 +62,7 @@ FourVector boost(const FourVector& p, const std::array<double, 3>& beta) {
     return boosted;
 }
 
-int test() {
+int Test() {
 
     int Num = 6;
 
