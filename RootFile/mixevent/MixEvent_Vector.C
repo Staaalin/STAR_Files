@@ -704,29 +704,29 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 H_Kstar[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
 
                 TestSum++;
-                bool IfRecord = true;
-                for (int Cid = 0;Cid < Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].size();Cid++) {
-                    if (Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid][Cid] == Aid) {
-                        IfRecord = false;
-                        break;
-                    }
-                }
-                if (IfRecord) {
-                    Mix_A_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Px[Aid]);
-                    Mix_A_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Py[Aid]);
-                    Mix_A_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Pz[Aid]);
-                    Mix_A_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
-                    EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
-                    Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].push_back(Aid);
-                }
-                if (!IfBFilled) {
-                    Mix_B_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Px[Bid]);
-                    Mix_B_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Py[Bid]);
-                    Mix_B_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Pz[Bid]);
-                    Mix_B_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
-                    EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
-                    IfBFilled = true;
-                }
+                // bool IfRecord = true;
+                // for (int Cid = 0;Cid < Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].size();Cid++) {
+                //     if (Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid][Cid] == Aid) {
+                //         IfRecord = false;
+                //         break;
+                //     }
+                // }
+                // if (IfRecord) {
+                //     Mix_A_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Px[Aid]);
+                //     Mix_A_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Py[Aid]);
+                //     Mix_A_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(A_Pz[Aid]);
+                //     Mix_A_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
+                //     EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
+                //     Mix_A_ID[RapIndex][PtIndex] [A_Kid][B_Kid].push_back(Aid);
+                // }
+                // if (!IfBFilled) {
+                //     Mix_B_Px   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Px[Bid]);
+                //     Mix_B_Py   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Py[Bid]);
+                //     Mix_B_Pz   [CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(B_Pz[Bid]);
+                //     Mix_B_EvtID[CenIndex][RapIndex][PtIndex] [A_Kid][B_Kid].push_back(EventID);
+                //     EventPatternMatch[CenIndex][RapIndex][PtIndex][A_Kid][B_Kid]++;
+                //     IfBFilled = true;
+                // }
             }
         }
 
