@@ -495,7 +495,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 Tstart = clock();
                 TestSum = 0;
             }
-            cout<<"1";
 
             A_Px   .resize(0);   B_Px.resize(0);
             A_Py   .resize(0);   B_Py.resize(0);
@@ -555,7 +554,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     B_ParID.push_back(Temp);
                 }
             }
-            cout<<"2";
 
             if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
             
@@ -598,7 +596,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 Mix_A_ID[i] [0][1].resize(0);
                 Mix_A_ID[i] [1][1].resize(0);
             }
-            cout<<"3";
 
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
@@ -618,23 +615,27 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 if ((RapIndex == -1)) {
                     continue;
                 }
-                cout<<"4";
+                cout<<"1";
 
                 int B_Kid = B_Kind[Bid];
                 bool IfBFilled = false;
+                cout<<"2";
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
+                    cout<<"3";
                     if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
+                    cout<<"4";
                     TLorentzVector p1 , p2;
                     p2.SetXYZM(BPx,BPy,BPz,BMass);
                     int A_Kid = A_Kind[Aid];
                     float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
                     p1.SetXYZM(APx,APy,APz,AMass);
                     TLorentzVector p3;
+                    cout<<"5";
                     p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
                     auto BV = -p3.BoostVector();
                     p1.Boost( BV);p2.Boost( BV);
                     H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
-                    cout<<"5";
+                    cout<<"6";
 
                     TestSum++;
                     bool IfRecord = true;
@@ -663,7 +664,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 }
             }
 
-            cout<<"6";
             for (int i = 0;i < yBinNum;i++) {
                 for (int j = 0;j < PVzBinNum;j++) {
                     for (int Aid = 0;Aid < 2;Aid++) {
@@ -705,7 +705,6 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 }
 
             }
-            cout<<"7";
 
         }
     }
