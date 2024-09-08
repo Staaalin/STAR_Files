@@ -96,9 +96,9 @@ void Test() {
 
                 // 计算质心系速度矢量
                 auto beta = calculateBeta(p1, p2);
-                beta[0] = -beta[0]
-                beta[1] = -beta[1]
-                beta[2] = -beta[2]
+                beta[0] = -beta[0];
+                beta[1] = -beta[1];
+                beta[2] = -beta[2];
 
                 std::cout<<"1"<<std::endl;
                 // Boost 两个四维矢量到质心系
