@@ -100,12 +100,12 @@ void Test() {
                 beta[1] = -beta[1]
                 beta[2] = -beta[2]
 
-                cout<<"1"<<endl;
+                std::cout<<"1"<<std::endl;
                 // Boost 两个四维矢量到质心系
                 std::vector<double> boostedP1 = boost(p1, beta);
-                cout<<"2"<<endl;
+                std::cout<<"2"<<std::endl;
                 std::vector<double> boostedP2 = boost(p2, beta);
-                cout<<"3"<<endl;
+                std::cout<<"3"<<std::endl;
 
                 // 输出结果
                 std::cout << "Boosted p1: (" << boostedP1[0] << ", " << boostedP1[1] << ", " << boostedP1[2] << ", " << boostedP1[3] << ")\n";
