@@ -687,13 +687,13 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
             for (int k=0;k<PtBinNum;k++){
                 for (int A_Kid=0;A_Kid<2;A_Kid++){
                     for (int B_Kid=0;B_Kid<2;B_Kid++) {
+                        if (A_Kid == 1 && B_Kid == 1) continue;
                         if ((Mix_event_Num[i][j][k][A_Kid][B_Kid] != 0) || (Mix_event_Num_SUM[i][j][k][A_Kid][B_Kid] != 0)) {
                         // if (true) {
                             TString Name;
                             if (A_Kid == 0 && B_Kid == 0) Name = "AMBM";
                             if (A_Kid == 0 && B_Kid == 1) Name = "AMBS";
                             if (A_Kid == 1 && B_Kid == 0) Name = "ASBM";
-                            if (A_Kid == 1 && B_Kid == 1) continue;
                             cout<<"["<<i<<","<<j<<","<<k<<","<<Name<<"] Filled " << Mix_event_Num_SUM[i][j][k][A_Kid][B_Kid] * HowMuchEventMixing << " events, and remain "<<Mix_event_Num[i][j][k][A_Kid][B_Kid]<<" events, "<<endl; 
                         }
                         if (Mode == 0) H_Kstar[i][j][k][A_Kid][B_Kid]->Write();
