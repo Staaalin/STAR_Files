@@ -537,7 +537,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         clock_t Tstart = clock();
         for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++){
             hadronTree->GetEntry(EntriesID);
-            if ((EntriesID+1)%100 == 0) {
+            if ((EntriesID+1)%200 == 0) {
                 time(&time_now);
                 int time_diff = (int)difftime(time_now, time_start);
                 cout << time_diff/60 << "min " << time_diff%60 << "s: ";
