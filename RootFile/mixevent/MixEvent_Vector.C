@@ -114,6 +114,17 @@ void print(std::vector<int> Temp)
     return ;
 }
 
+void print(std::vector<float> Temp)
+{
+	cout<<"{";
+    for (int i = 0;i<Temp.size();i++){
+		cout<<" "<<Temp[i];
+		if (i != (Temp.size() - 1)) cout<<" ,"; 
+	}
+	cout<<" }"<<endl;
+    return ;
+}
+
 Double_t massList(int PID)
 {
     Double_t Result;
@@ -635,6 +646,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 Mix_A_ID[i] [1][1].resize(0);
             }
 
+            cout<<"1";
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
                 float BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
@@ -654,11 +666,13 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     continue;
                 }
 
+                cout<<"2";
                 int B_Kid = B_Kind[Bid];
                 bool IfBFilled = false;
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
                     if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
 
+                    cout<<"3";
                     // TLorentzVector p1 , p2;
                     // p2.SetXYZM(BPx,BPy,BPz,BMass);
                     // int A_Kid = A_Kind[Aid];
@@ -674,11 +688,15 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     std::vector<float> p1 , p2;
                     p1.push_back(APx);p1.push_back(APy);p1.push_back(APz);p1.push_back(pow(APx*APx + APy*APy + APz*APz + AMass*AMass , 0.5));
                     p2.push_back(BPx);p2.push_back(BPy);p2.push_back(BPz);p2.push_back(pow(BPx*BPx + BPy*BPy + BPz*BPz + BMass*BMass , 0.5));
+                    
+                    cout<<"4";
                     auto beta = calculateBeta(p1, p2);
+                    cout<<"5";
                     beta[0] = -beta[0];
                     beta[1] = -beta[1];
                     beta[2] = -beta[2];
                     std::vector<float> boostedP1 = boost(p1, beta);
+                    cout<<"boostedP1 = ";print(boostedP1);
                     // std::vector<float> boostedP2 = boost(p2, beta);
                     H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(Rho(boostedP1));
 
