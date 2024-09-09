@@ -383,6 +383,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     double kstar, rap;
     TVector3 BetaTemp;
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
+    TLorentzVector p1 , p2 , p3;
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -671,56 +672,54 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
                     if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
 
-                    // TLorentzVector p1 , p2;
-                    // p2.SetXYZM(BPx,BPy,BPz,BMass);
-                    // int A_Kid = A_Kind[Aid];
-                    // float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
-                    // p1.SetXYZM(APx,APy,APz,AMass);
-                    // TLorentzVector p3;
-                    // p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
-                    // TVector3 BV = -p3.BoostVector();
-                    // p1.Boost( BV);p2.Boost( BV);
-                    // H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
-
+                    p2.SetXYZM(BPx,BPy,BPz,BMass);
                     int A_Kid = A_Kind[Aid];
-                    std::vector<float> p1 , p2;
-                    p1.push_back(APx);p1.push_back(APy);p1.push_back(APz);p1.push_back(pow(APx*APx + APy*APy + APz*APz + AMass*AMass , 0.5));
-                    p2.push_back(BPx);p2.push_back(BPy);p2.push_back(BPz);p2.push_back(pow(BPx*BPx + BPy*BPy + BPz*BPz + BMass*BMass , 0.5));
+                    float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
+                    p1.SetXYZM(APx,APy,APz,AMass);
+                    p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
+                    TVector3 BV = -p3.BoostVector();
+                    p1.Boost( BV);p2.Boost( BV);
+                    H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
+
+                    // int A_Kid = A_Kind[Aid];
+                    // std::vector<float> p1 , p2;
+                    // p1.push_back(APx);p1.push_back(APy);p1.push_back(APz);p1.push_back(pow(APx*APx + APy*APy + APz*APz + AMass*AMass , 0.5));
+                    // p2.push_back(BPx);p2.push_back(BPy);p2.push_back(BPz);p2.push_back(pow(BPx*BPx + BPy*BPy + BPz*BPz + BMass*BMass , 0.5));
                     
-                    std::vector<float> beta = calculateBeta(p1, p2);
-                    beta[0] = -beta[0];
-                    beta[1] = -beta[1];
-                    beta[2] = -beta[2];
-                    std::vector<float> boostedP1 = boost(p1, beta);
+                    // std::vector<float> beta = calculateBeta(p1, p2);
+                    // beta[0] = -beta[0];
+                    // beta[1] = -beta[1];
+                    // beta[2] = -beta[2];
+                    // std::vector<float> boostedP1 = boost(p1, beta);
                     // std::vector<float> boostedP2 = boost(p2, beta);
-                    H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(Rho(boostedP1));
+                    // H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(Rho(boostedP1));
 
                     TestSum++;
-                    if (TestSum%10 == 0) {
-                        TLorentzVector Np1 , Np2;
-                        Np2.SetXYZM(BPx,BPy,BPz,BMass);
-                        int A_Kid = A_Kind[Aid];
-                        float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
-                        Np1.SetXYZM(APx,APy,APz,AMass);
-                        TLorentzVector p3 = Np1 + Np2;
-                        // p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
-                        TVector3 BV = -p3.BoostVector();
-                        Np1.Boost( BV);Np2.Boost( BV);
-                        if (fabs(Np1.Px() - boostedP1[0]) > 0.0001) {
-                            cout<<"This is BAD:"<<endl;
-                            cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" , "<<Np1.E()<<" )"<<endl;
-                            cout<<"p1 = ";print(boostedP1);
-                            cout<<Np1.Px()<<" , "<<boostedP1[0]<<endl;
-                            cout<<"____________________________"<<endl;
-                        }
-                        else{
-                            cout<<"This is GOOD:"<<endl;
-                            cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" , "<<Np1.E()<<" )"<<endl;
-                            cout<<"p1 = ";print(boostedP1);
-                            cout<<Np1.Px()<<" , "<<boostedP1[0]<<endl;
-                            cout<<"____________________________"<<endl;
-                        }
-                    }
+                    // if (TestSum%10 == 0) {
+                    //     TLorentzVector Np1 , Np2;
+                    //     Np2.SetXYZM(BPx,BPy,BPz,BMass);
+                    //     int A_Kid = A_Kind[Aid];
+                    //     float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
+                    //     Np1.SetXYZM(APx,APy,APz,AMass);
+                    //     TLorentzVector p3 = Np1 + Np2;
+                    //     // p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
+                    //     TVector3 BV = -p3.BoostVector();
+                    //     Np1.Boost( BV);Np2.Boost( BV);
+                    //     if (fabs(Np1.Px() - boostedP1[0]) > 0.0001) {
+                    //         cout<<"This is BAD:"<<endl;
+                    //         cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" , "<<Np1.E()<<" )"<<endl;
+                    //         cout<<"p1 = ";print(boostedP1);
+                    //         cout<<Np1.Px()<<" , "<<boostedP1[0]<<endl;
+                    //         cout<<"____________________________"<<endl;
+                    //     }
+                    //     else{
+                    //         cout<<"This is GOOD:"<<endl;
+                    //         cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" , "<<Np1.E()<<" )"<<endl;
+                    //         cout<<"p1 = ";print(boostedP1);
+                    //         cout<<Np1.Px()<<" , "<<boostedP1[0]<<endl;
+                    //         cout<<"____________________________"<<endl;
+                    //     }
+                    // }
                     bool IfRecord = true;
                     for (int Cid = 0;Cid < Mix_A_ID[RapIndex] [A_Kid][B_Kid].size();Cid++) {
                         if (Mix_A_ID[RapIndex] [A_Kid][B_Kid][Cid] == Aid) {
@@ -764,28 +763,26 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                                         for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
                                             if (A_EID == Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]) continue;
 
-                                            // TLorentzVector p1 , p2;
-                                            // p2.SetXYZM(Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex],BMass);
-                                            // p1.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
-                                            // TLorentzVector p3;
-                                            // p3 = p1 + p2;
-                                            // auto BV = -p3.BoostVector();
-                                            // p1.Boost( BV);p2.Boost( BV);
-                                            // H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
+                                            p2.SetXYZM(Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex],BMass);
+                                            p1.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
+                                            p3 = p1 + p2;
+                                            auto BV = -p3.BoostVector();
+                                            p1.Boost( BV);p2.Boost( BV);
+                                            H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                             
-                                            float BPx = Mix_A_Px[CenIndex][i][j][Aid][Bid][Bindex];
-                                            float BPy = Mix_A_Py[CenIndex][i][j][Aid][Bid][Bindex];
-                                            float BPz = Mix_A_Pz[CenIndex][i][j][Aid][Bid][Bindex];
-                                            std::vector<float> p1 , p2;
-                                            p1.push_back(APx);p1.push_back(APy);p1.push_back(APz);p1.push_back(pow(APx*APx + APy*APy + APz*APz + AMass*AMass , 0.5));
-                                            p2.push_back(BPx);p2.push_back(BPy);p2.push_back(BPz);p2.push_back(pow(BPx*BPx + BPy*BPy + BPz*BPz + BMass*BMass , 0.5));
-                                            auto beta = calculateBeta(p1, p2);
-                                            beta[0] = -beta[0];
-                                            beta[1] = -beta[1];
-                                            beta[2] = -beta[2];
-                                            std::vector<float> boostedP1 = boost(p1, beta);
-                                            // std::vector<float> boostedP2 = boost(p2, beta);
-                                            H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(Rho(boostedP1));
+                                            // float BPx = Mix_A_Px[CenIndex][i][j][Aid][Bid][Bindex];
+                                            // float BPy = Mix_A_Py[CenIndex][i][j][Aid][Bid][Bindex];
+                                            // float BPz = Mix_A_Pz[CenIndex][i][j][Aid][Bid][Bindex];
+                                            // std::vector<float> p1 , p2;
+                                            // p1.push_back(APx);p1.push_back(APy);p1.push_back(APz);p1.push_back(pow(APx*APx + APy*APy + APz*APz + AMass*AMass , 0.5));
+                                            // p2.push_back(BPx);p2.push_back(BPy);p2.push_back(BPz);p2.push_back(pow(BPx*BPx + BPy*BPy + BPz*BPz + BMass*BMass , 0.5));
+                                            // auto beta = calculateBeta(p1, p2);
+                                            // beta[0] = -beta[0];
+                                            // beta[1] = -beta[1];
+                                            // beta[2] = -beta[2];
+                                            // std::vector<float> boostedP1 = boost(p1, beta);
+                                            // // std::vector<float> boostedP2 = boost(p2, beta);
+                                            // H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(Rho(boostedP1));
                                         }
                                     }
                                     Mix_event_Num    [CenIndex][i][j][Aid][Bid] = 0;
