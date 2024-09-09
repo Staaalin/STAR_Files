@@ -710,11 +710,15 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                             cout<<"This is BAD:"<<endl;
                             cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" , "<<Np1.E()<<" )"<<endl;
                             cout<<"p1 = ";print(boostedP1);
+                            cout<<Np1.Px()<<" , "<<boostedP1[0]<<endl;
+                            cout<<"____________________________"<<endl;
                         }
                         else{
                             cout<<"This is GOOD:"<<endl;
                             cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" , "<<Np1.E()<<" )"<<endl;
                             cout<<"p1 = ";print(boostedP1);
+                            cout<<Np1.Px()<<" , "<<boostedP1[0]<<endl;
+                            cout<<"____________________________"<<endl;
                         }
                     }
                     bool IfRecord = true;
