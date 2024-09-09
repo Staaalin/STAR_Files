@@ -679,7 +679,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     p1.SetXYZM(APx,APy,APz,AMass);
                     p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
                     BV = -p3.BoostVector();
-                    // p1.Boost( BV);p2.Boost( BV);
+                    p1.Boost( BV);p2.Boost( BV);
                     H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
 
                     // int A_Kid = A_Kind[Aid];
@@ -768,7 +768,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                                             p1.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
                                             p3 = p1 + p2;
                                             BV = -p3.BoostVector();
-                                            // p1.Boost( BV);p2.Boost( BV);
+                                            p1.Boost( BV);p2.Boost( BV);
                                             H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                             
                                             // float BPx = Mix_A_Px[CenIndex][i][j][Aid][Bid][Bindex];
