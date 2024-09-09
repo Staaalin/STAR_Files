@@ -690,7 +690,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     p2.push_back(BPx);p2.push_back(BPy);p2.push_back(BPz);p2.push_back(pow(BPx*BPx + BPy*BPy + BPz*BPz + BMass*BMass , 0.5));
                     
                     cout<<"4";
-                    auto beta = calculateBeta(p1, p2);
+                    std::vector<float> beta = calculateBeta(p1, p2);
                     cout<<"5";
                     beta[0] = -beta[0];
                     beta[1] = -beta[1];
