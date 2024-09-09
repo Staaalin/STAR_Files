@@ -707,8 +707,11 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         TVector3 BV = -p3.BoostVector();
                         Np1.Boost( BV);Np2.Boost( BV);
                         if (abs(Np1.Px() - boostedP1[0]) > 0.0001) {
-                            cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" )"<<endl;
+                            cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" , "<<Np1.M()<<" )"<<endl;
                             cout<<"p1 = ";print(p1);
+                        }
+                        else{
+                            cout<<"Good"<<endl;
                         }
                     }
                     bool IfRecord = true;
