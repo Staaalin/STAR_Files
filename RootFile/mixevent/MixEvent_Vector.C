@@ -708,13 +708,13 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         Np1.Boost( BV);Np2.Boost( BV);
                         if (abs(Np1.Px() - boostedP1[0]) > 0.0001) {
                             cout<<"This is BAD:"<<endl;
-                            cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" , "<<Np1.M()<<" )"<<endl;
-                            cout<<"p1 = ";print(p1);
+                            cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" , "<<Np1.E()<<" )"<<endl;
+                            cout<<"p1 = ";print(boostedP1);
                         }
                         else{
                             cout<<"This is GOOD:"<<endl;
-                            cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" , "<<Np1.M()<<" )"<<endl;
-                            cout<<"p1 = ";print(p1);
+                            cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" , "<<Np1.E()<<" )"<<endl;
+                            cout<<"p1 = ";print(boostedP1);
                         }
                     }
                     bool IfRecord = true;
