@@ -384,6 +384,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
     TVector3 BetaTemp;
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
     TLorentzVector p1 , p2 , p3;
+    TVector3 BV;
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -677,7 +678,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                     float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
                     p1.SetXYZM(APx,APy,APz,AMass);
                     p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
-                    TVector3 BV = -p3.BoostVector();
+                    BV = -p3.BoostVector();
                     // p1.Boost( BV);p2.Boost( BV);
                     H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
 
@@ -766,7 +767,7 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                                             p2.SetXYZM(Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex],Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex],BMass);
                                             p1.SetXYZM(Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex],Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex],AMass);
                                             p3 = p1 + p2;
-                                            auto BV = -p3.BoostVector();
+                                            BV = -p3.BoostVector();
                                             // p1.Boost( BV);p2.Boost( BV);
                                             H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                             
