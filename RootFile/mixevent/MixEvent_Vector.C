@@ -706,7 +706,10 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
                         TVector3 BV = -p3.BoostVector();
                         Np1.Boost( BV);Np2.Boost( BV);
-                        if (abs(Np1.X() - boostedP1[0]) > 0.0001) cout << "WWWW" << endl;
+                        if (abs(Np1.Px() - boostedP1[0]) > 0.0001) {
+                            cout<<"Np1 = ( "<<Np1.Px()<<" , "<<Np1.Py()<<" , "<<Np1.Pz()<<" )"<<endl;
+                            cout<<"p1 = ";print(p1);
+                        }
                     }
                     bool IfRecord = true;
                     for (int Cid = 0;Cid < Mix_A_ID[RapIndex] [A_Kid][B_Kid].size();Cid++) {
