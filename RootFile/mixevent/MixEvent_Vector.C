@@ -702,8 +702,8 @@ void MixEvent_Vector(TString MidName,int StartFileIndex,int EndFileIndex,int Out
                         int A_Kid = A_Kind[Aid];
                         float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
                         Np1.SetXYZM(APx,APy,APz,AMass);
-                        TLorentzVector p3;
-                        p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
+                        TLorentzVector p3 = p1 + p2;
+                        // p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
                         TVector3 BV = -p3.BoostVector();
                         Np1.Boost( BV);Np2.Boost( BV);
                         if (fabs(Np1.Px() - boostedP1[0]) > 0.0001) {
