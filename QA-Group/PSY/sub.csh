@@ -93,7 +93,7 @@ while ($i <= $numFiles)
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/QA/log/script\_$i\.out\" /\> >> $SubXml
-    echo \<output fromScratch=\"Run\.log\" toURL=\"file:$OutputLogURL"Run"$i\.log\" /\> >> $SubXml
+    echo \<output fromScratch=\"Run\.log\" toURL=\"file:$OutputLogURL"/Run"$i\.log\" /\> >> $SubXml
     echo \<output fromScratch=\"cen1\.v2\.root\" toURL=\"file:$OutputURL"/cen1_"$i\.root\" /\> >> $SubXml
     echo \</job\> >> $SubXml
 
@@ -107,4 +107,5 @@ while ($i <= $numFiles)
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sub.xml
     # echo "Delate submit files"
     @ i = $i + 1
+    
 end
