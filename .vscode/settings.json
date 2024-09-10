@@ -29,6 +29,7 @@
         "Subtract.C": "cpp",
         "MixEvent.C": "cpp",
         "MixEvent_Vector.C": "cpp",
-        "MixEvent_Test.C": "cpp"
+        "MixEvent_Test.C": "cpp",
+        "Ck.C": "cpp"
     }
 }
