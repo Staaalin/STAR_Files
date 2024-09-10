@@ -895,7 +895,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // BhadronTree->Branch("grefMult"           ,&BCgrefMult           ,"grefMult/I"                          );
             BhadronTree->Branch("EventID"            ,&BevtID               ,"EventID/I"                           );
             // BhadronTree->Branch("RunID"              ,&BrunID               ,"RunID/I"                             );
-            // BhadronTree->Branch("TriggerID"          ,&BTriggerID           ,"TriggerID/I"                         );
+            BhadronTree->Branch("TriggerID"          ,&BTriggerID           ,"TriggerID/I"                         );
             BhadronTree->Branch("Nch"                ,&BNch                 ,"Nch/I"                               );
             BhadronTree->Branch("PVz"                ,&BPVz                 ,"PVz/F"                               );
             BhadronTree->Branch("PDG"                ,&BPDG                 );
@@ -918,9 +918,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // BhadronTree->Branch("Chi2"               ,&BQA_Chi2              );
             
             // Used for restore corralated information
-            // BhadronTree->Branch("ParentList"         ,&BParentList     );
-            // BhadronTree->Branch("ParentSta"          ,&BParentSta      );
-            // BhadronTree->Branch("ParentEnd"          ,&BParentEnd      );
+            BhadronTree->Branch("ParentList"         ,&BParentList     );
+            BhadronTree->Branch("ParentSta"          ,&BParentSta      );
+            BhadronTree->Branch("ParentEnd"          ,&BParentEnd      );
 
             std::vector<Int_t> Mix_EvtID;
             for (int i=0;i<CentralityBinNum;i++){
