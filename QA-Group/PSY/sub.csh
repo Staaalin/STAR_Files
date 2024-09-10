@@ -14,6 +14,8 @@ set RightBrackets = "\)"
 set Quo = '\"'
 set FilesPerJob = 1
 
+set Store = " > Run.log "
+
 set cen = 1
 set opt_weight = 1
 
@@ -58,7 +60,7 @@ while ($i <= $numFiles)
     set ARM = " > "
     echo ll >> $SubXml
     echo echo \"000000000000000000000000000000000000000\" >> $SubXml
-    echo root4star \-b RunAnalyzer_QA\.C$LeftBrackets$cen,$opt_weight,$Quo$FILELIST$Quo$RightBrackets >> $SubXml
+    echo root4star \-b RunAnalyzer_QA\.C$LeftBrackets$cen,$opt_weight,$Quo$FILELIST$Quo$RightBrackets$Store >> $SubXml
     echo ls  >> $SubXml
     echo mv $OutputName \"cen1_\"$i\"\.root\" >> $SubXml
     echo \</command\> >> $SubXml
@@ -87,8 +89,8 @@ while ($i <= $numFiles)
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/QA/log/script\_$i\.out\" /\> >> $SubXml
-    echo \<output fromScratch=\"$i.log\" toURL=\"file:$OutputLogURL\" /\> >> $SubXml
-    echo \<output fromScratch=\"cen1_$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
+    echo \<output fromScratch=\"Run\.log\" toURL=\"file:$OutputLogURL"Run"$i\.log\" /\> >> $SubXml
+    echo \<output fromScratch=\"cen1\.v2\.root\" toURL=\"file:$OutputURL\"cen1_$i\.root\" /\> >> $SubXml
     echo \</job\> >> $SubXml
 
     cp $SubXml /star/data01/pwg/svianping/QA/xml/sub$i.xml
