@@ -91,11 +91,11 @@ while ($i <= $numFiles)
     echo \<output fromScratch=\"cen1_\"$i\"\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     echo \</job\> >> $SubXml
 
+    cp $SubXml /star/data01/pwg/svianping/QA/xml/sub$i.xml
     star-submit $SubXml
 
     echo "submitted"$i"/"$numFiles
 
-    cp $SubXml /star/data01/pwg/svianping/QA/xml/sub$i.xml
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/ZIP*
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sch*
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sub.xml
