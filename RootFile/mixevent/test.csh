@@ -3,11 +3,11 @@
 
 set midname = "/star/data01/pwg/svianping/output/output_"
 # set midname = "/star/data01/pwg/svianping/HADD/HADD_T_"
-set midname = "~/Result/Cor_T_"
+# set midname = "~/Result/Cor_T_"
 # set outname = "/star/data01/pwg/svianping/HADD/HADD_T_"
-# set outname = "~/Result/Cor_"
+set outname = "~/Result/Cor_"
 set StartFileIndex = 0
-set EndFileIndex = 120
+set EndFileIndex = 200
 set OutputFileIndex = 121
 set A_PDG = 321
 set B_PDG = 3122
