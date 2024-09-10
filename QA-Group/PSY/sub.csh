@@ -5,6 +5,7 @@ rm -rf /star/data01/pwg/svianping/QA/
 mkdir /star/data01/pwg/svianping/QA/
 mkdir /star/data01/pwg/svianping/QA/cen/
 mkdir /star/data01/pwg/svianping/QA/log/
+mkdir /star/data01/pwg/svianping/QA/xml/
 
 set MainDir=`pwd`
 
@@ -93,6 +94,8 @@ while ($i <= $numFiles)
     star-submit $SubXml
 
     echo "submitted"$i"/"$numFiles
+
+    cp $SubXml /star/data01/pwg/svianping/QA/xml/sub$i.xml
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/ZIP*
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sch*
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sub.xml
