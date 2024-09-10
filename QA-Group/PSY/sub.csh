@@ -62,7 +62,7 @@ while ($i <= $numFiles)
     echo echo \"000000000000000000000000000000000000000\" >> $SubXml
     echo root4star \-b RunAnalyzer_QA\.C$LeftBrackets$cen,$opt_weight,$Quo$FILELIST$Quo$RightBrackets$Store >> $SubXml
     echo ls  >> $SubXml
-    echo mv $OutputName \"cen1_\"$i\"\.root\" >> $SubXml
+    echo mv $OutputName \"cen1_$i\.root\" >> $SubXml
     echo \</command\> >> $SubXml
 
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
