@@ -88,7 +88,7 @@ while ($i <= $numFiles)
     echo \</SandBox\> >> $SubXml
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/QA/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"$i.log\" toURL=\"file:$OutputLogURL\" /\> >> $SubXml
-    echo \<output fromScratch=\"cen1_\"$i\"\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
+    echo \<output fromScratch=\"cen1_$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     echo \</job\> >> $SubXml
 
     cp $SubXml /star/data01/pwg/svianping/QA/xml/sub$i.xml
