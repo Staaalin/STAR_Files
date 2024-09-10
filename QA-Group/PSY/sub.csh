@@ -39,9 +39,10 @@ while ($i <= $numFiles)
 
 
     # set SubXml=sub.xml
-    set SubXml=/star/data01/pwg/svianping/QA/sub.xml
+    set SubXml = /star/data01/pwg/svianping/QA/sub.xml
     if(-e $SubXml) rm $SubXml
     touch $SubXml
+    echo file created
 
     set FILELIST = "modified_list_"$i".list"
     set output_file = "/star/data01/pwg/svianping/QA/"$FILELIST
@@ -108,7 +109,7 @@ while ($i <= $numFiles)
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/ZIP*
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sch*
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sub.xml
-    # echo "Delate submit files"
+    echo "Delate submit files"
     @ i = $i + 1
 
 
