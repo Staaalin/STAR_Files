@@ -861,9 +861,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     OutputFileName += OutputFileIndex;
     OutputFileName += ".root";
     TFile *fileA = new TFile(OutputFileName, "RECREATE");
-    folder_kStar = fileB->mkdir("kStar");
-    folder_dRap  = fileB->mkdir("dRap");
-    folder_dPt   = fileB->mkdir("dPt");
+    folder_kStar = fileA->mkdir("kStar");
+    folder_dRap  = fileA->mkdir("dRap");
+    folder_dPt   = fileA->mkdir("dPt");
 
     cout << "#######################" << endl;
     cout << "# Calculating Summary #" << endl;
