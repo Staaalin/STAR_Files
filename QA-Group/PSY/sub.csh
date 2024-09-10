@@ -32,6 +32,7 @@ set numFiles = $line_count
 cd /star/data01/pwg/svianping/QA/
 set i = 0
 set j = 0
+echo "共有文件"$line_count"个"
 while ($i <= $numFiles)
 
     # set SubXml=sub.xml
@@ -55,7 +56,10 @@ while ($i <= $numFiles)
     echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${FilesPerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
 
     echo \<command\> >> $SubXml
-    echo rm $i\.log >> $SubXml
+    
+    echo setenv NODEBUG yes   >> $SubXml
+    echo starver SL20d        >> $SubXml
+
     # echo touch $i\.log >> $SubXml
     set ARM = " > "
     echo ll >> $SubXml
