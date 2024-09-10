@@ -479,7 +479,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         TString TreeName = "hadronTree";
         if ((Mode == 0) && (PatternID < Pattern)) continue;
         if ((Mode != 0) && (PatternID == Pattern)) break;
-        if (Mode != 0) TreeName = PatternBin[PatternID] + TreeName;
+        if (Mode != 0) {
+            TreeName = PatternBin[PatternID] + "/" + TreeName;
+        }
 
         TChain *hadronTree = new TChain(TreeName);
         for(int i=StartFileIndex;i <= EndFileIndex;i++){
