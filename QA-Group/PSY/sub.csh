@@ -33,7 +33,10 @@ cd /star/data01/pwg/svianping/QA/
 set i = 0
 set j = 0
 echo "共有文件"$line_count"个"
+
+
 while ($i <= $numFiles)
+
 
     # set SubXml=sub.xml
     set SubXml=/star/data01/pwg/svianping/QA/sub.xml
@@ -107,5 +110,8 @@ while ($i <= $numFiles)
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/sub.xml
     # echo "Delate submit files"
     @ i = $i + 1
-    
+
+
 end
+
+
