@@ -48,8 +48,8 @@ using namespace std;
 
 #define Pi 3.1415926535898
 
-const int CentralityBin[] = {0,10,20,40,80};// %
-const float PVzBin[] = {-45.0 , -13.0 , 5.0 , 23.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
+const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
+const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
 const float yBin[] = {-5.0 , 0.0 , 0.5 , 5.0}; // B_y
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
@@ -422,16 +422,16 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     std::vector<int>   Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
     std::vector<int>   Mix_B_ID                                [yBinNum]               [2] [2] ;
     std::vector<float> Mix_B_Rap          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    int                Mix_event_Num      [10]                 [10]       [10]         [2] [2] ;
-    int                Mix_event_Num_SUM  [10]                 [10]       [10]         [2] [2] ;
+    int                Mix_event_Num      [15]                 [15]       [15]         [2] [2] ;
+    int                Mix_event_Num_SUM  [15]                 [15]       [15]         [2] [2] ;
     //        
-    TH1D* H_Kstar                         [10]                 [10]       [10]         [2] [2] ;
-    TH1D* H_Mix_Kstar                     [10]                 [10]       [10]         [2] [2] ;
-    TH1D* H_dRap                          [10]                 [10]       [10]         [2] [2] ;
-    TH1D* H_Mix_dRap                      [10]                 [10]       [10]         [2] [2] ;
-    TH1D* H_dPt                           [10]                 [10]       [10]         [2] [2] ;
-    TH1D* H_Mix_dPt                       [10]                 [10]       [10]         [2] [2] ;
-    int EventPatternMatch                 [10]                 [10]       [10]         [2] [2] ;
+    TH1D* H_Kstar                         [15]                 [15]       [15]         [2] [2] ;
+    TH1D* H_Mix_Kstar                     [15]                 [15]       [15]         [2] [2] ;
+    TH1D* H_dRap                          [15]                 [15]       [15]         [2] [2] ;
+    TH1D* H_Mix_dRap                      [15]                 [15]       [15]         [2] [2] ;
+    TH1D* H_dPt                           [15]                 [15]       [15]         [2] [2] ;
+    TH1D* H_Mix_dPt                       [15]                 [15]       [15]         [2] [2] ;
+    int EventPatternMatch                 [15]                 [15]       [15]         [2] [2] ;
     // Used for testing
     int TestSum = 0;
 
@@ -728,7 +728,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     BV = -p3.BoostVector();
                     p1.Boost( BV);p2.Boost( BV);
                     H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
-                    H_dRap [CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(fabs(A_Rap[Aid] - B_Rap[Bid]));
+                    H_dRap [CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(A_Rap[Aid] - B_Rap[Bid]);
                     H_dPt  [CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
 
                     // int A_Kid = A_Kind[Aid];
@@ -825,7 +825,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                             BV = -p3.BoostVector();
                                             p1.Boost( BV);p2.Boost( BV);
                                             H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
-                                            H_Mix_dRap [CenIndex][i][j][Aid][Bid]->Fill(fabs(Mix_A_Rap[CenIndex][i][j][Aid][Bid][Aindex] - Mix_B_Rap[CenIndex][i][j][Aid][Bid][Bindex]));
+                                            H_Mix_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid][Aindex] - Mix_B_Rap[CenIndex][i][j][Aid][Bid][Bindex]);
                                             H_Mix_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
                                             
                                             // float BPx = Mix_A_Px[CenIndex][i][j][Aid][Bid][Bindex];
