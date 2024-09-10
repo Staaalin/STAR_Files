@@ -62,7 +62,7 @@ while ($i <= $numFiles)
     echo echo \"000000000000000000000000000000000000000\" >> $SubXml
     echo root4star \-b RunAnalyzer_QA\.C$LeftBrackets$cen,$opt_weight,$Quo$FILELIST$Quo$RightBrackets$Store >> $SubXml
     echo ls  >> $SubXml
-    echo mv $OutputName \"cen1_$i\.root\" >> $SubXml
+    echo mv $OutputName cen1_$i\.root >> $SubXml
     echo \</command\> >> $SubXml
 
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
@@ -90,7 +90,7 @@ while ($i <= $numFiles)
     echo \</SandBox\> >> $SubXml
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/QA/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"Run\.log\" toURL=\"file:$OutputLogURL"Run"$i\.log\" /\> >> $SubXml
-    echo \<output fromScratch=\"cen1\.v2\.root\" toURL=\"file:$OutputURL\"cen1_$i\.root\" /\> >> $SubXml
+    echo \<output fromScratch=\"cen1\.v2\.root\" toURL=\"file:$OutputURL"/cen1_"$i\.root\" /\> >> $SubXml
     echo \</job\> >> $SubXml
 
     cp $SubXml /star/data01/pwg/svianping/QA/xml/sub$i.xml
