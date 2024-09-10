@@ -1020,7 +1020,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 // BCgrefMult = grefMult ;
                 BevtID     = EventID  ;
                 // BrunID     = RunID    ;
-                // BTriggerID = TriggerID;
+                BTriggerID = TriggerID;
                 BNch       = Nch      ;
                 BPVz       = PVz      ;
                 for (int j=0;j<PDGMult;j++){
