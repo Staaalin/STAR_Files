@@ -74,10 +74,10 @@ if ($InputNameIndex == 1) then
     mkdir /star/data01/pwg/svianping/HADD
     mkdir /star/data01/pwg/svianping/HADD/log/
 else if ($InputNameIndex == 2) then
-    set ObvInputName = "/star/data01/pwg/svianping/HADD/HADD_"
-    set ObvOutputName = "/star/data01/pwg/svianping/HADD/HADDrA_"
-    set InputName = "HADD_"
-    set OutputName = "HADDrA_"
+    set ObvInputName = "/star/data01/pwg/svianping/HADD/HADD_T_"
+    set ObvOutputName = "/star/data01/pwg/svianping/HADD/HADDr_"
+    set InputName = "HADD_T_"
+    set OutputName = "HADDr_"
     set OutputURL = "/star/data01/pwg/svianping/HADD/"
 else if ($InputNameIndex == 3) then
     set ObvInputName = "/star/data01/pwg/svianping/HADD/HADDrA_"
@@ -90,9 +90,6 @@ else
     exit
 endif
 
-rm -rf /star/data01/pwg/svianping/HADD/
-mkdir /star/data01/pwg/svianping/HADD/
-mkdir /star/data01/pwg/svianping/HADD/log/
 
 set MainDir=`pwd`
 
