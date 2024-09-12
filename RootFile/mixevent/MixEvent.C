@@ -457,10 +457,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
     for (int i = 0;i < FeedDownNum;i++){
         if (FeedDown[i] == A_PDG) {
-            FeddDown[i] = 0;
+            FeedDown[i] = 0;
         }
         if (FeedDown[i] == B_PDG) {
-            FeddDown[i] = 0;
+            FeedDown[i] = 0;
         }
     }
 
