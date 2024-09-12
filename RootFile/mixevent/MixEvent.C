@@ -51,10 +51,12 @@ using namespace std;
 const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
 const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
 const float yBin[] = {-5.0 , 0.0 , 0.5 , 5.0}; // B_y
+const int FeedDown[] = { 3334 , 3312 };
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
 const Int_t yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
+const Int_t FeedDownNum = sizeof(yBin)/sizeof(yBin[0]);
 
 TString KindBin[] = {"Mid","Sid"}
 #define KindNum 2
@@ -387,6 +389,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TVector3 BV;
     float tEnergy , APx , APy , APz , BPx , BPy , BPz;
     int A_Kid , B_Kid;
+    std::vector<int> Temp;
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -400,6 +403,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     std::vector<std::vector<int> >        A_ParID        ;
     std::vector<int>                      A_Kind         ;
     std::vector<Float_t>                  A_Rap          ;
+    std::vector<Int_t>                    A_IfRecord     ;
     std::vector<Float_t>                  B_Px           ;
     std::vector<Float_t>                  B_Py           ;
     std::vector<Float_t>                  B_Pz           ;
@@ -407,6 +411,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     std::vector<std::vector<int> >        B_ParID        ;
     std::vector<int>                      B_Kind         ;
     std::vector<Float_t>                  B_Rap          ;
+    std::vector<std::vector<int> >        C_ParID        ; // 用于存储Residal Effect
     // used as array
     std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
     std::vector<float> Mix_A_Py           [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
@@ -446,6 +451,15 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     
     TString HistNameI  , HistNameJ  , HistNameK  , HistNameL;
     TString HistNameIs , HistNameJs , HistNameKs , HistNameLs;
+
+    for (int i = 0;i < FeedDownNum;i++){
+        if (FeedDown[i] == A_PDG) {
+            FeddDown[i] = 0;
+        }
+        if (FeedDown[i] == B_PDG) {
+            FeddDown[i] = 0;
+        }
+    }
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
@@ -597,6 +611,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             A_ParID.resize(0);B_ParID.resize(0);
             A_Kind .resize(0); B_Kind.resize(0);
             A_Rap  .resize(0);  B_Rap.resize(0);
+            A_IfRecord.resize(0);
+            C_ParID.resize(0);
 
             for (int j=0;j<PDGMult;j++){
                 if (PDG->at(j) == A_PDG) {
@@ -618,7 +634,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     A_Px.push_back(mix_px->at(j));
                     A_Py.push_back(mix_py->at(j));
                     A_Pz.push_back(mix_pz->at(j));
-                    std::vector<int> Temp;Temp.clear();Temp.push_back(j);
+                    Temp.clear();Temp.push_back(j);
                     for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
                     }
@@ -626,7 +642,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + pow(AMass,2),0.5);
                     A_Rap.push_back(0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j))));
                 }
-                if (PDG->at(j) == B_PDG) {
+                else if (PDG->at(j) == B_PDG) {
                     if ( PatternID == Pattern ) {
                         if      (fabs(InvariantMass->at(j) - BMass) <= 3*BMassSigma) {B_Kind.push_back(0);}
                         else if (fabs(InvariantMass->at(j) - BMass) <= 6*BMassSigma) {B_Kind.push_back(1);}
@@ -645,7 +661,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     B_Px.push_back(mix_px->at(j));
                     B_Py.push_back(mix_py->at(j));
                     B_Pz.push_back(mix_pz->at(j));
-                    std::vector<int> Temp;Temp.clear();Temp.push_back(j);
+                    Temp.clear();Temp.push_back(j);
                     for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
                     }
@@ -653,10 +669,30 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + pow(BMass,2),0.5);
                     B_Rap.push_back(0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j))));
                 }
+                else{
+                    for (int l = 0;l < FeedDownNum;l++) {
+                        if ( abs(PDG->at(j)) == FeedDown[l] ) {
+                            Temp.clear();Temp.push_back(j);
+                            for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
+                                Temp.push_back(ParentList->at(k));
+                            }
+                            C_ParID.push_back(Temp);
+                        }
+                    }
+                }
             }
 
             if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
             
+            for (int Bid = 0;Bid < B_Px.size();Bid++) {
+                for (int Aid = 0;Aid < A_Px.size();Aid++) {
+                    if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])){
+                        A_IfRecord.push_back(0);
+                    }
+                    A_IfRecord.push_back(1);
+                }
+            }
+
             // Event Index
             int CenIndex = -1;
             for (int k=0;k<CentralityBinNum;k++){
@@ -716,22 +752,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
 
                 B_Kid = B_Kind[Bid];
-                bool IfBFilled = false;
+                bool IfBFilled[2] = {false,false};
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
-                    if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])) continue;
+                    if (A_IfRecord[Aid] == 0) continue;
 
-                    p2.SetXYZM(BPx,BPy,BPz,BMass);
-                    A_Kid = A_Kind[Aid];
-                    APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
-                    p1.SetXYZM(APx,APy,APz,AMass);
-                    p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
-                    BV = -p3.BoostVector();
-                    p1.Boost( BV);p2.Boost( BV);
-                    H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
-                    H_dRap [CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(A_Rap[Aid] - B_Rap[Bid]);
-                    H_dPt  [CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
-
-                    // int A_Kid = A_Kind[Aid];
+                    int A_Kid = A_Kind[Aid];
                     // std::vector<float> p1 , p2;
                     // p1.push_back(APx);p1.push_back(APy);p1.push_back(APz);p1.push_back(pow(APx*APx + APy*APy + APz*APz + AMass*AMass , 0.5));
                     // p2.push_back(BPx);p2.push_back(BPy);p2.push_back(BPz);p2.push_back(pow(BPx*BPx + BPy*BPy + BPz*BPz + BMass*BMass , 0.5));
@@ -786,14 +811,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         EventPatternMatch[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]++;
                         Mix_A_ID[RapIndex] [A_Kid][B_Kid].push_back(Aid);
                     }
-                    if (!IfBFilled) {
+                    if (!IfBFilled[A_Kid]) {
                         Mix_B_Px   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Px[Bid]);
                         Mix_B_Py   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Py[Bid]);
                         Mix_B_Pz   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Pz[Bid]);
                         Mix_B_Rap  [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Rap[Bid]);
                         Mix_B_EvtID[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(EntriesID);
                         EventPatternMatch[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]++;
-                        IfBFilled = true;
+                        IfBFilled[A_Kid] = true;
                     }
                 }
             }
@@ -810,7 +835,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                     for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
                                         int A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
                                         for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
-                                            if (A_EID == Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]) continue;
 
                                             APx = Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex];
                                             APy = Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex];
@@ -824,10 +848,17 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                             p3 = p1 + p2;
                                             BV = -p3.BoostVector();
                                             p1.Boost( BV);p2.Boost( BV);
-                                            H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
-                                            H_Mix_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid][Aindex] - Mix_B_Rap[CenIndex][i][j][Aid][Bid][Bindex]);
-                                            H_Mix_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
-                                            
+
+                                            if (A_EID != Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]) {
+                                                H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
+                                                H_Mix_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid][Aindex] - Mix_B_Rap[CenIndex][i][j][Aid][Bid][Bindex]);
+                                                H_Mix_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
+                                            }
+                                            else{
+                                                H_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
+                                                H_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid][Aindex] - Mix_B_Rap[CenIndex][i][j][Aid][Bid][Bindex]);
+                                                H_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
+                                            }
                                             // float BPx = Mix_A_Px[CenIndex][i][j][Aid][Bid][Bindex];
                                             // float BPy = Mix_A_Py[CenIndex][i][j][Aid][Bid][Bindex];
                                             // float BPz = Mix_A_Pz[CenIndex][i][j][Aid][Bid][Bindex];
