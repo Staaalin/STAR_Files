@@ -15,7 +15,7 @@
 
 ## pAu@200GeV or dAu@200GeV
 # inputs
-set CollisionType = dAu
+set CollisionType = OO
 set iJob=$1
 # settings
 set nRun=21

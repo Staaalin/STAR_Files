@@ -390,6 +390,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     float tEnergy , APx , APy , APz , BPx , BPy , BPz;
     int A_Kid , B_Kid;
     std::vector<int> Temp;
+    bool IfBFilled[2] = {false,false};
+    bool IfRecord = true;
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -411,6 +413,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     std::vector<std::vector<int> >        B_ParID        ;
     std::vector<int>                      B_Kind         ;
     std::vector<Float_t>                  B_Rap          ;
+    std::vector<Int_t>                    B_IfRecord     ;
     std::vector<std::vector<int> >        C_ParID        ; // 用于存储Residal Effect
     // used as array
     std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
@@ -611,7 +614,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             A_ParID.resize(0);B_ParID.resize(0);
             A_Kind .resize(0); B_Kind.resize(0);
             A_Rap  .resize(0);  B_Rap.resize(0);
-            A_IfRecord.resize(0);
+            A_IfRecord.resize(0);B_IfRecord.resize(0);
             C_ParID.resize(0);
 
             for (int j=0;j<PDGMult;j++){
@@ -684,12 +687,30 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
             if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
             
+            // 如果A、B有血缘关系，保留B
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
                     if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])){
                         A_IfRecord.push_back(0);
                     }
                     A_IfRecord.push_back(1);
+                }
+            }
+            
+            // 如果A、B与C有血缘关系，不记录A和B
+            for (int Aid = 0;Aid < A_Px.size();Aid++) {
+                for (int Cid = 0;Cid < C_ParID.size();Cid++) {
+                    if (IfCommonElement(A_ParID[Aid] , C_ParID[Cid])) {
+                        A_IfRecord[Aid] = 0;
+                    }
+                }
+            }
+            for (int Bid = 0;Bid < B_Px.size();Bid++) {
+                for (int Cid = 0;Cid < C_ParID.size();Cid++) {
+                    if (IfCommonElement(B_ParID[Bid] , C_ParID[Cid])) {
+                        B_IfRecord.push_back(0);
+                    }
+                    B_IfRecord.push_back(1);
                 }
             }
 
@@ -735,6 +756,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
+                if (B_IfRecord[Bid] == 0) continue;
+
                 BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
 
                 // B Index
@@ -752,7 +775,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
 
                 B_Kid = B_Kind[Bid];
-                bool IfBFilled[2] = {false,false};
+                IfBFilled[0] = false;IfBFilled[1] = false;
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
                     if (A_IfRecord[Aid] == 0) continue;
 
@@ -795,7 +818,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     //         cout<<"____________________________"<<endl;
                     //     }
                     // }
-                    bool IfRecord = true;
+                    IfRecord = true;
                     for (int Cid = 0;Cid < Mix_A_ID[RapIndex] [A_Kid][B_Kid].size();Cid++) {
                         if (Mix_A_ID[RapIndex] [A_Kid][B_Kid][Cid] == Aid) {
                             IfRecord = false;
