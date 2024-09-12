@@ -455,7 +455,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TString HistNameI  , HistNameJ  , HistNameK  , HistNameL;
     TString HistNameIs , HistNameJs , HistNameKs , HistNameLs;
 
-    cout<<FeedDownNum<<endl;
+    cout<<"1"<<endl;
 
     for (int i = 0;i < FeedDownNum;i++){
         if (FeedDown[i] == A_PDG) {
@@ -465,6 +465,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             FeedDown[i] = 0;
         }
     }
+    
+    cout<<"2"<<endl;
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
@@ -619,6 +621,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             A_IfRecord.resize(0);B_IfRecord.resize(0);
             C_ParID.resize(0);
 
+            cout<<"3"<<endl;
+
             for (int j=0;j<PDGMult;j++){
                 if (PDG->at(j) == A_PDG) {
                     if ( PatternID == Pattern ) {
@@ -687,6 +691,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
 
+            cout<<"4"<<endl;
+
             if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
             
             // 如果A、B有血缘关系，保留B
@@ -715,6 +721,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     B_IfRecord.push_back(1);
                 }
             }
+
+            cout<<"5"<<endl;
 
             // Event Index
             int CenIndex = -1;
@@ -758,6 +766,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
+                cout<<"6"<<endl;
+
                 if (B_IfRecord[Bid] == 0) continue;
 
                 BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
@@ -778,6 +788,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
                 B_Kid = B_Kind[Bid];
                 IfBFilled[0] = false;IfBFilled[1] = false;
+                cout<<"7"<<endl;
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
                     if (A_IfRecord[Aid] == 0) continue;
 
