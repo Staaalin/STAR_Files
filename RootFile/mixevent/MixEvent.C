@@ -56,7 +56,7 @@ const int FeedDown[] = { 3334 , 3312 };
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
 const Int_t yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
-const Int_t FeedDownNum = sizeof(yBin)/sizeof(yBin[0]);
+const Int_t FeedDownNum = sizeof(FeedDown)/sizeof(FeedDown[0]);
 
 TString KindBin[] = {"Mid","Sid"}
 #define KindNum 2
