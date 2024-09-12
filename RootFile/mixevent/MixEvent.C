@@ -756,15 +756,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
-                cout<<"1"<<endl;
-
                 if (B_IfRecord[Bid] == 0) continue;
 
-                cout<<"2"<<endl;
-
                 BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
-
-                cout<<"3"<<endl;
 
                 // B Index
                 rap = B_Rap[Bid];
@@ -776,17 +770,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
 
-                cout<<"4"<<endl;
-
                 if ((RapIndex == -1)) {
                     continue;
                 }
 
                 B_Kid = B_Kind[Bid];
-
-                cout<<"5"<<endl;
                 IfBFilled[0] = false;IfBFilled[1] = false;
-                cout<<"6"<<endl;
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
                     if (A_IfRecord[Aid] == 0) continue;
 
