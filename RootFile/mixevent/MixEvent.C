@@ -637,6 +637,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     A_Px.push_back(mix_px->at(j));
                     A_Py.push_back(mix_py->at(j));
                     A_Pz.push_back(mix_pz->at(j));
+                    A_IfRecord.push_back(1);
                     Temp.clear();Temp.push_back(j);
                     for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
@@ -664,6 +665,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     B_Px.push_back(mix_px->at(j));
                     B_Py.push_back(mix_py->at(j));
                     B_Pz.push_back(mix_pz->at(j));
+                    B_IfRecord.push_back(1);
                     Temp.clear();Temp.push_back(j);
                     for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
@@ -691,9 +693,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
                     if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])){
-                        A_IfRecord.push_back(0);
+                        A_IfRecord[Aid] = 0;
                     }
-                    A_IfRecord.push_back(1);
                 }
             }
             
@@ -708,9 +709,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
                 for (int Cid = 0;Cid < C_ParID.size();Cid++) {
                     if (IfCommonElement(B_ParID[Bid] , C_ParID[Cid])) {
-                        B_IfRecord.push_back(0);
+                        B_IfRecord[Bid] = 0;
                     }
-                    B_IfRecord.push_back(1);
                 }
             }
 
