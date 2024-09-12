@@ -455,6 +455,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TString HistNameI  , HistNameJ  , HistNameK  , HistNameL;
     TString HistNameIs , HistNameJs , HistNameKs , HistNameLs;
 
+    cout<<FeedDownNum<<endl;
+
     for (int i = 0;i < FeedDownNum;i++){
         if (FeedDown[i] == A_PDG) {
             FeedDown[i] = 0;
