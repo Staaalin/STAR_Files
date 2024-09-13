@@ -830,6 +830,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 Mix_B_Rap  [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Rap[i]);
                                 Mix_B_EvtID[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(EntriesID);
                             }
+                            EventPatternMatch[CenIndex][RapIndex][PVzIndex][Aid][Bid]++;
                         }
                         Mix_A_ID[RapIndex] [A_Kid][B_Kid].resize(0);
                         Mix_B_ID[RapIndex] [A_Kid][B_Kid].resize(0);
