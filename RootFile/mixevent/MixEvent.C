@@ -945,13 +945,13 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             cout<<"["<<i<<","<<j<<","<<k<<","<<Name<<"] Filled " << Mix_event_Num_SUM[i][j][k][A_Kid][B_Kid] * HowMuchEventMixing << " events, and remain "<<Mix_event_Num[i][j][k][A_Kid][B_Kid]<<" events, "<<endl; 
                         }
                         folder_kStar->cd();
-                        if (Mode == 0) H_Kstar[i][j][k][A_Kid][B_Kid]->Write();
+                        H_Kstar[i][j][k][A_Kid][B_Kid]->Write();
                         H_Mix_Kstar[i][j][k][A_Kid][B_Kid]->Write();
                         folder_dRap->cd();
-                        if (Mode == 0) H_dRap[i][j][k][A_Kid][B_Kid]->Write();
+                        H_dRap[i][j][k][A_Kid][B_Kid]->Write();
                         H_Mix_dRap[i][j][k][A_Kid][B_Kid]->Write();
                         folder_dPt->cd();
-                        if (Mode == 0) H_dPt[i][j][k][A_Kid][B_Kid]->Write();
+                        H_dPt[i][j][k][A_Kid][B_Kid]->Write();
                         H_Mix_dPt[i][j][k][A_Kid][B_Kid]->Write();
                     }
                 }
