@@ -868,11 +868,13 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                                 H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                                 H_Mix_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid][Aindex] - Mix_B_Rap[CenIndex][i][j][Aid][Bid][Bindex]);
                                                 H_Mix_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
+                                                cout<<"Smae Filled"<<endl;
                                             }
                                             else{
                                                 H_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                                 H_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid][Aindex] - Mix_B_Rap[CenIndex][i][j][Aid][Bid][Bindex]);
                                                 H_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
+                                                cout<<"Mix Filled"<<endl;
                                             }
                                             // float BPx = Mix_A_Px[CenIndex][i][j][Aid][Bid][Bindex];
                                             // float BPy = Mix_A_Py[CenIndex][i][j][Aid][Bid][Bindex];
