@@ -390,7 +390,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     float tEnergy , APx , APy , APz , BPx , BPy , BPz;
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID;
     std::vector<int> Temp;
+    std::vector<float> CMass , CMassSigma;
     bool IfRecord = true;
+    float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
+    float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -455,10 +458,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TString HistNameIs , HistNameJs , HistNameKs , HistNameLs;
 
     for (int i = 0;i < FeedDownNum;i++){
-        if (FeedDown[i] == A_PDG) {
+        CMass.push_back(massList(FeedDown[i]));
+        CMassSigma.push_back(massListSigma(FeedDown[i]));
+        if (abs(FeedDown[i]) == A_PDG) {
             FeedDown[i] = 0;
         }
-        if (FeedDown[i] == B_PDG) {
+        if (abs(FeedDown[i]) == B_PDG) {
             FeedDown[i] = 0;
         }
     }
@@ -583,9 +588,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
         const Int_t nentries=hadronTree->GetEntries();
         cout << "file number: " << nentries << endl;
-        
-        float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
-        float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
 
         time_t time_start;
         time_t time_now;
@@ -673,6 +675,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 else{
                     for (int l = 0;l < FeedDownNum;l++) {
                         if ( abs(PDG->at(j)) == FeedDown[l] ) {
+                            if ((fabs(InvariantMass->at(j) - CMass[l]) > 3*CMassSigma[l])) continue;
                             Temp.clear();Temp.push_back(j);
                             for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                                 Temp.push_back(ParentList->at(k));
