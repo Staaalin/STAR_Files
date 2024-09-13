@@ -854,11 +854,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                     Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
                                     for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
                                         A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
+                                        APx   = Mix_A_Px   [CenIndex][i][j][Aid][Bid][Aindex];
+                                        APy   = Mix_A_Py   [CenIndex][i][j][Aid][Bid][Aindex];
+                                        APz   = Mix_A_Pz   [CenIndex][i][j][Aid][Bid][Aindex];
                                         for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
-
-                                            APx = Mix_A_Px[CenIndex][i][j][Aid][Bid][Aindex];
-                                            APy = Mix_A_Py[CenIndex][i][j][Aid][Bid][Aindex];
-                                            APz = Mix_A_Pz[CenIndex][i][j][Aid][Bid][Aindex];
                                             BPx = Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex];
                                             BPy = Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex];
                                             BPz = Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex];
