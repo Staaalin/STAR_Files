@@ -858,6 +858,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                     cout<<Bindex<<"  ";
                                     if (Bindex < Mix_A_Size) {cout<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Bindex];}
                                     else {cout<<"       ";}
+                                    cout<<"  ";
                                     if (Bindex < Mix_B_Size) {cout<<Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex];}
                                     else {cout<<"       ";}
                                     cout<<" "<<endl;
