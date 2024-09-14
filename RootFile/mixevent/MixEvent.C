@@ -855,7 +855,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                     // Test imfomation
                                     cout<<"################   ["<<CenIndex<<","<<i<<","<<j<<","<<Aid<<","<<Bid<<"]   ################"<<endl;
                                     for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
-                                        cout<<Bindex<<"  "<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex]<<"    "<<Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]<<endl;
+                                        cout<<Bindex<<"  "<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Bindex]<<"    "<<Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]<<endl;
                                     }
                                     for (int Aindex = Mix_B_Size;Aindex < Mix_A_Size;Aindex++) {
                                         cout<<Aindex<<"  "<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex]<<endl;
