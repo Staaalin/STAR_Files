@@ -852,6 +852,15 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 if (Mix_event_Num[CenIndex][i][j][Aid][Bid] == HowMuchEventMixing+1) {
                                     Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
                                     Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
+                                    // Test imfomation
+                                    cout<<"################   ["<<CenIndex<<","<<i<<","<<j<<","<<Aid<<","<<Bid<<"]   ################"<<endl;
+                                    for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
+                                        cout<<Bindex<<"  "<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex]<<Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]<<endl;
+                                    }
+                                    for (int Aindex = Mix_B_Size;Aindex < Mix_A_Size;Aindex++) {
+                                        cout<<Aindex<<"  "<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex]<<endl;
+                                    }
+                                    
                                     for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
                                         A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
                                         APx   = Mix_A_Px   [CenIndex][i][j][Aid][Bid][Aindex];
@@ -878,19 +887,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                                 H_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid][Aindex] - Mix_B_Rap[CenIndex][i][j][Aid][Bid][Bindex]);
                                                 H_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
                                             }
-                                            // float BPx = Mix_A_Px[CenIndex][i][j][Aid][Bid][Bindex];
-                                            // float BPy = Mix_A_Py[CenIndex][i][j][Aid][Bid][Bindex];
-                                            // float BPz = Mix_A_Pz[CenIndex][i][j][Aid][Bid][Bindex];
-                                            // std::vector<float> p1 , p2;
-                                            // p1.push_back(APx);p1.push_back(APy);p1.push_back(APz);p1.push_back(pow(APx*APx + APy*APy + APz*APz + AMass*AMass , 0.5));
-                                            // p2.push_back(BPx);p2.push_back(BPy);p2.push_back(BPz);p2.push_back(pow(BPx*BPx + BPy*BPy + BPz*BPz + BMass*BMass , 0.5));
-                                            // auto beta = calculateBeta(p1, p2);
-                                            // beta[0] = -beta[0];
-                                            // beta[1] = -beta[1];
-                                            // beta[2] = -beta[2];
-                                            // std::vector<float> boostedP1 = boost(p1, beta);
-                                            // // std::vector<float> boostedP2 = boost(p2, beta);
-                                            // H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(Rho(boostedP1));
                                         }
                                     }
                                     Mix_event_Num    [CenIndex][i][j][Aid][Bid] = 0;
