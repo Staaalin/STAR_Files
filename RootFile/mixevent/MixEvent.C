@@ -849,17 +849,17 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         for (int Bid = 0;Bid < 2;Bid++) {
                             if (EventPatternMatch[CenIndex][i][j][Aid][Bid] != 0) {
                                 Mix_event_Num[CenIndex][i][j][Aid][Bid]++;
+                                // Test imfomation
+                                cout<<"################   ["<<CenIndex<<","<<i<<","<<j<<","<<Aid<<","<<Bid<<"] "<<Mix_event_Num[CenIndex][i][j][Aid][Bid]<<"   ################"<<endl;
+                                for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
+                                    cout<<Bindex<<"  "<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Bindex]<<"    "<<Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]<<endl;
+                                }
+                                for (int Aindex = Mix_B_Size;Aindex < Mix_A_Size;Aindex++) {
+                                    cout<<Aindex<<"  "<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex]<<endl;
+                                }
                                 if (Mix_event_Num[CenIndex][i][j][Aid][Bid] == HowMuchEventMixing+1) {
                                     Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
                                     Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
-                                    // Test imfomation
-                                    cout<<"################   ["<<CenIndex<<","<<i<<","<<j<<","<<Aid<<","<<Bid<<"] "<<Mix_event_Num[CenIndex][i][j][Aid][Bid]<<"   ################"<<endl;
-                                    for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
-                                        cout<<Bindex<<"  "<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Bindex]<<"    "<<Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]<<endl;
-                                    }
-                                    for (int Aindex = Mix_B_Size;Aindex < Mix_A_Size;Aindex++) {
-                                        cout<<Aindex<<"  "<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex]<<endl;
-                                    }
                                     
                                     for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
                                         A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
