@@ -831,10 +831,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             int LoopSize; Mix_B_Size < Mix_A_Size ? LoopSize = Mix_A_Size : LoopSize = Mix_B_Size ;
                             for (int Bindex = 0;Bindex < LoopSize;Bindex++) {
                                 cout<<Bindex<<"  ";
-                                if (Bindex < Mix_A_Size) {cout<<Mix_A_EvtID[CenIndex][RapIndex][PVzIndex][Aid][B_Kid].at(Bindex);}
+                                if (Bindex < Mix_A_Size) {cout<<Mix_A_EvtID[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid].at(Bindex);}
                                 else {cout<<"       ";}
                                 cout<<"  ";
-                                if (Bindex < Mix_B_Size) {cout<<Mix_B_EvtID[CenIndex][RapIndex][PVzIndex][Aid][B_Kid].at(Bindex);}
+                                if (Bindex < Mix_B_Size) {cout<<Mix_B_EvtID[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid].at(Bindex);}
                                 else {cout<<"       ";}
                                 cout<<" "<<endl;
                             }
