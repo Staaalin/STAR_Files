@@ -852,19 +852,19 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             if (EventPatternMatch[CenIndex][i][j][Aid][Bid] != 0) {
                                 Mix_event_Num[CenIndex][i][j][Aid][Bid]++;
                                 // Test imfomation
-                                Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
-                                Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
-                                cout<<"####  3rd  #####   "<<EventPatternMatch[CenIndex][i][j][Aid][Bid]<<"  ["<<CenIndex<<","<<i<<","<<j<<","<<Aid<<","<<Bid<<"] "<<Mix_event_Num[CenIndex][i][j][Aid][Bid]<<"   ################"<<endl;
-                                int LoopSize; Mix_B_Size < Mix_A_Size ? LoopSize = Mix_A_Size : LoopSize = Mix_B_Size ;
-                                for (int Bindex = 0;Bindex < LoopSize;Bindex++) {
-                                    cout<<Bindex<<"  ";
-                                    if (Bindex < Mix_A_Size) {cout<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid].at(Bindex);}
-                                    else {cout<<"       ";}
-                                    cout<<"  ";
-                                    if (Bindex < Mix_B_Size) {cout<<Mix_B_EvtID[CenIndex][i][j][Aid][Bid].at(Bindex);}
-                                    else {cout<<"       ";}
-                                    cout<<" "<<endl;
-                                }
+                                // Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
+                                // Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
+                                // cout<<"####  3rd  #####   "<<EventPatternMatch[CenIndex][i][j][Aid][Bid]<<"  ["<<CenIndex<<","<<i<<","<<j<<","<<Aid<<","<<Bid<<"] "<<Mix_event_Num[CenIndex][i][j][Aid][Bid]<<"   ################"<<endl;
+                                // int LoopSize; Mix_B_Size < Mix_A_Size ? LoopSize = Mix_A_Size : LoopSize = Mix_B_Size ;
+                                // for (int Bindex = 0;Bindex < LoopSize;Bindex++) {
+                                //     cout<<Bindex<<"  ";
+                                //     if (Bindex < Mix_A_Size) {cout<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid].at(Bindex);}
+                                //     else {cout<<"       ";}
+                                //     cout<<"  ";
+                                //     if (Bindex < Mix_B_Size) {cout<<Mix_B_EvtID[CenIndex][i][j][Aid][Bid].at(Bindex);}
+                                //     else {cout<<"       ";}
+                                //     cout<<" "<<endl;
+                                // }
 
                                 if (Mix_event_Num[CenIndex][i][j][Aid][Bid] == HowMuchEventMixing+1) {
                                     Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
