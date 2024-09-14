@@ -823,18 +823,18 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 Mix_B_Rap  [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Rap.at(BidN));
                                 Mix_B_EvtID[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(EntriesID);
                             }
-                            EventPatternMatch[CenIndex][RapIndex][PVzIndex][AidN][BidN]++;
+                            EventPatternMatch[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]++;
                             // Test imfomation
-                            Mix_A_Size = Mix_A_Px[CenIndex][RapIndex][PVzIndex][Aid][Bid].size();
-                            Mix_B_Size = Mix_B_Px[CenIndex][RapIndex][PVzIndex][Aid][Bid].size();
-                            cout<<"####  2rd  #####   "<<EventPatternMatch[CenIndex][RapIndex][PVzIndex][Aid][Bid]<<"  ["<<CenIndex<<","<<RapIndex<<","<<PVzIndex<<","<<Aid<<","<<Bid<<"] "<<Mix_event_Num[CenIndex][RapIndex][PVzIndex][Aid][Bid]<<"   ################"<<endl;
+                            Mix_A_Size = Mix_A_Px[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid].size();
+                            Mix_B_Size = Mix_B_Px[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid].size();
+                            cout<<"####  2rd  #####   "<<EventPatternMatch[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]<<"  ["<<CenIndex<<","<<RapIndex<<","<<PVzIndex<<","<<A_Kid<<","<<B_Kid<<"] "<<Mix_event_Num[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]<<"   ################"<<endl;
                             int LoopSize; Mix_B_Size < Mix_A_Size ? LoopSize = Mix_A_Size : LoopSize = Mix_B_Size ;
                             for (int Bindex = 0;Bindex < LoopSize;Bindex++) {
                                 cout<<Bindex<<"  ";
-                                if (Bindex < Mix_A_Size) {cout<<Mix_A_EvtID[CenIndex][RapIndex][PVzIndex][Aid][Bid].at(Bindex);}
+                                if (Bindex < Mix_A_Size) {cout<<Mix_A_EvtID[CenIndex][RapIndex][PVzIndex][Aid][B_Kid].at(Bindex);}
                                 else {cout<<"       ";}
                                 cout<<"  ";
-                                if (Bindex < Mix_B_Size) {cout<<Mix_B_EvtID[CenIndex][RapIndex][PVzIndex][Aid][Bid].at(Bindex);}
+                                if (Bindex < Mix_B_Size) {cout<<Mix_B_EvtID[CenIndex][RapIndex][PVzIndex][Aid][B_Kid].at(Bindex);}
                                 else {cout<<"       ";}
                                 cout<<" "<<endl;
                             }
