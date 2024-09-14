@@ -827,7 +827,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             // Test imfomation
                             Mix_A_Size = Mix_A_Px[CenIndex][RapIndex][PVzIndex][Aid][Bid].size();
                             Mix_B_Size = Mix_B_Px[CenIndex][RapIndex][PVzIndex][Aid][Bid].size();
-                            cout<<"####  3rd  #####   "<<EventPatternMatch[CenIndex][RapIndex][PVzIndex][Aid][Bid]<<"  ["<<CenIndex<<","<<RapIndex<<","<<PVzIndex<<","<<Aid<<","<<Bid<<"] "<<Mix_event_Num[CenIndex][RapIndex][PVzIndex][Aid][Bid]<<"   ################"<<endl;
+                            cout<<"####  2rd  #####   "<<EventPatternMatch[CenIndex][RapIndex][PVzIndex][Aid][Bid]<<"  ["<<CenIndex<<","<<RapIndex<<","<<PVzIndex<<","<<Aid<<","<<Bid<<"] "<<Mix_event_Num[CenIndex][RapIndex][PVzIndex][Aid][Bid]<<"   ################"<<endl;
                             int LoopSize; Mix_B_Size < Mix_A_Size ? LoopSize = Mix_A_Size : LoopSize = Mix_B_Size ;
                             for (int Bindex = 0;Bindex < LoopSize;Bindex++) {
                                 cout<<Bindex<<"  ";
