@@ -93,14 +93,13 @@ std::vector<float> boost(std::vector<float>& p, std::vector<float>& beta) {
     boosted.push_back(p[2] + gamma2 * bp * beta[2] + gamma * beta[2] * p[3]);
     boosted.push_back(gamma * (p[3] + bp));
 
-    // cout<<"boosted = ("<<boosted[0]<<" , "<<boosted[1]<<" , "<<boosted[2]<<" , "<<boosted[3]<<" )"<<endl;
     return boosted;
 }
 
 float Rho(std::vector<float>& p) {
     float Result = 0;
     for (int i = 0;i < 3;i++){
-        Result += p[i]*p[i];
+        Result += p.at(i)*p.at(i);
     }
     Result = pow(Result,0.5);
     return Result;
@@ -110,7 +109,7 @@ void print(std::vector<int> Temp)
 {
 	cout<<"{";
     for (int i = 0;i<Temp.size();i++){
-		cout<<" "<<Temp[i];
+		cout<<" "<<Temp.at(i);
 		if (i != (Temp.size() - 1)) cout<<" ,"; 
 	}
 	cout<<" }"<<endl;
@@ -121,7 +120,7 @@ void print(std::vector<float> Temp)
 {
 	cout<<"{";
     for (int i = 0;i<Temp.size();i++){
-		cout<<" "<<Temp[i];
+		cout<<" "<<Temp.at(i);
 		if (i != (Temp.size() - 1)) cout<<" ,"; 
 	}
 	cout<<" }"<<endl;
@@ -208,7 +207,7 @@ Double_t massListSigma(int PID)
 bool IfInVector(int Num , std::vector<int> V)
 {
     for (int i=0;i<V.size();i++) {
-        if (Num == V[i]){
+        if (Num == V.at(i)){
             return true;
         }
     }
@@ -219,7 +218,7 @@ bool IfCommonElement(std::vector<int> A , std::vector<int> B)
 {
     for (int i=0;i<A.size();i++){
         for (int j=0;j<B.size();j++){
-            if (A[i] == B[j]) return true;
+            if (A.at(i) == B.at(j)) return true;
         }
     }
     return false;
@@ -229,12 +228,12 @@ void DltElement(std::vector<int> &V , int ID)
 {
     std::vector<int> V_T;V_T.clear();
     for (int i=0;i<V.size();i++){
-        V_T.push_back(V[i]);
+        V_T.push_back(V.at(i));
     }
     V.clear();
     for (int i=0;i<V_T.size();i++){
         if (i == ID) continue;
-        V.push_back(V_T[i]);
+        V.push_back(V_T.at(i));
     }
     return;
 }
@@ -675,7 +674,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 else{
                     for (int l = 0;l < FeedDownNum;l++) {
                         if ( abs(PDG->at(j)) == FeedDown[l] ) {
-                            if ((fabs(InvariantMass->at(j) - CMass[l]) > 3*CMassSigma[l])) continue;
+                            if ((fabs(InvariantMass->at(j) - CMass.at(l)) > 3*CMassSigma.at(l))) continue;
                             Temp.clear();Temp.push_back(j);
                             for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                                 Temp.push_back(ParentList->at(k));
@@ -691,8 +690,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // 如果A、B有血缘关系，保留B
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
-                    if (IfCommonElement(A_ParID[Aid] , B_ParID[Bid])){
-                        A_IfRecord[Aid] = 0;
+                    if (IfCommonElement(A_ParID.at(Aid) , B_ParID.at(Bid))){
+                        A_IfRecord.at(Aid) = 0;
                     }
                 }
             }
@@ -700,15 +699,15 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // 如果A、B与C有血缘关系，不记录A和B
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 for (int Cid = 0;Cid < C_ParID.size();Cid++) {
-                    if (IfCommonElement(A_ParID[Aid] , C_ParID[Cid])) {
-                        A_IfRecord[Aid] = 0;
+                    if (IfCommonElement(A_ParID.at(Aid) , C_ParID.at(Cid))) {
+                        A_IfRecord.at(Aid) = 0;
                     }
                 }
             }
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
                 for (int Cid = 0;Cid < C_ParID.size();Cid++) {
-                    if (IfCommonElement(B_ParID[Bid] , C_ParID[Cid])) {
-                        B_IfRecord[Bid] = 0;
+                    if (IfCommonElement(B_ParID.at(Bid) , C_ParID.at(Cid))) {
+                        B_IfRecord.at(Bid) = 0;
                     }
                 }
             }
@@ -716,8 +715,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // Event Index
             int CenIndex = -1;
             for (int k=0;k<CentralityBinNum;k++){
-                // if ((NchList[k] <= refMult) && (refMult < NchList[k+1])) {
-                if ((NchList[k] >= Nch) && (Nch > NchList[k+1])) {
+                // if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
+                if ((NchList.at(k) >= Nch) && (Nch > NchList.at(k+1))) {
                     CenIndex = k;
                     break;
                 }
@@ -726,7 +725,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             
             int PVzIndex = -1;
             for (int k=0;k<PVzBinNum;k++){
-                // if ((NchList[k] <= refMult) && (refMult < NchList[k+1])) {
+                // if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
                 if ((PVzBin[k] <= PVz) && (PVz < PVzBin[k+1])) {
                     PVzIndex = k;
                     break;
@@ -748,12 +747,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
 
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
 
-                if (B_IfRecord[Bid] == 0) continue;
+                if (B_IfRecord.at(Bid) == 0) continue;
 
-                BPx = B_Px[Bid] , BPy = B_Py[Bid] , BPz = B_Pz[Bid];
+                BPx = B_Px.at(Bid) , BPy = B_Py.at(Bid) , BPz = B_Pz.at(Bid);
 
                 // B Index
-                rap = B_Rap[Bid];
+                rap = B_Rap.at(Bid);
                 int RapIndex = -1;
                 for (int k=0;k<yBinNum;k++){
                     if ((yBin[k] <= rap) && (rap < yBin[k+1])) {
@@ -766,32 +765,21 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     continue;
                 }
 
-                B_Kid = B_Kind[Bid];
+                B_Kid = B_Kind.at(Bid);
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
-                    if (A_IfRecord[Aid] == 0) continue;
+                    if (A_IfRecord.at(Aid) == 0) continue;
 
-                    A_Kid = A_Kind[Aid];
+                    A_Kid = A_Kind.at(Aid);
 
                     if (!IfInVector(Aid , Mix_A_ID[RapIndex] [A_Kid][B_Kid])) Mix_A_ID[RapIndex] [A_Kid][B_Kid].push_back(Aid);
                     if (!IfInVector(Bid , Mix_B_ID[RapIndex] [A_Kid][B_Kid])) Mix_B_ID[RapIndex] [A_Kid][B_Kid].push_back(Bid);
-                    // std::vector<float> p1 , p2;
-                    // p1.push_back(APx);p1.push_back(APy);p1.push_back(APz);p1.push_back(pow(APx*APx + APy*APy + APz*APz + AMass*AMass , 0.5));
-                    // p2.push_back(BPx);p2.push_back(BPy);p2.push_back(BPz);p2.push_back(pow(BPx*BPx + BPy*BPy + BPz*BPz + BMass*BMass , 0.5));
-                    
-                    // std::vector<float> beta = calculateBeta(p1, p2);
-                    // beta[0] = -beta[0];
-                    // beta[1] = -beta[1];
-                    // beta[2] = -beta[2];
-                    // std::vector<float> boostedP1 = boost(p1, beta);
-                    // std::vector<float> boostedP2 = boost(p2, beta);
-                    // H_Kstar[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]->Fill(Rho(boostedP1));
 
                     TestSum++;
                     // if (TestSum%10 == 0) {
                     //     TLorentzVector Np1 , Np2;
                     //     Np2.SetXYZM(BPx,BPy,BPz,BMass);
-                    //     int A_Kid = A_Kind[Aid];
-                    //     float APx = A_Px[Aid] , APy = A_Py[Aid] , APz = A_Pz[Aid];
+                    //     int A_Kid = A_Kind.at(Aid);
+                    //     float APx = A_Px.at(Aid) , APy = A_Py.at(Aid) , APz = A_Pz.at(Aid);
                     //     Np1.SetXYZM(APx,APy,APz,AMass);
                     //     TLorentzVector p3 = Np1 + Np2;
                     //     // p3.SetXYZM(APx + BPx,APy + BPy,APz + BPz,AMass + BMass);
@@ -820,19 +808,19 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     for (int B_Kid = 0;B_Kid < 2;B_Kid++) {
                         if ((Mix_A_ID[RapIndex] [A_Kid][B_Kid].size() != 0) && (Mix_B_ID[RapIndex] [A_Kid][B_Kid].size() != 0)) {
                             for (int i = 0;i < Mix_A_ID[RapIndex] [A_Kid][B_Kid].size();i++) {
-                                Aid = Mix_A_ID[RapIndex] [A_Kid][B_Kid] [i];
-                                Mix_A_Px   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(A_Px[Aid]);
-                                Mix_A_Py   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(A_Py[Aid]);
-                                Mix_A_Pz   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(A_Pz[Aid]);
-                                Mix_A_Rap  [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(A_Rap[Aid]);
+                                Aid = Mix_A_ID[RapIndex] [A_Kid][B_Kid] .at(i);
+                                Mix_A_Px   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(A_Px.at(Aid));
+                                Mix_A_Py   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(A_Py.at(Aid));
+                                Mix_A_Pz   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(A_Pz.at(Aid));
+                                Mix_A_Rap  [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(A_Rap.at(Aid));
                                 Mix_A_EvtID[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(EntriesID);
                             }
                             for (int i = 0;i < Mix_B_ID[RapIndex] [A_Kid][B_Kid].size();i++) {
-                                Bid = Mix_B_ID[RapIndex] [A_Kid][B_Kid] [i];
-                                Mix_B_Px   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Px[Bid]);
-                                Mix_B_Py   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Py[Bid]);
-                                Mix_B_Pz   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Pz[Bid]);
-                                Mix_B_Rap  [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Rap[Bid]);
+                                Bid = Mix_B_ID[RapIndex] [A_Kid][B_Kid] .at(i);
+                                Mix_B_Px   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Px.at(Bid));
+                                Mix_B_Py   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Py.at(Bid));
+                                Mix_B_Pz   [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Pz.at(Bid));
+                                Mix_B_Rap  [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(B_Rap.at(Bid));
                                 Mix_B_EvtID[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid].push_back(EntriesID);
                             }
                             EventPatternMatch[CenIndex][RapIndex][PVzIndex][Aid][Bid]++;
@@ -856,10 +844,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 int LoopSize; Mix_B_Size < Mix_A_Size ? LoopSize = Mix_A_Size : LoopSize = Mix_B_Size ;
                                 for (int Bindex = 0;Bindex < LoopSize;Bindex++) {
                                     cout<<Bindex<<"  ";
-                                    if (Bindex < Mix_A_Size) {cout<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Bindex];}
+                                    if (Bindex < Mix_A_Size) {cout<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid].at(Bindex);}
                                     else {cout<<"       ";}
                                     cout<<"  ";
-                                    if (Bindex < Mix_B_Size) {cout<<Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex];}
+                                    if (Bindex < Mix_B_Size) {cout<<Mix_B_EvtID[CenIndex][i][j][Aid][Bid].at(Bindex);}
                                     else {cout<<"       ";}
                                     cout<<" "<<endl;
                                 }
@@ -868,14 +856,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                     Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
                                     Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
                                     for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
-                                        A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
-                                        APx   = Mix_A_Px   [CenIndex][i][j][Aid][Bid][Aindex];
-                                        APy   = Mix_A_Py   [CenIndex][i][j][Aid][Bid][Aindex];
-                                        APz   = Mix_A_Pz   [CenIndex][i][j][Aid][Bid][Aindex];
+                                        A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid].at(Aindex);
+                                        APx   = Mix_A_Px   [CenIndex][i][j][Aid][Bid].at(Aindex);
+                                        APy   = Mix_A_Py   [CenIndex][i][j][Aid][Bid].at(Aindex);
+                                        APz   = Mix_A_Pz   [CenIndex][i][j][Aid][Bid].at(Aindex);
                                         for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
-                                            BPx = Mix_B_Px[CenIndex][i][j][Aid][Bid][Bindex];
-                                            BPy = Mix_B_Py[CenIndex][i][j][Aid][Bid][Bindex];
-                                            BPz = Mix_B_Pz[CenIndex][i][j][Aid][Bid][Bindex];
+                                            BPx = Mix_B_Px[CenIndex][i][j][Aid][Bid].at(Bindex);
+                                            BPy = Mix_B_Py[CenIndex][i][j][Aid][Bid].at(Bindex);
+                                            BPz = Mix_B_Pz[CenIndex][i][j][Aid][Bid].at(Bindex);
 
                                             p2.SetXYZM(BPx,BPy,BPz,BMass);
                                             p1.SetXYZM(APx,APy,APz,AMass);
@@ -883,14 +871,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                             BV = -p3.BoostVector();
                                             p1.Boost( BV);p2.Boost( BV);
 
-                                            if (A_EID != Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]) {
+                                            if (A_EID != Mix_B_EvtID[CenIndex][i][j][Aid][Bid].at(Bindex)) {
                                                 H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
-                                                H_Mix_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid][Aindex] - Mix_B_Rap[CenIndex][i][j][Aid][Bid][Bindex]);
+                                                H_Mix_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex));
                                                 H_Mix_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
                                             }
                                             else{
                                                 H_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
-                                                H_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid][Aindex] - Mix_B_Rap[CenIndex][i][j][Aid][Bid][Bindex]);
+                                                H_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex));
                                                 H_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
                                             }
                                         }
@@ -1048,26 +1036,26 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         for (int m=0;m<Mix_B_EvtID[i][j][k][A_Kid][B_Kid].size();m++){
                             int nIndex = -1;
                             for (int n=0;n<Mix_EvtID.size();n++){
-                                if (Mix_B_EvtID[i][j][k][A_Kid][B_Kid][m] == Mix_EvtID[n]){
+                                if (Mix_B_EvtID[i][j][k][A_Kid][B_Kid].at(m) == Mix_EvtID.at(n)){
                                     nIndex = n;
                                     break;
                                 }
                             }
                             if (nIndex == -1){
-                                Mix_EvtID.push_back(Mix_B_EvtID[i][j][k][A_Kid][B_Kid][m]);
+                                Mix_EvtID.push_back(Mix_B_EvtID[i][j][k][A_Kid][B_Kid].at(m));
                                 nIndex = Mix_EvtID.size() - 1;
                             }
                         }
                         for (int m=0;m<Mix_A_EvtID[i][j][k][A_Kid][B_Kid].size();m++){
                             int nIndex = -1;
                             for (int n=0;n<Mix_EvtID.size();n++){
-                                if (Mix_A_EvtID[i][j][k][A_Kid][B_Kid][m] == Mix_EvtID[n]){
+                                if (Mix_A_EvtID[i][j][k][A_Kid][B_Kid].at(m) == Mix_EvtID.at(n)){
                                     nIndex = n;
                                     break;
                                 }
                             }
                             if (nIndex == -1){
-                                Mix_EvtID.push_back(Mix_A_EvtID[i][j][k][A_Kid][B_Kid][m]);
+                                Mix_EvtID.push_back(Mix_A_EvtID[i][j][k][A_Kid][B_Kid].at(m));
                                 nIndex = Mix_EvtID.size() - 1;
                             }
                         }
@@ -1076,7 +1064,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
             for (int i=0;i<Mix_EvtID.size();i++){
-                hadronTree->GetEntry(Mix_EvtID[i]);
+                hadronTree->GetEntry(Mix_EvtID.at(i));
                 BPDGMult   = PDGMult  ;
                 // BCrefMult  = refMult  ;
                 // BCgrefMult = grefMult ;
