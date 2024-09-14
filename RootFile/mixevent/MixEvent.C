@@ -853,7 +853,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                     Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
                                     Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
                                     // Test imfomation
-                                    cout<<"################   ["<<CenIndex<<","<<i<<","<<j<<","<<Aid<<","<<Bid<<"]   ################"<<endl;
+                                    cout<<"################   ["<<CenIndex<<","<<i<<","<<j<<","<<Aid<<","<<Bid<<"] "<<Mix_event_Num[CenIndex][i][j][Aid][Bid]<<"   ################"<<endl;
                                     for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
                                         cout<<Bindex<<"  "<<Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Bindex]<<"    "<<Mix_B_EvtID[CenIndex][i][j][Aid][Bid][Bindex]<<endl;
                                     }
