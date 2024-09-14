@@ -850,6 +850,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             if (EventPatternMatch[CenIndex][i][j][Aid][Bid] != 0) {
                                 Mix_event_Num[CenIndex][i][j][Aid][Bid]++;
                                 // Test imfomation
+                                Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
+                                Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
                                 cout<<"################   ["<<CenIndex<<","<<i<<","<<j<<","<<Aid<<","<<Bid<<"] "<<Mix_event_Num[CenIndex][i][j][Aid][Bid]<<"   ################"<<endl;
                                 int LoopSize; Mix_B_Size < Mix_A_Size ? LoopSize = Mix_A_Size : LoopSize = Mix_B_Size ;
                                 for (int Bindex = 0;Bindex < LoopSize;Bindex++) {
@@ -860,10 +862,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                     else {cout<<"       ";}
                                     cout<<" "<<endl;
                                 }
+
                                 if (Mix_event_Num[CenIndex][i][j][Aid][Bid] == HowMuchEventMixing+1) {
                                     Mix_A_Size = Mix_A_Px[CenIndex][i][j][Aid][Bid].size();
                                     Mix_B_Size = Mix_B_Px[CenIndex][i][j][Aid][Bid].size();
-                                    
                                     for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
                                         A_EID = Mix_A_EvtID[CenIndex][i][j][Aid][Bid][Aindex];
                                         APx   = Mix_A_Px   [CenIndex][i][j][Aid][Bid][Aindex];
