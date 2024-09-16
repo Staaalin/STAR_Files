@@ -2589,7 +2589,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	for (int Itr = 0;Itr < PDG.size();Itr++) {
 		if (!IfRecorded_A_Matched) {
 			for (int TI = 0;TI < Recorded_A_PDG_Size;TI++) {
-				if (abs(PDG[TI]) == Recorded_A_PDG[TI]) {
+				if (abs(PDG[Itr]) == Recorded_A_PDG[TI]) {
 					IfRecorded_A_Matched = true;
 					break;
 				}
@@ -2597,7 +2597,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		if (!IfRecorded_B_Matched) {
 			for (int TI = 0;TI < Recorded_B_PDG_Size;TI++) {
-				if (abs(PDG[TI]) == Recorded_B_PDG[TI]) {
+				if (abs(PDG[Itr]) == Recorded_B_PDG[TI]) {
 					IfRecorded_B_Matched = true;
 					break;
 				}
