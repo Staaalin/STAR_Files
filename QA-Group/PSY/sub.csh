@@ -52,10 +52,12 @@ while ($i <= $numFiles)
     set first_line = `head -n $i $input_file`
 
     # 添加前缀
-    if ($i > 1) then
-        echo $modified_line = $prefix$first_line
+    if ($i > 0) then
+        echo prefix = $prefix
+        echo first_line = $first_line
+        echo modified_line = $prefix$first_line
     endif
-    
+
     set modified_line = $prefix$first_line
 
     # 写入新文件
