@@ -56,6 +56,8 @@ while ($i <= $numFiles)
     # 写入新文件
     echo $modified_line > $output_file
 
+    echo FileList Created
+
     # print xml file
     echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
     echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${FilesPerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
@@ -64,6 +66,9 @@ while ($i <= $numFiles)
     
     echo setenv NODEBUG yes   >> $SubXml
     echo starver SL20d        >> $SubXml
+
+
+    echo Environment Setted
 
     # echo touch $i\.log >> $SubXml
     set ARM = " > "
@@ -74,9 +79,13 @@ while ($i <= $numFiles)
     echo mv $OutputName cen1_$i\.root >> $SubXml
     echo \</command\> >> $SubXml
 
+    echo Command Setted
+
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
     echo \<Package name=\"ZIP\_File\_$i\"\> >> $SubXml
     # echo \<File\>file:/star/u/svianping/STAR\_Files/RootFile/HADDr\_xml\.C\</File\> >> $SubXml
+
+    echo ZIP Start
     
     set StRootPWD = "/star/u/svianping/STAR_Files/QA-Group/PSY/StRoot"
     echo \<File\>file:$StRootPWD\</File\> >> $SubXml
@@ -97,6 +106,9 @@ while ($i <= $numFiles)
 
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml
+
+    echo SandBox Setted
+
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/QA/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"Run$i\.log\" toURL=\"file:$OutputLogURL\" /\> >> $SubXml
     echo \<output fromScratch=\"cen1\_$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
