@@ -48,17 +48,12 @@ while ($i <= $numFiles)
     set FILELIST = "modified_list_"$i".list"
     set output_file = "/star/data01/pwg/svianping/QA/"$FILELIST
 
-    echo Test 1
-
     # 读取第一行内容
     set first_line = `head -n $i $input_file`
 
-    echo Test 2
-
     # 添加前缀
+    echo $modified_line = $prefix$first_line
     set modified_line = $prefix$first_line
-
-    echo Test 3
 
     # 写入新文件
     echo $modified_line > $output_file
