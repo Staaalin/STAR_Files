@@ -121,7 +121,7 @@ while ($i <= $numFiles)
     echo SandBox Setted
 
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/QA/log/script\_$i\.out\" /\> >> $SubXml
-    echo \<output fromScratch=\"Run$i\.log\" toURL=\"file:$OutputLogURL\" /\> >> $SubXml
+    echo \<output fromScratch=\"Run\_$i\.log\" toURL=\"file:$OutputLogURL\" /\> >> $SubXml
     echo \<output fromScratch=\"cen1\_$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     echo \</job\> >> $SubXml
 
