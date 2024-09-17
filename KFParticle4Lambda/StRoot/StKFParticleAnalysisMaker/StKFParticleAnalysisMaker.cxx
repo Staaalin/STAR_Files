@@ -2002,10 +2002,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				px.emplace_back(MomentumOfParticle_tb.X());
 				py.emplace_back(MomentumOfParticle_tb.Y());
 				pz.emplace_back(MomentumOfParticle_tb.Z());
-				float pt = pow(pow(MomentumOfParticle_tb.X(),2) + pow(MomentumOfParticle_tb.Y(),2),0.5);
-				float TanTheta = 1.0*pt/fabs(MomentumOfParticle_tb.Z());
-				float Theta = atan(TanTheta);
-				QA_eta.emplace_back(-log(tan(0.5*Theta)) * fabs(MomentumOfParticle_tb.Z())/MomentumOfParticle_tb.Z());
+				QA_eta.emplace_back(MomentumOfParticle_tb.Eta());
 				InvariantMass.emplace_back(particle.GetMass());//cout<<"particle.GetAtProductionVertex() = "<<particle.GetAtProductionVertex()<<endl;
 				// float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);
 				QA_Decay_Length.emplace_back(l);
