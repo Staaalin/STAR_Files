@@ -107,6 +107,9 @@ while ($i <= $numFiles)
     set ResolutionPWD = "/star/u/svianping/STAR_Files/QA-Group/PSY/Resolution_cen1.weight_112_QA_new.root"
     echo \<File\>file:$ResolutionPWD\</File\> >> $SubXml
 
+    set Cen1WeightPWD = "/star/u/svianping/STAR_Files/QA-Group/PSY/cen1.weight_112_QA.root"
+    echo \<File\>file:$Cen1WeightPWD\</File\> >> $SubXml
+
     set FILELISTPWD = $output_file
     echo \<File\>file:$FILELISTPWD\</File\> >> $SubXml
 
