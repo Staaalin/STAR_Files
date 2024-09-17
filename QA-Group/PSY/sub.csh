@@ -49,7 +49,8 @@ while ($i <= $numFiles)
     set output_file = "/star/data01/pwg/svianping/QA/"$FILELIST
 
     # 读取第一行内容
-    set first_line = `head -n $i $input_file`
+    # set first_line = `head -n $i $input_file`
+    set first_line = `sed -n $i\p $input_file`
 
     # 添加前缀
     if ($i > 0) then
