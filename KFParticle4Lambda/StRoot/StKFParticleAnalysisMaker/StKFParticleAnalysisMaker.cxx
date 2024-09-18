@@ -61,7 +61,7 @@
 #define LambdaPdg          3122
 #define XiPdg              3312
 #define OmegaPdg           3334
-#define XiRPdg             3314
+#define XiRPdg             1003314
 #define KaonPdg			   321
 #define ProtonPdg          2212
 #define K0SPdg			   310
@@ -203,7 +203,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
 
-	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,   333   ,   3314   ,  -3314  };
+	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,   333   ,   1003314   ,  -1003314  };
 	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "Phi"  ,  "XiR"  ,   "XibR"  };
 	const int BPDGList[]         = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
 	const TString BNameList[]    = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
