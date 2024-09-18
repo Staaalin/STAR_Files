@@ -77,6 +77,8 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	StKFParticleInterface::instance()->AddDecayToReconstructionList(-3312);
 	StKFParticleInterface::instance()->AddDecayToReconstructionList( 3334);
 	StKFParticleInterface::instance()->AddDecayToReconstructionList(-3334);
+	StKFParticleInterface::instance()->AddDecayToReconstructionList( 3314);
+	StKFParticleInterface::instance()->AddDecayToReconstructionList(-3314);
 
 	// StPicoDstMaker & chain
 	StPicoDstMaker* maker = (StPicoDstMaker *) StMaker::GetTopChain()->Maker("PicoDst");

@@ -50,6 +50,7 @@
 // #define DataName           "OO_200_21"
 #define pi                 TMath::Pi()
 #define OmegaPdgMass	   1.67245
+#define XiRPdgMass	       1.8235
 #define XiPdgMass	       1.3223
 #define LambdaPdgMass      1.11568
 #define ProtonPdgMass      0.938272
@@ -60,7 +61,7 @@
 #define LambdaPdg          3122
 #define XiPdg              3312
 #define OmegaPdg           3334
-#define XiPdg              3312
+#define XiRPdg             3314
 #define KaonPdg			   321
 #define ProtonPdg          2212
 #define K0SPdg			   310
@@ -69,12 +70,13 @@
 #define PionPdg            211
 #define LambdaPdgMassSigma 0.0014
 #define XiPdgMassSigma     0.0018
+#define XiRPdgMassSigma    0.0018
 #define OmegaPdgMassSigma  0.0027
 #define K0SPdgMassSigma    0.0043
 #define PhiPdgMassSigma    0.0031
 
-#define IfQAMode           false // If Writing Hist of QA;
-#define IfTree             true  // If Writing Tree;
+#define IfQAMode           true // If Writing Hist of QA;
+#define IfTree             false  // If Writing Tree;
 
 // #define DEBUGGING
 
@@ -201,8 +203,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
 
-	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,   333   };
-	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "Phi"  };
+	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,   333   ,   3314   ,  -3314  };
+	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "Phi"  ,  "XiR"  ,   "XibR"  };
 	const int BPDGList[]         = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
 	const TString BNameList[]    = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
 	const float TBPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
@@ -1672,7 +1674,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				(fabs(particle.GetPDG()) != XiPdg    ) && 
 				(fabs(particle.GetPDG()) != LambdaPdg) &&
 				(fabs(particle.GetPDG()) != K0SPdg   ) && 
-				(fabs(particle.GetPDG()) != PhiPdg)
+				(fabs(particle.GetPDG()) != PhiPdg   ) && 
+				(fabs(particle.GetPDG()) != XiRPdg   )
 			) {continue;}
 
 			// Check if wrong daughters
@@ -1786,7 +1789,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 						else if ((abs(PDGList[Itr]) == XiPdg    ) && (fabs(particle.GetMass() - XiPdgMass    ) < 3*XiPdgMassSigma    )){ PMass = XiPdgMass;}
 						else if ((abs(PDGList[Itr]) == OmegaPdg ) && (fabs(particle.GetMass() - OmegaPdgMass ) < 3*OmegaPdgMassSigma )){ PMass = OmegaPdgMass;}
 						else if ((abs(PDGList[Itr]) == PhiPdg   ) && (fabs(particle.GetMass() - PhiPdgMass   ) < 3*PhiPdgMassSigma   )){ PMass = PhiPdgMass;}
-						else if ((abs(PDGList[Itr]) == LambdaPdg) || (abs(PDGList[Itr]) == XiPdg) || (abs(PDGList[Itr]) == OmegaPdg) || (abs(PDGList[Itr]) == K0SPdg) || (abs(PDGList[Itr]) == PhiPdg)) {break;}
+						else if ((abs(PDGList[Itr]) == XiRPdg   ) && (fabs(particle.GetMass() - XiRPdgMass   ) < 3*XiRPdgMassSigma   )){ PMass = XiRPdgMass;}
+						else if ((abs(PDGList[Itr]) == LambdaPdg) || (abs(PDGList[Itr]) == XiPdg) || (abs(PDGList[Itr]) == OmegaPdg) || (abs(PDGList[Itr]) == K0SPdg) || (abs(PDGList[Itr]) == PhiPdg) || (abs(PDGList[Itr]) == XiRPdg)) {break;}
 						else {
 							continue;
 						}
@@ -1857,6 +1861,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 9*K0SPdgMassSigma))    {CheckPass = false;}
 				else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 9*LambdaPdgMassSigma)) {CheckPass = false;}
 				else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 9*XiPdgMassSigma))     {CheckPass = false;}
+				else if ((abs(particle.GetPDG()) == XiRPdg)    && (fabs(particle.GetMass() - XiRPdgMass)    > 9*XiRPdgMassSigma))    {CheckPass = false;}
 				else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 9*OmegaPdgMassSigma))  {CheckPass = false;}
 				if (CheckPass == true) {
 					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
@@ -1989,7 +1994,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			tempParticle.SetProductionVertex(pv);
 			tempParticle.GetDecayLength(l, dl);// cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
 
-			if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg))) {
+			if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg) || (abs(particle.GetPDG()) == XiRPdg))) {
 
 				// helix
 				TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
