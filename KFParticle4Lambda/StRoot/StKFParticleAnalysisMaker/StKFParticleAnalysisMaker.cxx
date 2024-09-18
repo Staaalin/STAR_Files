@@ -1262,7 +1262,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	//     pass event  
 	/////////////////////////////////////////////////////////
 	// Only those events reconstruct particles A and B simultaneously will be recorded.
-	int Recorded_A_PDG[] = { LambdaPdg , XiPdg , OmegaPdg };
+	int Recorded_A_PDG[] = { LambdaPdg , XiPdg , OmegaPdg , XiRPdg};
 	int Recorded_A_PDG_Size = sizeof(Recorded_A_PDG)/sizeof(Recorded_A_PDG[0]);
 	int Recorded_B_PDG[] = { KaonPdg , K0SPdg };
 	int Recorded_B_PDG_Size = sizeof(Recorded_B_PDG)/sizeof(Recorded_B_PDG[0]);
