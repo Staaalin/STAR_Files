@@ -50,7 +50,7 @@
 // #define DataName           "OO_200_21"
 #define pi                 TMath::Pi()
 #define OmegaPdgMass	   1.67245
-#define XiRPdgMass	       1.8235
+#define XiRPdgMass	       1.67245 // 应当是1.8235，但在dAu@200GeV Run21中并没有重建出来
 #define XiPdgMass	       1.3223
 #define LambdaPdgMass      1.11568
 #define ProtonPdgMass      0.938272
@@ -70,13 +70,13 @@
 #define PionPdg            211
 #define LambdaPdgMassSigma 0.0014
 #define XiPdgMassSigma     0.0018
-#define XiRPdgMassSigma    0.0018
+#define XiRPdgMassSigma    0.0025
 #define OmegaPdgMassSigma  0.0027
 #define K0SPdgMassSigma    0.0043
 #define PhiPdgMassSigma    0.0031
 
-#define IfQAMode           true // If Writing Hist of QA;
-#define IfTree             false  // If Writing Tree;
+#define IfQAMode           false // If Writing Hist of QA;
+#define IfTree             true // If Writing Tree;
 
 // #define DEBUGGING
 
