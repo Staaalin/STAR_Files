@@ -51,7 +51,7 @@ using namespace std;
 const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
 const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
 const float yBin[] = {-8.0 , 0.0 , 0.5 , 8.0}; // B_y
-int FeedDown[] = { 3334 , 3312 };
+int FeedDown[] = { 3334 , 3312 , 1003314 };
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
@@ -148,6 +148,12 @@ Double_t massList(int PID)
             case -211 :
                 Result = 0.13957;
                 break;
+            case 1003314 :// XiRPdgMass
+                Result = 1.6725;
+                break;
+            case -1003314 :// XiRPdgMass
+                Result = 1.6727;
+                break;
             case 3334 :// OmegaFitMass
                 Result = 1.6725;
                 break;
@@ -183,6 +189,12 @@ Double_t massListSigma(int PID)
                 Result = 0.0029;
                 break;
             case -3334 :// OmegaBarFitMass
+                Result = 0.0024;
+                break;
+            case 1003314 :// XiRPdgMass
+                Result = 0.0029;
+                break;
+            case -1003314 :// XiRPdgMass
                 Result = 0.0024;
                 break;
             case 3312 :// XiFitMass
