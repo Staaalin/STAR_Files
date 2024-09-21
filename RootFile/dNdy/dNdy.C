@@ -267,8 +267,9 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
     int StarBinNum = 100 , StarSta = -1.5 , StarEnd = 1.5;
     StarBinNum = (StarEnd - StarSta)/0.05;
 
-    TH1D* H_All  [20];
-    TH1D* H_Brap [20][20];
+    TH1D* H_All           [20];
+    TH1D* H_All_WithNetB  [20];
+    TH1D* H_Brap          [20][20];
 
     for (int i=0;i<CentralityBinNum;i++) {
         TString HistName1All = "H_All_";
@@ -276,6 +277,11 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         HistName1All += i;
         HistName2All += CentralityBin[i];HistName2All += " , ";HistName2All += CentralityBin[i+1];HistName2All += " ]";
         H_All[i] = new TH1D(HistName1All,HistName2All,StarBinNum,StarSta,StarEnd);
+        HistName1All = "H_All_WithNetB_";
+        HistName2All = "Cen: [ ";
+        HistName1All += i;
+        HistName2All += CentralityBin[i];HistName2All += " , ";HistName2All += CentralityBin[i+1];HistName2All += " ]";
+        H_All_WithNetB[i] = new TH1D(HistName1All,HistName2All,StarBinNum,StarSta,StarEnd);
         for (int j=0;j<yBinNum;j++){
             TString HistName1Brap = "H_Brap_";
             TString HistName2Brap = "Cen: [ ";
@@ -289,12 +295,24 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
 
     float tEnergy , APx , APy , APz , BPx , BPy , BPz;
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
+    int B_Sum , B_Sid;
     int CenIndex , RapIndex;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
     bool IfRecord = true , IfRecordThisEvent = true;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
+
+    for (int i = 0;i < FeedDownNum;i++){
+        CMass.push_back(massList(FeedDown[i]));
+        CMassSigma.push_back(massListSigma(FeedDown[i]));
+        if (abs(FeedDown[i]) == A_PDG) {
+            FeedDown[i] = 0;
+        }
+        if (abs(FeedDown[i]) == B_PDG) {
+            FeedDown[i] = 0;
+        }
+    }
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -368,11 +386,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
             Tstart = clock();
         }
 
-        A_Px   .resize(0);   B_Px.resize(0);
-        A_Py   .resize(0);   B_Py.resize(0);
-        A_Pz   .resize(0);   B_Pz.resize(0);
         A_ParID.resize(0);B_ParID.resize(0);
-        A_Kind .resize(0); B_Kind.resize(0);
         A_Rap  .resize(0);  B_Rap.resize(0);
         A_IfRecord.resize(0);B_IfRecord.resize(0);
         C_ParID.resize(0);
@@ -380,46 +394,83 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         for (int Id = 0; Id < PDGMult; Id++)
         {
             if (PDG->at(Id) == A_PDG) {
-                if (fabs(InvariantMass->at(j) - AMass) > 3*AMassSigma) {continue;}
-                // if ((fabs(InvariantMass->at(j) - AMass) <= 3*AMassSigma) || (fabs(InvariantMass->at(j) - AMass) > 6*AMassSigma)) {continue;}
-                A_Px.push_back(mix_px->at(j));
-                A_Py.push_back(mix_py->at(j));
-                A_Pz.push_back(mix_pz->at(j));
+                if (fabs(InvariantMass->at(Id) - AMass) > 3*AMassSigma) {continue;}
+                // if ((fabs(InvariantMass->at(Id) - AMass) <= 3*AMassSigma) || (fabs(InvariantMass->at(Id) - AMass) > 6*AMassSigma)) {continue;}
+                A_Px.push_back(mix_px->at(Id));
+                A_Py.push_back(mix_py->at(Id));
+                A_Pz.push_back(mix_pz->at(Id));
                 A_IfRecord.push_back(1);
-                Temp.clear();Temp.push_back(j);
-                for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
+                Temp.clear();Temp.push_back(Id);
+                for (int k=ParentSta->at(Id);k<=ParentEnd->at(Id);k++){
                     Temp.push_back(ParentList->at(k));
                 }
                 A_ParID.push_back(Temp);
-                tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + pow(AMass,2),0.5);
-                A_Rap.push_back(0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j))));
+                tEnergy = pow(pow(mix_px->at(Id),2) + pow(mix_py->at(Id),2) + pow(mix_pz->at(Id),2) + pow(AMass,2),0.5);
+                A_Rap.push_back(0.5*log((tEnergy+mix_pz->at(Id))/(tEnergy-mix_pz->at(Id))));
             }
             if (PDG->at(Id) == B_PDG) {
-                if (fabs(InvariantMass->at(j) - BMass) > 3*BMassSigma) {continue;}
-                // if ((fabs(InvariantMass->at(j) - BMass) <= 3*BMassSigma) || (fabs(InvariantMass->at(j) - BMass) > 6*BMassSigma)) {continue;}
-                B_Px.push_back(mix_px->at(j));
-                B_Py.push_back(mix_py->at(j));
-                B_Pz.push_back(mix_pz->at(j));
+                if (fabs(InvariantMass->at(Id) - BMass) > 3*BMassSigma) {continue;}
+                // if ((fabs(InvariantMass->at(Id) - BMass) <= 3*BMassSigma) || (fabs(InvariantMass->at(Id) - BMass) > 6*BMassSigma)) {continue;}
+                B_Px.push_back(mix_px->at(Id));
+                B_Py.push_back(mix_py->at(Id));
+                B_Pz.push_back(mix_pz->at(Id));
                 B_IfRecord.push_back(1);
-                Temp.clear();Temp.push_back(j);
-                for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
+                Temp.clear();Temp.push_back(Id);
+                for (int k=ParentSta->at(Id);k<=ParentEnd->at(Id);k++){
                     Temp.push_back(ParentList->at(k));
                 }
                 B_ParID.push_back(Temp);
-                tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + pow(BMass,2),0.5);
-                B_Rap.push_back(0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j))));
-            }
-            if (B_Rap.size() > 1) {
-                IfRecordThisEvent = false;
-                break;
+                tEnergy = pow(pow(mix_px->at(Id),2) + pow(mix_py->at(Id),2) + pow(mix_pz->at(Id),2) + pow(BMass,2),0.5);
+                B_Rap.push_back(0.5*log((tEnergy+mix_pz->at(Id))/(tEnergy-mix_pz->at(Id))));
             }
             if (PDG->at(Id) == -1*B_PDG) {
                 IfRecordThisEvent = false;
                 break;
             }
+            for (int j = 0;j < FeedDownNum;j++) {
+                if (abs(PDG->at(Id)) == FeedDown[j]) {
+                    if ((fabs(InvariantMass->at(Id) - CMass.at(j)) > 3*CMassSigma.at(j))) continue;
+                    Temp.clear();Temp.push_back(Id);
+                    for (int k=ParentSta->at(Id);k<=ParentEnd->at(Id);k++){
+                        Temp.push_back(ParentList->at(k));
+                    }
+                    C_ParID.push_back(Temp);
+                }
+            }
         }
 
         if (!IfRecordThisEvent) continue;
+
+        // 删除 FeedDown 等血缘关系的粒子
+        for (int i = 0;i < A_Rap.size();i++) {
+            for (int j = 0;j < B_Rap.size();j++) {
+                if (IfCommonElement(A_ParID.at(i) , B_ParID.at(j))) {
+                    A_IfRecord.at(i) = 0;
+                }
+            }
+        }
+        for (int i = 0;i < C_ParID.size();i++) {
+            for (int j = 0;j < A_Rap.size();j++) {
+                if (IfCommonElement(C_ParID.at(i) , A_ParID.at(j))) {
+                    A_IfRecord.at(j) = 0;
+                }
+            }
+            for (int j = 0;j < B_Rap.size();j++) {
+                if (IfCommonElement(C_ParID.at(i) , B_ParID.at(j))) {
+                    B_IfRecord.at(j) = 0;
+                }
+            }
+        }
+
+        //
+        B_Sum = 0;B_Sid = -1;
+        for (int i = 0;i < B_Rap.size();i++) {
+            if (B_IfRecord.at(i) != 0) {
+                B_Sid = i;
+                B_Sum++;
+            }
+        }
+        if (!(B_Sum != 1)) continue;
 
         // Event Index
         CenIndex = -1;
@@ -436,10 +487,16 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
             H_All[CenIndex]->Fill(A_Rap.at(j));
         }
 
+        if (!IfRecordThisEvent) continue;
+
+        for (int i=0;i<A_Rap.size();i++) {
+            H_All_WithNetB[CenIndex]->Fill(A_Rap.at(j));
+        }
+
         // B_Rap index
         RapIndex = -1
         for (int k=0;k<yBinNum;k++){
-            if ((yBin[k] <= B_Rap.at(0)) && (B_Rap.at(0) < yBin[k+1])) {
+            if ((yBin[k] <= B_Rap.at(B_Sid)) && (B_Rap.at(B_Sid) < yBin[k+1])) {
                 RapIndex = k;
                 break;
             }
@@ -462,6 +519,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
     fileA->cd();
     for (int i=0;i<CentralityBinNum;i++){
         H_All[i]->Write();
+        H_All_WithNetB[i]->Write();
         for (int j=0;j<yBinNum;j++){
             H_Brap[i][j]->Write();
         }
