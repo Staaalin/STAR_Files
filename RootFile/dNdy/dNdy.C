@@ -337,22 +337,21 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         #endif
     #endif
 
-    std::vector<Float_t>                  A_Px           ;
-    std::vector<Float_t>                  A_Py           ;
-    std::vector<Float_t>                  A_Pz           ;
     std::vector<Int_t>                    A_TreID        ;
     std::vector<std::vector<int> >        A_ParID        ;
     std::vector<int>                      A_Kind         ;
     std::vector<Float_t>                  A_Rap          ;
     std::vector<Int_t>                    A_IfRecord     ;
-    std::vector<Float_t>                  B_Px           ;
-    std::vector<Float_t>                  B_Py           ;
-    std::vector<Float_t>                  B_Pz           ;
     std::vector<Int_t>                    B_TreID        ;
     std::vector<std::vector<int> >        B_ParID        ;
     std::vector<int>                      B_Kind         ;
     std::vector<Float_t>                  B_Rap          ;
     std::vector<Int_t>                    B_IfRecord     ;
+    std::vector<Int_t>                    Bb_TreID       ;
+    std::vector<std::vector<int> >        Bb_ParID       ;
+    std::vector<int>                      Bb_Kind        ;
+    std::vector<Float_t>                  Bb_Rap         ;
+    std::vector<Int_t>                    Bb_IfRecord    ;
     std::vector<std::vector<int> >        C_ParID        ; // 用于存储Residal Effect
 
     int StarBinNum = 100 , StarSta = -1.5 , StarEnd = 1.5;
@@ -386,7 +385,9 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
 
     float tEnergy , APx , APy , APz , BPx , BPy , BPz;
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
-    int B_Sum , B_Sid;
+    int A_Sum  , A_Sid;
+    int B_Sum  , B_Sid;
+    int Bb_Sum , Bb_Sid;
     int CenIndex , RapIndex;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
@@ -476,9 +477,9 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
             Tstart = clock();
         }
 
-        A_ParID.resize(0);B_ParID.resize(0);
-        A_Rap  .resize(0);  B_Rap.resize(0);
-        A_IfRecord.resize(0);B_IfRecord.resize(0);
+        A_ParID.resize(0);B_ParID.resize(0);Bb_ParID.resize(0);
+        A_Rap  .resize(0);  B_Rap.resize(0);  Bb_Rap.resize(0);
+        A_IfRecord.resize(0);B_IfRecord.resize(0);Bb_IfRecord.resize(0);
         C_ParID.resize(0);
 
         for (int Id = 0; Id < PDGMult; Id++)
@@ -508,7 +509,16 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                 B_Rap.push_back(0.5*log((tEnergy+mix_pz->at(Id))/(tEnergy-mix_pz->at(Id))));
             }
             if (PDG->at(Id) == -1*B_PDG) {
-                IfRecordThisEvent = false;
+                if (fabs(InvariantMass->at(Id) - BMass) > 3*BMassSigma) {continue;}
+                // if ((fabs(InvariantMass->at(Id) - BMass) <= 3*BMassSigma) || (fabs(InvariantMass->at(Id) - BMass) > 6*BMassSigma)) {continue;}
+                Bb_IfRecord.push_back(1);
+                Temp.clear();Temp.push_back(Id);
+                for (int k=ParentSta->at(Id);k<=ParentEnd->at(Id);k++){
+                    Temp.push_back(ParentList->at(k));
+                }
+                Bb_ParID.push_back(Temp);
+                tEnergy = pow(pow(mix_px->at(Id),2) + pow(mix_py->at(Id),2) + pow(mix_pz->at(Id),2) + pow(BMass,2),0.5);
+                Bb_Rap.push_back(0.5*log((tEnergy+mix_pz->at(Id))/(tEnergy-mix_pz->at(Id))));
             }
             for (int j = 0;j < FeedDownNum;j++) {
                 if (abs(PDG->at(Id)) == FeedDown[j]) {
@@ -521,9 +531,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                 }
             }
         }
-        cout<<IfRecordThisEvent<<endl;
-
-        if (!IfRecordThisEvent) continue;
 
         // 删除 FeedDown 等血缘关系的粒子
         for (int i = 0;i < A_Rap.size();i++) {
@@ -532,21 +539,50 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                     A_IfRecord.at(i) = 0;
                 }
             }
-        }
-        for (int i = 0;i < C_ParID.size();i++) {
-            for (int j = 0;j < A_Rap.size();j++) {
-                if (IfCommonElement(C_ParID.at(i) , A_ParID.at(j))) {
-                    A_IfRecord.at(j) = 0;
+            for (int j = 0;j < Bb_Rap.size();j++) {
+                if (IfCommonElement(A_ParID.at(i) , Bb_ParID.at(j))) {
+                    A_IfRecord.at(i) = 0;
                 }
             }
-            for (int j = 0;j < B_Rap.size();j++) {
-                if (IfCommonElement(C_ParID.at(i) , B_ParID.at(j))) {
-                    B_IfRecord.at(j) = 0;
+            for (int j = 0;j < C_ParID.size();j++) {
+                if (IfCommonElement(A_ParID.at(i) , C_ParID.at(j))) {
+                    A_IfRecord.at(i) = 0;
+                }
+            }
+        }
+        for (int i = 0;i < B_Rap.size();i++) {
+            for (int j = 0;j < Bb_Rap.size();j++) {
+                if (IfCommonElement(B_ParID.at(i) , Bb_ParID.at(j))) {
+                    B_IfRecord.at(i) = 0;
+                }
+            }
+            for (int j = 0;j < C_ParID.size();j++) {
+                if (IfCommonElement(B_ParID.at(i) , C_ParID.at(j))) {
+                    B_IfRecord.at(i) = 0;
+                }
+            }
+        }
+        for (int i = 0;i < Bb_Rap.size();i++) {
+            for (int j = 0;j < C_ParID.size();j++) {
+                if (IfCommonElement(Bb_ParID.at(i) , C_ParID.at(j))) {
+                    Bb_IfRecord.at(i) = 0;
                 }
             }
         }
 
         //
+        A_Sum = 0;
+        for (int i = 0;i < Z_Rap.size();i++) {
+            if (A_IfRecord.at(i) != 0) {
+                A_Sum++;
+            }
+        }
+        Bb_Sum = 0;
+        for (int i = 0;i < Bb_Rap.size();i++) {
+            if (Bb_IfRecord.at(i) != 0) {
+                Bb_Sum++;
+            }
+        }
         B_Sum = 0;B_Sid = -1;
         for (int i = 0;i < B_Rap.size();i++) {
             if (B_IfRecord.at(i) != 0) {
@@ -554,6 +590,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                 B_Sum++;
             }
         }
+        cout<<"B "<<B_Sum<<" ; Bb "<<Bb_Sum<<" ; A "<<A_Sum<<endl;
         if (!(B_Sum == 1)) continue;
 
         // Event Index
