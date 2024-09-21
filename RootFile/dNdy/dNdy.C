@@ -590,7 +590,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                 B_Sum++;
             }
         }
-        cout<<"B "<<B_Sum<<" ; Bb "<<Bb_Sum<<" ; A "<<A_Sum<<endl;
+        // cout<<"B "<<B_Sum<<" ; Bb "<<Bb_Sum<<" ; A "<<A_Sum<<endl;
         if (!(B_Sum == 1)) continue;
 
         // Event Index
@@ -608,7 +608,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
             if (A_IfRecord.at(i) == 1) H_All[CenIndex]->Fill(A_Rap.at(i));
         }
 
-        if (!IfRecordThisEvent) continue;
+        if ((Bb_Sum == 0) && (B_Sum == 1)) continue;
 
         for (int i=0;i<A_Rap.size();i++) {
             if (A_IfRecord.at(i) == 1) H_All_WithNetB[CenIndex]->Fill(A_Rap.at(i));
