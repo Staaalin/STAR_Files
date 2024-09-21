@@ -575,13 +575,13 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         if (CenIndex == -1) continue;
 
         for (int i=0;i<A_Rap.size();i++) {
-            H_All[CenIndex]->Fill(A_Rap.at(j));
+            H_All[CenIndex]->Fill(A_Rap.at(i));
         }
 
         if (!IfRecordThisEvent) continue;
 
         for (int i=0;i<A_Rap.size();i++) {
-            H_All_WithNetB[CenIndex]->Fill(A_Rap.at(j));
+            H_All_WithNetB[CenIndex]->Fill(A_Rap.at(i));
         }
 
         // B_Rap index
@@ -596,7 +596,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         if ((RapIndex == -1)) {continue;}
 
         for (int i=0;i<A_Rap.size();i++) {
-            H_Brap[CenIndex][RapIndex]->Fill(A_Rap.at(j));
+            H_Brap[CenIndex][RapIndex]->Fill(A_Rap.at(i));
         }
         
     }
