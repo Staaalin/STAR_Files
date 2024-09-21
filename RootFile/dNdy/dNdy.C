@@ -521,6 +521,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                 }
             }
         }
+        cout<<IfRecordThisEvent<<endl;
 
         if (!IfRecordThisEvent) continue;
 
@@ -553,7 +554,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                 B_Sum++;
             }
         }
-        cout<<B_Sum<<endl;
         if (!(B_Sum == 1)) continue;
 
         // Event Index
