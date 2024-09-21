@@ -592,9 +592,11 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                 break;
             }
         }
+        cout<<"1";
 
         if ((RapIndex == -1)) {continue;}
 
+        cout<<"2";
         for (int i=0;i<A_Rap.size();i++) {
             H_Brap[CenIndex][RapIndex]->Fill(A_Rap.at(i));
         }
