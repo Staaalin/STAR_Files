@@ -484,11 +484,9 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         for (int Id = 0; Id < PDGMult; Id++)
         {
             if (PDG->at(Id) == A_PDG) {
+                cout<<"FOUND"<<endl;
                 if (fabs(InvariantMass->at(Id) - AMass) > 3*AMassSigma) {continue;}
                 // if ((fabs(InvariantMass->at(Id) - AMass) <= 3*AMassSigma) || (fabs(InvariantMass->at(Id) - AMass) > 6*AMassSigma)) {continue;}
-                A_Px.push_back(mix_px->at(Id));
-                A_Py.push_back(mix_py->at(Id));
-                A_Pz.push_back(mix_pz->at(Id));
                 A_IfRecord.push_back(1);
                 Temp.clear();Temp.push_back(Id);
                 for (int k=ParentSta->at(Id);k<=ParentEnd->at(Id);k++){
@@ -501,9 +499,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
             if (PDG->at(Id) == B_PDG) {
                 if (fabs(InvariantMass->at(Id) - BMass) > 3*BMassSigma) {continue;}
                 // if ((fabs(InvariantMass->at(Id) - BMass) <= 3*BMassSigma) || (fabs(InvariantMass->at(Id) - BMass) > 6*BMassSigma)) {continue;}
-                B_Px.push_back(mix_px->at(Id));
-                B_Py.push_back(mix_py->at(Id));
-                B_Pz.push_back(mix_pz->at(Id));
                 B_IfRecord.push_back(1);
                 Temp.clear();Temp.push_back(Id);
                 for (int k=ParentSta->at(Id);k<=ParentEnd->at(Id);k++){
@@ -515,7 +510,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
             }
             if (PDG->at(Id) == -1*B_PDG) {
                 IfRecordThisEvent = false;
-                break;
             }
             for (int j = 0;j < FeedDownNum;j++) {
                 if (abs(PDG->at(Id)) == FeedDown[j]) {
@@ -574,13 +568,13 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         if (CenIndex == -1) continue;
 
         for (int i=0;i<A_Rap.size();i++) {
-            H_All[CenIndex]->Fill(A_Rap.at(i));
+            if (A_IfRecord.at(i) == 1) H_All[CenIndex]->Fill(A_Rap.at(i));
         }
 
         if (!IfRecordThisEvent) continue;
 
         for (int i=0;i<A_Rap.size();i++) {
-            H_All_WithNetB[CenIndex]->Fill(A_Rap.at(i));
+            if (A_IfRecord.at(i) == 1) H_All_WithNetB[CenIndex]->Fill(A_Rap.at(i));
         }
 
         // B_Rap index
@@ -595,7 +589,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         if ((RapIndex == -1)) {continue;}
 
         for (int i=0;i<A_Rap.size();i++) {
-            H_Brap[CenIndex][RapIndex]->Fill(A_Rap.at(i));
+            if (A_IfRecord.at(i) == 1) H_Brap[CenIndex][RapIndex]->Fill(A_Rap.at(i));
         }
         
     }
