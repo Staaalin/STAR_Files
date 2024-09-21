@@ -585,7 +585,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         }
 
         // B_Rap index
-        RapIndex = -1
+        RapIndex = -1;
         for (int k=0;k<yBinNum;k++){
             if ((yBin[k] <= B_Rap.at(B_Sid)) && (B_Rap.at(B_Sid) < yBin[k+1])) {
                 RapIndex = k;
