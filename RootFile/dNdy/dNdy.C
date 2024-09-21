@@ -459,7 +459,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
 
-    cout<<"1";
     time_t time_start;
     time_t time_now;
     time(&time_start);
@@ -473,17 +472,14 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
             cout << time_diff/60 << "min " << time_diff%60 << "s: ";
             long long microseconds = (clock() - Tstart)/10000;
             std::cout << "Microseconds: " << microseconds << "  ";
-            cout << "Test/Events = " << 1.0*TestSum/50 << "  ";
             cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
             Tstart = clock();
         }
-        cout<<"2";
 
         A_ParID.resize(0);B_ParID.resize(0);
         A_Rap  .resize(0);  B_Rap.resize(0);
         A_IfRecord.resize(0);B_IfRecord.resize(0);
         C_ParID.resize(0);
-        cout<<"3";
 
         for (int Id = 0; Id < PDGMult; Id++)
         {
@@ -532,7 +528,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                 }
             }
         }
-        cout<<"4";
 
         if (!IfRecordThisEvent) continue;
 
@@ -556,7 +551,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                 }
             }
         }
-        cout<<"5";
 
         //
         B_Sum = 0;B_Sid = -1;
@@ -567,7 +561,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
             }
         }
         if (!(B_Sum == 1)) continue;
-        cout<<"6";
 
         // Event Index
         CenIndex = -1;
@@ -579,7 +572,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
             }
         }
         if (CenIndex == -1) continue;
-        cout<<"7";
 
         for (int i=0;i<A_Rap.size();i++) {
             H_All[CenIndex]->Fill(A_Rap.at(i));
@@ -590,7 +582,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         for (int i=0;i<A_Rap.size();i++) {
             H_All_WithNetB[CenIndex]->Fill(A_Rap.at(i));
         }
-        cout<<"8";
 
         // B_Rap index
         RapIndex = -1;
@@ -606,10 +597,8 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         for (int i=0;i<A_Rap.size();i++) {
             H_Brap[CenIndex][RapIndex]->Fill(A_Rap.at(i));
         }
-        cout<<"9";
         
     }
-    cout<<"10_";
 
     TString OutputFileName = OutMidName;
     OutputFileName += "H_";
@@ -617,7 +606,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
     OutputFileName += ".root";
     TFile *fileA = new TFile(OutputFileName, "RECREATE");
 
-    cout<<"11_";
     fileA->cd();
     for (int i=0;i<CentralityBinNum;i++){
         H_All[i]->Write();
