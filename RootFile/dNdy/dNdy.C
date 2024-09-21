@@ -379,7 +379,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
             HistName1Brap += i;HistName1Brap += "_";
             HistName2Brap += CentralityBin[i];HistName2Brap += " , ";HistName2Brap += CentralityBin[i+1];HistName2Brap += " ] , ";
             HistName1Brap += j;
-            HistName2Brap += "y";HistName2Brap += B_PDG;" = [ ";HistName2Brap += yBin[j];HistName2Brap += " , ";HistName2Brap += yBin[i+1];HistName2Brap += " ]";
+            HistName2Brap += "y";HistName2Brap += B_PDG;HistName2Brap += " = [ ";HistName2Brap += yBin[j];HistName2Brap += " , ";HistName2Brap += yBin[j+1];HistName2Brap += " ]";
             H_Brap[i][j] = new TH1D(HistName1Brap,HistName2Brap,StarBinNum,StarSta,StarEnd);
         }
     }
@@ -484,7 +484,6 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
         for (int Id = 0; Id < PDGMult; Id++)
         {
             if (PDG->at(Id) == A_PDG) {
-                cout<<"FOUND"<<endl;
                 if (fabs(InvariantMass->at(Id) - AMass) > 3*AMassSigma) {continue;}
                 // if ((fabs(InvariantMass->at(Id) - AMass) <= 3*AMassSigma) || (fabs(InvariantMass->at(Id) - AMass) > 6*AMassSigma)) {continue;}
                 A_IfRecord.push_back(1);
@@ -554,6 +553,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                 B_Sum++;
             }
         }
+        cout<<B_Sum<<endl;
         if (!(B_Sum == 1)) continue;
 
         // Event Index
