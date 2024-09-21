@@ -572,7 +572,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
 
         //
         A_Sum = 0;
-        for (int i = 0;i < Z_Rap.size();i++) {
+        for (int i = 0;i < A_Rap.size();i++) {
             if (A_IfRecord.at(i) != 0) {
                 A_Sum++;
             }
