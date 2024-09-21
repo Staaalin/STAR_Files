@@ -566,7 +566,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
                 B_Sum++;
             }
         }
-        if (!(B_Sum != 1)) continue;
+        if (!(B_Sum == 1)) continue;
         cout<<"6";
 
         // Event Index
