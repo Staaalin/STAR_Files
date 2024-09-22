@@ -242,6 +242,7 @@ void RandomGenerator() {
     int ListIndex;
     TString OutMidName = "Random_";
     int OutputFileIndex = 0;
+    int PatternID = Pattern;
 
     std::vector<int>     PDG          ;
     std::vector<Float_t> mix_px       ;
