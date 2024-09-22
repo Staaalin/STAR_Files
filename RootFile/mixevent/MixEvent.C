@@ -973,7 +973,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
     }
-    fileA.Close();
+    fileA->Close();
 
     cout << "#######################" << endl;
     cout << "# Finish storing Hist #" << endl;

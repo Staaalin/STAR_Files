@@ -230,18 +230,18 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
     return Result;
 }
 
-void RandomGenerator() {
+void RandomGenerator(int OutputFileIndex) {
 
     TRandom3 randGen;
     UInt_t A_Num , B_Num;
     // 设置对数正态分布的均值和标准差
     double mean = 1.0;  // 正态分布的均值
-    double sigma = 1.0; // 正态分布的标准差
+    double sigma = 0.1; // 正态分布的标准差
     int A_PDG = 321;
     int B_PDG = 3122;
     int ListIndex;
     TString OutMidName = "Random_";
-    int OutputFileIndex = 0;
+    // int OutputFileIndex = 0;
     int PatternID = Pattern;
 
     std::vector<int>     PDG          ;
@@ -432,7 +432,14 @@ void RandomGenerator() {
         }
     }
 
-    int nentries = 10000;
+    TH1D *H_A_Pt   = new TH1D("A_Pt","Pt of A",100,0,10);
+    TH1D *H_B_Pt   = new TH1D("B_Pt","Pt of B",100,0,10);
+    TH1D *H_A_P    = new TH1D("A_P","P of A",100,0,10);
+    TH1D *H_B_P    = new TH1D("B_P","P of B",100,0,10);
+    TH1D *H_A_Rap  = new TH1D("A_Rap","Rapidity of A",100,-10,10);
+    TH1D *H_B_Rap  = new TH1D("B_Rap","Rapidity of B",100,-10,10);
+
+    int nentries = 5000;
 
     Int_t PDGMult  ;
     Int_t refMult  ;
@@ -540,6 +547,9 @@ void RandomGenerator() {
                 A_ParID.push_back(Temp);
                 tEnergy = pow(pow(mix_px.at(j),2) + pow(mix_py.at(j),2) + pow(mix_pz.at(j),2) + pow(AMass,2),0.5);
                 A_Rap.push_back(0.5*log((tEnergy+mix_pz.at(j))/(tEnergy-mix_pz.at(j))));
+                H_A_Pt ->Fill(pow(pow(mix_px.at(j),2) + pow(mix_py.at(j),2),0.5));
+                H_A_P  ->Fill(pow(pow(mix_px.at(j),2) + pow(mix_py.at(j),2) + pow(mix_pz.at(j),2),0.5));
+                H_A_Rap->Fill(0.5*log((tEnergy+mix_pz.at(j))/(tEnergy-mix_pz.at(j))));
             }
             else if (PDG.at(j) == B_PDG) {
                 if ( PatternID == Pattern ) {
@@ -568,6 +578,9 @@ void RandomGenerator() {
                 B_ParID.push_back(Temp);
                 tEnergy = pow(pow(mix_px.at(j),2) + pow(mix_py.at(j),2) + pow(mix_pz.at(j),2) + pow(BMass,2),0.5);
                 B_Rap.push_back(0.5*log((tEnergy+mix_pz.at(j))/(tEnergy-mix_pz.at(j))));
+                H_B_Pt ->Fill(pow(pow(mix_px.at(j),2) + pow(mix_py.at(j),2),0.5));
+                H_B_P  ->Fill(pow(pow(mix_px.at(j),2) + pow(mix_py.at(j),2) + pow(mix_pz.at(j),2),0.5));
+                H_B_Rap->Fill(0.5*log((tEnergy+mix_pz.at(j))/(tEnergy-mix_pz.at(j))));
             }
             else{
                 for (int l = 0;l < FeedDownNum;l++) {
@@ -858,5 +871,11 @@ void RandomGenerator() {
             }
         }
     }
-    fileA.Close();
+    H_A_Pt ->Write();
+    H_B_Pt ->Write();
+    H_A_P  ->Write();
+    H_B_P  ->Write();
+    H_A_Rap->Write();
+    H_B_Rap->Write();
+    fileA->Close();
 }
