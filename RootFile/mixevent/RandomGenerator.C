@@ -236,7 +236,7 @@ void RandomGenerator(int OutputFileIndex) {
     UInt_t A_Num , B_Num;
     // 设置对数正态分布的均值和标准差
     double mean = 1.0;  // 正态分布的均值
-    double sigma = 0.1; // 正态分布的标准差
+    double sigma = 1.0; // 正态分布的标准差
     int A_PDG = 321;
     int B_PDG = 3122;
     int ListIndex;
