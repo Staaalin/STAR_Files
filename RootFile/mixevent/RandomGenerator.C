@@ -243,23 +243,23 @@ void RandomGenerator() {
     TString OutMidName = "Random_";
     int OutputFileIndex = 0;
 
-    std::vector<int>     *PDG          ;
-    std::vector<Float_t> *mix_px       ;
-    std::vector<Float_t> *mix_py       ;
-    std::vector<Float_t> *mix_pz       ;
-    std::vector<Float_t> *QA_eta       ;
-    std::vector<Float_t> *dEdx         ;
-    std::vector<Float_t> *m2           ;
-    std::vector<Float_t> *dcatopv      ;
-    std::vector<Float_t> *nSigmaProton ;
-    std::vector<Float_t> *nSigmaPion   ;
-    std::vector<Float_t> *nSigmaKaon   ;
-    std::vector<Float_t> *InvariantMass;
-    std::vector<Float_t> *Decay_Length ;
-    std::vector<Float_t> *Chi2         ;
-    std::vector<int>     *ParentList   ;
-    std::vector<int>     *ParentSta    ;
-    std::vector<int>     *ParentEnd    ;
+    std::vector<int>     PDG          ;
+    std::vector<Float_t> mix_px       ;
+    std::vector<Float_t> mix_py       ;
+    std::vector<Float_t> mix_pz       ;
+    std::vector<Float_t> QA_eta       ;
+    std::vector<Float_t> dEdx         ;
+    std::vector<Float_t> m2           ;
+    std::vector<Float_t> dcatopv      ;
+    std::vector<Float_t> nSigmaProton ;
+    std::vector<Float_t> nSigmaPion   ;
+    std::vector<Float_t> nSigmaKaon   ;
+    std::vector<Float_t> InvariantMass;
+    std::vector<Float_t> Decay_Length ;
+    std::vector<Float_t> Chi2         ;
+    std::vector<int>     ParentList   ;
+    std::vector<int>     ParentSta    ;
+    std::vector<int>     ParentEnd    ;
     TBranch *bPDG                      ;
     TBranch *bmix_px                   ;
     TBranch *bmix_py                   ;
@@ -449,14 +449,14 @@ void RandomGenerator() {
     for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++){
 
         // 随机产生事件
-        PDG          ->clear();
-        mix_px       ->clear();
-        mix_py       ->clear();
-        mix_pz       ->clear();
-        InvariantMass->clear();
-        ParentSta    ->clear();
-        ParentEnd    ->clear();
-        ParentList   ->clear();
+        PDG          .clear();
+        mix_px       .clear();
+        mix_py       .clear();
+        mix_pz       .clear();
+        InvariantMass.clear();
+        ParentSta    .clear();
+        ParentEnd    .clear();
+        ParentList   .clear();
         if ((EntriesID+1)%2000 == 0) {
             microseconds = (clock() - Tstart)/100;
             time(&time_now);
@@ -467,28 +467,28 @@ void RandomGenerator() {
         ListIndex = 0;
         A_Num = randGen.Integer(2) + 1;
         for (UInt_t i = 0;i < A_Num;i++){
-            PDG          ->push_back(A_PDG);
-            mix_px       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
-            mix_py       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
-            mix_pz       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
-            InvariantMass->push_back(AMass);
-            ParentSta    ->push_back(ListIndex);
-            ParentEnd    ->push_back(ListIndex);
-            ParentList   ->push_back(ListIndex);
+            PDG          .push_back(A_PDG);
+            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            InvariantMass.push_back(AMass);
+            ParentSta    .push_back(ListIndex);
+            ParentEnd    .push_back(ListIndex);
+            ParentList   .push_back(ListIndex);
             ListIndex++;
         }B_Num = 1;
         for (UInt_t i = 0;i < B_Num;i++){
-            PDG          ->push_back(B_PDG);
-            mix_px       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
-            mix_py       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
-            mix_pz       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
-            InvariantMass->push_back(BMass);
-            ParentSta    ->push_back(ListIndex);
-            ParentEnd    ->push_back(ListIndex);
-            ParentList   ->push_back(ListIndex);
+            PDG          .push_back(B_PDG);
+            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            InvariantMass.push_back(BMass);
+            ParentSta    .push_back(ListIndex);
+            ParentEnd    .push_back(ListIndex);
+            ParentList   .push_back(ListIndex);
             ListIndex++;
         }
-        PDGMult = PDG->size();
+        PDGMult = PDG.size();
         Nch = randGen.Integer(90) + 9;
         PVz = -45.0 + ((randGen.Integer(10000)*1.0)/10000) * 100;
 
@@ -512,69 +512,69 @@ void RandomGenerator() {
         C_ParID.resize(0);
 
         for (int j=0;j<PDGMult;j++){
-            if (PDG->at(j) == A_PDG) {
+            if (PDG.at(j) == A_PDG) {
                 if ( PatternID == Pattern ) {
-                    if      (fabs(InvariantMass->at(j) - AMass) <= 3*AMassSigma) {A_Kind.push_back(0);}
-                    // else if (fabs(InvariantMass->at(j) - AMass) <= 6*AMassSigma) {A_Kind.push_back(1);}
+                    if      (fabs(InvariantMass.at(j) - AMass) <= 3*AMassSigma) {A_Kind.push_back(0);}
+                    // else if (fabs(InvariantMass.at(j) - AMass) <= 6*AMassSigma) {A_Kind.push_back(1);}
                     else{continue;}
                 }
                 else {
-                    if      (fabs(InvariantMass->at(j) - AMass) <= 3*AMassSigma) {
+                    if      (fabs(InvariantMass.at(j) - AMass) <= 3*AMassSigma) {
                         if ((PatternID == 0) || (PatternID == 1)) {A_Kind.push_back(0);}
                         else {continue;}
                     }
-                    else if (fabs(InvariantMass->at(j) - AMass) <= 6*AMassSigma) {
+                    else if (fabs(InvariantMass.at(j) - AMass) <= 6*AMassSigma) {
                         if ((PatternID == 2))                     {A_Kind.push_back(1);}
                         else {continue;}
                     }
                 }
-                A_Px.push_back(mix_px->at(j));
-                A_Py.push_back(mix_py->at(j));
-                A_Pz.push_back(mix_pz->at(j));
+                A_Px.push_back(mix_px.at(j));
+                A_Py.push_back(mix_py.at(j));
+                A_Pz.push_back(mix_pz.at(j));
                 A_IfRecord.push_back(1);
                 Temp.clear();Temp.push_back(j);
-                for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
-                    Temp.push_back(ParentList->at(k));
+                for (int k=ParentSta.at(j);k<=ParentEnd.at(j);k++){
+                    Temp.push_back(ParentList.at(k));
                 }
                 A_ParID.push_back(Temp);
-                tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + pow(AMass,2),0.5);
-                A_Rap.push_back(0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j))));
+                tEnergy = pow(pow(mix_px.at(j),2) + pow(mix_py.at(j),2) + pow(mix_pz.at(j),2) + pow(AMass,2),0.5);
+                A_Rap.push_back(0.5*log((tEnergy+mix_pz.at(j))/(tEnergy-mix_pz.at(j))));
             }
-            else if (PDG->at(j) == B_PDG) {
+            else if (PDG.at(j) == B_PDG) {
                 if ( PatternID == Pattern ) {
-                    if      (fabs(InvariantMass->at(j) - BMass) <= 3*BMassSigma) {B_Kind.push_back(0);}
-                    // else if (fabs(InvariantMass->at(j) - BMass) <= 6*BMassSigma) {B_Kind.push_back(1);}
+                    if      (fabs(InvariantMass.at(j) - BMass) <= 3*BMassSigma) {B_Kind.push_back(0);}
+                    // else if (fabs(InvariantMass.at(j) - BMass) <= 6*BMassSigma) {B_Kind.push_back(1);}
                     else{continue;}
                 }
                 else {
-                    if      (fabs(InvariantMass->at(j) - BMass) <= 3*BMassSigma) {
+                    if      (fabs(InvariantMass.at(j) - BMass) <= 3*BMassSigma) {
                         if ((PatternID == 0) || (PatternID == 2)) {B_Kind.push_back(0);}
                         else {continue;}
                     }
-                    else if (fabs(InvariantMass->at(j) - BMass) <= 6*BMassSigma) {
+                    else if (fabs(InvariantMass.at(j) - BMass) <= 6*BMassSigma) {
                         if (PatternID == 1)                       {B_Kind.push_back(1);}
                         else {continue;}
                     }
                 }
-                B_Px.push_back(mix_px->at(j));
-                B_Py.push_back(mix_py->at(j));
-                B_Pz.push_back(mix_pz->at(j));
+                B_Px.push_back(mix_px.at(j));
+                B_Py.push_back(mix_py.at(j));
+                B_Pz.push_back(mix_pz.at(j));
                 B_IfRecord.push_back(1);
                 Temp.clear();Temp.push_back(j);
-                for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
-                    Temp.push_back(ParentList->at(k));
+                for (int k=ParentSta.at(j);k<=ParentEnd.at(j);k++){
+                    Temp.push_back(ParentList.at(k));
                 }
                 B_ParID.push_back(Temp);
-                tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + pow(BMass,2),0.5);
-                B_Rap.push_back(0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j))));
+                tEnergy = pow(pow(mix_px.at(j),2) + pow(mix_py.at(j),2) + pow(mix_pz.at(j),2) + pow(BMass,2),0.5);
+                B_Rap.push_back(0.5*log((tEnergy+mix_pz.at(j))/(tEnergy-mix_pz.at(j))));
             }
             else{
                 for (int l = 0;l < FeedDownNum;l++) {
-                    if ( abs(PDG->at(j)) == FeedDown[l] ) {
-                        if ((fabs(InvariantMass->at(j) - CMass.at(l)) > 3*CMassSigma.at(l))) continue;
+                    if ( abs(PDG.at(j)) == FeedDown[l] ) {
+                        if ((fabs(InvariantMass.at(j) - CMass.at(l)) > 3*CMassSigma.at(l))) continue;
                         Temp.clear();Temp.push_back(j);
-                        for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
-                            Temp.push_back(ParentList->at(k));
+                        for (int k=ParentSta.at(j);k<=ParentEnd.at(j);k++){
+                            Temp.push_back(ParentList.at(k));
                         }
                         C_ParID.push_back(Temp);
                     }
