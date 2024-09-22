@@ -48,8 +48,8 @@ using namespace std;
 
 #define Pi 3.1415926535898
 
-const int CentralityBin[] = {0 , 10 , 20 , 40 , 80};// %
-const float yBin[] = {-0.5 , -0.4 , -0.3 , -0.2 , -0.1 , 0.0 ,  0.1 , 0.2 , 0.3 , 0.4 , 0.5}; // B_y
+const int CentralityBin[] = {0 , 20 , 40 , 100};// %
+const float yBin[] = {-0.6 , -0.4 , -0.2 , 0.0 , 0.2 , 0.4 , 0.6}; // B_y
 int FeedDown[] = { 3334 , 3312 , 1003314 };
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
@@ -354,8 +354,7 @@ void dNdy(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileInde
     std::vector<Int_t>                    Bb_IfRecord    ;
     std::vector<std::vector<int> >        C_ParID        ; // 用于存储Residal Effect
 
-    int StarBinNum = 100 , StarSta = -1.5 , StarEnd = 1.5;
-    StarBinNum = (StarEnd - StarSta)/0.05;
+    int StarBinNum = 30 , StarSta = -1.5 , StarEnd = 1.5;
 
     TH1D* H_All           [20];
     TH1D* H_All_WithNetB  [20];
