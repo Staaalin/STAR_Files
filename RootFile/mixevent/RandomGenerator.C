@@ -241,9 +241,7 @@ void RandomGenerator() {
     int B_PDG = 3122;
     int ListIndex;
     TString OutMidName = "Random_";
-    OutputFileName += "H_";
-    OutputFileName += OutputFileIndex;
-    OutputFileName += ".root";
+    int OutputFileIndex = 0;
 
     std::vector<int>     *PDG          
     std::vector<Float_t> *mix_px       
