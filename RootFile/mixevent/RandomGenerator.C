@@ -466,7 +466,7 @@ void RandomGenerator() {
         }
         ListIndex = 0;
         A_Num = randGen.Integer(2) + 1;
-        for (UInt_t i = 0;i < A_Num;i++){
+        for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
             PDG          .push_back(A_PDG);
             mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
             mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
@@ -477,7 +477,7 @@ void RandomGenerator() {
             ParentList   .push_back(ListIndex);
             ListIndex++;
         }B_Num = 1;
-        for (UInt_t i = 0;i < B_Num;i++){
+        for (UInt_t UIntI = 0;UIntI < B_Num;UIntI++){
             PDG          .push_back(B_PDG);
             mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
             mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
