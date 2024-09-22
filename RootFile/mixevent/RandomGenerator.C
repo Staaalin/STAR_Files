@@ -449,6 +449,7 @@ void RandomGenerator() {
     for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++){
 
         // 随机产生事件
+        PDG          ->clear(0);
         mix_px       ->clear(0);
         mix_py       ->clear(0);
         mix_pz       ->clear(0);
@@ -466,7 +467,7 @@ void RandomGenerator() {
         ListIndex = 0;
         A_Num = randGen.Integer(2) + 1;
         for (UInt_t i = 0;i < A_Num;i++){
-            PDG->push_back(A_PDG);
+            PDG          ->push_back(A_PDG);
             mix_px       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
             mix_py       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
             mix_pz       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
