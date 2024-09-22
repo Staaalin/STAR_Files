@@ -451,6 +451,13 @@ void RandomGenerator() {
     for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++){
 
         // 随机产生事件
+        mix_px       ->clear(0);
+        mix_py       ->clear(0);
+        mix_pz       ->clear(0);
+        InvariantMass->clear(0);
+        ParentSta    ->clear(0);
+        ParentEnd    ->clear(0);
+        ParentList   ->clear(0);
         if ((EntriesID+1)%2000 == 0) {
             microseconds = (clock() - Tstart)/100;
             time(&time_now);
@@ -462,24 +469,24 @@ void RandomGenerator() {
         A_Num = randGen.Integer(2) + 1;
         for (UInt_t i = 0;i < A_Num;i++){
             PDG->push_back(A_PDG);
-            mix_px->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
-            mix_py->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
-            mix_pz->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            mix_px       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            mix_py       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            mix_pz       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
             InvariantMass->push_back(AMass);
-            ParentSta->push_back(ListIndex);
-            ParentEnd->push_back(ListIndex);
-            ParentList->push_back(ListIndex);
+            ParentSta    ->push_back(ListIndex);
+            ParentEnd    ->push_back(ListIndex);
+            ParentList   ->push_back(ListIndex);
             ListIndex++;
         }B_Num = 1;
         for (UInt_t i = 0;i < B_Num;i++){
-            PDG->push_back(B_PDG);
-            mix_px->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
-            mix_py->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
-            mix_pz->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            PDG          ->push_back(B_PDG);
+            mix_px       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            mix_py       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
+            mix_pz       ->push_back(std::exp(randGen.Gaus(mean, sigma))*pow(-1.0,randGen.Integer(2)));
             InvariantMass->push_back(BMass);
-            ParentSta->push_back(ListIndex);
-            ParentEnd->push_back(ListIndex);
-            ParentList->push_back(ListIndex);
+            ParentSta    ->push_back(ListIndex);
+            ParentEnd    ->push_back(ListIndex);
+            ParentList   ->push_back(ListIndex);
             ListIndex++;
         }
         PDGMult = PDG->size();
