@@ -230,7 +230,7 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
     return Result;
 }
 
-void RandomGenerator(int OutputFileIndex) {
+void RandomGenerator(int OutputFileIndex , int RandomSeed) {
 
     TRandom3 randGen;
     UInt_t A_Num , B_Num;
@@ -465,12 +465,12 @@ void RandomGenerator(int OutputFileIndex) {
         ParentSta    .clear();
         ParentEnd    .clear();
         ParentList   .clear();
-        if ((EntriesID+1)%2000 == 0) {
+        if ((EntriesID)%2000 == 0) {
             microseconds = (clock() - Tstart)/100;
             time(&time_now);
             Tstart = clock();
             int time_diff = (int)difftime(time_now, time_start);
-            randGen.SetSeed(microseconds + time_diff);
+            randGen.SetSeed(microseconds + time_diff + RandomSeed*100);
         }
         ListIndex = 0;
         A_Num = randGen.Integer(2) + 1;
