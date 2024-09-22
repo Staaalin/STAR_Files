@@ -484,7 +484,9 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
             ParentEnd    .push_back(ListIndex);
             ParentList   .push_back(ListIndex);
             ListIndex++;
-        }B_Num = 1;
+            if (mix_px.at(ListIndex-1)*mix_px.at(ListIndex-1) + mix_py.at(ListIndex-1)*mix_py.at(ListIndex-1) < 0.2) InvariantMass.at(ListIndex-1) = 7*AMass;
+        }
+        B_Num = 1;
         for (UInt_t UIntI = 0;UIntI < B_Num;UIntI++){
             PDG          .push_back(B_PDG);
             mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
