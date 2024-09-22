@@ -243,40 +243,40 @@ void RandomGenerator() {
     TString OutMidName = "Random_";
     int OutputFileIndex = 0;
 
-    std::vector<int>     *PDG          
-    std::vector<Float_t> *mix_px       
-    std::vector<Float_t> *mix_py       
-    std::vector<Float_t> *mix_pz       
-    std::vector<Float_t> *QA_eta       
-    std::vector<Float_t> *dEdx         
-    std::vector<Float_t> *m2           
-    std::vector<Float_t> *dcatopv      
-    std::vector<Float_t> *nSigmaProton 
-    std::vector<Float_t> *nSigmaPion   
-    std::vector<Float_t> *nSigmaKaon   
-    std::vector<Float_t> *InvariantMass
-    std::vector<Float_t> *Decay_Length 
-    std::vector<Float_t> *Chi2         
-    std::vector<int>     *ParentList   
-    std::vector<int>     *ParentSta    
-    std::vector<int>     *ParentEnd    
-    TBranch *bPDG                      
-    TBranch *bmix_px                   
-    TBranch *bmix_py                   
-    TBranch *bmix_pz                   
-    TBranch *bQA_eta                   
-    TBranch *bdEdx                     
-    TBranch *bm2                       
-    TBranch *bdcatopv                  
-    TBranch *bnSigmaProton             
-    TBranch *bnSigmaPion               
-    TBranch *bnSigmaKaon               
-    TBranch *bInvariantMass            
-    TBranch *bDecay_Length             
-    TBranch *bChi2                     
-    TBranch *bParentList               
-    TBranch *bParentSta                
-    TBranch *bParentEnd                
+    std::vector<int>     *PDG          ;
+    std::vector<Float_t> *mix_px       ;
+    std::vector<Float_t> *mix_py       ;
+    std::vector<Float_t> *mix_pz       ;
+    std::vector<Float_t> *QA_eta       ;
+    std::vector<Float_t> *dEdx         ;
+    std::vector<Float_t> *m2           ;
+    std::vector<Float_t> *dcatopv      ;
+    std::vector<Float_t> *nSigmaProton ;
+    std::vector<Float_t> *nSigmaPion   ;
+    std::vector<Float_t> *nSigmaKaon   ;
+    std::vector<Float_t> *InvariantMass;
+    std::vector<Float_t> *Decay_Length ;
+    std::vector<Float_t> *Chi2         ;
+    std::vector<int>     *ParentList   ;
+    std::vector<int>     *ParentSta    ;
+    std::vector<int>     *ParentEnd    ;
+    TBranch *bPDG                      ;
+    TBranch *bmix_px                   ;
+    TBranch *bmix_py                   ;
+    TBranch *bmix_pz                   ;
+    TBranch *bQA_eta                   ;
+    TBranch *bdEdx                     ;
+    TBranch *bm2                       ;
+    TBranch *bdcatopv                  ;
+    TBranch *bnSigmaProton             ;
+    TBranch *bnSigmaPion               ;
+    TBranch *bnSigmaKaon               ;
+    TBranch *bInvariantMass            ;
+    TBranch *bDecay_Length             ;
+    TBranch *bChi2                     ;
+    TBranch *bParentList               ;
+    TBranch *bParentSta                ;
+    TBranch *bParentEnd                ;
 
     double kstar, rap;
     TVector3 BetaTemp;
