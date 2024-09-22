@@ -439,7 +439,7 @@ void RandomGenerator(int OutputFileIndex) {
     TH1D *H_A_Rap  = new TH1D("A_Rap","Rapidity of A",100,-10,10);
     TH1D *H_B_Rap  = new TH1D("B_Rap","Rapidity of B",100,-10,10);
 
-    int nentries = 5000;
+    int nentries = 50000;
 
     Int_t PDGMult  ;
     Int_t refMult  ;
