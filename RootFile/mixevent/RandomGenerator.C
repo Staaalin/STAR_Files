@@ -476,9 +476,9 @@ void RandomGenerator(int OutputFileIndex) {
         A_Num = randGen.Integer(2) + 1;
         for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
             PDG          .push_back(A_PDG);
-            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.02);
-            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.02);
-            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.02);
+            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
+            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
+            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
             InvariantMass.push_back(AMass);
             ParentSta    .push_back(ListIndex);
             ParentEnd    .push_back(ListIndex);
@@ -487,9 +487,9 @@ void RandomGenerator(int OutputFileIndex) {
         }B_Num = 1;
         for (UInt_t UIntI = 0;UIntI < B_Num;UIntI++){
             PDG          .push_back(B_PDG);
-            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.02);
-            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.02);
-            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.02);
+            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
+            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
+            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
             InvariantMass.push_back(BMass);
             ParentSta    .push_back(ListIndex);
             ParentEnd    .push_back(ListIndex);
