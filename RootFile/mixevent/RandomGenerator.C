@@ -449,14 +449,14 @@ void RandomGenerator() {
     for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++){
 
         // 随机产生事件
-        PDG          ->clear(0);
-        mix_px       ->clear(0);
-        mix_py       ->clear(0);
-        mix_pz       ->clear(0);
-        InvariantMass->clear(0);
-        ParentSta    ->clear(0);
-        ParentEnd    ->clear(0);
-        ParentList   ->clear(0);
+        PDG          ->clear();
+        mix_px       ->clear();
+        mix_py       ->clear();
+        mix_pz       ->clear();
+        InvariantMass->clear();
+        ParentSta    ->clear();
+        ParentEnd    ->clear();
+        ParentList   ->clear();
         if ((EntriesID+1)%2000 == 0) {
             microseconds = (clock() - Tstart)/100;
             time(&time_now);
