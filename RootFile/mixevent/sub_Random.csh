@@ -10,6 +10,9 @@ cd /star/data01/pwg/svianping/Random/
 
 set FilesPerJob = 1
 
+set OutputName = "Random_"
+set OutputURL = /star/data01/pwg/svianping/Random/
+
 
 # set SubXml=sub.xml
 set SubXml=/star/data01/pwg/svianping/Random/sub.xml
