@@ -33,7 +33,7 @@ set OutputLogURL = "/star/data01/pwg/svianping/QA/log"
 
 set numFiles = $line_count
 cd /star/data01/pwg/svianping/QA/
-set i = 0
+set i = 1
 set j = 0
 set k = 0
 echo "共有文件"$line_count"个"

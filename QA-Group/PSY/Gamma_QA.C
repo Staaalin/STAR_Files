@@ -510,7 +510,7 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                 }
                 RefMult = NumCharge;
                 // RefMult = FxtMult;
-                cout<<"FxtMult = "<<FxtMult<<endl;
+                // cout<<"FxtMult = "<<FxtMult<<endl;
 
 
 ///temp add
