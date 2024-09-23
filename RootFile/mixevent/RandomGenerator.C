@@ -86,6 +86,20 @@ void print(std::vector<float> Temp)
     return ;
 }
 
+void CAB(float APx , float APy , float APz , float BPx , float BPy , float BPz , float fct) // 0 < fct < 1
+{
+    float CPx = BPx - APx;
+    float CPy = BPy - APy;
+    float CPz = BPz - APz;
+    CPx = CPx * fct;
+    CPy = CPy * fct;
+    CPz = CPz * fct;
+    APx = BPx - CPx;
+    APy = BPy - CPy;
+    APz = BPz - CPz;
+    return;
+}
+
 Double_t massList(int PID)
 {
     Double_t Result;
@@ -485,7 +499,6 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
             ParentList   .push_back(ListIndex);
             ListIndex++;
             // if (pow(mix_px.at(ListIndex-1)*mix_px.at(ListIndex-1) + mix_py.at(ListIndex-1)*mix_py.at(ListIndex-1),0.5) < 0.2) InvariantMass.at(ListIndex-1) = 5000;
-            // if (pow(mix_px.at(ListIndex-1)*mix_px.at(ListIndex-1) + mix_py.at(ListIndex-1)*mix_py.at(ListIndex-1),0.5) < 0.2) InvariantMass.at(ListIndex-1) = 5000;
         }
         B_Num = 1;
         for (UInt_t UIntI = 0;UIntI < B_Num;UIntI++){
@@ -503,11 +516,18 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
         Nch = randGen.Integer(90) + 9;
         PVz = -45.0 + ((randGen.Integer(10000)*1.0)/10000) * 100;
 
+        // 制造相互作用
+        BPx = mix_px.at(A_Num);// in case B_Num = 1;
+        BPy = mix_py.at(A_Num);// in case B_Num = 1;
+        BPz = mix_pz.at(A_Num);// in case B_Num = 1;
         for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
-            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
-            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
-            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
-            mix_px.at(UIntI) + 
+            APx = mix_px.at(UIntI);
+            APy = mix_py.at(UIntI);
+            APz = mix_pz.at(UIntI);
+            CAB(APx , APy , APz , BPx , BPy , BPz , 0.2*(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08));
+            mix_px.at(UIntI) = APx;
+            mix_py.at(UIntI) = APy;
+            mix_pz.at(UIntI) = APz;
         }
 
 
