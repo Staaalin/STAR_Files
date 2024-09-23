@@ -302,7 +302,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
     float tEnergy , APx , APy , APz , BPx , BPy , BPz;
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
     std::vector<int> Temp;
-    std::vector<float> CMass , CMassSigma;
+    std::vector<float> CMass , CMassSigma , TempF;
     bool IfRecord = true;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
@@ -525,10 +525,10 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
             APx = mix_px.at(UIntI);
             APy = mix_py.at(UIntI);
             APz = mix_pz.at(UIntI);
-            Temp.clear();Temp = CAB(APx , APy , APz , BPx , BPy , BPz , 0.2*(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08));
-            mix_px.at(UIntI) = Temp[0];
-            mix_py.at(UIntI) = Temp[1];
-            mix_pz.at(UIntI) = Temp[2];
+            TempF.clear();TempF = CAB(APx , APy , APz , BPx , BPy , BPz , 0.2*(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08));
+            mix_px.at(UIntI) = TempF[0];
+            mix_py.at(UIntI) = TempF[1];
+            mix_pz.at(UIntI) = TempF[2];
             if (APx == mix_px.at(UIntI)) cout<<"EROOR!"<<endl;
         }
 
