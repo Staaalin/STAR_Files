@@ -529,7 +529,6 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
             mix_px.at(UIntI) = TempF[0];
             mix_py.at(UIntI) = TempF[1];
             mix_pz.at(UIntI) = TempF[2];
-            if (APx == mix_px.at(UIntI)) cout<<"EROOR!"<<endl;
         }
 
 
