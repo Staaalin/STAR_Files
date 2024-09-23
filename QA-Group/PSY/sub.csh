@@ -1,5 +1,7 @@
 #!/bin/csh
 
+echo "Please enter how much datalists per job:"
+set NDPJ = "$<"
 
 rm -rf /star/data01/pwg/svianping/QA/
 mkdir /star/data01/pwg/svianping/QA/
@@ -33,11 +35,18 @@ set numFiles = $line_count
 cd /star/data01/pwg/svianping/QA/
 set i = 0
 set j = 0
+set k = 0
 echo "共有文件"$line_count"个"
 
 
 while ($i <= $numFiles)
 
+
+    if ($j > $numFiles) then
+    
+        break
+
+    endif
 
     # set SubXml=sub.xml
     set SubXml = /star/data01/pwg/svianping/QA/sub.xml
@@ -47,22 +56,38 @@ while ($i <= $numFiles)
 
     set FILELIST = "modified_list_"$i".list"
     set output_file = "/star/data01/pwg/svianping/QA/"$FILELIST
+    if(-e $output_file) rm $output_file
+    touch $output_file
 
-    # 读取第一行内容
-    # set first_line = `head -n $i $input_file`
-    set first_line = `sed -n $i\p $input_file`
+    @ k = 0
+    while ($k < $NDPJ)
 
-    # 添加前缀
-    if ($i > 0) then
-        echo prefix = $prefix
-        echo first_line = $first_line
-        echo modified_line = $prefix$first_line
-    endif
+        if ($j > $numFiles) then
 
-    set modified_line = $prefix$first_line
+            break
 
-    # 写入新文件
-    echo $modified_line > $output_file
+        endif
+        # 读取第一行内容
+        # set first_line = `head -n $i $input_file`
+        set first_line = `sed -n $j\p $input_file`
+
+        # 添加前缀
+        if ($i > 0) then
+            echo prefix = $prefix
+            echo first_line = $first_line
+            echo modified_line = $prefix$first_line
+        endif
+
+        set modified_line = $prefix$first_line
+
+        # 写入新文件
+        echo $modified_line >> $output_file
+
+        @ k = $k + 1
+
+        @ j = $j + 1
+
+    end
 
     echo FileList Created
 
