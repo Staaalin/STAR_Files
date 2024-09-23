@@ -98,8 +98,8 @@ const int cenDef[9] = {6,11,21,38,61,95,141,205,249}; //Updated 19June 2023 for 
 
 //Full production dataset 
 ////
-static Int_t runmin=19156034; // 19158057
-static Int_t runmax=19169018;//need to add 1 from the runmax 19161029
+static Int_t runmin=19158057; // 19158057
+static Int_t runmax=19169016;//need to add 1 from the runmax 19161029
 static Int_t runbins=runmax-runmin;
 const int run_sta = (int)((runmin%1000000)/1);
 const int run_end = (int)((runmax%1000000)/1);
