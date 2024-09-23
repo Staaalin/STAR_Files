@@ -473,7 +473,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
             randGen.SetSeed(microseconds + time_diff + RandomSeed*100);
         }
         ListIndex = 0;
-        A_Num = randGen.Integer(2) + 1;
+        A_Num = randGen.Integer(3) + 1;
         for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
             PDG          .push_back(A_PDG);
             mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
@@ -484,7 +484,8 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
             ParentEnd    .push_back(ListIndex);
             ParentList   .push_back(ListIndex);
             ListIndex++;
-            if (pow(mix_px.at(ListIndex-1)*mix_px.at(ListIndex-1) + mix_py.at(ListIndex-1)*mix_py.at(ListIndex-1),0.5) < 0.2) InvariantMass.at(ListIndex-1) = 5000;
+            // if (pow(mix_px.at(ListIndex-1)*mix_px.at(ListIndex-1) + mix_py.at(ListIndex-1)*mix_py.at(ListIndex-1),0.5) < 0.2) InvariantMass.at(ListIndex-1) = 5000;
+            // if (pow(mix_px.at(ListIndex-1)*mix_px.at(ListIndex-1) + mix_py.at(ListIndex-1)*mix_py.at(ListIndex-1),0.5) < 0.2) InvariantMass.at(ListIndex-1) = 5000;
         }
         B_Num = 1;
         for (UInt_t UIntI = 0;UIntI < B_Num;UIntI++){
@@ -501,6 +502,13 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
         PDGMult = PDG.size();
         Nch = randGen.Integer(90) + 9;
         PVz = -45.0 + ((randGen.Integer(10000)*1.0)/10000) * 100;
+
+        for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
+            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
+            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
+            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
+            mix_px.at(UIntI) + 
+        }
 
 
         // 随机产生事件结束
