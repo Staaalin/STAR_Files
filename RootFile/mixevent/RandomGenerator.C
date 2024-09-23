@@ -525,6 +525,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
             APy = mix_py.at(UIntI);
             APz = mix_pz.at(UIntI);
             CAB(APx , APy , APz , BPx , BPy , BPz , 0.2*(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08));
+            if (APx == mix_px.at(UIntI)) cout<<"ERROR!"<<endl;
             mix_px.at(UIntI) = APx;
             mix_py.at(UIntI) = APy;
             mix_pz.at(UIntI) = APz;
