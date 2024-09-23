@@ -86,18 +86,19 @@ void print(std::vector<float> Temp)
     return ;
 }
 
-void CAB(float APx , float APy , float APz , float BPx , float BPy , float BPz , float fct) // 0 < fct < 1
+std::vector<float> CAB(float APx , float APy , float APz , float BPx , float BPy , float BPz , float fct) // 0 < fct < 1
 {
+    std::vector<float> Result;Result.clear();
     float CPx = BPx - APx;
     float CPy = BPy - APy;
     float CPz = BPz - APz;
     CPx = CPx * fct;
     CPy = CPy * fct;
     CPz = CPz * fct;
-    APx = BPx - CPx;
-    APy = BPy - CPy;
-    APz = BPz - CPz;
-    return;
+    Result.push_back(BPx - CPx);
+    Result.push_back(BPy - CPy);
+    Result.push_back(BPz - CPz);
+    return Result;
 }
 
 Double_t massList(int PID)
@@ -524,11 +525,10 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
             APx = mix_px.at(UIntI);
             APy = mix_py.at(UIntI);
             APz = mix_pz.at(UIntI);
-            CAB(APx , APy , APz , BPx , BPy , BPz , 0.2*(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08));
-            if (APx == mix_px.at(UIntI)) cout<<"ERROR!"<<endl;
-            mix_px.at(UIntI) = APx;
-            mix_py.at(UIntI) = APy;
-            mix_pz.at(UIntI) = APz;
+            Temp.clear();Temp = CAB(APx , APy , APz , BPx , BPy , BPz , 0.2*(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08));
+            mix_px.at(UIntI) = Temp[0];
+            mix_py.at(UIntI) = Temp[1];
+            mix_pz.at(UIntI) = Temp[2];
         }
 
 
