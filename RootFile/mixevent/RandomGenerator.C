@@ -484,7 +484,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
             ParentEnd    .push_back(ListIndex);
             ParentList   .push_back(ListIndex);
             ListIndex++;
-            if (pow(mix_px.at(ListIndex-1)*mix_px.at(ListIndex-1) + mix_py.at(ListIndex-1)*mix_py.at(ListIndex-1),0.5) < 0.2) InvariantMass.at(ListIndex-1) = 7*AMass;
+            if (pow(mix_px.at(ListIndex-1)*mix_px.at(ListIndex-1) + mix_py.at(ListIndex-1)*mix_py.at(ListIndex-1),0.5) < 0.2) InvariantMass.at(ListIndex-1) = 5000;
         }
         B_Num = 1;
         for (UInt_t UIntI = 0;UIntI < B_Num;UIntI++){
