@@ -92,12 +92,13 @@ std::vector<float> CAB(float APx , float APy , float APz , float BPx , float BPy
     float CPx = BPx - APx;
     float CPy = BPy - APy;
     float CPz = BPz - APz;
-    CPx = CPx * fct;
-    CPy = CPy * fct;
-    CPz = CPz * fct;
-    Result.push_back(BPx - CPx);
-    Result.push_back(BPy - CPy);
-    Result.push_back(BPz - CPz);
+    float CP = pow(CPx*CPx + CPy*CPy + CPz*CPz,0.5);
+    float CPL;
+    if (CP > 0.2) {CPL = 0.2 + 0.08*(fct - 0.5);}
+    else {CPL = CP*fct;}
+    Result.push_back(BPx - CPx*(CPL/CP));
+    Result.push_back(BPy - CPy*(CPL/CP));
+    Result.push_back(BPz - CPz*(CPL/CP));
     return Result;
 }
 
@@ -522,10 +523,11 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
         BPy = mix_py.at(A_Num);// in case B_Num = 1;
         BPz = mix_pz.at(A_Num);// in case B_Num = 1;
         for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
+            if (randGen.Uniform(0.0, 1.0) < 0.8) continue;
             APx = mix_px.at(UIntI);
             APy = mix_py.at(UIntI);
             APz = mix_pz.at(UIntI);
-            TempF.clear();TempF = CAB(APx , APy , APz , BPx , BPy , BPz , 0.2*(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08));
+            TempF.clear();TempF = CAB(APx , APy , APz , BPx , BPy , BPz , randGen.Uniform(0.0, 1.0));
             mix_px.at(UIntI) = TempF[0];
             mix_py.at(UIntI) = TempF[1];
             mix_pz.at(UIntI) = TempF[2];
