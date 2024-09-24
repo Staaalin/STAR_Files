@@ -523,7 +523,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
         BPy = mix_py.at(A_Num);// in case B_Num = 1;
         BPz = mix_pz.at(A_Num);// in case B_Num = 1;
         for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
-            if (randGen.Uniform(0.0, 100.0) < 99.99) continue;
+            if (randGen.Uniform(0.0, 100.0) < 95.0) continue;
             APx = mix_px.at(UIntI);
             APy = mix_py.at(UIntI);
             APz = mix_pz.at(UIntI);
