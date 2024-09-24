@@ -21,7 +21,7 @@ else if ($InputNameIndex == 2) then
     cd /star/data01/pwg/svianping/HADD/
     set numFiles = `find . -maxdepth 1 -name "HADD_*.root" -type f | wc -l`
 
-else if ($InputNameIndex == 2) then
+else if ($InputNameIndex == 3) then
 
     cd /star/data01/pwg/svianping/QA/cen
     set numFiles = `find . -maxdepth 1 -name "cen1_*.root" -type f | wc -l`
