@@ -246,7 +246,7 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
     return Result;
 }
 
-void RandomGenerator(int OutputFileIndex , int RandomSeed) {
+void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000) {
 
     TRandom3 randGen;
     UInt_t A_Num , B_Num;
@@ -455,7 +455,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
     TH1D *H_A_Rap  = new TH1D("A_Rap","Rapidity of A",100,-10,10);
     TH1D *H_B_Rap  = new TH1D("B_Rap","Rapidity of B",100,-10,10);
 
-    int nentries = 50000;
+    // int nentries = 50000;
 
     Int_t PDGMult  ;
     Int_t refMult  ;
