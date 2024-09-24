@@ -300,7 +300,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
     TLorentzVector p1 , p2 , p3;
     TVector3 BV;
-    float tEnergy , APx , APy , APz , BPx , BPy , BPz;
+    float tEnergy , APx , APy , APz , ARap , BPx , BPy , BPz , BRap;
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma , TempF;
@@ -534,6 +534,15 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
         // }
 
         // 产生截断
+        for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
+            APx = mix_px.at(UIntI);
+            APy = mix_py.at(UIntI);
+            APz = mix_pz.at(UIntI);
+            tEnergy = pow(APx*APx + APy*APy + APz*APz + AMass*AMass,0.5);
+            ARap = 0.5*log((tEnergy+APz)/(tEnergy-APz));
+            if (fabs(randGen.Gaus(0, fabs(1/ARap) + 0.2)) < 1) continue;
+            InvariantMass.at(ListIndex-1) = 5000;
+        }
 
 
         // 随机产生事件结束
