@@ -540,7 +540,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
             APz = mix_pz.at(UIntI);
             tEnergy = pow(APx*APx + APy*APy + APz*APz + AMass*AMass,0.5);
             ARap = 0.5*log((tEnergy+APz)/(tEnergy-APz));
-            if (fabs(randGen.Gaus(0, fabs(1/ARap) + 0.2)) < 1) continue;
+            if (fabs(randGen.Gaus(0, fabs(1/ARap) + 0.01)) < 1) continue;
             InvariantMass.at(ListIndex-1) = 5000;
         }
 
