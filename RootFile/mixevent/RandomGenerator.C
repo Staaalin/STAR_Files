@@ -492,9 +492,9 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
         A_Num = randGen.Integer(3) + 1;
         for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
             PDG          .push_back(A_PDG);
-            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
-            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
-            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.08);
+            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.09);
+            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.09);
+            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.09);
             InvariantMass.push_back(AMass);
             ParentSta    .push_back(ListIndex);
             ParentEnd    .push_back(ListIndex);
@@ -519,19 +519,21 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
         PVz = -45.0 + ((randGen.Integer(10000)*1.0)/10000) * 100;
 
         // 制造相互作用
-        BPx = mix_px.at(A_Num);// in case B_Num = 1;
-        BPy = mix_py.at(A_Num);// in case B_Num = 1;
-        BPz = mix_pz.at(A_Num);// in case B_Num = 1;
-        for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
-            if (randGen.Uniform(0.0, 100.0) < 97.0) continue;
-            APx = mix_px.at(UIntI);
-            APy = mix_py.at(UIntI);
-            APz = mix_pz.at(UIntI);
-            TempF.clear();TempF = CAB(APx , APy , APz , BPx , BPy , BPz , randGen.Uniform(0.0, 1.0));
-            mix_px.at(UIntI) = TempF[0];
-            mix_py.at(UIntI) = TempF[1];
-            mix_pz.at(UIntI) = TempF[2];
-        }
+        // BPx = mix_px.at(A_Num);// in case B_Num = 1;
+        // BPy = mix_py.at(A_Num);// in case B_Num = 1;
+        // BPz = mix_pz.at(A_Num);// in case B_Num = 1;
+        // for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
+        //     if (randGen.Uniform(0.0, 100.0) < 97.0) continue;
+        //     APx = mix_px.at(UIntI);
+        //     APy = mix_py.at(UIntI);
+        //     APz = mix_pz.at(UIntI);
+        //     TempF.clear();TempF = CAB(APx , APy , APz , BPx , BPy , BPz , randGen.Uniform(0.0, 1.0));
+        //     mix_px.at(UIntI) = TempF[0];
+        //     mix_py.at(UIntI) = TempF[1];
+        //     mix_pz.at(UIntI) = TempF[2];
+        // }
+
+        // 产生截断
 
 
         // 随机产生事件结束
