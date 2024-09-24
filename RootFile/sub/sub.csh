@@ -74,6 +74,9 @@ else if ($InputNameIndex == 3) then
     set InputName = "cen1_"
     set OutputName = "CenHadd_"
     set OutputURL = "/star/data01/pwg/svianping/QA/"
+    rm -rf /star/data01/pwg/svianping/HADD
+    mkdir /star/data01/pwg/svianping/HADD
+    mkdir /star/data01/pwg/svianping/HADD/log/
 else
     echo "Error INVALID location!"
     exit
