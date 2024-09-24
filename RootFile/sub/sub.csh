@@ -8,7 +8,7 @@
 echo "Please enter which location:"
 echo "SCHEME 1: /star/data01/pwg/svianping/output/output_*.root"
 echo "SCHEME 2: /star/data01/pwg/svianping/HADD/HADD_*.root"
-echo "SCHEME 3: /star/data01/pwg/svianping/HADD/HADDrA_*.root"
+echo "SCHEME 3: /star/data01/pwg/svianping/QA/cen/cen1_*.root"
 set InputNameIndex = "$<"
 
 if ($InputNameIndex == 1) then
@@ -20,6 +20,11 @@ else if ($InputNameIndex == 2) then
 
     cd /star/data01/pwg/svianping/HADD/
     set numFiles = `find . -maxdepth 1 -name "HADD_*.root" -type f | wc -l`
+
+else if ($InputNameIndex == 2) then
+
+    cd /star/data01/pwg/svianping/QA/cen
+    set numFiles = `find . -maxdepth 1 -name "cen1_*.root" -type f | wc -l`
 
 endif
 
@@ -64,19 +69,15 @@ else if ($InputNameIndex == 2) then
     set OutputName = "HADDrA_"
     set OutputURL = "/star/data01/pwg/svianping/HADD/"
 else if ($InputNameIndex == 3) then
-    set ObvInputName = "/star/data01/pwg/svianping/HADD/HADDrA_"
-    set ObvOutputName = "/star/u/svianping/STAR_Files/RootFile/HADDrB_"
-    set InputName = "HADDrA_"
-    set OutputName = "HADDrB_"
-    set OutputURL = "/star/u/svianping/STAR_Files/RootFile/"
+    set ObvInputName = "/star/data01/pwg/svianping/QA/cen/cen1_"
+    set ObvOutputName = "/star/data01/pwg/svianping/QA/CenHadd_"
+    set InputName = "cen1_"
+    set OutputName = "CenHadd_"
+    set OutputURL = "/star/data01/pwg/svianping/QA/"
 else
     echo "Error INVALID location!"
     exit
 endif
-
-rm -rf /star/data01/pwg/svianping/HADD/
-mkdir /star/data01/pwg/svianping/HADD/
-mkdir /star/data01/pwg/svianping/HADD/log/
 
 set MainDir=`pwd`
 
