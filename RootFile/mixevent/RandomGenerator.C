@@ -492,9 +492,9 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed) {
         A_Num = randGen.Integer(3) + 1;
         for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
             PDG          .push_back(A_PDG);
-            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.1);
-            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.1);
-            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.1);
+            mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.12);
+            mix_py       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.12);
+            mix_pz       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.12);
             InvariantMass.push_back(AMass);
             ParentSta    .push_back(ListIndex);
             ParentEnd    .push_back(ListIndex);
