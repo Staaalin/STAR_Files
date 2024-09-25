@@ -452,8 +452,8 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
     TH1D *H_B_Pt   = new TH1D("B_Pt","Pt of B",100,0,10);
     TH1D *H_A_P    = new TH1D("A_P","P of A",100,0,10);
     TH1D *H_B_P    = new TH1D("B_P","P of B",100,0,10);
-    TH1D *H_A_Rap  = new TH1D("A_Rap","Rapidity of A",100,-10,10);
-    TH1D *H_B_Rap  = new TH1D("B_Rap","Rapidity of B",100,-10,10);
+    TH1D *H_A_Rap  = new TH1D("A_Rap","Rapidity of A",100,-3,3);
+    TH1D *H_B_Rap  = new TH1D("B_Rap","Rapidity of B",100,-3,3);
 
     // int nentries = 50000;
 
@@ -553,7 +553,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
             ATan = tan(0.5*ATheta);
             AEta = (ATan > 0) ? -1.0*log(ATan) : log(-1.0*ATan);
             if ( randGen.Uniform(0.0, 1.0) > (exp(-(AEta*AEta)/(2*0.5*0.5)) - 0.1) ) continue;
-            InvariantMass.at(ListIndex-1) = 5000;
+            InvariantMass.at(UIntI) = 5000;
         }
 
         // 随机产生事件结束
