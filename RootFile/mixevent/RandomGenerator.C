@@ -55,7 +55,7 @@ const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
 const Int_t yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
 const Int_t FeedDownNum = sizeof(FeedDown)/sizeof(FeedDown[0]);
 
-TString KindBin[] = {"Mid","Sid"}
+TString KindBin[] = {"Mid","Sid"};
 #define KindNum 2
 TString PatternBin[] = {"AMBM","AMBS","ASBM"};
 #define Pattern 3 // 0:A middle B middle , 1:A middle B sideband , 2:A sideband B middle
@@ -300,7 +300,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
     TLorentzVector p1 , p2 , p3;
     TVector3 BV;
-    float tEnergy , APx , APy , APz , ARap , BPx , BPy , BPz , BRap;
+    float tEnergy , APx , APy , APz , ARap , APt , AMon , AEta , ATan , ATheta , BPx , BPy , BPz , BRap , BPt , BEta , BMon , BTan , BTheta;
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma , TempF;
@@ -534,16 +534,27 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
         // }
 
         // 产生截断
+        // for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
+        //     APx = mix_px.at(UIntI);
+        //     APy = mix_py.at(UIntI);
+        //     APz = mix_pz.at(UIntI);
+        //     tEnergy = pow(APx*APx + APy*APy + APz*APz + AMass*AMass,0.5);
+        //     ARap = 0.5*log((tEnergy+APz)/(tEnergy-APz));
+        //     if (fabs(randGen.Gaus(0, fabs(1/ARap) + 0.01)) < 1) continue;
+        //     InvariantMass.at(ListIndex-1) = 5000;
+        // }
         for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
             APx = mix_px.at(UIntI);
             APy = mix_py.at(UIntI);
             APz = mix_pz.at(UIntI);
-            tEnergy = pow(APx*APx + APy*APy + APz*APz + AMass*AMass,0.5);
-            ARap = 0.5*log((tEnergy+APz)/(tEnergy-APz));
-            if (fabs(randGen.Gaus(0, fabs(1/ARap) + 0.01)) < 1) continue;
+            APt = pow(APx*APx + APy*APy,0.5);
+            AMon = pow(APt*APt + APz*APz,0.5);
+            ATheta = acosf(APz/AMon);
+            ATan = tan(0.5*ATheta);
+            AEta = (ATan > 0) ? -1.0*log(ATan) : log(-1.0*ATan);
+            if (fabs(randGen.Gaus(0 , 0.5)) < fabs(AEta)+0.1) continue;
             InvariantMass.at(ListIndex-1) = 5000;
         }
-
 
         // 随机产生事件结束
 
