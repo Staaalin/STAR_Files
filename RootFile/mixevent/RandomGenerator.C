@@ -489,7 +489,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
             randGen.SetSeed(microseconds + time_diff + RandomSeed*100);
         }
         ListIndex = 0;
-        A_Num = randGen.Integer(3) + 1;
+        A_Num = randGen.Integer(4) + 2;
         for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
             PDG          .push_back(A_PDG);
             mix_px       .push_back(std::exp(randGen.Gaus(mean, sigma)) * pow(-1.0,randGen.Integer(2)) * 0.12);
@@ -541,7 +541,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
         //     tEnergy = pow(APx*APx + APy*APy + APz*APz + AMass*AMass,0.5);
         //     ARap = 0.5*log((tEnergy+APz)/(tEnergy-APz));
         //     if (fabs(randGen.Gaus(0, fabs(1/ARap) + 0.01)) < 1) continue;
-        //     InvariantMass.at(ListIndex-1) = 5000;
+        //     InvariantMass.at(UIntI) = 5000;
         // }
         for (UInt_t UIntI = 0;UIntI < A_Num;UIntI++){
             APx = mix_px.at(UIntI);
@@ -552,7 +552,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
             ATheta = acos(APz/AMon);
             ATan = tan(0.5*ATheta);
             AEta = (ATan > 0) ? -1.0*log(ATan) : log(-1.0*ATan);
-            if ( randGen.Uniform(0.0, 1.0) > (exp(-(AEta*AEta)/(2*0.5*0.5)) - 0.1) ) continue;
+            if ( randGen.Uniform(0.0, 1.0) > (exp(-(AEta*AEta)/(2*1*1)) - 0.1) ) continue;
             InvariantMass.at(UIntI) = 5000;
         }
 
