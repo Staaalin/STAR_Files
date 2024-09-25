@@ -355,6 +355,8 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
     TH1D* H_Mix_dRap                      [15]                 [15]       [15]         [2] [2] ;
     TH1D* H_dPt                           [15]                 [15]       [15]         [2] [2] ;
     TH1D* H_Mix_dPt                       [15]                 [15]       [15]         [2] [2] ;
+    TH1D* H_Mass                          [15]                 [15]       [15]         [2] [2] ;
+    TH1D* H_Mix_Mass                      [15]                 [15]       [15]         [2] [2] ;
     int EventPatternMatch                 [15]                 [15]       [15]         [2] [2] ;
     // Used for testing
     int TestSum = 0;
@@ -367,6 +369,9 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
     
     int dPtBinNum = 200;
     float dPtSta = 0 , dPtEnd = 10;
+    
+    int MBinNum = 200;
+    float MSta = 0 , MEnd = 10;
     
     TString HistNameI  , HistNameJ  , HistNameK  , HistNameL;
     TString HistNameIs , HistNameJs , HistNameKs , HistNameLs;
@@ -420,6 +425,8 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
                         H_Mix_dRap                     [i][j][k][0][0] = new TH1D(HistNameJ,HistName2,dRapBinNum,dRapSta,dRapEnd);
                         H_dPt                          [i][j][k][0][0] = new TH1D(HistNameKs,HistName2s,dPtBinNum,dPtSta,dPtEnd);
                         H_Mix_dPt                      [i][j][k][0][0] = new TH1D(HistNameK,HistName2,dPtBinNum,dPtSta,dPtEnd);
+                        H_Mass                         [i][j][k][0][0] = new TH1D(HistNameKs,HistName2s,MBinNum,MSta,MEnd);
+                        H_Mix_Mass                     [i][j][k][0][0] = new TH1D(HistNameK,HistName2,MBinNum,MSta,MEnd);
                         Mix_event_Num                  [i][j][k][0][0] = 0;
                         Mix_event_Num_SUM              [i][j][k][0][0] = 0;
                     }
@@ -430,6 +437,8 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
                         H_Mix_dRap                     [i][j][k][0][1] = new TH1D(HistNameJ,HistName2,dRapBinNum,dRapSta,dRapEnd);
                         H_dPt                          [i][j][k][0][1] = new TH1D(HistNameKs,HistName2s,dPtBinNum,dPtSta,dPtEnd);
                         H_Mix_dPt                      [i][j][k][0][1] = new TH1D(HistNameK,HistName2,dPtBinNum,dPtSta,dPtEnd);
+                        H_Mass                         [i][j][k][0][1] = new TH1D(HistNameKs,HistName2s,MBinNum,MSta,MEnd);
+                        H_Mix_Mass                     [i][j][k][0][1] = new TH1D(HistNameK,HistName2,MBinNum,MSta,MEnd);
                         Mix_event_Num                  [i][j][k][0][1] = 0;
                         Mix_event_Num_SUM              [i][j][k][0][1] = 0;
                     }
@@ -440,6 +449,8 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
                         H_Mix_dRap                     [i][j][k][1][0] = new TH1D(HistNameJ,HistName2,dRapBinNum,dRapSta,dRapEnd);
                         H_dPt                          [i][j][k][1][0] = new TH1D(HistNameKs,HistName2s,dPtBinNum,dPtSta,dPtEnd);
                         H_Mix_dPt                      [i][j][k][1][0] = new TH1D(HistNameK,HistName2,dPtBinNum,dPtSta,dPtEnd);
+                        H_Mass                         [i][j][k][1][0] = new TH1D(HistNameKs,HistName2s,MBinNum,MSta,MEnd);
+                        H_Mix_Mass                     [i][j][k][1][0] = new TH1D(HistNameK,HistName2,MBinNum,MSta,MEnd);
                         Mix_event_Num                  [i][j][k][1][0] = 0;
                         Mix_event_Num_SUM              [i][j][k][1][0] = 0;
                     }
