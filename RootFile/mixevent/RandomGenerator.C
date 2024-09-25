@@ -552,7 +552,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
             ATheta = acos(APz/AMon);
             ATan = tan(0.5*ATheta);
             AEta = (ATan > 0) ? -1.0*log(ATan) : log(-1.0*ATan);
-            if (fabs(randGen.Gaus(0 , 4)) < (fabs(AEta)+0.01)) continue;
+            if (fabs(randGen.Gaus(0 , 10)) < (fabs(AEta)+0.01)) continue;
             InvariantMass.at(ListIndex-1) = 5000;
         }
 
