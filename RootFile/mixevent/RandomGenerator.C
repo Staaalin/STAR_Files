@@ -549,7 +549,7 @@ void RandomGenerator(int OutputFileIndex , int RandomSeed , int nentries = 50000
             APz = mix_pz.at(UIntI);
             APt = pow(APx*APx + APy*APy,0.5);
             AMon = pow(APt*APt + APz*APz,0.5);
-            ATheta = acosf(APz/AMon);
+            ATheta = acos(APz/AMon);
             ATan = tan(0.5*ATheta);
             AEta = (ATan > 0) ? -1.0*log(ATan) : log(-1.0*ATan);
             if (fabs(randGen.Gaus(0 , 0.5)) < fabs(AEta)+0.1) continue;
