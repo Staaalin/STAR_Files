@@ -914,13 +914,13 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                                 H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                                 H_Mix_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex));
                                                 H_Mix_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
-                                                H_Mix_Mass [CenIndex][i][j][Aid][Bid]->Fill(pow(pow(p1.Energy(),2) + pow(p2.Energy(),2),0.5));
+                                                H_Mix_Mass [CenIndex][i][j][Aid][Bid]->Fill(p1.Energy()+p2.Energy());
                                             }
                                             else{
                                                 H_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                                 H_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex));
                                                 H_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
-                                                H_Mass [CenIndex][i][j][Aid][Bid]->Fill(pow(pow(p1.Energy(),2) + pow(p2.Energy(),2),0.5));
+                                                H_Mass [CenIndex][i][j][Aid][Bid]->Fill(p1.Energy()+p2.Energy());
                                             }
                                         }
                                     }
