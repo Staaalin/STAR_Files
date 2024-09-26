@@ -51,7 +51,7 @@ using namespace std;
 const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
 const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
 const float yBin[] = {-8.0 , 0.0 , 0.5 , 8.0}; // B_y
-int FeedDown[] = { 3312 , 1003314 };
+int FeedDown[] = { 3334 , 3312 , 1003314 };
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
@@ -634,6 +634,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             A_Py   .resize(0);   B_Py.resize(0);
             A_Pz   .resize(0);   B_Pz.resize(0);
             A_ParID.resize(0);B_ParID.resize(0);
+            A_TreID.resize(0);B_TreID.resize(0);
             A_Kind .resize(0); B_Kind.resize(0);
             A_Rap  .resize(0);  B_Rap.resize(0);
             A_IfRecord.resize(0);B_IfRecord.resize(0);
@@ -659,6 +660,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     A_Px.push_back(mix_px->at(j));
                     A_Py.push_back(mix_py->at(j));
                     A_Pz.push_back(mix_pz->at(j));
+                    A_TreID.push_back(j);
                     A_IfRecord.push_back(1);
                     Temp.clear();Temp.push_back(j);
                     for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
@@ -687,6 +689,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     B_Px.push_back(mix_px->at(j));
                     B_Py.push_back(mix_py->at(j));
                     B_Pz.push_back(mix_pz->at(j));
+                    B_TreID.push_back(j);
                     B_IfRecord.push_back(1);
                     Temp.clear();Temp.push_back(j);
                     for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
@@ -715,7 +718,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // 如果A、B有血缘关系，保留B
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
-                    if (IfCommonElement(A_ParID.at(Aid) , B_ParID.at(Bid))){
+                    if (IfInVector(A_TreID.at(Aid) , B_ParID.at(Bid))){
                         A_IfRecord.at(Aid) = 0;
                     }
                 }
@@ -724,14 +727,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // 如果A、B与C有血缘关系，不记录A和B
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 for (int Cid = 0;Cid < C_ParID.size();Cid++) {
-                    if (IfCommonElement(A_ParID.at(Aid) , C_ParID.at(Cid))) {
+                    if (IfInVector(A_TreID.at(Aid) , C_ParID.at(Cid))) {
                         A_IfRecord.at(Aid) = 0;
                     }
                 }
             }
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
                 for (int Cid = 0;Cid < C_ParID.size();Cid++) {
-                    if (IfCommonElement(B_ParID.at(Bid) , C_ParID.at(Cid))) {
+                    if (IfInVector(B_TreID.at(Bid) , C_ParID.at(Cid))) {
                         B_IfRecord.at(Bid) = 0;
                     }
                 }
