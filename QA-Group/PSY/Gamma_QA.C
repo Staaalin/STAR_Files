@@ -481,6 +481,41 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
 		Day2    = (int)((Run%1000000)/10);
                 Day3    = (int)((Run%1000000)/1);
 
+                // Siyuan Ping: Reject Bad Run
+                if (Run == 19168001) continue;
+                if (Run == 19168002) continue;
+                if (Run == 19168003) continue;
+                if (Run == 19168016) continue;
+                if (Run == 19167054) continue;
+                if (Run == 19166003) continue;
+                if (Run == 19164002) continue;
+                if (Run == 19164021) continue;
+                if (Run == 19161031) continue;
+                if (Run == 19161032) continue;
+                if (Run == 19161033) continue;
+                if (Run == 19159042) continue;
+                if (Run == 19158053) continue;
+                if (Run == 19158054) continue;
+                if (Run == 19158055) continue;
+                if (Run == 19158056) continue;
+                if (Run == 19157033) continue;
+                if (Run == 19157034) continue;
+                if (Run == 19157035) continue;
+                if (Run == 19157036) continue;
+                if (Run == 19157037) continue;
+                if (Run == 19157038) continue;
+                if (Run == 19157039) continue;
+                if (Run == 19157040) continue;
+                if (Run == 19157041) continue;
+                if (Run == 19157042) continue;
+                if (Run == 19157043) continue;
+                if (Run == 19156034) continue;
+                if (Run == 19156035) continue;
+                if (Run == 19156036) continue;
+                if (Run == 19156038) continue;
+                if (Run == 19156039) continue;
+                if (Run == 19156069) continue;
+
 		// if(Run<21001000) continue;
 
 /*                refmultCorrUtil->init(Run);
