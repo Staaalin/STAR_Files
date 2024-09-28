@@ -1961,9 +1961,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 					if ( (abs(particle.GetPDG()) == 211)  || 
 						 (abs(particle.GetPDG()) == 2212) || 
 						 (abs(particle.GetPDG()) == 321) ) {
-						int iTrack = 0;
+						int iTrack = -1;
 						const int globalTrackId = (particle).DaughterIds()[0];
-						Int_t iTrackStart = globalTrackId - 1;
+						Int_t iTrackStart = globalTrackId;// Int_t iTrackStart = globalTrackId - 1;
 						if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
 						for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
 							StPicoTrack *track = mPicoDst->track(jTrack);
