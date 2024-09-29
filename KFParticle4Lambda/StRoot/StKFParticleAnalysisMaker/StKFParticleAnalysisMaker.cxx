@@ -2616,6 +2616,16 @@ Int_t StKFParticleAnalysisMaker::Make()
 		if (IfRecordThisEventInTree){
 			// cout<<"Found Hyperon"<<endl;
 			hadronTree->Fill();
+
+			cout<<"Event: "<<evtID<<endl;
+			for (int i=0;i<Correlatted_ID_List_T.size();i++) {
+				cout<<i<<": {"<<Recorded_KFP_ID[i][0]<<"} ";
+				for (int j=0;j<Correlatted_ID_List_T[i].size();j++){
+					cout<<Correlatted_ID_List_T[i][j]<<"  ";
+				}
+				cout<<" "<<endl;
+			}
+
 		}
 		// hadronTree->Fill();
 	}
