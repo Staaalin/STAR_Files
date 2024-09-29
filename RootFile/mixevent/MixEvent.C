@@ -720,6 +720,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
                     if (IfInVector(A_TreID.at(Aid) , B_ParID.at(Bid))){
                         A_IfRecord.at(Aid) = 0;
+                        cout<<"Meet1!"<<endl;
                     }
                 }
             }
@@ -729,6 +730,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 for (int Cid = 0;Cid < C_ParID.size();Cid++) {
                     if (IfInVector(A_TreID.at(Aid) , C_ParID.at(Cid))) {
                         A_IfRecord.at(Aid) = 0;
+                        cout<<"Meet2!"<<endl;
                     }
                 }
             }
@@ -736,6 +738,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 for (int Cid = 0;Cid < C_ParID.size();Cid++) {
                     if (IfInVector(B_TreID.at(Bid) , C_ParID.at(Cid))) {
                         B_IfRecord.at(Bid) = 0;
+                        cout<<"Meet3!"<<endl;
                     }
                 }
             }
