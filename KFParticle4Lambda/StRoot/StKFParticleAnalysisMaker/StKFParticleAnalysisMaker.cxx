@@ -2621,7 +2621,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			for (int i=0;i<Correlatted_ID_List_T.size();i++) {
 				cout<<i<<": {";
 				if (0<=Recorded_KFP_ID[i][0] && Recorded_KFP_ID[i][0]<KFParticlePerformanceInterface->GetNReconstructedParticles()) {cout<<(KFParticleInterface->GetParticles()[Recorded_KFP_ID[i][0]]).GetPDG();}
-				else {cout<<" None ";}
+				else {cout<<Recorded_KFP_ID[i][0];}
 				cout<<"} ";
 				for (int j=0;j<Correlatted_ID_List_T[i].size();j++){
 					cout<<Correlatted_ID_List_T[i][j]<<"  ";
