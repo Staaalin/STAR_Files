@@ -2345,7 +2345,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
 					if (IfTree) {
 						std::vector<int> Temp;Temp.resize(0);
-						Temp.push_back(iTrack);Temp.push_back(iTrack);
+						Temp.push_back(PDGList[Itr]);Temp.push_back(iTrack);
 						Recorded_KFP_ID.push_back(Temp);
 						QA_Chi2.emplace_back(-999);
 						QA_Decay_Length.emplace_back(-999);
