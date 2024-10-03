@@ -2315,8 +2315,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 					if (abs(PDGList[Itr])==PionPdg) {
 						if (
 							(
-								true
-								// ((-0.012 <= m2)&&(m2 <= 0.049)) // Tight 0.5 < $p_t$ < 0.6 GeV
+								// true
+								((-0.012 <= m2)&&(m2 <= 0.049)) // Tight 0.5 < $p_t$ < 0.6 GeV
 								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
 							) == false
 						)
