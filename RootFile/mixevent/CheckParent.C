@@ -351,7 +351,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
         for (int j=0;j<PDGMult;j++) {
             H2Index = -1;
             for (int k=0;k<ParNameNum;k++) {
-                if (PDG->at(j) == ParID[k]) H2Index = k;
+                if (PDG->at(j) == ParName[k]) H2Index = k;
             }
             if (H2Index == -1) continue;
             
