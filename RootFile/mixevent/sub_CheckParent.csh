@@ -111,8 +111,6 @@ while ($i <= $numFiles)
     @ Jnum = $FileStart + ( $i + 1 ) * $FilesPerJob - 1
     echo set EndFileIndex = $Jnum >> $SubXml
     echo set OutputFileIndex = $i >> $SubXml
-    echo set A_PDG = $A_PDG >> $SubXml
-    echo set B_PDG = $B_PDG >> $SubXml
     set LeftBrackets = "\("
     set RightBrackets = "\)"
     set Quo = '\"'
@@ -163,5 +161,3 @@ while ($i <= $numFiles)
     # echo "Delate submit files"
     @ i = $i + 1
 end
-
-echo This is $A_PDG - $B_PDG Corralation
