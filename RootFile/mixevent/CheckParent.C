@@ -344,7 +344,6 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
             cout << time_diff/60 << "min " << time_diff%60 << "s: ";
             long long microseconds = (clock() - Tstart)/10000;
             std::cout << "Microseconds: " << microseconds << "  ";
-            cout << "Test/Events = " << 1.0*TestSum/50 << "  ";
             cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
             Tstart = clock();
         }
