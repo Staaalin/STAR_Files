@@ -254,7 +254,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
         #endif
     #endif
 
-    const int ParName = { 3122 , 3312 , 3334 , -3122 , -3312 , -3334 };
+    const int ParName[] = { 3122 , 3312 , 3334 , -3122 , -3312 , -3334 };
     const int ParNameNum = sizeof(ParName)/sizeof(ParName[0]);
     vector<float> ML , MLS;
     for (int i=0;i<ParNameNum;i++) {
