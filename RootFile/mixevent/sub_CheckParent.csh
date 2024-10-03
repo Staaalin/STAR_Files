@@ -116,7 +116,7 @@ while ($i <= $numFiles)
     set LeftBrackets = "\("
     set RightBrackets = "\)"
     set Quo = '\"'
-    echo root4star \-b CheckRarent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo$RightBrackets >> $SubXml
+    echo root4star \-b CheckParent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo$RightBrackets >> $SubXml
     # echo root4star -q -b \'HADDr_xml.C\(\"$InputName\",\"$OutputName\",$i,$FilesPerJob,$FileStart,$FileEnd\)\'$ARM$i".log" >> $SubXml
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
@@ -139,7 +139,7 @@ while ($i <= $numFiles)
         @ k = $k + 1
     end
 
-    set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/CheckRarent.C"
+    set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/CheckParent.C"
     echo \<File\>file:$MixEventPWD\</File\> >> $SubXml
     set SourceFilePWD = "/star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh"
     echo \<File\>file:$SourceFilePWD\</File\> >> $SubXml
