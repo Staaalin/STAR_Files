@@ -483,6 +483,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             FeedDown[i] = 0;
         }
     }
+    cout<<"CMass = ";print(CMass);
+    cout<<"CMassSigma = ";print(CMassSigma);
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
