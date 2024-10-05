@@ -366,8 +366,8 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
             if (ParentEnd->at(j) >= ParentSta->at(j)) {
                 H_M[1][H2Index] -> Fill(InvariantMass->at(j));
                 for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++) {
-                    if (PDG.at(k) == DA) IfD[0] = true;
-                    if (PDG.at(k) == DB) IfD[1] = true;
+                    if (PDG->at(k) == DA) IfD[0] = true;
+                    if (PDG->at(k) == DB) IfD[1] = true;
                 }
                 if ((IfD[0] == true) && (IfD[1] == true)) H_M[2][H2Index] -> Fill(InvariantMass->at(j));
             }
