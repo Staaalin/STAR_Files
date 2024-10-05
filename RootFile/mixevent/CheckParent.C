@@ -284,7 +284,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
             if (j == 0) HistName1 += "NoCut";
             if (j == 1) HistName1 += "HaveParent";
             if (j == 2) HistName1 += "StrictParent";
-            if (j == 4) HistName1 += "Km&Lambda&Omega";
+            if (j == 3) HistName1 += "Km&Lambda&Omega";
             H_M [j] [i] = new TH1D(HistName1,HistName1,MBinNum,MSta,MEnd);
         }
     }
