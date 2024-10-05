@@ -715,7 +715,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
 
-            if ((C_ParID.size() != 0)) {continue;}
+            // if ((C_ParID.size() != 0)) {continue;}
             if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
             
             // 如果A、B有血缘关系，保留B
@@ -742,6 +742,25 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     if (IfInVector(B_TreID.at(Bid) , C_ParID.at(Cid))) {
                         B_IfRecord.at(Bid) = 0;
                         cout<<"Meet3!"<<endl;
+                    }
+                }
+            }
+
+            // 减除Km-Lambda的不变质量疑似为Omega的pair
+            if ((A_PDG == -321) && (B_PDG == 3122)) {
+                for (int i = 0;i<A_Px.size();i++) {
+                    if (A_IfRecord.at(i) == 0) continue;
+                    for (int j = 0;j<B_Px.size();j++) {
+                        if (B_IfRecord.at(j) == 0) continue;
+                        p2.SetXYZM(B_Px.at(j),B_Py.at(j),B_Pz.at(j),BMass);
+                        p1.SetXYZM(A_Px.at(i),A_Py.at(i),A_Pz.at(i),AMass);
+                        p3 = p1 + p2;
+                        BV = -p3.BoostVector();
+                        p1.Boost( BV);p2.Boost( BV);
+                        if (fabs(p1.Energy()+p2.Energy() - massList(3334)) < 3*massListSigma(3334)) {
+                            A_IfRecord.at(i) = 0;
+                            B_IfRecord.at(j) = 0;
+                        }
                     }
                 }
             }
