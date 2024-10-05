@@ -266,7 +266,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
     int ParID = -1 , H1Index , H2Index , DA , DB , DC , TID;
     DA = -321;
     DB = 3122;
-    DB = 3334;
+    DC = 3334;
     //              A      B     C
     bool IfD[3] = {false,false,false};
 
