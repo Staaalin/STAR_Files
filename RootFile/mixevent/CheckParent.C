@@ -254,6 +254,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
         #endif
     #endif
 
+    cout<<"1";
     const int ParName[] = { 3122 , 3312 , 3334 , -3122 , -3312 , -3334 };
     const int ParNameNum = sizeof(ParName)/sizeof(ParName[0]);
     vector<float> ML , MLS;
@@ -274,6 +275,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
 
     TH1D* H_M [4][20];
     TString HistName1 , HistName2;
+    cout<<"2";
 
     for (int i=0;i<ParNameNum;i++) {
         MSta = floor(ML.at(i)/0.0005-MBinPar)*0.0005 , MEnd = MSta + (MBinNum - MBinPar)*0.0005;
@@ -288,6 +290,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
             H_M [j] [i] = new TH1D(HistName1,HistName1,MBinNum,MSta,MEnd);
         }
     }
+    cout<<"3";
 
     TString TreeName = "hadronTree";
     TChain *hadronTree = new TChain(TreeName);
@@ -337,6 +340,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
+    cout<<"3";
 
     time_t time_start;
     time_t time_now;
@@ -353,6 +357,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
             cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
             Tstart = clock();
         }
+        cout<<"4";
 
         for (int j=0;j<PDGMult;j++) {
             H2Index = -1;
@@ -372,6 +377,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
                 if ((IfD[0] == true) && (IfD[1] == true)) H_M[2][H2Index] -> Fill(InvariantMass->at(j));
             }
         }
+        cout<<"5";
 
         IfD[0] = false;IfD[1] = false;IfD[2] = false;TID = -1;
         for (int j=0;j<PDGMult;j++) {
@@ -380,8 +386,10 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
             if (PDG->at(j) == DC) {IfD[2] = true;TID = j;}
         }
         if ((IfD[0] == true) && (IfD[1] == true) && (IfD[2] == true)) H_M[3][2] -> Fill(InvariantMass->at(TID));
+        cout<<"6";
     }
 
+    cout<<"7";
     TString OutputFileName = OutMidName;
     OutputFileName += "H_";
     OutputFileName += OutputFileIndex;
@@ -395,6 +403,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
         }
     }
     H_M[3][2] -> Write();
+    cout<<"8";
     fileA->Close();
 
 
