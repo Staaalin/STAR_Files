@@ -262,23 +262,29 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
         MLS.push_back(massListSigma(ParName[i]));
     }
 
-    int ParID = -1 , H1Index , H2Index;
+    int ParID = -1 , H1Index , H2Index , DA , DB , DC , TID;
+    DA = -321;
+    DB = 3122;
+    DB = 3334;
+    //              A      B     C
+    bool IfD[2] = {false,false,false};
 
     const int MBinNum = 500 , MBinPar = 50;
     float MSta , MEnd;
 
-    TH1D* H_M [3][20];
+    TH1D* H_M [4][20];
     TString HistName1 , HistName2;
 
     for (int i=0;i<ParNameNum;i++) {
         MSta = floor(ML.at(i)/0.0005-MBinPar)*0.0005 , MEnd = MSta + (MBinNum - MBinPar)*0.0005;
-        for (int j = 0;j<3;j++){
+        for (int j = 0;j<4;j++){
             HistName1 = "HM_";
             HistName1 += ParName[i];
             HistName1 += "_";
             if (j == 0) HistName1 += "NoCut";
             if (j == 1) HistName1 += "HaveParent";
             if (j == 2) HistName1 += "StrictParent";
+            if (j == 4) HistName1 += "Km&Lambda&Omega";
             H_M [j] [i] = new TH1D(HistName1,HistName1,MBinNum,MSta,MEnd);
         }
     }
@@ -355,11 +361,25 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
             }
             if (H2Index == -1) continue;
             
+            IfD[0] = false;IfD[1] = false;
             H_M[0][H2Index] -> Fill(InvariantMass->at(j));
             if (ParentEnd->at(j) >= ParentSta->at(j)) {
                 H_M[1][H2Index] -> Fill(InvariantMass->at(j));
+                for (int k=ParentSta->at(j);k<=ParentEnd->at(j);k++) {
+                    if (PDG.at(k) == DA) IfD[0] = true;
+                    if (PDG.at(k) == DB) IfD[1] = true;
+                }
+                if ((IfD[0] == true) && (IfD[1] == true)) H_M[2][H2Index] -> Fill(InvariantMass->at(j));
             }
         }
+
+        IfD[0] = false;IfD[1] = false;IfD[2] = false;TID = -1;
+        for (int j=0;j<PDGMult;j++) {
+            if (PDG->at(j) == DA) {IfD[0] = true;}
+            if (PDG->at(j) == DB) {IfD[1] = true;}
+            if (PDG->at(j) == DC) {IfD[2] = true;TID = j;}
+        }
+        if ((IfD[0] == true) && (IfD[1] == true) && (IfD[2] == true)) H_M[3][2] -> Fill(InvariantMass->at(TID));
     }
 
     TString OutputFileName = OutMidName;
@@ -374,6 +394,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
             H_M [j] [i]->Write();
         }
     }
+    H_M[3][2] -> Write();
     fileA->Close();
 
 
