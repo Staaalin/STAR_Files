@@ -267,7 +267,7 @@ void CheckParent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputF
     DB = 3122;
     DB = 3334;
     //              A      B     C
-    bool IfD[2] = {false,false,false};
+    bool IfD[3] = {false,false,false};
 
     const int MBinNum = 500 , MBinPar = 50;
     float MSta , MEnd;
