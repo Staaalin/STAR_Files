@@ -2621,24 +2621,24 @@ Int_t StKFParticleAnalysisMaker::Make()
 			hadronTree->Fill();
 
 			// 展示处理出来的Recorded_KFP_ID和他们关联的序号
-			cout<<"Event: "<<evtID<<endl;
-			for (int i=0;i<Correlatted_ID_List_T.size();i++) {
-				cout<<i<<": {";
-				if (0<=Recorded_KFP_ID[i][0] && Recorded_KFP_ID[i][0]<KFParticlePerformanceInterface->GetNReconstructedParticles()) {cout<<(KFParticleInterface->GetParticles()[Recorded_KFP_ID[i][0]]).GetPDG();}
-				else {cout<<Recorded_KFP_ID[i][0];}
-				cout<<"} ";
-				for (int j=0;j<Correlatted_ID_List_T[i].size();j++){
-					cout<<Correlatted_ID_List_T[i][j]<<"  ";
-				}
-				cout<<" "<<endl;
-			}
+			// cout<<"Event: "<<evtID<<endl;
+			// for (int i=0;i<Correlatted_ID_List_T.size();i++) {
+			// 	cout<<i<<": {";
+			// 	if (0<=Recorded_KFP_ID[i][0] && Recorded_KFP_ID[i][0]<KFParticlePerformanceInterface->GetNReconstructedParticles()) {cout<<(KFParticleInterface->GetParticles()[Recorded_KFP_ID[i][0]]).GetPDG();}
+			// 	else {cout<<Recorded_KFP_ID[i][0];}
+			// 	cout<<"} ";
+			// 	for (int j=0;j<Correlatted_ID_List_T[i].size();j++){
+			// 		cout<<Correlatted_ID_List_T[i][j]<<"  ";
+			// 	}
+			// 	cout<<" "<<endl;
+			// }
 			
 			// 展示记录的粒子
-			cout<<"########################"<<endl;
-			for (int i = 0;i<PDG.size();i++) {
-				cout<<i<<"  "<<PDG[i]<<endl;
-			}
-			cout<<"########################"<<endl;
+			// cout<<"########################"<<endl;
+			// for (int i = 0;i<PDG.size();i++) {
+			// 	cout<<i<<"  "<<PDG[i]<<endl;
+			// }
+			// cout<<"########################"<<endl;
 
 			// 展示所有KFP粒子
 			// cout<<"<<<<<<<<<<<<"<<endl;
