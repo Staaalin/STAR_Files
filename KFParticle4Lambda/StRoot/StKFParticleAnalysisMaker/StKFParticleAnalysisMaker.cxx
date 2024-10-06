@@ -2617,6 +2617,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// cout<<"Found Hyperon"<<endl;
 			hadronTree->Fill();
 
+			// 展示处理出来的Recorded_KFP_ID和他们关联的序号
 			cout<<"Event: "<<evtID<<endl;
 			for (int i=0;i<Correlatted_ID_List_T.size();i++) {
 				cout<<i<<": {";
@@ -2628,6 +2629,34 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 				cout<<" "<<endl;
 			}
+
+			// 展示所有KFP粒子
+			cout<<"<<<<<<<<<<<<"<<endl;
+			for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
+				KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+				if (particle.GetPDG() == -1) {
+					for (int iDaughter = 1;iDaughter<particle.NDaughters();iDaughter++){
+						const int daughterId = particle.DaughterIds()[iDaughter];
+						// cout<<"daughterId = "<<daughterId<<endl;
+						const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+						if (daughter.GetPDG() == -1) {
+							for (int iGDaughter = 1;iGDaughter<daughter.NDaughters();iGDaughter++){
+								const int GdaughterId = daughter.DaughterIds()[iGDaughter];
+								// cout<<"daughterId = "<<daughterId<<endl;
+								const KFParticle Gdaughter = KFParticleInterface->GetParticles()[GdaughterId];
+								cout<<"        "<<GdaughterId<<"  PDG: "<<Gdaughter.GetPDG()<<endl;
+							}
+						}
+						else{
+							cout<<"    "<<daughterId<<"  PDG: "<<daughter.GetPDG()<<endl;
+						}
+					}
+				}
+				else{
+					cout<<iKFParticle<<"  PDG: "<<particle.GetPDG()<<endl;
+				}
+			}
+			cout<<">>>>>>>>>>>>"<<endl;
 
 		}
 		// hadronTree->Fill();
