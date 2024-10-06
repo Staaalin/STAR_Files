@@ -1262,7 +1262,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	//     pass event  
 	/////////////////////////////////////////////////////////
 	// Only those events reconstruct particles A and B simultaneously will be recorded.
-	int Recorded_A_PDG[] = { LambdaPdg , XiPdg , OmegaPdg};
+	int Recorded_A_PDG[] = { LambdaPdg , XiPdg , OmegaPdg , XiRPdg};
 	int Recorded_A_PDG_Size = sizeof(Recorded_A_PDG)/sizeof(Recorded_A_PDG[0]);
 	int Recorded_B_PDG[] = { KaonPdg , K0SPdg };
 	int Recorded_B_PDG_Size = sizeof(Recorded_B_PDG)/sizeof(Recorded_B_PDG[0]);
@@ -1270,7 +1270,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	bool IfRecorded_B_Matched = false;
 	bool IfRecordThisEventInTree = false;
 	////////////////////////////////////////////////////////
-	int Recorded_Particle[] = { KaonPdg , PionPdg , ProtonPdg , K0SPdg , LambdaPdg , XiPdg , OmegaPdg}; // Record which particle
+	int Recorded_Particle[] = { KaonPdg , PionPdg , ProtonPdg , K0SPdg , LambdaPdg , XiPdg , OmegaPdg , XiRPdg}; // Record which particle
 	int Recorded_Particle_Size = sizeof(Recorded_Particle)/sizeof(Recorded_Particle[0]);
 	StPicoEvent* mEvent= (StPicoEvent*) mPicoDst->event(); 
 	if(!mEvent)return kStOK;
