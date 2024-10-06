@@ -454,6 +454,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TH1D* H_Mix_dPt                       [15]                 [15]       [15]         [2] [2] ;
     TH1D* H_Mass                          [15]                 [15]       [15]         [2] [2] ;
     TH1D* H_Mix_Mass                      [15]                 [15]       [15]         [2] [2] ;
+    TH1D* H_ALL_Mass                                                                   [2] [2] ;
+    TH1D* H_ALL_Mix_Mass                                                               [2] [2] ;
     int EventPatternMatch                 [15]                 [15]       [15]         [2] [2] ;
     // Used for testing
     int TestSum = 0;
@@ -559,6 +561,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
     }
+    H_ALL_Mass                     [0][0] = new TH1D("H_Mass_AMBM","H_Mass_AMBM",MBinNum,MSta,MEnd);
+    H_ALL_Mix_Mass                 [0][0] = new TH1D("H_Mass_AMBM","H_Mass_AMBM",MBinNum,MSta,MEnd);
+    H_ALL_Mass                     [0][1] = new TH1D("H_Mass_AMBS","H_Mass_AMBS",MBinNum,MSta,MEnd);
+    H_ALL_Mix_Mass                 [0][1] = new TH1D("H_Mass_AMBS","H_Mass_AMBS",MBinNum,MSta,MEnd);
+    H_ALL_Mass                     [1][0] = new TH1D("H_Mass_ASBM","H_Mass_ASBM",MBinNum,MSta,MEnd);
+    H_ALL_Mix_Mass                 [1][0] = new TH1D("H_Mass_ASBM","H_Mass_ASBM",MBinNum,MSta,MEnd);
 
     for (int PatternID = 0;PatternID < Pattern+1;PatternID++) {  
         TString TreeName = "hadronTree";
@@ -943,12 +951,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                                 H_Mix_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex));
                                                 H_Mix_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
                                                 H_Mix_Mass [CenIndex][i][j][Aid][Bid]->Fill(p1.Energy()+p2.Energy());
+                                                H_ALL_Mix_Mass             [Aid][Bid]->Fill(p1.Energy()+p2.Energy());
                                             }
                                             else{
                                                 H_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                                 H_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex));
                                                 H_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
                                                 H_Mass [CenIndex][i][j][Aid][Bid]->Fill(p1.Energy()+p2.Energy());
+                                                H_ALL_Mass             [Aid][Bid]->Fill(p1.Energy()+p2.Energy());
                                             }
                                         }
                                     }
@@ -1020,6 +1030,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
     }
+    H_ALL_Mass    [0][0]->Write();
+    H_ALL_Mix_Mass[0][0]->Write();
+    H_ALL_Mass    [0][1]->Write();
+    H_ALL_Mix_Mass[0][1]->Write();
+    H_ALL_Mass    [1][0]->Write();
+    H_ALL_Mix_Mass[1][0]->Write();
     fileA->Close();
 
     cout << "#######################" << endl;
