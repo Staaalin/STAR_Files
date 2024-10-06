@@ -2634,11 +2634,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 			cout<<"<<<<<<<<<<<<"<<endl;
 			for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
 				KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
-				if (particle.GetPDG() == -1) {
+				cout<<iKFParticle<<"  PDG: "<<particle.GetPDG()<<endl;
+				if ((abs(particle.GetPDG()) == 310)||(abs(particle.GetPDG()) == 333)||(abs(particle.GetPDG()) == 3312)||(abs(particle.GetPDG()) == 3122)||(abs(particle.GetPDG()) == 3334)||(abs(particle.GetPDG()) == 1003314)) {
 					for (int iDaughter = 1;iDaughter<particle.NDaughters();iDaughter++){
 						const int daughterId = particle.DaughterIds()[iDaughter];
 						// cout<<"daughterId = "<<daughterId<<endl;
 						const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+						cout<<"    "<<daughterId<<"  PDG: "<<daughter.GetPDG()<<endl;
 						if (daughter.GetPDG() == -1) {
 							for (int iGDaughter = 1;iGDaughter<daughter.NDaughters();iGDaughter++){
 								const int GdaughterId = daughter.DaughterIds()[iGDaughter];
@@ -2647,13 +2649,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 								cout<<"        "<<GdaughterId<<"  PDG: "<<Gdaughter.GetPDG()<<endl;
 							}
 						}
-						else{
-							cout<<"    "<<daughterId<<"  PDG: "<<daughter.GetPDG()<<endl;
-						}
 					}
-				}
-				else{
-					cout<<iKFParticle<<"  PDG: "<<particle.GetPDG()<<endl;
 				}
 			}
 			cout<<">>>>>>>>>>>>"<<endl;
