@@ -2636,13 +2636,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 				KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 				cout<<iKFParticle<<"  PDG: "<<particle.GetPDG()<<endl;
 				if ((abs(particle.GetPDG()) == 310)||(abs(particle.GetPDG()) == 333)||(abs(particle.GetPDG()) == 3312)||(abs(particle.GetPDG()) == 3122)||(abs(particle.GetPDG()) == 3334)||(abs(particle.GetPDG()) == 1003314)||(abs(particle.GetPDG()) == -1)) {
-					for (int iDaughter = 1;iDaughter<particle.NDaughters();iDaughter++){
+					for (int iDaughter = 0;iDaughter<particle.NDaughters();iDaughter++){
 						const int daughterId = particle.DaughterIds()[iDaughter];
 						// cout<<"daughterId = "<<daughterId<<endl;
 						const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 						cout<<"    "<<daughterId<<"  PDG: "<<daughter.GetPDG()<<endl;
 						if ((abs(daughter.GetPDG()) == 310)||(abs(daughter.GetPDG()) == 333)||(abs(daughter.GetPDG()) == 3312)||(abs(daughter.GetPDG()) == 3122)||(abs(daughter.GetPDG()) == 3334)||(abs(daughter.GetPDG()) == 1003314)||(abs(daughter.GetPDG()) == -1)) {
-							for (int iGDaughter = 1;iGDaughter<daughter.NDaughters();iGDaughter++){
+							for (int iGDaughter = 0;iGDaughter<daughter.NDaughters();iGDaughter++){
 								const int GdaughterId = daughter.DaughterIds()[iGDaughter];
 								// cout<<"daughterId = "<<daughterId<<endl;
 								const KFParticle Gdaughter = KFParticleInterface->GetParticles()[GdaughterId];
