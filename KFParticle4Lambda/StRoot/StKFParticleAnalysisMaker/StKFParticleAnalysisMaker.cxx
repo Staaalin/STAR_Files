@@ -1869,7 +1869,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 					}
 					int Itr = 1;
 					while (Itr < TempT.size()) {
-						if ((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG() == -1){
+						if ((abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != PionPdg) && 
+						    (abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != ProtonPdg) && 
+						    (abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != KaonPdg) )
+						{
 							KFParticle daughter = KFParticleInterface->GetParticles()[TempT[Itr]];
 							for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
 								if (daughter.DaughterIds()[iDaughter] == TempT[Itr]) continue;
