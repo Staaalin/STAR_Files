@@ -2621,41 +2621,41 @@ Int_t StKFParticleAnalysisMaker::Make()
 			hadronTree->Fill();
 
 			// 展示处理出来的Recorded_KFP_ID和他们关联的序号
-			// cout<<"Event: "<<evtID<<endl;
-			// for (int i=0;i<Correlatted_ID_List_T.size();i++) {
-			// 	cout<<i<<": {";
-			// 	if (0<=Recorded_KFP_ID[i][0] && Recorded_KFP_ID[i][0]<KFParticlePerformanceInterface->GetNReconstructedParticles()) {cout<<(KFParticleInterface->GetParticles()[Recorded_KFP_ID[i][0]]).GetPDG();}
-			// 	else {cout<<Recorded_KFP_ID[i][0];}
-			// 	cout<<"} ";
-			// 	for (int j=0;j<Correlatted_ID_List_T[i].size();j++){
-			// 		cout<<Correlatted_ID_List_T[i][j]<<"  ";
-			// 	}
-			// 	cout<<" "<<endl;
-			// }
+			cout<<"Event: "<<evtID<<endl;
+			for (int i=0;i<Correlatted_ID_List_T.size();i++) {
+				cout<<i<<": {";
+				if (0<=Recorded_KFP_ID[i][0] && Recorded_KFP_ID[i][0]<KFParticlePerformanceInterface->GetNReconstructedParticles()) {cout<<(KFParticleInterface->GetParticles()[Recorded_KFP_ID[i][0]]).GetPDG();}
+				else {cout<<Recorded_KFP_ID[i][0];}
+				cout<<"} ";
+				for (int j=0;j<Correlatted_ID_List_T[i].size();j++){
+					cout<<Correlatted_ID_List_T[i][j]<<"  ";
+				}
+				cout<<" "<<endl;
+			}
 
 			// 展示所有KFP粒子
-			// cout<<"<<<<<<<<<<<<"<<endl;
-			// for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
-			// 	KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
-			// 	cout<<iKFParticle<<"  PDG: "<<particle.GetPDG()<<endl;
-			// 	if ((abs(particle.GetPDG()) == 310)||(abs(particle.GetPDG()) == 333)||(abs(particle.GetPDG()) == 3312)||(abs(particle.GetPDG()) == 3122)||(abs(particle.GetPDG()) == 3334)||(abs(particle.GetPDG()) == 1003314)||(abs(particle.GetPDG()) == -1)) {
-			// 		for (int iDaughter = 0;iDaughter<particle.NDaughters();iDaughter++){
-			// 			const int daughterId = particle.DaughterIds()[iDaughter];
-			// 			// cout<<"daughterId = "<<daughterId<<endl;
-			// 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-			// 			cout<<"    "<<daughterId<<"  PDG: "<<daughter.GetPDG()<<endl;
-			// 			if ((abs(daughter.GetPDG()) == 310)||(abs(daughter.GetPDG()) == 333)||(abs(daughter.GetPDG()) == 3312)||(abs(daughter.GetPDG()) == 3122)||(abs(daughter.GetPDG()) == 3334)||(abs(daughter.GetPDG()) == 1003314)||(abs(daughter.GetPDG()) == -1)) {
-			// 				for (int iGDaughter = 0;iGDaughter<daughter.NDaughters();iGDaughter++){
-			// 					const int GdaughterId = daughter.DaughterIds()[iGDaughter];
-			// 					// cout<<"daughterId = "<<daughterId<<endl;
-			// 					const KFParticle Gdaughter = KFParticleInterface->GetParticles()[GdaughterId];
-			// 					cout<<"        "<<GdaughterId<<"  PDG: "<<Gdaughter.GetPDG()<<endl;
-			// 				}
-			// 			}
-			// 		}
-			// 	}
-			// }
-			// cout<<">>>>>>>>>>>>"<<endl;
+			cout<<"<<<<<<<<<<<<"<<endl;
+			for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
+				KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+				cout<<iKFParticle<<"  PDG: "<<particle.GetPDG()<<endl;
+				if ((abs(particle.GetPDG()) == 310)||(abs(particle.GetPDG()) == 333)||(abs(particle.GetPDG()) == 3312)||(abs(particle.GetPDG()) == 3122)||(abs(particle.GetPDG()) == 3334)||(abs(particle.GetPDG()) == 1003314)||(abs(particle.GetPDG()) == -1)) {
+					for (int iDaughter = 0;iDaughter<particle.NDaughters();iDaughter++){
+						const int daughterId = particle.DaughterIds()[iDaughter];
+						// cout<<"daughterId = "<<daughterId<<endl;
+						const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+						cout<<"    "<<daughterId<<"  PDG: "<<daughter.GetPDG()<<endl;
+						if ((abs(daughter.GetPDG()) == 310)||(abs(daughter.GetPDG()) == 333)||(abs(daughter.GetPDG()) == 3312)||(abs(daughter.GetPDG()) == 3122)||(abs(daughter.GetPDG()) == 3334)||(abs(daughter.GetPDG()) == 1003314)||(abs(daughter.GetPDG()) == -1)) {
+							for (int iGDaughter = 0;iGDaughter<daughter.NDaughters();iGDaughter++){
+								const int GdaughterId = daughter.DaughterIds()[iGDaughter];
+								// cout<<"daughterId = "<<daughterId<<endl;
+								const KFParticle Gdaughter = KFParticleInterface->GetParticles()[GdaughterId];
+								cout<<"        "<<GdaughterId<<"  PDG: "<<Gdaughter.GetPDG()<<endl;
+							}
+						}
+					}
+				}
+			}
+			cout<<">>>>>>>>>>>>"<<endl;
 
 		}
 		// hadronTree->Fill();
