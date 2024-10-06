@@ -999,6 +999,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     cout << "# Calculating Summary #" << endl;
     cout << "#######################" << endl;
     fileA->cd();
+    H_ALL_Mass    [0][0]->Write();
+    H_ALL_Mix_Mass[0][0]->Write();
+    H_ALL_Mass    [0][1]->Write();
+    H_ALL_Mix_Mass[0][1]->Write();
+    H_ALL_Mass    [1][0]->Write();
+    H_ALL_Mix_Mass[1][0]->Write();
     for (int i=0;i<CentralityBinNum;i++){
         for (int j=0;j<yBinNum;j++){
             for (int k=0;k<PVzBinNum;k++){
@@ -1030,12 +1036,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
         }
     }
-    H_ALL_Mass    [0][0]->Write();
-    H_ALL_Mix_Mass[0][0]->Write();
-    H_ALL_Mass    [0][1]->Write();
-    H_ALL_Mix_Mass[0][1]->Write();
-    H_ALL_Mass    [1][0]->Write();
-    H_ALL_Mix_Mass[1][0]->Write();
     fileA->Close();
 
     cout << "#######################" << endl;
