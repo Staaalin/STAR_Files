@@ -51,7 +51,7 @@ using namespace std;
 const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
 const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
 const float yBin[] = {-8.0 , 0.0 , 0.5 , 8.0}; // B_y
-int FeedDown[] = { 3334 , 3312 , 1003314 };
+int FeedDown[] = { 3334 , 1003314 };
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
@@ -715,7 +715,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
 
-            // if ((C_ParID.size() != 0)) {continue;}
+            if ((C_ParID.size() != 0)) {continue;}
             if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
             
             // 如果A、B有血缘关系，保留B
