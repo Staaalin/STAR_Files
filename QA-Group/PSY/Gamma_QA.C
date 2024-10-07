@@ -545,9 +545,9 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
 
                 for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
                         StPicoTrack *picoTrack = dst->track(iTrack);
-                        if (! track)            continue;
-                        if (! track->charge())  continue;
-                        if (! track->isPrimary()) continue;
+                        if (! picoTrack)            continue;
+                        if (! picoTrack->charge())  continue;
+                        if (! picoTrack->isPrimary()) continue;
 
                         EtaAsso   = picoTrack->pMom().Eta();
                         PtAsso    = picoTrack->pMom().Pt();

@@ -545,9 +545,9 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
 
                 for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
                         StPicoTrack *picoTrack = dst->track(iTrack);
-                        if (! track)            continue;
-                        if (! track->charge())  continue;
-                        if (! track->isPrimary()) continue;
+                        if (! picoTrack)            continue;
+                        if (! picoTrack->charge())  continue;
+                        if (! picoTrack->isPrimary()) continue;
 
                         EtaAsso   = picoTrack->pMom().Eta();
                         PtAsso    = picoTrack->pMom().Pt();
@@ -556,15 +556,6 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                         ChargeAsso= picoTrack->charge();
                         gDCAxy = picoTrack->gDCAxy(pVx,pVy);
                         dEdx = picoTrack->dEdx();
-                        //if(dEdx>100 || dEdx<0) cout<<dEdx<<endl;
-                        //to shuffle charge of POI
-                        match[trk] = 0;		
-                        if(IsGoodPOI(picoTrack)) {
-                                match[trk] = POIcount;
-                                iCharge[POIcount] = ChargeAsso;
-                                POIcount++;
-                        }
-                        if(!IsGoodAsso(picoTrack)) continue;
 
                         pTemp_track->Fill(1,PtAsso);
                         pTemp_track->Fill(2,EtaAsso);
@@ -573,41 +564,8 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                         pTemp_track->Fill(5,DCAGlobalAsso);
                         pTemp_track->Fill(6,gDCAxy);
                         pTemp_track_dedx->Fill(1,dEdx);
-                        FillPhiAsso();  //ChargeAsso is needed here
-                        ShiftPhiAsso(trk);
-                        //this is q2
-                        if((opt_useEPD==0 && fabs(EtaAsso)<Eta_ESE_Cut) || opt_useEPD>0) {
-                                if(IsGoodPOI(picoTrack) && IsGoodPion(d,picoTrack,1)) {
-                                        mQQx_1 += cos(PhiAsso_new[trk]*nHar);
-                                        mQQy_1 += sin(PhiAsso_new[trk]*nHar);
-                                        mQQx += cos(PhiAsso_new[trk]*nHar);
-                                        mQQy += sin(PhiAsso_new[trk]*nHar);
-                                        Qcount++;
-                                }
-                        }
-                        mQx +=PtAsso*cos(PhiAsso_new[trk]*nHar); mQy +=PtAsso*sin(PhiAsso_new[trk] * nHar);
-                        if(iTr[Fcount] > Scount) {mQx1 +=PtAsso*cos(PhiAsso_new[trk]*nHar); mQy1 +=PtAsso*sin(PhiAsso_new[trk] * nHar);}
-                        else {mQx2 += PtAsso * cos(PhiAsso_new[trk] * nHar); mQy2 += PtAsso * sin(PhiAsso_new[trk] * nHar);}
-                        if(EtaAsso> Eta_EP_Cut) {mQx3 +=PtAsso*cos(PhiAsso_new[trk]*nHar); mQy3 +=PtAsso*sin(PhiAsso_new[trk] * nHar);}
-                        if(EtaAsso<-Eta_EP_Cut) {mQx4 +=PtAsso*cos(PhiAsso_new[trk]*nHar); mQy4 +=PtAsso*sin(PhiAsso_new[trk] * nHar);}
-                        Fcount++;
+                        
                 }
-                mQ.Set(mQx, mQy); mQ1.Set(mQx1, mQy1); mQ2.Set(mQx2, mQy2); mQ3.Set(mQx3, mQy3); mQ4.Set(mQx4, mQy4);
-                TPC_EP_full = mQ.Phi()/nHar;
-                TPC_EP_east = mQ1.Phi()/nHar;
-                TPC_EP_west = mQ2.Phi()/nHar;
-                TPC_EP_for  = mQ3.Phi()/nHar;
-                TPC_EP_bac  = mQ4.Phi()/nHar;
-                if(mQx3==0 || mQy3==0) TPC_EP_for = -10;
-                if(mQx4==0 || mQy4==0) TPC_EP_bac = -10;
-                Q2 = (mQQx*mQQx+mQQy*mQQy)/float(Qcount);
-                TPC_Day3_cos2->Fill(Day3, cos(nHar*TPC_EP_full));
-                TPC_Day3_sin2->Fill(Day3, sin(nHar*TPC_EP_full));
-                pT_Day3->Fill(Day3,pTemp_track->GetBinContent(1));
-                Eta_Day3->Fill(Day3,pTemp_track->GetBinContent(2));
-                Phi_Day3->Fill(Day3,pTemp_track->GetBinContent(3));
-                Charge_Day3->Fill(Day3,pTemp_track->GetBinContent(4));
-                DCA_Day3->Fill(Day3,pTemp_track->GetBinContent(5));
         //add Yu's
                 runidvsdedx->Fill(Run,pTemp_track_dedx->GetBinContent(1)); 
                 runidvsavgpt->Fill(Run,pTemp_track->GetBinContent(1));
@@ -616,14 +574,6 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                 runidvsavgphi->Fill(Run,pTemp_track->GetBinContent(3));
                 runidvsgdcaxy->Fill(Run,pTemp_track->GetBinContent(6));
                 runidvsdcaxysigma->Fill(Run,pTemp_track->GetBinError(6)*sqrt(pTemp_track->GetBinEntries(6)));
-                //float asigma= pTemp_track->GetBinError(6)*sqrt(pTemp_track->GetBinEntries(6));
-                //if(asigma>10) cout<<asigma <<endl;//pTemp_track->GetBinError(6)*sqrt(pTemp_track->GetBinEntries(6));
-                runidvsavgQ2x->Fill(Run,pow(mQQx,2)/float(Qcount));
-                runidvsavgQ2y->Fill(Run,pow(mQQy,2)/float(Qcount));
-                runidvsavgQ1x->Fill(Run,pow(mQQx_1,2)/float(Qcount));
-                runidvsavgQ1y->Fill(Run,pow(mQQy_1,2)/float(Qcount));
-                runidvsTPCcos->Fill(Run,cos(nHar*TPC_EP_full));
-                runidvsTPCsin->Fill(Run,sin(nHar*TPC_EP_full));
                 
         }
 }

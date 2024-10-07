@@ -649,7 +649,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             A_Kind .resize(0); B_Kind.resize(0);
             A_Rap  .resize(0);  B_Rap.resize(0);
             A_IfRecord.resize(0);B_IfRecord.resize(0);
-            C_ParID.resize(0);IfFoundOmega = false;
+            C_ParID.resize(0);// IfFoundOmega = false;
 
             for (int j=0;j<PDGMult;j++){
                 if (PDG->at(j) == A_PDG) {
@@ -719,8 +719,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 Temp.push_back(ParentList->at(k));
                             }
                             C_ParID.push_back(Temp);
-                            IfFoundOmega = true;
-                            cout<<"Found Omega"<<endl;
+                            // IfFoundOmega = true;
+                            // cout<<"Found Omega"<<endl;
                         }
                     }
                 }
@@ -729,31 +729,31 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // if ((C_ParID.size() != 0)) {continue;}
             if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
             
-            if (IfFoundOmega) {
-                for (int Aid = 0;Aid < A_Px.size();Aid++) {
-                    cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
-                }
-                for (int Bid = 0;Bid < B_Px.size();Bid++) {
-                    cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
-                }
-                for (int Cid = 0;Cid < C_ParID.size();Cid++) {
-                    cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
-                }
-            }
+            // if (IfFoundOmega) {
+            //     for (int Aid = 0;Aid < A_Px.size();Aid++) {
+            //         cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
+            //     }
+            //     for (int Bid = 0;Bid < B_Px.size();Bid++) {
+            //         cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
+            //     }
+            //     for (int Cid = 0;Cid < C_ParID.size();Cid++) {
+            //         cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
+            //     }
+            // }
             // 如果A、B有血缘关系，保留B
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
                     if (IfInVector(A_TreID.at(Aid) , B_ParID.at(Bid))){
                         A_IfRecord.at(Aid) = 0;
-                        cout<<"Meet 1!"<<endl;
-                        cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
-                        cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
+                        // cout<<"Meet 1!"<<endl;
+                        // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
+                        // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
                     }
                     if (IfCommonElement(A_ParID.at(Aid) , B_ParID.at(Bid))){
                         A_IfRecord.at(Aid) = 0;
-                        cout<<"Meet 2!"<<endl;
-                        cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
-                        cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
+                        // cout<<"Meet 2!"<<endl;
+                        // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
+                        // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
                     }
                 }
             }
@@ -763,15 +763,15 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 for (int Cid = 0;Cid < C_ParID.size();Cid++) {
                     if (IfInVector(A_TreID.at(Aid) , C_ParID.at(Cid))) {
                         A_IfRecord.at(Aid) = 0;
-                        cout<<"Meet 3!"<<endl;
-                        cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
-                        cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
+                        // cout<<"Meet 3!"<<endl;
+                        // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
+                        // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
                     }
                     if (IfCommonElement(A_ParID.at(Aid) , C_ParID.at(Cid))){
                         A_IfRecord.at(Aid) = 0;
-                        cout<<"Meet 4!"<<endl;
-                        cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
-                        cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
+                        // cout<<"Meet 4!"<<endl;
+                        // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
+                        // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
                     }
                 }
             }
@@ -779,15 +779,15 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 for (int Cid = 0;Cid < C_ParID.size();Cid++) {
                     if (IfInVector(B_TreID.at(Bid) , C_ParID.at(Cid))) {
                         B_IfRecord.at(Bid) = 0;
-                        cout<<"Meet 5!"<<endl;
-                        cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
-                        cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
+                        // cout<<"Meet 5!"<<endl;
+                        // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
+                        // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
                     }
                     if (IfCommonElement(B_ParID.at(Bid) , C_ParID.at(Cid))){
-                        A_IfRecord.at(Aid) = 0;
-                        cout<<"Meet 6!"<<endl;
-                        cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
-                        cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
+                        B_IfRecord.at(Bid) = 0;
+                        // cout<<"Meet 6!"<<endl;
+                        // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
+                        // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
                     }
                 }
             }
