@@ -38,8 +38,8 @@ void RunAnalyzer_QA(const int cen = 0, const int opt_weight = 0, const Char_t *i
   gSystem->Load("StEpdUtil");
   gSystem->Load("StRefMultCorr");
   TString str;
-  // str = ".x Gamma_QA.C++(";
-  str = ".x Gamma_QA_Simple.C++(";
+  str = ".x Gamma_QA.C++(";
+  // str = ".x Gamma_QA_Simple.C++(";
   str += cen;
   str += ",";
   str += opt_weight;
