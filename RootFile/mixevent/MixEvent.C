@@ -562,11 +562,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         }
     }
     H_ALL_Mass                     [0][0] = new TH1D("H_Mass_AMBM","H_Mass_AMBM",MBinNum,MSta,MEnd);
-    H_ALL_Mix_Mass                 [0][0] = new TH1D("H_Mass_AMBM","H_Mass_AMBM",MBinNum,MSta,MEnd);
+    H_ALL_Mix_Mass                 [0][0] = new TH1D("H_Mass_Mix_AMBM","H_Mass_AMBM",MBinNum,MSta,MEnd);
     H_ALL_Mass                     [0][1] = new TH1D("H_Mass_AMBS","H_Mass_AMBS",MBinNum,MSta,MEnd);
-    H_ALL_Mix_Mass                 [0][1] = new TH1D("H_Mass_AMBS","H_Mass_AMBS",MBinNum,MSta,MEnd);
+    H_ALL_Mix_Mass                 [0][1] = new TH1D("H_Mass_Mix_AMBS","H_Mass_AMBS",MBinNum,MSta,MEnd);
     H_ALL_Mass                     [1][0] = new TH1D("H_Mass_ASBM","H_Mass_ASBM",MBinNum,MSta,MEnd);
-    H_ALL_Mix_Mass                 [1][0] = new TH1D("H_Mass_ASBM","H_Mass_ASBM",MBinNum,MSta,MEnd);
+    H_ALL_Mix_Mass                 [1][0] = new TH1D("H_Mass_Mix_ASBM","H_Mass_ASBM",MBinNum,MSta,MEnd);
 
     for (int PatternID = 0;PatternID < Pattern+1;PatternID++) {  
         TString TreeName = "hadronTree";
