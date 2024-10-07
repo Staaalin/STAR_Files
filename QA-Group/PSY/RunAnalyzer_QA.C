@@ -38,7 +38,8 @@ void RunAnalyzer_QA(const int cen = 0, const int opt_weight = 0, const Char_t *i
   gSystem->Load("StEpdUtil");
   gSystem->Load("StRefMultCorr");
   TString str;
-  str = ".x Gamma_QA.C++(";
+  // str = ".x Gamma_QA.C++(";
+  str = ".x Gamma_QA_Simple.C++(";
   str += cen;
   str += ",";
   str += opt_weight;
@@ -48,6 +49,7 @@ void RunAnalyzer_QA(const int cen = 0, const int opt_weight = 0, const Char_t *i
 //  cout<<str.Data()<<endl;
   gROOT->ProcessLine( str.Data() );
   // Next line should be commented if you run in a batch mode
-  gROOT->ProcessLine(".!rm -f Gamma_QA_C* ");
+  // gROOT->ProcessLine(".!rm -f Gamma_QA_C* ");
+  gROOT->ProcessLine(".!rm -f Gamma_QA_Simple_C* ");
   gROOT->ProcessLine(".!rm -f RunAnalyzer_QA_C* ");
 }

@@ -574,8 +574,11 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                 runidvsavgphi->Fill(Run,pTemp_track->GetBinContent(3));
                 runidvsgdcaxy->Fill(Run,pTemp_track->GetBinContent(6));
                 runidvsdcaxysigma->Fill(Run,pTemp_track->GetBinError(6)*sqrt(pTemp_track->GetBinEntries(6)));
+                pTemp_track->Reset();
                 
         }
+
+        WriteHistogram(cen,opt_weight);
 }
 
 bool IsGoodEvent(int c) {
@@ -613,4 +616,35 @@ hTally->Fill(6);
 hTally->Fill(7);
 
 	return true;
+}
+
+/////////////////////////////////
+void WriteHistogram(int c, int o) {
+	char fname_out[200];
+	sprintf(fname_out,"cen%d.gamma1%d%d_pipi_EP%d_Boost%d.root",c,nHar-1,nHar,opt_useEPD,opt_boost);
+	if(opt_HighOrder==1) sprintf(fname_out,"cen%d.gamma1%d%d_pipi_EP%d_Boost%d.root",c,nHar+1,nHar,opt_useEPD,opt_boost);
+	if(opt_HighOrder==2) sprintf(fname_out,"cen%d.gamma422_pipi_EP%d_Boost%d.root",c,opt_useEPD,opt_boost);
+	if(o==1) sprintf(fname_out,"cen%d.v%d.root",c,nHar);
+        TFile *fout = new TFile(fname_out,"RECREATE");
+
+//        gROOT->GetList()->ls();
+        TList* list = gROOT->GetList();//GetListOfKeys();
+        TIter next(list);
+        TKey* key;
+        TObject* obj;
+        while ((key = (TKey*)next())) {
+		TString tempStr(key->GetName());
+		if (tempStr.Contains("Temp")) continue;
+		if(o==1 && (tempStr.Contains("Parity")||tempStr.Contains("Delta"))) continue;
+        	obj = gROOT->Get(key->GetName());
+                if (!obj) continue;
+                if(obj->IsA() == TDirectory::Class()){
+                        delete obj;
+                        obj = NULL;
+                        continue;
+        	}
+        	obj->Write();
+   	}
+	fout->Write();
+	fout->Close();
 }
