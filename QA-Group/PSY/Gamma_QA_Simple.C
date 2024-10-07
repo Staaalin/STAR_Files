@@ -395,7 +395,7 @@ void EPD_hits(TClonesArray *mEpdHits);
 
 //void __attribute__((constructor)) LoadLib();  
 /////////////////////////////main program starts here/////////////////////////////////////
-void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){	//main_function
+void Gamma_QA_Simple(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){	//main_function
 	delete gRandom;
 	gRandom = new TRandom(0);
 
