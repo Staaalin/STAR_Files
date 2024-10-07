@@ -579,6 +579,8 @@ void Gamma_QA_Simple(int cen=1, int opt_weight =1, const Char_t *inFile = "test.
         }
 
         WriteHistogram(cen,opt_weight);
+
+        return;
 }
 
 bool IsGoodEvent(int c) {
