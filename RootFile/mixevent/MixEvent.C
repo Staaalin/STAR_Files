@@ -718,6 +718,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 Temp.push_back(ParentList->at(k));
                             }
                             C_ParID.push_back(Temp);
+                            cout<<"Found Omega"<<endl;
                         }
                     }
                 }
