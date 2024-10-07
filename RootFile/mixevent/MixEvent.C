@@ -724,7 +724,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
             }
 
-            if ((C_ParID.size() != 0)) {continue;}
+            // if ((C_ParID.size() != 0)) {continue;}
             if ((A_Px.size() == 0) || (B_Px.size() == 0)) {continue;}
             
             // 如果A、B有血缘关系，保留B
