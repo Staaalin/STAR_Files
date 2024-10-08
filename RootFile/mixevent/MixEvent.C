@@ -398,7 +398,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
     TLorentzVector p1 , p2 , p3;
     TVector3 BV;
-    float tEnergy , APx , APy , APz , BPx , BPy , BPz;
+    float tEnergy , APx , APy , APz , BPx , BPy , BPz , PairMass;
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
@@ -477,14 +477,20 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TString HistNameIs , HistNameJs , HistNameKs , HistNameLs;
 
     for (int i = 0;i < FeedDownNum;i++){
-        CMass.push_back(massList(FeedDown[i]));
-        CMassSigma.push_back(massListSigma(FeedDown[i]));
         if (abs(FeedDown[i]) == A_PDG) {
             FeedDown[i] = 0;
+            CMass.push_back(-100);
+            CMassSigma.push_back(-1);
+            continue;
         }
         if (abs(FeedDown[i]) == B_PDG) {
             FeedDown[i] = 0;
+            CMass.push_back(-100);
+            CMassSigma.push_back(-1);
+            continue;
         }
+        CMass.push_back(massList(FeedDown[i]));
+        CMassSigma.push_back(massListSigma(FeedDown[i]));
     }
     cout<<"CMass = ";print(CMass);
     cout<<"CMassSigma = ";print(CMassSigma);
@@ -749,12 +755,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
                         // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
                     }
-                    if (IfCommonElement(A_ParID.at(Aid) , B_ParID.at(Bid))){
-                        A_IfRecord.at(Aid) = 0;
-                        // cout<<"Meet 2!"<<endl;
-                        // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
-                        // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
-                    }
+                    // if (IfCommonElement(A_ParID.at(Aid) , B_ParID.at(Bid))){
+                    //     A_IfRecord.at(Aid) = 0;
+                    //     // cout<<"Meet 2!"<<endl;
+                    //     // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
+                    //     // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
+                    // }
                 }
             }
             
@@ -767,12 +773,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
                         // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
                     }
-                    if (IfCommonElement(A_ParID.at(Aid) , C_ParID.at(Cid))){
-                        A_IfRecord.at(Aid) = 0;
-                        // cout<<"Meet 4!"<<endl;
-                        // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
-                        // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
-                    }
+                    // if (IfCommonElement(A_ParID.at(Aid) , C_ParID.at(Cid))){
+                    //     A_IfRecord.at(Aid) = 0;
+                    //     // cout<<"Meet 4!"<<endl;
+                    //     // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
+                    //     // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
+                    // }
                 }
             }
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
@@ -783,12 +789,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
                         // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
                     }
-                    if (IfCommonElement(B_ParID.at(Bid) , C_ParID.at(Cid))){
-                        B_IfRecord.at(Bid) = 0;
-                        // cout<<"Meet 6!"<<endl;
-                        // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
-                        // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
-                    }
+                    // if (IfCommonElement(B_ParID.at(Bid) , C_ParID.at(Cid))){
+                    //     B_IfRecord.at(Bid) = 0;
+                    //     // cout<<"Meet 6!"<<endl;
+                    //     // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
+                    //     // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
+                    // }
                 }
             }
 
@@ -983,20 +989,29 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                             p3 = p1 + p2;
                                             BV = -p3.BoostVector();
                                             p1.Boost( BV);p2.Boost( BV);
+                                            PairMass = p1.Energy()+p2.Energy();
 
+                                            IfRecord = true;
+                                            for (int Cid = 0;Cid < FeedDownNum;Cid++) {
+                                                if (fabs(PairMass-CMass.at(Cid))<=3*CMassSigma.at(Cid)) {
+                                                    IfRecord = false;
+                                                    break;
+                                                }
+                                            }
+                                            if (!IfRecord) continue;
                                             if (A_EID != Mix_B_EvtID[CenIndex][i][j][Aid][Bid].at(Bindex)) {
                                                 H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                                 H_Mix_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex));
                                                 H_Mix_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
-                                                H_Mix_Mass [CenIndex][i][j][Aid][Bid]->Fill(p1.Energy()+p2.Energy());
-                                                H_ALL_Mix_Mass             [Aid][Bid]->Fill(p1.Energy()+p2.Energy());
+                                                H_Mix_Mass [CenIndex][i][j][Aid][Bid]->Fill(PairMass);
+                                                H_ALL_Mix_Mass             [Aid][Bid]->Fill(PairMass);
                                             }
                                             else{
                                                 H_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                                 H_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex));
                                                 H_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
-                                                H_Mass [CenIndex][i][j][Aid][Bid]->Fill(p1.Energy()+p2.Energy());
-                                                H_ALL_Mass             [Aid][Bid]->Fill(p1.Energy()+p2.Energy());
+                                                H_Mass [CenIndex][i][j][Aid][Bid]->Fill(PairMass);
+                                                H_ALL_Mass             [Aid][Bid]->Fill(PairMass);
                                             }
                                         }
                                     }
