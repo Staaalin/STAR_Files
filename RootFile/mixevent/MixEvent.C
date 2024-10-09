@@ -250,6 +250,48 @@ void DltElement(std::vector<int> &V , int ID)
     return;
 }
 
+std::vector<int> GetDaughterPDGLit(int ID)
+{
+    std::vector<int> V_T;V_T.clear();
+    switch (ID)
+    {
+        case 3334 :// Omega
+            V_T.push_back(-321);
+            V_T.push_back(3122);
+            return V_T;
+        case -3334 :// OmegaBar
+            V_T.push_back(321);
+            V_T.push_back(-3122);
+            return V_T;
+        case 1003314 :// XiR
+            V_T.push_back(-321);
+            V_T.push_back(3122);
+            return V_T;
+        case -1003314 :// XiRBar
+            V_T.push_back(321);
+            V_T.push_back(-3122);
+            return V_T;
+        case 3312 :// Xi
+            V_T.push_back(-211);
+            V_T.push_back(3122);
+            return V_T;
+        case -3312 :// XiBar
+            V_T.push_back(211);
+            V_T.push_back(-3122);
+            return V_T;
+        case 3122 :// Lambda
+            V_T.push_back(-211);
+            V_T.push_back(2212);
+            return V_T;
+        case -3122 :// LambdaBar
+            V_T.push_back(211);
+            V_T.push_back(-2212);
+            return V_T;
+        default :
+            return V_T;
+    }
+}
+
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
 {
     //This is 329
@@ -402,7 +444,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
-    bool IfRecord = true;
+    bool IfRecord = true , IfRemoveFeedPair = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
 
@@ -494,6 +536,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     }
     cout<<"CMass = ";print(CMass);
     cout<<"CMassSigma = ";print(CMassSigma);
+
+    for (int i=0;i<FeedDownNum;i++) {
+        if ( IfInVector(A_PDG , GetDaughterPDGLit(FeedDown[i])) && IfInVector(B_PDG , GetDaughterPDGLit(FeedDown[i])) ) IfRemoveFeedPair = true;
+    }
 
     for (int i=0;i<CentralityBinNum;i++){
         for (int l=0;l<Pattern;l++){
@@ -991,14 +1037,16 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                             p1.Boost( BV);p2.Boost( BV);
                                             PairMass = p1.Energy()+p2.Energy();
 
-                                            IfRecord = true;
-                                            for (int Cid = 0;Cid < FeedDownNum;Cid++) {
-                                                if (fabs(PairMass-CMass.at(Cid))<=3*CMassSigma.at(Cid)) {
-                                                    IfRecord = false;
-                                                    break;
+                                            if (IfRemoveFeedPair) {
+                                                IfRecord = true;
+                                                for (int Cid = 0;Cid < FeedDownNum;Cid++) {
+                                                    if (fabs(PairMass-CMass.at(Cid))<=3*CMassSigma.at(Cid)) {
+                                                        IfRecord = false;
+                                                        break;
+                                                    }
                                                 }
+                                                if (!IfRecord) continue;
                                             }
-                                            if (!IfRecord) continue;
                                             if (A_EID != Mix_B_EvtID[CenIndex][i][j][Aid][Bid].at(Bindex)) {
                                                 H_Mix_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
                                                 H_Mix_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex));
