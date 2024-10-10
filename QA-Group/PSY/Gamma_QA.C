@@ -571,7 +571,8 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
 	runidvsavgdca    ->Fill(Run,Sum_avgdca/RefMult);
 	runidvsavgphi    ->Fill(Run,Sum_avgphi/RefMult);
 	runidvsgdcaxy    ->Fill(Run,Sum_gdcaxy/RefMult);
-	runidvsdcaxysigma->Fill(Run,Hdcaxysigma->GetBinError(6)*sqrt(Hdcaxysigma->GetBinEntries(6)));
+	// runidvsdcaxysigma->Fill(Run,Hdcaxysigma->GetBinError(6)*sqrt(Hdcaxysigma->GetBinEntries(6)));
+	runidvsdcaxysigma->Fill(Run,Sum_gdcaxy);
         Hdcaxysigma->Reset();
 
 ///temp add
