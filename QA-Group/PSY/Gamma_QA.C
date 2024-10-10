@@ -96,6 +96,15 @@ const Float_t Vr_cut = 2;	//2, Vr
 const float Vz_diff = 10;        //5, difference between Vz{TPC} and Vz{VPD}
 const int cenDef[9] = {6,11,21,38,61,95,141,205,249}; //Updated 19June 2023 for 11GeV v1
 
+// Siyuan
+float Sum_dedx       = 0.0;
+float Sum_avgpt      = 0.0;
+float Sum_avgeta     = 0.0;
+float Sum_avgdca     = 0.0;
+float Sum_avgphi     = 0.0;
+float Sum_gdcaxy     = 0.0;
+TProfile *Hdcaxysigma = new TProfile("Hdcaxysigma","Hdcaxysigma",10,0.5,10.5,-50,50); //pT, eta,phi,charge,DCA,
+
 //Full production dataset 
 ////
 static Int_t runmin=19158057; // 19158057
@@ -529,6 +538,12 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                 if((i+1)%1000==0) cout<<"centraility = "<<Centrality<<" Eweight = "<<Eweight<<endl;
 */
                 // PSY: Loop for Nch to check refmult
+                Sum_dedx       = 0;
+                Sum_avgpt      = 0;
+                Sum_avgeta     = 0;
+                Sum_avgdca     = 0;
+                Sum_avgphi     = 0;
+                Sum_gdcaxy     = 0;
                 Int_t nTracks = dst->numberOfTracks();
                 int NumCharge = 0;
                 for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
@@ -537,11 +552,27 @@ void Gamma_QA(int cen=1, int opt_weight =1, const Char_t *inFile = "test.list"){
                         if (! track->charge())  continue;
                         if (! track->isPrimary()) continue;
                         NumCharge++;
+                        Sum_dedx       += track->dEdx();
+                        Sum_avgpt      += track->pMom().Pt();
+                        Sum_avgeta     += track->pMom().Eta();
+                        Sum_avgdca     += track->gDCA(pV).Mag();
+                        Sum_avgphi     += track->pMom().Phi();
+                        Sum_gdcaxy     += track->gDCAxy(pVx,pVy);
+                        Hdcaxysigma    ->Fill(6,track->gDCAxy(pVx,pVy));
                 }
                 RefMult = NumCharge;
                 // RefMult = FxtMult;
                 // cout<<"FxtMult = "<<FxtMult<<endl;
 
+// Siyuan
+        runidvsdedx      ->Fill(Run,Sum_dedx  /RefMult); 
+	runidvsavgpt     ->Fill(Run,Sum_avgpt /RefMult);
+	runidvsavgeta    ->Fill(Run,Sum_avgeta/RefMult);
+	runidvsavgdca    ->Fill(Run,Sum_avgdca/RefMult);
+	runidvsavgphi    ->Fill(Run,Sum_avgphi/RefMult);
+	runidvsgdcaxy    ->Fill(Run,Sum_gdcaxy/RefMult);
+	runidvsdcaxysigma->Fill(Run,Hdcaxysigma->GetBinError(6)*sqrt(Hdcaxysigma->GetBinEntries(6)));
+        Hdcaxysigma->Reset();
 
 ///temp add
 	Centrality = 0;
@@ -803,13 +834,13 @@ void MakeTPC_EP(StPicoDst *d, int *iTr) {
           Charge_Day3->Fill(Day3,pTemp_track->GetBinContent(4));
           DCA_Day3->Fill(Day3,pTemp_track->GetBinContent(5));
 //add Yu's
-        runidvsdedx->Fill(Run,pTemp_track_dedx->GetBinContent(1)); 
-	runidvsavgpt->Fill(Run,pTemp_track->GetBinContent(1));
-	runidvsavgeta->Fill(Run,pTemp_track->GetBinContent(2));
-	runidvsavgdca->Fill(Run,pTemp_track->GetBinContent(5));
-	runidvsavgphi->Fill(Run,pTemp_track->GetBinContent(3));
-	runidvsgdcaxy->Fill(Run,pTemp_track->GetBinContent(6));
-	runidvsdcaxysigma->Fill(Run,pTemp_track->GetBinError(6)*sqrt(pTemp_track->GetBinEntries(6)));
+        // runidvsdedx->Fill(Run,pTemp_track_dedx->GetBinContent(1)); 
+	// runidvsavgpt->Fill(Run,pTemp_track->GetBinContent(1));
+	// runidvsavgeta->Fill(Run,pTemp_track->GetBinContent(2));
+	// runidvsavgdca->Fill(Run,pTemp_track->GetBinContent(5));
+	// runidvsavgphi->Fill(Run,pTemp_track->GetBinContent(3));
+	// runidvsgdcaxy->Fill(Run,pTemp_track->GetBinContent(6));
+	// runidvsdcaxysigma->Fill(Run,pTemp_track->GetBinError(6)*sqrt(pTemp_track->GetBinEntries(6)));
 	//float asigma= pTemp_track->GetBinError(6)*sqrt(pTemp_track->GetBinEntries(6));
 	//if(asigma>10) cout<<asigma <<endl;//pTemp_track->GetBinError(6)*sqrt(pTemp_track->GetBinEntries(6));
 	runidvsavgQ2x->Fill(Run,pow(mQQx,2)/float(Qcount));
