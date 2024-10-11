@@ -795,12 +795,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // 如果A、B有血缘关系，保留B
             for (int Bid = 0;Bid < B_Px.size();Bid++) {
                 for (int Aid = 0;Aid < A_Px.size();Aid++) {
-                    if (IfInVector(A_TreID.at(Aid) , B_ParID.at(Bid))){
-                        A_IfRecord.at(Aid) = 0;
-                        // cout<<"Meet 1!"<<endl;
-                        // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
-                        // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
-                    }
+                    // if (IfInVector(A_TreID.at(Aid) , B_ParID.at(Bid))){
+                    //     A_IfRecord.at(Aid) = 0;
+                    //     // cout<<"Meet 1!"<<endl;
+                    //     // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
+                    //     // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
+                    // }
                     // if (IfCommonElement(A_ParID.at(Aid) , B_ParID.at(Bid))){
                     //     A_IfRecord.at(Aid) = 0;
                     //     // cout<<"Meet 2!"<<endl;
