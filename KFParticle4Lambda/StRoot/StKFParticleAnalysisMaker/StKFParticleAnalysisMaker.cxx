@@ -41,8 +41,8 @@
 
 // #define DataName           "pAu_200_15"
 // #define DataName           "AuAu_27_18"
-// #define DataName           "dAu_200_16"
-#define DataName           "dAu_200_21"
+#define DataName           "dAu_200_16"
+// #define DataName           "dAu_200_21"
 // #define DataName           "dAu_62_16"
 // #define DataName           "dAu_39_16"
 // #define DataName           "dAu_20_16"
@@ -1270,7 +1270,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	bool IfRecorded_B_Matched = false;
 	bool IfRecordThisEventInTree = false;
 	////////////////////////////////////////////////////////
-	int Recorded_Particle[] = { KaonPdg , PionPdg , ProtonPdg , K0SPdg , LambdaPdg , XiPdg , OmegaPdg , XiRPdg}; // Record which particle
+	int Recorded_Particle[] = { KaonPdg , K0SPdg , LambdaPdg , XiPdg , OmegaPdg , XiRPdg}; // Record which particle
 	int Recorded_Particle_Size = sizeof(Recorded_Particle)/sizeof(Recorded_Particle[0]);
 	StPicoEvent* mEvent= (StPicoEvent*) mPicoDst->event(); 
 	if(!mEvent)return kStOK;
