@@ -61,7 +61,7 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	// KFParticle
 	StKFParticleInterface::instance()->CleanLowPVTrackEvents();
 	// StKFParticleInterface::instance()->UseHFTTracksOnly();
-	StKFParticleInterface::instance()->SetSoftKaonPIDMode();
+	// StKFParticleInterface::instance()->SetSoftKaonPIDMode();
 	StKFParticleInterface::instance()->SetSoftTofPidMode();
 	StKFParticleInterface::instance()->SetChiPrimaryCut(5);
 	StKFParticleInterface::instance()->SetMaxDistanceBetweenParticlesCut(0.5);
