@@ -18,7 +18,7 @@
 set CollisionType = dAu
 set iJob=$1
 # settings
-set nRun=21
+set nRun=16
 set mRun=Run${nRun}
 set mEnergy=200.0
 set ListDir=./datalist/
