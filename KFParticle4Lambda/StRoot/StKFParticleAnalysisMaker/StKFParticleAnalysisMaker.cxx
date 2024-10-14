@@ -41,9 +41,9 @@
 
 // #define DataName           "pAu_200_15"
 // #define DataName           "AuAu_27_18"
-#define DataName           "dAu_200_16"
+// #define DataName           "dAu_200_16"
 // #define DataName           "dAu_200_21"
-// #define DataName           "dAu_62_16"
+#define DataName           "dAu_62_16"
 // #define DataName           "dAu_39_16"
 // #define DataName           "dAu_20_16"
 // #define DataName           "pp_200_15"
@@ -1402,8 +1402,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 	const double DVz = VertexZ-vpdVz;
 
 	// d+Au@200GeV RUN21 https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
-	if(fabs(VertexZ - 5) > 50) return kStOK; // AuAu27 80 ; dAu@39 25
-	if(sqrt(pow(VertexX + 0.4,2.)+pow(VertexY,2.))>2.0) return kStOK; 
+	// if(fabs(VertexZ - 5) > 50) return kStOK;
+	// if(sqrt(pow(VertexX + 0.4,2.)+pow(VertexY,2.))>2.0) return kStOK; 
+	// if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
+	
+	// d+Au@62GeV RUN16 NO DATA
+	if(fabs(VertexZ) > 20) return kStOK; 
+	if(sqrt(pow(VertexX,2.)+pow(VertexY,2.))>2.0) return kStOK; 
 	if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
 	
 	TPVz = VertexZ;
