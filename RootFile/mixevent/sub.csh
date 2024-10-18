@@ -37,6 +37,12 @@ else if ($InputNameIndex == 2) then
     cd /star/data01/pwg/svianping/HADD/
     set numFiles = `find . -maxdepth 1 -name "HADD_T_*.root" -type f | wc -l`
 
+    rm -rf ZIP_File_*
+    rm -rf log/
+    rm sched*
+
+    mkdir log/
+
 endif
 
 echo "一共有文件数：$numFiles"
