@@ -46,6 +46,8 @@ using namespace std;
 // #define DataName           "pp_200_15"
 // #define DataName           "OO_200_21"
 
+#define SpecialMode true
+
 #define Pi 3.1415926535898
 
 const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
@@ -65,6 +67,8 @@ TString PatternBin[] = {"AMBM","AMBS","ASBM"};
 // Pattern应当大于KindNum
 
 int HowMuchEventMixing = 10;
+
+if (SpecialMode) HowMuchEventMixing = 15;
 
 // 计算质心系速度
 std::vector<float> calculateBeta(std::vector<float>& p1, std::vector<float>& p2) {
@@ -125,6 +129,48 @@ void print(std::vector<float> Temp)
 	}
 	cout<<" }"<<endl;
     return ;
+}
+
+float CenCorr(float Vz)
+{
+    if (DataName == "dAu_200_21") {// data from https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
+        if      (Vz < -50.0) {
+            return 1.0;
+        }
+        else if (Vz < -40.0) {
+            return 1.13833390;
+        }
+        else if (Vz < -30.0) {
+            return 1.06240111;
+        }
+        else if (Vz < -20.0) {
+            return 1.02187042;
+        }
+        else if (Vz < -10.0) {
+            return 1.00557849;
+        }
+        else if (Vz < 0.0) {
+            return 0.99907267;
+        }
+        else if (Vz < 10.0) {
+            return 0.99731279;
+        }
+        else if (Vz < 20.0) {
+            return 0.99807879;
+        }
+        else if (Vz < 30.0) {
+            return 0.99894410;
+        }
+        else if (Vz < 40.0) {
+            return 0.99543646;
+        }
+        else if (Vz < 50.0) {
+            return 0.99522446;
+        }
+        else                {
+            return 1.0;
+        }
+    }
 }
 
 Double_t massList(int PID)
@@ -514,6 +560,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     
     int MBinNum = 500 , MBinPar = 50;
     float MSta = floor((AMass + BMass)/0.0005-MBinPar)*0.0005 , MEnd = MSta + (MBinNum - MBinPar)*0.0005;
+
+    float NNch;
     
     TString HistNameI  , HistNameJ  , HistNameK  , HistNameL;
     TString HistNameIs , HistNameJs , HistNameKs , HistNameLs;
@@ -866,8 +914,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             // Event Index
             int CenIndex = -1;
             for (int k=0;k<CentralityBinNum;k++){
+                NNch = CenCorr(PVz) * Nch;
                 // if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
-                if ((NchList.at(k) >= Nch) && (Nch > NchList.at(k+1))) {
+                if ((NchList.at(k) >= NNch) && (NNch > NchList.at(k+1))) {
                     CenIndex = k;
                     break;
                 }
@@ -1029,6 +1078,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                             BPx = Mix_B_Px[CenIndex][i][j][Aid][Bid].at(Bindex);
                                             BPy = Mix_B_Py[CenIndex][i][j][Aid][Bid].at(Bindex);
                                             BPz = Mix_B_Pz[CenIndex][i][j][Aid][Bid].at(Bindex);
+
+                                            if (SpecialMode) {
+                                                if (APz+BPz < 0) continue;
+                                            }
 
                                             p2.SetXYZM(BPx,BPy,BPz,BMass);
                                             p1.SetXYZM(APx,APy,APz,AMass);
