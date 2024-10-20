@@ -46,7 +46,7 @@ using namespace std;
 // #define DataName           "pp_200_15"
 // #define DataName           "OO_200_21"
 
-#define SpecialMode true
+#define SpecialMode false
 
 #define Pi 3.1415926535898
 
