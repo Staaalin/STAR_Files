@@ -654,9 +654,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Res_Mass                     [i][j][k][0][0] = new TH1D(HistNameLr,HistNameLr,MBinNum,MSta,MEnd);
                         Mix_event_Num                  [i][j][k][0][0] = 0;
                         Mix_event_Num_SUM              [i][j][k][0][0] = 0;
-                        HistNameK = HistNameKs + "_AMBM"
+                        HistNameK = HistNameKs + "_AMBM";
                         H_A_Num                        [i][j][k][0][0] = new TH1D(HistNameK,HistNameK,1,-1,1);
-                        HistNameK = HistNameKr + "_AMBM"
+                        HistNameK = HistNameKr + "_AMBM";
                         H_B_Num                        [i][j][k][0][0] = new TH1D(HistNameK,HistNameK,1,-1,1);
                     }
                     if (l == 1) { // AMBS
@@ -674,9 +674,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Res_Mass                     [i][j][k][0][1] = new TH1D(HistNameLr,HistNameLr,MBinNum,MSta,MEnd);
                         Mix_event_Num                  [i][j][k][0][1] = 0;
                         Mix_event_Num_SUM              [i][j][k][0][1] = 0;
-                        HistNameK = HistNameKs + "_AMBS"
+                        HistNameK = HistNameKs + "_AMBS";
                         H_A_Num                        [i][j][k][0][1] = new TH1D(HistNameK,HistNameK,1,-1,1);
-                        HistNameK = HistNameKr + "_AMBS"
+                        HistNameK = HistNameKr + "_AMBS";
                         H_B_Num                        [i][j][k][0][1] = new TH1D(HistNameK,HistNameK,1,-1,1);
                     }
                     if (l == 2) { // ASBM
@@ -694,9 +694,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Res_Mass                     [i][j][k][1][0] = new TH1D(HistNameLr,HistNameLr,MBinNum,MSta,MEnd);
                         Mix_event_Num                  [i][j][k][1][0] = 0;
                         Mix_event_Num_SUM              [i][j][k][1][0] = 0;
-                        HistNameK = HistNameKs + "_ASBM"
+                        HistNameK = HistNameKs + "_ASBM";
                         H_A_Num                        [i][j][k][1][0] = new TH1D(HistNameK,HistNameK,1,-1,1);
-                        HistNameK = HistNameKr + "_ASBM"
+                        HistNameK = HistNameKr + "_ASBM";
                         H_B_Num                        [i][j][k][1][0] = new TH1D(HistNameK,HistNameK,1,-1,1);
                     }
                 }
