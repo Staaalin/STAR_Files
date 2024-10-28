@@ -1157,12 +1157,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                     }
                                     for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
                                         if (Mix_A_IfMadePair[CenIndex][i][j][Aid][Bid].at(Aindex) == 1) {
-                                            H_A_Num[CenIndex][i][j][Aid][Bid].Fill(0);
+                                            H_A_Num[CenIndex][i][j][Aid][Bid]->Fill(0);
                                         }
                                     }
                                     for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
                                         if (Mix_B_IfMadePair[CenIndex][i][j][Aid][Bid].at(Bindex) == 1) {
-                                            H_B_Num[CenIndex][i][j][Aid][Bid].Fill(0);
+                                            H_B_Num[CenIndex][i][j][Aid][Bid]->Fill(0);
                                         }
                                     }
                                     Mix_event_Num    [CenIndex][i][j][Aid][Bid] = 0;
@@ -1272,12 +1272,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 }
                                 for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
                                     if (Mix_A_IfMadePair[i][j][k][A_Kid][B_Kid].at(Aindex) == 1) {
-                                        H_A_Num[i][j][k][A_Kid][B_Kid].Fill(0);
+                                        H_A_Num[i][j][k][A_Kid][B_Kid]->Fill(0);
                                     }
                                 }
                                 for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
                                     if (Mix_B_IfMadePair[i][j][k][A_Kid][B_Kid].at(Bindex) == 1) {
-                                        H_B_Num[i][j][k][A_Kid][B_Kid].Fill(0);
+                                        H_B_Num[i][j][k][A_Kid][B_Kid]->Fill(0);
                                     }
                                 }
                             }
