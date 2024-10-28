@@ -1290,6 +1290,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 }
                             }
                         }
+                        fileA->cd();
                         H_A_Num[i][j][k][A_Kid][B_Kid]->Write();
                         H_B_Num[i][j][k][A_Kid][B_Kid]->Write();
                         folder_kStar->cd();
