@@ -1270,7 +1270,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	bool IfRecorded_B_Matched = false;
 	bool IfRecordThisEventInTree = false;
 	////////////////////////////////////////////////////////
-	int Recorded_Particle[] = { KaonPdg , K0SPdg , LambdaPdg , XiPdg , OmegaPdg , XiRPdg}; // Record which particle
+	int Recorded_Particle[] = { KaonPdg , ProtonPdg , PionPdg , K0SPdg , LambdaPdg , XiPdg , OmegaPdg , XiRPdg}; // Record which particle
 	int Recorded_Particle_Size = sizeof(Recorded_Particle)/sizeof(Recorded_Particle[0]);
 	StPicoEvent* mEvent= (StPicoEvent*) mPicoDst->event(); 
 	if(!mEvent)return kStOK;
@@ -1603,8 +1603,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 						}
 
 						StPicoTrack *track = mPicoDst->track(iTrack);
-						float p = track->gMom().Mag();
-						float pt = track->gMom().Perp();
+						p = track->gMom().Mag();
+						pt = track->gMom().Perp();
 						float phi = track->gMom().Phi();
 						float eta = track->gMom().Eta();
 						double track_px = track->gMom().X();
@@ -2083,8 +2083,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 
 		// track info
-		float p = track->gMom().Mag();
-		float pt = track->gMom().Perp();
+		p = track->gMom().Mag();
+		pt = track->gMom().Perp();
 		float phi = track->gMom().Phi();
 		float eta = track->gMom().Eta();
 		double track_px = track->gMom().X();
@@ -2310,32 +2310,33 @@ Int_t StKFParticleAnalysisMaker::Make()
 						// 	) == false
 						// )
 						// {continue;}
-						std::vector<float> m2Zone = TPCandTOF_Gen.KaonTOFm2(pt, DataName);
+						std::vector<float> Km2Zone = TPCandTOF_Gen.KaonTOFm2(pt, DataName);
 						if (
 							(
 								// (0.2 <= pt && pt < 0.3) ||
-								((m2Zone[0] <= m2)&&(m2 <= m2Zone[1]))
+								((Km2Zone[0] <= m2)&&(m2 <= Km2Zone[1]))
 							) == false
 						)
 						{continue;}
 					}
 					//// For Pion
 					if (abs(PDGList[Itr])==PionPdg) {
+						std::vector<float> Pim2Zone = TPCandTOF_Gen.PionTOFm2(pt, DataName);
 						if (
 							(
 								// true
-								((-0.012 <= m2)&&(m2 <= 0.049)) // Tight 0.5 < $p_t$ < 0.6 GeV
-								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
+								((Pim2Zone[0] <= m2)&&(m2 <= Pim2Zone[1]))
 							) == false
 						)
 						{continue;}
 					}
 					//// For Proton
 					if (abs(PDGList[Itr])==ProtonPdg) {
+						std::vector<float> Pm2Zone = TPCandTOF_Gen.ProtonTOFm2(pt, DataName);
 						if (
 							(
-								((0.746 <= m2)&&(m2 <= 1.015)) // Tight 0.5 < $p_t$ < 0.6 GeV
-								//  || (fabs(track->nSigmaPion())>3&&fabs(track->nSigmaProton())>3)
+								// true
+								((Pm2Zone[0] <= m2)&&(m2 <= Pm2Zone[1]))
 							) == false
 						)
 						{continue;}

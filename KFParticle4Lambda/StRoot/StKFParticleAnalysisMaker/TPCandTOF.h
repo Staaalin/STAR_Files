@@ -9,4 +9,6 @@ class TPCandTOF
     TPCandTOF(TString _DataName): DataName(_DataName) {}
     float KaonTPCCenter(float Pt , TString DataName);
     std::vector<float> KaonTOFm2(float Pt, TString DataName);
+    std::vector<float> ProtonTOFm2(float Pt, TString DataName);
+    std::vector<float> PionTOFm2(float Pt, TString DataName);
 };

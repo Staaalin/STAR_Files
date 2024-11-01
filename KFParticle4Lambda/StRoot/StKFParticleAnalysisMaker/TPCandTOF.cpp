@@ -69,3 +69,86 @@ std::vector<float> TPCandTOF::KaonTOFm2(float Pt, TString DataName)
         return result;
     }
 }
+
+std::vector<float> TPCandTOF::ProtonTOFm2(float Pt, TString DataName)
+{
+    std::vector<float> result;
+    if (DataName == "dAu_200_21") {
+        if      (0.2 <= Pt && Pt < 0.3) { result = {0.668 , 1.024}; }
+        else if (0.3 <= Pt && Pt < 0.4) { result = {0.797 , 0.959}; }
+        else if (0.4 <= Pt && Pt < 0.5) { result = {0.809 , 0.952}; }
+        else if (0.5 <= Pt && Pt < 0.6) { result = {0.813 , 0.947}; }
+        else if (0.6 <= Pt && Pt < 0.7) { result = {0.813 , 0.947}; }
+        else if (0.7 <= Pt && Pt < 0.8) { result = {0.811 , 0.949}; }
+        else if (0.8 <= Pt && Pt < 0.9) { result = {0.806 , 0.954}; }
+        else if (0.9 <= Pt && Pt < 1.0) { result = {0.799 , 0.959}; }
+        else if (1.0 <= Pt && Pt < 1.1) { result = {0.790 , 0.966}; }
+        else if (1.1 <= Pt && Pt < 1.2) { result = {0.781 , 0.975}; }
+        else if (1.2 <= Pt && Pt < 1.3) { result = {0.770 , 0.984}; }
+        else if (1.3 <= Pt && Pt < 1.4) { result = {0.758 , 0.994}; }
+        else                            { result = {0.745 , 1.005}; }
+        return result;
+    }
+    else if (DataName == "dAu_200_16") { // tbd
+        if      (0.2 <= Pt && Pt < 0.3) { result = {0.668 , 1.024}; }
+        else if (0.3 <= Pt && Pt < 0.4) { result = {0.797 , 0.959}; }
+        else if (0.4 <= Pt && Pt < 0.5) { result = {0.809 , 0.952}; }
+        else if (0.5 <= Pt && Pt < 0.6) { result = {0.813 , 0.947}; }
+        else if (0.6 <= Pt && Pt < 0.7) { result = {0.813 , 0.947}; }
+        else if (0.7 <= Pt && Pt < 0.8) { result = {0.811 , 0.949}; }
+        else if (0.8 <= Pt && Pt < 0.9) { result = {0.806 , 0.954}; }
+        else if (0.9 <= Pt && Pt < 1.0) { result = {0.799 , 0.959}; }
+        else if (1.0 <= Pt && Pt < 1.1) { result = {0.790 , 0.966}; }
+        else if (1.1 <= Pt && Pt < 1.2) { result = {0.781 , 0.975}; }
+        else if (1.2 <= Pt && Pt < 1.3) { result = {0.770 , 0.984}; }
+        else if (1.3 <= Pt && Pt < 1.4) { result = {0.758 , 0.994}; }
+        else                            { result = {0.745 , 1.005}; }
+        return result;
+    }
+    else{
+        result = {0.745 , 1.005};
+        return result;
+    }
+}
+
+
+std::vector<float> TPCandTOF::PionTOFm2(float Pt, TString DataName)
+{
+    std::vector<float> result;
+    if (DataName == "dAu_200_21") {
+        if      (0.2 <= Pt && Pt < 0.3) { result = { 0.0150 , 0.0263}; }
+        else if (0.3 <= Pt && Pt < 0.4) { result = { 0.0122 , 0.0273}; }
+        else if (0.4 <= Pt && Pt < 0.5) { result = { 0.0083 , 0.0301}; }
+        else if (0.5 <= Pt && Pt < 0.6) { result = { 0.0034 , 0.0340}; }
+        else if (0.6 <= Pt && Pt < 0.7) { result = {-0.0016 , 0.0379}; }
+        else if (0.7 <= Pt && Pt < 0.8) { result = {-0.0093 , 0.0439}; }
+        else if (0.8 <= Pt && Pt < 0.9) { result = {-0.0169 , 0.0499}; }
+        else if (0.9 <= Pt && Pt < 1.0) { result = {-0.0254 , 0.0566}; }
+        else if (1.0 <= Pt && Pt < 1.1) { result = {-0.0349 , 0.0640}; }
+        else if (1.1 <= Pt && Pt < 1.2) { result = {-0.0453 , 0.0720}; }
+        else if (1.2 <= Pt && Pt < 1.3) { result = {-0.0566 , 0.0807}; }
+        else if (1.3 <= Pt && Pt < 1.4) { result = {-0.0688 , 0.0897}; }
+        else                            { result = {-0.0813 , 0.0985}; }
+        return result;
+    }
+    else if (DataName == "dAu_200_16") { // tbd
+        if      (0.2 <= Pt && Pt < 0.3) { result = { 0.0150 , 0.0263}; }
+        else if (0.3 <= Pt && Pt < 0.4) { result = { 0.0122 , 0.0273}; }
+        else if (0.4 <= Pt && Pt < 0.5) { result = { 0.0083 , 0.0301}; }
+        else if (0.5 <= Pt && Pt < 0.6) { result = { 0.0034 , 0.0340}; }
+        else if (0.6 <= Pt && Pt < 0.7) { result = {-0.0016 , 0.0379}; }
+        else if (0.7 <= Pt && Pt < 0.8) { result = {-0.0093 , 0.0439}; }
+        else if (0.8 <= Pt && Pt < 0.9) { result = {-0.0169 , 0.0499}; }
+        else if (0.9 <= Pt && Pt < 1.0) { result = {-0.0254 , 0.0566}; }
+        else if (1.0 <= Pt && Pt < 1.1) { result = {-0.0349 , 0.0640}; }
+        else if (1.1 <= Pt && Pt < 1.2) { result = {-0.0453 , 0.0720}; }
+        else if (1.2 <= Pt && Pt < 1.3) { result = {-0.0566 , 0.0807}; }
+        else if (1.3 <= Pt && Pt < 1.4) { result = {-0.0688 , 0.0897}; }
+        else                            { result = {-0.0813 , 0.0985}; }
+        return result;
+    }
+    else{
+        result = {-0.0813 , 0.0985};
+        return result;
+    }
+}
