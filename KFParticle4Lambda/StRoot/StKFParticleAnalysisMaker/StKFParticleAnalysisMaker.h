@@ -255,7 +255,8 @@ private:
 
 	TTree *hadronTree;
 	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult , Omega_Omegab_Num , TriggerID , Nch;
-	float TPVz , p , pt;
+	float TPVz , p , pt , phi , eta , tEnergy , rap;
+	double track_px , track_py , track_pz;
 	std::vector<int> PDG , ReCons_TrackID , ParentList , ParentSta , ParentEnd;
 	std::vector<float> px,py,pz,InvariantMass,QA_eta;
 	double zTOF_proton,zTOF_pion,zTOF_kaon;

@@ -1262,9 +1262,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 	//     pass event  
 	/////////////////////////////////////////////////////////
 	// Only those events reconstruct particles A and B simultaneously will be recorded.
-	int Recorded_A_PDG[] = { LambdaPdg , XiPdg , OmegaPdg , XiRPdg};
+	int Recorded_A_PDG[] = { LambdaPdg , XiPdg , OmegaPdg , XiRPdg , ProtonPdg};
 	int Recorded_A_PDG_Size = sizeof(Recorded_A_PDG)/sizeof(Recorded_A_PDG[0]);
-	int Recorded_B_PDG[] = { KaonPdg , K0SPdg };
+	int Recorded_B_PDG[] = { KaonPdg , K0SPdg , PionPdg};
 	int Recorded_B_PDG_Size = sizeof(Recorded_B_PDG)/sizeof(Recorded_B_PDG[0]);
 	bool IfRecorded_A_Matched = false;
 	bool IfRecorded_B_Matched = false;
@@ -1605,17 +1605,17 @@ Int_t StKFParticleAnalysisMaker::Make()
 						StPicoTrack *track = mPicoDst->track(iTrack);
 						p = track->gMom().Mag();
 						pt = track->gMom().Perp();
-						float phi = track->gMom().Phi();
-						float eta = track->gMom().Eta();
-						double track_px = track->gMom().X();
-						double track_py = track->gMom().Y();
-						double track_pz = track->gMom().Z();
+						phi = track->gMom().Phi();
+						eta = track->gMom().Eta();
+						track_px = track->gMom().X();
+						track_py = track->gMom().Y();
+						track_pz = track->gMom().Z();
 						if (pt < 0.4 || pt > 1.5) continue;
 						if (p < 0.4  || p > 2   ) continue;
 						H_KFP_Pt[Jtr] -> Fill(pt);
 						H_KFP_P[Jtr] -> Fill(p);
-						float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(particle.GetPDG()),2),0.5);
-						float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
+						tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(particle.GetPDG()),2),0.5);
+						rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
 						H_KFP_rapidity[Jtr]->Fill(rap);
 						H_KFP_y_Pt[Jtr]->Fill(rap,pt);
 						H_KFP_y_nSigmaKaon[Jtr]->Fill(rap,track->nSigmaKaon());
@@ -2085,11 +2085,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// track info
 		p = track->gMom().Mag();
 		pt = track->gMom().Perp();
-		float phi = track->gMom().Phi();
-		float eta = track->gMom().Eta();
-		double track_px = track->gMom().X();
-		double track_py = track->gMom().Y();
-		double track_pz = track->gMom().Z();
+		phi = track->gMom().Phi();
+		eta = track->gMom().Eta();
+		track_px = track->gMom().X();
+		track_py = track->gMom().Y();
+		track_pz = track->gMom().Z();
 		// float dcatopv = track->gDCA(Vertex3D).Mag();
 		// float nSigmaKaon = track->nSigmaKaon();
 		// float nSigmaPion = track->nSigmaPion();
@@ -2350,8 +2350,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 						}
 					}
 					if (!IfRecordThisTrack) continue;
-					float tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
-					float rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
+					tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
+					rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
 					if (IfTree) {
 						std::vector<int> Temp;Temp.resize(0);
 						Temp.push_back(PDGList[Itr]);Temp.push_back(iTrack);
