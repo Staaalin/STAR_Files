@@ -56,6 +56,7 @@ const float yBin[]  = {-1.0 , 0.0 , 1.0}; // B_y
 const float AyCut[] = {-1.0 , 1.0}; // A_y
 int FeedDown[] = { 3334 , -3334};
 // int FeedDown[] = {0};
+const float EtaCut[] = {-1.0 , 1.0}; // EtaCut for both A and B
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
@@ -573,7 +574,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     int MBinNum = 500 , MBinPar = 50;
     float MSta = floor((AMass + BMass)/0.0005-MBinPar)*0.0005 , MEnd = MSta + (MBinNum - MBinPar)*0.0005;
 
-    float NNch;
+    float NNch , Eta;
     
     TString HistNameI  , HistNameJ  , HistNameK  , HistNameL  , HistNameM ;
     TString HistNameIs , HistNameJs , HistNameKs , HistNameLs , HistNameMr;
@@ -883,9 +884,27 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             //         cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
             //     }
             // }
+
+            // A rapidity cut
             for (int Aid = 0;Aid < A_Px.size();Aid++) {
                 if ((A_Rap.at(Aid) < AyCut[0]) || (A_Rap.at(Aid) > AyCut[1])){
                     A_IfRecord.at(Aid) = 0;
+                }
+            }
+
+            // A Eta Cut
+            for (int Aid = 0;Aid < A_Px.size();Aid++) {
+                Eta = -1.0*log(tan(0.5*(acos(A_Pz.at(Aid)/pow(A_Px.at(Aid)*A_Px.at(Aid)+A_Py.at(Aid)*A_Py.at(Aid)+A_Pz.at(Aid)*A_Pz.at(Aid),0.5)))));
+                if ((Eta < EtaCut[0]) || (Eta > EtaCut[1])){
+                    A_IfRecord.at(Aid) = 0;
+                }
+            }
+
+            // B Eta Cut
+            for (int Bid = 0;Bid < B_Px.size();Bid++) {
+                Eta = -1.0*log(tan(0.5*(acos(B_Pz.at(Bid)/pow(B_Px.at(Bid)*B_Px.at(Bid)+B_Py.at(Bid)*B_Py.at(Bid)+B_Pz.at(Bid)*B_Pz.at(Bid),0.5)))));
+                if ((Eta < EtaCut[0]) || (Eta > EtaCut[1])){
+                    B_IfRecord.at(Bid) = 0;
                 }
             }
             // 如果A、B有血缘关系，保留B
