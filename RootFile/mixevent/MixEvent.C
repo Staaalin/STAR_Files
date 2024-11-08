@@ -54,8 +54,8 @@ const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 
 const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
 const float yBin[]  = {-1.0 , 0.0 , 1.0}; // B_y
 const float AyCut[] = {-1.0 , 1.0}; // A_y
-// int FeedDown[] = { 3334 , -3334};
-int FeedDown[] = {0};
+int FeedDown[] = { 3334 , -3334};
+// int FeedDown[] = {0};
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
