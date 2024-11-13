@@ -52,11 +52,11 @@ using namespace std;
 
 const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
 const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
-const float yBin[]  = {-1.0 , 0.0 , 1.0}; // B_y
+const float yBin[]  = {-1.5 , 0.0 , 1.5}; // B_y
 const float AyCut[] = {-1.0 , 1.0}; // A_y
 int FeedDown[] = { 3334 , -3334};
 // int FeedDown[] = {0};
-const float EtaCut[] = {-1.0 , 1.0}; // EtaCut for both A and B
+const float EtaCut[] = {-8.0 , 8.0}; // EtaCut for both A and B
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
@@ -489,7 +489,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
     TLorentzVector p1 , p2 , p3;
     TVector3 BV;
-    float tEnergy , APx , APy , APz , BPx , BPy , BPz , PairMass;
+    float tEnergy , APx , APy , APz , BPx , BPy , BPz , PairMass , KS , Pt;
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
@@ -553,6 +553,15 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TH1D* H_Res_dPt                       [15]                 [15]       [15]         [2] [2] ;
     TH1D* H_Res_Mass                      [15]                 [15]       [15]         [2] [2] ;
 
+    TH1D* H_ALL_Kstar                                          [15]                    [2] [2] ;
+    TH1D* H_ALL_Mix_Kstar                                      [15]                    [2] [2] ;
+    TH1D* H_ALL_Res_Kstar                                      [15]                    [2] [2] ;
+    TH1D* H_ALL_dPt                                            [15]                    [2] [2] ;
+    TH1D* H_ALL_Mix_dPt                                        [15]                    [2] [2] ;
+    TH1D* H_ALL_Res_dPt                                        [15]                    [2] [2] ;
+    TH1D* H_ALL_dRap                                           [15]                    [2] [2] ;
+    TH1D* H_ALL_Mix_dRap                                       [15]                    [2] [2] ;
+    TH1D* H_ALL_Res_dRap                                       [15]                    [2] [2] ;
     TH1D* H_ALL_Mass                                                                   [2] [2] ;
     TH1D* H_ALL_Mix_Mass                                                               [2] [2] ;
     TH1D* H_A_Num                         [15]                 [15]       [15]         [2] [2] ;
@@ -609,9 +618,15 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 for (int j=0;j<yBinNum;j++){
                     TString HistName1 = "H_";
                     TString HistName2 = "Cen: [";
+                    TString HistName3 = "All Cen , ";
+                    TString HistName4 = "H_ALL";
+                    TString HistName5 = "H_ALL_Mix";
+                    TString HistName6 = "H_ALL_Res";
                     HistName1 += i;HistName1 += "_";
                     HistName2 += CentralityBin[i];HistName2 += "% , ";
                     HistName2 += CentralityBin[i+1];HistName2 += "%], ";
+                    HistName3 += yBin[j];HistName3 += " < y";HistName3 += B_PDG;HistName3 += " <  ";
+                    HistName3 += yBin[j+1];HistName3 += ", All PVz";
                     HistName1 += j;HistName1 += "_";
                     HistName2 += yBin[j];HistName2 += " < y";HistName2 += B_PDG;HistName2 += " <  ";
                     HistName2 += yBin[j+1];HistName2 += ", ";
@@ -620,6 +635,15 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     HistName2 += PVzBin[k+1];
                     TString HistName1s = HistName1;
                     TString HistName2s = HistName2;
+                    TString HistName4s = HistName4;
+                    TString HistName5s = HistName5;
+                    TString HistName6s = HistName6;
+                    TString HistName4r = HistName4;
+                    TString HistName5r = HistName5;
+                    TString HistName6r = HistName6;
+                    TString HistName4p = HistName4;
+                    TString HistName5p = HistName5;
+                    TString HistName6p = HistName6;
                     HistName1s += "_S_";
                     HistName1 += "_M_";
                     HistName1 += PatternBin[l];
@@ -630,12 +654,21 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     // 区分kstar、dRap……
                     HistNameI  = HistName1  + "_kStar";
                     HistNameIs = HistName1s + "_kStar";
+                    HistName4s = HistName4  + "_kStar";
+                    HistName5s = HistName5  + "_kStar";
+                    HistName6s = HistName5  + "_kStar";
                     HistNameIr = HistName1s + "_Res_kStar";
                     HistNameJ  = HistName1  + "_dRap";
                     HistNameJs = HistName1s + "_dRap";
+                    HistName4r = HistName4  + "_dRap";
+                    HistName5r = HistName5  + "_dRap";
+                    HistName6r = HistName5  + "_dRap";
                     HistNameJr = HistName1s + "_Res_dRap";
                     HistNameK  = HistName1  + "_dPt";
                     HistNameKs = HistName1s + "_dPt";
+                    HistName4p = HistName4  + "_dPt";
+                    HistName5p = HistName5  + "_dPt";
+                    HistName6p = HistName5  + "_dPt";
                     HistNameKr = HistName1s + "_Res_dPt";
                     HistNameL  = HistName1  + "_Mass";
                     HistNameLs = HistName1s + "_Mass";
@@ -661,6 +694,17 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_A_Num                        [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         HistNameM = HistNameMr + "_AMBM";
                         H_B_Num                        [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        if ((i==0)&&(k==0)){
+                            H_ALL_Kstar                   [j]   [0][0] = new TH1D(HistName4s,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Mix_Kstar               [j]   [0][0] = new TH1D(HistName5s,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Res_Kstar               [j]   [0][0] = new TH1D(HistName6s,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_dRap                    [j]   [0][0] = new TH1D(HistName4r,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Mix_dRap                [j]   [0][0] = new TH1D(HistName5r,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Res_dRap                [j]   [0][0] = new TH1D(HistName6r,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_dPt                     [j]   [0][0] = new TH1D(HistName4p,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Mix_dPt                 [j]   [0][0] = new TH1D(HistName5p,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Res_dPt                 [j]   [0][0] = new TH1D(HistName6p,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                        }
                     }
                     if (l == 1) { // AMBS
                         H_Kstar                        [i][j][k][0][1] = new TH1D(HistNameIs,HistName2s,kStarBinNum,kStarSta,kStarEnd);
@@ -681,6 +725,17 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_A_Num                        [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         HistNameM = HistNameMr + "_AMBS";
                         H_B_Num                        [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        if ((i==0)&&(k==0)){
+                            H_ALL_Kstar                   [j]   [0][1] = new TH1D(HistName4s,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Mix_Kstar               [j]   [0][1] = new TH1D(HistName5s,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Res_Kstar               [j]   [0][1] = new TH1D(HistName6s,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_dRap                    [j]   [0][1] = new TH1D(HistName4r,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Mix_dRap                [j]   [0][1] = new TH1D(HistName5r,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Res_dRap                [j]   [0][1] = new TH1D(HistName6r,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_dPt                     [j]   [0][1] = new TH1D(HistName4p,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Mix_dPt                 [j]   [0][1] = new TH1D(HistName5p,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Res_dPt                 [j]   [0][1] = new TH1D(HistName6p,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                        }
                     }
                     if (l == 2) { // ASBM
                         H_Kstar                        [i][j][k][1][0] = new TH1D(HistNameIs,HistName2s,kStarBinNum,kStarSta,kStarEnd);
@@ -701,6 +756,17 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_A_Num                        [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         HistNameM = HistNameMr + "_ASBM";
                         H_B_Num                        [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        if ((i==0)&&(k==0)){
+                            H_ALL_Kstar                   [j]   [1][0] = new TH1D(HistName4s,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Mix_Kstar               [j]   [1][0] = new TH1D(HistName5s,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Res_Kstar               [j]   [1][0] = new TH1D(HistName6s,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_dRap                    [j]   [1][0] = new TH1D(HistName4r,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Mix_dRap                [j]   [1][0] = new TH1D(HistName5r,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Res_dRap                [j]   [1][0] = new TH1D(HistName6r,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_dPt                     [j]   [1][0] = new TH1D(HistName4p,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Mix_dPt                 [j]   [1][0] = new TH1D(HistName5p,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                            H_ALL_Res_dPt                 [j]   [1][0] = new TH1D(HistName6p,HistName3,kStarBinNum,kStarSta,kStarEnd);
+                        }
                     }
                 }
             }
@@ -1170,20 +1236,35 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                                 if (!IfRecord) continue;
                                             }
                                             if (A_EID != Mix_B_EvtID[CenIndex][i][j][Aid][Bid].at(Bindex)) {
-                                                H_Mix_Kstar     [CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
-                                                H_Mix_dRap      [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex));
-                                                H_Mix_dPt       [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
+                                                KS = 0.5 * (p2 - p1).Rho();
+                                                rap = Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex);
+                                                Pt = fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5));
+                                                H_Mix_Kstar     [CenIndex][i][j][Aid][Bid]->Fill(KS);
+                                                H_ALL_Mix_Kstar           [i]   [Aid][Bid]->Fill(KS);
+                                                H_Mix_dRap      [CenIndex][i][j][Aid][Bid]->Fill(rap);
+                                                H_ALL_Mix_dRap            [i]   [Aid][Bid]->Fill(rap);
+                                                H_Mix_dPt       [CenIndex][i][j][Aid][Bid]->Fill(Pt);
+                                                H_ALL_Mix_dPt             [i]   [Aid][Bid]->Fill(Pt);
                                                 H_Mix_Mass      [CenIndex][i][j][Aid][Bid]->Fill(PairMass);
                                                 H_ALL_Mix_Mass                  [Aid][Bid]->Fill(PairMass);
                                                 Mix_A_IfMadePair[CenIndex][i][j][Aid][Bid].at(Aindex) = 1;
                                                 Mix_B_IfMadePair[CenIndex][i][j][Aid][Bid].at(Bindex) = 1;
                                             }
                                             else{
-                                                H_Kstar[CenIndex][i][j][Aid][Bid]->Fill(0.5 * (p2 - p1).Rho());
-                                                H_dRap [CenIndex][i][j][Aid][Bid]->Fill(Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex));
-                                                H_dPt  [CenIndex][i][j][Aid][Bid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
-                                                H_Mass [CenIndex][i][j][Aid][Bid]->Fill(PairMass);
-                                                H_ALL_Mass             [Aid][Bid]->Fill(PairMass);
+                                                KS = 0.5 * (p2 - p1).Rho();
+                                                rap = Mix_A_Rap[CenIndex][i][j][Aid][Bid].at(Aindex) - Mix_B_Rap[CenIndex][i][j][Aid][Bid].at(Bindex);
+                                                Pt = fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5));
+                                                H_Kstar         [CenIndex][i][j][Aid][Bid]->Fill(KS);
+                                                H_Res_Kstar     [CenIndex][i][j][Aid][Bid]->Fill(KS);
+                                                H_ALL_Kstar               [i]   [Aid][Bid]->Fill(KS);
+                                                H_dRap          [CenIndex][i][j][Aid][Bid]->Fill(rap);
+                                                H_Res_dRap      [CenIndex][i][j][Aid][Bid]->Fill(rap);
+                                                H_ALL_dRap                [i]   [Aid][Bid]->Fill(rap);
+                                                H_dPt           [CenIndex][i][j][Aid][Bid]->Fill(Pt);
+                                                H_Res_dPt       [CenIndex][i][j][Aid][Bid]->Fill(Pt);
+                                                H_ALL_dPt                 [i]   [Aid][Bid]->Fill(Pt);
+                                                H_Mass          [CenIndex][i][j][Aid][Bid]->Fill(PairMass);
+                                                H_ALL_Mass                      [Aid][Bid]->Fill(PairMass);
                                                 Mix_A_IfMadePair[CenIndex][i][j][Aid][Bid].at(Aindex) = 1;
                                                 Mix_B_IfMadePair[CenIndex][i][j][Aid][Bid].at(Bindex) = 1;
                                             }
@@ -1295,10 +1376,16 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                             continue;
                                         }
                                         else{
-                                            H_Res_Kstar[i][j][k][A_Kid][B_Kid]->Fill(0.5 * (p2 - p1).Rho());
-                                            H_Res_dRap [i][j][k][A_Kid][B_Kid]->Fill(Mix_A_Rap[i][j][k][A_Kid][B_Kid].at(Aindex) - Mix_B_Rap[i][j][k][A_Kid][B_Kid].at(Bindex));
-                                            H_Res_dPt  [i][j][k][A_Kid][B_Kid]->Fill(fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5)));
-                                            H_Res_Mass [i][j][k][A_Kid][B_Kid]->Fill(PairMass);
+                                            KS = 0.5 * (p2 - p1).Rho();
+                                            rap = Mix_A_Rap[i][j][k][A_Kid][B_Kid].at(Aindex) - Mix_B_Rap[i][j][k][A_Kid][B_Kid].at(Bindex);
+                                            Pt = fabs(pow(APx*APx + APy*APy , 0.5) - pow(BPx*BPx + BPy*BPy , 0.5));
+                                            H_Res_Kstar     [i][j][k][A_Kid][B_Kid]->Fill(KS);
+                                            H_Res_dRap      [i][j][k][A_Kid][B_Kid]->Fill(rap);
+                                            H_Res_dPt       [i][j][k][A_Kid][B_Kid]->Fill(Pt);
+                                            H_ALL_Res_Kstar    [j]   [A_Kid][B_Kid]->Fill(KS);
+                                            H_ALL_Res_dRap     [j]   [A_Kid][B_Kid]->Fill(rap);
+                                            H_ALL_Res_dPt      [j]   [A_Kid][B_Kid]->Fill(Pt);
+                                            H_Res_Mass      [i][j][k][A_Kid][B_Kid]->Fill(PairMass);
                                             Mix_A_IfMadePair[i][j][k][A_Kid][B_Kid].at(Aindex) = 1;
                                             Mix_B_IfMadePair[i][j][k][A_Kid][B_Kid].at(Bindex) = 1;
                                         }
@@ -1319,6 +1406,17 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         fileA->cd();
                         H_A_Num[i][j][k][A_Kid][B_Kid]->Write();
                         H_B_Num[i][j][k][A_Kid][B_Kid]->Write();
+                        if ((i==0)&&(k==0)){
+                            if(H_ALL_Kstar      [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Kstar      [j]  [A_Kid][B_Kid]->Write();
+                            if(H_ALL_Mix_Kstar  [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Mix_Kstar  [j]  [A_Kid][B_Kid]->Write();
+                            if(H_ALL_Res_Kstar  [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Res_Kstar  [j]  [A_Kid][B_Kid]->Write();
+                            if(H_ALL_dRap       [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_dRap       [j]  [A_Kid][B_Kid]->Write();
+                            if(H_ALL_Mix_dRap   [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Mix_dRap   [j]  [A_Kid][B_Kid]->Write();
+                            if(H_ALL_Res_dRap   [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Res_dRap   [j]  [A_Kid][B_Kid]->Write();
+                            if(H_ALL_dPt        [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_dPt        [j]  [A_Kid][B_Kid]->Write();
+                            if(H_ALL_Mix_dPt    [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Mix_dPt    [j]  [A_Kid][B_Kid]->Write();
+                            if(H_ALL_Res_dPt    [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Res_dPt    [j]  [A_Kid][B_Kid]->Write();
+                        }
                         folder_kStar->cd();
                         if(H_Kstar    [i][j][k][A_Kid][B_Kid]->GetEntries() != 0) H_Kstar    [i][j][k][A_Kid][B_Kid]->Write();
                         if(H_Mix_Kstar[i][j][k][A_Kid][B_Kid]->GetEntries() != 0) H_Mix_Kstar[i][j][k][A_Kid][B_Kid]->Write();
