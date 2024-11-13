@@ -628,9 +628,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     HistName3 += yBin[j];HistName3 += " < y";HistName3 += B_PDG;HistName3 += " <  ";
                     HistName3 += yBin[j+1];HistName3 += ", All PVz";
                     HistName1 += j;HistName1 += "_";
-                    HistName4 += "_";HistName4 += j;
-                    HistName5 += "_";HistName5 += j;
-                    HistName6 += "_";HistName6 += j;
+                    HistName4 += "_";HistName4 += j;HistName4 += "_";
+                    HistName5 += "_";HistName5 += j;HistName5 += "_";
+                    HistName6 += "_";HistName6 += j;HistName6 += "_";
                     HistName2 += yBin[j];HistName2 += " < y";HistName2 += B_PDG;HistName2 += " <  ";
                     HistName2 += yBin[j+1];HistName2 += ", ";
                     HistName1 += k;
@@ -1260,12 +1260,15 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                                 H_Kstar         [CenIndex][i][j][Aid][Bid]->Fill(KS);
                                                 H_Res_Kstar     [CenIndex][i][j][Aid][Bid]->Fill(KS);
                                                 H_ALL_Kstar               [i]   [Aid][Bid]->Fill(KS);
+                                                H_ALL_Res_Kstar           [i]   [Aid][Bid]->Fill(KS);
                                                 H_dRap          [CenIndex][i][j][Aid][Bid]->Fill(rap);
                                                 H_Res_dRap      [CenIndex][i][j][Aid][Bid]->Fill(rap);
                                                 H_ALL_dRap                [i]   [Aid][Bid]->Fill(rap);
+                                                H_ALL_Res_dRap            [i]   [Aid][Bid]->Fill(rap);
                                                 H_dPt           [CenIndex][i][j][Aid][Bid]->Fill(Pt);
                                                 H_Res_dPt       [CenIndex][i][j][Aid][Bid]->Fill(Pt);
                                                 H_ALL_dPt                 [i]   [Aid][Bid]->Fill(Pt);
+                                                H_ALL_Res_dPt             [i]   [Aid][Bid]->Fill(Pt);
                                                 H_Mass          [CenIndex][i][j][Aid][Bid]->Fill(PairMass);
                                                 H_ALL_Mass                      [Aid][Bid]->Fill(PairMass);
                                                 Mix_A_IfMadePair[CenIndex][i][j][Aid][Bid].at(Aindex) = 1;
