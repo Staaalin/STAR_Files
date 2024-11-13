@@ -628,6 +628,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     HistName3 += yBin[j];HistName3 += " < y";HistName3 += B_PDG;HistName3 += " <  ";
                     HistName3 += yBin[j+1];HistName3 += ", All PVz";
                     HistName1 += j;HistName1 += "_";
+                    HistName4 += "_";HistName4 += j;
+                    HistName5 += "_";HistName5 += j;
+                    HistName6 += "_";HistName6 += j;
                     HistName2 += yBin[j];HistName2 += " < y";HistName2 += B_PDG;HistName2 += " <  ";
                     HistName2 += yBin[j+1];HistName2 += ", ";
                     HistName1 += k;
