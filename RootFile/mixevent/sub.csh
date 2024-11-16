@@ -170,7 +170,7 @@ while ($i <= $numFiles)
 
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml
-    echo \<stdout URL=\"file:/star/data01/pwg/svianping/MIX\_$A_PDG\_$B_PDG\"/log/script\_$i\.out\" /\> >> $SubXml
+    echo \<stdout URL=\"file:/star/data01/pwg/svianping/MIX\_$A_PDG\_$B_PDG/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"$i.log\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     set HC = "H_"
     set TC = "T_"
