@@ -27,6 +27,8 @@ echo "SCHEME 2: /star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADD_T_*.root"
 echo "SCHEME 3: /star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADDrA_*.root"
 set InputNameIndex = "$<"
 
+set OutPutPath = "0"
+
 if ($InputNameIndex == 1) then
 
     cd /star/data01/pwg/svianping/output/
@@ -34,7 +36,7 @@ if ($InputNameIndex == 1) then
 
 else if ($InputNameIndex == 2) then
 
-    set OutPutPath = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/"
+    @OutPutPath = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/"
     cd $OutPutPath
     set numFiles = `find . -maxdepth 1 -name "HADD_T_*.root" -type f | wc -l`
 
