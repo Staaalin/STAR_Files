@@ -23,8 +23,8 @@ set B_PDG = "$<"
 
 echo "Please enter which location:"
 echo "SCHEME 1: /star/data01/pwg/svianping/output/output_*.root"
-echo "SCHEME 2: /star/data01/pwg/svianping/HADD/HADD_T_*.root"
-echo "SCHEME 3: /star/data01/pwg/svianping/HADD/HADDrA_*.root"
+echo "SCHEME 2: /star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADD_T_*.root"
+echo "SCHEME 3: /star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADDrA_*.root"
 set InputNameIndex = "$<"
 
 if ($InputNameIndex == 1) then
@@ -34,7 +34,8 @@ if ($InputNameIndex == 1) then
 
 else if ($InputNameIndex == 2) then
 
-    cd /star/data01/pwg/svianping/HADD/
+    set OutPutPath = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/"
+    cd $OutPutPath
     set numFiles = `find . -maxdepth 1 -name "HADD_T_*.root" -type f | wc -l`
 
     rm -rf ZIP_File_*
@@ -72,21 +73,21 @@ endif
 
 if ($InputNameIndex == 1) then
     set ObvInputName = "/star/data01/pwg/svianping/output/output_"
-    set ObvOutputName = "/star/data01/pwg/svianping/HADD/HADD_"
+    set ObvOutputName = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADD_"
     set InputName = "output_"
     set OutputName = "HADD_"
-    set OutputURL = "/star/data01/pwg/svianping/HADD/"
-    rm -rf /star/data01/pwg/svianping/HADD
-    mkdir /star/data01/pwg/svianping/HADD
-    mkdir /star/data01/pwg/svianping/HADD/log/
+    set OutputURL = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/"
+    rm -rf $OutPutPath
+    mkdir $OutPutPath
+    mkdir /star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/log/
 else if ($InputNameIndex == 2) then
-    set ObvInputName = "/star/data01/pwg/svianping/HADD/HADD_T_"
-    set ObvOutputName = "/star/data01/pwg/svianping/HADD/HADDr_"
+    set ObvInputName = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADD_T_"
+    set ObvOutputName = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADDr_"
     set InputName = "HADD_T_"
     set OutputName = "HADDr_"
-    set OutputURL = "/star/data01/pwg/svianping/HADD/"
+    set OutputURL = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/"
 else if ($InputNameIndex == 3) then
-    set ObvInputName = "/star/data01/pwg/svianping/HADD/HADDrA_"
+    set ObvInputName = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADDrA_"
     set ObvOutputName = "/star/u/svianping/STAR_Files/RootFile/HADDrB_"
     set InputName = "HADDrA_"
     set OutputName = "HADDrB_"
@@ -103,13 +104,13 @@ set MainDir=`pwd`
 set numFiles = 1
 @ numFiles = ( $FileEnd - $FileStart ) / $FilesPerJob
 
-cd /star/data01/pwg/svianping/HADD/
+cd $OutPutPath
 set i = 0
 set j = 0
 while ($i <= $numFiles)
 
     # set SubXml=sub.xml
-    set SubXml=/star/data01/pwg/svianping/HADD/sub.xml
+    set SubXml="/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/sub.xml"
     if(-e $SubXml) rm $SubXml
     touch $SubXml
 
@@ -167,7 +168,7 @@ while ($i <= $numFiles)
 
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml
-    echo \<stdout URL=\"file:/star/data01/pwg/svianping/HADD/log/script\_$i\.out\" /\> >> $SubXml
+    echo \<stdout URL=\"file:/star/data01/pwg/svianping/MIX\_\"$A_PDG\"\_\"$B_PDG\"/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"$i.log\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     set HC = "H_"
     set TC = "T_"
