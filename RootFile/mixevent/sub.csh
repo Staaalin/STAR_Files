@@ -31,6 +31,7 @@ set OutPutPath = "0"
 
 if ($InputNameIndex == 1) then
 
+    @OutPutPath = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/"
     cd /star/data01/pwg/svianping/output/
     set numFiles = `find . -maxdepth 1 -name "output_*.root" -type f | wc -l`
 
