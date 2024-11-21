@@ -63,6 +63,8 @@ const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
 const Int_t yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
 const Int_t FeedDownNum = sizeof(FeedDown)/sizeof(FeedDown[0]);
 
+bool IfBoost2CMS = true;
+
 TString KindBin[] = {"Mid","Sid"}
 #define KindNum 2
 TString PatternBin[] = {"AMBM","AMBS","ASBM"};
@@ -196,6 +198,18 @@ Double_t massList(int PID)
                 break;
             case -211 :
                 Result = 0.13957;
+                break;
+            case 2212 :
+                Result = 0.938272;
+                break;
+            case -2212 :
+                Result = 0.938272;
+                break;
+            case 2112 :
+                Result = 1.008665;
+                break;
+            case -2112 :
+                Result = 1.008665;
                 break;
             case 1003314 :// XiRPdgMass
                 Result = 1.6725;
@@ -489,16 +503,17 @@ void MixEventTest(TString MidName,int StartFileIndex,int EndFileIndex,int Output
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
     TLorentzVector p1 , p2 , p3;
     TVector3 BV;
-    float tEnergy , APx , APy , APz , BPx , BPy , BPz , PairMass , KS , Pt;
+    float tEnergy , APx , APy , APz , BPx , BPy , BPz , PairMass , KS , Pt , Px , Py , Pz;
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
     std::vector<int> Temp;
-    std::vector<float> CMass , CMassSigma;
+    std::vector<float> CMass , CMassSigma , Momentum , BoostedMomentum;
     bool IfRecord = true , IfRemoveFeedPair = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
 
     float PzShift;
-    if(DataName=="dAu_200_21") PzShift = (0.5*(2+197) - 2)*200;
+    std::vector<float> PzShiftBeta;
+    if(DataName=="dAu_200_21") {PzShift = 0.5(0.5*(2*(101.320**2-1)**0.5+197*(99.389**2-1)**0.5)-2*(101.320**2-1)**0.5);PzShiftBeta.push_back(0);PzShiftBeta.push_back(0);PzShiftBeta.push_back(PzShift/(PzShift**2+1));}
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -884,9 +899,19 @@ void MixEventTest(TString MidName,int StartFileIndex,int EndFileIndex,int Output
                             else {continue;}
                         }
                     }
-                    A_Px.push_back(mix_px->at(j));
-                    A_Py.push_back(mix_py->at(j));
-                    A_Pz.push_back(mix_pz->at(j)+PzShift);
+                    if (IfBoost2CMS) {
+                        Px = mix_px->at(j);
+                        Py = mix_py->at(j);
+                        Pz = mix_pz->at(j);
+                        Momentum = {Px , Py , Pz};
+                        BoostedMomentum = boost(Momentum, PzShiftBeta);
+                        Px = BoostedMomentum[0];
+                        Py = BoostedMomentum[1];
+                        Pz = BoostedMomentum[2];
+                    }
+                    A_Px.push_back(Px);
+                    A_Py.push_back(Py);
+                    A_Pz.push_back(Pz);
                     A_TreID.push_back(j);
                     A_IfRecord.push_back(1);
                     Temp.clear();Temp.push_back(j);
@@ -913,9 +938,19 @@ void MixEventTest(TString MidName,int StartFileIndex,int EndFileIndex,int Output
                             else {continue;}
                         }
                     }
-                    B_Px.push_back(mix_px->at(j));
-                    B_Py.push_back(mix_py->at(j));
-                    B_Pz.push_back(mix_pz->at(j)+PzShift);
+                    if (IfBoost2CMS) {
+                        Px = mix_px->at(j);
+                        Py = mix_py->at(j);
+                        Pz = mix_pz->at(j);
+                        Momentum = {Px , Py , Pz};
+                        BoostedMomentum = boost(Momentum, PzShiftBeta);
+                        Px = BoostedMomentum[0];
+                        Py = BoostedMomentum[1];
+                        Pz = BoostedMomentum[2];
+                    }
+                    B_Px.push_back(Px);
+                    B_Py.push_back(Py);
+                    B_Pz.push_back(Pz);
                     B_TreID.push_back(j);
                     B_IfRecord.push_back(1);
                     Temp.clear();Temp.push_back(j);
