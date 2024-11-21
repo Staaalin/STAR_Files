@@ -513,7 +513,12 @@ void MixEventTest(TString MidName,int StartFileIndex,int EndFileIndex,int Output
 
     float PzShift;
     std::vector<float> PzShiftBeta;
-    if(DataName=="dAu_200_21") {PzShift = 0.5*(0.5*(2*((pow(101.320,2)-1),0.5)+197*pow((pow(99.389,2)-1),0.5))-2*pow((pow(101.320,2)-1),0.5));PzShiftBeta.push_back(0);PzShiftBeta.push_back(0);PzShiftBeta.push_back(PzShift/(PzShift**2+1));}
+    if(DataName=="dAu_200_21") {
+        PzShift = 0.5*(0.5*(2*((pow(101.320,2)-1),0.5)+197*pow((pow(99.389,2)-1),0.5))-2*pow((pow(101.320,2)-1),0.5));
+        PzShiftBeta.push_back(0);PzShiftBeta.push_back(0);PzShiftBeta.push_back(PzShift/(PzShift**2+1));
+        cout<<"PzShift = "<<PzShift<<endl;
+        cout<<"PzShiftBeta = { "<<PzShiftBeta[0]<<" , "<<PzShiftBeta[1]<<" , "<<PzShiftBeta[2]<<" } "<<endl;
+    }
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
