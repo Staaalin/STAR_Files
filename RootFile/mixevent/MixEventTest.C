@@ -903,8 +903,8 @@ void MixEventTest(TString MidName,int StartFileIndex,int EndFileIndex,int Output
                         Px = mix_px->at(j);
                         Py = mix_py->at(j);
                         Pz = mix_pz->at(j);
-                        Momentum = {Px , Py , Pz};
-                        BoostedMomentum = boost(Momentum, PzShiftBeta);
+                        Momentum.clear();Momentum.push_back(Px);Momentum.push_back(Py);Momentum.push_back(Pz);
+                        BoostedMomentum.clear();BoostedMomentum = boost(Momentum, PzShiftBeta);
                         Px = BoostedMomentum[0];
                         Py = BoostedMomentum[1];
                         Pz = BoostedMomentum[2];
@@ -942,8 +942,8 @@ void MixEventTest(TString MidName,int StartFileIndex,int EndFileIndex,int Output
                         Px = mix_px->at(j);
                         Py = mix_py->at(j);
                         Pz = mix_pz->at(j);
-                        Momentum = {Px , Py , Pz};
-                        BoostedMomentum = boost(Momentum, PzShiftBeta);
+                        Momentum.clear();Momentum.push_back(Px);Momentum.push_back(Py);Momentum.push_back(Pz);
+                        BoostedMomentum.clear();BoostedMomentum = boost(Momentum, PzShiftBeta);
                         Px = BoostedMomentum[0];
                         Py = BoostedMomentum[1];
                         Pz = BoostedMomentum[2];
