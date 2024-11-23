@@ -140,8 +140,8 @@ while ($i <= $numFiles)
     set LeftBrackets = "\("
     set RightBrackets = "\)"
     set Quo = '\"'
-    # echo root4star \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
-    echo root4star \-b MixEventTest\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
+    echo root4star \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
+    # echo root4star \-b MixEventTest\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
 
@@ -163,8 +163,8 @@ while ($i <= $numFiles)
         @ k = $k + 1
     end
 
-    # set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEvent.C"
-    set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEventTest.C"
+    set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEvent.C"
+    # set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEventTest.C"
     echo \<File\>file:$MixEventPWD\</File\> >> $SubXml
     set SourceFilePWD = "/star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh"
     echo \<File\>file:$SourceFilePWD\</File\> >> $SubXml
