@@ -1489,6 +1489,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     for (int j=0;j<yBinNum;j++){
         for (int A_Kid=0;A_Kid<2;A_Kid++){
             for (int B_Kid=0;B_Kid<2;B_Kid++) {
+                if ((A_Kid == 0)&&(B_Kid == 0)) continue;
                 if(H_ALL_Kstar      [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Kstar      [j]  [A_Kid][B_Kid]->Write();
                 if(H_ALL_Mix_Kstar  [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Mix_Kstar  [j]  [A_Kid][B_Kid]->Write();
                 if(H_ALL_Res_Kstar  [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Res_Kstar  [j]  [A_Kid][B_Kid]->Write();
@@ -1502,7 +1503,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 if(H_ALL_B_Num      [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_B_Num      [j]  [A_Kid][B_Kid]->Write();
                 if(H_ALL_Res_A_Num  [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Res_A_Num  [j]  [A_Kid][B_Kid]->Write();
                 if(H_ALL_Res_B_Num  [j]  [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Res_B_Num  [j]  [A_Kid][B_Kid]->Write();
-                cout<<"J = "<<j<<" Stored."<<endl;
+                // cout<<"J = "<<j<<" Stored."<<endl;
             }
         }
     }
