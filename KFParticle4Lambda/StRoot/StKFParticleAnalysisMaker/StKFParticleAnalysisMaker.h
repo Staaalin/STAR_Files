@@ -112,6 +112,13 @@ private:
 	int        mJob;
 	std::vector<int> Recorded_runID;
 
+	unsigned long mapMask0 = 0xFFFFFF00;
+	unsigned long mapMask1 = 0x1FFFFF;
+	ULong64_t     ImapMask = 0xFFFFFFFFFF;
+	unsigned long padRow1to24Track1;
+	unsigned long padRow25to45Track1;
+	ULong64_t     IpadRowTrack1;
+
 	////////////////
 	TH1F *hNRefMult;
 	TH1F *hNRefMultA;
