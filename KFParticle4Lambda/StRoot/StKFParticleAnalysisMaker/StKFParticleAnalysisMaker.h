@@ -112,6 +112,7 @@ private:
 	int        mJob;
 	std::vector<int> Recorded_runID;
 
+	// SL value
 	unsigned long mapMask0 = 0xFFFFFF00;
 	unsigned long mapMask1 = 0x1FFFFF;
 	ULong64_t     ImapMask = 0xFFFFFFFFFF;
