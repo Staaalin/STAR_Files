@@ -52,7 +52,7 @@ using namespace std;
 
 const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
 const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
-const float yBin[]  = {-1.0 , 0 , 1.0}; // B_y
+const float yBin[]  = {-1.5 , 1.5}; // B_y
 const float AyCut[] = {-1.0 , 1.0}; // A_y
 int FeedDown[] = { 3334 , -3334};
 // int FeedDown[] = {0};
@@ -362,7 +362,7 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
     return Result;
 }
 
-void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
+void Shuffle(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
               int A_PDG,int B_PDG,int Mode = 0) // Mode = 0: PDGMult 为vector长度
 {
 
@@ -490,7 +490,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TLorentzVector p1 , p2 , p3;
     TVector3 BV;
     float tEnergy , APx , APy , APz , BPx , BPy , BPz , PairMass , KS , Pt;
-    int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
+    int A_Kid , B_Kid , A_EID , AidN , BidN;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
     bool IfRecord = true , IfRemoveFeedPair = false;
@@ -520,59 +520,59 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     std::vector<Int_t>                    B_IfRecord     ;
     std::vector<std::vector<int> >        C_ParID        ; // 用于存储Residal Effect
     // used as array
-    std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<float> Mix_A_Py           [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<float> Mix_A_Pz           [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   Mix_A_TreID        [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   Mix_A_EvtID        [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   Mix_A_ID                                [yBinNum]               [2] [2] ;
-    std::vector<float> Mix_A_Rap          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   Mix_A_IfMadePair   [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<float> Mix_B_Px           [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<float> Mix_B_Py           [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<float> Mix_B_Pz           [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   Mix_B_ID                                [yBinNum]               [2] [2] ;
-    std::vector<float> Mix_B_Rap          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   Mix_B_IfMadePair   [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    int                Mix_event_Num      [15]                 [15]       [15]         [2] [2] ;
-    int                Mix_event_Num_SUM  [15]                 [15]       [15]         [2] [2] ;
+    std::vector<float> Mix_A_Px           [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<float> Mix_A_Py           [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<float> Mix_A_Pz           [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<int>   Mix_A_TreID        [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<int>   Mix_A_EvtID        [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<int>   Mix_A_ID                                [yBinNum]             ;
+    std::vector<float> Mix_A_Rap          [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<int>   Mix_A_IfMadePair   [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<float> Mix_B_Px           [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<float> Mix_B_Py           [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<float> Mix_B_Pz           [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<int>   Mix_B_TreID        [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<int>   Mix_B_EvtID        [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<int>   Mix_B_ID                                [yBinNum]             ;
+    std::vector<float> Mix_B_Rap          [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    std::vector<int>   Mix_B_IfMadePair   [CentralityBinNum]   [yBinNum]  [PVzBinNum];
+    int                Mix_event_Num      [15]                 [15]       [15]       ;
+    int                Mix_event_Num_SUM  [15]                 [15]       [15]       ;
     //        
-    TH1D* H_Kstar                         [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_Mix_Kstar                     [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_dRap                          [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_Mix_dRap                      [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_dPt                           [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_Mix_dPt                       [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_Mass                          [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_Mix_Mass                      [15]                 [15]       [15]         [2] [2] ;
+    TH1D* H_Kstar                         [15]                 [15]       [15]       ;
+    TH1D* H_Mix_Kstar                     [15]                 [15]       [15]       ;
+    TH1D* H_dRap                          [15]                 [15]       [15]       ;
+    TH1D* H_Mix_dRap                      [15]                 [15]       [15]       ;
+    TH1D* H_dPt                           [15]                 [15]       [15]       ;
+    TH1D* H_Mix_dPt                       [15]                 [15]       [15]       ;
+    TH1D* H_Mass                          [15]                 [15]       [15]       ;
+    TH1D* H_Mix_Mass                      [15]                 [15]       [15]       ;
 
-    TH1D* H_Res_Kstar                     [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_Res_dRap                      [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_Res_dPt                       [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_Res_Mass                      [15]                 [15]       [15]         [2] [2] ;
+    TH1D* H_Res_Kstar                     [15]                 [15]       [15]       ;
+    TH1D* H_Res_dRap                      [15]                 [15]       [15]       ;
+    TH1D* H_Res_dPt                       [15]                 [15]       [15]       ;
+    TH1D* H_Res_Mass                      [15]                 [15]       [15]       ;
 
-    TH1D* H_ALL_Kstar                                          [15]                    [2] [2] ;
-    TH1D* H_ALL_Mix_Kstar                                      [15]                    [2] [2] ;
-    TH1D* H_ALL_Res_Kstar                                      [15]                    [2] [2] ;
-    TH1D* H_ALL_dPt                                            [15]                    [2] [2] ;
-    TH1D* H_ALL_Mix_dPt                                        [15]                    [2] [2] ;
-    TH1D* H_ALL_Res_dPt                                        [15]                    [2] [2] ;
-    TH1D* H_ALL_dRap                                           [15]                    [2] [2] ;
-    TH1D* H_ALL_Mix_dRap                                       [15]                    [2] [2] ;
-    TH1D* H_ALL_Res_dRap                                       [15]                    [2] [2] ;
-    TH1D* H_ALL_Mass                                                                   [2] [2] ;
-    TH1D* H_ALL_Mix_Mass                                                               [2] [2] ;
-    TH1D* H_A_Num                         [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_B_Num                         [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_Res_A_Num                     [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_Res_B_Num                     [15]                 [15]       [15]         [2] [2] ;
-    TH1D* H_ALL_A_Num                                          [15]                    [2] [2] ;
-    TH1D* H_ALL_B_Num                                          [15]                    [2] [2] ;
-    TH1D* H_ALL_Res_A_Num                                      [15]                    [2] [2] ;
-    TH1D* H_ALL_Res_B_Num                                      [15]                    [2] [2] ;
-    int EventPatternMatch                 [15]                 [15]       [15]         [2] [2] ;
+    TH1D* H_ALL_Kstar                                          [15]                  ;
+    TH1D* H_ALL_Mix_Kstar                                      [15]                  ;
+    TH1D* H_ALL_Res_Kstar                                      [15]                  ;
+    TH1D* H_ALL_dPt                                            [15]                  ;
+    TH1D* H_ALL_Mix_dPt                                        [15]                  ;
+    TH1D* H_ALL_Res_dPt                                        [15]                  ;
+    TH1D* H_ALL_dRap                                           [15]                  ;
+    TH1D* H_ALL_Mix_dRap                                       [15]                  ;
+    TH1D* H_ALL_Res_dRap                                       [15]                  ;
+    TH1D* H_ALL_Mass                                                                 ;
+    TH1D* H_ALL_Mix_Mass                                                             ;
+    TH1D* H_A_Num                         [15]                 [15]       [15]       ;
+    TH1D* H_B_Num                         [15]                 [15]       [15]       ;
+    TH1D* H_Res_A_Num                     [15]                 [15]       [15]       ;
+    TH1D* H_Res_B_Num                     [15]                 [15]       [15]       ;
+    TH1D* H_ALL_A_Num                                          [15]                  ;
+    TH1D* H_ALL_B_Num                                          [15]                  ;
+    TH1D* H_ALL_Res_A_Num                                      [15]                  ;
+    TH1D* H_ALL_Res_B_Num                                      [15]                  ;
+    int EventPatternMatch                 [15]                 [15]       [15]       ;
     // Used for testing
     int TestSum = 0;
     bool IfFoundOmega = false;
