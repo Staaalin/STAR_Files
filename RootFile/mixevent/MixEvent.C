@@ -723,9 +723,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             H_ALL_Mix_dPt                 [j]   [0][0] = new TH1D(HistName5p,HistName3,dPtBinNum,dPtSta,dPtEnd);
                             H_ALL_Res_dPt                 [j]   [0][0] = new TH1D(HistName6p,HistName3,dPtBinNum,dPtSta,dPtEnd);
                             HistNameM = "H_ALL_";HistNameM += j;HistNameM += "_AMBM_Kstar_dRap";
-                            H_ALL_Kstar_dRap              [j]   [0][0] = new TH2F(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd,dRapBinNum,dRapSta,dRapEnd);
+                            H_ALL_Kstar_dRap              [j]   [0][0] = new TH2F(HistNameM,HistNameM,100,kStarSta,kStarEnd,100,dRapSta,dRapEnd);
                             HistNameM = "H_ALL_Mix_";HistNameM += j;HistNameM += "_AMBM_Kstar_dRap";
-                            H_ALL_Mix_Kstar_dRap          [j]   [0][0] = new TH2F(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd,dRapBinNum,dRapSta,dRapEnd);
+                            H_ALL_Mix_Kstar_dRap          [j]   [0][0] = new TH2F(HistNameM,HistNameM,100,kStarSta,kStarEnd,100,dRapSta,dRapEnd);
                             HistNameM = HistName4 + "A_Num_AMBM";
                             H_ALL_A_Num                   [j]   [0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                             HistNameM = HistName6 + "A_Num_AMBM";
@@ -770,9 +770,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             H_ALL_Mix_dPt                 [j]   [0][1] = new TH1D(HistName5p,HistName3,dPtBinNum,dPtSta,dPtEnd);
                             H_ALL_Res_dPt                 [j]   [0][1] = new TH1D(HistName6p,HistName3,dPtBinNum,dPtSta,dPtEnd);
                             HistNameM = "H_ALL_";HistNameM += j;HistNameM += "_AMBS_Kstar_dRap";
-                            H_ALL_Kstar_dRap              [j]   [0][1] = new TH2F(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd,dRapBinNum,dRapSta,dRapEnd);
+                            H_ALL_Kstar_dRap              [j]   [0][1] = new TH2F(HistNameM,HistNameM,100,kStarSta,kStarEnd,100,dRapSta,dRapEnd);
                             HistNameM = "H_ALL_Mix_";HistNameM += j;HistNameM += "_AMBS_Kstar_dRap";
-                            H_ALL_Mix_Kstar_dRap          [j]   [0][1] = new TH2F(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd,dRapBinNum,dRapSta,dRapEnd);
+                            H_ALL_Mix_Kstar_dRap          [j]   [0][1] = new TH2F(HistNameM,HistNameM,100,kStarSta,kStarEnd,100,dRapSta,dRapEnd);
                             HistNameM = HistName4 + "A_Num_AMBS";
                             H_ALL_A_Num                   [j]   [0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
                             HistNameM = HistName6 + "A_Num_AMBS";
@@ -817,9 +817,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             H_ALL_Mix_dPt                 [j]   [1][0] = new TH1D(HistName5p,HistName3,dPtBinNum,dPtSta,dPtEnd);
                             H_ALL_Res_dPt                 [j]   [1][0] = new TH1D(HistName6p,HistName3,dPtBinNum,dPtSta,dPtEnd);
                             HistNameM = "H_ALL_";HistNameM += j;HistNameM += "_ASBM_Kstar_dRap";
-                            H_ALL_Kstar_dRap              [j]   [1][0] = new TH2F(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd,dRapBinNum,dRapSta,dRapEnd);
+                            H_ALL_Kstar_dRap              [j]   [1][0] = new TH2F(HistNameM,HistNameM,100,kStarSta,kStarEnd,100,dRapSta,dRapEnd);
                             HistNameM = "H_ALL_Mix_";HistNameM += j;HistNameM += "_ASBM_Kstar_dRap";
-                            H_ALL_Mix_Kstar_dRap          [j]   [1][0] = new TH2F(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd,dRapBinNum,dRapSta,dRapEnd);
+                            H_ALL_Mix_Kstar_dRap          [j]   [1][0] = new TH2F(HistNameM,HistNameM,100,kStarSta,kStarEnd,100,dRapSta,dRapEnd);
                             HistNameM = HistName4 + "A_Num_ASBM";
                             H_ALL_A_Num                   [j]   [1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                             HistNameM = HistName6 + "A_Num_ASBM";
