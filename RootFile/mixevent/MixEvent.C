@@ -174,6 +174,7 @@ float CenCorr(float Vz)
             return 1.0;
         }
     }
+    return 1.0;
 }
 
 Double_t massList(int PID)
@@ -232,6 +233,37 @@ Double_t massListSigma(int PID)
 {
     Double_t Result;
     if (DataName == "dAu_200_21"){
+        switch (PID)
+        {
+            case 3334 :// OmegaFitMass
+                Result = 0.0029;
+                break;
+            case -3334 :// OmegaBarFitMass
+                Result = 0.0024;
+                break;
+            case 1003314 :// XiRPdgMass
+                Result = 0.0029;
+                break;
+            case -1003314 :// XiRPdgMass
+                Result = 0.0024;
+                break;
+            case 3312 :// XiFitMass
+                Result = 0.0024;
+                break;
+            case -3312 :// XiBarFitMass
+                Result = 0.0024;
+                break;
+            case 3122 :// LambdaFitMass
+                Result = 0.0020;
+                break;
+            case -3122 :// LambdaBarFitMass
+                Result = 0.0020;
+                break;
+            default :
+                Result = 100;
+        }
+    }
+    if (DataName == "dAu_62_16"){// tbd, used as dAu@200R21
         switch (PID)
         {
             case 3334 :// OmegaFitMass
@@ -538,6 +570,25 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     std::vector<int>   Mix_B_IfMadePair   [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
     int                Mix_event_Num      [15]                 [15]       [15]         [2] [2] ;
     int                Mix_event_Num_SUM  [15]                 [15]       [15]         [2] [2] ;
+    //        
+    std::vector<float> MMix_A_Px          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<float> MMix_A_Py          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<float> MMix_A_Pz          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<int>   MMix_A_TreID       [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<int>   MMix_A_EvtID       [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<int>   MMix_A_ID                               [yBinNum]               [2] [2] ;
+    std::vector<float> MMix_A_Rap         [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<int>   MMix_A_IfMadePair  [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<float> MMix_B_Px          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<float> MMix_B_Py          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<float> MMix_B_Pz          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<int>   MMix_B_TreID       [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<int>   MMix_B_EvtID       [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<int>   MMix_B_ID                               [yBinNum]               [2] [2] ;
+    std::vector<float> MMix_B_Rap         [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    std::vector<int>   MMix_B_IfMadePair  [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
+    int                MMix_event_Num     [15]                 [15]       [15]         [2] [2] ;
+    int                MMix_event_Num_SUM [15]                 [15]       [15]         [2] [2] ;
     //        
     TH1D* H_Kstar                         [15]                 [15]       [15]         [2] [2] ;
     TH1D* H_Mix_Kstar                     [15]                 [15]       [15]         [2] [2] ;
