@@ -571,25 +571,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     int                Mix_event_Num      [15]                 [15]       [15]         [2] [2] ;
     int                Mix_event_Num_SUM  [15]                 [15]       [15]         [2] [2] ;
     //        
-    std::vector<float> MMix_A_Px          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<float> MMix_A_Py          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<float> MMix_A_Pz          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   MMix_A_TreID       [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   MMix_A_EvtID       [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   MMix_A_ID                               [yBinNum]               [2] [2] ;
-    std::vector<float> MMix_A_Rap         [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   MMix_A_IfMadePair  [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<float> MMix_B_Px          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<float> MMix_B_Py          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<float> MMix_B_Pz          [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   MMix_B_TreID       [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   MMix_B_EvtID       [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   MMix_B_ID                               [yBinNum]               [2] [2] ;
-    std::vector<float> MMix_B_Rap         [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    std::vector<int>   MMix_B_IfMadePair  [CentralityBinNum]   [yBinNum]  [PVzBinNum]  [2] [2] ;
-    int                MMix_event_Num     [15]                 [15]       [15]         [2] [2] ;
-    int                MMix_event_Num_SUM [15]                 [15]       [15]         [2] [2] ;
-    //        
     TH1D* H_Kstar                         [15]                 [15]       [15]         [2] [2] ;
     TH1D* H_Mix_Kstar                     [15]                 [15]       [15]         [2] [2] ;
     TH1D* H_dRap                          [15]                 [15]       [15]         [2] [2] ;
