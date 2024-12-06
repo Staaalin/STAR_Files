@@ -605,6 +605,28 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TH1D* H_ALL_Res_A_Num                                      [15]                    [2] [2] ;
     TH1D* H_ALL_Res_B_Num                                      [15]                    [2] [2] ;
 
+    // Rotation
+    TH1D* R_S_Kstar                       [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_S_dRap                        [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_S_dPt                         [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_S_Mass                        [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_M_Kstar                       [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_M_dRap                        [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_M_dPt                         [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_M_Mass                        [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_A_Num                         [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_B_Num                         [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_ALL_S_Kstar                   [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_ALL_S_dRap                    [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_ALL_S_dPt                     [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_ALL_S_Mass                    [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_ALL_M_Kstar                   [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_ALL_M_dRap                    [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_ALL_M_dPt                     [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_ALL_M_Mass                    [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_ALL_A_Num                     [15]                 [15]       [15]         [2] [2] ;
+    TH1D* R_ALL_B_Num                     [15]                 [15]       [15]         [2] [2] ;
+
     // Store in test
     TH2F* H_ALL_Kstar_dRap                                     [15]                    [2] [2] ;
     TH2F* H_ALL_Mix_Kstar_dRap                                 [15]                    [2] [2] ;
@@ -744,6 +766,22 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Res_A_Num                    [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         HistNameM = HistName1s + "_Res_B_Num";
                         H_Res_B_Num                    [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_AMBM_Kstar";
+                        R_S_Kstar                      [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_AMBM_Kstar";
+                        R_M_Kstar                      [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_AMBM_dRap";
+                        R_S_dRap                       [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_AMBM_dRap";
+                        R_M_dRap                       [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_AMBM_dPt";
+                        R_S_dPt                        [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_AMBM_dPt";
+                        R_M_dPt                        [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_A_AMBM_Num";
+                        R_A_Num                        [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_B_AMBM_Num";
+                        R_B_Num                        [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         if ((i==0)&&(k==0)){
                             H_ALL_Kstar                   [j]   [0][0] = new TH1D(HistName4s,HistName3,kStarBinNum,kStarSta,kStarEnd);
                             H_ALL_Mix_Kstar               [j]   [0][0] = new TH1D(HistName5s,HistName3,kStarBinNum,kStarSta,kStarEnd);
@@ -766,6 +804,22 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             H_ALL_B_Num                   [j]   [0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                             HistNameM = HistName6 + "B_Num_AMBM";
                             H_ALL_Res_B_Num               [j]   [0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_S_AMBM_Kstar";
+                            R_ALL_S_Kstar                 [j]   [0][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_M_AMBM_Kstar";
+                            R_ALL_M_Kstar                 [j]   [0][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_S_AMBM_dRap";
+                            R_ALL_S_dRap                  [j]   [0][0] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_M_AMBM_dRap";
+                            R_ALL_M_dRap                  [j]   [0][0] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_S_AMBM_dPt";
+                            R_ALL_S_dPt                   [j]   [0][0] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_M_AMBM_dPt";
+                            R_ALL_M_dPt                   [j]   [0][0] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_A_AMBM_Num";
+                            R_ALL_A_Num                   [j]   [0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_B_AMBM_Num";
+                            R_ALL_B_Num                   [j]   [0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         }
                     }
                     if (l == 1) { // AMBS
@@ -791,6 +845,22 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Res_A_Num                    [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         HistNameM = HistName1s + "_Res_B_Num";
                         H_Res_B_Num                    [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_AMBS_Kstar";
+                        R_S_Kstar                      [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_AMBS_Kstar";
+                        R_M_Kstar                      [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_AMBS_dRap";
+                        R_S_dRap                       [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_AMBS_dRap";
+                        R_M_dRap                       [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_AMBS_dPt";
+                        R_S_dPt                        [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_AMBS_dPt";
+                        R_M_dPt                        [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_A_AMBS_Num";
+                        R_A_Num                        [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_B_AMBS_Num";
+                        R_B_Num                        [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         if ((i==0)&&(k==0)){
                             H_ALL_Kstar                   [j]   [0][1] = new TH1D(HistName4s,HistName3,kStarBinNum,kStarSta,kStarEnd);
                             H_ALL_Mix_Kstar               [j]   [0][1] = new TH1D(HistName5s,HistName3,kStarBinNum,kStarSta,kStarEnd);
@@ -813,6 +883,22 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             H_ALL_B_Num                   [j]   [0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
                             HistNameM = HistName6 + "B_Num_AMBS";
                             H_ALL_Res_B_Num               [j]   [0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_S_AMBS_Kstar";
+                            R_ALL_S_Kstar                 [j]   [0][1] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_M_AMBS_Kstar";
+                            R_ALL_M_Kstar                 [j]   [0][1] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_S_AMBS_dRap";
+                            R_ALL_S_dRap                  [j]   [0][1] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_M_AMBS_dRap";
+                            R_ALL_M_dRap                  [j]   [0][1] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_S_AMBS_dPt";
+                            R_ALL_S_dPt                   [j]   [0][1] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_M_AMBS_dPt";
+                            R_ALL_M_dPt                   [j]   [0][1] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_A_AMBS_Num";
+                            R_ALL_A_Num                   [j]   [0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_B_AMBS_Num";
+                            R_ALL_B_Num                   [j]   [0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         }
                     }
                     if (l == 2) { // ASBM
@@ -838,6 +924,22 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Res_A_Num                    [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         HistNameM = HistName1s + "_Res_B_Num";
                         H_Res_B_Num                    [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_ASBM_Kstar";
+                        R_S_Kstar                      [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_ASBM_Kstar";
+                        R_M_Kstar                      [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_ASBM_dRap";
+                        R_S_dRap                       [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_ASBM_dRap";
+                        R_M_dRap                       [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_ASBM_dPt";
+                        R_S_dPt                        [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_ASBM_dPt";
+                        R_M_dPt                        [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_A_ASBM_Num";
+                        R_A_Num                        [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_B_ASBM_Num";
+                        R_B_Num                        [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         if ((i==0)&&(k==0)){
                             H_ALL_Kstar                   [j]   [1][0] = new TH1D(HistName4s,HistName3,kStarBinNum,kStarSta,kStarEnd);
                             H_ALL_Mix_Kstar               [j]   [1][0] = new TH1D(HistName5s,HistName3,kStarBinNum,kStarSta,kStarEnd);
@@ -860,6 +962,22 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             H_ALL_B_Num                   [j]   [1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                             HistNameM = HistName6 + "B_Num_ASBM";
                             H_ALL_Res_B_Num               [j]   [1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_S_ASBM_Kstar";
+                            R_ALL_S_Kstar                 [j]   [1][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_M_ASBM_Kstar";
+                            R_ALL_M_Kstar                 [j]   [1][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_S_ASBM_dRap";
+                            R_ALL_S_dRap                  [j]   [1][0] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_M_ASBM_dRap";
+                            R_ALL_M_dRap                  [j]   [1][0] = new TH1D(HistNameM,HistNameM,dRapBinNum,dRapSta,dRapEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_S_ASBM_dPt";
+                            R_ALL_S_dPt                   [j]   [1][0] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_M_ASBM_dPt";
+                            R_ALL_M_dPt                   [j]   [1][0] = new TH1D(HistNameM,HistNameM,dPtBinNum,dPtSta,dPtEnd);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_A_ASBM_Num";
+                            R_ALL_A_Num                   [j]   [1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = "R_ALL_" + std::to_string(j) + "_B_ASBM_Num";
+                            R_ALL_B_Num                   [j]   [1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         }
                     }
                 }
@@ -1344,6 +1462,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                                 H_ALL_Mix_Kstar_dRap      [i]   [Aid][Bid]->Fill(KS,rap);
                                                 Mix_A_IfMadePair[CenIndex][i][j][Aid][Bid].at(Aindex) = 1;
                                                 Mix_B_IfMadePair[CenIndex][i][j][Aid][Bid].at(Bindex) = 1;
+
+                                                R_S_Kstar       [CenIndex][i][j][Aid][Bid]->Fill(KS);
+                                                R_ALL_S_Kstar             [i]   [Aid][Bid]->Fill(KS);
+                                                R_S_dRap        [CenIndex][i][j][Aid][Bid]->Fill(rap);
+                                                R_ALL_S_dRap              [i]   [Aid][Bid]->Fill(rap);
                                             }
                                             else{
                                                 KS = 0.5 * (p2 - p1).Rho();

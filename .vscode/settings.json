@@ -35,6 +35,7 @@
         "RandomGenerator.C": "cpp",
         "Gamma_QA_Origin.C": "cpp",
         "Gamma_QA_Simple.C": "cpp",
-        "MixEventTest.C": "cpp"
+        "MixEventTest.C": "cpp",
+        "Rotation.C": "cpp"
     }
 }
