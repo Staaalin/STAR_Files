@@ -1426,9 +1426,6 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                             BPy = Mix_B_Py[CenIndex][i][j][Aid][Bid].at(Bindex);
                                             BPz = Mix_B_Pz[CenIndex][i][j][Aid][Bid].at(Bindex);
 
-                                            if (SpecialMode) {
-                                                if (APz+BPz < 0) continue;
-                                            }
 
                                             p2.SetXYZM(BPx,BPy,BPz,BMass);
                                             p1.SetXYZM(APx,APy,APz,AMass);
@@ -1459,14 +1456,16 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                                 H_ALL_Mix_dPt             [i]   [Aid][Bid]->Fill(Pt);
                                                 H_Mix_Mass      [CenIndex][i][j][Aid][Bid]->Fill(PairMass);
                                                 H_ALL_Mix_Mass                  [Aid][Bid]->Fill(PairMass);
-                                                H_ALL_Mix_Kstar_dRap      [i]   [Aid][Bid]->Fill(KS,rap);
+                                                if (SpecialMode) {
+                                                    H_ALL_Mix_Kstar_dRap  [i]   [Aid][Bid]->Fill(KS,rap);
+                                                }
                                                 Mix_A_IfMadePair[CenIndex][i][j][Aid][Bid].at(Aindex) = 1;
                                                 Mix_B_IfMadePair[CenIndex][i][j][Aid][Bid].at(Bindex) = 1;
 
-                                                R_S_Kstar       [CenIndex][i][j][Aid][Bid]->Fill(KS);
-                                                R_ALL_S_Kstar             [i]   [Aid][Bid]->Fill(KS);
-                                                R_S_dRap        [CenIndex][i][j][Aid][Bid]->Fill(rap);
-                                                R_ALL_S_dRap              [i]   [Aid][Bid]->Fill(rap);
+                                                // R_S_Kstar       [CenIndex][i][j][Aid][Bid]->Fill(KS);
+                                                // R_ALL_S_Kstar             [i]   [Aid][Bid]->Fill(KS);
+                                                // R_S_dRap        [CenIndex][i][j][Aid][Bid]->Fill(rap);
+                                                // R_ALL_S_dRap              [i]   [Aid][Bid]->Fill(rap);
                                             }
                                             else{
                                                 KS = 0.5 * (p2 - p1).Rho();
@@ -1486,7 +1485,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                                 H_ALL_Res_dPt             [i]   [Aid][Bid]->Fill(Pt);
                                                 H_Mass          [CenIndex][i][j][Aid][Bid]->Fill(PairMass);
                                                 H_ALL_Mass                      [Aid][Bid]->Fill(PairMass);
-                                                H_ALL_Kstar_dRap          [i]   [Aid][Bid]->Fill(KS,rap);
+                                                if (SpecialMode) {
+                                                    H_ALL_Kstar_dRap      [i]   [Aid][Bid]->Fill(KS,rap);
+                                                }
                                                 Mix_A_IfMadePair[CenIndex][i][j][Aid][Bid].at(Aindex) = 1;
                                                 Mix_B_IfMadePair[CenIndex][i][j][Aid][Bid].at(Bindex) = 1;
                                             }

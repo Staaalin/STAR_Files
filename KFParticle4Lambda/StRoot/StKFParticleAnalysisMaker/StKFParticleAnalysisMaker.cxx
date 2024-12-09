@@ -169,6 +169,10 @@ Int_t StKFParticleAnalysisMaker::Init() {
 	proton_m2_lo = 0.75;
 	proton_m2_hi = 1.1;
 
+	// SL Cut
+	slcutmin = -0.5;
+	slcutmax = 0.6 ;
+
 	TFile *f = GetTFile(); // These two lines need to be HERE (though I don't know /why/)- don't throw in another function
 	if(f){f->cd(); BookVertexPlots();}
 
@@ -928,14 +932,19 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("nSigmaKaon"         ,&QA_nSigmaKaon        );
 		
 		// Used for Reconstruction QA
-		hadronTree->Branch("InvariantMass"      ,&InvariantMass       );
+		hadronTree->Branch("InvariantMass"      ,&InvariantMass        );
 		hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length      );
 		hadronTree->Branch("Chi2"               ,&QA_Chi2              );
 
-		// Used for restore corralated information
-		hadronTree->Branch("ParentList"      ,&ParentList     );
-		hadronTree->Branch("ParentSta"       ,&ParentSta      );
-		hadronTree->Branch("ParentEnd"       ,&ParentEnd      );
+		// Used for store corralated information
+		hadronTree->Branch("ParentList"         ,&ParentList           );
+		hadronTree->Branch("ParentSta"          ,&ParentSta            );
+		hadronTree->Branch("ParentEnd"          ,&ParentEnd            );
+   
+		// Used for store SL corralated information   
+		hadronTree->Branch("SL_ParentList"      ,&SL_ParentList        );
+		hadronTree->Branch("SL_ParentSta"       ,&SL_ParentSta         );
+		hadronTree->Branch("SL_ParentEnd"       ,&SL_ParentEnd         );
 
 	}
 
@@ -1468,7 +1477,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	float pT_trig_hi = 2.0;
 	float eta_trig_cut = 1.0;
   
-	std::vector<vector<int> > Correlatted_ID_List_T;
+	std::vector<vector<int> > Correlatted_ID_List_T , SE_Correlatted_ID_List_T , ME_Correlatted_ID_List_T;
 	CrefMult = refMult;CgrefMult = grefMult;
 	PDG            .resize(0);
 	px             .resize(0);
@@ -1489,6 +1498,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 	ParentList.resize(0);
 	ParentSta.resize(0);
 	ParentEnd.resize(0);
+	SL_ParentList.resize(0);
+	SL_ParentSta.resize(0);
+	SL_ParentEnd.resize(0);
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	// Calculating Nch
 	int NumCharge = 0;
@@ -2370,6 +2382,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
 						QA_m2.emplace_back(m2);
 						InvariantMass.emplace_back(massList(NeedPDG[Ktr])); 
+						// Recording SL value
 					}
 					if (IfQAMode) {
 						H_Pt[Jtr] -> Fill(pt);
@@ -2466,9 +2479,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 	}
 	if (IfTree) {
 		Correlatted_ID_List_T.resize(0);
+		SE_Correlatted_ID_List_T.resize(0);
+		ME_Correlatted_ID_List_T.resize(0);
 		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
 			std::vector<int> Temp;Temp.resize(0);
 			Correlatted_ID_List_T.push_back(Temp);
+			SE_Correlatted_ID_List_T.resize(Temp);
+			ME_Correlatted_ID_List_T.resize(Temp);
 		}
 		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
 			for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
@@ -2480,6 +2497,32 @@ Int_t StKFParticleAnalysisMaker::Make()
 						if ( Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP] ){
 							Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
 							Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
+							IfCorrelated = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
+			for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
+				bool IfCorrelated = false;
+				for (int kRecorded_KFP=1;kRecorded_KFP < Recorded_KFP_ID[iRecorded_KFP].size();kRecorded_KFP++){
+					if (IfCorrelated == true) break;
+					if (Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == -1) continue;
+					StPicoTrack *trackA = mPicoDst->track(Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP]);
+					padRow1to24TrackA  = trackA->topologyMap(0) & mapMask0;
+					padRow25to45TrackA = trackA->topologyMap(1) & mapMask1;
+					if (IfITPC) IpadRowTrackA = trackA->iTpcTopologyMap() & ImapMask;
+					for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
+						StPicoTrack *trackB = mPicoDst->track(Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP]);
+						padRow1to24TrackB  = trackB->topologyMap(0) & mapMask0;
+						padRow25to45TrackB = trackB->topologyMap(1) & mapMask1;	
+						if (IfITPC) IpadRowTrackB = trackB->iTpcTopologyMap() & ImapMask;
+						SL_Value = StKFParticleAnalysisMaker::getSL(padRow1To24TrackA ,padRow25To45TrackA ,IpadRowA ,trackA->nHitsFit() ,padRow1To24TrackB , padRow25To45TrackB ,IpadRowB ,trackB->nHitsFit(), IfITPC)
+						if ((SL_Value<=slcutmin) || (SL_Value>=slcutmax)){
+							SE_Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
+							SE_Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
 							IfCorrelated = true;
 							break;
 						}
@@ -3037,7 +3080,61 @@ void StKFParticleAnalysisMaker::print(std::vector<std::vector<int> > Temp)
     return ;
 }
 
-// StPicoHelix StKFParticleAnalysisMaker::StPicoTrack2StPicoHelix(StPicoTrack* Track){
-// 	StPicoHelix Result;
-// 	Result.setParameters(Double_t c, Double_t dip, Double_t phase,const TVector3& o, Int_t h)
-// }
+double StKFParticleAnalysisMaker::getSL(Int_t padRow1To24Track1 ,Int_t padRow25To45Track1 ,ULong64_t IpadRow1 ,Int_t nhits1 , Int_t padRow1To24Track2 , Int_t padRow25To45Track2 ,ULong64_t IpadRow2 ,Int_t nhits2/*, Int_t index_E*/,bool IfITPC_T) {// From qyq
+	// AND logic
+	unsigned long bothPads1To24  = padRow1To24Track1 & padRow1To24Track2;
+	unsigned long bothPads25To45 = padRow25To45Track1 & padRow25To45Track2;
+	ULong64_t     bothIPads;
+	if (IfITPC_T) bothIPads  = IpadRow1 & IpadRow2;
+	// XOR logic
+	unsigned long onePad1To24  = padRow1To24Track1 ^ padRow1To24Track2;
+	unsigned long onePad25To45 = padRow25To45Track1 ^ padRow25To45Track2;
+	ULong64_t     oneIPads;
+	if (IfITPC_T) oneIPads = IpadRow1 ^ IpadRow2;
+	unsigned long bitI;
+	int ibits;
+	int Quality = 0;
+	double normQual = 0.0;
+	int MaxQuality = nhits1+nhits2;
+	for (ibits=8;ibits<=31;ibits++) {
+		bitI = 0;
+		bitI |= 1UL<<(ibits);
+		if ( onePad1To24 & bitI ) {
+			Quality++;
+			continue;
+		}
+		else{
+			if ( bothPads1To24 & bitI ) Quality--;
+		}
+	}
+	for (ibits=0;ibits<=20;ibits++) {
+		bitI = 0;
+		bitI |= 1UL<<(ibits);
+		if ( onePad25To45 & bitI ) {
+			Quality++;
+			continue;
+		}
+		else{
+			if ( bothPads25To45 & bitI ) Quality--;
+		}
+	}
+	// if(index_E==30){
+	// 	normQual = (double)Quality/( (double) MaxQuality );
+	// 	return normQual;
+	// }
+	if (IfITPC_T) {
+		for (ibits=0;ibits<=40;ibits++) {
+			bitI = 0;
+			bitI |= 1UL<<(ibits);
+			if ( oneIPads & bitI ) {
+				Quality++;
+				continue;
+			}
+			else{
+				if ( bothIPads & bitI ) Quality--;
+			}
+		}
+	}
+	normQual = (double)Quality/( (double) MaxQuality );
+	return normQual;
+}        

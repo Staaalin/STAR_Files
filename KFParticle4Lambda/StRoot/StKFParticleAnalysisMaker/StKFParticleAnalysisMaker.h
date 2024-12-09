@@ -77,6 +77,7 @@ private:
 	Double_t StKFParticleAnalysisMaker::massList(int PID);
 	void StKFParticleAnalysisMaker::print(std::vector<int> Temp);
 	void StKFParticleAnalysisMaker::print(std::vector<std::vector<int> > Temp);
+	double StKFParticleAnalysisMaker::getSL(Int_t padRow1To24Track1 ,Int_t padRow25To45Track1 ,ULong64_t IpadRow1 ,Int_t nhits1 , Int_t padRow1To24Track2 , Int_t padRow25To45Track2 ,ULong64_t IpadRow2 ,Int_t nhits2, Int_t index_E)
 	bool InterfaceCantProcessEvent;
 	int ProtonTrackIndex, PionTrackIndex, KaonTrackIndex;
 	vector<int> trackMap;
@@ -112,13 +113,17 @@ private:
 	int        mJob;
 	std::vector<int> Recorded_runID;
 
+	bool IfITPC;
 	// SL value
+	float  slcutmin = -0.5;
+	float  slcutmax = 0.6 ;
+	float  SL_Value;
 	unsigned long mapMask0 = 0xFFFFFF00;
 	unsigned long mapMask1 = 0x1FFFFF;
-	ULong64_t     ImapMask = 0xFFFFFFFFFF;
-	unsigned long padRow1to24Track1;
-	unsigned long padRow25to45Track1;
-	ULong64_t     IpadRowTrack1;
+	ULong64_t     ImapMask = 0x1FFFFFFFFFE;
+	unsigned long padRow1to24TrackA, padRow1to24TrackB;
+	unsigned long padRow25to45TrackA,padRow25to45TrackB;
+	ULong64_t     IpadRowTrackA,IpadRowTrackB;
 
 	////////////////
 	TH1F *hNRefMult;
@@ -265,7 +270,7 @@ private:
 	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult , Omega_Omegab_Num , TriggerID , Nch;
 	float TPVz , p , pt , phi , eta , tEnergy , rap;
 	double track_px , track_py , track_pz;
-	std::vector<int> PDG , ReCons_TrackID , ParentList , ParentSta , ParentEnd;
+	std::vector<int> PDG , ReCons_TrackID , ParentList , ParentSta , ParentEnd , SL_ParentList , SL_ParentSta , SL_ParentEnd;
 	std::vector<float> px,py,pz,InvariantMass,QA_eta;
 	double zTOF_proton,zTOF_pion,zTOF_kaon;
 	// Used for QA
