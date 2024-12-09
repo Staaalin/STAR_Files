@@ -50,7 +50,8 @@ using namespace std;
 
 #define Pi 3.1415926535898
 
-const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
+// const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
+const int CentralityBin[] = {0 , 10 , 30 , 50 , 100};// %
 const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
 const float yBin[]  = {-1.0 , 0.0 , 1.0}; // B_y
 const float AyCut[] = {-1.0 , 1.0}; // A_y
