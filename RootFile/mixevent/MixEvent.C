@@ -605,6 +605,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TH1D* H_ALL_B_Num                                          [15]                    [2] [2] ;
     TH1D* H_ALL_Res_A_Num                                      [15]                    [2] [2] ;
     TH1D* H_ALL_Res_B_Num                                      [15]                    [2] [2] ;
+    TProfile* H_Event_Num                 [15]                 [15]       [15]         [2] [2] ;
+    TProfile* H_Res_Event_Num             [15]                 [15]       [15]         [2] [2] ;
+    TProfile* H_ALL_Event_Num                                  [15]                    [2] [2] ;
+    TProfile* H_ALL_Res_Event_Num                              [15]                    [2] [2] ;
 
     // Rotation
     TH1D* R_S_Kstar                       [15]                 [15]       [15]         [2] [2] ;
@@ -767,6 +771,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Res_A_Num                    [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         HistNameM = HistName1s + "_Res_B_Num";
                         H_Res_B_Num                    [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = HistName1s + "_Event_Num";
+                        H_Event_Num                    [i][j][k][0][0] = new TProfile(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = HistName1s + "_Res_Event_Num";
+                        H_Res_Event_Num                [i][j][k][0][0] = new TProfile(HistNameM,HistNameM,1,-1,1);
                         // HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_AMBM_Kstar";
                         // R_S_Kstar                      [i][j][k][0][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
                         // HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_AMBM_Kstar";
@@ -805,6 +813,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             H_ALL_B_Num                   [j]   [0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                             HistNameM = HistName6 + "B_Num_AMBM";
                             H_ALL_Res_B_Num               [j]   [0][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = HistName4 + "Event_Num_AMBM";
+                            H_ALL_Event_Num               [j]   [0][0] = new TProfile(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = HistName6 + "Event_Num_AMBM";
+                            H_ALL_Res_Event_Num           [j]   [0][0] = new TProfile(HistNameM,HistNameM,1,-1,1);
                             // HistNameM = "R_ALL_" + std::to_string(j) + "_S_AMBM_Kstar";
                             // R_ALL_S_Kstar                 [j]   [0][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
                             // HistNameM = "R_ALL_" + std::to_string(j) + "_M_AMBM_Kstar";
@@ -846,6 +858,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Res_A_Num                    [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         HistNameM = HistName1s + "_Res_B_Num";
                         H_Res_B_Num                    [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = HistName1s + "_Event_Num";
+                        H_Event_Num                    [i][j][k][0][1] = new TProfile(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = HistName1s + "_Res_Event_Num";
+                        H_Res_Event_Num                [i][j][k][0][1] = new TProfile(HistNameM,HistNameM,1,-1,1);
                         // HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_AMBS_Kstar";
                         // R_S_Kstar                      [i][j][k][0][1] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
                         // HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_AMBS_Kstar";
@@ -884,6 +900,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             H_ALL_B_Num                   [j]   [0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
                             HistNameM = HistName6 + "B_Num_AMBS";
                             H_ALL_Res_B_Num               [j]   [0][1] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = HistName4 + "Event_Num_AMBS";
+                            H_ALL_Event_Num               [j]   [0][1] = new TProfile(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = HistName6 + "Event_Num_AMBS";
+                            H_ALL_Res_Event_Num           [j]   [0][1] = new TProfile(HistNameM,HistNameM,1,-1,1);
                             // HistNameM = "R_ALL_" + std::to_string(j) + "_S_AMBS_Kstar";
                             // R_ALL_S_Kstar                 [j]   [0][1] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
                             // HistNameM = "R_ALL_" + std::to_string(j) + "_M_AMBS_Kstar";
@@ -925,6 +945,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Res_A_Num                    [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                         HistNameM = HistName1s + "_Res_B_Num";
                         H_Res_B_Num                    [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = HistName1s + "_Event_Num";
+                        H_Event_Num                    [i][j][k][1][0] = new TProfile(HistNameM,HistNameM,1,-1,1);
+                        HistNameM = HistName1s + "_Res_Event_Num";
+                        H_Res_Event_Num                [i][j][k][1][0] = new TProfile(HistNameM,HistNameM,1,-1,1);
                         // HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_S_ASBM_Kstar";
                         // R_S_Kstar                      [i][j][k][1][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
                         // HistNameM = "R_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k) + "_M_ASBM_Kstar";
@@ -963,6 +987,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             H_ALL_B_Num                   [j]   [1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
                             HistNameM = HistName6 + "B_Num_ASBM";
                             H_ALL_Res_B_Num               [j]   [1][0] = new TH1D(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = HistName4 + "Event_Num_ASBM";
+                            H_ALL_Event_Num               [j]   [1][0] = new TProfile(HistNameM,HistNameM,1,-1,1);
+                            HistNameM = HistName6 + "Event_Num_ASBM";
+                            H_ALL_Res_Event_Num           [j]   [1][0] = new TProfile(HistNameM,HistNameM,1,-1,1);
                             // HistNameM = "R_ALL_" + std::to_string(j) + "_S_ASBM_Kstar";
                             // R_ALL_S_Kstar                 [j]   [1][0] = new TH1D(HistNameM,HistNameM,kStarBinNum,kStarSta,kStarEnd);
                             // HistNameM = "R_ALL_" + std::to_string(j) + "_M_ASBM_Kstar";
@@ -1512,6 +1540,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                     }
                                     Mix_event_Num    [CenIndex][i][j][Aid][Bid] = 0;
                                     Mix_event_Num_SUM[CenIndex][i][j][Aid][Bid]++;
+                                    H_Event_Num      [CenIndex][i][j][Aid][Bid].Fill(0,HowMuchEventMixing+1);
+                                    H_ALL_Event_Num            [i]   [Aid][Bid].Fill(0,HowMuchEventMixing+1);
                                     Mix_A_Px[CenIndex][i][j][Aid][Bid].clear();
                                     Mix_B_Px[CenIndex][i][j][Aid][Bid].clear();
                                     Mix_A_Py[CenIndex][i][j][Aid][Bid].clear();
@@ -1624,23 +1654,29 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 }
                                 for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
                                     if (Mix_A_IfMadePair[i][j][k][A_Kid][B_Kid].at(Aindex) == 1) {
-                                        H_Res_A_Num    [i][j][k][A_Kid][B_Kid]->Fill(0);
-                                        H_ALL_Res_A_Num   [j]   [A_Kid][B_Kid]->Fill(0);
+                                        H_Res_A_Num     [i][j][k][A_Kid][B_Kid]->Fill(0);
+                                        H_ALL_Res_A_Num    [j]   [A_Kid][B_Kid]->Fill(0);
                                     }
                                 }
                                 for (int Bindex = 0;Bindex < Mix_B_Size;Bindex++) {
                                     if (Mix_B_IfMadePair[i][j][k][A_Kid][B_Kid].at(Bindex) == 1) {
-                                        H_Res_B_Num    [i][j][k][A_Kid][B_Kid]->Fill(0);
-                                        H_ALL_Res_B_Num   [j]   [A_Kid][B_Kid]->Fill(0);
+                                        H_Res_B_Num     [i][j][k][A_Kid][B_Kid]->Fill(0);
+                                        H_ALL_Res_B_Num    [j]   [A_Kid][B_Kid]->Fill(0);
                                     }
                                 }
+                                H_Res_Event_Num    [i][j][k][A_Kid][B_Kid].Fill(0,Mix_event_Num[i][j][k][A_Kid][B_Kid]);
+                                H_ALL_Res_Event_Num   [j]   [A_Kid][B_Kid].Fill(0,Mix_event_Num[i][j][k][A_Kid][B_Kid]);
                             }
                         }
                         fileA->cd();
-                        H_A_Num    [i][j][k][A_Kid][B_Kid]->Write();
-                        H_B_Num    [i][j][k][A_Kid][B_Kid]->Write();
-                        H_Res_A_Num[i][j][k][A_Kid][B_Kid]->Write();
-                        H_Res_B_Num[i][j][k][A_Kid][B_Kid]->Write();
+                        H_A_Num        [i][j][k][A_Kid][B_Kid]->Write();
+                        H_B_Num        [i][j][k][A_Kid][B_Kid]->Write();
+                        H_Res_A_Num    [i][j][k][A_Kid][B_Kid]->Write();
+                        H_Res_B_Num    [i][j][k][A_Kid][B_Kid]->Write();
+                        H_Event_Num    [i][j][k][A_Kid][B_Kid]->Write();
+                        H_ALL_Event_Num   [j]   [A_Kid][B_Kid]->Write();
+                        H_Res_Event_Num[i][j][k][A_Kid][B_Kid]->Write();
+                        H_ALL_Res_B_Num   [j]   [A_Kid][B_Kid]->Write();
                         folder_kStar->cd();
                         if(H_Kstar             [i][j][k][A_Kid][B_Kid]->GetEntries() != 0) H_Kstar             [i][j][k][A_Kid][B_Kid]->Write();
                         if(H_Mix_Kstar         [i][j][k][A_Kid][B_Kid]->GetEntries() != 0) H_Mix_Kstar         [i][j][k][A_Kid][B_Kid]->Write();
