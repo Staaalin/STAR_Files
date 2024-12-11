@@ -1540,8 +1540,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                     }
                                     Mix_event_Num    [CenIndex][i][j][Aid][Bid] = 0;
                                     Mix_event_Num_SUM[CenIndex][i][j][Aid][Bid]++;
-                                    H_Event_Num      [CenIndex][i][j][Aid][Bid].Fill(0,HowMuchEventMixing+1);
-                                    H_ALL_Event_Num            [i]   [Aid][Bid].Fill(0,HowMuchEventMixing+1);
+                                    H_Event_Num      [CenIndex][i][j][Aid][Bid]->Fill(0,HowMuchEventMixing+1);
+                                    H_ALL_Event_Num            [i]   [Aid][Bid]->Fill(0,HowMuchEventMixing+1);
                                     Mix_A_Px[CenIndex][i][j][Aid][Bid].clear();
                                     Mix_B_Px[CenIndex][i][j][Aid][Bid].clear();
                                     Mix_A_Py[CenIndex][i][j][Aid][Bid].clear();
@@ -1664,8 +1664,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                         H_ALL_Res_B_Num    [j]   [A_Kid][B_Kid]->Fill(0);
                                     }
                                 }
-                                H_Res_Event_Num    [i][j][k][A_Kid][B_Kid].Fill(0,Mix_event_Num[i][j][k][A_Kid][B_Kid]);
-                                H_ALL_Res_Event_Num   [j]   [A_Kid][B_Kid].Fill(0,Mix_event_Num[i][j][k][A_Kid][B_Kid]);
+                                H_Res_Event_Num    [i][j][k][A_Kid][B_Kid]->Fill(0,Mix_event_Num[i][j][k][A_Kid][B_Kid]);
+                                H_ALL_Res_Event_Num   [j]   [A_Kid][B_Kid]->Fill(0,Mix_event_Num[i][j][k][A_Kid][B_Kid]);
                             }
                         }
                         fileA->cd();
