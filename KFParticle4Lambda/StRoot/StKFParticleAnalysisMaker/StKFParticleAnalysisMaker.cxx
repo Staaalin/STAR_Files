@@ -2519,7 +2519,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						padRow1to24TrackB  = trackB->topologyMap(0) & mapMask0;
 						padRow25to45TrackB = trackB->topologyMap(1) & mapMask1;	
 						if (IfITPC) IpadRowTrackB = trackB->iTpcTopologyMap() & ImapMask;
-						SL_Value = StKFParticleAnalysisMaker::getSL(padRow1To24TrackA ,padRow25To45TrackA ,IpadRowA ,trackA->nHitsFit() ,padRow1To24TrackB , padRow25To45TrackB ,IpadRowB ,trackB->nHitsFit(), IfITPC)
+						SL_Value = StKFParticleAnalysisMaker::getSL(padRow1To24TrackA ,padRow25To45TrackA ,IpadRowTrackA ,trackA->nHitsFit() ,padRow1To24TrackB , padRow25To45TrackB ,IpadRowTrackB ,trackB->nHitsFit(), IfITPC)
 						if ((SL_Value<=slcutmin) || (SL_Value>=slcutmax)){
 							SE_Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
 							SE_Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
@@ -3138,3 +3138,8 @@ double StKFParticleAnalysisMaker::getSL(Int_t padRow1To24Track1 ,Int_t padRow25T
 	normQual = (double)Quality/( (double) MaxQuality );
 	return normQual;
 }        
+double StKFParticleAnalysisMaker::getphistar(TLorentzVector Four_mom1, TLorentzVector Four_mom2, int q1, int q2,double Bz, double tpcR){
+	double deltaphistar = Four_mom1.Phi()-Four_mom2.Phi() + TMath::ASin(-0.15*(q1)*Bz*tpcR/Four_mom1.Perp())-TMath::ASin(-0.15*(q2)*Bz*tpcR/Four_mom2.Perp());
+	deltaphistar = atan2(sin(deltaphistar),cos(deltaphistar));
+	return deltaphistar;
+}

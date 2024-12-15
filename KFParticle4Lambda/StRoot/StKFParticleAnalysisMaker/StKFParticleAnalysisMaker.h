@@ -77,7 +77,8 @@ private:
 	Double_t StKFParticleAnalysisMaker::massList(int PID);
 	void StKFParticleAnalysisMaker::print(std::vector<int> Temp);
 	void StKFParticleAnalysisMaker::print(std::vector<std::vector<int> > Temp);
-	double StKFParticleAnalysisMaker::getSL(Int_t padRow1To24Track1 ,Int_t padRow25To45Track1 ,ULong64_t IpadRow1 ,Int_t nhits1 , Int_t padRow1To24Track2 , Int_t padRow25To45Track2 ,ULong64_t IpadRow2 ,Int_t nhits2, Int_t index_E)
+	double StKFParticleAnalysisMaker::getSL(Int_t padRow1To24Track1 ,Int_t padRow25To45Track1 ,ULong64_t IpadRow1 ,Int_t nhits1 , Int_t padRow1To24Track2 , Int_t padRow25To45Track2 ,ULong64_t IpadRow2 ,Int_t nhits2, Int_t index_E);
+	double StKFParticleAnalysisMaker::getphistar(TLorentzVector Four_mom1, TLorentzVector Four_mom2, int q1, int q2,double Bz, double tpcR);
 	bool InterfaceCantProcessEvent;
 	int ProtonTrackIndex, PionTrackIndex, KaonTrackIndex;
 	vector<int> trackMap;
