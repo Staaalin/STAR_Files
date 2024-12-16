@@ -3095,16 +3095,21 @@ double StKFParticleAnalysisMaker::getSL(Int_t padRow1To24Track1 ,Int_t padRow25T
 	int ibits;
 	int Quality = 0;
 	double normQual = 0.0;
-	int MaxQuality = nhits1+nhits2;
+	// int MaxQuality = nhits1+nhits2;// Calculate by nHits
+	int MaxQuality = 0;
 	for (ibits=8;ibits<=31;ibits++) {
 		bitI = 0;
 		bitI |= 1UL<<(ibits);
 		if ( onePad1To24 & bitI ) {
 			Quality++;
+			MaxQuality += 1;
 			continue;
 		}
 		else{
-			if ( bothPads1To24 & bitI ) Quality--;
+			if ( bothPads1To24 & bitI ) {
+				Quality--;
+				MaxQuality += 2;
+			}
 		}
 	}
 	for (ibits=0;ibits<=20;ibits++) {
@@ -3112,10 +3117,14 @@ double StKFParticleAnalysisMaker::getSL(Int_t padRow1To24Track1 ,Int_t padRow25T
 		bitI |= 1UL<<(ibits);
 		if ( onePad25To45 & bitI ) {
 			Quality++;
+			MaxQuality += 1;
 			continue;
 		}
 		else{
-			if ( bothPads25To45 & bitI ) Quality--;
+			if ( bothPads25To45 & bitI ) {
+				Quality--;
+				MaxQuality += 2;
+			}
 		}
 	}
 	// if(index_E==30){
@@ -3128,10 +3137,14 @@ double StKFParticleAnalysisMaker::getSL(Int_t padRow1To24Track1 ,Int_t padRow25T
 			bitI |= 1UL<<(ibits);
 			if ( oneIPads & bitI ) {
 				Quality++;
+				MaxQuality += 1;
 				continue;
 			}
 			else{
-				if ( bothIPads & bitI ) Quality--;
+				if ( bothIPads & bitI ) {
+					Quality--;
+					MaxQuality += 2;
+				}
 			}
 		}
 	}
