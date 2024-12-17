@@ -37,27 +37,27 @@ float CenCorr(float Vz,TString Name);
 Double_t massList(int PID,TString Name);
 Double_t massListSigma(int PID,TString Name);
 bool IfInVector(int Num , std::vector<int> V);
+bool IfInVector(int Num , std::vector<unsigned short int> V);
 bool IfCommonElement(std::vector<int> A , std::vector<int> B);
 void DltElement(std::vector<int> &V , int ID);
 std::vector<int> GetDaughterPDGLit(int ID);
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize);
 
 struct Particle{
-    int PDG;
-    unsigned int EvtID;
-
+    unsigned short int TreeID;
     float Px;
     float Py;
     float Pz;
 
     float Rap;
-}
+    float Pt;
+};
 
 struct ParticlePool{
     unsigned int EvtID;
     vector<Particle> ListA;
     vector<Particle> ListB;
-}
+};
 
 // const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
 const int CentralityBin[] = {0 , 10 , 30 , 50 , 100};// %
@@ -196,8 +196,15 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         #endif
     #endif
 
+    int i , j , k , l , m , n;// used as Index
+    int Aid , Bid , Cid;// used as Index
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
+    Particle AnyParticle;
+    std::vector<Particle> ParticleA     , ParticleB;
+    unsigned short int    ParticleASize , ParticleBSize , ParticleCSize;
+    std::vector<std::vector<unsigned short int> > A_ParID,B_ParID,C_ParID;
+    std::vector<uint8_t> A_IfRecord,B_IfRecord;
     bool IfRecord = true , IfRemoveFeedPair = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
@@ -207,6 +214,9 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     print(NchList);
     cout<<" "<<endl;
 
+    // ############################################################################################################# //
+    // ####                                            Declare Histgram                                         #### //
+    // ############################################################################################################# //
     // Hist Parameter
     int kStarBinNum = 400;
     float kStarSta = 0 , kStarEnd = 8;
@@ -264,6 +274,19 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH1D* H_Res_Event_Num                 [15]                 [15]       [15] ;
     TH1D* H_ALL_Event_Num                                      [15]            ;
     TH1D* H_ALL_Res_Event_Num                                  [15]            ;
+    int RebinNum[] = {1,2,4,5,10,20,25,50};                    //               RebinNum
+    TH1D* H_A_Num_dRap                    [15]                 [15]       [15]    [15];
+    TH1D* H_Mix_A_Num_dRap                [15]                 [15]       [15]    [15];
+    TH1D* H_Res_A_Num_dRap                [15]                 [15]       [15]    [15];
+    TH1D* H_ALL_A_Num_dRap                                     [15]               [15];
+    TH1D* H_ALL_Mix_A_Num_dRap                                 [15]               [15];
+    TH1D* H_ALL_Res_A_Num_dRap                                 [15]               [15];
+    TH1D* H_B_Num_dRap                    [15]                 [15]       [15]    [15];
+    TH1D* H_Mix_B_Num_dRap                [15]                 [15]       [15]    [15];
+    TH1D* H_Res_B_Num_dRap                [15]                 [15]       [15]    [15];
+    TH1D* H_ALL_B_Num_dRap                                     [15]               [15];
+    TH1D* H_ALL_Mix_B_Num_dRap                                 [15]               [15];
+    TH1D* H_ALL_Res_B_Num_dRap                                 [15]               [15];
 
     // A/B d (net)Num / d Dy
     TH1D* H_A_Num_Dy                      [15]                 [15]       [15] ;
@@ -280,9 +303,9 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH1D* H_ALL_Res_B_Num_Dy                                   [15]            ;
 
     TString HistNameTemp1 , HistNameTemp2;
-    for (int i=0;i<CentralityBinNum;i++){
-        for (int k=0;k<PVzBinNum;k++){
-            for (int j=0;j<yBinNum;j++){
+    for (i=0;i<CentralityBinNum;i++){
+        for (k=0;k<PVzBinNum;k++){
+            for (j=0;j<yBinNum;j++){
                 HistNameTemp1 = "H_";HistNameTemp1+="Kstar_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
                 HistNameTemp2 = "Kstar, [";HistNameTemp2+=CentralityBin[i];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[i+1];HistNameTemp2+="%], ";
                 HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
@@ -402,128 +425,361 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                 HistNameTemp2+=PVzBin[k];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[k+1];HistNameTemp2+=" cm";
                 H_Res_Event_Num [i][j][k] = new TH1D(HistNameTemp1,HistNameTemp2,1,-1,1);
+                
+                for (int RebinIndex=0;RebinIndex<(sizeof(RebinNum)/sizeof(RebinNum[0]));RebinIndex++){
+                    HistNameTemp1 = "H_";HistNameTemp1+="A_Num_dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                    HistNameTemp2 = "A_Num_dRap, [";HistNameTemp2+=CentralityBin[i];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[i+1];HistNameTemp2+="%], ";
+                    HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                    HistNameTemp2+=PVzBin[k];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[k+1];HistNameTemp2+=" cm";
+                    H_A_Num_dRap    [i][j][k][RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+
+                    HistNameTemp1 = "H_M_";HistNameTemp1+="A_Num_dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                    HistNameTemp2 = "Mixed A_Num_dRap, [";HistNameTemp2+=CentralityBin[i];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[i+1];HistNameTemp2+="%], ";
+                    HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                    HistNameTemp2+=PVzBin[k];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[k+1];HistNameTemp2+=" cm";
+                    H_Mix_A_Num_dRap[i][j][k][RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+
+                    HistNameTemp1 = "H_R_";HistNameTemp1+="A_Num_dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                    HistNameTemp2 = "Resed A_Num_dRap, [";HistNameTemp2+=CentralityBin[i];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[i+1];HistNameTemp2+="%], ";
+                    HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                    HistNameTemp2+=PVzBin[k];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[k+1];HistNameTemp2+=" cm";
+                    H_Res_A_Num_dRap[i][j][k][RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+                    
+                    HistNameTemp1 = "H_";HistNameTemp1+="B_Num_dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                    HistNameTemp2 = "B_Num_dRap, [";HistNameTemp2+=CentralityBin[i];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[i+1];HistNameTemp2+="%], ";
+                    HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                    HistNameTemp2+=PVzBin[k];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[k+1];HistNameTemp2+=" cm";
+                    H_B_Num_dRap    [i][j][k][RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+
+                    HistNameTemp1 = "H_M_";HistNameTemp1+="B_Num_dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                    HistNameTemp2 = "Mixed B_Num_dRap, [";HistNameTemp2+=CentralityBin[i];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[i+1];HistNameTemp2+="%], ";
+                    HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                    HistNameTemp2+=PVzBin[k];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[k+1];HistNameTemp2+=" cm";
+                    H_Mix_B_Num_dRap[i][j][k][RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+
+                    HistNameTemp1 = "H_R_";HistNameTemp1+="B_Num_dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                    HistNameTemp2 = "Resed B_Num_dRap, [";HistNameTemp2+=CentralityBin[i];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[i+1];HistNameTemp2+="%], ";
+                    HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                    HistNameTemp2+=PVzBin[k];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[k+1];HistNameTemp2+=" cm";
+                    H_Res_B_Num_dRap[i][j][k][RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+                }
 
                 if ((i == 0)&&(k == 0)) {
-                    HistNameTemp1 = "H_ALL_";HistNameTemp1+="Kstar_";HistNameTemp1+="ALL";HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_";HistNameTemp1+="Kstar_";HistNameTemp1+="ALL";HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Kstar, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Kstar    [j] = new TH1D(HistNameTemp1,HistNameTemp2,kStarBinNum,kStarSta,kStarEnd);
 
-                    HistNameTemp1 = "H_ALL_M_";HistNameTemp1+="Kstar_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_M_";HistNameTemp1+="Kstar_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Mixed Kstar, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Mix_Kstar[j] = new TH1D(HistNameTemp1,HistNameTemp2,kStarBinNum,kStarSta,kStarEnd);
 
-                    HistNameTemp1 = "H_ALL_R_";HistNameTemp1+="Kstar_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_R_";HistNameTemp1+="Kstar_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Resed Kstar, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Res_Kstar[j] = new TH1D(HistNameTemp1,HistNameTemp2,kStarBinNum,kStarSta,kStarEnd);
                     
-                    HistNameTemp1 = "H_ALL_";HistNameTemp1+="dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_";HistNameTemp1+="dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "dRap, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_dRap     [j] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum,dRapSta,dRapEnd);
 
-                    HistNameTemp1 = "H_ALL_M_";HistNameTemp1+="dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_M_";HistNameTemp1+="dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Mixed dRap, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Mix_dRap [j] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum,dRapSta,dRapEnd);
 
-                    HistNameTemp1 = "H_ALL_R_";HistNameTemp1+="dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_R_";HistNameTemp1+="dRap_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Resed dRap, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Res_dRap [j] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum,dRapSta,dRapEnd);
                     
-                    HistNameTemp1 = "H_ALL_";HistNameTemp1+="dPt_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_";HistNameTemp1+="dPt_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "dPt, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_dPt      [j] = new TH1D(HistNameTemp1,HistNameTemp2,dPtBinNum,dPtSta,dPtEnd);
 
-                    HistNameTemp1 = "H_ALL_M_";HistNameTemp1+="dPt_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_M_";HistNameTemp1+="dPt_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Mixed dPt, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Mix_dPt  [j] = new TH1D(HistNameTemp1,HistNameTemp2,dPtBinNum,dPtSta,dPtEnd);
 
-                    HistNameTemp1 = "H_ALL_R_";HistNameTemp1+="dPt_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_R_";HistNameTemp1+="dPt_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Resed dPt, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Res_dPt  [j] = new TH1D(HistNameTemp1,HistNameTemp2,dPtBinNum,dPtSta,dPtEnd);
                     
-                    HistNameTemp1 = "H_ALL_";HistNameTemp1+="Mass_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_";HistNameTemp1+="Mass_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Mass, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Mass     [j] = new TH1D(HistNameTemp1,HistNameTemp2,MBinNum,MSta,MEnd);
 
-                    HistNameTemp1 = "H_ALL_M_";HistNameTemp1+="Mass_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_M_";HistNameTemp1+="Mass_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Mixed Mass, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Mix_Mass [j] = new TH1D(HistNameTemp1,HistNameTemp2,MBinNum,MSta,MEnd);
 
-                    HistNameTemp1 = "H_ALL_R_";HistNameTemp1+="Mass_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_R_";HistNameTemp1+="Mass_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Resed Mass, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Res_Mass [j] = new TH1D(HistNameTemp1,HistNameTemp2,MBinNum,MSta,MEnd);
                     
-                    HistNameTemp1 = "H_ALL_";HistNameTemp1+="A_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_";HistNameTemp1+="A_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "A_Num, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_A_Num     [j] = new TH1D(HistNameTemp1,HistNameTemp2,1,-1,1);
 
-                    HistNameTemp1 = "H_ALL_M_";HistNameTemp1+="A_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_M_";HistNameTemp1+="A_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Mixed A_Num, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Mix_A_Num [j] = new TH1D(HistNameTemp1,HistNameTemp2,1,-1,1);
 
-                    HistNameTemp1 = "H_ALL_R_";HistNameTemp1+="A_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_R_";HistNameTemp1+="A_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Resed A_Num, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Res_A_Num [j] = new TH1D(HistNameTemp1,HistNameTemp2,1,-1,1);
                     
-                    HistNameTemp1 = "H_ALL_";HistNameTemp1+="B_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_";HistNameTemp1+="B_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "B_Num, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_B_Num     [j] = new TH1D(HistNameTemp1,HistNameTemp2,1,-1,1);
 
-                    HistNameTemp1 = "H_ALL_M_";HistNameTemp1+="B_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_M_";HistNameTemp1+="B_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Mixed B_Num, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Mix_B_Num [j] = new TH1D(HistNameTemp1,HistNameTemp2,1,-1,1);
 
-                    HistNameTemp1 = "H_ALL_R_";HistNameTemp1+="B_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_R_";HistNameTemp1+="B_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Resed B_Num, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Res_B_Num [j] = new TH1D(HistNameTemp1,HistNameTemp2,1,-1,1);
                     
-                    HistNameTemp1 = "H_ALL_";HistNameTemp1+="Event_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_";HistNameTemp1+="Event_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Event_Num, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Event_Num     [j] = new TH1D(HistNameTemp1,HistNameTemp2,1,-1,1);
 
-                    HistNameTemp1 = "H_ALL_R_";HistNameTemp1+="Event_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+=k;
+                    HistNameTemp1 = "H_R_";HistNameTemp1+="Event_Num_";HistNameTemp1+=i;HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";
                     HistNameTemp2 = "Resed Event_Num, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
                     HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
                     HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
                     H_ALL_Res_Event_Num [j] = new TH1D(HistNameTemp1,HistNameTemp2,1,-1,1);
+                
+                    for (int RebinIndex=0;RebinIndex<(sizeof(RebinNum)/sizeof(RebinNum[0]));RebinIndex++){
+                        HistNameTemp1 = "H_";HistNameTemp1+="A_Num_dRap_";HistNameTemp1+="ALL";HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                        HistNameTemp2 = "A_Num_dRap, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
+                        HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                        HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
+                        H_A_Num_dRap       [j]   [RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+
+                        HistNameTemp1 = "H_M_";HistNameTemp1+="A_Num_dRap_";HistNameTemp1+="ALL";HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                        HistNameTemp2 = "Mixed A_Num_dRap, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
+                        HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                        HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
+                        H_Mix_A_Num_dRap   [j]   [RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+
+                        HistNameTemp1 = "H_R_";HistNameTemp1+="A_Num_dRap_";HistNameTemp1+="ALL";HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                        HistNameTemp2 = "Resed A_Num_dRap, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
+                        HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                        HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
+                        H_Res_A_Num_dRap   [j]   [RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+                        
+                        HistNameTemp1 = "H_";HistNameTemp1+="B_Num_dRap_";HistNameTemp1+="ALL";HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                        HistNameTemp2 = "B_Num_dRap, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
+                        HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                        HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
+                        H_B_Num_dRap       [j]   [RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+
+                        HistNameTemp1 = "H_M_";HistNameTemp1+="B_Num_dRap_";HistNameTemp1+="ALL";HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                        HistNameTemp2 = "Mixed B_Num_dRap, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
+                        HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                        HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
+                        H_Mix_B_Num_dRap   [j]   [RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+
+                        HistNameTemp1 = "H_R_";HistNameTemp1+="B_Num_dRap_";HistNameTemp1+="ALL";HistNameTemp1+="_";HistNameTemp1+=j;HistNameTemp1+="_";HistNameTemp1+="ALL";HistNameTemp1+="_R";HistNameTemp1+=RebinNum[RebinIndex];
+                        HistNameTemp2 = "Resed B_Num_dRap, [";HistNameTemp2+=CentralityBin[0];HistNameTemp2+="%,";HistNameTemp2+=CentralityBin[CentralityBinNum];HistNameTemp2+="%], ";
+                        HistNameTemp2+=yBin[j];HistNameTemp2+="<y_";HistNameTemp2+=B_PDG;HistNameTemp2+="<";HistNameTemp2+=yBin[j+1];HistNameTemp2+=", ";
+                        HistNameTemp2+=PVzBin[0];HistNameTemp2+="<PVz<";HistNameTemp2+=PVzBin[PVzBinNum];HistNameTemp2+=" cm";
+                        H_Res_B_Num_dRap   [j]   [RebinIndex] = new TH1D(HistNameTemp1,HistNameTemp2,dRapBinNum/RebinNum[RebinIndex],dRapSta,dRapEnd);
+                    }
                 }
+            }
+        }
+    }
+    
+    // ############################################################################################################# //
+    // ####                                              Events Loop                                            #### //
+    // ############################################################################################################# //
+    TString TreeName = "hadronTree";
+    TChain *hadronTree = new TChain(TreeName);
+    for(i=StartFileIndex;i <= EndFileIndex;i++){
+        TString filename = MidName;
+        filename+=i;
+        filename+=".root";
+        hadronTree->Add(filename);
+        // cout<<"Add "<<filename<<" Successfully"<<endl;
+    }
+    Int_t PDGMult  ;
+    Int_t refMult  ;
+    Int_t grefMult ;
+    Int_t EventID  ;
+    Int_t RunID    ;
+    Int_t TriggerID;
+    Int_t Nch      ;
+    float PVz      ;
+
+    hadronTree->SetBranchAddress("PDGMult"  ,&PDGMult  );
+    // hadronTree->SetBranchAddress("refMult"  ,&refMult  );
+    // hadronTree->SetBranchAddress("grefMult" ,&grefMult );
+    hadronTree->SetBranchAddress("EventID"  ,&EventID  );
+    // hadronTree->SetBranchAddress("RunID"    ,&RunID    );
+    // hadronTree->SetBranchAddress("TriggerID",&TriggerID);
+    hadronTree->SetBranchAddress("Nch"      ,&Nch      );
+    hadronTree->SetBranchAddress("PVz"      ,&PVz      );
+    
+    hadronTree->SetBranchAddress("PDG"          ,&PDG          ,&bPDG          );
+    hadronTree->SetBranchAddress("mix_px"       ,&mix_px       ,&bmix_px       );
+    hadronTree->SetBranchAddress("mix_py"       ,&mix_py       ,&bmix_py       );
+    hadronTree->SetBranchAddress("mix_pz"       ,&mix_pz       ,&bmix_pz       );
+    // hadronTree->SetBranchAddress("QA_eta"       ,&QA_eta       ,&bQA_eta       );
+    // hadronTree->SetBranchAddress("dEdx"         ,&dEdx         ,&bdEdx         );
+    // hadronTree->SetBranchAddress("m2"           ,&m2           ,&bm2           );
+    // hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
+    // hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
+    // hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
+    // hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
+    hadronTree->SetBranchAddress("InvariantMass",&InvariantMass,&bInvariantMass);
+    // hadronTree->SetBranchAddress("Decay_Length" ,&Decay_Length ,&bDecay_Length );
+    // hadronTree->SetBranchAddress("Chi2"         ,&Chi2         ,&bChi2         );
+    hadronTree->SetBranchAddress("ParentList"   ,&ParentList   ,&bParentList   );
+    hadronTree->SetBranchAddress("ParentSta"    ,&ParentSta    ,&bParentSta    );
+    hadronTree->SetBranchAddress("ParentEnd"    ,&ParentEnd    ,&bParentEnd    );
+
+    const Int_t nentries=hadronTree->GetEntries();
+    cout << "Events number: " << nentries << endl;
+    ParticleA.clear();ParticleB.clear();A_ParID.clear();B_ParID.clear();C_ParID.clear();A_IfRecord.clear();B_IfRecord.clear();
+    for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++) {
+        hadronTree->GetEntry(EntriesID);
+        for (j=0;j<PDGMult;j++) {
+            if (PDG->at(j) == A_PDG) {
+                if (fabs(InvariantMass->at(j) - AMass) <= 3*AMassSigma) {
+                    AnyParticle.TreeID = j;
+                    ParticleA.push_back(AnyParticle);
+                }
+                else{continue;}
+            }
+            else if (PDG->at(j) == B_PDG) {
+                if (fabs(InvariantMass->at(j) - BMass) <= 3*AMassSigma) {
+                    AnyParticle.TreeID = j;
+                    ParticleB.push_back(AnyParticle);
+                }
+                else{continue;}
+            }
+            else {
+                for (int l = 0;l < FeedDownNum;l++) {
+                    if ( abs(PDG->at(j)) == FeedDown[l] ) {
+                        if ((fabs(InvariantMass->at(j) - CMass.at(l)) > 3*CMassSigma.at(l))) continue;
+                        Temp.clear();Temp.push_back(j);
+                        for (k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
+                            Temp.push_back(ParentList->at(k));
+                        }
+                        C_ParID.push_back(Temp);
+                        // IfFoundOmega = true;
+                        // cout<<"Found Omega"<<endl;
+                    }
+                }
+            }
+        }
+
+        ParticleASize = ParticleA.size();ParticleBSize = ParticleB.size();
+        if ((ParticleASize * ParticleBSize) == 0) continue; // if the particle A and B are not found.
+
+        for (i=0;i<ParticleASize;i++) {
+            j = ParticleA[i].TreeID;
+            Temp.clear();Temp.push_back(j);
+            for (k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
+                Temp.push_back(ParentList->at(k));
+            }
+            A_ParID.push_back(Temp);
+            A_IfRecord.push_back(1);
+        }
+        for (i=0;i<ParticleBSize;i++) {
+            j = ParticleB[i].TreeID;
+            Temp.clear();Temp.push_back(j);
+            for (k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
+                Temp.push_back(ParentList->at(k));
+            }
+            B_ParID.push_back(Temp);
+            B_IfRecord.push_back(1);
+        }
+        
+        // 如果A、B有血缘关系，保留B
+        for (Bid = 0;Bid < ParticleBSize;Bid++) {
+            for (Aid = 0;Aid < ParticleASize;;Aid++) {
+                if (IfInVector(ParticleA[Aid].TreeID , B_ParID.at(Bid))){
+                    A_IfRecord.at(Aid) = 0;
+                }
+                // if (IfCommonElement(A_ParID.at(Aid) , B_ParID.at(Bid))){
+                //     A_IfRecord.at(Aid) = 0;
+                //     // cout<<"Meet 2!"<<endl;
+                //     // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
+                //     // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
+                // }
+            }
+        }
+        
+        ParticleCSize = C_ParID.size();
+        // 如果A、B与C有血缘关系，不记录A和B
+        for (Aid = 0;Aid < ParticleASize;Aid++) {
+            for (Cid = 0;Cid < ParticleCSize;Cid++) {
+                if (IfInVector(ParticleA[Aid].TreeID , C_ParID.at(Cid))) {
+                    A_IfRecord.at(Aid) = 0;
+                    // cout<<"Meet 3!"<<endl;
+                    // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
+                    // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
+                }
+                // if (IfCommonElement(A_ParID.at(Aid) , C_ParID.at(Cid))){
+                //     A_IfRecord.at(Aid) = 0;
+                //     // cout<<"Meet 4!"<<endl;
+                //     // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
+                //     // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
+                // }
+            }
+        }
+        for (Bid = 0;Bid < ParticleBSize;Bid++) {
+            for (Cid = 0;Cid < ParticleCSize;Cid++) {
+                if (IfInVector(ParticleB[Bid].TreeID , C_ParID.at(Cid))) {
+                    B_IfRecord.at(Bid) = 0;
+                    // cout<<"Meet 5!"<<endl;
+                    // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
+                    // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
+                }
+                // if (IfCommonElement(B_ParID.at(Bid) , C_ParID.at(Cid))){
+                //     B_IfRecord.at(Bid) = 0;
+                //     // cout<<"Meet 6!"<<endl;
+                //     // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
+                //     // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
+                // }
             }
         }
     }
@@ -717,6 +973,16 @@ Double_t massListSigma(int PID,TString Name)
 }
 
 bool IfInVector(int Num , std::vector<int> V)
+{
+    for (int i=0;i<V.size();i++) {
+        if (Num == V.at(i)){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool IfInVector(int Num , std::vector<unsigned short int> V)
 {
     for (int i=0;i<V.size();i++) {
         if (Num == V.at(i)){
