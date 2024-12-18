@@ -43,24 +43,12 @@ void DltElement(std::vector<int> &V , int ID);
 std::vector<int> GetDaughterPDGLit(int ID);
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize);
 
-struct Particle{
-    unsigned short int TreeID;
-    float Px;
-    float Py;
-    float Pz;
-
-    float Rap;
-    float Pt;
-};
-
-struct ParticlePool{
-    unsigned int EvtID;
-    vector<Particle> ListA;
-    vector<Particle> ListB;
-};
+#define A_Num_Per_Event 15
+#define B_Num_Per_Event 15
+#define Max_Event_Per_Pool 100 // no larger than 255
 
 // const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
-const int CentralityBin[] = {0 , 10 , 30 , 50 , 100};// %
+const int CentralityBin[] = {0 , 10 , 20 , 40 , 60 , 100};// %
 const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
 const float yBin[]  = {-1.0 , 0.0 , 1.0}; // B_y
 const float AyCut[] = {-1.0 , 1.0}; // A_y
@@ -73,6 +61,24 @@ const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
 const Int_t yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
 const Int_t FeedDownNum = sizeof(FeedDown)/sizeof(FeedDown[0]);
+
+struct Particle{
+    unsigned short int TreeID;
+    float Px;
+    float Py;
+    float Pz;
+
+    float Rap;
+    float Pt;
+};
+
+struct ParticlePool{
+    unsigned int EvtID;
+    unsigned short int ListA_Index;
+    Particle ListA[A_Num_Per_Event];
+    unsigned short int ListB_Index;
+    Particle ListB[B_Num_Per_Event];
+};
 
 ///////////       Main       ///////////
 void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
@@ -198,13 +204,16 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
 
     int i , j , k , l , m , n;// used as Index
     int Aid , Bid , Cid;// used as Index
+    float tPx , tPy , tPz , tPtSqu , tPt , tRap , tEnergy;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
     Particle AnyParticle;
-    std::vector<Particle> ParticleA     , ParticleB;
-    unsigned short int    ParticleASize , ParticleBSize , ParticleCSize;
+    Particle ParticleA[A_Num_Per_Event] , ParticleB[B_Num_Per_Event];
+    unsigned short int    ParticleASize , ParticleBSize , ParticleCSize; // Particle*Size == Particle*.Size
+    unsigned short int    ParticleASizeR, ParticleBSizeR; // Particle*Size after cut
     std::vector<std::vector<unsigned short int> > A_ParID,B_ParID,C_ParID;
-    std::vector<uint8_t> A_IfRecord,B_IfRecord;
+    bool A_IfRecord[A_Num_Per_Event],B_IfRecord[B_Num_Per_Event];
+    uint8_t A_yIndex[A_Num_Per_Event],B_yIndex[B_Num_Per_Event];
     bool IfRecord = true , IfRemoveFeedPair = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
@@ -233,6 +242,8 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     float NNch , Eta;
 
     //// Define Histgrams
+    uint8_t CenIndex , PVzIndex , yIndex;
+    bool RapIndex[15];
     //                                     centrality          B_y        PVz
     TH1D* H_Kstar                         [15]                 [15]       [15] ;
     TH1D* H_Mix_Kstar                     [15]                 [15]       [15] ;
@@ -287,6 +298,9 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH1D* H_ALL_B_Num_dRap                                     [15]               [15];
     TH1D* H_ALL_Mix_B_Num_dRap                                 [15]               [15];
     TH1D* H_ALL_Res_B_Num_dRap                                 [15]               [15];
+    //                                                                          EventPool
+    ParticlePool       Tot_Pool           [15]                 [15]       [15]    [Max_Event_Per_Pool];
+    unsigned uint8_t   Tot_Pool_Num       [15]                 [15]       [15] ;
 
     // A/B d (net)Num / d Dy
     TH1D* H_A_Num_Dy                      [15]                 [15]       [15] ;
@@ -677,21 +691,59 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
 
     const Int_t nentries=hadronTree->GetEntries();
     cout << "Events number: " << nentries << endl;
-    ParticleA.clear();ParticleB.clear();A_ParID.clear();B_ParID.clear();C_ParID.clear();A_IfRecord.clear();B_IfRecord.clear();
+    A_ParID.clear();B_ParID.clear();C_ParID.clear();
+    for (i=0;i<PVzBinNum;i++) {
+        for (j=0;j<yBinNum;j++) {
+            for (k=0;k<PVzBinNum;k++) {
+                Tot_Pool_Num       [i]                 [j]       [k] = 0;
+            }
+        }
+    }
     for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++) {
         hadronTree->GetEntry(EntriesID);
+
+        // Decide Event Index
+        CenIndex = -1;
+        for (k=0;k<CentralityBinNum;k++){
+            NNch = CenCorr(PVz) * Nch;
+            // if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
+            if ((NchList.at(k) >= NNch) && (NNch > NchList.at(k+1))) {
+                CenIndex = k;
+                break;
+            }
+        }
+        if (CenIndex == -1) continue;
+        
+        PVzIndex = -1;
+        for (k=0;k<PVzBinNum;k++){
+            // if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
+            if ((PVzBin[k] <= PVz) && (PVz < PVzBin[k+1])) {
+                PVzIndex = k;
+                break;
+            }
+        }
+        if (PVzIndex == -1) continue;
+
+        // initialize RapIndex
+        for (k=0;k<yBinNum;k++) {
+            RapIndex[k] = false;
+        }
+
+        ParticleASize = 0;ParticleBSize = 0;ParticleCSize = 0;
         for (j=0;j<PDGMult;j++) {
             if (PDG->at(j) == A_PDG) {
                 if (fabs(InvariantMass->at(j) - AMass) <= 3*AMassSigma) {
                     AnyParticle.TreeID = j;
-                    ParticleA.push_back(AnyParticle);
+                    ParticleA[ParticleASize] = AnyParticle;
+                    ParticleASize++;
                 }
                 else{continue;}
             }
             else if (PDG->at(j) == B_PDG) {
                 if (fabs(InvariantMass->at(j) - BMass) <= 3*AMassSigma) {
                     AnyParticle.TreeID = j;
-                    ParticleB.push_back(AnyParticle);
+                    ParticleB[ParticleBSize] = AnyParticle;
+                    ParticleBSize++;
                 }
                 else{continue;}
             }
@@ -704,6 +756,7 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                             Temp.push_back(ParentList->at(k));
                         }
                         C_ParID.push_back(Temp);
+                        ParticleCSize++;
                         // IfFoundOmega = true;
                         // cout<<"Found Omega"<<endl;
                     }
@@ -711,7 +764,6 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             }
         }
 
-        ParticleASize = ParticleA.size();ParticleBSize = ParticleB.size();
         if ((ParticleASize * ParticleBSize) == 0) continue; // if the particle A and B are not found.
 
         for (i=0;i<ParticleASize;i++) {
@@ -721,7 +773,17 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 Temp.push_back(ParentList->at(k));
             }
             A_ParID.push_back(Temp);
-            A_IfRecord.push_back(1);
+            A_IfRecord[i] = true;
+            tPx = mix_px->at(j);
+            tPy = mix_py->at(j);
+            tPz = mix_pz->at(j);
+            ParticleA[i].Px = tPx;
+            ParticleA[i].Py = tPy;
+            ParticleA[i].Pz = tPz;
+            tPtSqu = tPx*tPx + tPy*tPy;
+            tEnergy = pow(tPtSqu + tPz*tPz + AMass*AMass,0.5);
+            ParticleA[i].Pt = pow(tPtSqu,0.5);
+            ParticleA[i].Rap = 0.5*log((tEnergy+tPz)/(tEnergy-tPz));
         }
         for (i=0;i<ParticleBSize;i++) {
             j = ParticleB[i].TreeID;
@@ -730,14 +792,34 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 Temp.push_back(ParentList->at(k));
             }
             B_ParID.push_back(Temp);
-            B_IfRecord.push_back(1);
+            B_IfRecord[i] = true;
+            tPx = mix_px->at(j);
+            tPy = mix_py->at(j);
+            tPz = mix_pz->at(j);
+            ParticleB[i].Px = tPx;
+            ParticleB[i].Py = tPy;
+            ParticleB[i].Pz = tPz;
+            tPtSqu = tPx*tPx + tPy*tPy;
+            tEnergy = pow(tPtSqu + tPz*tPz + BMass*BMass,0.5);
+            ParticleB[i].Pt = pow(tPtSqu,0.5);
+            rap = 0.5*log((tEnergy+tPz)/(tEnergy-tPz));
+            ParticleB[i].Rap = rap;
+            // Decide B-Rapidity Index
+            B_yIndex[i] = -1;
+            for (k=0;k<yBinNum;k++){
+                if ((yBin[k] <= rap) && (rap < yBin[k+1])) {
+                    B_yIndex[i] = k;
+                    break;
+                }
+            }
+            if (B_yIndex[i] = -1) B_IfRecord[i] = false;
         }
-        
+
         // 如果A、B有血缘关系，保留B
         for (Bid = 0;Bid < ParticleBSize;Bid++) {
             for (Aid = 0;Aid < ParticleASize;;Aid++) {
                 if (IfInVector(ParticleA[Aid].TreeID , B_ParID.at(Bid))){
-                    A_IfRecord.at(Aid) = 0;
+                    A_IfRecord[Aid] = false;
                 }
                 // if (IfCommonElement(A_ParID.at(Aid) , B_ParID.at(Bid))){
                 //     A_IfRecord.at(Aid) = 0;
@@ -748,12 +830,11 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             }
         }
         
-        ParticleCSize = C_ParID.size();
         // 如果A、B与C有血缘关系，不记录A和B
         for (Aid = 0;Aid < ParticleASize;Aid++) {
             for (Cid = 0;Cid < ParticleCSize;Cid++) {
                 if (IfInVector(ParticleA[Aid].TreeID , C_ParID.at(Cid))) {
-                    A_IfRecord.at(Aid) = 0;
+                    A_IfRecord[Aid] = false;
                     // cout<<"Meet 3!"<<endl;
                     // cout<<"{ "<<A_PDG<<" } "<<A_TreID.at(Aid)<<" th ";print(A_ParID.at(Aid));
                     // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
@@ -769,7 +850,7 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         for (Bid = 0;Bid < ParticleBSize;Bid++) {
             for (Cid = 0;Cid < ParticleCSize;Cid++) {
                 if (IfInVector(ParticleB[Bid].TreeID , C_ParID.at(Cid))) {
-                    B_IfRecord.at(Bid) = 0;
+                    B_IfRecord[Bid] = false;
                     // cout<<"Meet 5!"<<endl;
                     // cout<<"{ "<<B_PDG<<" } "<<B_TreID.at(Bid)<<" th ";print(B_ParID.at(Bid));
                     // cout<<"{ "<<FeedDown[0]<<" } "<<(C_ParID.at(Cid)).at(0)<<" th ";print(C_ParID.at(Cid));
@@ -782,13 +863,51 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 // }
             }
         }
-
+        
+        // A rapidity cut
         for (Aid = 0;Aid < ParticleASize;Aid++) {
-            if (A_IfRecord.at(Aid)==0) continue;
-            i = ParticleA[Aid].TreeID;
-            ParticleA[Aid].Px = mix_px->at(i);
-            ParticleA[Aid].Py = mix_py->at(i);
-            ParticleA[Aid].Pz = mix_pz->at(i);
+            tRap = ParticleA[Aid].Rap;
+            if ((tRap < AyCut[0]) || (tRap > AyCut[1])){
+                A_IfRecord[Aid] = false;
+            }
+        }
+
+        // A Eta Cut
+        for (Aid = 0;Aid < ParticleASize;Aid++) {
+            tPt = ParticleA[Aid].Pt;
+            tPz = ParticleA[Aid].Pz;
+            Eta = -1.0*log(tan(0.5*(acos(tPz/pow(tPt*tPt+tPz*tPz,0.5)))));
+            if ((Eta < EtaCut[0]) || (Eta > EtaCut[1])){
+                A_IfRecord[Aid] = false;
+            }
+        }
+
+        // B Eta Cut
+        for (Bid = 0;Bid < ParticleBSize;Bid++) {
+            tPt = ParticleB[Bid].Pt;
+            tPz = ParticleB[Bid].Pz;
+            Eta = -1.0*log(tan(0.5*(acos(tPz/pow(tPt*tPt+tPz*tPz,0.5)))));
+            if ((Eta < EtaCut[0]) || (Eta > EtaCut[1])){
+                B_IfRecord[Bid] = false;
+            }
+        }
+
+        ParticleASizeR = 0;ParticleBSizeR = 0;
+        for (Aid = 0;Aid < ParticleASize;Aid++) {
+            if (A_IfRecord[Aid]) ParticleASizeR++;
+        }
+        for (Bid = 0;Aid < ParticleBSize;Bid++) {
+            if (B_IfRecord[Bid]) ParticleBSizeR++;
+        }
+        if ((ParticleASizeR * ParticleBSizeR) == 0) continue; // if the particle A and B are not found after cut.
+
+        // FIll in the pool
+        for (Bid = 0;Bid < ParticleBSize;Bid++) {
+            if (B_IfRecord[Bid]) {
+                yIndex = B_yIndex[Bid];
+                RapIndex[yIndex] = true;
+                Tot_Pool [CenIndex] [yIndex] [PVzIndex] [50]
+            }
         }
     }
 
