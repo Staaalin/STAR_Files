@@ -782,6 +782,14 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 // }
             }
         }
+
+        for (Aid = 0;Aid < ParticleASize;Aid++) {
+            if (A_IfRecord.at(Aid)==0) continue;
+            i = ParticleA[Aid].TreeID;
+            ParticleA[Aid].Px = mix_px->at(i);
+            ParticleA[Aid].Py = mix_py->at(i);
+            ParticleA[Aid].Pz = mix_pz->at(i);
+        }
     }
 
     return;
