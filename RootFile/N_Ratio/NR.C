@@ -42,6 +42,7 @@ bool IfCommonElement(std::vector<int> A , std::vector<int> B);
 void DltElement(std::vector<int> &V , int ID);
 std::vector<int> GetDaughterPDGLit(int ID);
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize);
+float GetPairMass(float p1x,float p1y,float p1z,float m1,float p2x,float p2y,float p2z,float m2);
 
 #define A_Num_Per_Event 15
 #define B_Num_Per_Event 15
@@ -204,10 +205,12 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
 
     int i , j , k , l , m , n;// used as Index
     int Aid , Bid , Cid;// used as Index
-    float tPx , tPy , tPz , tPtSqu , tPt , tRap , tEnergy;
+    float tPx , tPy , tPz , tPtSqu , tPt , tRap , tEnergy , PairMass;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
+    float C_Mass;
     Particle AnyParticle;
+    ParticlePool  Any_Pool;
     Particle ParticleA[A_Num_Per_Event] , ParticleB[B_Num_Per_Event];
     unsigned short int    ParticleASize , ParticleBSize , ParticleCSize; // Particle*Size == Particle*.Size
     unsigned short int    ParticleASizeR, ParticleBSizeR; // Particle*Size after cut
@@ -217,6 +220,29 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     bool IfRecord = true , IfRemoveFeedPair = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
+
+    for (int i = 0;i < FeedDownNum;i++){
+        if (abs(FeedDown[i]) == A_PDG) {
+            FeedDown[i] = 0;
+            CMass.push_back(-100);
+            CMassSigma.push_back(-1);
+            continue;
+        }
+        if (abs(FeedDown[i]) == B_PDG) {
+            FeedDown[i] = 0;
+            CMass.push_back(-100);
+            CMassSigma.push_back(-1);
+            continue;
+        }
+        CMass.push_back(massList(FeedDown[i]));
+        CMassSigma.push_back(massListSigma(FeedDown[i]));
+    }
+    cout<<"CMass = ";print(CMass);
+    cout<<"CMassSigma = ";print(CMassSigma);
+
+    for (int i=0;i<FeedDownNum;i++) {
+        if ( IfInVector(A_PDG , GetDaughterPDGLit(FeedDown[i])) && IfInVector(B_PDG , GetDaughterPDGLit(FeedDown[i])) ) IfRemoveFeedPair = true;
+    }
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -892,13 +918,33 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             }
         }
 
+        // C FeedDown Cut
+        if (IfRemoveFeedPair) {
+            for (Cid = 0;Cid<ParticleCSize;Cid++){
+                for (Bid = 0;Bid < ParticleBSize;Bid++) {
+                    if (B_IfRecord[Bid]) {
+                        C_Mass = CMass[Cid];
+                        for (Aid = 0;Aid < ParticleASize;Aid++) {
+                            if (A_IfRecord[Aid]) {
+                                PairMass = GetPairMass(ParticleA[Aid].Px,ParticleA[Aid].Py,ParticleA[Aid].Pz,AMass,ParticleB[Bid].Px,ParticleB[Bid].Py,ParticleB[Bid].Pz,BMass);
+                                if (fabs(PairMass - C_Mass)<3*CMassSigma) {
+                                    B_IfRecord[Bid] = false;
+                                    A_IfRecord[Aid] = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         ParticleASizeR = 0;ParticleBSizeR = 0;
         for (Aid = 0;Aid < ParticleASize;Aid++) {
             if (A_IfRecord[Aid]) ParticleASizeR++;
         }
         for (Bid = 0;Aid < ParticleBSize;Bid++) {
             if (B_IfRecord[Bid]) ParticleBSizeR++;
-        }
         if ((ParticleASizeR * ParticleBSizeR) == 0) continue; // if the particle A and B are not found after cut.
 
         // FIll in the pool
@@ -906,7 +952,14 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             if (B_IfRecord[Bid]) {
                 yIndex = B_yIndex[Bid];
                 RapIndex[yIndex] = true;
-                Tot_Pool [CenIndex] [yIndex] [PVzIndex] [50]
+                Tot_Pool      [CenIndex] [yIndex] [PVzIndex] [50];
+                Any_Pool.EvtID = EntriesID;
+                for ()
+                unsigned short int ListA_Index;
+                Particle ListA[A_Num_Per_Event];
+                unsigned short int ListB_Index;
+                Particle ListB[B_Num_Per_Event];
+                Tot_Pool_Num  [CenIndex] [yIndex] [PVzIndex] ++;
             }
         }
     }
@@ -1204,4 +1257,19 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
         }
     }
     return Result;
+}
+
+// Get Mass in rest frame
+float GetPairMass(float p1x,float p1y,float p1z,float m1,float p2x,float p2y,float p2z,float m2) {
+    float E1 = pow(p1x*p1x+p1y*p1y+p1z*p1z+m1*m1,0.5);
+    float E2 = pow(p2x*p2x+p2y*p2y+p2z*p2z+m2*m2,0.5);
+    float Tot_E = E1+E2;
+    float beta[3] = { -(p1x+p2x)/Tot_E , -(p1y+p2y)/Tot_E , -(p1z+p2z)/Tot_E };
+    float beta2 = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+    float gamma = 1.0 / std::sqrt(1.0 - beta2);
+    float gamma2 = (beta2 > 0) ? (gamma - 1.0) / beta2 : 0.0;
+
+    float bp1 = beta[0]*p1x + beta[1]*p1y + beta[2]*p1z;
+    float bp2 = beta[0]*p2x + beta[1]*p2y + beta[2]*p2z;
+    return gamma * (E1 + bp1 + E2 + bp2);
 }
