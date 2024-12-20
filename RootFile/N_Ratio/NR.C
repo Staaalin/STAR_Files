@@ -958,7 +958,7 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         for (Bid = 0;Bid < ParticleBSize;Bid++) {
             if (B_IfRecord[Bid]) {
                 yIndex = B_yIndex[Bid];
-                RapIndex[yIndex] = true;
+                IfMatched   [yIndex] = true;
                 Tot_Pool      [CenIndex] [yIndex] [PVzIndex] [50];
                 Any_Pool.EvtID = EntriesID;
                 for ()
