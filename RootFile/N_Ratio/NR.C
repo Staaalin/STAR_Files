@@ -217,6 +217,7 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     std::vector<std::vector<unsigned short int> > A_ParID,B_ParID,C_ParID;
     bool A_IfRecord[A_Num_Per_Event],B_IfRecord[B_Num_Per_Event];
     uint8_t A_yIndex[A_Num_Per_Event],B_yIndex[B_Num_Per_Event];
+    bool IfMatched[yBinNum];
     bool IfRecord = true , IfRemoveFeedPair = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
@@ -327,6 +328,7 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     //                                                                          EventPool
     ParticlePool       Tot_Pool           [15]                 [15]       [15]    [Max_Event_Per_Pool];
     unsigned uint8_t   Tot_Pool_Num       [15]                 [15]       [15] ;
+    ParticlePool       Tot_Pool_Tmp                            [15]       ; // Temp Store
 
     // A/B d (net)Num / d Dy
     TH1D* H_A_Num_Dy                      [15]                 [15]       [15] ;
@@ -948,6 +950,11 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         if ((ParticleASizeR * ParticleBSizeR) == 0) continue; // if the particle A and B are not found after cut.
 
         // FIll in the pool
+        for (i=0;i<yBinNum;i++) {
+            IfMatched   [i]             = false;
+            Tot_Pool_Tmp[i].ListA_Index = 0;
+            Tot_Pool_Tmp[i].ListB_Index = 0;
+        }
         for (Bid = 0;Bid < ParticleBSize;Bid++) {
             if (B_IfRecord[Bid]) {
                 yIndex = B_yIndex[Bid];
