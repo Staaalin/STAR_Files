@@ -31,6 +31,24 @@
 #include <stdio.h>
 using namespace std;
 
+struct Particle{
+    unsigned short int TreeID;
+    float Px;
+    float Py;
+    float Pz;
+
+    float Rap;
+    float Pt;
+};
+
+struct ParticlePool{
+    unsigned int EvtID;
+    unsigned short int ListA_Index;
+    Particle ListA[A_Num_Per_Event];
+    unsigned short int ListB_Index;
+    Particle ListB[B_Num_Per_Event];
+};
+
 void print(std::vector<int> Temp);
 void print(std::vector<float> Temp);
 float CenCorr(float Vz,TString Name);
@@ -43,6 +61,7 @@ void DltElement(std::vector<int> &V , int ID);
 std::vector<int> GetDaughterPDGLit(int ID);
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize);
 float GetPairMass(float p1x,float p1y,float p1z,float m1,float p2x,float p2y,float p2z,float m2);
+void GetPairMassAndKstar(Particle PA , Particle PB , float AMass , float BMass , float (&MassAndKstar)[2]);
 
 #define A_Num_Per_Event 15
 #define B_Num_Per_Event 15
@@ -62,24 +81,6 @@ const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
 const Int_t yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
 const Int_t FeedDownNum = sizeof(FeedDown)/sizeof(FeedDown[0]);
-
-struct Particle{
-    unsigned short int TreeID;
-    float Px;
-    float Py;
-    float Pz;
-
-    float Rap;
-    float Pt;
-};
-
-struct ParticlePool{
-    unsigned int EvtID;
-    unsigned short int ListA_Index;
-    Particle ListA[A_Num_Per_Event];
-    unsigned short int ListB_Index;
-    Particle ListB[B_Num_Per_Event];
-};
 
 ///////////       Main       ///////////
 void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
@@ -205,12 +206,11 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
 
     int i , j , k , l , m , n;// used as Index
     int Aid , Bid , Cid;// used as Index
-    float tPx , tPy , tPz , tPtSqu , tPt , tRap , tEnergy , PairMass;
+    float tPx , tPy , tPz , tPtSqu , tPt , tRap , tEnergy , PairMass , MassAndKstar[2];
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
     float C_Mass;
     Particle AnyParticle;
-    ParticlePool  Any_Pool;
     Particle ParticleA[A_Num_Per_Event] , ParticleB[B_Num_Per_Event];
     unsigned short int    ParticleASize , ParticleBSize , ParticleCSize; // Particle*Size == Particle*.Size
     unsigned short int    ParticleASizeR, ParticleBSizeR; // Particle*Size after cut
@@ -326,8 +326,10 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH1D* H_ALL_Mix_B_Num_dRap                                 [15]               [15];
     TH1D* H_ALL_Res_B_Num_dRap                                 [15]               [15];
     //                                                                          EventPool
-    ParticlePool       Tot_Pool           [15]                 [15]       [15]    [Max_Event_Per_Pool];
+    ParticlePool       Tot_Pool           [15]                 [15]       [15]  [Max_Event_Per_Pool];
+    uint8_t            Tot_Pool_Index     [15]                 [15]       [15] ;
     unsigned uint8_t   Tot_Pool_Num       [15]                 [15]       [15] ;
+    bool               Tot_Pool_IfFilled  [15]                 [15]       [15] ;
     ParticlePool       Tot_Pool_Tmp                            [15]       ; // Temp Store
 
     // A/B d (net)Num / d Dy
@@ -724,6 +726,8 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         for (j=0;j<yBinNum;j++) {
             for (k=0;k<PVzBinNum;k++) {
                 Tot_Pool_Num       [i]                 [j]       [k] = 0;
+                Tot_Pool_Index     [i]                 [j]       [k] = -1;
+                Tot_Pool_IfFilled  [i]                 [j]       [k] = false;
             }
         }
     }
@@ -950,7 +954,7 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         if ((ParticleASizeR * ParticleBSizeR) == 0) continue; // if the particle A and B are not found after cut.
 
         // FIll in the pool
-        for (i=0;i<yBinNum;i++) {
+        for (i=0;i<yBinNum;i++) {// initial
             IfMatched   [i]             = false;
             Tot_Pool_Tmp[i].ListA_Index = 0;
             Tot_Pool_Tmp[i].ListB_Index = 0;
@@ -958,17 +962,34 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         for (Bid = 0;Bid < ParticleBSize;Bid++) {
             if (B_IfRecord[Bid]) {
                 yIndex = B_yIndex[Bid];
-                IfMatched   [yIndex] = true;
-                Tot_Pool      [CenIndex] [yIndex] [PVzIndex] [50];
-                Any_Pool.EvtID = EntriesID;
-                for ()
-                unsigned short int ListA_Index;
-                Particle ListA[A_Num_Per_Event];
-                unsigned short int ListB_Index;
-                Particle ListB[B_Num_Per_Event];
-                Tot_Pool_Num  [CenIndex] [yIndex] [PVzIndex] ++;
+                IfMatched   [yIndex]                                         = true;
+                Tot_Pool_Tmp[yIndex].EvtID                                   = EntriesID;
+                Tot_Pool_Tmp[yIndex].ListB[Tot_Pool_Tmp[yIndex].ListB_Index] = ParticleB[Bid];
+                Tot_Pool_Tmp[yIndex].ListB_Index++;
             }
         }
+        for (i=0;i<yBinNum;i++) {
+            if (IfMatched[i]) {
+                j = 0;
+                for (Aid = 0;Aid < ParticleASize;Aid++) {
+                    if (A_IfRecord[Aid]) {
+                        Tot_Pool_Tmp[i].ListA[j] = ParticleA[Aid];
+                        j++;
+                    }
+                }
+                Tot_Pool_Tmp[i].ListA_Index = j-1;
+                Tot_Pool_Index[CenIndex] [i] [PVzIndex]++;
+                if (Tot_Pool_Index[CenIndex] [i] [PVzIndex] == (Max_Event_Per_Pool)) Tot_Pool_Index[CenIndex] [i] [PVzIndex] = 0;
+                Tot_Pool      [CenIndex] [i] [PVzIndex] [Tot_Pool_Index[CenIndex] [i] [PVzIndex]] = Tot_Pool_Tmp[i];
+                if (!(Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex])) {
+                    Tot_Pool_Num[CenIndex] [i] [PVzIndex]++;
+                    if (Tot_Pool_Num[CenIndex] [i] [PVzIndex] == (Max_Event_Per_Pool - 1)) Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex] = true;
+                }
+            }
+        }
+        // ############################################################################################################# //
+        // ####                                          Fill in the Hist                                           #### //
+        // ############################################################################################################# //
     }
 
     return;
@@ -1279,4 +1300,28 @@ float GetPairMass(float p1x,float p1y,float p1z,float m1,float p2x,float p2y,flo
     float bp1 = beta[0]*p1x + beta[1]*p1y + beta[2]*p1z;
     float bp2 = beta[0]*p2x + beta[1]*p2y + beta[2]*p2z;
     return gamma * (E1 + bp1 + E2 + bp2);
+}
+
+void GetPairMassAndKstar(Particle PA , Particle PB , float AMass , float BMass , float (&MassAndKstar)[2]) {
+    float p1x = PA.Px ,p1y = PA.Py , p1z = PA.Pz  , p2x = PB.Px , p2y = PB.Py ,  p2z = PB.Pz;
+    float E1 = pow(p1x*p1x+p1y*p1y+p1z*p1z+AMass*AMass,0.5);
+    float E2 = pow(p2x*p2x+p2y*p2y+p2z*p2z+BMass*BMass,0.5);
+    float Tot_E = E1+E2;
+    float beta[3] = { -(p1x+p2x)/Tot_E , -(p1y+p2y)/Tot_E , -(p1z+p2z)/Tot_E };
+    float beta2 = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+    float gamma = 1.0 / std::sqrt(1.0 - beta2);
+    float gamma2 = (beta2 > 0) ? (gamma - 1.0) / beta2 : 0.0;
+
+    float bp1 = beta[0]*p1x + beta[1]*p1y + beta[2]*p1z;
+    float bp2 = beta[0]*p2x + beta[1]*p2y + beta[2]*p2z;
+
+    // float New_Px = p1x + gamma2 * bp1 * beta[0] + gamma * beta[0] * E1;
+    // float New_Py = p1y + gamma2 * bp1 * beta[1] + gamma * beta[1] * E1;
+    // float New_Pz = p1z + gamma2 * bp1 * beta[2] + gamma * beta[2] * E1;
+    float New_Px = (p1x - p2x) + gamma2 * (bp1-bp2) * beta[0] + gamma * beta[0] * (E1-E2);
+    float New_Py = (p1y - p2y) + gamma2 * (bp1-bp2) * beta[1] + gamma * beta[1] * (E1-E2);
+    float New_Pz = (p1z - p2z) + gamma2 * (bp1-bp2) * beta[2] + gamma * beta[2] * (E1-E2);
+
+    MassAndKstar[0] = (gamma * (E1 + bp1 + E2 + bp2));
+    MassAndKstar[1] = 0.5*pow(New_Px*New_Px+New_Py*New_Py+New_Pz*New_Pz,0.5);
 }
