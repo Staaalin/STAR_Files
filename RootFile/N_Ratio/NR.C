@@ -31,6 +31,11 @@
 #include <stdio.h>
 using namespace std;
 
+
+#define A_Num_Per_Event 5
+#define B_Num_Per_Event 5
+#define HowMuchEventMixing 10
+
 struct Particle{
     unsigned short int TreeID;
     float Px;
@@ -43,6 +48,7 @@ struct Particle{
 
 struct ParticlePool{
     unsigned int EvtID;
+    bool IfMadeSame = false;
     unsigned short int ListA_Index;
     Particle ListA[A_Num_Per_Event];
     unsigned short int ListB_Index;
@@ -62,10 +68,6 @@ std::vector<int> GetDaughterPDGLit(int ID);
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize);
 float GetPairMass(float p1x,float p1y,float p1z,float m1,float p2x,float p2y,float p2z,float m2);
 void GetPairMassAndKstar(Particle PA , Particle PB , float AMass , float BMass , float (&MassAndKstar)[2]);
-
-#define A_Num_Per_Event 15
-#define B_Num_Per_Event 15
-#define Max_Event_Per_Pool 100 // no larger than 255
 
 // const int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 60 , 70 , 80};// %
 const int CentralityBin[] = {0 , 10 , 20 , 40 , 60 , 100};// %
@@ -206,12 +208,17 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
 
     int i , j , k , l , m , n;// used as Index
     int Aid , Bid , Cid;// used as Index
+    uint8_t GenI , GenJ , GenK; // used as index generator looping in pool when filling hist
     float tPx , tPy , tPz , tPtSqu , tPt , tRap , tEnergy , PairMass , MassAndKstar[2];
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
     float C_Mass;
     Particle AnyParticle;
     Particle ParticleA[A_Num_Per_Event] , ParticleB[B_Num_Per_Event];
+    float Mass_Store[A_Num_Per_Event*B_Num_Per_Event];
+    float Kstar_Store[A_Num_Per_Event*B_Num_Per_Event];
+    int   A_Num_Store[A_Num_Per_Event*B_Num_Per_Event];
+    int   B_Num_Store[A_Num_Per_Event*B_Num_Per_Event];
     unsigned short int    ParticleASize , ParticleBSize , ParticleCSize; // Particle*Size == Particle*.Size
     unsigned short int    ParticleASizeR, ParticleBSizeR; // Particle*Size after cut
     std::vector<std::vector<unsigned short int> > A_ParID,B_ParID,C_ParID;
@@ -326,11 +333,13 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH1D* H_ALL_Mix_B_Num_dRap                                 [15]               [15];
     TH1D* H_ALL_Res_B_Num_dRap                                 [15]               [15];
     //                                                                          EventPool
-    ParticlePool       Tot_Pool           [15]                 [15]       [15]  [Max_Event_Per_Pool];
-    uint8_t            Tot_Pool_Index     [15]                 [15]       [15] ;
-    unsigned uint8_t   Tot_Pool_Num       [15]                 [15]       [15] ;
+    ParticlePool       Tot_Pool           [15]                 [15]       [15]  [HowMuchEventMixing+1];
+    uint8_t            Tot_Pool_F_Index   [15]                 [15]       [15] ;                     // The point in pool
+    uint8_t            Tot_Pool_Num       [15]                 [15]       [15] ;
     bool               Tot_Pool_IfFilled  [15]                 [15]       [15] ;
     ParticlePool       Tot_Pool_Tmp                            [15]       ; // Temp Store
+    ParticlePool       Tot_Pool_TTmp                                      ; // Temp Store
+    ParticlePool       Tot_Pool_TTTmp                                     ; // Temp Store
 
     // A/B d (net)Num / d Dy
     TH1D* H_A_Num_Dy                      [15]                 [15]       [15] ;
@@ -726,7 +735,8 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         for (j=0;j<yBinNum;j++) {
             for (k=0;k<PVzBinNum;k++) {
                 Tot_Pool_Num       [i]                 [j]       [k] = 0;
-                Tot_Pool_Index     [i]                 [j]       [k] = -1;
+                Tot_Pool_F_Index   [i]                 [j]       [k] = -1;
+                Tot_Pool_C_Index   [i]                 [j]       [k] = -1;
                 Tot_Pool_IfFilled  [i]                 [j]       [k] = false;
             }
         }
@@ -978,18 +988,36 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                     }
                 }
                 Tot_Pool_Tmp[i].ListA_Index = j-1;
-                Tot_Pool_Index[CenIndex] [i] [PVzIndex]++;
-                if (Tot_Pool_Index[CenIndex] [i] [PVzIndex] == (Max_Event_Per_Pool)) Tot_Pool_Index[CenIndex] [i] [PVzIndex] = 0;
-                Tot_Pool      [CenIndex] [i] [PVzIndex] [Tot_Pool_Index[CenIndex] [i] [PVzIndex]] = Tot_Pool_Tmp[i];
+                Tot_Pool_Num[CenIndex] [i] [PVzIndex]++;
+                if (Tot_Pool_Num[CenIndex] [i] [PVzIndex] == (HowMuchEventMixing+1)) {
+                    Tot_Pool_Num[CenIndex] [i] [PVzIndex] = 0;
+                    Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex] = true;
+                }
+                Tot_Pool      [CenIndex] [i] [PVzIndex] [Tot_Pool_F_Index[CenIndex] [i] [PVzIndex]] = Tot_Pool_Tmp[i];
                 if (!(Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex])) {
                     Tot_Pool_Num[CenIndex] [i] [PVzIndex]++;
-                    if (Tot_Pool_Num[CenIndex] [i] [PVzIndex] == (Max_Event_Per_Pool - 1)) Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex] = true;
+                    if (Tot_Pool_Num[CenIndex] [i] [PVzIndex] == (HowMuchEventMixing)) Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex] = true;
                 }
             }
         }
         // ############################################################################################################# //
         // ####                                          Fill in the Hist                                           #### //
         // ############################################################################################################# //
+        for (i=0;i<yBinNum;i++) {
+            if (IfMatched[i] && Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex]) {
+                j = Tot_Pool_F_Index[CenIndex] [i] [PVzIndex];
+                for (k=0;k<=HowMuchEventMixing;k++) {
+                    for (Bid=0;Bid<Tot_Pool_TTmp.ListB_Index;Bid++) {
+                        for (Aid=0;Aid<Tot_Pool_TTTmp.ListA_Index;Aid++) {
+                            GetPairMassAndKstar(Tot_Pool_TTmp.ListB[Bid] , Tot_Pool_TTTmp.ListA[Aid] , AMass , BMass , MassAndKstar);
+                            Mass_Store[m] = MassAndKstar[0];
+                            Kstar_Store[m] = MassAndKstar[1];
+                            m++;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     return;
