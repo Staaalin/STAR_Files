@@ -215,6 +215,7 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     float C_Mass;
     Particle AnyParticle;
     Particle ParticleA[A_Num_Per_Event] , ParticleB[B_Num_Per_Event];
+    Particle ParticleA_Tmp , ParticleB_Tmp;
     float Mass_Store[A_Num_Per_Event*B_Num_Per_Event];
     float Kstar_Store[A_Num_Per_Event*B_Num_Per_Event];
     int   A_Num_Store[A_Num_Per_Event*B_Num_Per_Event];
@@ -989,33 +990,63 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 }
                 Tot_Pool_Tmp[i].ListA_Index = j-1;
                 Tot_Pool_Num[CenIndex] [i] [PVzIndex]++;
-                if (Tot_Pool_Num[CenIndex] [i] [PVzIndex] == (HowMuchEventMixing+1)) {
-                    Tot_Pool_Num[CenIndex] [i] [PVzIndex] = 0;
+                if (Tot_Pool_Num[CenIndex] [i] [PVzIndex] == (HowMuchEventMixing)) {
                     Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex] = true;
                 }
-                Tot_Pool      [CenIndex] [i] [PVzIndex] [Tot_Pool_F_Index[CenIndex] [i] [PVzIndex]] = Tot_Pool_Tmp[i];
-                if (!(Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex])) {
-                    Tot_Pool_Num[CenIndex] [i] [PVzIndex]++;
-                    if (Tot_Pool_Num[CenIndex] [i] [PVzIndex] == (HowMuchEventMixing)) Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex] = true;
-                }
+                Tot_Pool [CenIndex] [i] [PVzIndex] [Tot_Pool_Num[CenIndex] [i] [PVzIndex]] = Tot_Pool_Tmp[i];
             }
         }
         // ############################################################################################################# //
         // ####                                          Fill in the Hist                                           #### //
         // ############################################################################################################# //
         for (i=0;i<yBinNum;i++) {
-            if (IfMatched[i] && Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex]) {
-                j = Tot_Pool_F_Index[CenIndex] [i] [PVzIndex];
-                for (k=0;k<=HowMuchEventMixing;k++) {
-                    for (Bid=0;Bid<Tot_Pool_TTmp.ListB_Index;Bid++) {
-                        for (Aid=0;Aid<Tot_Pool_TTTmp.ListA_Index;Aid++) {
-                            GetPairMassAndKstar(Tot_Pool_TTmp.ListB[Bid] , Tot_Pool_TTTmp.ListA[Aid] , AMass , BMass , MassAndKstar);
-                            Mass_Store[m] = MassAndKstar[0];
-                            Kstar_Store[m] = MassAndKstar[1];
-                            m++;
+            if (Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex]) {
+                for (j=0;j<=HowMuchEventMixing;j++) {
+                    Tot_Pool_TTmp = Tot_Pool[CenIndex] [i] [PVzIndex] [j];
+                    for (k=0;k<=HowMuchEventMixing;k++) {
+                        Tot_Pool_TTTmp = Tot_Pool[CenIndex] [i] [PVzIndex] [k];
+                        for (Bid=0;Bid<Tot_Pool_TTmp.ListB_Index;Bid++) {
+                            for (Aid=0;Aid<Tot_Pool_TTTmp.ListA_Index;Aid++) {
+                                ParticleA_Tmp = Tot_Pool_TTTmp.ListA[Aid];
+                                ParticleB_Tmp = Tot_Pool_TTmp.ListB[Bid];
+                                GetPairMassAndKstar(ParticleB_Tmp , ParticleA_Tmp , AMass , BMass , MassAndKstar);
+                                Mass_Store[m] = MassAndKstar[0];
+                                Kstar_Store[m] = MassAndKstar[1];
+                                tRap = ParticleA_Tmp.Rap - ParticleB_Tmp.Rap;
+                                tPt  = ParticleA_Tmp.Pt  - ParticleB_Tmp.Pt ;
+                                if (j == k) {
+                                    H_Event_Num      [CenIndex] [i] [PVzIndex]->Fill(0);
+                                    H_Res_Event_Num  [CenIndex] [i] [PVzIndex]->Fill(0);
+                                    H_ALL_Event_Num             [i]           ->Fill(0);
+                                    H_ALL_Res_Event_Num         [i]           ->Fill(0);
+                                    H_Mass           [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[0]);
+                                    H_Kstar          [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[1]);
+                                    H_dRap           [CenIndex] [i] [PVzIndex]->Fill(tRap);
+                                    H_dPt            [CenIndex] [i] [PVzIndex]->Fill(tPt);
+                                    H_Res_Mass       [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[0]);
+                                    H_Res_Kstar      [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[1]);
+                                    H_Res_dRap       [CenIndex] [i] [PVzIndex]->Fill(tRap);
+                                    H_Res_dPt        [CenIndex] [i] [PVzIndex]->Fill(tPt);
+                                    H_ALL_Mass                  [i]           ->Fill(MassAndKstar[0]);
+                                    H_ALL_Kstar                 [i]           ->Fill(MassAndKstar[1]);
+                                    H_ALL_dRap                  [i]           ->Fill(tRap);
+                                    H_ALL_dPt                   [i]           ->Fill(tPt);
+                                    H_ALL_Res_Mass              [i]           ->Fill(MassAndKstar[0]);
+                                    H_ALL_Res_Kstar             [i]           ->Fill(MassAndKstar[1]);
+                                    H_ALL_Res_dRap              [i]           ->Fill(tRap);
+                                    H_ALL_Res_dPt               [i]           ->Fill(tPt);
+                                }
+                                else {
+                                    for (m=0;m<2;m++) {
+                                        H_Mix_A_Num_dRap[i] [MassAndKstar[m].RapIndex]->Fill(MassAndKstar[m].Mass);
+                                        H_Mix_B_Num_dRap[i] [MassAndKstar[m].RapIndex]->Fill(MassAndKstar[m].Mass);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+                Tot_Pool_Num[CenIndex] [i] [PVzIndex] = -1;
             }
         }
     }
