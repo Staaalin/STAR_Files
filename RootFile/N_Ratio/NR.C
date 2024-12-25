@@ -38,6 +38,7 @@ using namespace std;
 
 struct Particle{
     unsigned short int TreeID;
+    unsigned short int ID;// Unique ID in Mix pool
     float Px;
     float Py;
     float Pz;
@@ -49,9 +50,9 @@ struct Particle{
 struct ParticlePool{
     unsigned int EvtID;
     bool IfMadeSame = false;
-    unsigned short int ListA_Index;
+    short int ListA_Index;
     Particle ListA[A_Num_Per_Event];
-    unsigned short int ListB_Index;
+    short int ListB_Index;
     Particle ListB[B_Num_Per_Event];
 };
 
@@ -225,12 +226,22 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     std::vector<std::vector<unsigned short int> > A_ParID,B_ParID,C_ParID;
     bool A_IfRecord[A_Num_Per_Event],B_IfRecord[B_Num_Per_Event];
     uint8_t A_yIndex[A_Num_Per_Event],B_yIndex[B_Num_Per_Event];
+
+    short int dRap_Bin_IfFilled_Same_Index=-1;
+    short int A_dRap_PID_IfFilled_Same[A_Num_Per_Event*B_Num_Per_Event],B_dRap_PID_IfFilled_Same[A_Num_Per_Event*B_Num_Per_Event];
+    float     M_dRap_Val_IfFilled_Same[A_Num_Per_Event*B_Num_Per_Event];
+    short int M_dRap_Bin_IfFilled_Same[A_Num_Per_Event*B_Num_Per_Event];
+    int       dRap_Bin_IfFilled_Mix_Index=-1;
+    short int A_dRap_PID_IfFilled_Mix[A_Num_Per_Event*B_Num_Per_Event*(HowMuchEventMixing)*(HowMuchEventMixing)],B_dRap_PID_IfFilled_Mix[A_Num_Per_Event*B_Num_Per_Event*(HowMuchEventMixing)*(HowMuchEventMixing)];
+    float     M_dRap_Val_IfFilled_Mix[A_Num_Per_Event*B_Num_Per_Event*(HowMuchEventMixing)*(HowMuchEventMixing)];
+    short int M_dRap_Bin_IfFilled_Mix[A_Num_Per_Event*B_Num_Per_Event*(HowMuchEventMixing)*(HowMuchEventMixing)];
+    
     bool IfMatched[yBinNum];
     bool IfRecord = true , IfRemoveFeedPair = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
 
-    for (int i = 0;i < FeedDownNum;i++){
+    for (i = 0;i < FeedDownNum;i++){
         if (abs(FeedDown[i]) == A_PDG) {
             FeedDown[i] = 0;
             CMass.push_back(-100);
@@ -249,7 +260,7 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     cout<<"CMass = ";print(CMass);
     cout<<"CMassSigma = ";print(CMassSigma);
 
-    for (int i=0;i<FeedDownNum;i++) {
+    for (i=0;i<FeedDownNum;i++) {
         if ( IfInVector(A_PDG , GetDaughterPDGLit(FeedDown[i])) && IfInVector(B_PDG , GetDaughterPDGLit(FeedDown[i])) ) IfRemoveFeedPair = true;
     }
 
@@ -265,8 +276,11 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     int kStarBinNum = 400;
     float kStarSta = 0 , kStarEnd = 8;
     
-    int dRapBinNum = 300;
-    float dRapSta = -3 , dRapEnd = 3;
+    int dRapBinNum = 200;
+    float dRapSta = -2.5 , dRapEnd = 2.5;
+    float dRapLength = dRapEnd - dRapSta;
+    float dRapBinWidth = dRapLength/dRapBinNum;
+    float dRapBinWidth_temp;
     
     int dPtBinNum = 200;
     float dPtSta = 0 , dPtEnd = 10;
@@ -320,7 +334,8 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH1D* H_Res_Event_Num                 [15]                 [15]       [15] ;
     TH1D* H_ALL_Event_Num                                      [15]            ;
     TH1D* H_ALL_Res_Event_Num                                  [15]            ;
-    int RebinNum[] = {1,2,4,5,10,20,25,50};                    //               RebinNum
+    int RebinNum[] = {1,2,4,5,10,20,25,40};int RebinNumSize = sizeof(RebinNum)/sizeof(RebinNum[0]);
+                                                               //               RebinNum
     TH1D* H_A_Num_dRap                    [15]                 [15]       [15]    [15];
     TH1D* H_Mix_A_Num_dRap                [15]                 [15]       [15]    [15];
     TH1D* H_Res_A_Num_dRap                [15]                 [15]       [15]    [15];
@@ -967,16 +982,16 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         // FIll in the pool
         for (i=0;i<yBinNum;i++) {// initial
             IfMatched   [i]             = false;
-            Tot_Pool_Tmp[i].ListA_Index = 0;
-            Tot_Pool_Tmp[i].ListB_Index = 0;
+            Tot_Pool_Tmp[i].ListA_Index = -1;
+            Tot_Pool_Tmp[i].ListB_Index = -1;
         }
         for (Bid = 0;Bid < ParticleBSize;Bid++) {
             if (B_IfRecord[Bid]) {
                 yIndex = B_yIndex[Bid];
                 IfMatched   [yIndex]                                         = true;
                 Tot_Pool_Tmp[yIndex].EvtID                                   = EntriesID;
-                Tot_Pool_Tmp[yIndex].ListB[Tot_Pool_Tmp[yIndex].ListB_Index] = ParticleB[Bid];
                 Tot_Pool_Tmp[yIndex].ListB_Index++;
+                Tot_Pool_Tmp[yIndex].ListB[Tot_Pool_Tmp[yIndex].ListB_Index] = ParticleB[Bid];
             }
         }
         for (i=0;i<yBinNum;i++) {
@@ -989,11 +1004,20 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                     }
                 }
                 Tot_Pool_Tmp[i].ListA_Index = j-1;
+                k = Tot_Pool_Num[CenIndex] [i] [PVzIndex];
+                j = (k==-1) ? -1 : Tot_Pool  [CenIndex] [i] [PVzIndex][k].ListA[Tot_Pool[CenIndex] [i] [PVzIndex][k].ListA_Index].ID;
+                for (Aid=0;Aid<Tot_Pool_Tmp[i].ListA_Index;Aid++) {
+                    Tot_Pool_Tmp[i].ListA[Aid].ID = j + Aid + 1;
+                }
+                j = (k==-1) ? -1 : Tot_Pool  [CenIndex] [i] [PVzIndex][k].ListB[Tot_Pool[CenIndex] [i] [PVzIndex][k].ListB_Index].ID;
+                for (Bid=0;Bid<Tot_Pool_Tmp[i].ListB_Index;Bid++) {
+                    Tot_Pool_Tmp[i].ListB[Bid].ID = j + Bid + 1;
+                }
                 Tot_Pool_Num[CenIndex] [i] [PVzIndex]++;
+                Tot_Pool [CenIndex] [i] [PVzIndex] [Tot_Pool_Num[CenIndex] [i] [PVzIndex]] = Tot_Pool_Tmp[i];
                 if (Tot_Pool_Num[CenIndex] [i] [PVzIndex] == (HowMuchEventMixing)) {
                     Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex] = true;
                 }
-                Tot_Pool [CenIndex] [i] [PVzIndex] [Tot_Pool_Num[CenIndex] [i] [PVzIndex]] = Tot_Pool_Tmp[i];
             }
         }
         // ############################################################################################################# //
@@ -1001,8 +1025,76 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         // ############################################################################################################# //
         for (i=0;i<yBinNum;i++) {
             if (Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex]) {
+                dRap_Bin_IfFilled_Same_Index = -1;
                 for (j=0;j<=HowMuchEventMixing;j++) {
                     Tot_Pool_TTmp = Tot_Pool[CenIndex] [i] [PVzIndex] [j];
+
+                    // same event
+                    for (Bid=0;Bid<Tot_Pool_TTmp.ListB_Index;Bid++) {
+                        ParticleB_Tmp = Tot_Pool_TTmp.ListB[Bid];
+                        for (Aid=0;Aid<Tot_Pool_TTmp.ListA_Index;Aid++) {
+                            ParticleA_Tmp = Tot_Pool_TTmp.ListA[Aid];
+                            GetPairMassAndKstar(ParticleB_Tmp , ParticleA_Tmp , AMass , BMass , MassAndKstar);
+                            tRap = ParticleA_Tmp.Rap - ParticleB_Tmp.Rap;
+                            tPt  = ParticleA_Tmp.Pt  - ParticleB_Tmp.Pt ;
+                            H_Event_Num      [CenIndex] [i] [PVzIndex]->Fill(0);
+                            H_Res_Event_Num  [CenIndex] [i] [PVzIndex]->Fill(0);
+                            H_ALL_Event_Num             [i]           ->Fill(0);
+                            H_ALL_Res_Event_Num         [i]           ->Fill(0);
+                            H_Mass           [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[0]);
+                            H_Kstar          [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[1]);
+                            H_dRap           [CenIndex] [i] [PVzIndex]->Fill(tRap);
+                            H_dPt            [CenIndex] [i] [PVzIndex]->Fill(tPt);
+                            H_Res_Mass       [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[0]);
+                            H_Res_Kstar      [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[1]);
+                            H_Res_dRap       [CenIndex] [i] [PVzIndex]->Fill(tRap);
+                            H_Res_dPt        [CenIndex] [i] [PVzIndex]->Fill(tPt);
+                            H_ALL_Mass                  [i]           ->Fill(MassAndKstar[0]);
+                            H_ALL_Kstar                 [i]           ->Fill(MassAndKstar[1]);
+                            H_ALL_dRap                  [i]           ->Fill(tRap);
+                            H_ALL_dPt                   [i]           ->Fill(tPt);
+                            H_ALL_Res_Mass              [i]           ->Fill(MassAndKstar[0]);
+                            H_ALL_Res_Kstar             [i]           ->Fill(MassAndKstar[1]);
+                            H_ALL_Res_dRap              [i]           ->Fill(tRap);
+                            H_ALL_Res_dPt               [i]           ->Fill(tPt);
+                            dRap_Bin_IfFilled_Same_Index++;
+                            M_dRap_Val_IfFilled_Same[dRap_Bin_IfFilled_Same_Index] = tRap;
+                            A_dRap_PID_IfFilled_Same[dRap_Bin_IfFilled_Same_Index] = ParticleA_Tmp.ID;
+                            B_dRap_PID_IfFilled_Same[dRap_Bin_IfFilled_Same_Index] = ParticleB_Tmp.ID;
+                        }
+                    }
+                    for(k=0;k<RebinNumSize;k++){
+                        dRapBinWidth_temp = dRapBinWidth*RebinNum[k];
+                        for(l=0;l<=dRap_Bin_IfFilled_Same_Index;l++) M_dRap_Bin_IfFilled_Same[l] = (int)((M_dRap_Val_IfFilled_Same[l]-dRapSta)/dRapBinWidth_temp);
+                        for(l=0;l<=dRap_Bin_IfFilled_Same_Index;l++){
+                            IfRecord = true;
+                            for(m=l;m<=dRap_Bin_IfFilled_Same_Index;m++){
+                                if (M_dRap_Bin_IfFilled_Same[l] == M_dRap_Bin_IfFilled_Same[m]) && (A_dRap_PID_IfFilled_Same[l] == A_dRap_PID_IfFilled_Same[m]) {
+                                    IfRecord = false;
+                                    break;
+                                }
+                            }
+                            if (IfRecord) {
+                                H_A_Num_dRap     [CenIndex] [i] [PVzIndex][k]->Fill(M_dRap_Val_IfFilled_Same[l]);
+                                H_Res_A_Num_dRap [CenIndex] [i] [PVzIndex][k]->Fill(M_dRap_Val_IfFilled_Same[l]);
+                            }
+                        }
+                        for(l=0;l<=dRap_Bin_IfFilled_Same_Index;l++){
+                            IfRecord = true;
+                            for(m=l;m<=dRap_Bin_IfFilled_Same_Index;m++){
+                                if (M_dRap_Bin_IfFilled_Same[l] == M_dRap_Bin_IfFilled_Same[m]) && (B_dRap_PID_IfFilled_Same[l] == B_dRap_PID_IfFilled_Same[m]) {
+                                    IfRecord = false;
+                                    break;
+                                }
+                            }
+                            if (IfRecord) {
+                                H_B_Num_dRap     [CenIndex] [i] [PVzIndex][k]->Fill(M_dRap_Val_IfFilled_Same[l]);
+                                H_Res_B_Num_dRap [CenIndex] [i] [PVzIndex][k]->Fill(M_dRap_Val_IfFilled_Same[l]);
+                            }
+                        }
+                    }
+
+                    // mix event
                     for (k=0;k<=HowMuchEventMixing;k++) {
                         Tot_Pool_TTTmp = Tot_Pool[CenIndex] [i] [PVzIndex] [k];
                         for (Bid=0;Bid<Tot_Pool_TTmp.ListB_Index;Bid++) {
@@ -1010,11 +1102,9 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                                 ParticleA_Tmp = Tot_Pool_TTTmp.ListA[Aid];
                                 ParticleB_Tmp = Tot_Pool_TTmp.ListB[Bid];
                                 GetPairMassAndKstar(ParticleB_Tmp , ParticleA_Tmp , AMass , BMass , MassAndKstar);
-                                Mass_Store[m] = MassAndKstar[0];
-                                Kstar_Store[m] = MassAndKstar[1];
                                 tRap = ParticleA_Tmp.Rap - ParticleB_Tmp.Rap;
                                 tPt  = ParticleA_Tmp.Pt  - ParticleB_Tmp.Pt ;
-                                if (j == k) {
+                                if (j != k) {
                                     H_Event_Num      [CenIndex] [i] [PVzIndex]->Fill(0);
                                     H_Res_Event_Num  [CenIndex] [i] [PVzIndex]->Fill(0);
                                     H_ALL_Event_Num             [i]           ->Fill(0);
@@ -1035,12 +1125,7 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                                     H_ALL_Res_Kstar             [i]           ->Fill(MassAndKstar[1]);
                                     H_ALL_Res_dRap              [i]           ->Fill(tRap);
                                     H_ALL_Res_dPt               [i]           ->Fill(tPt);
-                                }
-                                else {
-                                    for (m=0;m<2;m++) {
-                                        H_Mix_A_Num_dRap[i] [MassAndKstar[m].RapIndex]->Fill(MassAndKstar[m].Mass);
-                                        H_Mix_B_Num_dRap[i] [MassAndKstar[m].RapIndex]->Fill(MassAndKstar[m].Mass);
-                                    }
+
                                 }
                             }
                         }
