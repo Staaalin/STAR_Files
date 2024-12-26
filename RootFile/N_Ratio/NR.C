@@ -239,6 +239,13 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     short int M_dRap_Bin_IfFilled_Mix[A_Num_Per_Event*B_Num_Per_Event*(HowMuchEventMixing)*(HowMuchEventMixing)];
     bool      A_Filled_dRap_Hist_Mix  [500][A_Num_Per_Event*(HowMuchEventMixing)];
     bool      B_Filled_dRap_Hist_Mix  [500][B_Num_Per_Event*(HowMuchEventMixing)];
+    // Record the number of pairs in bool
+    int A_X_Mix_Index_Temp_N=-1;
+    short int A_X_Mix_Index_Temp      [A_Num_Per_Event*B_Num_Per_Event*(HowMuchEventMixing)*(HowMuchEventMixing)];
+    short int A_Y_Mix_Index_Temp      [A_Num_Per_Event*B_Num_Per_Event*(HowMuchEventMixing)*(HowMuchEventMixing)];
+    int B_X_Mix_Index_Temp_N=-1;
+    short int B_X_Mix_Index_Temp      [A_Num_Per_Event*B_Num_Per_Event*(HowMuchEventMixing)*(HowMuchEventMixing)];
+    short int B_Y_Mix_Index_Temp      [A_Num_Per_Event*B_Num_Per_Event*(HowMuchEventMixing)*(HowMuchEventMixing)];
     for (i = 0;i<500;i++) {
         for (j = 0;j<A_Num_Per_Event;j++) A_Filled_dRap_Hist_Same[i][j] = false;
         for (j = 0;j<B_Num_Per_Event;j++) B_Filled_dRap_Hist_Same[i][j] = false;
@@ -366,20 +373,6 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     ParticlePool       Tot_Pool_Tmp                            [15]       ; // Temp Store
     ParticlePool       Tot_Pool_TTmp                                      ; // Temp Store
     ParticlePool       Tot_Pool_TTTmp                                     ; // Temp Store
-
-    // A/B d (net)Num / d Dy
-    TH1D* H_A_Num_Dy                      [15]                 [15]       [15] ;
-    TH1D* H_Mix_A_Num_Dy                  [15]                 [15]       [15] ;
-    TH1D* H_Res_A_Num_Dy                  [15]                 [15]       [15] ;
-    TH1D* H_ALL_A_Num_Dy                                       [15]            ;
-    TH1D* H_ALL_Mix_A_Num_Dy                                   [15]            ;
-    TH1D* H_ALL_Res_A_Num_Dy                                   [15]            ;
-    TH1D* H_B_Num_Dy                      [15]                 [15]       [15] ;
-    TH1D* H_Mix_B_Num_Dy                  [15]                 [15]       [15] ;
-    TH1D* H_Res_B_Num_Dy                  [15]                 [15]       [15] ;
-    TH1D* H_ALL_B_Num_Dy                                       [15]            ;
-    TH1D* H_ALL_Mix_B_Num_Dy                                   [15]            ;
-    TH1D* H_ALL_Res_B_Num_Dy                                   [15]            ;
 
     TString HistNameTemp1 , HistNameTemp2;
     for (i=0;i<CentralityBinNum;i++){
@@ -1036,13 +1029,26 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         for (i=0;i<yBinNum;i++) {
             if (Tot_Pool_IfFilled[CenIndex] [i] [PVzIndex]) {
                 dRap_Bin_IfFilled_Same_Index = -1;
+                dRap_Bin_IfFilled_Mix_Index = -1;
                 for (j=0;j<=HowMuchEventMixing;j++) {
                     Tot_Pool_TTmp = Tot_Pool[CenIndex] [i] [PVzIndex] [j];
 
                     // same event
-                    for (Bid=0;Bid<Tot_Pool_TTmp.ListB_Index;Bid++) {
+                    for (Aid=0;Aid<=Tot_Pool_TTmp.ListA_Index;Aid++) {
+                        H_A_Num             [CenIndex] [i] [PVzIndex]   ->Fill(0);
+                        H_Res_A_Num         [CenIndex] [i] [PVzIndex]   ->Fill(0);
+                        H_ALL_A_Num                    [i]              ->Fill(0);
+                        H_ALL_Res_A_Num                [i]              ->Fill(0);
+                    }
+                    for (Bid=0;Bid<=Tot_Pool_TTmp.ListB_Index;Bid++) {
+                        H_B_Num             [CenIndex] [i] [PVzIndex]   ->Fill(0);
+                        H_Res_B_Num         [CenIndex] [i] [PVzIndex]   ->Fill(0);
+                        H_ALL_B_Num                    [i]              ->Fill(0);
+                        H_ALL_Res_B_Num                [i]              ->Fill(0);
+                    }
+                    for (Bid=0;Bid<=Tot_Pool_TTmp.ListB_Index;Bid++) {
                         ParticleB_Tmp = Tot_Pool_TTmp.ListB[Bid];
-                        for (Aid=0;Aid<Tot_Pool_TTmp.ListA_Index;Aid++) {
+                        for (Aid=0;Aid<=Tot_Pool_TTmp.ListA_Index;Aid++) {
                             ParticleA_Tmp = Tot_Pool_TTmp.ListA[Aid];
                             GetPairMassAndKstar(ParticleB_Tmp , ParticleA_Tmp , AMass , BMass , MassAndKstar);
                             tRap = ParticleA_Tmp.Rap - ParticleB_Tmp.Rap;
@@ -1075,49 +1081,96 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                     }
                     for(k=0;k<RebinNumSize;k++){
                         dRapBinWidth_temp = dRapBinWidth*RebinNum[k];
-                        for(l=0;l<=dRap_Bin_IfFilled_Same_Index;l++) {
-                            m = (int)((M_dRap_Val_IfFilled_Same[l]-dRapSta)/dRapBinWidth_temp);
-                            if (!(A_Filled_dRap_Hist_Same[m][A_dRap_PID_IfFilled_Same[l]])) {
-                                A_Filled_dRap_Hist_Same[m][A_dRap_PID_IfFilled_Same[l]] = true;
-                                H_A_Num_Dy     [CenIndex] [i] [PVzIndex]->Fill(M_dRap_Val_IfFilled_Same[l]);
+                        if (dRap_Bin_IfFilled_Same_Index==0) {
+                            tRap = M_dRap_Val_IfFilled_Same[0];
+                            H_A_Num_dRap        [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                            H_Res_A_Num_dRap    [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                            H_ALL_A_Num_dRap               [i]           [k]->Fill(tRap);
+                            H_ALL_Res_A_Num_dRap           [i]           [k]->Fill(tRap);
+                            H_B_Num_dRap        [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                            H_Res_B_Num_dRap    [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                            H_ALL_B_Num_dRap               [i]           [k]->Fill(tRap);
+                            H_ALL_Res_B_Num_dRap           [i]           [k]->Fill(tRap);
+                        }else{
+                            for(l=0;l<=dRap_Bin_IfFilled_Same_Index;l++) {
+                                m = (int)((M_dRap_Val_IfFilled_Same[l]-dRapSta)/dRapBinWidth_temp);
+                                if (!(A_Filled_dRap_Hist_Same[m][A_dRap_PID_IfFilled_Same[l]])) {
+                                    A_Filled_dRap_Hist_Same[m][A_dRap_PID_IfFilled_Same[l]] = true;
+                                    tRap = M_dRap_Val_IfFilled_Same[l];
+                                    H_A_Num_dRap          [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                                    H_Res_A_Num_dRap      [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                                    H_ALL_A_Num_dRap                 [i]           [k]->Fill(tRap);
+                                    H_ALL_Res_A_Num_dRap             [i]           [k]->Fill(tRap);
+                                }
+                                if (!(B_Filled_dRap_Hist_Same[m][B_dRap_PID_IfFilled_Same[l]])) {
+                                    B_Filled_dRap_Hist_Same[m][B_dRap_PID_IfFilled_Same[l]] = true;
+                                    tRap = M_dRap_Val_IfFilled_Same[l];
+                                    H_B_Num_dRap          [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                                    H_Res_B_Num_dRap      [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                                    H_ALL_B_Num_dRap                 [i]           [k]->Fill(tRap);
+                                    H_ALL_Res_B_Num_dRap             [i]           [k]->Fill(tRap);
+                                }
+                            }
+                            for(l=0;l<=dRap_Bin_IfFilled_Same_Index;l++) {
+                                m = (int)((M_dRap_Val_IfFilled_Same[l]-dRapSta)/dRapBinWidth_temp);
+                                A_Filled_dRap_Hist_Same[m][A_dRap_PID_IfFilled_Same[l]] = false;
+                                B_Filled_dRap_Hist_Same[m][B_dRap_PID_IfFilled_Same[l]] = false;
                             }
                         }
-                        
                     }
 
                     // mix event
-                    for (k=0;k<=HowMuchEventMixing;k++) {
-                        Tot_Pool_TTTmp = Tot_Pool[CenIndex] [i] [PVzIndex] [k];
-                        for (Bid=0;Bid<Tot_Pool_TTmp.ListB_Index;Bid++) {
-                            for (Aid=0;Aid<Tot_Pool_TTTmp.ListA_Index;Aid++) {
+                    for (n=0;n<=HowMuchEventMixing;n++) {
+                        if (j == n) continue;
+                        Tot_Pool_TTTmp = Tot_Pool[CenIndex] [i] [PVzIndex] [n];
+                        for (Bid=0;Bid<=Tot_Pool_TTmp.ListB_Index;Bid++) {
+                            ParticleB_Tmp = Tot_Pool_TTmp.ListB[Bid];
+                            for (Aid=0;Aid<=Tot_Pool_TTTmp.ListA_Index;Aid++) {
                                 ParticleA_Tmp = Tot_Pool_TTTmp.ListA[Aid];
-                                ParticleB_Tmp = Tot_Pool_TTmp.ListB[Bid];
                                 GetPairMassAndKstar(ParticleB_Tmp , ParticleA_Tmp , AMass , BMass , MassAndKstar);
                                 tRap = ParticleA_Tmp.Rap - ParticleB_Tmp.Rap;
                                 tPt  = ParticleA_Tmp.Pt  - ParticleB_Tmp.Pt ;
-                                if (j != k) {
-                                    H_Event_Num      [CenIndex] [i] [PVzIndex]->Fill(0);
-                                    H_Res_Event_Num  [CenIndex] [i] [PVzIndex]->Fill(0);
-                                    H_ALL_Event_Num             [i]           ->Fill(0);
-                                    H_ALL_Res_Event_Num         [i]           ->Fill(0);
-                                    H_Mass           [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[0]);
-                                    H_Kstar          [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[1]);
-                                    H_dRap           [CenIndex] [i] [PVzIndex]->Fill(tRap);
-                                    H_dPt            [CenIndex] [i] [PVzIndex]->Fill(tPt);
-                                    H_Res_Mass       [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[0]);
-                                    H_Res_Kstar      [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[1]);
-                                    H_Res_dRap       [CenIndex] [i] [PVzIndex]->Fill(tRap);
-                                    H_Res_dPt        [CenIndex] [i] [PVzIndex]->Fill(tPt);
-                                    H_ALL_Mass                  [i]           ->Fill(MassAndKstar[0]);
-                                    H_ALL_Kstar                 [i]           ->Fill(MassAndKstar[1]);
-                                    H_ALL_dRap                  [i]           ->Fill(tRap);
-                                    H_ALL_dPt                   [i]           ->Fill(tPt);
-                                    H_ALL_Res_Mass              [i]           ->Fill(MassAndKstar[0]);
-                                    H_ALL_Res_Kstar             [i]           ->Fill(MassAndKstar[1]);
-                                    H_ALL_Res_dRap              [i]           ->Fill(tRap);
-                                    H_ALL_Res_dPt               [i]           ->Fill(tPt);
-
+                                if (fabs(MassAndKstar[0]-C_Mass)>3*CMassSigma) {
+                                    H_Mix_Mass       [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[0]);
+                                    H_ALL_Mix_Mass              [i]           ->Fill(MassAndKstar[0]);
+                                    H_Mix_Kstar      [CenIndex] [i] [PVzIndex]->Fill(MassAndKstar[1]);
+                                    H_ALL_Mix_Kstar             [i]           ->Fill(MassAndKstar[1]);
                                 }
+                                H_Mix_dRap       [CenIndex] [i] [PVzIndex]->Fill(tRap);
+                                H_Mix_dPt        [CenIndex] [i] [PVzIndex]->Fill(tPt);
+                                H_ALL_Mix_dRap              [i]           ->Fill(tRap);
+                                H_ALL_Mix_dPt               [i]           ->Fill(tPt);
+                                dRap_Bin_IfFilled_Mix_Index++;
+                                M_dRap_Val_IfFilled_Mix[dRap_Bin_IfFilled_Mix_Index] = tRap;
+                                A_dRap_PID_IfFilled_Mix[dRap_Bin_IfFilled_Mix_Index] = ParticleA_Tmp.ID;
+                                B_dRap_PID_IfFilled_Mix[dRap_Bin_IfFilled_Mix_Index] = ParticleB_Tmp.ID;
+                            }
+                        }
+                        for(k=0;k<RebinNumSize;k++){
+                            dRapBinWidth_temp = dRapBinWidth*RebinNum[k];
+                            for(l=0;l<=dRap_Bin_IfFilled_Mix_Index;l++) {
+                                m = (int)((M_dRap_Val_IfFilled_Mix[l]-dRapSta)/dRapBinWidth_temp);
+                                if (!(A_Filled_dRap_Hist_Mix[m][A_dRap_PID_IfFilled_Mix[l]])) {
+                                    A_Filled_dRap_Hist_Mix[m][A_dRap_PID_IfFilled_Mix[l]] = true;
+                                    tRap = M_dRap_Val_IfFilled_Mix[l];
+                                    H_A_Num_dRap          [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                                    H_Res_A_Num_dRap      [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                                    H_ALL_A_Num_dRap                 [i]           [k]->Fill(tRap);
+                                    H_ALL_Res_A_Num_dRap             [i]           [k]->Fill(tRap);
+                                }
+                                if (!(B_Filled_dRap_Hist_Mix[m][B_dRap_PID_IfFilled_Mix[l]])) {
+                                    B_Filled_dRap_Hist_Mix[m][B_dRap_PID_IfFilled_Mix[l]] = true;
+                                    tRap = M_dRap_Val_IfFilled_Mix[l];
+                                    H_B_Num_dRap          [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                                    H_Res_B_Num_dRap      [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                                    H_ALL_B_Num_dRap                 [i]           [k]->Fill(tRap);
+                                    H_ALL_Res_B_Num_dRap             [i]           [k]->Fill(tRap);
+                                }
+                            }
+                            for(l=0;l<=dRap_Bin_IfFilled_Mix_Index;l++) {
+                                m = (int)((M_dRap_Val_IfFilled_Mix[l]-dRapSta)/dRapBinWidth_temp);
+                                A_Filled_dRap_Hist_Mix[m][A_dRap_PID_IfFilled_Mix[l]] = false;
+                                B_Filled_dRap_Hist_Mix[m][B_dRap_PID_IfFilled_Mix[l]] = false;
                             }
                         }
                     }
