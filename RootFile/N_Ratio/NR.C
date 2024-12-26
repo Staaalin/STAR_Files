@@ -1146,39 +1146,56 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                                 B_dRap_PID_IfFilled_Mix[dRap_Bin_IfFilled_Mix_Index] = ParticleB_Tmp.ID;
                             }
                         }
-                        for(k=0;k<RebinNumSize;k++){
-                            dRapBinWidth_temp = dRapBinWidth*RebinNum[k];
-                            for(l=0;l<=dRap_Bin_IfFilled_Mix_Index;l++) {
-                                m = (int)((M_dRap_Val_IfFilled_Mix[l]-dRapSta)/dRapBinWidth_temp);
-                                if (!(A_Filled_dRap_Hist_Mix[m][A_dRap_PID_IfFilled_Mix[l]])) {
-                                    A_Filled_dRap_Hist_Mix[m][A_dRap_PID_IfFilled_Mix[l]] = true;
-                                    tRap = M_dRap_Val_IfFilled_Mix[l];
-                                    H_A_Num_dRap          [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
-                                    H_Res_A_Num_dRap      [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
-                                    H_ALL_A_Num_dRap                 [i]           [k]->Fill(tRap);
-                                    H_ALL_Res_A_Num_dRap             [i]           [k]->Fill(tRap);
-                                }
-                                if (!(B_Filled_dRap_Hist_Mix[m][B_dRap_PID_IfFilled_Mix[l]])) {
-                                    B_Filled_dRap_Hist_Mix[m][B_dRap_PID_IfFilled_Mix[l]] = true;
-                                    tRap = M_dRap_Val_IfFilled_Mix[l];
-                                    H_B_Num_dRap          [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
-                                    H_Res_B_Num_dRap      [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
-                                    H_ALL_B_Num_dRap                 [i]           [k]->Fill(tRap);
-                                    H_ALL_Res_B_Num_dRap             [i]           [k]->Fill(tRap);
-                                }
-                            }
-                            for(l=0;l<=dRap_Bin_IfFilled_Mix_Index;l++) {
-                                m = (int)((M_dRap_Val_IfFilled_Mix[l]-dRapSta)/dRapBinWidth_temp);
-                                A_Filled_dRap_Hist_Mix[m][A_dRap_PID_IfFilled_Mix[l]] = false;
-                                B_Filled_dRap_Hist_Mix[m][B_dRap_PID_IfFilled_Mix[l]] = false;
-                            }
+                    }
+                }
+                for(k=0;k<RebinNumSize;k++){
+                    dRapBinWidth_temp = dRapBinWidth*RebinNum[k];
+                    for(l=0;l<=dRap_Bin_IfFilled_Mix_Index;l++) {
+                        m = (int)((M_dRap_Val_IfFilled_Mix[l]-dRapSta)/dRapBinWidth_temp);
+                        if (!(A_Filled_dRap_Hist_Mix[m][A_dRap_PID_IfFilled_Mix[l]])) {
+                            A_Filled_dRap_Hist_Mix[m][A_dRap_PID_IfFilled_Mix[l]] = true;
+                            tRap = M_dRap_Val_IfFilled_Mix[l];
+                            H_Mix_A_Num_dRap      [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                            H_ALL_Mix_A_Num_dRap             [i]           [k]->Fill(tRap);
                         }
+                        if (!(B_Filled_dRap_Hist_Mix[m][B_dRap_PID_IfFilled_Mix[l]])) {
+                            B_Filled_dRap_Hist_Mix[m][B_dRap_PID_IfFilled_Mix[l]] = true;
+                            tRap = M_dRap_Val_IfFilled_Mix[l];
+                            H_Mix_B_Num_dRap      [CenIndex] [i] [PVzIndex][k]->Fill(tRap);
+                            H_ALL_Mix_B_Num_dRap             [i]           [k]->Fill(tRap);
+                        }
+                    }
+                    for(l=0;l<=dRap_Bin_IfFilled_Mix_Index;l++) {
+                        m = (int)((M_dRap_Val_IfFilled_Mix[l]-dRapSta)/dRapBinWidth_temp);
+                        A_Filled_dRap_Hist_Mix[m][A_dRap_PID_IfFilled_Mix[l]] = false;
+                        B_Filled_dRap_Hist_Mix[m][B_dRap_PID_IfFilled_Mix[l]] = false;
                     }
                 }
                 Tot_Pool_Num[CenIndex] [i] [PVzIndex] = -1;
             }
         }
     }
+    // ############################################################################################################# //
+    // ####                                            Writing Hist                                             #### //
+    // ############################################################################################################# //
+
+
+
+    TString OutputFileName = OutMidName;
+    OutputFileName += "H_";
+    OutputFileName += OutputFileIndex;
+    OutputFileName += ".root";
+    TFile *fileA = new TFile(OutputFileName, "RECREATE");
+    folder_kStar = fileA->mkdir("kStar");
+    folder_dRap  = fileA->mkdir("dRap");
+    folder_dPt   = fileA->mkdir("dPt");
+    folder_Mass  = fileA->mkdir("Mass");
+    folder_Test  = fileA->mkdir("Test");
+    folder_Bin_kStar = folder_kStar->mkdir("Bin");
+    folder_Bin_dRap  = fileA->mkdir("dRap");
+    folder_Bin_dPt   = fileA->mkdir("dPt");
+    folder_Bin_Mass  = fileA->mkdir("Mass");
+    folder_Bin_Test  = fileA->mkdir("Test");
 
     return;
 }
