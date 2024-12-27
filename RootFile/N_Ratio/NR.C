@@ -1186,16 +1186,65 @@ void NR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     OutputFileName += OutputFileIndex;
     OutputFileName += ".root";
     TFile *fileA = new TFile(OutputFileName, "RECREATE");
-    folder_kStar = fileA->mkdir("kStar");
-    folder_dRap  = fileA->mkdir("dRap");
-    folder_dPt   = fileA->mkdir("dPt");
-    folder_Mass  = fileA->mkdir("Mass");
-    folder_Test  = fileA->mkdir("Test");
-    folder_Bin_kStar = folder_kStar->mkdir("Bin");
-    folder_Bin_dRap  = fileA->mkdir("dRap");
-    folder_Bin_dPt   = fileA->mkdir("dPt");
-    folder_Bin_Mass  = fileA->mkdir("Mass");
-    folder_Bin_Test  = fileA->mkdir("Test");
+    folder_kStar     = fileA->mkdir("kStar");
+    folder_dRap      = fileA->mkdir("dRap");
+    folder_dPt       = fileA->mkdir("dPt");
+    folder_Mass      = fileA->mkdir("Mass");
+    folder_Num       = fileA->mkdir("Num");
+    folder_Num_dRap  = fileA->mkdir("Num_dRap");
+    folder_Bin_kStar     = folder_kStar    ->mkdir("Bin");
+    folder_Bin_dRap      = folder_dRap     ->mkdir("Bin");
+    folder_Bin_dPt       = folder_dPt      ->mkdir("Bin");
+    folder_Bin_Mass      = folder_Mass     ->mkdir("Bin");
+    folder_Bin_Num       = folder_Num      ->mkdir("Bin");
+    folder_Bin_Num_dRap  = folder_Num_dRap ->mkdir("Bin");
+    TDirectory *folder_Num_dRap_R[RebinNumSize];
+    TDirectory *folder_Bin_Num_dRap_R[RebinNumSize];
+    for (i=0;i<RebinNumSize;i++) {
+        folder_Num_dRap_R    [i] = folder_Num_dRap    ->mkdir(Form("Rebin_%d",RebinNum[i]));
+        folder_Bin_Num_dRap_R[i] = folder_Bin_Num_dRap->mkdir(Form("Rebin_%d",RebinNum[i]));
+    }
+    fileA->cd();
+    for (k=0;k<yBinNum;k++) {
+        H_ALL_Event_Num          [k]   ->Write();
+        H_ALL_Res_Event_Num      [k]   ->Write();
+        H_ALL_Mass               [k]   ->Write();
+        H_ALL_Kstar              [k]   ->Write();
+        H_ALL_dRap               [k]   ->Write();
+        H_ALL_dPt                [k]   ->Write();
+        H_ALL_Res_Mass           [k]   ->Write();
+        H_ALL_Res_Kstar          [k]   ->Write();
+        H_ALL_Res_dRap           [k]   ->Write();
+        H_ALL_Res_dPt            [k]   ->Write();
+        for (l=0;l<RebinNumSize;l++) {
+            H_ALL_A_Num_dRap     [k] [l]  ->Write();
+            H_ALL_Res_A_Num_dRap [k] [l]  ->Write();
+            H_ALL_Mix_A_Num_dRap [k] [l]  ->Write();
+            H_ALL_B_Num_dRap     [k] [l]  ->Write();
+            H_ALL_Res_B_Num_dRap [k] [l]  ->Write();
+            H_ALL_Mix_B_Num_dRap [k] [l]  ->Write();
+        }
+        for (i=0;i<CentralityBinNum;i++) {
+            for (j=0;j<PVzBinNum;j++) {
+                H_Event_Num          [i] [k] [j]->Write();
+                H_Res_Event_Num      [i] [k] [j]->Write();
+                H_Mass               [i] [k] [j]->Write();
+                H_Kstar              [i] [k] [j]->Write();
+                H_dRap               [i] [k] [j]->Write();
+                H_dPt                [i] [k] [j]->Write();
+                H_Res_Mass           [i] [k] [j]->Write();
+                H_Res_Kstar          [i] [k] [j]->Write();
+                H_Res_dRap           [i] [k] [j]->Write();
+                H_Res_dPt            [i] [k] [j]->Write();
+                for (l=0;l<RebinNumSize;l++) {
+                    H_A_Num_dRap        [i] [k] [j][l]->Write();
+                    H_Res_A_Num_dRap    [i] [k] [j][l]->Write();
+                    H_B_Num_dRap        [i] [k] [j][l]->Write();
+                    H_Res_B_Num_dRap    [i] [k] [j][l]->Write();
+                }
+            }
+        }
+    }
 
     return;
 }
