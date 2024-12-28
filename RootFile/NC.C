@@ -55,16 +55,19 @@ struct ParticlePool{
     Particle ListB[B_Num_Per_Event];
 };
 
-void f(float (&MassAndKstar)[2]) {
+float* f() {
+    float* MassAndKstar[2];
     MassAndKstar[0] = 5.0;
     MassAndKstar[1] = 10.0;
+    return MassAndKstar;
 }
 
 void NC()
 {
-	float R[2] = {0,1};
-    f(R);
+	// float R[2] = {0,1};
+    float* R = f(R);
     cout<<"R = ["<<R[0]<<","<<R[1]<<"]"<<endl;
+    delete[] R;
 
 	return;
 }
