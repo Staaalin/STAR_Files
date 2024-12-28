@@ -1450,7 +1450,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                             // p1.Boost( BV);p2.Boost( BV);
                                             // PairMass = p1.Energy()+p2.Energy();
 
-                                            float* MassAndKstar = GetPairMassAndKstar(APx , APy , APz , BPx , BPy , BPz , AMass , BMass , MassAndKstar);
+                                            float* MassAndKstar = GetPairMassAndKstar(APx , APy , APz , BPx , BPy , BPz , AMass , BMass);
                                             PairMass = MassAndKstar[0];
 
                                             if (IfRemoveFeedPair) {
