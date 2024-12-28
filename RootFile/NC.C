@@ -67,7 +67,7 @@ void NC()
 	// float R[2] = {0,1};
     float* R = f();
     cout<<"R = ["<<R[0]<<","<<R[1]<<"]"<<endl;
-    delete[] R;
+    delete R;
 
 	return;
 }
