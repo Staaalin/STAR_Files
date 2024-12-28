@@ -69,5 +69,4 @@ void NC()
     cout<<"R = ["<<R[0]<<","<<R[1]<<"]"<<endl;
     delete R;
 
-	return;
 }
