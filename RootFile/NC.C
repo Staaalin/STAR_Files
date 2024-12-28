@@ -56,7 +56,7 @@ struct ParticlePool{
 };
 
 float* f() {
-    float* MassAndKstar[2];
+    float* MassAndKstar = new float[2];
     MassAndKstar[0] = 5.0;
     MassAndKstar[1] = 10.0;
     return MassAndKstar;
@@ -67,6 +67,6 @@ void NC()
 	// float R[2] = {0,1};
     float* R = f();
     cout<<"R = ["<<R[0]<<","<<R[1]<<"]"<<endl;
-    delete R;
+    delete[] R;
 
 }
