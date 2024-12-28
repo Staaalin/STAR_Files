@@ -411,7 +411,7 @@ float GetPairMass(float p1x,float p1y,float p1z,float m1,float p2x,float p2y,flo
     return gamma * (E1 + bp1 + E2 + bp2);
 }
 
-void GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float AMass , float BMass , float (&MassAndKstar)[2]) {
+float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float AMass , float BMass) {
     float E1 = pow(p1x*p1x+p1y*p1y+p1z*p1z+AMass*AMass,0.5);
     float E2 = pow(p2x*p2x+p2y*p2y+p2z*p2z+BMass*BMass,0.5);
     float Tot_E = E1+E2;
@@ -430,8 +430,10 @@ void GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float p
     float New_Py = (p1y - p2y) + gamma2 * (bp1-bp2) * beta[1] + gamma * beta[1] * (E1-E2);
     float New_Pz = (p1z - p2z) + gamma2 * (bp1-bp2) * beta[2] + gamma * beta[2] * (E1-E2);
 
+    float* MassAndKstar = new float[2];
     MassAndKstar[0] = (gamma * (E1 + bp1 + E2 + bp2));
     MassAndKstar[1] = 0.5*pow(New_Px*New_Px+New_Py*New_Py+New_Pz*New_Pz,0.5);
+    return MassAndKstar;
 }
 
 void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
@@ -568,7 +570,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     bool IfRecord = true , IfRemoveFeedPair = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
-    float MassAndKstar[2];
+    // float MassAndKstar[2];
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -1448,7 +1450,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                             // p1.Boost( BV);p2.Boost( BV);
                                             // PairMass = p1.Energy()+p2.Energy();
 
-                                            GetPairMassAndKstar(APx , APy , APz , BPx , BPy , BPz , AMass , BMass , MassAndKstar);
+                                            float* MassAndKstar = GetPairMassAndKstar(APx , APy , APz , BPx , BPy , BPz , AMass , BMass , MassAndKstar);
                                             PairMass = MassAndKstar[0];
 
                                             if (IfRemoveFeedPair) {
@@ -1510,6 +1512,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                                 Mix_A_IfMadePair[CenIndex][i][j][Aid][Bid].at(Aindex) = 1;
                                                 Mix_B_IfMadePair[CenIndex][i][j][Aid][Bid].at(Bindex) = 1;
                                             }
+                                            delete[] MassAndKstar;
                                         }
                                     }
                                     for (int Aindex = 0;Aindex < Mix_A_Size;Aindex++) {
