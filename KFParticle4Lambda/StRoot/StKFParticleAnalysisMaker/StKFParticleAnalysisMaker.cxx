@@ -2539,6 +2539,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 			ParentEnd.emplace_back(Index_Sum-1);
 		}
+		Index_Sum = 0;
+		for (int Itr=0;Itr<SE_Correlatted_ID_List_T.size();Itr++){
+			SE_ParentSta.emplace_back(Index_Sum);
+			for (int Jtr = 0;Jtr < SE_Correlatted_ID_List_T[Itr].size();Jtr++) {
+				SE_ParentList.emplace_back(SE_Correlatted_ID_List_T[Itr][Jtr]);
+				Index_Sum++;
+			}
+			SE_ParentEnd.emplace_back(Index_Sum-1);
+		}
 		// cout<<"_____________________________________________"<<endl;
 		// cout<<"Recorded_KFP_ID              = {"<<endl;
 		// for (int i=0;i<Recorded_KFP_ID.size();i++) {
