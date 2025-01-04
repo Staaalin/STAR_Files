@@ -1300,6 +1300,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	const int tofMatch  = mEvent->nBTOFMatch();
 
 	const double magnet = mEvent->bField();
+	cout<<"magnet = "<<magnet<<endl;
 
 	// int SizeOf_Recorded_runID = Recorded_runID.size();
 	// if (SizeOf_Recorded_runID == 0){
@@ -2519,7 +2520,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						padRow1to24TrackB  = trackB->topologyMap(0) & mapMask0;
 						padRow25to45TrackB = trackB->topologyMap(1) & mapMask1;	
 						if (IfITPC) IpadRowTrackB = trackB->iTpcTopologyMap() & ImapMask;
-						SL_Value = StKFParticleAnalysisMaker::getSL(padRow1To24TrackA ,padRow25To45TrackA ,IpadRowTrackA ,trackA->nHitsFit() ,padRow1To24TrackB , padRow25To45TrackB ,IpadRowTrackB ,trackB->nHitsFit(), IfITPC);
+						SL_Value = StKFParticleAnalysisMaker::getSL(padRow1to24TrackA ,padRow25to45TrackA ,IpadRowTrackA ,trackA->nHitsFit() ,padRow1to24TrackB , padRow25to45TrackB ,IpadRowTrackB ,trackB->nHitsFit(), IfITPC);
 						if ((SL_Value<=slcutmin) || (SL_Value>=slcutmax)){
 							SE_Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
 							SE_Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
