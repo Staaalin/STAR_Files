@@ -77,7 +77,7 @@ private:
 	Double_t massList(int PID);
 	void print(std::vector<int> Temp);
 	void print(std::vector<std::vector<int> > Temp);
-	double getSL(Int_t padRow1To24Track1 ,Int_t padRow25To45Track1 ,ULong64_t IpadRow1 ,Int_t nhits1 , Int_t padRow1To24Track2 , Int_t padRow25To45Track2 ,ULong64_t IpadRow2 ,Int_t nhits2, Int_t index_E);
+	double getSL(Int_t padRow1To24Track1 ,Int_t padRow25To45Track1 ,ULong64_t IpadRow1 ,Int_t nhits1 , Int_t padRow1To24Track2 , Int_t padRow25To45Track2 ,ULong64_t IpadRow2 ,Int_t nhits2,bool IfITPC_T);
 	double getphistar(TLorentzVector Four_mom1, TLorentzVector Four_mom2, int q1, int q2,double Bz, double tpcR);
 	bool InterfaceCantProcessEvent;
 	int ProtonTrackIndex, PionTrackIndex, KaonTrackIndex;
@@ -118,7 +118,7 @@ private:
 	// SL value
 	float  slcutmin = -0.5;
 	float  slcutmax = 0.6 ;
-	float  SL_Value;
+	double  SL_Value;
 	unsigned long mapMask0 = 0xFFFFFF00;
 	unsigned long mapMask1 = 0x1FFFFF;
 	ULong64_t     ImapMask = 0x1FFFFFFFFFE;

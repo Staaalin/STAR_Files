@@ -2519,7 +2519,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						padRow1to24TrackB  = trackB->topologyMap(0) & mapMask0;
 						padRow25to45TrackB = trackB->topologyMap(1) & mapMask1;	
 						if (IfITPC) IpadRowTrackB = trackB->iTpcTopologyMap() & ImapMask;
-						SL_Value = StKFParticleAnalysisMaker::getSL(padRow1To24TrackA ,padRow25To45TrackA ,IpadRowTrackA ,trackA->nHitsFit() ,padRow1To24TrackB , padRow25To45TrackB ,IpadRowTrackB ,trackB->nHitsFit(), IfITPC)
+						SL_Value = StKFParticleAnalysisMaker::getSL(padRow1To24TrackA ,padRow25To45TrackA ,IpadRowTrackA ,trackA->nHitsFit() ,padRow1To24TrackB , padRow25To45TrackB ,IpadRowTrackB ,trackB->nHitsFit(), IfITPC);
 						if ((SL_Value<=slcutmin) || (SL_Value>=slcutmax)){
 							SE_Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
 							SE_Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
@@ -2896,7 +2896,7 @@ std::vector<bool> StKFParticleAnalysisMaker::TrackPID(std::vector<int>& TestPDG 
 	return result;
 }
 
-int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , double magnet , bool Track_has_tof , float m2 = -999. , float beta = -999.){
+int StKFParticleAnalysisMaker::TrackID(StPicoTrack *track , TVector3 Vertex3D , double magnet , bool Track_has_tof , float m2 , float beta){
 
 	float TrackID_pt = track->gMom().Perp();
 	float TrackID_dcatopv = track->gDCA(Vertex3D).Mag();
