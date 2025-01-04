@@ -15,6 +15,8 @@
 #include "StPicoEvent/StPicoBTofPidTraits.h"
 #include "TRandom.h"
 #include "TRandom3.h"
+#include "TVector3.h"
+#include "TLorentzVector.h"
 #include "StMaker.h"
 #include "TString.h"
 #include "TObject.h"

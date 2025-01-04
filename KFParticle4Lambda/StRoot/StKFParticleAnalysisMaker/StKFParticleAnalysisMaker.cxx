@@ -21,8 +21,6 @@
 #include <TMath.h>
 #include <map>
 #include "StPicoEvent/StPicoETofPidTraits.h"
-#include "TVector3.h"
-#include "TLorentzVector.h"
 
 #include "KFVertex.h"
 #include "KFParticle.h"
