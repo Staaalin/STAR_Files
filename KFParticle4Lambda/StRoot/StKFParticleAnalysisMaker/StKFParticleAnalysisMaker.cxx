@@ -1268,6 +1268,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		return kStOK;
 	}
 
+	IfITPC = false;
 	//     pass event  
 	/////////////////////////////////////////////////////////
 	// Only those events reconstruct particles A and B simultaneously will be recorded.
