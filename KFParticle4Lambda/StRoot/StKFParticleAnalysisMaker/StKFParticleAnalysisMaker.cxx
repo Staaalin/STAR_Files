@@ -942,9 +942,9 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("ParentEnd"          ,&ParentEnd            );
    
 		// Used for store SL corralated information   
-		hadronTree->Branch("SL_ParentList"      ,&SL_ParentList        );
-		hadronTree->Branch("SL_ParentSta"       ,&SL_ParentSta         );
-		hadronTree->Branch("SL_ParentEnd"       ,&SL_ParentEnd         );
+		hadronTree->Branch("SE_ParentList"      ,&SE_ParentList        );
+		hadronTree->Branch("SE_ParentSta"       ,&SE_ParentSta         );
+		hadronTree->Branch("SE_ParentEnd"       ,&SE_ParentEnd         );
 
 	}
 
@@ -1498,9 +1498,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 	ParentList.resize(0);
 	ParentSta.resize(0);
 	ParentEnd.resize(0);
-	SL_ParentList.resize(0);
-	SL_ParentSta.resize(0);
-	SL_ParentEnd.resize(0);
+	SE_ParentList.resize(0);
+	SE_ParentSta.resize(0);
+	SE_ParentEnd.resize(0);
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	// Calculating Nch
 	int NumCharge = 0;
