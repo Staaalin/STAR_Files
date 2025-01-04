@@ -2515,12 +2515,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 					StPicoTrack *trackA = mPicoDst->track(Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP]);
 					padRow1to24TrackA  = trackA->topologyMap(0) & mapMask0;
 					padRow25to45TrackA = trackA->topologyMap(1) & mapMask1;
-					if (IfITPC) IpadRowTrackA = trackA->iTpcTopologyMap() & ImapMask;
+					// if (IfITPC) IpadRowTrackA = trackA->iTpcTopologyMap() & ImapMask;
 					for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
 						StPicoTrack *trackB = mPicoDst->track(Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP]);
 						padRow1to24TrackB  = trackB->topologyMap(0) & mapMask0;
 						padRow25to45TrackB = trackB->topologyMap(1) & mapMask1;	
-						if (IfITPC) IpadRowTrackB = trackB->iTpcTopologyMap() & ImapMask;
+						// if (IfITPC) IpadRowTrackB = trackB->iTpcTopologyMap() & ImapMask;
 						SL_Value = StKFParticleAnalysisMaker::getSL(padRow1to24TrackA ,padRow25to45TrackA ,IpadRowTrackA ,trackA->nHitsFit() ,padRow1to24TrackB , padRow25to45TrackB ,IpadRowTrackB ,trackB->nHitsFit(), IfITPC);
 						if ((SL_Value<=slcutmin) || (SL_Value>=slcutmax)){
 							SE_Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
