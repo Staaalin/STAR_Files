@@ -1300,7 +1300,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	const int tofMatch  = mEvent->nBTOFMatch();
 
 	const double magnet = mEvent->bField();
-	cout<<"magnet = "<<magnet<<endl;
+	// cout<<"magnet = "<<magnet<<endl;as
 
 	// int SizeOf_Recorded_runID = Recorded_runID.size();
 	// if (SizeOf_Recorded_runID == 0){
