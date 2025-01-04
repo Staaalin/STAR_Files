@@ -2484,8 +2484,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
 			std::vector<int> Temp;Temp.resize(0);
 			Correlatted_ID_List_T.push_back(Temp);
-			SE_Correlatted_ID_List_T.resize(Temp);
-			ME_Correlatted_ID_List_T.resize(Temp);
+			SE_Correlatted_ID_List_T.push_back(Temp);
+			ME_Correlatted_ID_List_T.push_back(Temp);
 		}
 		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
 			for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
