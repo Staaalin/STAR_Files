@@ -122,8 +122,8 @@ private:
 	unsigned long mapMask0 = 0xFFFFFF00;
 	unsigned long mapMask1 = 0x1FFFFF;
 	ULong64_t     ImapMask = 0x1FFFFFFFFFE;
-	unsigned long padRow1to24TrackA, padRow1to24TrackB;
-	unsigned long padRow25to45TrackA,padRow25to45TrackB;
+	Int_t padRow1to24TrackA, padRow1to24TrackB;
+	Int_t padRow25to45TrackA,padRow25to45TrackB;
 	ULong64_t     IpadRowTrackA,IpadRowTrackB;
 
 	////////////////
