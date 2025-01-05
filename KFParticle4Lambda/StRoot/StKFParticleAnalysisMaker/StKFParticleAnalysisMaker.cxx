@@ -206,7 +206,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 	cout<<nDays<<" "<<mDayL<<" "<<mDayH<<" "<<nTims<<" "<<mStps<<endl;
 
-	hEventNum = new TH1D("Events_Total","Events_Total",1,0,2);
+	hEventNum = new TH1D("Events_Total","Events_Total",7,-1,6);
 
 	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,   333   ,   1003314   ,  -1003314  };
 	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "Phi"  ,  "XiR"  ,   "XibR"  };
@@ -1290,6 +1290,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	int Recorded_Particle_Size = sizeof(Recorded_Particle)/sizeof(Recorded_Particle[0]);
 	StPicoEvent* mEvent= (StPicoEvent*) mPicoDst->event(); 
 	if(!mEvent)return kStOK;
+	hEventNum -> Fill(0);
 
 	runID    = mEvent->runId();
 	evtID    = mEvent->eventId();
@@ -1401,12 +1402,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 	const double VertexR = sqrt(VertexX*VertexX + VertexY*VertexY);
 	const double vpdVz   = mEvent->vzVpd();
 
+	hEventNum -> Fill(2);
+
 
 	//event cut
 	//if(refMult <=2 || refMult > 1000) return kStOK;
 	if(removeBadID(runID)) return kStOK;            
 	if(mRefMultCorr->isBadRun(runID)) return kStOK; // reject bad run of StRefMultCorr
 	if(!mRefMultCorr->passnTofMatchRefmultCut(1.*refMult, 1.*tofMatch)) return kStOK; // reject pileup of StRefMultCorr
+	hEventNum -> Fill(3);
 
 	// float DiffDVZCenter[2] = { -30.0 , 50.5 };// d+Au@200GeV RUN 16
 	// if (!(6.5<fabs(vpdVz-VertexZ) && fabs(vpdVz-VertexZ)<9.5 && fabs(vpdVz)<20)) return kStOK; // band test
@@ -1428,6 +1432,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	// if(fabs(VertexZ) > 20) return kStOK; 
 	// if(sqrt(pow(VertexX,2.)+pow(VertexY,2.))>2.0) return kStOK; 
 	// if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
+
+	hEventNum -> Fill(4);
 	
 	TPVz = VertexZ;
 
@@ -2769,6 +2775,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// hadronTree->Fill();
 	}
 	/////////////////////////////////////////////////////////
+	hEventNum -> Fill(5);
 	return kStOK;
 
 }
