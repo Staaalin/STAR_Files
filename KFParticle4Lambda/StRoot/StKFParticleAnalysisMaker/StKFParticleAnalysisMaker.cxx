@@ -77,6 +77,7 @@
 
 #define IfQAMode           false // If Writing Hist of QA;
 #define IfTree             true // If Writing Tree;
+#define TPC_R              0.6
 
 // #define DEBUGGING
 
@@ -945,6 +946,11 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("SE_ParentList"      ,&SE_ParentList        );
 		hadronTree->Branch("SE_ParentSta"       ,&SE_ParentSta         );
 		hadronTree->Branch("SE_ParentEnd"       ,&SE_ParentEnd         );
+   
+		// Used for store ME corralated information   
+		hadronTree->Branch("ME_ParentList"      ,&ME_ParentList        );
+		hadronTree->Branch("ME_ParentSta"       ,&ME_ParentSta         );
+		hadronTree->Branch("ME_ParentEnd"       ,&ME_ParentEnd         );
 
 	}
 
@@ -1301,7 +1307,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	const int tofMatch  = mEvent->nBTOFMatch();
 
 	const double magnet = mEvent->bField();
-	cout<<"magnet = "<<magnet<<endl;
+	// cout<<"magnet = "<<magnet<<endl;
+	B_inTesla = magnet / 10;
 
 	// int SizeOf_Recorded_runID = Recorded_runID.size();
 	// if (SizeOf_Recorded_runID == 0){
@@ -1503,6 +1510,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 	SE_ParentList.resize(0);
 	SE_ParentSta.resize(0);
 	SE_ParentEnd.resize(0);
+	ME_ParentList.resize(0);
+	ME_ParentSta.resize(0);
+	ME_ParentEnd.resize(0);
 	Int_t nTracks = mPicoDst->numberOfTracks();
 	// Calculating Nch
 	int NumCharge = 0;
@@ -2532,6 +2542,28 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
+		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
+			for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
+				bool IfCorrelated = false;
+				for (int kRecorded_KFP=1;kRecorded_KFP < Recorded_KFP_ID[iRecorded_KFP].size();kRecorded_KFP++){
+					if (IfCorrelated == true) break;
+					if (Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == -1) continue;
+					StPicoTrack *trackA = mPicoDst->track(Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP]);
+					trackA_pT = trackA->gMom().Perp();trackA_phi = trackA->gMom().Phi();trackA_eta = trackA->gMom().Eta();trackA_charge = trackA->charge();
+					for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
+						StPicoTrack *trackB = mPicoDst->track(Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP]);
+						trackB_pT = trackB->gMom().Perp();trackB_phi = trackB->gMom().Phi();trackB_eta = trackB->gMom().Eta();trackB_charge = trackB->charge();
+						phi = StKFParticleAnalysisMaker::getphistar(trackA_phi, trackB_phi, trackA_pT, trackB_pT, trackA_charge, trackB_charge, B_inTesla, TPC_R);
+						if ((fabs(phi)<0.07)&&(fabs(trackA_eta-trackB_eta)<0.02)){
+							ME_Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
+							ME_Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
+							IfCorrelated = true;
+							break;
+						}
+					}
+				}
+			}
+		}
 		int Index_Sum = 0;
 		for (int Itr=0;Itr<Correlatted_ID_List_T.size();Itr++){
 			ParentSta.emplace_back(Index_Sum);
@@ -2549,6 +2581,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 				Index_Sum++;
 			}
 			SE_ParentEnd.emplace_back(Index_Sum-1);
+		}
+		Index_Sum = 0;
+		for (int Itr=0;Itr<ME_Correlatted_ID_List_T.size();Itr++){
+			ME_ParentSta.emplace_back(Index_Sum);
+			for (int Jtr = 0;Jtr < ME_Correlatted_ID_List_T[Itr].size();Jtr++) {
+				ME_ParentList.emplace_back(ME_Correlatted_ID_List_T[Itr][Jtr]);
+				Index_Sum++;
+			}
+			ME_ParentEnd.emplace_back(Index_Sum-1);
 		}
 		// cout<<"_____________________________________________"<<endl;
 		// cout<<"Recorded_KFP_ID              = {"<<endl;
@@ -3162,8 +3203,9 @@ double StKFParticleAnalysisMaker::getSL(Int_t padRow1To24Track1 ,Int_t padRow25T
 	normQual = (double)Quality/( (double) MaxQuality );
 	return normQual;
 }        
-double StKFParticleAnalysisMaker::getphistar(TLorentzVector Four_mom1, TLorentzVector Four_mom2, int q1, int q2,double Bz, double tpcR){
-	double deltaphistar = Four_mom1.Phi()-Four_mom2.Phi() + TMath::ASin(-0.15*(q1)*Bz*tpcR/Four_mom1.Perp())-TMath::ASin(-0.15*(q2)*Bz*tpcR/Four_mom2.Perp());
+double StKFParticleAnalysisMaker::getphistar(float phi1, float phi2, float Pt1, float Pt2, int q1, int q2,double Bz, double tpcR){
+	// double deltaphistar = Four_mom1.Phi()-Four_mom2.Phi() + TMath::ASin(-0.15*(q1)*Bz*tpcR/Four_mom1.Perp())-TMath::ASin(-0.15*(q2)*Bz*tpcR/Four_mom2.Perp());
+	double deltaphistar = phi1-phi2 + TMath::ASin(-0.15*(q1)*Bz*tpcR/Pt1)-TMath::ASin(-0.15*(q2)*Bz*tpcR/Pt2);
 	deltaphistar = atan2(sin(deltaphistar),cos(deltaphistar));
 	return deltaphistar;
 }

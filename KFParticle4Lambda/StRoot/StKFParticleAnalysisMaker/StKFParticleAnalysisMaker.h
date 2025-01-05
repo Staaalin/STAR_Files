@@ -80,7 +80,7 @@ private:
 	void print(std::vector<int> Temp);
 	void print(std::vector<std::vector<int> > Temp);
 	double getSL(Int_t padRow1To24Track1 ,Int_t padRow25To45Track1 ,ULong64_t IpadRow1 ,Int_t nhits1 , Int_t padRow1To24Track2 , Int_t padRow25To45Track2 ,ULong64_t IpadRow2 ,Int_t nhits2,bool IfITPC_T);
-	double getphistar(TLorentzVector Four_mom1, TLorentzVector Four_mom2, int q1, int q2,double Bz, double tpcR);
+	double getphistar(float phi1, float phi2, float Pt1, float Pt2, int q1, int q2,double Bz, double tpcR);
 	bool InterfaceCantProcessEvent;
 	int ProtonTrackIndex, PionTrackIndex, KaonTrackIndex;
 	vector<int> trackMap;
@@ -108,6 +108,7 @@ private:
 	int        mRun;            
 	double     mEnergy;            
 	TString    mListDir;            
+	double     B_inTesla;
 
 	TString    mOutName;
 	double     PI;
@@ -273,7 +274,9 @@ private:
 	int buffer_size,CrefMult,CgrefMult,evtID,runID,PDGMult , Omega_Omegab_Num , TriggerID , Nch;
 	float TPVz , p , pt , phi , eta , tEnergy , rap;
 	double track_px , track_py , track_pz;
-	std::vector<int> PDG , ReCons_TrackID , ParentList , ParentSta , ParentEnd , SE_ParentList , SE_ParentSta , SE_ParentEnd;
+	float trackA_pT , trackA_phi , trackA_eta ;int trackA_charge;
+	float trackB_pT , trackB_phi , trackB_eta ;int trackB_charge;
+	std::vector<int> PDG , ReCons_TrackID , ParentList , ParentSta , ParentEnd , SE_ParentList , SE_ParentSta , SE_ParentEnd , ME_ParentList , ME_ParentSta , ME_ParentEnd;
 	std::vector<float> px,py,pz,InvariantMass,QA_eta;
 	double zTOF_proton,zTOF_pion,zTOF_kaon;
 	// Used for QA
