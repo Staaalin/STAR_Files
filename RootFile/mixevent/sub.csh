@@ -146,6 +146,9 @@ while ($i <= $numFiles)
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
 
+    echo \<ResourceUsage\> >> $SubXml
+    echo \<Memory size=\"200\" unit=\"MB\"\> >> $SubXml
+
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
     echo \<Package name=\"ZIP\_File\_$i\"\> >> $SubXml
     # echo \<File\>file:/star/u/svianping/STAR\_Files/RootFile/HADDr\_xml\.C\</File\> >> $SubXml
@@ -173,8 +176,7 @@ while ($i <= $numFiles)
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml
 
-    echo \<ResourceUsage\> >> $SubXml
-    echo \<Memory\>200\</Memory\> >> $SubXml
+    echo \</Memory\> >> $SubXml
     echo \</ResourceUsage\> >> $SubXml
 
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/MIX\_$A_PDG\_$B_PDG/log/script\_$i\.out\" /\> >> $SubXml
