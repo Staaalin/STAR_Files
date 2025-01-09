@@ -174,7 +174,7 @@ while ($i <= $numFiles)
     echo \</SandBox\> >> $SubXml
 
     echo \<ResourceUsage\> >> $SubXml
-    echo \<Memory value=\"200\"/\> >> $SubXml
+    echo \<Memory\>200\</Memory\> >> $SubXml
     echo \</ResourceUsage\> >> $SubXml
 
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/MIX\_$A_PDG\_$B_PDG/log/script\_$i\.out\" /\> >> $SubXml
