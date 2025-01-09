@@ -1669,6 +1669,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Event_Num    [i][j][k][A_Kid][B_Kid]->Write();
                         H_ALL_Event_Num   [j]   [A_Kid][B_Kid]->Write();
                         H_Res_Event_Num[i][j][k][A_Kid][B_Kid]->Write();
+                        H_ALL_Res_A_Num   [j]   [A_Kid][B_Kid]->Write();
                         H_ALL_Res_B_Num   [j]   [A_Kid][B_Kid]->Write();
                         folder_kStar->cd();
                         if(H_Kstar             [i][j][k][A_Kid][B_Kid]->GetEntries() != 0) H_Kstar             [i][j][k][A_Kid][B_Kid]->Write();
