@@ -146,6 +146,15 @@ while ($i <= $numFiles)
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
 
+    echo \<ResourceUsage\> >> $SubXml
+    echo \<Memory\> >> $SubXml
+    echo \<MinMemory\>5\</MinMemory\> >> $SubXml
+    echo \<MaxMemory\>16\</MaxMemory\> >> $SubXml
+    echo \</Memory\> >> $SubXml
+    echo \<Priority\>75\</Priority\> >> $SubXml
+    echo \</ResourceUsage\> >> $SubXml
+
+
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
     echo \<Package name=\"ZIP\_File\_$i\"\> >> $SubXml
     # echo \<File\>file:/star/u/svianping/STAR\_Files/RootFile/HADDr\_xml\.C\</File\> >> $SubXml
@@ -172,11 +181,6 @@ while ($i <= $numFiles)
 
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml
-
-    echo \<ResourceUsage\> >> $SubXml
-    echo \<Memory\>200\</Memory\> >> $SubXml
-    echo \</ResourceUsage\> >> $SubXml
-
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/MIX\_$A_PDG\_$B_PDG/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"$i.log\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     set HC = "H_"
