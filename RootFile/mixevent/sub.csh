@@ -173,9 +173,9 @@ while ($i <= $numFiles)
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml
 
-    set env_content = "  <environment>\n    <env name=\"_condor_RequestMemory\">200</env>\n  </environment>"
-    echo "$env_content" >> $SubXml
-
+    echo \<environment\> >> $SubXml
+    echo \<env name=\"_condor_RequestMemory\"\>200\</env\> >> $SubXml
+    echo \</environment\> >> $SubXml
 
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/MIX\_$A_PDG\_$B_PDG/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"$i.log\" toURL=\"file:$OutputURL\" /\> >> $SubXml
