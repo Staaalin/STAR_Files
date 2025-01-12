@@ -1380,9 +1380,13 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             cout<<"7"<<endl;
 
             for (RapIndex = 0;RapIndex < yBinNum;RapIndex++) {
+                cout<<"71"<<endl;
                 for (A_Kid = 0;A_Kid < 2;A_Kid++) {
+                    cout<<"72"<<endl;
                     for (B_Kid = 0;B_Kid < 2;B_Kid++) {
+                        cout<<"73"<<endl;
                         if ((Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid] != 0) && (Mix_B_ID_Index[RapIndex] [A_Kid][B_Kid] != 0)) {
+                            cout<<"74"<<endl;
                             for (i = 0;i < Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid];i++) {
                                 Mix_A_Index_T = Mix_A_Index[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid];
                                 AidN = Mix_A_ID[RapIndex] [A_Kid][B_Kid][i];
@@ -1394,6 +1398,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 Mix_A_IfMadePair[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = false;
                                 Mix_A_Index     [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid]++;
                             }
+                            cout<<"75"<<endl;
                             for (i = 0;i < Mix_B_ID_Index[RapIndex] [A_Kid][B_Kid];i++) {
                                 Mix_B_Index_T = Mix_B_Index[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid];
                                 BidN = Mix_B_ID[RapIndex] [A_Kid][B_Kid][i];
@@ -1407,6 +1412,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             }
                             EventPatternMatch[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]++;
                         }
+                        cout<<"76"<<endl;
                         Mix_A_ID      [RapIndex] [A_Kid][B_Kid].clear();
                         Mix_B_ID      [RapIndex] [A_Kid][B_Kid].clear();
                         Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid] = 0;
