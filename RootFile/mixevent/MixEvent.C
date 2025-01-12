@@ -688,6 +688,23 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     TH2F* H_ALL_Mix_Kstar_dRap                                 [15]                    [2] [2] ;
 
     int EventPatternMatch                 [15]                 [15]       [15]         [2] [2] ;
+
+    for (i=0;i<15;i++){
+        for (j=0;j<15;j++){
+            for (k=0;k<15;k++){
+                for (m = 0;m < 2;m++){
+                    for (n = 0;n < 2;n++){
+                        Mix_A_Index       [i]                  [j]        [k]          [m] [n] = 0;
+                        Mix_B_Index       [i]                  [j]        [k]          [m] [n] = 0;
+                        Mix_A_ID_Index                         [j]                     [m] [n] = 0;
+                        Mix_B_ID_Index                         [j]                     [m] [n] = 0;
+                    }
+                }
+
+            }
+        }
+    }
+
     // Used for testing
     int TestSum = 0;
     bool IfFoundOmega = false;
@@ -1131,7 +1148,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         time(&time_start);
         clock_t Tstart = clock();
         for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++){
-            cout<<"1"<<endl;
+            // cout<<"1"<<endl;
             hadronTree->GetEntry(EntriesID);
             if ((EntriesID+1)%200 == 0) {
                 time(&time_now);
@@ -1143,7 +1160,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
                 Tstart = clock();
             }
-            cout<<"2"<<endl;
+            // cout<<"2"<<endl;
 
             A_Num = -1;B_Num = -1;
             A_ParID.resize(0);B_ParID.resize(0);
@@ -1223,7 +1240,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
             }
-            cout<<"3"<<endl;
+            // cout<<"3"<<endl;
 
             // if ((C_ParID.size() != 0)) {continue;}
             if ((A_Num == -1) || (B_Num == -1)) {continue;}
@@ -1287,7 +1304,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
             }
-            cout<<"4"<<endl;
+            // cout<<"4"<<endl;
 
             // 减除Km-Lambda的不变质量疑似为Omega的pair
             if (IfRemoveFeedPair) {
@@ -1308,7 +1325,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
             }
-            cout<<"5"<<endl;
+            // cout<<"5"<<endl;
 
             // Event Index
             int CenIndex = -1;
@@ -1343,7 +1360,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
             }
-            cout<<"6"<<endl;
+            // cout<<"6"<<endl;
 
             for (Bid = 0;Bid < B_Num;Bid++) {
 
@@ -1377,37 +1394,37 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     TestSum++;
                 }
             }
-            cout<<"7"<<endl;
+            // cout<<"7"<<endl;
 
             for (RapIndex = 0;RapIndex < yBinNum;RapIndex++) {
-                cout<<"71"<<endl;
+                // cout<<"71"<<endl;
                 for (A_Kid = 0;A_Kid < 2;A_Kid++) {
-                    cout<<"72"<<endl;
+                    // cout<<"72"<<endl;
                     for (B_Kid = 0;B_Kid < 2;B_Kid++) {
-                        cout<<"73"<<endl;
+                        // cout<<"73"<<endl;
                         if ((Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid] != 0) && (Mix_B_ID_Index[RapIndex] [A_Kid][B_Kid] != 0)) {
-                            cout<<"74"<<endl;
+                            // cout<<"74"<<endl;
                             for (i = 0;i < Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid];i++) {
-                                cout<<"741"<<endl;
+                                // cout<<"741"<<endl;
                                 Mix_A_Index_T = Mix_A_Index[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid];
-                                cout<<"742"<<endl;
-                                cout<<"Mix_A_ID["<<RapIndex<<"] ["<<A_Kid<<"]["<<B_Kid<<"].size() = "<<Mix_A_ID[RapIndex] [A_Kid][B_Kid].size()<<endl;
-                                cout<<"Mix_A_ID_Index["<<RapIndex<<"] ["<<A_Kid<<"]["<<B_Kid<<"] = "<<Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid]<<endl;
+                                // cout<<"742"<<endl;
+                                // cout<<"Mix_A_ID["<<RapIndex<<"] ["<<A_Kid<<"]["<<B_Kid<<"].size() = "<<Mix_A_ID[RapIndex] [A_Kid][B_Kid].size()<<endl;
+                                // cout<<"Mix_A_ID_Index["<<RapIndex<<"] ["<<A_Kid<<"]["<<B_Kid<<"] = "<<Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid]<<endl;
                                 AidN = Mix_A_ID[RapIndex] [A_Kid][B_Kid][i];
-                                cout<<"743"<<endl;
+                                // cout<<"743"<<endl;
                                 Mix_A_Px        [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = A_Px [AidN];
                                 Mix_A_Py        [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = A_Py [AidN];
                                 Mix_A_Pz        [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = A_Pz [AidN];
                                 Mix_A_Rap       [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = A_Rap[AidN];
-                                cout<<"744"<<endl;
+                                // cout<<"744"<<endl;
                                 Mix_A_EvtID     [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = EntriesID;
-                                cout<<"745"<<endl;
+                                // cout<<"745"<<endl;
                                 Mix_A_IfMadePair[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = false;
-                                cout<<"746"<<endl;
+                                // cout<<"746"<<endl;
                                 Mix_A_Index     [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid]++;
-                                cout<<"747"<<endl;
+                                // cout<<"747"<<endl;
                             }
-                            cout<<"75"<<endl;
+                            // cout<<"75"<<endl;
                             for (i = 0;i < Mix_B_ID_Index[RapIndex] [A_Kid][B_Kid];i++) {
                                 Mix_B_Index_T = Mix_B_Index[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid];
                                 BidN = Mix_B_ID[RapIndex] [A_Kid][B_Kid][i];
@@ -1421,7 +1438,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             }
                             EventPatternMatch[CenIndex][RapIndex][PVzIndex][A_Kid][B_Kid]++;
                         }
-                        cout<<"76"<<endl;
+                        // cout<<"76"<<endl;
                         Mix_A_ID      [RapIndex] [A_Kid][B_Kid].clear();
                         Mix_B_ID      [RapIndex] [A_Kid][B_Kid].clear();
                         Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid] = 0;
@@ -1429,7 +1446,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
             }
-            cout<<"8"<<endl;
+            // cout<<"8"<<endl;
 
             for (i = 0;i < yBinNum;i++) {
                 for (j = 0;j < PVzBinNum;j++) {
@@ -1564,7 +1581,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
 
             }
-            cout<<"9"<<endl;
+            // cout<<"9"<<endl;
 
         }
     }
