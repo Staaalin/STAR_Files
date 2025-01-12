@@ -1699,7 +1699,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         H_Res_A_Num    [i][j][k][A_Kid][B_Kid]->Write();
                         H_Res_B_Num    [i][j][k][A_Kid][B_Kid]->Write();
                         H_Event_Num    [i][j][k][A_Kid][B_Kid]->Write();
-                        H_ALL_Event_Num   [j]   [A_Kid][B_Kid]->Write();
+                        if ((i == 0)&&(k==0)) H_ALL_Event_Num   [j]   [A_Kid][B_Kid]->Write();
                         H_Res_Event_Num[i][j][k][A_Kid][B_Kid]->Write();
                         folder_kStar->cd();
                         if(H_Kstar             [i][j][k][A_Kid][B_Kid]->GetEntries() != 0) H_Kstar             [i][j][k][A_Kid][B_Kid]->Write();
@@ -1718,8 +1718,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         if(H_Mix_Mass          [i][j][k][A_Kid][B_Kid]->GetEntries() != 0) H_Mix_Mass          [i][j][k][A_Kid][B_Kid]->Write();
                         if(H_Res_Mass          [i][j][k][A_Kid][B_Kid]->GetEntries() != 0) H_Res_Mass          [i][j][k][A_Kid][B_Kid]->Write();
                         folder_Test->cd();
-                        if(H_ALL_Mix_Kstar_dRap   [j]   [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Mix_Kstar_dRap   [j]   [A_Kid][B_Kid]->Write();
-                        if(H_ALL_Kstar_dRap       [j]   [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Kstar_dRap       [j]   [A_Kid][B_Kid]->Write();
+                        if ((i == 0)&&(k==0)) {if(H_ALL_Mix_Kstar_dRap   [j]   [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Mix_Kstar_dRap   [j]   [A_Kid][B_Kid]->Write();}
+                        if ((i == 0)&&(k==0)) {if(H_ALL_Kstar_dRap       [j]   [A_Kid][B_Kid]->GetEntries() != 0) H_ALL_Kstar_dRap       [j]   [A_Kid][B_Kid]->Write();}
                     }
                 }
             }
