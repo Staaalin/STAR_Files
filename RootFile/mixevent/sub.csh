@@ -146,17 +146,17 @@ while ($i <= $numFiles)
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
 
-    # echo \<ResourceUsage\> >> $SubXml
-    # echo \<Memory\> >> $SubXml
+    echo \<ResourceUsage\> >> $SubXml
+    echo \<Memory\> >> $SubXml
     # echo \<MinMemory\>5\</MinMemory\> >> $SubXml
-    # echo \<MaxMemory\>16\</MaxMemory\> >> $SubXml
-    # echo \</Memory\> >> $SubXml
+    echo \<MaxMemory\>100\</MaxMemory\> >> $SubXml
+    echo \</Memory\> >> $SubXml
     # echo \<StorageSpace\> >> $SubXml
     # echo \<MinStorage\>100\</MinStorage\> >> $SubXml
     # echo \<MaxStorage\>200\</MaxStorage\>  >> $SubXml
     # echo \</StorageSpace\> >> $SubXml
-    # echo \<Priority\>75\</Priority\> >> $SubXml
-    # echo \</ResourceUsage\> >> $SubXml
+    echo \<Priority\>75\</Priority\> >> $SubXml
+    echo \</ResourceUsage\> >> $SubXml
 
 
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
