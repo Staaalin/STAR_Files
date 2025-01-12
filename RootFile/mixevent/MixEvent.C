@@ -1833,29 +1833,29 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             for (i=0;i<CentralityBinNum;i++){
                 for (j=0;j<yBinNum;j++){
                     for (k=0;k<PVzBinNum;k++){
-                        for (m=0;m<Mix_B_EvtID[i][j][k][A_Kid][B_Kid].size();m++){
+                        for (m=0;m<Mix_B_Index[i][j][k][A_Kid][B_Kid];m++){
                             int nIndex = -1;
                             for (n=0;n<Mix_EvtID.size();n++){
-                                if (Mix_B_EvtID[i][j][k][A_Kid][B_Kid].at(m) == Mix_EvtID.at(n)){
+                                if (Mix_B_EvtID[i][j][k][A_Kid][B_Kid][m] == Mix_EvtID.at(n)){
                                     nIndex = n;
                                     break;
                                 }
                             }
                             if (nIndex == -1){
-                                Mix_EvtID.push_back(Mix_B_EvtID[i][j][k][A_Kid][B_Kid].at(m));
+                                Mix_EvtID.push_back(Mix_B_EvtID[i][j][k][A_Kid][B_Kid][m]);
                                 nIndex = Mix_EvtID.size() - 1;
                             }
                         }
-                        for (m=0;m<Mix_A_EvtID[i][j][k][A_Kid][B_Kid].size();m++){
+                        for (m=0;m<Mix_A_Index[i][j][k][A_Kid][B_Kid];m++){
                             int nIndex = -1;
                             for (n=0;n<Mix_EvtID.size();n++){
-                                if (Mix_A_EvtID[i][j][k][A_Kid][B_Kid].at(m) == Mix_EvtID.at(n)){
+                                if (Mix_A_EvtID[i][j][k][A_Kid][B_Kid][m] == Mix_EvtID.at(n)){
                                     nIndex = n;
                                     break;
                                 }
                             }
                             if (nIndex == -1){
-                                Mix_EvtID.push_back(Mix_A_EvtID[i][j][k][A_Kid][B_Kid].at(m));
+                                Mix_EvtID.push_back(Mix_A_EvtID[i][j][k][A_Kid][B_Kid][m]);
                                 nIndex = Mix_EvtID.size() - 1;
                             }
                         }
