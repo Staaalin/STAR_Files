@@ -147,10 +147,10 @@ while ($i <= $numFiles)
     echo \</command\> >> $SubXml
 
     echo \<ResourceUsage\> >> $SubXml
-    echo \<Memory\> >> $SubXml
+    # echo \<Memory\> >> $SubXml
     # echo \<MinMemory\>5\</MinMemory\> >> $SubXml
-    echo \<MaxMemory\>100\</MaxMemory\> >> $SubXml
-    echo \</Memory\> >> $SubXml
+    # echo \<MaxMemory\>100\</MaxMemory\> >> $SubXml
+    # echo \</Memory\> >> $SubXml
     # echo \<StorageSpace\> >> $SubXml
     # echo \<MinStorage\>100\</MinStorage\> >> $SubXml
     # echo \<MaxStorage\>200\</MaxStorage\>  >> $SubXml
