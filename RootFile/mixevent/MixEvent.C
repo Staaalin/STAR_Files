@@ -608,7 +608,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     float              Mix_A_Rap          [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*A_Num_Per_Event];
     bool               Mix_A_IfMadePair   [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*A_Num_Per_Event];
     unsigned short int Mix_A_ID_Index                          [15]                    [2] [2] ;
-    unsigned short int Mix_A_ID                                [15]                    [2] [2] [(HowMuchEventMixing+1)*A_Num_Per_Event];
+    std::vector<int>   Mix_A_ID                                [15]                    [2] [2] ;
     unsigned short int Mix_B_Index_T = 0;
     unsigned short int Mix_B_Index        [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
     float              Mix_B_Px           [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
@@ -619,7 +619,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     float              Mix_B_Rap          [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
     bool               Mix_B_IfMadePair   [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
     unsigned short int Mix_B_ID_Index                          [15]                    [2] [2] ;
-    unsigned short int Mix_B_ID                                [15]                    [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
+    std::vector<int>   Mix_B_ID                                [15]                    [2] [2] ;
     int                Mix_event_Num      [15]                 [15]       [15]         [2] [2] ;
     int                Mix_event_Num_SUM  [15]                 [15]       [15]         [2] [2] ;
     //        
