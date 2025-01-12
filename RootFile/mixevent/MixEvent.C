@@ -1388,15 +1388,22 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                         if ((Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid] != 0) && (Mix_B_ID_Index[RapIndex] [A_Kid][B_Kid] != 0)) {
                             cout<<"74"<<endl;
                             for (i = 0;i < Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid];i++) {
+                                cout<<"741"<<endl;
                                 Mix_A_Index_T = Mix_A_Index[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid];
+                                cout<<"742"<<endl;
                                 AidN = Mix_A_ID[RapIndex] [A_Kid][B_Kid][i];
+                                cout<<"743"<<endl;
                                 Mix_A_Px        [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = A_Px [AidN];
                                 Mix_A_Py        [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = A_Py [AidN];
                                 Mix_A_Pz        [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = A_Pz [AidN];
                                 Mix_A_Rap       [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = A_Rap[AidN];
+                                cout<<"744"<<endl;
                                 Mix_A_EvtID     [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = EntriesID;
+                                cout<<"745"<<endl;
                                 Mix_A_IfMadePair[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = false;
+                                cout<<"746"<<endl;
                                 Mix_A_Index     [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid]++;
+                                cout<<"747"<<endl;
                             }
                             cout<<"75"<<endl;
                             for (i = 0;i < Mix_B_ID_Index[RapIndex] [A_Kid][B_Kid];i++) {
