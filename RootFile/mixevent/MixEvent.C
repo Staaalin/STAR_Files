@@ -599,7 +599,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     // used as array
     //                                        centrality          B_y        PVz
     unsigned short int Mix_A_Index_T = 0;
-    unsigned short int Mix_A_Index        [15]                 [15]       [15]         [2] [2] ;
+    unsigned short int Mix_A_Index        [15]                 [15]       [15]         [2] [2] = 0;
     float              Mix_A_Px           [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*A_Num_Per_Event];
     float              Mix_A_Py           [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*A_Num_Per_Event];
     float              Mix_A_Pz           [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*A_Num_Per_Event];
@@ -607,10 +607,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     unsigned int       Mix_A_EvtID        [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*A_Num_Per_Event];
     float              Mix_A_Rap          [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*A_Num_Per_Event];
     bool               Mix_A_IfMadePair   [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*A_Num_Per_Event];
-    unsigned short int Mix_A_ID_Index                          [15]                    [2] [2] ;
+    unsigned short int Mix_A_ID_Index                          [15]                    [2] [2] = 0;
     std::vector<int>   Mix_A_ID                                [15]                    [2] [2] ;
     unsigned short int Mix_B_Index_T = 0;
-    unsigned short int Mix_B_Index        [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
+    unsigned short int Mix_B_Index        [15]                 [15]       [15]         [2] [2] = 0;
     float              Mix_B_Px           [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
     float              Mix_B_Py           [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
     float              Mix_B_Pz           [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
@@ -618,7 +618,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     unsigned int       Mix_B_EvtID        [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
     float              Mix_B_Rap          [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
     bool               Mix_B_IfMadePair   [15]                 [15]       [15]         [2] [2] [(HowMuchEventMixing+1)*B_Num_Per_Event];
-    unsigned short int Mix_B_ID_Index                          [15]                    [2] [2] ;
+    unsigned short int Mix_B_ID_Index                          [15]                    [2] [2] = 0;
     std::vector<int>   Mix_B_ID                                [15]                    [2] [2] ;
     int                Mix_event_Num      [15]                 [15]       [15]         [2] [2] ;
     int                Mix_event_Num_SUM  [15]                 [15]       [15]         [2] [2] ;
@@ -1391,7 +1391,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 cout<<"741"<<endl;
                                 Mix_A_Index_T = Mix_A_Index[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid];
                                 cout<<"742"<<endl;
-                                cout<<"Mix_A_ID["<<RapIndex+"] ["<<A_Kid<<"]["<<B_Kid<<"].size() = "<<Mix_A_ID[RapIndex] [A_Kid][B_Kid].size()<<endl;
+                                cout<<"Mix_A_ID["<<RapIndex<<"] ["<<A_Kid<<"]["<<B_Kid<<"].size() = "<<Mix_A_ID[RapIndex] [A_Kid][B_Kid].size()<<endl;
                                 cout<<"Mix_A_ID_Index["<<RapIndex<<"] ["<<A_Kid<<"]["<<B_Kid<<"] = "<<Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid]<<endl;
                                 AidN = Mix_A_ID[RapIndex] [A_Kid][B_Kid][i];
                                 cout<<"743"<<endl;
