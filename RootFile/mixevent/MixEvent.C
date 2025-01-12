@@ -1391,6 +1391,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                                 cout<<"741"<<endl;
                                 Mix_A_Index_T = Mix_A_Index[CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid];
                                 cout<<"742"<<endl;
+                                cout<<"Mix_A_ID["+RapIndex+"] ["+A_Kid+"]["+B_Kid+"].size() = "<<Mix_A_ID[RapIndex] [A_Kid][B_Kid].size()<<endl;
+                                cout<<"Mix_A_ID_Index["+RapIndex+"] ["+A_Kid+"]["+B_Kid+"] = "<<Mix_A_ID_Index[RapIndex] [A_Kid][B_Kid]<<endl;
                                 AidN = Mix_A_ID[RapIndex] [A_Kid][B_Kid][i];
                                 cout<<"743"<<endl;
                                 Mix_A_Px        [CenIndex][RapIndex][PVzIndex] [A_Kid][B_Kid][Mix_A_Index_T] = A_Px [AidN];
