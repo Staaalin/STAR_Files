@@ -1131,7 +1131,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         time(&time_start);
         clock_t Tstart = clock();
         for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++){
-            // cout<<"1"<<endl;
+            cout<<"1"<<endl;
             hadronTree->GetEntry(EntriesID);
             if ((EntriesID+1)%200 == 0) {
                 time(&time_now);
@@ -1143,7 +1143,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 cout<<"Calculating Event "<<(EntriesID+1)<<"/"<<nentries<<endl;
                 Tstart = clock();
             }
-            // cout<<"2"<<endl;
+            cout<<"2"<<endl;
 
             A_Num = -1;B_Num = -1;
             A_ParID.resize(0);B_ParID.resize(0);
@@ -1223,7 +1223,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
             }
-            // cout<<"3"<<endl;
+            cout<<"3"<<endl;
 
             // if ((C_ParID.size() != 0)) {continue;}
             if ((A_Num == -1) || (B_Num == -1)) {continue;}
@@ -1287,7 +1287,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
             }
-            // cout<<"4"<<endl;
+            cout<<"4"<<endl;
 
             // 减除Km-Lambda的不变质量疑似为Omega的pair
             if (IfRemoveFeedPair) {
@@ -1308,7 +1308,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
             }
-            // cout<<"5"<<endl;
+            cout<<"5"<<endl;
 
             // Event Index
             int CenIndex = -1;
@@ -1343,7 +1343,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
             }
-            // cout<<"6"<<endl;
+            cout<<"6"<<endl;
 
             for (Bid = 0;Bid < B_Num;Bid++) {
 
@@ -1377,7 +1377,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     TestSum++;
                 }
             }
-            // cout<<"7"<<endl;
+            cout<<"7"<<endl;
 
             for (RapIndex = 0;RapIndex < yBinNum;RapIndex++) {
                 for (A_Kid = 0;A_Kid < 2;A_Kid++) {
@@ -1414,7 +1414,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                 }
             }
-            // cout<<"8"<<endl;
+            cout<<"8"<<endl;
 
             for (i = 0;i < yBinNum;i++) {
                 for (j = 0;j < PVzBinNum;j++) {
@@ -1549,7 +1549,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                 }
 
             }
-            // cout<<"9"<<endl;
+            cout<<"9"<<endl;
 
         }
     }
