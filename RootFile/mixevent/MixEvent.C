@@ -459,6 +459,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         std::vector<int>     *ParentList         = nullptr;
         std::vector<int>     *ParentSta          = nullptr;
         std::vector<int>     *ParentEnd          = nullptr;
+        std::vector<int>     *SE_ParentList      = nullptr;
+        std::vector<int>     *SE_ParentSta       = nullptr;
+        std::vector<int>     *SE_ParentEnd       = nullptr;
+        std::vector<int>     *ME_ParentList      = nullptr;
+        std::vector<int>     *ME_ParentSta       = nullptr;
+        std::vector<int>     *ME_ParentEnd       = nullptr;
 
         TBranch *bPDG                            = nullptr;
         TBranch *bmix_px                         = nullptr;
@@ -477,6 +483,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         TBranch *bParentList                     = nullptr;
         TBranch *bParentSta                      = nullptr;
         TBranch *bParentEnd                      = nullptr;
+        TBranch *bSE_ParentList                  = nullptr;
+        TBranch *bSE_ParentSta                   = nullptr;
+        TBranch *bSE_ParentEnd                   = nullptr;
+        TBranch *bME_ParentList                  = nullptr;
+        TBranch *bME_ParentSta                   = nullptr;
+        TBranch *bME_ParentEnd                   = nullptr;
     
     #else
         #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
@@ -498,6 +510,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             std::vector<int>     *ParentList         = NULL;
             std::vector<int>     *ParentSta          = NULL;
             std::vector<int>     *ParentEnd          = NULL;
+            std::vector<int>     *SE_ParentList      = NULL;
+            std::vector<int>     *SE_ParentSta       = NULL;
+            std::vector<int>     *SE_ParentEnd       = NULL;
+            std::vector<int>     *ME_ParentList      = NULL;
+            std::vector<int>     *ME_ParentSta       = NULL;
+            std::vector<int>     *ME_ParentEnd       = NULL;
 
             TBranch *bPDG                            = NULL;
             TBranch *bmix_px                         = NULL;
@@ -516,6 +534,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             TBranch *bParentList                     = NULL;
             TBranch *bParentSta                      = NULL;
             TBranch *bParentEnd                      = NULL;
+            TBranch *bSE_ParentList                  = NULL;
+            TBranch *bSE_ParentSta                   = NULL;
+            TBranch *bSE_ParentEnd                   = NULL;
+            TBranch *bME_ParentList                  = NULL;
+            TBranch *bME_ParentSta                   = NULL;
+            TBranch *bME_ParentEnd                   = NULL;
 
         #else
     
@@ -536,6 +560,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             std::vector<int>     *ParentList         = 0;
             std::vector<int>     *ParentSta          = 0;
             std::vector<int>     *ParentEnd          = 0;
+            std::vector<int>     *SE_ParentList      = 0;
+            std::vector<int>     *SE_ParentSta       = 0;
+            std::vector<int>     *SE_ParentEnd       = 0;
+            std::vector<int>     *ME_ParentList      = 0;
+            std::vector<int>     *ME_ParentSta       = 0;
+            std::vector<int>     *ME_ParentEnd       = 0;
     
             TBranch *bPDG                            = 0;
             TBranch *bmix_px                         = 0;
@@ -554,6 +584,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             TBranch *bParentList                     = 0;
             TBranch *bParentSta                      = 0;
             TBranch *bParentEnd                      = 0;
+            TBranch *bSE_ParentList                  = 0;
+            TBranch *bSE_ParentSta                   = 0;
+            TBranch *bSE_ParentEnd                   = 0;
+            TBranch *bME_ParentList                  = 0;
+            TBranch *bME_ParentSta                   = 0;
+            TBranch *bME_ParentEnd                   = 0;
 
         #endif
     #endif
@@ -1139,6 +1175,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         hadronTree->SetBranchAddress("ParentList"   ,&ParentList   ,&bParentList   );
         hadronTree->SetBranchAddress("ParentSta"    ,&ParentSta    ,&bParentSta    );
         hadronTree->SetBranchAddress("ParentEnd"    ,&ParentEnd    ,&bParentEnd    );
+        hadronTree->SetBranchAddress("SE_ParentList",&SE_ParentList,&bSE_bParentList   );
+        hadronTree->SetBranchAddress("SE_ParentSta" ,&SE_ParentSta ,&bSE_bParentSta    );
+        hadronTree->SetBranchAddress("SE_ParentEnd" ,&SE_ParentEnd ,&bSE_bParentEnd    );
+        hadronTree->SetBranchAddress("ME_ParentList",&ME_ParentList,&bME_bParentList   );
+        hadronTree->SetBranchAddress("ME_ParentSta" ,&ME_ParentSta ,&bME_bParentSta    );
+        hadronTree->SetBranchAddress("ME_ParentEnd" ,&ME_ParentEnd ,&bME_bParentEnd    );
 
         const Int_t nentries=hadronTree->GetEntries();
         cout << "file number: " << nentries << endl;
@@ -1192,6 +1234,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     for (k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
                     }
+                    for (k=SE_ParentSta->at(j);k<=SE_ParentEnd->at(j);k++){
+                        Temp.push_back(SE_ParentList->at(k));
+                    }
+                    for (k=ME_ParentSta->at(j);k<=ME_ParentEnd->at(j);k++){
+                        Temp.push_back(ME_ParentList->at(k));
+                    }
                     A_ParID.push_back(Temp);
                     tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + AMass*AMass,0.5);
                     A_Rap[A_Num]=0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j)));
@@ -1220,6 +1268,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     Temp.clear();Temp.push_back(j);
                     for (k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
+                    }
+                    for (k=SE_ParentSta->at(j);k<=SE_ParentEnd->at(j);k++){
+                        Temp.push_back(SE_ParentList->at(k));
+                    }
+                    for (k=ME_ParentSta->at(j);k<=ME_ParentEnd->at(j);k++){
+                        Temp.push_back(ME_ParentList->at(k));
                     }
                     B_ParID.push_back(Temp);
                     tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + BMass*BMass,0.5);
