@@ -1175,12 +1175,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         hadronTree->SetBranchAddress("ParentList"   ,&ParentList   ,&bParentList   );
         hadronTree->SetBranchAddress("ParentSta"    ,&ParentSta    ,&bParentSta    );
         hadronTree->SetBranchAddress("ParentEnd"    ,&ParentEnd    ,&bParentEnd    );
-        hadronTree->SetBranchAddress("SE_ParentList",&SE_ParentList,&bSE_bParentList   );
-        hadronTree->SetBranchAddress("SE_ParentSta" ,&SE_ParentSta ,&bSE_bParentSta    );
-        hadronTree->SetBranchAddress("SE_ParentEnd" ,&SE_ParentEnd ,&bSE_bParentEnd    );
-        hadronTree->SetBranchAddress("ME_ParentList",&ME_ParentList,&bME_bParentList   );
-        hadronTree->SetBranchAddress("ME_ParentSta" ,&ME_ParentSta ,&bME_bParentSta    );
-        hadronTree->SetBranchAddress("ME_ParentEnd" ,&ME_ParentEnd ,&bME_bParentEnd    );
+        hadronTree->SetBranchAddress("SE_ParentList",&SE_ParentList,&bSE_ParentList   );
+        hadronTree->SetBranchAddress("SE_ParentSta" ,&SE_ParentSta ,&bSE_ParentSta    );
+        hadronTree->SetBranchAddress("SE_ParentEnd" ,&SE_ParentEnd ,&bSE_ParentEnd    );
+        hadronTree->SetBranchAddress("ME_ParentList",&ME_ParentList,&bME_ParentList   );
+        hadronTree->SetBranchAddress("ME_ParentSta" ,&ME_ParentSta ,&bME_ParentSta    );
+        hadronTree->SetBranchAddress("ME_ParentEnd" ,&ME_ParentEnd ,&bME_ParentEnd    );
 
         const Int_t nentries=hadronTree->GetEntries();
         cout << "file number: " << nentries << endl;
