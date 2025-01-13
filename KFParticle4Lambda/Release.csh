@@ -18,3 +18,5 @@ foreach i (`seq 0 10123`)
         echo "File already exists: $filename"
     endif
 end
+
+# condor_q -hold -format '%s\n' ClusterId | xargs -I {} condor_release {}
