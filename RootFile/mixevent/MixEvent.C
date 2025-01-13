@@ -64,8 +64,8 @@ const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
 const Int_t yBinNum = sizeof(yBin)/sizeof(yBin[0]) - 1; // -1
 const Int_t FeedDownNum = sizeof(FeedDown)/sizeof(FeedDown[0]);
 
-#define A_Num_Per_Event 5
-#define B_Num_Per_Event 5
+#define A_Num_Per_Event 15
+#define B_Num_Per_Event 10
 #define HowMuchEventMixing 10
 
 TString KindBin[] = {"Mid","Sid"}
