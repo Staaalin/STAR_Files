@@ -1234,12 +1234,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     for (k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
                     }
-                    for (k=SE_ParentSta->at(j);k<=SE_ParentEnd->at(j);k++){
-                        Temp.push_back(SE_ParentList->at(k));
-                    }
-                    for (k=ME_ParentSta->at(j);k<=ME_ParentEnd->at(j);k++){
-                        Temp.push_back(ME_ParentList->at(k));
-                    }
+                    // for (k=SE_ParentSta->at(j);k<=SE_ParentEnd->at(j);k++){
+                    //     Temp.push_back(SE_ParentList->at(k));
+                    // }
+                    // for (k=ME_ParentSta->at(j);k<=ME_ParentEnd->at(j);k++){
+                    //     Temp.push_back(ME_ParentList->at(k));
+                    // }
                     A_ParID.push_back(Temp);
                     tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + AMass*AMass,0.5);
                     A_Rap[A_Num]=0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j)));
@@ -1269,12 +1269,12 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     for (k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
                     }
-                    for (k=SE_ParentSta->at(j);k<=SE_ParentEnd->at(j);k++){
-                        Temp.push_back(SE_ParentList->at(k));
-                    }
-                    for (k=ME_ParentSta->at(j);k<=ME_ParentEnd->at(j);k++){
-                        Temp.push_back(ME_ParentList->at(k));
-                    }
+                    // for (k=SE_ParentSta->at(j);k<=SE_ParentEnd->at(j);k++){
+                    //     Temp.push_back(SE_ParentList->at(k));
+                    // }
+                    // for (k=ME_ParentSta->at(j);k<=ME_ParentEnd->at(j);k++){
+                    //     Temp.push_back(ME_ParentList->at(k));
+                    // }
                     B_ParID.push_back(Temp);
                     tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + BMass*BMass,0.5);
                     B_Rap[B_Num]=0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j)));
