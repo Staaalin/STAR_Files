@@ -437,7 +437,7 @@ float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float
 }
 
 void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
-              int A_PDG,int B_PDG,int Mode = 0) // Mode = 0: PDGMult 为vector长度
+              int A_PDG,int B_PDG,int Mode = 0,int SP_ME = 0) // Mode = 0: PDGMult 为vector长度 ; SP_Me : if turn on cut of Splite & Merge Effect ; Purity_MC : if turn on 
 {
 
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
@@ -604,7 +604,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
-    bool IfRecord = true , IfRemoveFeedPair = false;
+    bool IfRecord = true , IfRemoveFeedPair = false , IfRemoveSpliteMerge = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
     // float MassAndKstar[2];
@@ -785,6 +785,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     for (i=0;i<FeedDownNum;i++) {
         if ( IfInVector(A_PDG , GetDaughterPDGLit(FeedDown[i])) && IfInVector(B_PDG , GetDaughterPDGLit(FeedDown[i])) ) IfRemoveFeedPair = true;
     }
+
+    if (SP_ME == 1) IfRemoveSpliteMerge = true;
 
     for (i=0;i<CentralityBinNum;i++){
         for (l=0;l<Pattern;l++){
@@ -1175,12 +1177,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         hadronTree->SetBranchAddress("ParentList"   ,&ParentList   ,&bParentList   );
         hadronTree->SetBranchAddress("ParentSta"    ,&ParentSta    ,&bParentSta    );
         hadronTree->SetBranchAddress("ParentEnd"    ,&ParentEnd    ,&bParentEnd    );
-        hadronTree->SetBranchAddress("SE_ParentList",&SE_ParentList,&bSE_ParentList   );
-        hadronTree->SetBranchAddress("SE_ParentSta" ,&SE_ParentSta ,&bSE_ParentSta    );
-        hadronTree->SetBranchAddress("SE_ParentEnd" ,&SE_ParentEnd ,&bSE_ParentEnd    );
-        hadronTree->SetBranchAddress("ME_ParentList",&ME_ParentList,&bME_ParentList   );
-        hadronTree->SetBranchAddress("ME_ParentSta" ,&ME_ParentSta ,&bME_ParentSta    );
-        hadronTree->SetBranchAddress("ME_ParentEnd" ,&ME_ParentEnd ,&bME_ParentEnd    );
+        if (IfRemoveSpliteMerge) {
+            hadronTree->SetBranchAddress("SE_ParentList",&SE_ParentList,&bSE_ParentList   );
+            hadronTree->SetBranchAddress("SE_ParentSta" ,&SE_ParentSta ,&bSE_ParentSta    );
+            hadronTree->SetBranchAddress("SE_ParentEnd" ,&SE_ParentEnd ,&bSE_ParentEnd    );
+            hadronTree->SetBranchAddress("ME_ParentList",&ME_ParentList,&bME_ParentList   );
+            hadronTree->SetBranchAddress("ME_ParentSta" ,&ME_ParentSta ,&bME_ParentSta    );
+            hadronTree->SetBranchAddress("ME_ParentEnd" ,&ME_ParentEnd ,&bME_ParentEnd    );
+        }
 
         const Int_t nentries=hadronTree->GetEntries();
         cout << "file number: " << nentries << endl;
@@ -1234,12 +1238,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     for (k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
                     }
-                    // for (k=SE_ParentSta->at(j);k<=SE_ParentEnd->at(j);k++){
-                    //     Temp.push_back(SE_ParentList->at(k));
-                    // }
-                    // for (k=ME_ParentSta->at(j);k<=ME_ParentEnd->at(j);k++){
-                    //     Temp.push_back(ME_ParentList->at(k));
-                    // }
+                    if (IfRemoveSpliteMerge) {
+                        for (k=SE_ParentSta->at(j);k<=SE_ParentEnd->at(j);k++){
+                            Temp.push_back(SE_ParentList->at(k));
+                        }
+                        for (k=ME_ParentSta->at(j);k<=ME_ParentEnd->at(j);k++){
+                            Temp.push_back(ME_ParentList->at(k));
+                        }
+                    }
                     A_ParID.push_back(Temp);
                     tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + AMass*AMass,0.5);
                     A_Rap[A_Num]=0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j)));
@@ -1269,12 +1275,14 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     for (k=ParentSta->at(j);k<=ParentEnd->at(j);k++){
                         Temp.push_back(ParentList->at(k));
                     }
-                    // for (k=SE_ParentSta->at(j);k<=SE_ParentEnd->at(j);k++){
-                    //     Temp.push_back(SE_ParentList->at(k));
-                    // }
-                    // for (k=ME_ParentSta->at(j);k<=ME_ParentEnd->at(j);k++){
-                    //     Temp.push_back(ME_ParentList->at(k));
-                    // }
+                    if (IfRemoveSpliteMerge) {
+                        for (k=SE_ParentSta->at(j);k<=SE_ParentEnd->at(j);k++){
+                            Temp.push_back(SE_ParentList->at(k));
+                        }
+                        for (k=ME_ParentSta->at(j);k<=ME_ParentEnd->at(j);k++){
+                            Temp.push_back(ME_ParentList->at(k));
+                        }
+                    }
                     B_ParID.push_back(Temp);
                     tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + BMass*BMass,0.5);
                     B_Rap[B_Num]=0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j)));
