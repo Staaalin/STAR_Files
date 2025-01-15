@@ -931,6 +931,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton      );
 		hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion        );
 		hadronTree->Branch("nSigmaKaon"         ,&QA_nSigmaKaon        );
+		hadronTree->Branch("nHitsFit"           ,&QA_nHitsFit          );
+		hadronTree->Branch("nHitsMax"           ,&QA_nHitsMax          );
 		
 		// Used for Reconstruction QA
 		hadronTree->Branch("InvariantMass"      ,&InvariantMass        );
@@ -1508,6 +1510,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 	InvariantMass  .resize(0);
 	QA_Decay_Length.resize(0);
 	QA_Chi2        .resize(0);
+	QA_nHitsFit    .resize(0);
+	QA_nHitsMax    .resize(0);
 
 	Recorded_KFP_ID.resize(0);
 	ParentList.resize(0);
@@ -1528,8 +1532,8 @@ Int_t StKFParticleAnalysisMaker::Make()
     	if (! track->charge())  continue;
     	if (  track->nHitsFit() < 15) continue;
 		// if (  track->nHitsDedx() < 15) continue;
-		// if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
-		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52) continue;
+		if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52 || track->nHitsFit()*1.0 / track->nHitsMax() > 1.05) continue;
+		// if (  track->nHitsFit()*1.0 / track->nHitsMax() < 0.52) continue;
 		// if (  track->dEdxError() < 0.04 || track->dEdxError() > 0.12) continue; // same as kfp
 		// if (! track->isPrimary()) continue;
 		if (track->gMom().Perp() < 0.2 || track->gMom().Perp() > 2.0) continue;
@@ -2061,6 +2065,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				// cout<<"MomentumOfParticle_tb.Mag() = "<<MomentumOfParticle_tb.Mag()<<endl;
 				// cout<<"MomentumOfParticle.Mag() = "<<MomentumOfParticle.Mag()<<endl;
 				QA_m2.emplace_back(-999);
+				QA_nHitsFit.emplace_back(-999);
+				QA_nHitsMax.emplace_back(-999);
 			}
 			else if ((abs(particle.GetPDG()) == LambdaPdg) || (abs(particle.GetPDG()) == K0SPdg) || (abs(particle.GetPDG()) == PhiPdg))
 			{
@@ -2078,6 +2084,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				QA_nSigmaPion.emplace_back(-999);
 				QA_nSigmaKaon.emplace_back(-999);
 				QA_m2.emplace_back(-999);
+				QA_nHitsFit.emplace_back(-999);
+				QA_nHitsMax.emplace_back(-999);
 
 			}
 		}
@@ -2399,6 +2407,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 						QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
 						QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
 						QA_m2.emplace_back(m2);
+						QA_nHitsFit.emplace_back(track->nHitsFit());
+						QA_nHitsMax.emplace_back(track->nHitsMax());
 						InvariantMass.emplace_back(massList(NeedPDG[Ktr])); 
 						// Recording SL value
 					}

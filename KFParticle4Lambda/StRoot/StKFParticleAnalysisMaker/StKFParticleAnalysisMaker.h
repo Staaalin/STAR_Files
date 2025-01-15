@@ -277,7 +277,7 @@ private:
 	float trackA_pT , trackA_phi , trackA_eta ;int trackA_charge;
 	float trackB_pT , trackB_phi , trackB_eta ;int trackB_charge;
 	std::vector<int> PDG , ReCons_TrackID , ParentList , ParentSta , ParentEnd , SE_ParentList , SE_ParentSta , SE_ParentEnd , ME_ParentList , ME_ParentSta , ME_ParentEnd;
-	std::vector<float> px,py,pz,InvariantMass,QA_eta;
+	std::vector<float> px,py,pz,InvariantMass,QA_eta,QA_nHitsFit,QA_nHitsMax;
 	double zTOF_proton,zTOF_pion,zTOF_kaon;
 	// Used for QA
 	std::vector<float> QA_dEdx,QA_m2,QA_nSigmaProton,QA_nSigmaPion,QA_nSigmaKaon,QA_Chi2;
