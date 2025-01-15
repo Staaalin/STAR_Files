@@ -51,6 +51,14 @@ endif
 echo "If subtract splite & merge effect? 0:no , 1:yes"
 set SLMEIndex = "$<"
 
+echo "What kind of Cut?"
+echo "0 : Default"
+echo "1 : nHitFit >= 20"
+echo "2 : PVz"
+echo "3 : TPC nSigma"
+echo "4 : TOF m2"
+set CutIndex = "$<"
+
 echo "一共有文件数：$numFiles"
 
 echo "Please enter merge how much .root into ONE:"
@@ -144,7 +152,7 @@ while ($i <= $numFiles)
     set RightBrackets = "\)"
     set Quo = '\"'
     # echo root4star \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
-    echo root \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG,0,$SLMEIndex$RightBrackets >> $SubXml
+    echo root \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG,0,$SLMEIndex,$CutIndex$RightBrackets >> $SubXml
     # echo root4star \-b MixEventTest\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml

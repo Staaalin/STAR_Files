@@ -437,7 +437,8 @@ float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float
 }
 
 void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
-              int A_PDG,int B_PDG,int Mode = 0,int SP_ME = 0) // Mode = 0: PDGMult 为vector长度 ; SP_Me : if turn on cut of Splite & Merge Effect ; Purity_MC : if turn on 
+              int A_PDG,int B_PDG,int Mode = 0,int SP_ME = 0, // Mode = 0: PDGMult 为vector长度 ; SP_Me : if turn on cut of Splite & Merge Effect ; Purity_MC : if turn on 
+              int CutID = 0) // 0: default ; 1: nHit ; 2: PVz ; 3: TPC_nSigma ; 4: TOF_m2
 {
 
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
@@ -604,7 +605,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
-    bool IfRecord = true , IfRemoveFeedPair = false , IfRemoveSpliteMerge = false;
+    bool IfRecord = true , IfRemoveFeedPair = false , IfRemoveSpliteMerge = false , IfRemoveHighPVz = false , IfRemoveHighTPCsigma = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
     // float MassAndKstar[2];
@@ -787,6 +788,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     }
 
     if (SP_ME == 1) IfRemoveSpliteMerge = true;
+    if (CutID == 2) IfRemoveHighPVz = true;
+    if (CutID == 3) IfRemoveHighTPCsigma = true;
 
     for (i=0;i<CentralityBinNum;i++){
         for (l=0;l<Pattern;l++){
@@ -1170,7 +1173,9 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         // hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
         // hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
         // hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
-        // hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
+        if (IfRemoveHighTPCsigma && ((abs(A_PDG) == 321) || (abs(B_PDG) == 321))){
+            hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
+        }
         hadronTree->SetBranchAddress("InvariantMass",&InvariantMass,&bInvariantMass);
         // hadronTree->SetBranchAddress("Decay_Length" ,&Decay_Length ,&bDecay_Length );
         // hadronTree->SetBranchAddress("Chi2"         ,&Chi2         ,&bChi2         );
@@ -1208,12 +1213,21 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             }
             // cout<<"2"<<endl;
 
+            if (IfRemoveHighPVz) {
+                if (!((-25.0 <= PVz) && (PVz < 25.0))) continue;
+            }
+
             A_Num = -1;B_Num = -1;
             A_ParID.resize(0);B_ParID.resize(0);
             C_ParID.resize(0);// IfFoundOmega = false;
 
             for (j=0;j<PDGMult;j++){
                 if (PDG->at(j) == A_PDG) {
+                    if (IfRemoveHighTPCsigma) {
+                        if (abs(A_PDG) == 321) {
+                            if (fabs(nSigmaKaon->at(j))>1) continue;
+                        }
+                    }
                     if ( PatternID == Pattern ) {
                         if      (fabs(InvariantMass->at(j) - AMass) <= 3*AMassSigma) {A_Num++;A_Kind[A_Num]=0;}
                         // else if (fabs(InvariantMass->at(j) - AMass) <= 6*AMassSigma) {A_Kind.push_back(1);}
@@ -1251,6 +1265,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     A_Rap[A_Num]=0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j)));
                 }
                 else if (PDG->at(j) == B_PDG) {
+                    if (IfRemoveHighTPCsigma) {
+                        if (abs(B_PDG) == 321) {
+                            if (fabs(nSigmaKaon->at(j))>1) continue;
+                        }
+                    }
                     if ( PatternID == Pattern ) {
                         if      (fabs(InvariantMass->at(j) - BMass) <= 3*BMassSigma) {B_Num++;B_Kind[B_Num]=0;}
                         // else if (fabs(InvariantMass->at(j) - BMass) <= 6*BMassSigma) {B_Kind.push_back(1);}
