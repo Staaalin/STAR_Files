@@ -457,6 +457,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         std::vector<Float_t> *InvariantMass      = nullptr;
         std::vector<Float_t> *Decay_Length       = nullptr;
         std::vector<Float_t> *Chi2               = nullptr;
+        std::vector<Float_t> *nHitsFit           = nullptr;
+        std::vector<Float_t> *nHitsMax           = nullptr;
         std::vector<int>     *ParentList         = nullptr;
         std::vector<int>     *ParentSta          = nullptr;
         std::vector<int>     *ParentEnd          = nullptr;
@@ -481,6 +483,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         TBranch *bInvariantMass                  = nullptr;
         TBranch *bDecay_Length                   = nullptr;
         TBranch *bChi2                           = nullptr;
+        TBranch *bnHitsFit                       = nullptr;
+        TBranch *bnHitsMax                       = nullptr;
         TBranch *bParentList                     = nullptr;
         TBranch *bParentSta                      = nullptr;
         TBranch *bParentEnd                      = nullptr;
@@ -508,6 +512,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             std::vector<Float_t> *InvariantMass      = NULL;
             std::vector<Float_t> *Decay_Length       = NULL;
             std::vector<Float_t> *Chi2               = NULL;
+            std::vector<Float_t> *nHitsFit           = NULL;
+            std::vector<Float_t> *nHitsMax           = NULL;
             std::vector<int>     *ParentList         = NULL;
             std::vector<int>     *ParentSta          = NULL;
             std::vector<int>     *ParentEnd          = NULL;
@@ -532,6 +538,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             TBranch *bInvariantMass                  = NULL;
             TBranch *bDecay_Length                   = NULL;
             TBranch *bChi2                           = NULL;
+            TBranch *bnHitsFit                       = NULL;
+            TBranch *bnHitsMax                       = NULL;
             TBranch *bParentList                     = NULL;
             TBranch *bParentSta                      = NULL;
             TBranch *bParentEnd                      = NULL;
@@ -558,6 +566,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             std::vector<Float_t> *InvariantMass      = 0;
             std::vector<Float_t> *Decay_Length       = 0;
             std::vector<Float_t> *Chi2               = 0;
+            std::vector<Float_t> *nHitsFit           = 0;
+            std::vector<Float_t> *nHitsMax           = 0;
             std::vector<int>     *ParentList         = 0;
             std::vector<int>     *ParentSta          = 0;
             std::vector<int>     *ParentEnd          = 0;
@@ -582,6 +592,8 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             TBranch *bInvariantMass                  = 0;
             TBranch *bDecay_Length                   = 0;
             TBranch *bChi2                           = 0;
+            TBranch *bnHitsFit                       = 0;
+            TBranch *bnHitsMax                       = 0;
             TBranch *bParentList                     = 0;
             TBranch *bParentSta                      = 0;
             TBranch *bParentEnd                      = 0;
@@ -605,7 +617,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
-    bool IfRecord = true , IfRemoveFeedPair = false , IfRemoveSpliteMerge = false , IfRemoveHighPVz = false , IfRemoveHighTPCsigma = false;
+    bool IfRecord = true , IfRemoveFeedPair = false , IfRemoveSpliteMerge = false , IfRemoveLownHits = false , IfRemoveHighPVz = false , IfRemoveHighTPCsigma = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
     // float MassAndKstar[2];
@@ -788,6 +800,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     }
 
     if (SP_ME == 1) IfRemoveSpliteMerge = true;
+    if (CutID == 1) IfRemoveLownHits = true;
     if (CutID == 2) IfRemoveHighPVz = true;
     if (CutID == 3) IfRemoveHighTPCsigma = true;
 
@@ -1179,6 +1192,10 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         hadronTree->SetBranchAddress("InvariantMass",&InvariantMass,&bInvariantMass);
         // hadronTree->SetBranchAddress("Decay_Length" ,&Decay_Length ,&bDecay_Length );
         // hadronTree->SetBranchAddress("Chi2"         ,&Chi2         ,&bChi2         );
+        if (IfRemoveLownHits) {
+            hadronTree->SetBranchAddress("nHitsFit"     ,&nHitsFit     ,&bnHitsFit     );
+            hadronTree->SetBranchAddress("nHitsMax"     ,&nHitsMax     ,&bnHitsMax     );
+        }
         hadronTree->SetBranchAddress("ParentList"   ,&ParentList   ,&bParentList   );
         hadronTree->SetBranchAddress("ParentSta"    ,&ParentSta    ,&bParentSta    );
         hadronTree->SetBranchAddress("ParentEnd"    ,&ParentEnd    ,&bParentEnd    );
@@ -1228,6 +1245,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             if (fabs(nSigmaKaon->at(j))>1) continue;
                         }
                     }
+                    if (IfRemoveLownHits) {
+                        if ((abs(A_PDG) == 321) || (abs(A_PDG) == 211) || (abs(A_PDG) == 2212)) {
+                            if (nHitsFit->at(j) < 20) continue;
+                        }
+                    }
                     if ( PatternID == Pattern ) {
                         if      (fabs(InvariantMass->at(j) - AMass) <= 3*AMassSigma) {A_Num++;A_Kind[A_Num]=0;}
                         // else if (fabs(InvariantMass->at(j) - AMass) <= 6*AMassSigma) {A_Kind.push_back(1);}
@@ -1268,6 +1290,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     if (IfRemoveHighTPCsigma) {
                         if (abs(B_PDG) == 321) {
                             if (fabs(nSigmaKaon->at(j))>1) continue;
+                        }
+                    }
+                    if (IfRemoveLownHits) {
+                        if ((abs(B_PDG) == 321) || (abs(B_PDG) == 211) || (abs(B_PDG) == 2212)) {
+                            if (nHitsFit->at(j) < 20) continue;
                         }
                     }
                     if ( PatternID == Pattern ) {
