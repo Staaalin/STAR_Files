@@ -1996,29 +1996,27 @@ Int_t StKFParticleAnalysisMaker::Make()
 			StLambdaDecayPair TmpLambdaDecayPair(p4Pair, p4Proton, ProtonTrackIndex, PionTrackIndex, (eLambda==0), dmass);
 			KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 		} // End loop over KFParticles
-		if (IfTree) {
-			for (int i=0;i<Recorded_KFP_ID.size();i++) {
-				for (int j=1;j<Recorded_KFP_ID[i].size();j++) {
-					const KFParticle particle = KFParticleInterface->GetParticles()[Recorded_KFP_ID[i][j]];
-					if ( (abs(particle.GetPDG()) == 211)  || 
-						 (abs(particle.GetPDG()) == 2212) || 
-						 (abs(particle.GetPDG()) == 321) ) {
-						int iTrack = -1;
-						const int globalTrackId = (particle).DaughterIds()[0];
-						Int_t iTrackStart = globalTrackId;// Int_t iTrackStart = globalTrackId - 1;
-						if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-						for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
-							StPicoTrack *track = mPicoDst->track(jTrack);
-							if (track->id() == globalTrackId){
-								iTrack = jTrack;
-								break;
-							}
+		for (int i=0;i<Recorded_KFP_ID.size();i++) {
+			for (int j=1;j<Recorded_KFP_ID[i].size();j++) {
+				const KFParticle particle = KFParticleInterface->GetParticles()[Recorded_KFP_ID[i][j]];
+				if ( (abs(particle.GetPDG()) == 211)  || 
+						(abs(particle.GetPDG()) == 2212) || 
+						(abs(particle.GetPDG()) == 321) ) {
+					int iTrack = -1;
+					const int globalTrackId = (particle).DaughterIds()[0];
+					Int_t iTrackStart = globalTrackId;// Int_t iTrackStart = globalTrackId - 1;
+					if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+					for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+						StPicoTrack *track = mPicoDst->track(jTrack);
+						if (track->id() == globalTrackId){
+							iTrack = jTrack;
+							break;
 						}
-						Recorded_KFP_ID[i][j] = iTrack;
 					}
-					else{
-						Recorded_KFP_ID[i][j] = -1;
-					}
+					Recorded_KFP_ID[i][j] = iTrack;
+				}
+				else{
+					Recorded_KFP_ID[i][j] = -1;
 				}
 			}
 		}// 自此，Recorded_KFP_ID[:][0]是KFP中的位置，其余为DST中的位置或者标识错误的-1
@@ -2026,68 +2024,66 @@ Int_t StKFParticleAnalysisMaker::Make()
 	}
 	
 	for (int iKFParticle = 0;iKFParticle<Recorded_KFP_ID.size();iKFParticle++){
-		if (IfTree){ // Model
-			KFParticle particle = KFParticleInterface->GetParticles()[Recorded_KFP_ID[iKFParticle][0]];
-			//SCHEME 2:
-			KFParticle tempParticle(particle);
-			float l,dl;
-			KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
-			// pv += particle;
-			tempParticle.SetProductionVertex(pv);
-			tempParticle.GetDecayLength(l, dl);// cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
+		KFParticle particle = KFParticleInterface->GetParticles()[Recorded_KFP_ID[iKFParticle][0]];
+		//SCHEME 2:
+		KFParticle tempParticle(particle);
+		float l,dl;
+		KFParticle pv(KFParticleInterface->GetTopoReconstructor()->GetPrimVertex());
+		// pv += particle;
+		tempParticle.SetProductionVertex(pv);
+		tempParticle.GetDecayLength(l, dl);// cout<<"SCHEME 2: DecayLength = "<<l<<";  ";if (fabs(v0decaylength/l)>1.15 || fabs(v0decaylength/l)<0.95){cout<<particle.GetPDG()<<"  "<<particle.GetMass()<<endl;}else{cout<<" "<<endl;}
 
-			if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg) || (abs(particle.GetPDG()) == XiRPdg))) {
+		if (IfHelix && ((abs(particle.GetPDG()) == OmegaPdg) || (abs(particle.GetPDG()) == XiPdg) || (abs(particle.GetPDG()) == XiRPdg))) {
 
-				// helix
-				TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
-				TVector3 PositionOfParticle(particle.GetX(), particle.GetY(), particle.GetZ());
-				TLorentzVector OmegaLorentz(MomentumOfParticle, particle.GetE());
-				StPicoPhysicalHelix heliPositionOfParticle(MomentumOfParticle, PositionOfParticle, magnet*kilogauss, particle.GetQ());
-				double pathlength = heliPositionOfParticle.pathLength(Vertex3D, false);
-				TVector3 MomentumOfParticle_tb = heliPositionOfParticle.momentumAt(pathlength, magnet*kilogauss); 
-				PDG.emplace_back(particle.GetPDG());
-				px.emplace_back(MomentumOfParticle_tb.X());
-				py.emplace_back(MomentumOfParticle_tb.Y());
-				pz.emplace_back(MomentumOfParticle_tb.Z());
-				QA_eta.emplace_back(MomentumOfParticle_tb.Eta());
-				InvariantMass.emplace_back(particle.GetMass());//cout<<"particle.GetAtProductionVertex() = "<<particle.GetAtProductionVertex()<<endl;
-				// float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);
-				QA_Decay_Length.emplace_back(l);
-				OmegaVec.push_back(particle);ParticleVec.push_back(particle);
-				QA_Chi2.emplace_back(particle.GetChi2());
-				QA_DCA_V0_PV.emplace_back(-999);
-				QA_dEdx.emplace_back(-999);
-				QA_nSigmaProton.emplace_back(-999);
-				QA_nSigmaPion.emplace_back(-999);
-				QA_nSigmaKaon.emplace_back(-999);
-				// cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
-				// cout<<"kilogauss = "<<kilogauss<<endl;
-				// cout<<"MomentumOfParticle_tb.Mag() = "<<MomentumOfParticle_tb.Mag()<<endl;
-				// cout<<"MomentumOfParticle.Mag() = "<<MomentumOfParticle.Mag()<<endl;
-				QA_m2.emplace_back(-999);
-				QA_nHitsFit.emplace_back(-999);
-				QA_nHitsMax.emplace_back(-999);
-			}
-			else if ((abs(particle.GetPDG()) == LambdaPdg) || (abs(particle.GetPDG()) == K0SPdg) || (abs(particle.GetPDG()) == PhiPdg))
-			{
-				PDG.emplace_back(particle.GetPDG());
-				px.emplace_back(particle.GetPx());
-				py.emplace_back(particle.GetPy());
-				pz.emplace_back(particle.GetPz());
-				QA_eta.emplace_back(particle.GetEta());
-				InvariantMass.emplace_back(particle.GetMass());
-				QA_Chi2.emplace_back(particle.GetChi2());
-				QA_Decay_Length.emplace_back(l);
-				QA_DCA_V0_PV.emplace_back(-1);
-				QA_dEdx.emplace_back(-999);
-				QA_nSigmaProton.emplace_back(-999);
-				QA_nSigmaPion.emplace_back(-999);
-				QA_nSigmaKaon.emplace_back(-999);
-				QA_m2.emplace_back(-999);
-				QA_nHitsFit.emplace_back(-999);
-				QA_nHitsMax.emplace_back(-999);
+			// helix
+			TVector3 MomentumOfParticle(particle.GetPx(), particle.GetPy(), particle.GetPz());
+			TVector3 PositionOfParticle(particle.GetX(), particle.GetY(), particle.GetZ());
+			TLorentzVector OmegaLorentz(MomentumOfParticle, particle.GetE());
+			StPicoPhysicalHelix heliPositionOfParticle(MomentumOfParticle, PositionOfParticle, magnet*kilogauss, particle.GetQ());
+			double pathlength = heliPositionOfParticle.pathLength(Vertex3D, false);
+			TVector3 MomentumOfParticle_tb = heliPositionOfParticle.momentumAt(pathlength, magnet*kilogauss); 
+			PDG.emplace_back(particle.GetPDG());
+			px.emplace_back(MomentumOfParticle_tb.X());
+			py.emplace_back(MomentumOfParticle_tb.Y());
+			pz.emplace_back(MomentumOfParticle_tb.Z());
+			QA_eta.emplace_back(MomentumOfParticle_tb.Eta());
+			InvariantMass.emplace_back(particle.GetMass());//cout<<"particle.GetAtProductionVertex() = "<<particle.GetAtProductionVertex()<<endl;
+			// float DL = 0. , eDL = 0.;particle.GetDecayLength(DL,eDL);
+			QA_Decay_Length.emplace_back(l);
+			OmegaVec.push_back(particle);ParticleVec.push_back(particle);
+			QA_Chi2.emplace_back(particle.GetChi2());
+			QA_DCA_V0_PV.emplace_back(-999);
+			QA_dEdx.emplace_back(-999);
+			QA_nSigmaProton.emplace_back(-999);
+			QA_nSigmaPion.emplace_back(-999);
+			QA_nSigmaKaon.emplace_back(-999);
+			// cout<<"particle.GetPz()="<<particle.GetPz()<<", "<<"MomentumOfParticle_tb.Z()="<<MomentumOfParticle_tb.Z()<<endl; 
+			// cout<<"kilogauss = "<<kilogauss<<endl;
+			// cout<<"MomentumOfParticle_tb.Mag() = "<<MomentumOfParticle_tb.Mag()<<endl;
+			// cout<<"MomentumOfParticle.Mag() = "<<MomentumOfParticle.Mag()<<endl;
+			QA_m2.emplace_back(-999);
+			QA_nHitsFit.emplace_back(-999);
+			QA_nHitsMax.emplace_back(-999);
+		}
+		else if ((abs(particle.GetPDG()) == LambdaPdg) || (abs(particle.GetPDG()) == K0SPdg) || (abs(particle.GetPDG()) == PhiPdg))
+		{
+			PDG.emplace_back(particle.GetPDG());
+			px.emplace_back(particle.GetPx());
+			py.emplace_back(particle.GetPy());
+			pz.emplace_back(particle.GetPz());
+			QA_eta.emplace_back(particle.GetEta());
+			InvariantMass.emplace_back(particle.GetMass());
+			QA_Chi2.emplace_back(particle.GetChi2());
+			QA_Decay_Length.emplace_back(l);
+			QA_DCA_V0_PV.emplace_back(-1);
+			QA_dEdx.emplace_back(-999);
+			QA_nSigmaProton.emplace_back(-999);
+			QA_nSigmaPion.emplace_back(-999);
+			QA_nSigmaKaon.emplace_back(-999);
+			QA_m2.emplace_back(-999);
+			QA_nHitsFit.emplace_back(-999);
+			QA_nHitsMax.emplace_back(-999);
 
-			}
 		}
 	}
 
