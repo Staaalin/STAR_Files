@@ -438,6 +438,10 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_All_nSigmaKaon_y->GetYaxis()->SetTitle("nSigmaKaon");
 		H_All_nSigmaKaon_eta->GetXaxis()->SetTitle("eta");
 		H_All_nSigmaKaon_eta->GetYaxis()->SetTitle("nSigmaKaon");
+		
+		// Merge Effect
+		TH2F *H_Before_Merge_Phi_Eta_Kaon_LambdaDaughter = new TH2F("H_Before_Merge_Phi_Eta_Kaon_LambdaDaughter" ,"deta vs. dphistar for all Kaon and Lambda Daughter before removing Merge Effect"  ,100,-0.25*pi,0.25*pi,100,-0.25*pi,0.25*pi);
+		TH2F *H_After_Merge_Phi_Eta_Kaon_LambdaDaughter  = new TH2F("H_After_Merge_Phi_Eta_Kaon_LambdaDaughter"  ,"deta vs. dphistar for all Kaon and Lambda after removing Merge Effect"            ,100,-0.25*pi,0.25*pi,100,-0.25*pi,0.25*pi);
 
 		for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 
@@ -979,9 +983,13 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		folder_PIDQA    = fout->mkdir("PID_QA");
 		folder_ReconsQA = fout->mkdir("Reconstruction_QA");
 		KFPPIDQA        = fout->mkdir("KFP_PID_QA");
+		DTest           = fout->mkdir("Test");
 
 		////////////////////////////////////// Event-QA //////////////////////////////////////
 
+		DTest -> cd();
+		H_Before_Merge_Phi_Eta_Kaon_LambdaDaughter->Write();
+		H_After_Merge_Phi_Eta_Kaon_LambdaDaughter ->Write();
 
 		folder_EventQA->cd();
 		//-- Used for  test --
@@ -1884,97 +1892,95 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// dcav0toPV = sqrt(xv0toPV.Mag2() - dcav0toPV);
 			// double v0decaylength = xv0toPV.Mag();
 			// double v0cosrdotp = rdotp/v0decaylength/pv0.Mag();// cout<<"SCHEME 1: DecayLength = "<<v0decaylength<<";  ";
-			if (IfTree){
-				bool IfRecordThisTrack = false;
-				for (int Mtr = 0;Mtr < Recorded_Particle_Size;Mtr++) {
-					if (Recorded_Particle[Mtr] == abs(particle.GetPDG())) {
-						IfRecordThisTrack = true;
-						break;
-					}
+			bool IfRecordThisTrack = false;
+			for (int Mtr = 0;Mtr < Recorded_Particle_Size;Mtr++) {
+				if (Recorded_Particle[Mtr] == abs(particle.GetPDG())) {
+					IfRecordThisTrack = true;
+					break;
 				}
-				if (!IfRecordThisTrack) continue;
-				bool CheckPass = true;
-				vector<int> Temp;Temp.resize(0);Temp.push_back(iKFParticle);
-				vector<int> TempT;TempT.resize(0);TempT.push_back(iKFParticle);
-				if      ((abs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 9*PhiPdgMassSigma))    {CheckPass = false;}
-				else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 9*K0SPdgMassSigma))    {CheckPass = false;}
-				else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 9*LambdaPdgMassSigma)) {CheckPass = false;}
-				else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 9*XiPdgMassSigma))     {CheckPass = false;}
-				else if ((abs(particle.GetPDG()) == XiRPdg)    && (fabs(particle.GetMass() - XiRPdgMass)    > 9*XiRPdgMassSigma))    {CheckPass = false;}
-				else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 9*OmegaPdgMassSigma))  {CheckPass = false;}
-				if (CheckPass == true) {
-					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-						TempT.push_back(particle.DaughterIds()[iDaughter]);
-					}
-					int Itr = 1;
-					while (Itr < TempT.size()) {
-						if ((abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != PionPdg) && 
-						    (abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != ProtonPdg) && 
-						    (abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != KaonPdg) )
-						{
-							KFParticle daughter = KFParticleInterface->GetParticles()[TempT[Itr]];
-							for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
-								if (daughter.DaughterIds()[iDaughter] == TempT[Itr]) continue;
-								TempT.push_back(daughter.DaughterIds()[iDaughter]);
-								// if (Itr > 2) {
-								// 	cout<<"TempT      = ";StKFParticleAnalysisMaker::print(TempT);
-								// 	vector<int> Temp1;Temp1.resize(0);
-								// 	for (int i = 0;i<TempT.size();i++){
-								// 		Temp1.push_back((KFParticleInterface->GetParticles()[TempT[i]]).GetPDG());
-								// 	}
-								// 	cout<<"TempT(KFP) = ";StKFParticleAnalysisMaker::print(Temp1);
-								// }
-							}
-						}else{
-							Temp.push_back(TempT[Itr]);
+			}
+			if (!IfRecordThisTrack) continue;
+			bool CheckPass = true;
+			vector<int> Temp;Temp.resize(0);Temp.push_back(iKFParticle);
+			vector<int> TempT;TempT.resize(0);TempT.push_back(iKFParticle);
+			if      ((abs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 9*PhiPdgMassSigma))    {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 9*K0SPdgMassSigma))    {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 9*LambdaPdgMassSigma)) {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 9*XiPdgMassSigma))     {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == XiRPdg)    && (fabs(particle.GetMass() - XiRPdgMass)    > 9*XiRPdgMassSigma))    {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 9*OmegaPdgMassSigma))  {CheckPass = false;}
+			if (CheckPass == true) {
+				for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+					TempT.push_back(particle.DaughterIds()[iDaughter]);
+				}
+				int Itr = 1;
+				while (Itr < TempT.size()) {
+					if ((abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != PionPdg) && 
+						(abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != ProtonPdg) && 
+						(abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != KaonPdg) )
+					{
+						KFParticle daughter = KFParticleInterface->GetParticles()[TempT[Itr]];
+						for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
+							if (daughter.DaughterIds()[iDaughter] == TempT[Itr]) continue;
+							TempT.push_back(daughter.DaughterIds()[iDaughter]);
 							// if (Itr > 2) {
-							// 	cout<<"Temp       = ";StKFParticleAnalysisMaker::print(Temp);
+							// 	cout<<"TempT      = ";StKFParticleAnalysisMaker::print(TempT);
 							// 	vector<int> Temp1;Temp1.resize(0);
-							// 	for (int i = 0;i<Temp.size();i++){
-							// 		Temp1.push_back((KFParticleInterface->GetParticles()[Temp[i]]).GetPDG());
+							// 	for (int i = 0;i<TempT.size();i++){
+							// 		Temp1.push_back((KFParticleInterface->GetParticles()[TempT[i]]).GetPDG());
 							// 	}
-							// 	cout<<"Temp(KFP)  = ";StKFParticleAnalysisMaker::print(Temp1);
+							// 	cout<<"TempT(KFP) = ";StKFParticleAnalysisMaker::print(Temp1);
 							// }
 						}
-						Itr++;
+					}else{
+						Temp.push_back(TempT[Itr]);
+						// if (Itr > 2) {
+						// 	cout<<"Temp       = ";StKFParticleAnalysisMaker::print(Temp);
+						// 	vector<int> Temp1;Temp1.resize(0);
+						// 	for (int i = 0;i<Temp.size();i++){
+						// 		Temp1.push_back((KFParticleInterface->GetParticles()[Temp[i]]).GetPDG());
+						// 	}
+						// 	cout<<"Temp(KFP)  = ";StKFParticleAnalysisMaker::print(Temp1);
+						// }
 					}
-					for (int i = 0;i<Temp.size();i++){
-						for (int j = i+1;j<Temp.size();j++){
-							if (Temp[i] == Temp[j]) {
-								CheckPass = false;
-								break;
-							}
+					Itr++;
+				}
+				for (int i = 0;i<Temp.size();i++){
+					for (int j = i+1;j<Temp.size();j++){
+						if (Temp[i] == Temp[j]) {
+							CheckPass = false;
+							break;
 						}
 					}
-					// if (Itr > 3) cout<<"====================================================="<<endl;
 				}
-				if (CheckPass == true){
-					Recorded_KFP_ID.push_back(Temp);
-				}
-				// if (CheckPass == true) { // cuts for Pions used to reconstruct K0S
-				// 	KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
-				// 	if ((NKFParticle.GetPDG() == 310)) {
-				// 		for (int iDaughter = 1;iDaughter<Temp.size();iDaughter++){
-				// 			if (abs((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG()) != 211) continue;
-				// 			int iTrack = 0;
-				// 			const int globalTrackId = (KFParticleInterface->GetParticles()[Temp[iDaughter]]).DaughterIds()[0];
-				// 			Int_t iTrackStart = globalTrackId - 1;
-				// 			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-				// 			for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
-				// 				StPicoTrack *track = mPicoDst->track(jTrack);
-				// 				if (track->id() == globalTrackId){
-				// 					iTrack = jTrack;
-				// 					break;
-				// 				}
-				// 			}
-				// 			StPicoTrack *track = mPicoDst->track(iTrack);
-				// 			std::vector<int> TestPDG;TestPDG.push_back((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG());
-				// 			std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(TestPDG , track , Vertex3D);
-				// 			if(PDGBool[0] == false) CheckPass = false;
-				// 		}
-				// 	}
-				// }
+				// if (Itr > 3) cout<<"====================================================="<<endl;
 			}
+			if (CheckPass == true){
+				Recorded_KFP_ID.push_back(Temp);
+			}
+			// if (CheckPass == true) { // cuts for Pions used to reconstruct K0S
+			// 	KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
+			// 	if ((NKFParticle.GetPDG() == 310)) {
+			// 		for (int iDaughter = 1;iDaughter<Temp.size();iDaughter++){
+			// 			if (abs((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG()) != 211) continue;
+			// 			int iTrack = 0;
+			// 			const int globalTrackId = (KFParticleInterface->GetParticles()[Temp[iDaughter]]).DaughterIds()[0];
+			// 			Int_t iTrackStart = globalTrackId - 1;
+			// 			if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+			// 			for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+			// 				StPicoTrack *track = mPicoDst->track(jTrack);
+			// 				if (track->id() == globalTrackId){
+			// 					iTrack = jTrack;
+			// 					break;
+			// 				}
+			// 			}
+			// 			StPicoTrack *track = mPicoDst->track(iTrack);
+			// 			std::vector<int> TestPDG;TestPDG.push_back((KFParticleInterface->GetParticles()[Temp[iDaughter]]).GetPDG());
+			// 			std::vector<bool> PDGBool = StKFParticleAnalysisMaker::TrackPID(TestPDG , track , Vertex3D);
+			// 			if(PDGBool[0] == false) CheckPass = false;
+			// 		}
+			// 	}
+			// }
 			// cout<<"CrefMult:"<<CrefMult<<endl;
 			// cout<<"PDG:"<<particle.GetPDG()<<endl; 
 
@@ -2386,28 +2392,26 @@ Int_t StKFParticleAnalysisMaker::Make()
 					if (!IfRecordThisTrack) continue;
 					tEnergy = pow(pow(track->gMom().Mag(),2) + pow(StKFParticleAnalysisMaker::massList(NeedPDG[Ktr]),2),0.5);
 					rap = 0.5*log((tEnergy+track_pz)/(tEnergy-track_pz));
-					if (IfTree) {
-						std::vector<int> Temp;Temp.resize(0);
-						Temp.push_back(PDGList[Itr]);Temp.push_back(iTrack);
-						Recorded_KFP_ID.push_back(Temp);
-						QA_Chi2.emplace_back(-999);
-						QA_Decay_Length.emplace_back(-999);
-						PDG.emplace_back(NeedPDG[Ktr]);
-						px.emplace_back(track_px);
-						py.emplace_back(track_py);
-						pz.emplace_back(track_pz);
-						QA_eta.emplace_back(eta);
-						QA_dEdx.emplace_back(track->dEdx());
-						QA_nSigmaProton.emplace_back(track->nSigmaProton());
-						QA_nSigmaPion.emplace_back(track->nSigmaPion());
-						QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
-						QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
-						QA_m2.emplace_back(m2);
-						QA_nHitsFit.emplace_back(track->nHitsFit());
-						QA_nHitsMax.emplace_back(track->nHitsMax());
-						InvariantMass.emplace_back(massList(NeedPDG[Ktr])); 
-						// Recording SL value
-					}
+					std::vector<int> Temp;Temp.resize(0);
+					Temp.push_back(PDGList[Itr]);Temp.push_back(iTrack);
+					Recorded_KFP_ID.push_back(Temp);
+					QA_Chi2.emplace_back(-999);
+					QA_Decay_Length.emplace_back(-999);
+					PDG.emplace_back(NeedPDG[Ktr]);
+					px.emplace_back(track_px);
+					py.emplace_back(track_py);
+					pz.emplace_back(track_pz);
+					QA_eta.emplace_back(eta);
+					QA_dEdx.emplace_back(track->dEdx());
+					QA_nSigmaProton.emplace_back(track->nSigmaProton());
+					QA_nSigmaPion.emplace_back(track->nSigmaPion());
+					QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
+					QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
+					QA_m2.emplace_back(m2);
+					QA_nHitsFit.emplace_back(track->nHitsFit());
+					QA_nHitsMax.emplace_back(track->nHitsMax());
+					InvariantMass.emplace_back(massList(NeedPDG[Ktr])); 
+					// Recording SL value
 					if (IfQAMode) {
 						H_Pt[Jtr] -> Fill(pt);
 						H_P[Jtr] -> Fill(p);
@@ -2501,129 +2505,137 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 
 	}
-	if (IfTree) {
-		Correlatted_ID_List_T.resize(0);
-		SE_Correlatted_ID_List_T.resize(0);
-		ME_Correlatted_ID_List_T.resize(0);
-		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
-			std::vector<int> Temp;Temp.resize(0);
-			Correlatted_ID_List_T.push_back(Temp);
-			SE_Correlatted_ID_List_T.push_back(Temp);
-			ME_Correlatted_ID_List_T.push_back(Temp);
-		}
-		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
-			for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
-				bool IfCorrelated = false;
-				for (int kRecorded_KFP=1;kRecorded_KFP < Recorded_KFP_ID[iRecorded_KFP].size();kRecorded_KFP++){
-					if (IfCorrelated == true) break;
-					if (Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == -1) continue;
-					for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
-						if ( Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP] ){
-							Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
-							Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
-							IfCorrelated = true;
-							break;
-						}
-					}
-				}
-			}
-		}
-		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
-			for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
-				bool IfCorrelated = false;
-				for (int kRecorded_KFP=1;kRecorded_KFP < Recorded_KFP_ID[iRecorded_KFP].size();kRecorded_KFP++){
-					if (IfCorrelated == true) break;
-					if (Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == -1) continue;
-					StPicoTrack *trackA = mPicoDst->track(Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP]);
-					padRow1to24TrackA  = trackA->topologyMap(0) & mapMask0;
-					padRow25to45TrackA = trackA->topologyMap(1) & mapMask1;
-					// if (IfITPC) IpadRowTrackA = trackA->iTpcTopologyMap() & ImapMask;
-					for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
-						StPicoTrack *trackB = mPicoDst->track(Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP]);
-						padRow1to24TrackB  = trackB->topologyMap(0) & mapMask0;
-						padRow25to45TrackB = trackB->topologyMap(1) & mapMask1;	
-						// if (IfITPC) IpadRowTrackB = trackB->iTpcTopologyMap() & ImapMask;
-						SL_Value = StKFParticleAnalysisMaker::getSL(padRow1to24TrackA ,padRow25to45TrackA ,IpadRowTrackA ,trackA->nHitsFit() ,padRow1to24TrackB , padRow25to45TrackB ,IpadRowTrackB ,trackB->nHitsFit(), IfITPC);
-						if ((SL_Value<=slcutmin) || (SL_Value>=slcutmax)){
-							SE_Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
-							SE_Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
-							IfCorrelated = true;
-							break;
-						}
-					}
-				}
-			}
-		}
-		for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
-			for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
-				bool IfCorrelated = false;
-				for (int kRecorded_KFP=1;kRecorded_KFP < Recorded_KFP_ID[iRecorded_KFP].size();kRecorded_KFP++){
-					if (IfCorrelated == true) break;
-					if (Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == -1) continue;
-					StPicoTrack *trackA = mPicoDst->track(Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP]);
-					trackA_pT = trackA->gMom().Perp();trackA_phi = trackA->gMom().Phi();trackA_eta = trackA->gMom().Eta();trackA_charge = trackA->charge();
-					for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
-						StPicoTrack *trackB = mPicoDst->track(Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP]);
-						trackB_pT = trackB->gMom().Perp();trackB_phi = trackB->gMom().Phi();trackB_eta = trackB->gMom().Eta();trackB_charge = trackB->charge();
-						phi = StKFParticleAnalysisMaker::getphistar(trackA_phi, trackB_phi, trackA_pT, trackB_pT, trackA_charge, trackB_charge, B_inTesla, TPC_R);
-						if ((fabs(phi)<0.07)&&(fabs(trackA_eta-trackB_eta)<0.02)){
-							ME_Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
-							ME_Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
-							IfCorrelated = true;
-							break;
-						}
-					}
-				}
-			}
-		}
-		int Index_Sum = 0;
-		for (int Itr=0;Itr<Correlatted_ID_List_T.size();Itr++){
-			ParentSta.emplace_back(Index_Sum);
-			for (int Jtr = 0;Jtr < Correlatted_ID_List_T[Itr].size();Jtr++) {
-				ParentList.emplace_back(Correlatted_ID_List_T[Itr][Jtr]);
-				Index_Sum++;
-			}
-			ParentEnd.emplace_back(Index_Sum-1);
-		}
-		Index_Sum = 0;
-		for (int Itr=0;Itr<SE_Correlatted_ID_List_T.size();Itr++){
-			SE_ParentSta.emplace_back(Index_Sum);
-			for (int Jtr = 0;Jtr < SE_Correlatted_ID_List_T[Itr].size();Jtr++) {
-				SE_ParentList.emplace_back(SE_Correlatted_ID_List_T[Itr][Jtr]);
-				Index_Sum++;
-			}
-			SE_ParentEnd.emplace_back(Index_Sum-1);
-		}
-		Index_Sum = 0;
-		for (int Itr=0;Itr<ME_Correlatted_ID_List_T.size();Itr++){
-			ME_ParentSta.emplace_back(Index_Sum);
-			for (int Jtr = 0;Jtr < ME_Correlatted_ID_List_T[Itr].size();Jtr++) {
-				ME_ParentList.emplace_back(ME_Correlatted_ID_List_T[Itr][Jtr]);
-				Index_Sum++;
-			}
-			ME_ParentEnd.emplace_back(Index_Sum-1);
-		}
-		// cout<<"_____________________________________________"<<endl;
-		// cout<<"Recorded_KFP_ID              = {"<<endl;
-		// for (int i=0;i<Recorded_KFP_ID.size();i++) {
-		// 	cout<<"                                  { ";
-		// 	for (int j=0;j<Recorded_KFP_ID[i].size();j++) {cout<<Recorded_KFP_ID[i][j];if (j<(Recorded_KFP_ID[i].size()-1)) cout<<" , ";}
-		// 	cout<<" }"<<endl;
-		// }
-		// cout<<"                                }"<<endl;
-		// cout<<"PDG.size()                   = "<<PDG.size()<<endl;
-		// cout<<"Correlatted_ID_List_T        = {"<<endl;
-		// for (int i=0;i<Correlatted_ID_List_T.size();i++) {
-		// 	cout<<"                                  { ";
-		// 	for (int j=0;j<Correlatted_ID_List_T[i].size();j++) {cout<<Correlatted_ID_List_T[i][j];if (j<(Correlatted_ID_List_T[i].size()-1)) cout<<" , ";}
-		// 	cout<<" }"<<endl;
-		// }
-		// cout<<"                                }"<<endl;
-		// cout<<"Correlatted_ID_List.size()   = "<<Correlatted_ID_List.size()<<endl;
-		// cout<<"Correlatted_ID_Sta.size()    = "<<Correlatted_ID_Sta.size()<<endl;
-		// cout<<"Correlatted_ID_End.size()    = "<<Correlatted_ID_End.size()<<endl;
-		// cout<<"_____________________________________________"<<endl;
+	Correlatted_ID_List_T.resize(0);
+	SE_Correlatted_ID_List_T.resize(0);
+	ME_Correlatted_ID_List_T.resize(0);
+	for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
+		std::vector<int> Temp;Temp.resize(0);
+		Correlatted_ID_List_T.push_back(Temp);
+		SE_Correlatted_ID_List_T.push_back(Temp);
+		ME_Correlatted_ID_List_T.push_back(Temp);
 	}
+	for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
+		for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
+			bool IfCorrelated = false;
+			for (int kRecorded_KFP=1;kRecorded_KFP < Recorded_KFP_ID[iRecorded_KFP].size();kRecorded_KFP++){
+				if (IfCorrelated == true) break;
+				if (Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == -1) continue;
+				for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
+					if ( Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP] ){
+						Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
+						Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
+						IfCorrelated = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+	for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
+		for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
+			bool IfCorrelated = false;
+			for (int kRecorded_KFP=1;kRecorded_KFP < Recorded_KFP_ID[iRecorded_KFP].size();kRecorded_KFP++){
+				if (IfCorrelated == true) break;
+				if (Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == -1) continue;
+				StPicoTrack *trackA = mPicoDst->track(Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP]);
+				padRow1to24TrackA  = trackA->topologyMap(0) & mapMask0;
+				padRow25to45TrackA = trackA->topologyMap(1) & mapMask1;
+				// if (IfITPC) IpadRowTrackA = trackA->iTpcTopologyMap() & ImapMask;
+				for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
+					StPicoTrack *trackB = mPicoDst->track(Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP]);
+					padRow1to24TrackB  = trackB->topologyMap(0) & mapMask0;
+					padRow25to45TrackB = trackB->topologyMap(1) & mapMask1;	
+					// if (IfITPC) IpadRowTrackB = trackB->iTpcTopologyMap() & ImapMask;
+					SL_Value = StKFParticleAnalysisMaker::getSL(padRow1to24TrackA ,padRow25to45TrackA ,IpadRowTrackA ,trackA->nHitsFit() ,padRow1to24TrackB , padRow25to45TrackB ,IpadRowTrackB ,trackB->nHitsFit(), IfITPC);
+					if ((SL_Value<=slcutmin) || (SL_Value>=slcutmax)){
+						SE_Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
+						SE_Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
+						IfCorrelated = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+	for (int iRecorded_KFP=0;iRecorded_KFP<Recorded_KFP_ID.size();iRecorded_KFP++){
+		for (int jRecorded_KFP=iRecorded_KFP+1;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++){
+			bool IfCorrelated = false;
+			for (int kRecorded_KFP=1;kRecorded_KFP < Recorded_KFP_ID[iRecorded_KFP].size();kRecorded_KFP++){
+				if (IfCorrelated == true) break;
+				if (Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP] == -1) continue;
+				StPicoTrack *trackA = mPicoDst->track(Recorded_KFP_ID[iRecorded_KFP][kRecorded_KFP]);
+				trackA_pT = trackA->gMom().Perp();trackA_phi = trackA->gMom().Phi();trackA_eta = trackA->gMom().Eta();trackA_charge = trackA->charge();
+				for (int nRecorded_KFP=1;nRecorded_KFP < Recorded_KFP_ID[jRecorded_KFP].size();nRecorded_KFP++){
+					StPicoTrack *trackB = mPicoDst->track(Recorded_KFP_ID[jRecorded_KFP][nRecorded_KFP]);
+					trackB_pT = trackB->gMom().Perp();trackB_phi = trackB->gMom().Phi();trackB_eta = trackB->gMom().Eta();trackB_charge = trackB->charge();
+					phi = StKFParticleAnalysisMaker::getphistar(trackA_phi, trackB_phi, trackA_pT, trackB_pT, trackA_charge, trackB_charge, B_inTesla, TPC_R);
+					if (IfQAMode) {
+						if ( (Recorded_KFP_ID[iRecorded_KFP][0] == KaonPdg) && (Recorded_KFP_ID[jRecorded_KFP][0] == LambdaPdg) ) {
+							H_Before_Merge_Phi_Eta_Kaon_LambdaDaughter->Fill(phi,trackA_eta-trackB_eta);
+						}
+					}
+					if ((fabs(phi)<0.07)&&(fabs(trackA_eta-trackB_eta)<0.02)){
+						ME_Correlatted_ID_List_T[iRecorded_KFP].push_back(jRecorded_KFP);
+						ME_Correlatted_ID_List_T[jRecorded_KFP].push_back(iRecorded_KFP);
+						IfCorrelated = true;
+						break;
+					}
+					if (IfQAMode) {
+						if ( (Recorded_KFP_ID[iRecorded_KFP][0] == KaonPdg) && (Recorded_KFP_ID[jRecorded_KFP][0] == LambdaPdg) ) {
+							H_After_Merge_Phi_Eta_Kaon_LambdaDaughter->Fill(phi,trackA_eta-trackB_eta);
+						}
+					}
+				}
+			}
+		}
+	}
+	int Index_Sum = 0;
+	for (int Itr=0;Itr<Correlatted_ID_List_T.size();Itr++){
+		ParentSta.emplace_back(Index_Sum);
+		for (int Jtr = 0;Jtr < Correlatted_ID_List_T[Itr].size();Jtr++) {
+			ParentList.emplace_back(Correlatted_ID_List_T[Itr][Jtr]);
+			Index_Sum++;
+		}
+		ParentEnd.emplace_back(Index_Sum-1);
+	}
+	Index_Sum = 0;
+	for (int Itr=0;Itr<SE_Correlatted_ID_List_T.size();Itr++){
+		SE_ParentSta.emplace_back(Index_Sum);
+		for (int Jtr = 0;Jtr < SE_Correlatted_ID_List_T[Itr].size();Jtr++) {
+			SE_ParentList.emplace_back(SE_Correlatted_ID_List_T[Itr][Jtr]);
+			Index_Sum++;
+		}
+		SE_ParentEnd.emplace_back(Index_Sum-1);
+	}
+	Index_Sum = 0;
+	for (int Itr=0;Itr<ME_Correlatted_ID_List_T.size();Itr++){
+		ME_ParentSta.emplace_back(Index_Sum);
+		for (int Jtr = 0;Jtr < ME_Correlatted_ID_List_T[Itr].size();Jtr++) {
+			ME_ParentList.emplace_back(ME_Correlatted_ID_List_T[Itr][Jtr]);
+			Index_Sum++;
+		}
+		ME_ParentEnd.emplace_back(Index_Sum-1);
+	}
+	// cout<<"_____________________________________________"<<endl;
+	// cout<<"Recorded_KFP_ID              = {"<<endl;
+	// for (int i=0;i<Recorded_KFP_ID.size();i++) {
+	// 	cout<<"                                  { ";
+	// 	for (int j=0;j<Recorded_KFP_ID[i].size();j++) {cout<<Recorded_KFP_ID[i][j];if (j<(Recorded_KFP_ID[i].size()-1)) cout<<" , ";}
+	// 	cout<<" }"<<endl;
+	// }
+	// cout<<"                                }"<<endl;
+	// cout<<"PDG.size()                   = "<<PDG.size()<<endl;
+	// cout<<"Correlatted_ID_List_T        = {"<<endl;
+	// for (int i=0;i<Correlatted_ID_List_T.size();i++) {
+	// 	cout<<"                                  { ";
+	// 	for (int j=0;j<Correlatted_ID_List_T[i].size();j++) {cout<<Correlatted_ID_List_T[i][j];if (j<(Correlatted_ID_List_T[i].size()-1)) cout<<" , ";}
+	// 	cout<<" }"<<endl;
+	// }
+	// cout<<"                                }"<<endl;
+	// cout<<"Correlatted_ID_List.size()   = "<<Correlatted_ID_List.size()<<endl;
+	// cout<<"Correlatted_ID_Sta.size()    = "<<Correlatted_ID_Sta.size()<<endl;
+	// cout<<"Correlatted_ID_End.size()    = "<<Correlatted_ID_End.size()<<endl;
+	// cout<<"_____________________________________________"<<endl;
 	// cout<<"Total_Pz = "<<Total_Pz<<endl;
 	if (IfQAMode) {
 		H_Total_Pz->Fill(Total_Pz);

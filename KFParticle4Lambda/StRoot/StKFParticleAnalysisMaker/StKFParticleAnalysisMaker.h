@@ -222,6 +222,11 @@ private:
 	TH2F *H_All_nSigmaKaon_y;
 	TH2F *H_All_nSigmaKaon_eta;
 
+	TDirectory* DTest;
+	// Splite & Merge Effect
+	TH2F *H_Before_Merge_Phi_Eta_Kaon_LambdaDaughter;
+	TH2F *H_After_Merge_Phi_Eta_Kaon_LambdaDaughter;
+
 	// KFP PID QA
 	TDirectory* KFPPIDQA;
 	TDirectory* KFPPID[PDG2NameSize2];
