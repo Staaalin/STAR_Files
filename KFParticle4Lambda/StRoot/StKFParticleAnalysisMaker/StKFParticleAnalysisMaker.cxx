@@ -440,8 +440,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_All_nSigmaKaon_eta->GetYaxis()->SetTitle("nSigmaKaon");
 		
 		// Merge Effect
-		TH2F *H_Before_Merge_Phi_Eta_Kaon_LambdaDaughter = new TH2F("H_Before_Merge_Phi_Eta_Kaon_LambdaDaughter" ,"deta vs. dphistar for all Kaon and Lambda Daughter before removing Merge Effect"  ,100,-0.25*pi,0.25*pi,100,-0.25*pi,0.25*pi);
-		TH2F *H_After_Merge_Phi_Eta_Kaon_LambdaDaughter  = new TH2F("H_After_Merge_Phi_Eta_Kaon_LambdaDaughter"  ,"deta vs. dphistar for all Kaon and Lambda after removing Merge Effect"            ,100,-0.25*pi,0.25*pi,100,-0.25*pi,0.25*pi);
+		H_Before_Merge_Phi_Eta_Kaon_LambdaDaughter = new TH2F("H_Before_Merge_Phi_Eta_Kaon_LambdaDaughter" ,"deta vs. dphistar for all Kaon and Lambda Daughter before removing Merge Effect"  ,100,-0.25*pi,0.25*pi,100,-0.25*pi,0.25*pi);
+		H_After_Merge_Phi_Eta_Kaon_LambdaDaughter  = new TH2F("H_After_Merge_Phi_Eta_Kaon_LambdaDaughter"  ,"deta vs. dphistar for all Kaon and Lambda after removing Merge Effect"            ,100,-0.25*pi,0.25*pi,100,-0.25*pi,0.25*pi);
 
 		for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 
