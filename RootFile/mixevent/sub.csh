@@ -56,7 +56,7 @@ echo "0 : Default"
 echo "1 : nHitFit >= 20"
 echo "2 : PVz"
 echo "3 : TPC nSigma"
-echo "4 : TOF m2"
+echo "4 : High DCA"
 set CutIndex = "$<"
 
 echo "一共有文件数：$numFiles"

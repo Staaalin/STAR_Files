@@ -987,7 +987,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 
 		////////////////////////////////////// Event-QA //////////////////////////////////////
 
-		DTest -> cd();
+		DTest->cd();
 		H_Before_Merge_Phi_Eta_Kaon_LambdaDaughter->Write();
 		H_After_Merge_Phi_Eta_Kaon_LambdaDaughter ->Write();
 

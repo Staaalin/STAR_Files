@@ -54,7 +54,7 @@ using namespace std;
 const int CentralityBin[] = {0 , 10 , 30 , 50 , 100};// %
 const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
 // const float yBin[]  = {-1.0 , 0.0 , 1.0}; // B_y
-const float yBin[]  = {-0.1 , 0.1}; // B_y
+const float yBin[]  = {-1.0 , -0.4 , -0.2 , 0.2 , 0.4 , 1.0}; // B_y
 const float AyCut[] = {-1.0 , 1.0}; // A_y
 int FeedDown[] = { 3334 , -3334};
 // int FeedDown[] = {0};
@@ -439,7 +439,7 @@ float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float
 
 void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,
               int A_PDG,int B_PDG,int Mode = 0,int SP_ME = 0, // Mode = 0: PDGMult 为vector长度 ; SP_Me : if turn on cut of Splite & Merge Effect ; Purity_MC : if turn on 
-              int CutID = 0) // 0: default ; 1: nHit ; 2: PVz ; 3: TPC_nSigma ; 4: TOF_m2
+              int CutID = 0) // 0: default ; 1: nHit ; 2: PVz ; 3: TPC_nSigma ; 4: DCA
 {
 
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
@@ -618,7 +618,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     int A_Kid , B_Kid , Mix_A_Size , Mix_B_Size , A_EID , AidN , BidN;
     std::vector<int> Temp;
     std::vector<float> CMass , CMassSigma;
-    bool IfRecord = true , IfRemoveFeedPair = false , IfRemoveSpliteMerge = false , IfRemoveLownHits = false , IfRemoveHighPVz = false , IfRemoveHighTPCsigma = false;
+    bool IfRecord = true , IfRemoveFeedPair = false , IfRemoveSpliteMerge = false , IfRemoveLownHits = false , IfRemoveHighPVz = false , IfRemoveHighTPCsigma = false , IfCutHighDCA = false;
     float BMass = massList(B_PDG)           , AMass = massList(A_PDG);
     float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
     // float MassAndKstar[2];
@@ -804,6 +804,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
     if (CutID == 1) IfRemoveLownHits = true;
     if (CutID == 2) IfRemoveHighPVz = true;
     if (CutID == 3) IfRemoveHighTPCsigma = true;
+    if (CutID == 4) IfCutHighDCA = true;
 
     for (i=0;i<CentralityBinNum;i++){
         for (l=0;l<Pattern;l++){
@@ -1184,7 +1185,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
         // hadronTree->SetBranchAddress("QA_eta"       ,&QA_eta       ,&bQA_eta       );
         // hadronTree->SetBranchAddress("dEdx"         ,&dEdx         ,&bdEdx         );
         // hadronTree->SetBranchAddress("m2"           ,&m2           ,&bm2           );
-        // hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
+        if(IfCutHighDCA) hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
         // hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
         // hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
         if (IfRemoveHighTPCsigma && ((abs(A_PDG) == 321) || (abs(B_PDG) == 321))){
@@ -1251,6 +1252,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                             if (nHitsFit->at(j) < 20) continue;
                         }
                     }
+                    if (IfCutHighDCA) {
+                        if ((abs(A_PDG) == 321) || (abs(A_PDG) == 211) || (abs(A_PDG) == 2212)) {
+                            if ( (0 > dcatopv) || (dcatopv > 0.5)) continue;
+                        }
+                    }
                     if ( PatternID == Pattern ) {
                         if      (fabs(InvariantMass->at(j) - AMass) <= 3*AMassSigma) {A_Num++;A_Kind[A_Num]=0;}
                         // else if (fabs(InvariantMass->at(j) - AMass) <= 6*AMassSigma) {A_Kind.push_back(1);}
@@ -1296,6 +1302,11 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     if (IfRemoveLownHits) {
                         if ((abs(B_PDG) == 321) || (abs(B_PDG) == 211) || (abs(B_PDG) == 2212)) {
                             if (nHitsFit->at(j) < 20) continue;
+                        }
+                    }
+                    if (IfCutHighDCA) {
+                        if ((abs(B_PDG) == 321) || (abs(B_PDG) == 211) || (abs(B_PDG) == 2212)) {
+                            if ( (0 > dcatopv) || (dcatopv > 0.5)) continue;
                         }
                     }
                     if ( PatternID == Pattern ) {
