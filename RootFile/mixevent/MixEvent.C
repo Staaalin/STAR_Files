@@ -1254,7 +1254,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     if (IfCutHighDCA) {
                         if ((abs(A_PDG) == 321) || (abs(A_PDG) == 211) || (abs(A_PDG) == 2212)) {
-                            if ( (0 > dcatopv) || (dcatopv > 0.5)) continue;
+                            if ( (0 > dcatopv->at(j)) || (dcatopv->at(j) > 0.5)) continue;
                         }
                     }
                     if ( PatternID == Pattern ) {
@@ -1306,7 +1306,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     }
                     if (IfCutHighDCA) {
                         if ((abs(B_PDG) == 321) || (abs(B_PDG) == 211) || (abs(B_PDG) == 2212)) {
-                            if ( (0 > dcatopv) || (dcatopv > 0.5)) continue;
+                            if ( (0 > dcatopv->at(j)) || (dcatopv->at(j) > 0.5)) continue;
                         }
                     }
                     if ( PatternID == Pattern ) {
