@@ -166,7 +166,7 @@ while ($i <= $numFiles)
     # echo \<MinStorage\>100\</MinStorage\> >> $SubXml
     # echo \<MaxStorage\>200\</MaxStorage\>  >> $SubXml
     # echo \</StorageSpace\> >> $SubXml
-    echo \<Priority\>75\</Priority\> >> $SubXml
+    echo \<Priority\>5\</Priority\> >> $SubXml
     echo \</ResourceUsage\> >> $SubXml
 
 
