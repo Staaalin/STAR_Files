@@ -43,6 +43,8 @@ using namespace std;
 
 float CenCorr(float Vz);
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize);
+void print(std::vector<int> Temp);
+void print(std::vector<float> Temp);
 
 #define A_Num_Per_Event 5
 #define B_Num_Per_Event 5
@@ -504,4 +506,26 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize)
         }
     }
     return Result;
+}
+
+void print(std::vector<int> Temp)
+{
+	cout<<"{";
+    for (int i = 0;i<Temp.size();i++){
+		cout<<" "<<Temp.at(i);
+		if (i != (Temp.size() - 1)) cout<<" ,"; 
+	}
+	cout<<" }"<<endl;
+    return ;
+}
+
+void print(std::vector<float> Temp)
+{
+	cout<<"{";
+    for (int i = 0;i<Temp.size();i++){
+		cout<<" "<<Temp.at(i);
+		if (i != (Temp.size() - 1)) cout<<" ,"; 
+	}
+	cout<<" }"<<endl;
+    return ;
 }
