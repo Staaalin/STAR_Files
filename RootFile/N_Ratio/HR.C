@@ -165,24 +165,24 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
 
     float Mass_Lambda = 1.1161;
     MSta = floor((Mass_Lambda)/0.0005-MBinPar)*0.0005 , MEnd = MSta + (MBinNum - MBinPar)*0.0005;
-    TH3D* H_Lambda  = new TH3D("H_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 100,Mass_Lambda_Sta,Mass_Lambda_End , CentralityBinNum,0,CentralityBinNum);
-    TH3D* H_Lambdab = new TH3D("H_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 100,Mass_Lambda_Sta,Mass_Lambda_End , CentralityBinNum,0,CentralityBinNum);
-    TH2D* H_ALL_Lambda  = new TH2D("H_ALL_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 100,Mass_Lambda_Sta,Mass_Lambda_End);
-    TH2D* H_ALL_Lambdab = new TH2D("H_ALL_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 100,Mass_Lambda_Sta,Mass_Lambda_End);
+    TH3D* H_Lambda  = new TH3D("H_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 100,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
+    TH3D* H_Lambdab = new TH3D("H_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 100,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
+    TH2D* H_ALL_Lambda  = new TH2D("H_ALL_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 100,MSta,MEnd);
+    TH2D* H_ALL_Lambdab = new TH2D("H_ALL_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 100,MSta,MEnd);
 
     float Mass_Xi     = 1.3223;
     MSta = floor((Mass_Xi)/0.0005-MBinPar)*0.0005 , MEnd = MSta + (MBinNum - MBinPar)*0.0005;
-    TH3D* H_Xi      = new TH3D("H_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 100,Mass_Xi_Sta,Mass_Xi_End         , CentralityBinNum,0,CentralityBinNum);
-    TH3D* H_Xib     = new TH3D("H_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 100,Mass_Xi_Sta,Mass_Xi_End         , CentralityBinNum,0,CentralityBinNum);
-    TH2D* H_ALL_Xi      = new TH2D("H_ALL_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 100,Mass_Xi_Sta,Mass_Xi_End);
-    TH2D* H_ALL_Xib     = new TH2D("H_ALL_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 100,Mass_Xi_Sta,Mass_Xi_End);
+    TH3D* H_Xi      = new TH3D("H_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 100,MSta,MEnd         , CentralityBinNum,0,CentralityBinNum);
+    TH3D* H_Xib     = new TH3D("H_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 100,MSta,MEnd         , CentralityBinNum,0,CentralityBinNum);
+    TH2D* H_ALL_Xi      = new TH2D("H_ALL_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 100,MSta,MEnd);
+    TH2D* H_ALL_Xib     = new TH2D("H_ALL_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 100,MSta,MEnd);
 
     float Mass_Omega  = 1.6725;
     MSta = floor((Mass_Omega)/0.0005-MBinPar)*0.0005 , MEnd = MSta + (MBinNum - MBinPar)*0.0005;
-    TH3D* H_Omega   = new TH3D("H_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 100,Mass_Omega_Sta,Mass_Omega_End   , CentralityBinNum,0,CentralityBinNum);
-    TH3D* H_Omegab  = new TH3D("H_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 100,Mass_Omega_Sta,Mass_Omega_End   , CentralityBinNum,0,CentralityBinNum);
-    TH2D* H_ALL_Omega   = new TH2D("H_ALL_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 100,Mass_Omega_Sta,Mass_Omega_End);
-    TH2D* H_ALL_Omegab  = new TH2D("H_ALL_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 100,Mass_Omega_Sta,Mass_Omega_End);
+    TH3D* H_Omega   = new TH3D("H_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 100,MSta,MEnd   , CentralityBinNum,0,CentralityBinNum);
+    TH3D* H_Omegab  = new TH3D("H_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 100,MSta,MEnd   , CentralityBinNum,0,CentralityBinNum);
+    TH2D* H_ALL_Omega   = new TH2D("H_ALL_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 100,MSta,MEnd);
+    TH2D* H_ALL_Omegab  = new TH2D("H_ALL_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 100,MSta,MEnd);
 
     int i , j , k , l , m , n;// used as Index
     int CenIndex;
