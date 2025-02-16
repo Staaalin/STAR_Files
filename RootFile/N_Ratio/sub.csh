@@ -133,7 +133,7 @@ while ($i <= $numFiles)
     set LeftBrackets = "\("
     set RightBrackets = "\)"
     set Quo = '\"'
-    echo root \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,0$RightBrackets >> $SubXml
+    echo root \-b HR\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,0$RightBrackets >> $SubXml
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
 
@@ -168,9 +168,8 @@ while ($i <= $numFiles)
         @ k = $k + 1
     end
 
-    set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEvent.C"
-    # set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEventTest.C"
-    echo \<File\>file:$MixEventPWD\</File\> >> $SubXml
+    set NRPWD = "/star/u/svianping/STAR_Files/RootFile/N_Ratio/HR.C"
+    echo \<File\>file:$NRPWD\</File\> >> $SubXml
     set SourceFilePWD = "/star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh"
     echo \<File\>file:$SourceFilePWD\</File\> >> $SubXml
 
