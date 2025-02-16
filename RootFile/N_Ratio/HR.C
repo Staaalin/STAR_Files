@@ -55,9 +55,17 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         std::vector<Float_t> *InvariantMass      = nullptr;
         std::vector<Float_t> *Decay_Length       = nullptr;
         std::vector<Float_t> *Chi2               = nullptr;
+        std::vector<Float_t> *nHitsFit           = nullptr;
+        std::vector<Float_t> *nHitsMax           = nullptr;
         std::vector<int>     *ParentList         = nullptr;
         std::vector<int>     *ParentSta          = nullptr;
         std::vector<int>     *ParentEnd          = nullptr;
+        std::vector<int>     *SE_ParentList      = nullptr;
+        std::vector<int>     *SE_ParentSta       = nullptr;
+        std::vector<int>     *SE_ParentEnd       = nullptr;
+        std::vector<int>     *ME_ParentList      = nullptr;
+        std::vector<int>     *ME_ParentSta       = nullptr;
+        std::vector<int>     *ME_ParentEnd       = nullptr;
 
         TBranch *bPDG                            = nullptr;
         TBranch *bmix_px                         = nullptr;
@@ -73,9 +81,17 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         TBranch *bInvariantMass                  = nullptr;
         TBranch *bDecay_Length                   = nullptr;
         TBranch *bChi2                           = nullptr;
+        TBranch *bnHitsFit                       = nullptr;
+        TBranch *bnHitsMax                       = nullptr;
         TBranch *bParentList                     = nullptr;
         TBranch *bParentSta                      = nullptr;
         TBranch *bParentEnd                      = nullptr;
+        TBranch *bSE_ParentList                  = nullptr;
+        TBranch *bSE_ParentSta                   = nullptr;
+        TBranch *bSE_ParentEnd                   = nullptr;
+        TBranch *bME_ParentList                  = nullptr;
+        TBranch *bME_ParentSta                   = nullptr;
+        TBranch *bME_ParentEnd                   = nullptr;
     
     #else
         #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
@@ -94,9 +110,17 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             std::vector<Float_t> *InvariantMass      = NULL;
             std::vector<Float_t> *Decay_Length       = NULL;
             std::vector<Float_t> *Chi2               = NULL;
+            std::vector<Float_t> *nHitsFit           = NULL;
+            std::vector<Float_t> *nHitsMax           = NULL;
             std::vector<int>     *ParentList         = NULL;
             std::vector<int>     *ParentSta          = NULL;
             std::vector<int>     *ParentEnd          = NULL;
+            std::vector<int>     *SE_ParentList      = NULL;
+            std::vector<int>     *SE_ParentSta       = NULL;
+            std::vector<int>     *SE_ParentEnd       = NULL;
+            std::vector<int>     *ME_ParentList      = NULL;
+            std::vector<int>     *ME_ParentSta       = NULL;
+            std::vector<int>     *ME_ParentEnd       = NULL;
 
             TBranch *bPDG                            = NULL;
             TBranch *bmix_px                         = NULL;
@@ -112,9 +136,17 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             TBranch *bInvariantMass                  = NULL;
             TBranch *bDecay_Length                   = NULL;
             TBranch *bChi2                           = NULL;
+            TBranch *bnHitsFit                       = NULL;
+            TBranch *bnHitsMax                       = NULL;
             TBranch *bParentList                     = NULL;
             TBranch *bParentSta                      = NULL;
             TBranch *bParentEnd                      = NULL;
+            TBranch *bSE_ParentList                  = NULL;
+            TBranch *bSE_ParentSta                   = NULL;
+            TBranch *bSE_ParentEnd                   = NULL;
+            TBranch *bME_ParentList                  = NULL;
+            TBranch *bME_ParentSta                   = NULL;
+            TBranch *bME_ParentEnd                   = NULL;
 
         #else
     
@@ -132,9 +164,17 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             std::vector<Float_t> *InvariantMass      = 0;
             std::vector<Float_t> *Decay_Length       = 0;
             std::vector<Float_t> *Chi2               = 0;
+            std::vector<Float_t> *nHitsFit           = 0;
+            std::vector<Float_t> *nHitsMax           = 0;
             std::vector<int>     *ParentList         = 0;
             std::vector<int>     *ParentSta          = 0;
             std::vector<int>     *ParentEnd          = 0;
+            std::vector<int>     *SE_ParentList      = 0;
+            std::vector<int>     *SE_ParentSta       = 0;
+            std::vector<int>     *SE_ParentEnd       = 0;
+            std::vector<int>     *ME_ParentList      = 0;
+            std::vector<int>     *ME_ParentSta       = 0;
+            std::vector<int>     *ME_ParentEnd       = 0;
     
             TBranch *bPDG                            = 0;
             TBranch *bmix_px                         = 0;
@@ -150,9 +190,17 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             TBranch *bInvariantMass                  = 0;
             TBranch *bDecay_Length                   = 0;
             TBranch *bChi2                           = 0;
+            TBranch *bnHitsFit                       = 0;
+            TBranch *bnHitsMax                       = 0;
             TBranch *bParentList                     = 0;
             TBranch *bParentSta                      = 0;
             TBranch *bParentEnd                      = 0;
+            TBranch *bSE_ParentList                  = 0;
+            TBranch *bSE_ParentSta                   = 0;
+            TBranch *bSE_ParentEnd                   = 0;
+            TBranch *bME_ParentList                  = 0;
+            TBranch *bME_ParentSta                   = 0;
+            TBranch *bME_ParentEnd                   = 0;
 
         #endif
     #endif
