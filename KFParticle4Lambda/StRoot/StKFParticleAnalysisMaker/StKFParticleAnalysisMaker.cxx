@@ -1903,12 +1903,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 			bool CheckPass = true;
 			vector<int> Temp;Temp.resize(0);Temp.push_back(iKFParticle);
 			vector<int> TempT;TempT.resize(0);TempT.push_back(iKFParticle);
-			if      ((abs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 9*PhiPdgMassSigma))    {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 9*K0SPdgMassSigma))    {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 9*LambdaPdgMassSigma)) {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 9*XiPdgMassSigma))     {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == XiRPdg)    && (fabs(particle.GetMass() - XiRPdgMass)    > 9*XiRPdgMassSigma))    {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 9*OmegaPdgMassSigma))  {CheckPass = false;}
+			if      ((abs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 27*PhiPdgMassSigma))    {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 27*K0SPdgMassSigma))    {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 27*LambdaPdgMassSigma)) {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 27*XiPdgMassSigma))     {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == XiRPdg)    && (fabs(particle.GetMass() - XiRPdgMass)    > 27*XiRPdgMassSigma))    {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 27*OmegaPdgMassSigma))  {CheckPass = false;}
 			if (CheckPass == true) {
 				for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 					TempT.push_back(particle.DaughterIds()[iDaughter]);
@@ -2005,9 +2005,17 @@ Int_t StKFParticleAnalysisMaker::Make()
 		for (int i=0;i<Recorded_KFP_ID.size();i++) {
 			for (int j=1;j<Recorded_KFP_ID[i].size();j++) {
 				const KFParticle particle = KFParticleInterface->GetParticles()[Recorded_KFP_ID[i][j]];
-				if ( (abs(particle.GetPDG()) == 211)  || 
+				if (    (abs(particle.GetPDG()) == 211)  || 
 						(abs(particle.GetPDG()) == 2212) || 
 						(abs(particle.GetPDG()) == 321) ) {
+					for (int k=0;k<Recorded_KFP_ID.size();k++) {
+						if (Recorded_KFP_ID[i][j] == Recorded_KFP_ID[k][0]) break;
+						if (k == Recorded_KFP_ID.size()-1) {
+							vector<int> Temp;Temp.resize(0);Temp.push_back(Recorded_KFP_ID[i][j]);Temp.push_back(Recorded_KFP_ID[i][j]);
+							Recorded_KFP_ID.push_back(Temp);
+							break;
+						}
+					}
 					int iTrack = -1;
 					const int globalTrackId = (particle).DaughterIds()[0];
 					Int_t iTrackStart = globalTrackId;// Int_t iTrackStart = globalTrackId - 1;
@@ -2090,6 +2098,25 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_nHitsFit.emplace_back(-999);
 			QA_nHitsMax.emplace_back(-999);
 
+		}
+		else if ((abs(particle.GetPDG()) == ProtonPdg) || (abs(particle.GetPDG()) == PionPdg) || (abs(particle.GetPDG()) == KaonPdg)) {
+			StPicoTrack *track = mPicoDst->track(Recorded_KFP_ID[iKFParticle][1]);
+			PDG.emplace_back(particle.GetPDG());
+			px.emplace_back(particle.GetPx());
+			py.emplace_back(particle.GetPy());
+			pz.emplace_back(particle.GetPz());
+			QA_eta.emplace_back(particle.GetEta());
+			InvariantMass.emplace_back(-1);// 只由KFP识别的，质量标记为-1
+			QA_Chi2.emplace_back(particle.GetChi2());
+			QA_Decay_Length.emplace_back(l);
+			QA_DCA_V0_PV.emplace_back(-1);
+			QA_dEdx.emplace_back(track->dEdx());
+			QA_nSigmaProton.emplace_back(track->nSigmaProton());
+			QA_nSigmaPion.emplace_back(track->nSigmaPion());
+			QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
+			QA_m2.emplace_back(-999);
+			QA_nHitsFit.emplace_back(track->nHitsFit());
+			QA_nHitsMax.emplace_back(track->nHitsMax());
 		}
 	}
 
