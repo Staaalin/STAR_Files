@@ -1241,7 +1241,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
             C_ParID.resize(0);// IfFoundOmega = false;
 
             for (j=0;j<PDGMult;j++){
-                if (PDG->at(j) == A_PDG) {
+                if ((PDG->at(j) == A_PDG) && (InvariantMass->at(j)>=0)) {
                     if (IfRemoveHighTPCsigma) {
                         if (abs(A_PDG) == 321) {
                             if (fabs(nSigmaKaon->at(j))>1) continue;
@@ -1293,7 +1293,7 @@ void MixEvent(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFile
                     tEnergy = pow(pow(mix_px->at(j),2) + pow(mix_py->at(j),2) + pow(mix_pz->at(j),2) + AMass*AMass,0.5);
                     A_Rap[A_Num]=0.5*log((tEnergy+mix_pz->at(j))/(tEnergy-mix_pz->at(j)));
                 }
-                else if (PDG->at(j) == B_PDG) {
+                else if ((PDG->at(j) == B_PDG) && (InvariantMass->at(j)>=0)) {
                     if (IfRemoveHighTPCsigma) {
                         if (abs(B_PDG) == 321) {
                             if (fabs(nSigmaKaon->at(j))>1) continue;
