@@ -223,31 +223,46 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     int MBinNum = 500 , MBinPar = 50;
     float MSta , MEnd;
 
-    float Mass_Lambda = 1.1161;
+    float Mass_Lambda = 1.1161 , Mass_Sigma_Lambda = 0.0020;
     MSta = floor((Mass_Lambda)/0.0005 - 50)*0.0005 , MEnd = floor((Mass_Lambda)/0.0005 + 50)*0.0005;
-    TH3D* H_Lambda  = new TH3D("H_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
-    TH3D* H_Lambdab = new TH3D("H_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
-    TH2D* H_ALL_Lambda  = new TH2D("H_ALL_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 200,MSta,MEnd);
-    TH2D* H_ALL_Lambdab = new TH2D("H_ALL_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 200,MSta,MEnd);
+    TH3D* H_Lambda       = new TH3D("H_Lambda" ,"Lambda_Distribution"        , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
+    TH3D* H_Lambdab      = new TH3D("H_Lambdab","LambdaBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
+    TH2D* H_ALL_Lambda   = new TH2D("H_ALL_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_ALL_Lambdab  = new TH2D("H_ALL_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_Lambda_Pt_y  = new TH2D("H_Lambda_Pt_y" ,"Lambda_Pt_y"           , 272,-1.7,1.7, 176,0,2.2);
+    TH2D* H_Lambdab_Pt_y = new TH2D("H_Lambdab_Pt_y","LambdaBar_Pt_y"        , 272,-1.7,1.7, 176,0,2.2);
 
-    float Mass_Xi     = 1.3223;
+    float Mass_Xi     = 1.3223 , Mass_Sigma_Xi = 0.0024;
     MSta = floor((Mass_Xi)/0.0005 - 50)*0.0005 , MEnd = floor((Mass_Xi)/0.0005 + 50)*0.0005;
-    TH3D* H_Xi      = new TH3D("H_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 200,MSta,MEnd         , CentralityBinNum,0,CentralityBinNum);
-    TH3D* H_Xib     = new TH3D("H_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd         , CentralityBinNum,0,CentralityBinNum);
-    TH2D* H_ALL_Xi      = new TH2D("H_ALL_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 200,MSta,MEnd);
-    TH2D* H_ALL_Xib     = new TH2D("H_ALL_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
+    TH3D* H_Xi           = new TH3D("H_Xi"     ,"Xi_Distribution"            , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
+    TH3D* H_Xib          = new TH3D("H_Xib"    ,"XiBar_Distribution"         , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
+    TH2D* H_ALL_Xi       = new TH2D("H_ALL_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_ALL_Xib      = new TH2D("H_ALL_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_Xi_Pt_y      = new TH2D("H_Xi_Pt_y" ,"Xi_Pt_y"                   , 272,-1.7,1.7, 176,0,2.2);
+    TH2D* H_Xib_Pt_y     = new TH2D("H_Xib_Pt_y","XiBar_Pt_y"                , 272,-1.7,1.7, 176,0,2.2);
 
-    float Mass_Omega  = 1.6725;
+    float Mass_Omega  = 1.6725 , Mass_Sigma_Omega = 0.0029;
     MSta = floor((Mass_Omega)/0.0005 - 50)*0.0005 , MEnd = floor((Mass_Omega)/0.0005 + 50)*0.0005;
-    TH3D* H_Omega   = new TH3D("H_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 200,MSta,MEnd   , CentralityBinNum,0,CentralityBinNum);
-    TH3D* H_Omegab  = new TH3D("H_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 200,MSta,MEnd   , CentralityBinNum,0,CentralityBinNum);
+    TH3D* H_Omega       = new TH3D("H_Omega"  ,"Omega_Distribution"         , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
+    TH3D* H_Omegab      = new TH3D("H_Omegab" ,"OmegaBar_Distribution"      , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH2D* H_ALL_Omega   = new TH2D("H_ALL_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
     TH2D* H_ALL_Omegab  = new TH2D("H_ALL_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_Omega_Pt_y  = new TH2D("H_Omega_Pt_y" ,"Omega_Pt_y"             , 272,-1.7,1.7, 176,0,2.2);
+    TH2D* H_Omegab_Pt_y = new TH2D("H_Omegab_Pt_y","OmegaBar_Pt_y"          , 272,-1.7,1.7, 176,0,2.2);
+
+    float Mass_Kaon = 0.493677;
+    MSta = floor((Mass_Kaon)/0.0005 - 50)*0.0005 , MEnd = floor((Mass_Kaon)/0.0005 + 50)*0.0005;
+    TH3D* H_Kaon        = new TH3D("H_Kaon" ,"Kaon_Distribution"            , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
+    TH3D* H_Kaonb       = new TH3D("H_Kaonb","KaonBar_Distribution"         , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
+    TH2D* H_ALL_Kaon    = new TH2D("H_ALL_Kaon" ,"Kaon_Distribution"        , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_ALL_Kaonb   = new TH2D("H_ALL_Kaonb","KaonBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_Kaon_Pt_y   = new TH2D("H_Kaon_Pt_y" ,"Kaon_Pt_y"               , 272,-1.7,1.7, 176,0,2.2);
+    TH2D* H_Kaonb_Pt_y  = new TH2D("H_Kaonb_Pt_y","KaonBar_Pt_y"            , 272,-1.7,1.7, 176,0,2.2);
 
     int i , j , k , l , m , n;// used as Index
     int CenIndex;
     int NNch;
-    float tEnergy , rap;
+    float tEnergy , rap , Pt , Pz_T , Mass_T;
 
     TString TreeName = "hadronTree";
     TChain *hadronTree = new TChain(TreeName);
@@ -329,9 +344,13 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         }
     
         for (i=0;i<PDGMult;i++){
-            if       (PDG->at(i) == 3122) {
-                tEnergy = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2) + pow(mix_pz->at(i),2) + Mass_Lambda*Mass_Lambda,0.5);
-                rap     = 0.5*log((tEnergy+mix_pz->at(i))/(tEnergy-mix_pz->at(i)));
+            Mass_T = InvariantMass->at(i);
+            if ((Mass_T<0)) continue;
+            Pz_T = mix_pz->at(i);
+            if      (PDG->at(i) == 321) {
+                Pt = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2),0.5);
+                tEnergy = pow(Pt*Pt + Pz_T*Pz_T + Mass_Kaon*Mass_Kaon,0.5);
+                rap     = 0.5*log((tEnergy+Pz_T)/(tEnergy-Pz_T));
                 CenIndex = 0;
                 for (k=0;k<CentralityBinNum;k++){
                     NNch = CenCorr(PVz) * Nch;
@@ -341,12 +360,50 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                         break;
                     }
                 }
-                H_Lambda->Fill(rap,InvariantMass->at(i),CenIndex);
-                H_ALL_Lambda->Fill(rap,InvariantMass->at(i));
+                H_Kaon->Fill(rap,Mass_T,CenIndex);
+                H_ALL_Kaon->Fill(rap,Mass_T);
+                H_Kaon_Pt_y->Fill(rap,Pt);
+            }
+            else if (PDG->at(i) == -321) {
+                Pt = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2),0.5);
+                tEnergy = pow(Pt*Pt + Pz_T*Pz_T + Mass_Kaon*Mass_Kaon,0.5);
+                rap     = 0.5*log((tEnergy+Pz_T)/(tEnergy-Pz_T));
+                CenIndex = 0;
+                for (k=0;k<CentralityBinNum;k++){
+                    NNch = CenCorr(PVz) * Nch;
+                    // if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
+                    if ((NchList.at(k) >= NNch) && (NNch > NchList.at(k+1))) {
+                        CenIndex = k;
+                        break;
+                    }
+                }
+                H_Kaonb->Fill(rap,Mass_T,CenIndex);
+                H_ALL_Kaonb->Fill(rap,Mass_T);
+                H_Kaonb_Pt_y->Fill(rap,Pt);
+            }
+            else if (PDG->at(i) == 3122) {
+                Pt = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2),0.5);
+                tEnergy = pow(Pt*Pt + Pz_T*Pz_T + Mass_Lambda*Mass_Lambda,0.5);
+                rap     = 0.5*log((tEnergy+Pz_T)/(tEnergy-Pz_T));
+                CenIndex = 0;
+                for (k=0;k<CentralityBinNum;k++){
+                    NNch = CenCorr(PVz) * Nch;
+                    // if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
+                    if ((NchList.at(k) >= NNch) && (NNch > NchList.at(k+1))) {
+                        CenIndex = k;
+                        break;
+                    }
+                }
+                H_Lambda->Fill(rap,Mass_T,CenIndex);
+                H_ALL_Lambda->Fill(rap,Mass_T);
+                if (fabs(Mass_T - Mass_Lambda) <= 3*Mass_Sigma_Lambda) {
+                    H_Lambda_Pt_y->Fill(rap,Pt);
+                }
             }
             else if (PDG->at(i) == -3122) {
-                tEnergy = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2) + pow(mix_pz->at(i),2) + Mass_Lambda*Mass_Lambda,0.5);
-                rap     = 0.5*log((tEnergy+mix_pz->at(i))/(tEnergy-mix_pz->at(i)));
+                Pt = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2),0.5);
+                tEnergy = pow(Pt*Pt + Pz_T*Pz_T + Mass_Lambda*Mass_Lambda,0.5);
+                rap     = 0.5*log((tEnergy+Pz_T)/(tEnergy-Pz_T));
                 CenIndex = 0;
                 for (k=0;k<CentralityBinNum;k++){
                     NNch = CenCorr(PVz) * Nch;
@@ -356,12 +413,16 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                         break;
                     }
                 }
-                H_Lambdab->Fill(rap,InvariantMass->at(i),CenIndex);
-                H_ALL_Lambdab->Fill(rap,InvariantMass->at(i));
+                H_Lambdab->Fill(rap,Mass_T,CenIndex);
+                H_ALL_Lambdab->Fill(rap,Mass_T);
+                if (fabs(Mass_T - Mass_Lambda) <= 3*Mass_Sigma_Lambda) {
+                    H_Lambdab_Pt_y->Fill(rap,Pt);
+                }
             }
             else if (PDG->at(i) == 3312) {
-                tEnergy = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2) + pow(mix_pz->at(i),2) + Mass_Xi*Mass_Xi,0.5);
-                rap     = 0.5*log((tEnergy+mix_pz->at(i))/(tEnergy-mix_pz->at(i)));
+                Pt = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2),0.5);
+                tEnergy = pow(Pt*Pt + Pz_T*Pz_T + Mass_Xi*Mass_Xi,0.5);
+                rap     = 0.5*log((tEnergy+Pz_T)/(tEnergy-Pz_T));
                 CenIndex = 0;
                 for (k=0;k<CentralityBinNum;k++){
                     NNch = CenCorr(PVz) * Nch;
@@ -371,12 +432,16 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                         break;
                     }
                 }
-                H_Xi->Fill(rap,InvariantMass->at(i),CenIndex);
-                H_ALL_Xi->Fill(rap,InvariantMass->at(i));
+                H_Xi->Fill(rap,Mass_T,CenIndex);
+                H_ALL_Xi->Fill(rap,Mass_T);
+                if (fabs(Mass_T - Mass_Xi) <= 3*Mass_Sigma_Xi) {
+                    H_Xi_Pt_y->Fill(rap,Pt);
+                }
             }
             else if (PDG->at(i) == -3312) {
-                tEnergy = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2) + pow(mix_pz->at(i),2) + Mass_Xi*Mass_Xi,0.5);
-                rap     = 0.5*log((tEnergy+mix_pz->at(i))/(tEnergy-mix_pz->at(i)));
+                Pt = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2),0.5);
+                tEnergy = pow(Pt*Pt + Pz_T*Pz_T + Mass_Xi*Mass_Xi,0.5);
+                rap     = 0.5*log((tEnergy+Pz_T)/(tEnergy-Pz_T));
                 CenIndex = 0;
                 for (k=0;k<CentralityBinNum;k++){
                     NNch = CenCorr(PVz) * Nch;
@@ -386,12 +451,16 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                         break;
                     }
                 }
-                H_Xib->Fill(rap,InvariantMass->at(i),CenIndex);
-                H_ALL_Xib->Fill(rap,InvariantMass->at(i));
+                H_Xib->Fill(rap,Mass_T,CenIndex);
+                H_ALL_Xib->Fill(rap,Mass_T);
+                if (fabs(Mass_T - Mass_Xi) <= 3*Mass_Sigma_Xi) {
+                    H_Xib_Pt_y->Fill(rap,Pt);
+                }
             }
             else if (PDG->at(i) == 3334) {
-                tEnergy = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2) + pow(mix_pz->at(i),2) + Mass_Omega*Mass_Omega,0.5);
-                rap     = 0.5*log((tEnergy+mix_pz->at(i))/(tEnergy-mix_pz->at(i)));
+                Pt = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2),0.5);
+                tEnergy = pow(Pt*Pt + Pz_T*Pz_T + Mass_Omega*Mass_Omega,0.5);
+                rap     = 0.5*log((tEnergy+Pz_T)/(tEnergy-Pz_T));
                 CenIndex = 0;
                 for (k=0;k<CentralityBinNum;k++){
                     NNch = CenCorr(PVz) * Nch;
@@ -401,12 +470,16 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                         break;
                     }
                 }
-                H_Omega->Fill(rap,InvariantMass->at(i),CenIndex);
-                H_ALL_Omega->Fill(rap,InvariantMass->at(i));
+                H_Omega->Fill(rap,Mass_T,CenIndex);
+                H_ALL_Omega->Fill(rap,Mass_T);
+                if (fabs(Mass_T - Mass_Omega) <= 3*Mass_Sigma_Omega) {
+                    H_Omega_Pt_y->Fill(rap,Pt);
+                }
             }
             else if (PDG->at(i) == -3334) {
-                tEnergy = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2) + pow(mix_pz->at(i),2) + Mass_Omega*Mass_Omega,0.5);
-                rap     = 0.5*log((tEnergy+mix_pz->at(i))/(tEnergy-mix_pz->at(i)));
+                Pt = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2),0.5);
+                tEnergy = pow(Pt*Pt + Pz_T*Pz_T + Mass_Omega*Mass_Omega,0.5);
+                rap     = 0.5*log((tEnergy+Pz_T)/(tEnergy-Pz_T));
                 CenIndex = 0;
                 for (k=0;k<CentralityBinNum;k++){
                     NNch = CenCorr(PVz) * Nch;
@@ -416,8 +489,11 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                         break;
                     }
                 }
-                H_Omegab->Fill(rap,InvariantMass->at(i),CenIndex);
-                H_ALL_Omegab->Fill(rap,InvariantMass->at(i));
+                H_Omegab->Fill(rap,Mass_T,CenIndex);
+                H_ALL_Omegab->Fill(rap,Mass_T);
+                if (fabs(Mass_T - Mass_Omega) <= 3*Mass_Sigma_Omega) {
+                    H_Omegab_Pt_y->Fill(rap,Pt);
+                }
             }
         }
     }
@@ -427,18 +503,30 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     OutputFileName += ".root";
     TFile *fileA = new TFile(OutputFileName, "RECREATE");
     fileA->cd();
-    H_Lambda      -> Write();
-    H_Lambdab     -> Write();
-    H_ALL_Lambda  -> Write();
-    H_ALL_Lambdab -> Write();
-    H_Xi          -> Write();
-    H_Xib         -> Write();
-    H_ALL_Xi      -> Write();
-    H_ALL_Xib     -> Write();
-    H_Omega       -> Write();
-    H_Omegab      -> Write();
-    H_ALL_Omega   -> Write();
-    H_ALL_Omegab  -> Write();
+    H_Lambda       -> Write();
+    H_Lambdab      -> Write();
+    H_ALL_Lambda   -> Write();
+    H_ALL_Lambdab  -> Write();
+    H_Lambda_Pt_y  -> Write();
+    H_Lambdab_Pt_y -> Write();
+    H_Xi           -> Write();
+    H_Xib          -> Write();
+    H_ALL_Xi       -> Write();
+    H_ALL_Xib      -> Write();
+    H_Xi_Pt_y      -> Write();
+    H_Xib_Pt_y     -> Write();
+    H_Omega        -> Write();
+    H_Omegab       -> Write();
+    H_ALL_Omega    -> Write();
+    H_ALL_Omegab   -> Write();
+    H_Omega_Pt_y   -> Write();
+    H_Omegab_Pt_y  -> Write();
+    H_Kaon         -> Write();
+    H_Kaonb        -> Write();
+    H_ALL_Kaon     -> Write();
+    H_ALL_Kaonb    -> Write();
+    H_Kaon_Pt_y    -> Write();
+    H_Kaonb_Pt_y   -> Write();
     fileA->Close();
     return;
 }
