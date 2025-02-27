@@ -229,8 +229,8 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH3D* H_Lambdab      = new TH3D("H_Lambdab","LambdaBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH2D* H_ALL_Lambda   = new TH2D("H_ALL_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 200,MSta,MEnd);
     TH2D* H_ALL_Lambdab  = new TH2D("H_ALL_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 200,MSta,MEnd);
-    TH2D* H_Lambda_Pt_y  = new TH2D("H_Lambda_Pt_y" ,"Lambda_Pt_y"           , 272,-1.7,1.7, 176,0,2.2);
-    TH2D* H_Lambdab_Pt_y = new TH2D("H_Lambdab_Pt_y","LambdaBar_Pt_y"        , 272,-1.7,1.7, 176,0,2.2);
+    TH2D* H_Lambda_Pt_y  = new TH2D("H_Lambda_Pt_y" ,"Lambda_Pt_y"           , 272,-1.7,1.7, 224,0,2.8);
+    TH2D* H_Lambdab_Pt_y = new TH2D("H_Lambdab_Pt_y","LambdaBar_Pt_y"        , 272,-1.7,1.7, 224,0,2.8);
 
     float Mass_Xi     = 1.3223 , Mass_Sigma_Xi = 0.0024;
     MSta = floor((Mass_Xi)/0.0005 - 50)*0.0005 , MEnd = floor((Mass_Xi)/0.0005 + 50)*0.0005;
@@ -238,8 +238,8 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH3D* H_Xib          = new TH3D("H_Xib"    ,"XiBar_Distribution"         , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH2D* H_ALL_Xi       = new TH2D("H_ALL_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 200,MSta,MEnd);
     TH2D* H_ALL_Xib      = new TH2D("H_ALL_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
-    TH2D* H_Xi_Pt_y      = new TH2D("H_Xi_Pt_y" ,"Xi_Pt_y"                   , 272,-1.7,1.7, 176,0,2.2);
-    TH2D* H_Xib_Pt_y     = new TH2D("H_Xib_Pt_y","XiBar_Pt_y"                , 272,-1.7,1.7, 176,0,2.2);
+    TH2D* H_Xi_Pt_y      = new TH2D("H_Xi_Pt_y" ,"Xi_Pt_y"                   , 136,-1.7,1.7, 112,0,2.8);
+    TH2D* H_Xib_Pt_y     = new TH2D("H_Xib_Pt_y","XiBar_Pt_y"                , 136,-1.7,1.7, 112,0,2.8);
 
     float Mass_Omega  = 1.6725 , Mass_Sigma_Omega = 0.0029;
     MSta = floor((Mass_Omega)/0.0005 - 50)*0.0005 , MEnd = floor((Mass_Omega)/0.0005 + 50)*0.0005;
@@ -247,8 +247,8 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH3D* H_Omegab      = new TH3D("H_Omegab" ,"OmegaBar_Distribution"      , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH2D* H_ALL_Omega   = new TH2D("H_ALL_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
     TH2D* H_ALL_Omegab  = new TH2D("H_ALL_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 200,MSta,MEnd);
-    TH2D* H_Omega_Pt_y  = new TH2D("H_Omega_Pt_y" ,"Omega_Pt_y"             , 272,-1.7,1.7, 176,0,2.2);
-    TH2D* H_Omegab_Pt_y = new TH2D("H_Omegab_Pt_y","OmegaBar_Pt_y"          , 272,-1.7,1.7, 176,0,2.2);
+    TH2D* H_Omega_Pt_y  = new TH2D("H_Omega_Pt_y" ,"Omega_Pt_y"             , 68,-1.7,1.7, 56,0,2.8);
+    TH2D* H_Omegab_Pt_y = new TH2D("H_Omegab_Pt_y","OmegaBar_Pt_y"          , 68,-1.7,1.7, 56,0,2.8);
 
     float Mass_Kaon = 0.493677;
     MSta = floor((Mass_Kaon)/0.0005 - 50)*0.0005 , MEnd = floor((Mass_Kaon)/0.0005 + 50)*0.0005;
@@ -256,8 +256,8 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH3D* H_Kaonb       = new TH3D("H_Kaonb","KaonBar_Distribution"         , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH2D* H_ALL_Kaon    = new TH2D("H_ALL_Kaon" ,"Kaon_Distribution"        , 40,-2,2 , 200,MSta,MEnd);
     TH2D* H_ALL_Kaonb   = new TH2D("H_ALL_Kaonb","KaonBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
-    TH2D* H_Kaon_Pt_y   = new TH2D("H_Kaon_Pt_y" ,"Kaon_Pt_y"               , 272,-1.7,1.7, 176,0,2.2);
-    TH2D* H_Kaonb_Pt_y  = new TH2D("H_Kaonb_Pt_y","KaonBar_Pt_y"            , 272,-1.7,1.7, 176,0,2.2);
+    TH2D* H_Kaon_Pt_y   = new TH2D("H_Kaon_Pt_y" ,"Kaon_Pt_y"               , 200,-1,1, 160,0,1.6);
+    TH2D* H_Kaonb_Pt_y  = new TH2D("H_Kaonb_Pt_y","KaonBar_Pt_y"            , 200,-1,1, 160,0,1.6);
 
     int i , j , k , l , m , n;// used as Index
     int CenIndex;
