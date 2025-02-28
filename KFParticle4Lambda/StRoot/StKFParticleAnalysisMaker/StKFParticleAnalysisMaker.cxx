@@ -1903,12 +1903,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 			bool CheckPass = true;
 			vector<int> Temp;Temp.resize(0);Temp.push_back(iKFParticle);
 			vector<int> TempT;TempT.resize(0);TempT.push_back(iKFParticle);
-			if      ((abs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 27*PhiPdgMassSigma))    {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 27*K0SPdgMassSigma))    {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 27*LambdaPdgMassSigma)) {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 27*XiPdgMassSigma))     {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == XiRPdg)    && (fabs(particle.GetMass() - XiRPdgMass)    > 27*XiRPdgMassSigma))    {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 27*OmegaPdgMassSigma))  {CheckPass = false;}
+			if      ((abs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    > 33*PhiPdgMassSigma))    {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    > 33*K0SPdgMassSigma))    {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 33*LambdaPdgMassSigma)) {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 33*XiPdgMassSigma))     {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == XiRPdg)    && (fabs(particle.GetMass() - XiRPdgMass)    > 33*XiRPdgMassSigma))    {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 33*OmegaPdgMassSigma))  {CheckPass = false;}
 			if (CheckPass == true) {
 				for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 					TempT.push_back(particle.DaughterIds()[iDaughter]);
