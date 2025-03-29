@@ -87,7 +87,15 @@ private:
 	StPicoDst *PicoDst;
 	StPicoTrack *ProtonTrack, *PionTrack, *KaonTrack;
 	void BookVertexPlots();
-	vector<vector<int> > Recorded_KFP_ID;
+
+	vector<vector<int> > Recorded_KFP_ID; int SplitNum;
+	// Recorded_KFP_ID structure:
+	// 0             { { Reconstructed 1 location in KFP , daughter track 1 location in DST , daughter track 2 location in DST , ... } }
+	// 1             { { Reconstructed 2 location in KFP , daughter track 1 location in DST , daughter track 2 location in DST , ... } }
+	//               ... 
+	// SplitNum      { { 1 PDG                           , track location in DST            } }
+	// SplitNum + 1  { { 2 PDG                           , track location in DST            } }
+	//               ...
 
 	StPicoDstMaker *mPicoDstMaker;
 	StRefMultCorr *mRefMultCorr;
@@ -288,6 +296,8 @@ private:
 	std::vector<float> QA_dEdx,QA_m2,QA_nSigmaProton,QA_nSigmaPion,QA_nSigmaKaon,QA_Chi2;
 	std::vector<double> QA_zTOF_proton,QA_zTOF_pion,QA_zTOF_kaon,QA_Decay_Length,QA_DCA_V0_PV,QA_DCA_Daughters;
 	std::vector<int> QA_IfConfuse,QA_IfBadReconstructed;// Used as bool
+
+	std::vector<int> DaughtersID;
 
 
 	/////////////////////////////////////

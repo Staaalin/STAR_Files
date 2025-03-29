@@ -209,7 +209,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	hEventNum = new TH1D("Events_Total","Events_Total",7,-1,6);
 
 	const int APDGList[]         = {     3122     ,   -3122   ,   3334    ,  -3334    , 3312        ,  -3312      ,   310   ,   333   ,   1003314   ,  -1003314  };
-	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "Phi"  ,  "XiR"  ,   "XibR"  };
+	const TString ANameList[]    = {  "Lambda"    , "Lambdab" ,   "Omega" , "Omegab"  , "Xi"        ,  "Xib"      ,  "K0S"  ,  "Phi"  ,  "XiR"      ,   "XibR"  };
 	const int BPDGList[]         = {    321       ,   -321    ,    211    , -211      ,    2212     ,   -2212     };
 	const TString BNameList[]    = {  "Kaon+"     , "Kaon-"   ,   "Pi+"   , "Pi-"     , "Proton"    , "Protonb"   };
 	const float TBPDGListMass[]  = { KaonPdgMass  ,KaonPdgMass,PionPdgMass,PionPdgMass,ProtonPdgMass,ProtonPdgMass};
@@ -926,22 +926,22 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("mix_px"             ,&px                  );
 		hadronTree->Branch("mix_py"             ,&py                  );
 		hadronTree->Branch("mix_pz"             ,&pz                  );
-		hadronTree->Branch("QA_eta"             ,&QA_eta                 );
+		// hadronTree->Branch("QA_eta"             ,&QA_eta              );
 
 		// Used for PID QA
 		hadronTree->Branch("dEdx"               ,&QA_dEdx              );
-		hadronTree->Branch("m2"                 ,&QA_m2                );
+		// hadronTree->Branch("m2"                 ,&QA_m2                );
 		hadronTree->Branch("dcatopv"            ,&QA_DCA_V0_PV         );
-		hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton      );
-		hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion        );
-		hadronTree->Branch("nSigmaKaon"         ,&QA_nSigmaKaon        );
+		// hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton      );
+		// hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion        );
+		// hadronTree->Branch("nSigmaKaon"         ,&QA_nSigmaKaon        );
 		hadronTree->Branch("nHitsFit"           ,&QA_nHitsFit          );
 		hadronTree->Branch("nHitsMax"           ,&QA_nHitsMax          );
 		
 		// Used for Reconstruction QA
 		hadronTree->Branch("InvariantMass"      ,&InvariantMass        );
 		hadronTree->Branch("Decay_Length"       ,&QA_Decay_Length      );
-		hadronTree->Branch("Chi2"               ,&QA_Chi2              );
+		// hadronTree->Branch("Chi2"               ,&QA_Chi2              );
 
 		// Used for store corralated information
 		hadronTree->Branch("ParentList"         ,&ParentList           );
@@ -957,6 +957,9 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("ME_ParentList"      ,&ME_ParentList        );
 		hadronTree->Branch("ME_ParentSta"       ,&ME_ParentSta         );
 		hadronTree->Branch("ME_ParentEnd"       ,&ME_ParentEnd         );
+
+		// Store daughters
+		hadronTree->Branch("DaughtersID"        ,&DaughtersID          ); // -1 ~ 2,147,483,647   3 max daughters
 
 	}
 
@@ -1520,6 +1523,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	QA_Chi2        .resize(0);
 	QA_nHitsFit    .resize(0);
 	QA_nHitsMax    .resize(0);
+	DaughtersID    .resize(0);
 
 	Recorded_KFP_ID.resize(0);
 	ParentList.resize(0);
@@ -1717,12 +1721,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 
 			if (
-				(fabs(particle.GetPDG()) != OmegaPdg ) && 
-				(fabs(particle.GetPDG()) != XiPdg    ) && 
-				(fabs(particle.GetPDG()) != LambdaPdg) &&
-				(fabs(particle.GetPDG()) != K0SPdg   ) && 
-				(fabs(particle.GetPDG()) != PhiPdg   ) && 
-				(fabs(particle.GetPDG()) != XiRPdg   )
+				(abs(particle.GetPDG()) != OmegaPdg ) && 
+				(abs(particle.GetPDG()) != XiPdg    ) && 
+				(abs(particle.GetPDG()) != LambdaPdg) &&
+				(abs(particle.GetPDG()) != K0SPdg   ) && 
+				(abs(particle.GetPDG()) != PhiPdg   ) && 
+				(abs(particle.GetPDG()) != XiRPdg   )
 			) {continue;}
 
 			// Check if wrong daughters
@@ -2078,6 +2082,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_m2.emplace_back(-999);
 			QA_nHitsFit.emplace_back(-999);
 			QA_nHitsMax.emplace_back(-999);
+			DaughtersID.emplace_back(  -1);
 		}
 		else if ((abs(particle.GetPDG()) == LambdaPdg) || (abs(particle.GetPDG()) == K0SPdg) || (abs(particle.GetPDG()) == PhiPdg))
 		{
@@ -2097,28 +2102,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_m2.emplace_back(-999);
 			QA_nHitsFit.emplace_back(-999);
 			QA_nHitsMax.emplace_back(-999);
+			DaughtersID.emplace_back(  -1);
 
 		}
-		else if ((abs(particle.GetPDG()) == ProtonPdg) || (abs(particle.GetPDG()) == PionPdg) || (abs(particle.GetPDG()) == KaonPdg)) {
-			StPicoTrack *track = mPicoDst->track(Recorded_KFP_ID[iKFParticle][1]);
-			PDG.emplace_back(particle.GetPDG());
-			px.emplace_back(particle.GetPx());
-			py.emplace_back(particle.GetPy());
-			pz.emplace_back(particle.GetPz());
-			QA_eta.emplace_back(particle.GetEta());
-			InvariantMass.emplace_back(-1);// 只由KFP识别的，质量标记为-1
-			QA_Chi2.emplace_back(particle.GetChi2());
-			QA_Decay_Length.emplace_back(l);
-			QA_DCA_V0_PV.emplace_back(-1);
-			QA_dEdx.emplace_back(track->dEdx());
-			QA_nSigmaProton.emplace_back(track->nSigmaProton());
-			QA_nSigmaPion.emplace_back(track->nSigmaPion());
-			QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
-			QA_m2.emplace_back(-999);
-			QA_nHitsFit.emplace_back(track->nHitsFit());
-			QA_nHitsMax.emplace_back(track->nHitsMax());
-		}
 	}
+	if ( PDG.size() != Recorded_KFP_ID.size() ) {cout<<"Error: Different size of branch and Recorded_KFP_ID";return kStOK;}
+	SplitNum = Recorded_KFP_ID.size();
 
 	std::vector<int> NeedPDG; NeedPDG.resize(0);
 	NeedPDG.push_back( 2212);NeedPDG.push_back( 211);NeedPDG.push_back( 321);
@@ -2438,6 +2427,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					QA_nHitsFit.emplace_back(track->nHitsFit());
 					QA_nHitsMax.emplace_back(track->nHitsMax());
 					InvariantMass.emplace_back(massList(NeedPDG[Ktr])); 
+					DaughtersID.emplace_back(  -1);
 					// Recording SL value
 					if (IfQAMode) {
 						H_Pt[Jtr] -> Fill(pt);
@@ -2532,6 +2522,83 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 
 	}
+
+	for(int iRecorded_KFP=0;iRecorded_KFP<SplitNum;iRecorded_KFP++){
+		KFParticle particle = KFParticleInterface->GetParticles()[ Recorded_KFP_ID[iRecorded_KFP][0] ];
+		if ( particle.NDaughters() != 2) continue; // 目前来看，所有重建的粒子应当都是两体衰变，如要变更，请仔细修改整个循环
+		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+			const int daughterId = particle.DaughterIds()[iDaughter];
+			// cout<<"daughterId = "<<daughterId<<endl;
+			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+			if ((abs(daughter.GetPDG()) == PionPdg) || (abs(daughter.GetPDG()) == KaonPdg) || (abs(daughter.GetPDG()) == ProtonPdg)){
+				const int globalTrackId = daughter.DaughterIds()[0];
+				Int_t iTrackStart = globalTrackId - 1;
+				if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+				for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+					StPicoTrack *track = mPicoDst->track(jTrack);
+					if (track->id() == globalTrackId){
+						// int TrackPDG = TrackID(track , Vertex3D , magnet , false);
+						for (int jRecorded_KFP=SplitNum;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++) {
+							if ( Recorded_KFP_ID[jRecorded_KFP][1] == jTrack ) { // 已被记录过了
+								if (DaughtersID.at(iRecorded_KFP) == -1) {DaughtersID.at(iRecorded_KFP)  = jRecorded_KFP;     }
+								else                                     {DaughtersID.at(iRecorded_KFP) += jRecorded_KFP*1000;}
+								break;
+							}
+							if ( jRecorded_KFP == Recorded_KFP_ID.size() - 1 ) {
+								if (DaughtersID.at(iRecorded_KFP) == -1) {DaughtersID.at(iRecorded_KFP)  = Recorded_KFP_ID.size();     }
+								else                                     {DaughtersID.at(iRecorded_KFP) += Recorded_KFP_ID.size()*1000;}
+								std::vector<int> Temp;Temp.resize(0);
+								Temp.push_back(daughter.GetPDG());Temp.push_back(jTrack);
+								Recorded_KFP_ID.push_back(Temp);
+								QA_Chi2.emplace_back(-999);
+								QA_Decay_Length.emplace_back(-999);
+								PDG.emplace_back(daughter.GetPDG());
+								px.emplace_back(track->gMom().X());
+								py.emplace_back(track->gMom().Y());
+								pz.emplace_back(track->gMom().Z());
+								QA_eta.emplace_back(track->gMom().Eta());
+								QA_dEdx.emplace_back(track->dEdx());
+								QA_nSigmaProton.emplace_back(track->nSigmaProton());
+								QA_nSigmaPion.emplace_back(track->nSigmaPion());
+								QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
+								QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
+								QA_m2.emplace_back(-1);
+								QA_nHitsFit.emplace_back(track->nHitsFit());
+								QA_nHitsMax.emplace_back(track->nHitsMax());
+								InvariantMass.emplace_back(-1); // 只由KFP鉴别的，质量赋值为-1
+								DaughtersID.emplace_back(  -1);
+							}
+						}
+					}
+				}
+			}
+			else{
+				if (DaughtersID.at(iRecorded_KFP) == -1) {DaughtersID.at(iRecorded_KFP)  = Recorded_KFP_ID.size();     }
+				else                                     {DaughtersID.at(iRecorded_KFP) += Recorded_KFP_ID.size()*1000;}
+				std::vector<int> Temp;Temp.resize(0);
+				Temp.push_back(daughter.GetPDG());Temp.push_back(-1);
+				Recorded_KFP_ID.push_back(Temp);
+				PDG.emplace_back(daughter.GetPDG());
+				px.emplace_back(daughter.GetPx());
+				py.emplace_back(daughter.GetPy());
+				pz.emplace_back(daughter.GetPz());
+				QA_eta.emplace_back(daughter.GetEta());
+				InvariantMass.emplace_back(-1);
+				QA_Chi2.emplace_back(daughter.GetChi2());
+				QA_Decay_Length.emplace_back(-1);
+				QA_DCA_V0_PV.emplace_back(-1);
+				QA_dEdx.emplace_back(-999);
+				QA_nSigmaProton.emplace_back(-999);
+				QA_nSigmaPion.emplace_back(-999);
+				QA_nSigmaKaon.emplace_back(-999);
+				QA_m2.emplace_back(-999);
+				QA_nHitsFit.emplace_back(-999);
+				QA_nHitsMax.emplace_back(-999);
+				DaughtersID.emplace_back(  -1);
+			}
+		}
+	}
+
 	Correlatted_ID_List_T.resize(0);
 	SE_Correlatted_ID_List_T.resize(0);
 	ME_Correlatted_ID_List_T.resize(0);
