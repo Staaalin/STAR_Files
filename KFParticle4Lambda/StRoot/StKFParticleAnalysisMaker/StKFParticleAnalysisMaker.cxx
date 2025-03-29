@@ -1437,7 +1437,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	const double DVz = VertexZ-vpdVz;
 
 	// d+Au@200GeV RUN21 https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
-	if(fabs(VertexZ - 0) > 30) return kStOK;
+	if(fabs(VertexZ - 5) > 50) return kStOK;
 	if(sqrt(pow(VertexX + 0.4,2.)+pow(VertexY,2.))>2.0) return kStOK; 
 	if(fabs(VertexZ-vpdVz)>3.) return kStOK;       // no vpd cut in low energy?
 	
