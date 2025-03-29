@@ -45,10 +45,12 @@ float CenCorr(float Vz);
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize);
 void print(std::vector<int> Temp);
 void print(std::vector<float> Temp);
+float GetPairMass(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float AMass , float BMass);
+Double_t massList(int PID);
 
 #define A_Num_Per_Event 5
 #define B_Num_Per_Event 5
-#define HowMuchEventMixing 10
+#define RotNum 10
 
 void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,int Mode = 0) {
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
@@ -78,6 +80,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         std::vector<int>     *ME_ParentList      = nullptr;
         std::vector<int>     *ME_ParentSta       = nullptr;
         std::vector<int>     *ME_ParentEnd       = nullptr;
+        std::vector<int>     *DaughtersID        = nullptr;
 
         TBranch *bPDG                            = nullptr;
         TBranch *bmix_px                         = nullptr;
@@ -104,6 +107,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
         TBranch *bME_ParentList                  = nullptr;
         TBranch *bME_ParentSta                   = nullptr;
         TBranch *bME_ParentEnd                   = nullptr;
+        TBranch *bDaughtersID                    = nullptr;
     
     #else
         #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0)
@@ -133,6 +137,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             std::vector<int>     *ME_ParentList      = NULL;
             std::vector<int>     *ME_ParentSta       = NULL;
             std::vector<int>     *ME_ParentEnd       = NULL;
+            std::vector<int>     *DaughtersID        = NULL;
 
             TBranch *bPDG                            = NULL;
             TBranch *bmix_px                         = NULL;
@@ -159,6 +164,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             TBranch *bME_ParentList                  = NULL;
             TBranch *bME_ParentSta                   = NULL;
             TBranch *bME_ParentEnd                   = NULL;
+            TBranch *bDaughtersID                    = NULL;
 
         #else
     
@@ -187,6 +193,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             std::vector<int>     *ME_ParentList      = 0;
             std::vector<int>     *ME_ParentSta       = 0;
             std::vector<int>     *ME_ParentEnd       = 0;
+            std::vector<int>     *DaughtersID        = 0;
     
             TBranch *bPDG                            = 0;
             TBranch *bmix_px                         = 0;
@@ -213,6 +220,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             TBranch *bME_ParentList                  = 0;
             TBranch *bME_ParentSta                   = 0;
             TBranch *bME_ParentEnd                   = 0;
+            TBranch *bDaughtersID                    = 0;
 
         #endif
     #endif
@@ -229,6 +237,8 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH3D* H_Lambdab      = new TH3D("H_Lambdab","LambdaBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH2D* H_ALL_Lambda   = new TH2D("H_ALL_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 200,MSta,MEnd);
     TH2D* H_ALL_Lambdab  = new TH2D("H_ALL_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_ALLr_Lambda  = new TH2D("H_ALLr_Lambda" ,"Lambda_Distribution"   , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_ALLr_Lambdab = new TH2D("H_ALLr_Lambdab","LambdaBar_Distribution", 40,-2,2 , 200,MSta,MEnd);
     TH2D* H_Lambda_Pt_y  = new TH2D("H_Lambda_Pt_y" ,"Lambda_Pt_y"           , 272,-1.7,1.7, 224,0,2.8);
     TH2D* H_Lambdab_Pt_y = new TH2D("H_Lambdab_Pt_y","LambdaBar_Pt_y"        , 272,-1.7,1.7, 224,0,2.8);
 
@@ -238,6 +248,8 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH3D* H_Xib          = new TH3D("H_Xib"    ,"XiBar_Distribution"         , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH2D* H_ALL_Xi       = new TH2D("H_ALL_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 200,MSta,MEnd);
     TH2D* H_ALL_Xib      = new TH2D("H_ALL_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_ALLr_Xi      = new TH2D("H_ALLr_Xi"    ,"Xi_Distribution"        , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_ALLr_Xib     = new TH2D("H_ALLr_Xib"   ,"XiBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
     TH2D* H_Xi_Pt_y      = new TH2D("H_Xi_Pt_y" ,"Xi_Pt_y"                   , 136,-1.7,1.7, 112,0,2.8);
     TH2D* H_Xib_Pt_y     = new TH2D("H_Xib_Pt_y","XiBar_Pt_y"                , 136,-1.7,1.7, 112,0,2.8);
 
@@ -247,6 +259,8 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     TH3D* H_Omegab      = new TH3D("H_Omegab" ,"OmegaBar_Distribution"      , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH2D* H_ALL_Omega   = new TH2D("H_ALL_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
     TH2D* H_ALL_Omegab  = new TH2D("H_ALL_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_ALLr_Omega  = new TH2D("H_ALLr_Omega" ,"Omega_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
+    TH2D* H_ALLr_Omegab = new TH2D("H_ALLr_Omegab","OmegaBar_Distribution"  , 40,-2,2 , 200,MSta,MEnd);
     TH2D* H_Omega_Pt_y  = new TH2D("H_Omega_Pt_y" ,"Omega_Pt_y"             , 68,-1.7,1.7, 56,0,2.8);
     TH2D* H_Omegab_Pt_y = new TH2D("H_Omegab_Pt_y","OmegaBar_Pt_y"          , 68,-1.7,1.7, 56,0,2.8);
 
@@ -261,8 +275,13 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
 
     int i , j , k , l , m , n;// used as Index
     int CenIndex;
-    int NNch;
+    int NNch , DID , D1id , D2id;
     float tEnergy , rap , Pt , Pz_T , Mass_T;
+    float AMass , BMass , CMass[RotNum];
+    float APx , APy , APz , BPx , BPy , BPz;
+    float APr , BPr , Theta;
+
+    TRandom3 randGen;
 
     TString TreeName = "hadronTree";
     TChain *hadronTree = new TChain(TreeName);
@@ -298,10 +317,10 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     // hadronTree->SetBranchAddress("QA_eta"       ,&QA_eta       ,&bQA_eta       );
     // hadronTree->SetBranchAddress("dEdx"         ,&dEdx         ,&bdEdx         );
     // hadronTree->SetBranchAddress("m2"           ,&m2           ,&bm2           );
-    hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
+    // hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
     // hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
     // hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
-    hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
+    // hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
     hadronTree->SetBranchAddress("InvariantMass",&InvariantMass,&bInvariantMass);
     // hadronTree->SetBranchAddress("Decay_Length" ,&Decay_Length ,&bDecay_Length );
     // hadronTree->SetBranchAddress("Chi2"         ,&Chi2         ,&bChi2         );
@@ -316,6 +335,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     hadronTree->SetBranchAddress("ME_ParentList",&ME_ParentList,&bME_ParentList   );
     hadronTree->SetBranchAddress("ME_ParentSta" ,&ME_ParentSta ,&bME_ParentSta    );
     hadronTree->SetBranchAddress("ME_ParentEnd" ,&ME_ParentEnd ,&bME_ParentEnd    );
+    hadronTree->SetBranchAddress("DaughtersID"  ,&DaughtersID  ,&bDaughtersID     );
 
     std::vector<int> NchList = GetNchList(CentralityBin , CentralityBinNum+1);     // centrality
     cout<<"NchList = ";
@@ -363,8 +383,9 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 H_Kaon->Fill(rap,Mass_T,CenIndex);
                 H_ALL_Kaon->Fill(rap,Mass_T);
                 H_Kaon_Pt_y->Fill(rap,Pt);
+                continue;
             }
-            else if (PDG->at(i) == -321) {
+            if (PDG->at(i) == -321) {
                 Pt = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2),0.5);
                 tEnergy = pow(Pt*Pt + Pz_T*Pz_T + Mass_Kaon*Mass_Kaon,0.5);
                 rap     = 0.5*log((tEnergy+Pz_T)/(tEnergy-Pz_T));
@@ -380,8 +401,9 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 H_Kaonb->Fill(rap,Mass_T,CenIndex);
                 H_ALL_Kaonb->Fill(rap,Mass_T);
                 H_Kaonb_Pt_y->Fill(rap,Pt);
+                continue;
             }
-            else if (PDG->at(i) == 3122) {
+            if (PDG->at(i) == 3122) {
                 Pt = pow(pow(mix_px->at(i),2) + pow(mix_py->at(i),2),0.5);
                 tEnergy = pow(Pt*Pt + Pz_T*Pz_T + Mass_Lambda*Mass_Lambda,0.5);
                 rap     = 0.5*log((tEnergy+Pz_T)/(tEnergy-Pz_T));
@@ -495,6 +517,36 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                     H_Omegab_Pt_y->Fill(rap,Pt);
                 }
             }
+            else{ continue; }
+
+            DID = DaughtersID->at(i);
+            if (DID <= 1000) continue;
+            D1id = DID/1000;D2id = DID%1000;
+            if ((PDG->at(D1id) == -1) || (PDG->at(D2id) == -1)) continue;
+            AMass = massList(PDG->at(D1id));BMass = massList(PDG->at(D2id));
+            APx = mix_px->at(D1id);
+            APy = mix_py->at(D1id);
+            APz = mix_pz->at(D1id);
+            BPx = mix_px->at(D2id);
+            BPy = mix_py->at(D2id);
+            BPz = mix_pz->at(D2id);
+            APr = pow(APx*APx+APy*APy,0.5);
+            BPr = pow(BPx*BPx+BPy*BPy,0.5);
+            for (j=0;j<RotNum;j++) {
+                Theta = randGen.Rndm() * 2 * 3.1415926535898;
+                APx = APr*sin(Theta);
+                APy = APr*cos(Theta);
+                Theta = randGen.Rndm() * 2 * 3.1415926535898;
+                BPx = BPr*sin(Theta);
+                BPy = BPr*cos(Theta);
+                CMass[j] = GetPairMass(APx , APy , APz , BPx , BPy , BPz , AMass , BMass);
+            }
+            if (PDG->at(i) ==  3122) {for (j=0;j<RotNum;j++) {H_ALLr_Lambda ->Fill(rap,CMass[j]);} continue;}
+            if (PDG->at(i) == -3122) {for (j=0;j<RotNum;j++) {H_ALLr_Lambdab->Fill(rap,CMass[j]);} continue;}
+            if (PDG->at(i) ==  3312) {for (j=0;j<RotNum;j++) {H_ALLr_Xi     ->Fill(rap,CMass[j]);} continue;}
+            if (PDG->at(i) == -3312) {for (j=0;j<RotNum;j++) {H_ALLr_Xib    ->Fill(rap,CMass[j]);} continue;}
+            if (PDG->at(i) ==  3334) {for (j=0;j<RotNum;j++) {H_ALLr_Omega  ->Fill(rap,CMass[j]);} continue;}
+            if (PDG->at(i) == -3334) {for (j=0;j<RotNum;j++) {H_ALLr_Omegab ->Fill(rap,CMass[j]);} continue;}
         }
     }
     TString OutputFileName = OutMidName;
@@ -507,18 +559,24 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     H_Lambdab      -> Write();
     H_ALL_Lambda   -> Write();
     H_ALL_Lambdab  -> Write();
+    H_ALLr_Lambda  -> Write();
+    H_ALLr_Lambdab -> Write();
     H_Lambda_Pt_y  -> Write();
     H_Lambdab_Pt_y -> Write();
     H_Xi           -> Write();
     H_Xib          -> Write();
     H_ALL_Xi       -> Write();
     H_ALL_Xib      -> Write();
+    H_ALLr_Xi      -> Write();
+    H_ALLr_Xib     -> Write();
     H_Xi_Pt_y      -> Write();
     H_Xib_Pt_y     -> Write();
     H_Omega        -> Write();
     H_Omegab       -> Write();
     H_ALL_Omega    -> Write();
     H_ALL_Omegab   -> Write();
+    H_ALLr_Omega   -> Write();
+    H_ALLr_Omegab  -> Write();
     H_Omega_Pt_y   -> Write();
     H_Omegab_Pt_y  -> Write();
     H_Kaon         -> Write();
@@ -615,4 +673,71 @@ void print(std::vector<float> Temp)
 	}
 	cout<<" }"<<endl;
     return ;
+}
+
+float GetPairMass(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float AMass , float BMass) {
+    float E1 = pow(p1x*p1x+p1y*p1y+p1z*p1z+AMass*AMass,0.5);
+    float E2 = pow(p2x*p2x+p2y*p2y+p2z*p2z+BMass*BMass,0.5);
+    float Tot_E = E1+E2;
+    float beta[3] = { -(p1x+p2x)/Tot_E , -(p1y+p2y)/Tot_E , -(p1z+p2z)/Tot_E };
+    float beta2 = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+    float gamma = 1.0 / std::sqrt(1.0 - beta2);
+    float gamma2 = (beta2 > 0) ? (gamma - 1.0) / beta2 : 0.0;
+
+    float bp1 = beta[0]*p1x + beta[1]*p1y + beta[2]*p1z;
+    float bp2 = beta[0]*p2x + beta[1]*p2y + beta[2]*p2z;
+
+    return gamma * (E1 + bp1 + E2 + bp2);
+}
+
+Double_t massList(int PID)
+{
+    Double_t Result;
+    if (DataName == "dAu_200_21"){
+        switch (PID)
+        {
+            case 321 :
+                Result = 0.493677;
+                break;
+            case -321 :
+                Result = 0.493677;
+                break;
+            case 310 :
+                Result = 0.49794;
+                break;
+            case 211 :
+                Result = 0.13957;
+                break;
+            case -211 :
+                Result = 0.13957;
+                break;
+            case 1003314 :// XiRPdgMass
+                Result = 1.6725;
+                break;
+            case -1003314 :// XiRPdgMass
+                Result = 1.6727;
+                break;
+            case 3334 :// OmegaFitMass
+                Result = 1.6725;
+                break;
+            case -3334 :// OmegaBarFitMass
+                Result = 1.6727;
+                break;
+            case 3312 :// XiFitMass
+                Result = 1.3223;
+                break;
+            case -3312 :// XiBarFitMass
+                Result = 1.3223;
+                break;
+            case 3122 :// LambdaFitMass
+                Result = 1.1161;
+                break;
+            case -3122 :// LambdaBarFitMass
+                Result = 1.1161;
+                break;
+            default :
+                Result = 0;
+        }
+    }
+    return Result;
 }

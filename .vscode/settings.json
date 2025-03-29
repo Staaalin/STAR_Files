@@ -38,6 +38,7 @@
         "MixEventTest.C": "cpp",
         "Rotation.C": "cpp",
         "NR.C": "cpp",
-        "pion_mod.C": "cpp"
+        "pion_mod.C": "cpp",
+        "HR.C": "cpp"
     }
 }
