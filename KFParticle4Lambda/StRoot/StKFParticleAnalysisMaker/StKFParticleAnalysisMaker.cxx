@@ -929,7 +929,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		// hadronTree->Branch("QA_eta"             ,&QA_eta              );
 
 		// Used for PID QA
-		hadronTree->Branch("dEdx"               ,&QA_dEdx              );
+		// hadronTree->Branch("dEdx"               ,&QA_dEdx              );
 		// hadronTree->Branch("m2"                 ,&QA_m2                );
 		hadronTree->Branch("dcatopv"            ,&QA_DCA_V0_PV         );
 		// hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton      );
@@ -2012,14 +2012,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 				if (    (abs(particle.GetPDG()) == 211)  || 
 						(abs(particle.GetPDG()) == 2212) || 
 						(abs(particle.GetPDG()) == 321) ) {
-					for (int k=0;k<Recorded_KFP_ID.size();k++) {
-						if (Recorded_KFP_ID[i][j] == Recorded_KFP_ID[k][0]) break;
-						if (k == Recorded_KFP_ID.size()-1) {
-							vector<int> Temp;Temp.resize(0);Temp.push_back(Recorded_KFP_ID[i][j]);Temp.push_back(Recorded_KFP_ID[i][j]);
-							Recorded_KFP_ID.push_back(Temp);
-							break;
-						}
-					}
+					// for (int k=0;k<Recorded_KFP_ID.size();k++) {
+					// 	if (Recorded_KFP_ID[i][j] == Recorded_KFP_ID[k][0]) break;
+					// 	if (k == Recorded_KFP_ID.size()-1) {
+					// 		vector<int> Temp;Temp.resize(0);Temp.push_back(Recorded_KFP_ID[i][j]);Temp.push_back(Recorded_KFP_ID[i][j]);
+					// 		Recorded_KFP_ID.push_back(Temp);
+					// 		break;
+					// 	}
+					// }
 					int iTrack = -1;
 					const int globalTrackId = (particle).DaughterIds()[0];
 					Int_t iTrackStart = globalTrackId;// Int_t iTrackStart = globalTrackId - 1;
