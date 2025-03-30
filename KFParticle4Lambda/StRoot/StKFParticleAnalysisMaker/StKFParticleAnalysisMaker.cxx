@@ -2537,37 +2537,29 @@ Int_t StKFParticleAnalysisMaker::Make()
 					StPicoTrack *track = mPicoDst->track(jTrack);
 					if (track->id() == globalTrackId){
 						// int TrackPDG = TrackID(track , Vertex3D , magnet , false);
-						for (int jRecorded_KFP=SplitNum;jRecorded_KFP<Recorded_KFP_ID.size();jRecorded_KFP++) {
-							if ( Recorded_KFP_ID[jRecorded_KFP][1] == jTrack ) { // 已被记录过了
-								if (DaughtersID.at(iRecorded_KFP) == -1) {DaughtersID.at(iRecorded_KFP)  = jRecorded_KFP;     }
-								else                                     {DaughtersID.at(iRecorded_KFP) += jRecorded_KFP*1000;}
-								break;
-							}
-							if ( jRecorded_KFP == Recorded_KFP_ID.size() - 1 ) {
-								if (DaughtersID.at(iRecorded_KFP) == -1) {DaughtersID.at(iRecorded_KFP)  = Recorded_KFP_ID.size();     }
-								else                                     {DaughtersID.at(iRecorded_KFP) += Recorded_KFP_ID.size()*1000;}
-								std::vector<int> Temp;Temp.resize(0);
-								Temp.push_back(daughter.GetPDG());Temp.push_back(jTrack);
-								Recorded_KFP_ID.push_back(Temp);
-								QA_Chi2.emplace_back(-999);
-								QA_Decay_Length.emplace_back(-999);
-								PDG.emplace_back(daughter.GetPDG());
-								px.emplace_back(track->gMom().X());
-								py.emplace_back(track->gMom().Y());
-								pz.emplace_back(track->gMom().Z());
-								QA_eta.emplace_back(track->gMom().Eta());
-								QA_dEdx.emplace_back(track->dEdx());
-								QA_nSigmaProton.emplace_back(track->nSigmaProton());
-								QA_nSigmaPion.emplace_back(track->nSigmaPion());
-								QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
-								QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
-								QA_m2.emplace_back(-1);
-								QA_nHitsFit.emplace_back(track->nHitsFit());
-								QA_nHitsMax.emplace_back(track->nHitsMax());
-								InvariantMass.emplace_back(-1); // 只由KFP鉴别的，质量赋值为-1
-								DaughtersID.emplace_back(  -1);
-							}
-						}
+						if (DaughtersID.at(iRecorded_KFP) == -1) {DaughtersID.at(iRecorded_KFP)  = Recorded_KFP_ID.size();     }
+						else                                     {DaughtersID.at(iRecorded_KFP) += Recorded_KFP_ID.size()*1000;}
+						std::vector<int> Temp;Temp.resize(0);
+						Temp.push_back(daughter.GetPDG());Temp.push_back(jTrack);
+						Recorded_KFP_ID.push_back(Temp);
+						QA_Chi2.emplace_back(-999);
+						QA_Decay_Length.emplace_back(-999);
+						PDG.emplace_back(daughter.GetPDG());
+						px.emplace_back(track->gMom().X());
+						py.emplace_back(track->gMom().Y());
+						pz.emplace_back(track->gMom().Z());
+						QA_eta.emplace_back(track->gMom().Eta());
+						QA_dEdx.emplace_back(track->dEdx());
+						QA_nSigmaProton.emplace_back(track->nSigmaProton());
+						QA_nSigmaPion.emplace_back(track->nSigmaPion());
+						QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
+						QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
+						QA_m2.emplace_back(-1);
+						QA_nHitsFit.emplace_back(track->nHitsFit());
+						QA_nHitsMax.emplace_back(track->nHitsMax());
+						InvariantMass.emplace_back(-1); // 只由KFP鉴别的，质量赋值为-1
+						DaughtersID.emplace_back(  -1);
+						break;
 					}
 				}
 			}
