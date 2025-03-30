@@ -521,7 +521,12 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
 
             DID = DaughtersID->at(i);
             if (DID <= 1000) continue;
+            cout<<"DID = "<<DID<<endl;
+            cout<<"PDGMult = "<<PDGMult<<endl;
             D1id = DID/1000;D2id = DID%1000;
+            cout<<"D1id = "<<D1id<<endl;
+            cout<<"D2id = "<<D2id<<endl;
+            cout<<"___________"<<endl;
             if ((PDG->at(D1id) == -1) || (PDG->at(D2id) == -1)) continue;
             AMass = massList(PDG->at(D1id));BMass = massList(PDG->at(D2id));
             APx = mix_px->at(D1id);
