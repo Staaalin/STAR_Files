@@ -230,9 +230,11 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
 
     int MBinNum = 500 , MBinPar = 50;
     float MSta , MEnd;
+    float Lambda_MR[2] , Xi_MR[2] , Omega_MR[2];
 
     float Mass_Lambda = 1.1161 , Mass_Sigma_Lambda = 0.0020;
     MSta = floor((Mass_Lambda)/0.0005 - 50)*0.0005 , MEnd = floor((Mass_Lambda)/0.0005 + 50)*0.0005;
+    Lambda_MR[0] = MSta;Lambda_MR[1] = MEnd;
     TH3D* H_Lambda       = new TH3D("H_Lambda" ,"Lambda_Distribution"        , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH3D* H_Lambdab      = new TH3D("H_Lambdab","LambdaBar_Distribution"     , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH2D* H_ALL_Lambda   = new TH2D("H_ALL_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 200,MSta,MEnd);
@@ -244,6 +246,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
 
     float Mass_Xi     = 1.3223 , Mass_Sigma_Xi = 0.0024;
     MSta = floor((Mass_Xi)/0.0005 - 50)*0.0005 , MEnd = floor((Mass_Xi)/0.0005 + 50)*0.0005;
+    Xi_MR[0] = MSta;Xi_MR[1] = MEnd;
     TH3D* H_Xi           = new TH3D("H_Xi"     ,"Xi_Distribution"            , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH3D* H_Xib          = new TH3D("H_Xib"    ,"XiBar_Distribution"         , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH2D* H_ALL_Xi       = new TH2D("H_ALL_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 200,MSta,MEnd);
@@ -255,6 +258,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
 
     float Mass_Omega  = 1.6725 , Mass_Sigma_Omega = 0.0029;
     MSta = floor((Mass_Omega)/0.0005 - 50)*0.0005 , MEnd = floor((Mass_Omega)/0.0005 + 50)*0.0005;
+    Omega_MR[0] = MSta;Omega_MR[1] = MEnd;
     TH3D* H_Omega       = new TH3D("H_Omega"  ,"Omega_Distribution"         , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH3D* H_Omegab      = new TH3D("H_Omegab" ,"OmegaBar_Distribution"      , 40,-2,2 , 200,MSta,MEnd , CentralityBinNum,0,CentralityBinNum);
     TH2D* H_ALL_Omega   = new TH2D("H_ALL_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 200,MSta,MEnd);
@@ -277,7 +281,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     int CenIndex;
     int NNch , DID , D1id , D2id;
     float tEnergy , rap , Pt , Pz_T , Mass_T;
-    float AMass , BMass , CMass[RotNum];
+    float AMass , BMass , CMass[RotNum] , CMass_T;
     float APx , APy , APz , BPx , BPy , BPz;
     float APr , BPr , Theta;
 
@@ -539,7 +543,11 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 Theta = randGen.Rndm() * 2 * 3.1415926535898;
                 BPx = BPr*sin(Theta);
                 BPy = BPr*cos(Theta);
-                CMass[j] = GetPairMass(APx , APy , APz , BPx , BPy , BPz , AMass , BMass);
+                CMass_T = GetPairMass(APx , APy , APz , BPx , BPy , BPz , AMass , BMass);
+                if (abs(PDG->at(i)) == 3122) {if ((Lambda_MR[0] < CMass_T) || (Lambda_MR[1] > CMass_T)) {j--;continue;}}
+                if (abs(PDG->at(i)) == 3312) {if ((Xi_MR[0]     < CMass_T) || (Xi_MR[1]     > CMass_T)) {j--;continue;}}
+                if (abs(PDG->at(i)) == 3344) {if ((Omega_MR[0]  < CMass_T) || (Omega_MR[1]  > CMass_T)) {j--;continue;}}
+                CMass[j] = CMass_T;
             }
             if (PDG->at(i) ==  3122) {for (j=0;j<RotNum;j++) {H_ALLr_Lambda ->Fill(rap,CMass[j]);} continue;}
             if (PDG->at(i) == -3122) {for (j=0;j<RotNum;j++) {H_ALLr_Lambdab->Fill(rap,CMass[j]);} continue;}
