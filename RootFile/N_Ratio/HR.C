@@ -549,9 +549,9 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 BPx = BPr*sin(Theta);
                 BPy = BPr*cos(Theta);
                 CMass_T = GetPairMass(APx , APy , APz , BPx , BPy , BPz , AMass , BMass);
-                if (abs(PDG->at(i)) == 3122) {if ((Lambda_MR[0] < CMass_T) || (Lambda_MR[1] > CMass_T)) {j--;continue;}}
-                if (abs(PDG->at(i)) == 3312) {if ((Xi_MR[0]     < CMass_T) || (Xi_MR[1]     > CMass_T)) {j--;continue;}}
-                if (abs(PDG->at(i)) == 3344) {if ((Omega_MR[0]  < CMass_T) || (Omega_MR[1]  > CMass_T)) {j--;continue;}}
+                if (abs(PDG->at(i)) == 3122) {if ((Lambda_MR[0] > CMass_T) || (Lambda_MR[1] < CMass_T)) {j--;continue;}}
+                if (abs(PDG->at(i)) == 3312) {if ((Xi_MR[0]     > CMass_T) || (Xi_MR[1]     < CMass_T)) {j--;continue;}}
+                if (abs(PDG->at(i)) == 3344) {if ((Omega_MR[0]  > CMass_T) || (Omega_MR[1]  < CMass_T)) {j--;continue;}}
                 CMass[j] = CMass_T;
             }
             if (PDG->at(i) ==  3122) {for (j=0;j<RotNum;j++) {H_ALLr_Lambda ->Fill(rap,CMass[j]);} continue;}
