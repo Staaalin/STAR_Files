@@ -50,7 +50,7 @@ Double_t massList(int PID);
 
 #define A_Num_Per_Event 5
 #define B_Num_Per_Event 5
-#define RotNum 10
+#define RotNum 50
 
 void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,TString OutMidName,int Mode = 0) {
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
@@ -544,10 +544,6 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             // cout<<"M_PDG = "<<PDG->at(i)<<endl;
             // cout<<"A_PDG = "<<APDG<<endl;
             // cout<<"B_PDG = "<<BPDG<<endl;
-            if ((EntriesID+1)>=80) {
-                cout<<"__________"<<endl;cout<<"PDG = "<<PDG->at(i)<<endl;cout<<"APDG = "<<APDG<<endl;cout<<"BPDG = "<<BPDG<<endl;
-                cout<<"AMass = "<<AMass<<endl;cout<<"BMass = "<<BMass<<endl;
-            }
             for (j=0;j<RotNum;j++) {
                 Theta = randGen.Rndm() * 2 * 3.1415926535898;
                 APx = APr*sin(Theta);
@@ -555,14 +551,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 Theta = randGen.Rndm() * 2 * 3.1415926535898;
                 BPx = BPr*sin(Theta);
                 BPy = BPr*cos(Theta);
-                CMass_T = GetPairMass(APx , APy , APz , BPx , BPy , BPz , AMass , BMass);
-                if ((EntriesID+1)>=80) {
-                    cout<<"Mass = "<<CMass_T<<endl;
-                }
-                if (abs(PDG->at(i)) == 3122) {if ((Lambda_MR[0] > CMass_T) || (Lambda_MR[1] < CMass_T)) {j--;continue;}}
-                if (abs(PDG->at(i)) == 3312) {if ((Xi_MR[0]     > CMass_T) || (Xi_MR[1]     < CMass_T)) {j--;continue;}}
-                if (abs(PDG->at(i)) == 3344) {if ((Omega_MR[0]  > CMass_T) || (Omega_MR[1]  < CMass_T)) {j--;continue;}}
-                CMass[j] = CMass_T;
+                CMass[j] = GetPairMass(APx , APy , APz , BPx , BPy , BPz , AMass , BMass);
             }
             if (PDG->at(i) ==  3122) {for (j=0;j<RotNum;j++) {H_ALLr_Lambda ->Fill(rap,CMass[j]);} continue;}
             if (PDG->at(i) == -3122) {for (j=0;j<RotNum;j++) {H_ALLr_Lambdab->Fill(rap,CMass[j]);} continue;}
