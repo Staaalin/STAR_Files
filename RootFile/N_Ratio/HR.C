@@ -358,7 +358,7 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
     for (int EntriesID = 0 ; EntriesID < nentries ; EntriesID++) {
         hadronTree->GetEntry(EntriesID);
     
-        if ((EntriesID+1)%1 == 0) {
+        if ((EntriesID+1)%100 == 0) {
             time(&time_now);
             int time_diff = (int)difftime(time_now, time_start);
             cout << time_diff/60 << "min " << time_diff%60 << "s: ";
@@ -544,6 +544,10 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             // cout<<"M_PDG = "<<PDG->at(i)<<endl;
             // cout<<"A_PDG = "<<APDG<<endl;
             // cout<<"B_PDG = "<<BPDG<<endl;
+            if ((EntriesID+1)>=80) {
+                cout<<"__________"<<endl;cout<<"PDG = "<<PDG->at(i)<<endl;cout<<"APDG = "<<APDG<<endl;cout<<"BPDG = "<<BPDG<<endl;
+                cout<<"AMass = "<<AMass<<endl;cout<<"BMass = "<<BMass<<endl;
+            }
             for (j=0;j<RotNum;j++) {
                 Theta = randGen.Rndm() * 2 * 3.1415926535898;
                 APx = APr*sin(Theta);
@@ -552,7 +556,9 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
                 BPx = BPr*sin(Theta);
                 BPy = BPr*cos(Theta);
                 CMass_T = GetPairMass(APx , APy , APz , BPx , BPy , BPz , AMass , BMass);
-                // cout<<"Mass = "<<CMass_T<<endl;
+                if ((EntriesID+1)>=80) {
+                    cout<<"Mass = "<<CMass_T<<endl;
+                }
                 if (abs(PDG->at(i)) == 3122) {if ((Lambda_MR[0] > CMass_T) || (Lambda_MR[1] < CMass_T)) {j--;continue;}}
                 if (abs(PDG->at(i)) == 3312) {if ((Xi_MR[0]     > CMass_T) || (Xi_MR[1]     < CMass_T)) {j--;continue;}}
                 if (abs(PDG->at(i)) == 3344) {if ((Omega_MR[0]  > CMass_T) || (Omega_MR[1]  < CMass_T)) {j--;continue;}}
