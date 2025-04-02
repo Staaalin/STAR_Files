@@ -539,26 +539,30 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             BPx = mix_px->at(D2id);
             BPy = mix_py->at(D2id);
             BPz = mix_pz->at(D2id);
-            APr = pow(APx*APx+APy*APy,0.5);
-            BPr = pow(BPx*BPx+BPy*BPy,0.5);
-            // cout<<"M_PDG = "<<PDG->at(i)<<endl;
-            // cout<<"A_PDG = "<<APDG<<endl;
-            // cout<<"B_PDG = "<<BPDG<<endl;
-            for (j=0;j<RotNum;j++) {
-                Theta = randGen.Rndm() * 2 * 3.1415926535898;
-                APx = APr*sin(Theta);
-                APy = APr*cos(Theta);
-                Theta = randGen.Rndm() * 2 * 3.1415926535898;
-                BPx = BPr*sin(Theta);
-                BPy = BPr*cos(Theta);
-                CMass[j] = GetPairMass(APx , APy , APz , BPx , BPy , BPz , AMass , BMass);
-            }
-            if (PDG->at(i) ==  3122) {for (j=0;j<RotNum;j++) {H_ALLr_Lambda ->Fill(rap,CMass[j]);} continue;}
-            if (PDG->at(i) == -3122) {for (j=0;j<RotNum;j++) {H_ALLr_Lambdab->Fill(rap,CMass[j]);} continue;}
-            if (PDG->at(i) ==  3312) {for (j=0;j<RotNum;j++) {H_ALLr_Xi     ->Fill(rap,CMass[j]);} continue;}
-            if (PDG->at(i) == -3312) {for (j=0;j<RotNum;j++) {H_ALLr_Xib    ->Fill(rap,CMass[j]);} continue;}
-            if (PDG->at(i) ==  3334) {for (j=0;j<RotNum;j++) {H_ALLr_Omega  ->Fill(rap,CMass[j]);} continue;}
-            if (PDG->at(i) == -3334) {for (j=0;j<RotNum;j++) {H_ALLr_Omegab ->Fill(rap,CMass[j]);} continue;}
+            // APr = pow(APx*APx+APy*APy,0.5);
+            // BPr = pow(BPx*BPx+BPy*BPy,0.5);
+            // for (j=0;j<RotNum;j++) {
+            //     Theta = randGen.Rndm() * 2 * 3.1415926535898;
+            //     APx = APr*sin(Theta);
+            //     APy = APr*cos(Theta);
+            //     Theta = randGen.Rndm() * 2 * 3.1415926535898;
+            //     BPx = BPr*sin(Theta);
+            //     BPy = BPr*cos(Theta);
+            //     CMass[j] = GetPairMass(APx , APy , APz , BPx , BPy , BPz , AMass , BMass);
+            // }
+            // if (PDG->at(i) ==  3122) {for (j=0;j<RotNum;j++) {H_ALLr_Lambda ->Fill(rap,CMass[j]);} continue;}
+            // if (PDG->at(i) == -3122) {for (j=0;j<RotNum;j++) {H_ALLr_Lambdab->Fill(rap,CMass[j]);} continue;}
+            // if (PDG->at(i) ==  3312) {for (j=0;j<RotNum;j++) {H_ALLr_Xi     ->Fill(rap,CMass[j]);} continue;}
+            // if (PDG->at(i) == -3312) {for (j=0;j<RotNum;j++) {H_ALLr_Xib    ->Fill(rap,CMass[j]);} continue;}
+            // if (PDG->at(i) ==  3334) {for (j=0;j<RotNum;j++) {H_ALLr_Omega  ->Fill(rap,CMass[j]);} continue;}
+            // if (PDG->at(i) == -3334) {for (j=0;j<RotNum;j++) {H_ALLr_Omegab ->Fill(rap,CMass[j]);} continue;}
+            CMass_T = GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass);
+            if (PDG->at(i) ==  3122) {H_ALLr_Lambda ->Fill(rap,CMass_T);continue;}
+            if (PDG->at(i) == -3122) {H_ALLr_Lambdab->Fill(rap,CMass_T);continue;}
+            if (PDG->at(i) ==  3312) {H_ALLr_Xi     ->Fill(rap,CMass_T);continue;}
+            if (PDG->at(i) == -3312) {H_ALLr_Xib    ->Fill(rap,CMass_T);continue;}
+            if (PDG->at(i) ==  3334) {H_ALLr_Omega  ->Fill(rap,CMass_T);continue;}
+            if (PDG->at(i) == -3334) {H_ALLr_Omegab ->Fill(rap,CMass_T);continue;}
         }
     }
     TString OutputFileName = OutMidName;
