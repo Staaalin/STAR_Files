@@ -528,9 +528,9 @@ void HR(TString MidName,int StartFileIndex,int EndFileIndex,int OutputFileIndex,
             if (DID <= 1000) continue;
             D1id = DID/1000;D2id = DID%1000;
             APDG = PDG->at(D1id);BPDG = PDG->at(D2id);
-            if      (abs(PDG->at(i)) == 3122) {if                            (abs(APDG*BPDG) != 466732 ) {continue;}} // 211 * 2212
-            else if (abs(PDG->at(i)) == 3312) {if (abs(APDG*BPDG) != 211) || (abs(APDG*BPDG) != 658742 ) {continue;}} // 211 * 3122
-            else if (abs(PDG->at(i)) == 3334) {if (abs(APDG*BPDG) != 321) || (abs(APDG*BPDG) != 1002162) {continue;}} // 321 * 3122
+            if      (abs(PDG->at(i)) == 3122) {if (                           (abs(APDG*BPDG) != 466732 )) {continue;}} // 211 * 2212
+            else if (abs(PDG->at(i)) == 3312) {if ((abs(APDG*BPDG) != 211) && (abs(APDG*BPDG) != 658742 )) {continue;}} // 211 * 3122
+            else if (abs(PDG->at(i)) == 3334) {if ((abs(APDG*BPDG) != 321) && (abs(APDG*BPDG) != 1002162)) {continue;}} // 321 * 3122
             AMass = (APDG != -1) ? massList(APDG) : massList(3122);
             BMass = (BPDG != -1) ? massList(BPDG) : massList(3122);
             APx = mix_px->at(D1id);
