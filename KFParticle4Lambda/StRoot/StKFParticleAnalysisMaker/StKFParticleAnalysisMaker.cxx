@@ -75,8 +75,8 @@
 #define K0SPdgMassSigma    0.0043
 #define PhiPdgMassSigma    0.0031
 
-#define IfQAMode           false // If Writing Hist of QA;
-#define IfTree             true // If Writing Tree;
+#define IfQAMode           true // If Writing Hist of QA;
+#define IfTree             false // If Writing Tree;
 #define TPC_R              0.6
 
 // #define DEBUGGING
@@ -294,6 +294,28 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_Pt_nSigmaKaonTOF = new TH2F("H_Pt_nSigmaKaonTOF","nSigmaKaonTOF vs. p_t",     400,0,10,800,-10,10);
 		H_Pt_nSigmaKaonTOF->GetXaxis()->SetTitle("p_t [GeV]");
 		H_Pt_nSigmaKaonTOF->GetYaxis()->SetTitle("nSigmaKaonTOF");
+
+		MSta = floor((LambdaPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((LambdaPdgMass)/0.0005 + 100)*0.0005;
+		H_ALL_Lambda   = new TH2D("H_ALL_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 400,MSta,MEnd);
+		H_ALL_Lambdab  = new TH2D("H_ALL_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Lambda  = new TH2D("H_ALLr_Lambda" ,"Lambda_Distribution"   , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Lambdab = new TH2D("H_ALLr_Lambdab","LambdaBar_Distribution", 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Lambda  = new TH2D("H_ALLp_Lambda" ,"Lambda_Distribution"   , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Lambdab = new TH2D("H_ALLp_Lambdab","LambdaBar_Distribution", 40,-2,2 , 400,MSta,MEnd);
+		MSta = floor((XiPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((XiPdgMass)/0.0005 + 100)*0.0005;
+		H_ALL_Xi       = new TH2D("H_ALL_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
+		H_ALL_Xib      = new TH2D("H_ALL_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Xi      = new TH2D("H_ALLr_Xi"    ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Xib     = new TH2D("H_ALLr_Xib"   ,"XiBar_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Xi      = new TH2D("H_ALLp_Xi"    ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Xib     = new TH2D("H_ALLp_Xib"   ,"XiBar_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		MSta = floor((OmegaPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((OmegaPdgMass)/0.0005 + 100)*0.0005;
+		H_ALL_Omega    = new TH2D("H_ALL_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		H_ALL_Omegab   = new TH2D("H_ALL_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Omega   = new TH2D("H_ALLr_Omega" ,"Omega_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Omegab  = new TH2D("H_ALLr_Omegab","OmegaBar_Distribution"  , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Omega   = new TH2D("H_ALLp_Omega" ,"Omega_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Omegab  = new TH2D("H_ALLp_Omegab","OmegaBar_Distribution"  , 40,-2,2 , 400,MSta,MEnd);
 
 		TriggerList Trigger_List_Data(DataName);
 		std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
@@ -1159,6 +1181,24 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 			H_Hyperon_Rap[i]->Write();
 
 		}
+		H_ALL_Lambda  ->Write();
+		H_ALL_Lambdab ->Write();
+		H_ALLr_Lambda ->Write();
+		H_ALLr_Lambdab->Write();
+		H_ALLp_Lambda ->Write();
+		H_ALLp_Lambdab->Write();
+		H_ALL_Xi      ->Write();
+		H_ALL_Xib     ->Write();
+		H_ALLr_Xi     ->Write();
+		H_ALLr_Xib    ->Write();
+		H_ALLp_Xi     ->Write();
+		H_ALLp_Xib    ->Write();
+		H_ALL_Omega   ->Write();
+		H_ALL_Omegab  ->Write();
+		H_ALLr_Omega  ->Write();
+		H_ALLr_Omegab ->Write();
+		H_ALLp_Omega  ->Write();
+		H_ALLp_Omegab ->Write();
 		fout->cd();
 	}
 	cout<<"T_T:"<<endl;
@@ -1626,7 +1666,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 			std::cout << "Parsing refMult : " << refMult <<std::endl;
 			std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 			#endif
-			
+			if (IfQAMode){
+				IfFill_BM = true;
+			}
 			if (IfQAMode){
 				// Fill track from KFP
 				if ((abs(particle.GetPDG()) == 2212) || (abs(particle.GetPDG()) == 211) || (abs(particle.GetPDG()) == 321)) { // Proton , Pion or Kaon
@@ -1718,7 +1760,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 
 
-
 			if (
 				(abs(particle.GetPDG()) != OmegaPdg ) && 
 				(abs(particle.GetPDG()) != XiPdg    ) && 
@@ -1727,6 +1768,66 @@ Int_t StKFParticleAnalysisMaker::Make()
 				(abs(particle.GetPDG()) != PhiPdg   ) && 
 				(abs(particle.GetPDG()) != XiRPdg   )
 			) {continue;}
+
+			if (IfQAMode) {
+				if (particle.NDaughters() == 2) {
+					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+						const int daughterId = particle.DaughterIds()[iDaughter];
+						// cout<<"daughterId = "<<daughterId<<endl;
+						const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+						if (daughter.GetMass() <= 0) {IfFill_BM = false;continue;}
+						if (iDaughter == 0) {
+							AMass = daughter.GetMass();
+							APx   = daughter.GetPx();
+							APy   = daughter.GetPx();
+							APz   = daughter.GetPx();
+						}
+						if (iDaughter == 1) {
+							BMass = daughter.GetMass();
+							BPx   = daughter.GetPx();
+							BPy   = daughter.GetPx();
+							BPz   = daughter.GetPx();
+						}
+					}
+				}
+				if (IfFill_BM) {
+					MPz = particle.GetPz();
+					MPt = pow(pow(particle.GetPx(),2) + pow(particle.GetPy(),2),0.5);
+					MEnergy = pow(MPt*MPt + MPz*MPz + LambdaMass*LambdaMass,0.5);
+					MRap    = 0.5*log((MEnergy+MPz)/(MEnergy-MPz));
+					if      (particle.GetPDG() ==  LambdaPdg) {
+						H_ALLr_Lambda ->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Lambda ->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Lambda  ->FIll(MRap,particle.GetMass());
+					}
+					else if (particle.GetPDG() == -LambdaPdg) {
+						H_ALLr_Lambdab->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Lambdab->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Lambdab ->FIll(MRap,particle.GetMass());
+					}
+					else if (particle.GetPDG() ==  XiPdg) {
+						H_ALLr_Xi ->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Xi ->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Xi  ->FIll(MRap,particle.GetMass());
+					}
+					else if (particle.GetPDG() == -XiPdg) {
+						H_ALLr_Xib->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Xib->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Xib ->FIll(MRap,particle.GetMass());
+					}
+					else if (particle.GetPDG() ==  OmegaPdg) {
+						H_ALLr_Omega ->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Omega ->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Omega  ->FIll(MRap,particle.GetMass());
+					}
+					else if (particle.GetPDG() == -OmegaPdg) {
+						H_ALLr_Omegab->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Omegab->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Omegab ->FIll(MRap,particle.GetMass());
+					}
+				} 
+			}
+
 
 			// Check if wrong daughters
 			// bool IfCorrectDaughter = true;
@@ -3320,4 +3421,18 @@ double StKFParticleAnalysisMaker::getphistar(float phi1, float phi2, float Pt1, 
 	double deltaphistar = phi1-phi2 + TMath::ASin(-0.15*(q1)*Bz*tpcR/Pt1)-TMath::ASin(-0.15*(q2)*Bz*tpcR/Pt2);
 	deltaphistar = atan2(sin(deltaphistar),cos(deltaphistar));
 	return deltaphistar;
+}
+float StKFParticleAnalysisMaker::GetPairMass(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float AMass , float BMass) {
+    float E1 = pow(p1x*p1x+p1y*p1y+p1z*p1z+AMass*AMass,0.5);
+    float E2 = pow(p2x*p2x+p2y*p2y+p2z*p2z+BMass*BMass,0.5);
+    float Tot_E = E1+E2;
+    float beta[3] = { -(p1x+p2x)/Tot_E , -(p1y+p2y)/Tot_E , -(p1z+p2z)/Tot_E };
+    float beta2 = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+    float gamma = 1.0 / std::sqrt(1.0 - beta2);
+    float gamma2 = (beta2 > 0) ? (gamma - 1.0) / beta2 : 0.0;
+
+    float bp1 = beta[0]*p1x + beta[1]*p1y + beta[2]*p1z;
+    float bp2 = beta[0]*p2x + beta[1]*p2y + beta[2]*p2z;
+
+    return gamma * (E1 + bp1 + E2 + bp2);
 }
