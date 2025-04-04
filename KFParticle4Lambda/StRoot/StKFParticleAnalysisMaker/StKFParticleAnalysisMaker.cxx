@@ -75,8 +75,10 @@
 #define K0SPdgMassSigma    0.0043
 #define PhiPdgMassSigma    0.0031
 
-#define IfQAMode           true // If Writing Hist of QA;
+#define IfQAMode           false  // If Writing Hist of QA;
 #define IfTree             false // If Writing Tree;
+#define IfLoadHY           true  // If Writing Tree;
+
 #define TPC_R              0.6
 
 // #define DEBUGGING
@@ -230,6 +232,30 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		PDGList[Itr] = BPDGList[Jtr];NameList[Itr] = BNameList[Jtr];
 	}
 
+	if (IfLoadHY){
+		MSta = floor((LambdaPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((LambdaPdgMass)/0.0005 + 100)*0.0005;
+		H_ALL_Lambda   = new TH2F("H_ALL_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 400,MSta,MEnd);
+		H_ALL_Lambdab  = new TH2F("H_ALL_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Lambda  = new TH2F("H_ALLr_Lambda" ,"Lambda_Distribution"   , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Lambdab = new TH2F("H_ALLr_Lambdab","LambdaBar_Distribution", 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Lambda  = new TH2F("H_ALLp_Lambda" ,"Lambda_Distribution"   , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Lambdab = new TH2F("H_ALLp_Lambdab","LambdaBar_Distribution", 40,-2,2 , 400,MSta,MEnd);
+		MSta = floor((XiPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((XiPdgMass)/0.0005 + 100)*0.0005;
+		H_ALL_Xi       = new TH2F("H_ALL_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
+		H_ALL_Xib      = new TH2F("H_ALL_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Xi      = new TH2F("H_ALLr_Xi"    ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Xib     = new TH2F("H_ALLr_Xib"   ,"XiBar_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Xi      = new TH2F("H_ALLp_Xi"    ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Xib     = new TH2F("H_ALLp_Xib"   ,"XiBar_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		MSta = floor((OmegaPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((OmegaPdgMass)/0.0005 + 100)*0.0005;
+		H_ALL_Omega    = new TH2F("H_ALL_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		H_ALL_Omegab   = new TH2F("H_ALL_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Omega   = new TH2F("H_ALLr_Omega" ,"Omega_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Omegab  = new TH2F("H_ALLr_Omegab","OmegaBar_Distribution"  , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Omega   = new TH2F("H_ALLp_Omega" ,"Omega_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Omegab  = new TH2F("H_ALLp_Omegab","OmegaBar_Distribution"  , 40,-2,2 , 400,MSta,MEnd);
+	}
+
 	if (IfQAMode) {
 
 		hNRefMult = new TH1F("RefMult" , "Reference Multiplicity" , 1000, 0.0, 1000.0 ) ;
@@ -295,27 +321,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_Pt_nSigmaKaonTOF->GetXaxis()->SetTitle("p_t [GeV]");
 		H_Pt_nSigmaKaonTOF->GetYaxis()->SetTitle("nSigmaKaonTOF");
 
-		MSta = floor((LambdaPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((LambdaPdgMass)/0.0005 + 100)*0.0005;
-		H_ALL_Lambda   = new TH2D("H_ALL_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 400,MSta,MEnd);
-		H_ALL_Lambdab  = new TH2D("H_ALL_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLr_Lambda  = new TH2D("H_ALLr_Lambda" ,"Lambda_Distribution"   , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLr_Lambdab = new TH2D("H_ALLr_Lambdab","LambdaBar_Distribution", 40,-2,2 , 400,MSta,MEnd);
-		H_ALLp_Lambda  = new TH2D("H_ALLp_Lambda" ,"Lambda_Distribution"   , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLp_Lambdab = new TH2D("H_ALLp_Lambdab","LambdaBar_Distribution", 40,-2,2 , 400,MSta,MEnd);
-		MSta = floor((XiPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((XiPdgMass)/0.0005 + 100)*0.0005;
-		H_ALL_Xi       = new TH2D("H_ALL_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
-		H_ALL_Xib      = new TH2D("H_ALL_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLr_Xi      = new TH2D("H_ALLr_Xi"    ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLr_Xib     = new TH2D("H_ALLr_Xib"   ,"XiBar_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLp_Xi      = new TH2D("H_ALLp_Xi"    ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLp_Xib     = new TH2D("H_ALLp_Xib"   ,"XiBar_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
-		MSta = floor((OmegaPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((OmegaPdgMass)/0.0005 + 100)*0.0005;
-		H_ALL_Omega    = new TH2D("H_ALL_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
-		H_ALL_Omegab   = new TH2D("H_ALL_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLr_Omega   = new TH2D("H_ALLr_Omega" ,"Omega_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLr_Omegab  = new TH2D("H_ALLr_Omegab","OmegaBar_Distribution"  , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLp_Omega   = new TH2D("H_ALLp_Omega" ,"Omega_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLp_Omegab  = new TH2D("H_ALLp_Omegab","OmegaBar_Distribution"  , 40,-2,2 , 400,MSta,MEnd);
+
 
 		TriggerList Trigger_List_Data(DataName);
 		std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
@@ -1002,6 +1008,9 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		hadronTree ->Write();
 	}
 
+	if (IfLoadHY){
+		folder_LoadHY   = fout->mkdir("LoadHY");
+	}
 	if (IfQAMode){
 
 		folder_EventQA  = fout->mkdir("Event_QA");
@@ -1181,6 +1190,10 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 			H_Hyperon_Rap[i]->Write();
 
 		}
+		fout->cd();
+	}
+	if (IfLoadHY){
+		folder_LoadHY ->cd();
 		H_ALL_Lambda  ->Write();
 		H_ALL_Lambdab ->Write();
 		H_ALLr_Lambda ->Write();
@@ -1199,7 +1212,7 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_ALLr_Omegab ->Write();
 		H_ALLp_Omega  ->Write();
 		H_ALLp_Omegab ->Write();
-		fout->cd();
+		
 	}
 	cout<<"T_T:"<<endl;
 	return;
@@ -1769,7 +1782,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				(abs(particle.GetPDG()) != XiRPdg   )
 			) {continue;}
 
-			if (IfQAMode) {
+			if (IfLoadHY) {
 				if (particle.NDaughters() == 2) {
 					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 						const int daughterId = particle.DaughterIds()[iDaughter];
@@ -1825,7 +1838,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						H_ALLp_Omegab->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
 						H_ALL_Omegab ->Fill(MRap,particle.GetMass());
 					}
-				} 
+				}
 			}
 
 

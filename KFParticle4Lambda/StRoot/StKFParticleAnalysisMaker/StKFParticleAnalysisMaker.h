@@ -155,24 +155,24 @@ private:
 	TH2F *H_Total_Pxy;
 
 	bool  IfFill_BM;
-	TH2D* H_ALL_Lambda  ;
-	TH2D* H_ALL_Lambdab ;
-	TH2D* H_ALLr_Lambda ;
-	TH2D* H_ALLr_Lambdab;
-	TH2D* H_ALLp_Lambda ;
-	TH2D* H_ALLp_Lambdab;
-	TH2D* H_ALL_Xi      ;
-	TH2D* H_ALL_Xib     ;
-	TH2D* H_ALLr_Xi     ;
-	TH2D* H_ALLr_Xib    ;
-	TH2D* H_ALLp_Xi     ;
-	TH2D* H_ALLp_Xib    ;
-	TH2D* H_ALL_Omega   ;
-	TH2D* H_ALL_Omegab  ;
-	TH2D* H_ALLr_Omega  ;
-	TH2D* H_ALLr_Omegab ;
-	TH2D* H_ALLp_Omega  ;
-	TH2D* H_ALLp_Omegab ;
+	TH2F* H_ALL_Lambda  ;
+	TH2F* H_ALL_Lambdab ;
+	TH2F* H_ALLr_Lambda ;
+	TH2F* H_ALLr_Lambdab;
+	TH2F* H_ALLp_Lambda ;
+	TH2F* H_ALLp_Lambdab;
+	TH2F* H_ALL_Xi      ;
+	TH2F* H_ALL_Xib     ;
+	TH2F* H_ALLr_Xi     ;
+	TH2F* H_ALLr_Xib    ;
+	TH2F* H_ALLp_Xi     ;
+	TH2F* H_ALLp_Xib    ;
+	TH2F* H_ALL_Omega   ;
+	TH2F* H_ALL_Omegab  ;
+	TH2F* H_ALLr_Omega  ;
+	TH2F* H_ALLr_Omegab ;
+	TH2F* H_ALLp_Omega  ;
+	TH2F* H_ALLp_Omegab ;
 	float AMass ;
 	float BMass ;
 	float APx   ;
@@ -190,6 +190,7 @@ private:
 	TDirectory* folder_EventQA;
 	TDirectory* folder_PIDQA;
 	TDirectory* folder_ReconsQA;
+	TDirectory* folder_LoadHY;
 
 	#define PDG2NameSize  10 // APDGList.size()
 	#define PDG2NameSize2 6  // BPDGList.size()
