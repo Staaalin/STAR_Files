@@ -1822,7 +1822,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					MPt = pow(pow(particle.GetPx(),2) + pow(particle.GetPy(),2),0.5);
 					MEnergy = pow(MPt*MPt + MPz*MPz + LambdaMass*LambdaMass,0.5);
 					MRap    = 0.5*log((MEnergy+MPz)/(MEnergy-MPz));
-					Particle_N2[0] = Particle_A;Particle_N2[1] = Particle_B;
+					Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 					Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 					if      (particle.GetPDG() ==  LambdaPdg) {
 						H_ALLr_Lambda ->Fill(MRap,Particle_M.GetMass());
