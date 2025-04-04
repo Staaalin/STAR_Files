@@ -1679,7 +1679,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			std::cout << "Parsing refMult : " << refMult <<std::endl;
 			std::cout << "Parsed CrefMult : " << CrefMult <<std::endl;
 			#endif
-			if (IfQAMode){
+			if (IfLoadHY){
 				IfFill_BM = true;
 			}
 			if (IfQAMode){
