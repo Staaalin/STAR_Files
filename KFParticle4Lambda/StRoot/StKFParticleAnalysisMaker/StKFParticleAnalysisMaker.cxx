@@ -1668,9 +1668,13 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// 		}
 		// 	}
 		// }
-
+		N_Entries = KFParticlePerformanceInterface->GetNReconstructedParticles();
 		Omega_Omegab_Num = 0;
-		for (int iKFParticle=0; iKFParticle < KFParticlePerformanceInterface->GetNReconstructedParticles(); iKFParticle++){ 
+		if (IfLoadHY) {
+			KFP_PV.SetXYZ(VertexX, VertexY, VertexZ);
+			KFP_PV_P = KFParticle(KFP_PV);
+		}
+		for (int iKFParticle=0; iKFParticle < N_Entries; iKFParticle++){ 
 			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
 			bool IfWellConstrcuted = true;
@@ -1784,22 +1788,32 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 			if (IfLoadHY) {
 				if (particle.NDaughters() == 2) {
-					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++) {
 						const int daughterId = particle.DaughterIds()[iDaughter];
 						// cout<<"daughterId = "<<daughterId<<endl;
 						const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 						if (daughter.GetMass() <= 0) {IfFill_BM = false;continue;}
 						if (iDaughter == 0) {
-							AMass = daughter.GetMass();
-							APx   = daughter.GetPx();
-							APy   = daughter.GetPx();
-							APz   = daughter.GetPx();
+							KFPtrack_A.SetPxPyPz(daughter.GetPx(), daughter.GetPy(), daughter.GetPz());
+							KFPtrack_A.SetXYZ(   daughter.GetX() , daughter.GetY() , daughter.GetZ() );
+							KFPtrack_A.SetID(-1);
+							KFPtrack_A.SetCharge(daughter.GetQ()   );
+							KFPtrack_A.SetChi2(  daughter.GetChi2());
+							KFPtrack_A.SetNDF(   daughter.GetNDF());
+							KFPtrack_A.SetCovarianceMatrix (daughter.CovarianceMatrix());
+							KFPtrack_A.SetId (-1);
+							Particle_A = KFParticle(KFPtrack_A,daughter.GetPDG());
 						}
 						if (iDaughter == 1) {
-							BMass = daughter.GetMass();
-							BPx   = daughter.GetPx();
-							BPy   = daughter.GetPx();
-							BPz   = daughter.GetPx();
+							KFPtrack_B.SetPxPyPz(-daughter.GetPx(), -daughter.GetPy(), daughter.GetPz());
+							KFPtrack_B.SetXYZ(   daughter.GetX() , daughter.GetY() , daughter.GetZ() );
+							KFPtrack_B.SetID(-1);
+							KFPtrack_B.SetCharge(daughter.GetQ()   );
+							KFPtrack_B.SetChi2(  daughter.GetChi2());
+							KFPtrack_B.SetNDF(   daughter.GetNDF());
+							KFPtrack_B.SetCovarianceMatrix (daughter.CovarianceMatrix());
+							KFPtrack_B.SetId (-1);
+							Particle_B = KFParticle(KFPtrack_B,daughter.GetPDG());
 						}
 					}
 				}
@@ -1808,37 +1822,91 @@ Int_t StKFParticleAnalysisMaker::Make()
 					MPt = pow(pow(particle.GetPx(),2) + pow(particle.GetPy(),2),0.5);
 					MEnergy = pow(MPt*MPt + MPz*MPz + LambdaMass*LambdaMass,0.5);
 					MRap    = 0.5*log((MEnergy+MPz)/(MEnergy-MPz));
+					Particle_N2[0] = Particle_A;Particle_N2[1] = Particle_B;
+					Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 					if      (particle.GetPDG() ==  LambdaPdg) {
-						H_ALLr_Lambda ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Lambda ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALLr_Lambda ->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Lambda  ->Fill(MRap,particle.GetMass());
 					}
 					else if (particle.GetPDG() == -LambdaPdg) {
-						H_ALLr_Lambdab->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Lambdab->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALLr_Lambdab->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Lambdab ->Fill(MRap,particle.GetMass());
 					}
 					else if (particle.GetPDG() ==  XiPdg) {
-						H_ALLr_Xi ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Xi ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALLr_Xi ->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Xi  ->Fill(MRap,particle.GetMass());
 					}
 					else if (particle.GetPDG() == -XiPdg) {
-						H_ALLr_Xib->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Xib->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALLr_Xib->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Xib ->Fill(MRap,particle.GetMass());
 					}
 					else if (particle.GetPDG() ==  OmegaPdg) {
-						H_ALLr_Omega ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Omega ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALLr_Omega ->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Omega  ->Fill(MRap,particle.GetMass());
 					}
 					else if (particle.GetPDG() == -OmegaPdg) {
-						H_ALLr_Omegab->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Omegab->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALLr_Omegab->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Omegab ->Fill(MRap,particle.GetMass());
 					}
 				}
+
+
+				// if (particle.NDaughters() == 2) {
+				// 	for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+				// 		const int daughterId = particle.DaughterIds()[iDaughter];
+				// 		// cout<<"daughterId = "<<daughterId<<endl;
+				// 		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+				// 		if (daughter.GetMass() <= 0) {IfFill_BM = false;continue;}
+				// 		if (iDaughter == 0) {
+				// 			AMass = daughter.GetMass();
+				// 			APx   = daughter.GetPx();
+				// 			APy   = daughter.GetPx();
+				// 			APz   = daughter.GetPx();
+				// 		}
+				// 		if (iDaughter == 1) {
+				// 			BMass = daughter.GetMass();
+				// 			BPx   = daughter.GetPx();
+				// 			BPy   = daughter.GetPx();
+				// 			BPz   = daughter.GetPx();
+				// 		}
+				// 	}
+				// }
+				// if (IfFill_BM) {
+				// 	MPz = particle.GetPz();
+				// 	MPt = pow(pow(particle.GetPx(),2) + pow(particle.GetPy(),2),0.5);
+				// 	MEnergy = pow(MPt*MPt + MPz*MPz + LambdaMass*LambdaMass,0.5);
+				// 	MRap    = 0.5*log((MEnergy+MPz)/(MEnergy-MPz));
+				// 	if      (particle.GetPDG() ==  LambdaPdg) {
+				// 		H_ALLr_Lambda ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+				// 		H_ALLp_Lambda ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+				// 		H_ALL_Lambda  ->Fill(MRap,particle.GetMass());
+				// 	}
+				// 	else if (particle.GetPDG() == -LambdaPdg) {
+				// 		H_ALLr_Lambdab->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+				// 		H_ALLp_Lambdab->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+				// 		H_ALL_Lambdab ->Fill(MRap,particle.GetMass());
+				// 	}
+				// 	else if (particle.GetPDG() ==  XiPdg) {
+				// 		H_ALLr_Xi ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+				// 		H_ALLp_Xi ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+				// 		H_ALL_Xi  ->Fill(MRap,particle.GetMass());
+				// 	}
+				// 	else if (particle.GetPDG() == -XiPdg) {
+				// 		H_ALLr_Xib->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+				// 		H_ALLp_Xib->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+				// 		H_ALL_Xib ->Fill(MRap,particle.GetMass());
+				// 	}
+				// 	else if (particle.GetPDG() ==  OmegaPdg) {
+				// 		H_ALLr_Omega ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+				// 		H_ALLp_Omega ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+				// 		H_ALL_Omega  ->Fill(MRap,particle.GetMass());
+				// 	}
+				// 	else if (particle.GetPDG() == -OmegaPdg) {
+				// 		H_ALLr_Omegab->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+				// 		H_ALLp_Omegab->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+				// 		H_ALL_Omegab ->Fill(MRap,particle.GetMass());
+				// 	}
+				// }
 			}
 
 
