@@ -8,6 +8,11 @@
 #include "StKFParticleInterface.h"
 #include "StKFParticlePerformanceInterface.h"
 
+
+#include "StRoot/KFParticle/KFPTrack.h"
+#include "StRoot/KFParticle/KFPVertex.h"
+#include "StRoot/KFParticle/KFParticle.h"
+
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoDst.h"
 #include "StPicoEvent/StPicoTrack.h"
