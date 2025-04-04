@@ -1796,34 +1796,34 @@ Int_t StKFParticleAnalysisMaker::Make()
 					MEnergy = pow(MPt*MPt + MPz*MPz + LambdaMass*LambdaMass,0.5);
 					MRap    = 0.5*log((MEnergy+MPz)/(MEnergy-MPz));
 					if      (particle.GetPDG() ==  LambdaPdg) {
-						H_ALLr_Lambda ->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Lambda ->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-						H_ALL_Lambda  ->FIll(MRap,particle.GetMass());
+						H_ALLr_Lambda ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Lambda ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Lambda  ->Fill(MRap,particle.GetMass());
 					}
 					else if (particle.GetPDG() == -LambdaPdg) {
-						H_ALLr_Lambdab->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Lambdab->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-						H_ALL_Lambdab ->FIll(MRap,particle.GetMass());
+						H_ALLr_Lambdab->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Lambdab->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Lambdab ->Fill(MRap,particle.GetMass());
 					}
 					else if (particle.GetPDG() ==  XiPdg) {
-						H_ALLr_Xi ->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Xi ->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-						H_ALL_Xi  ->FIll(MRap,particle.GetMass());
+						H_ALLr_Xi ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Xi ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Xi  ->Fill(MRap,particle.GetMass());
 					}
 					else if (particle.GetPDG() == -XiPdg) {
-						H_ALLr_Xib->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Xib->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-						H_ALL_Xib ->FIll(MRap,particle.GetMass());
+						H_ALLr_Xib->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Xib->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Xib ->Fill(MRap,particle.GetMass());
 					}
 					else if (particle.GetPDG() ==  OmegaPdg) {
-						H_ALLr_Omega ->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Omega ->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-						H_ALL_Omega  ->FIll(MRap,particle.GetMass());
+						H_ALLr_Omega ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Omega ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Omega  ->Fill(MRap,particle.GetMass());
 					}
 					else if (particle.GetPDG() == -OmegaPdg) {
-						H_ALLr_Omegab->FIll(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-						H_ALLp_Omegab->FIll(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-						H_ALL_Omegab ->FIll(MRap,particle.GetMass());
+						H_ALLr_Omegab->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
+						H_ALLp_Omegab->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
+						H_ALL_Omegab ->Fill(MRap,particle.GetMass());
 					}
 				} 
 			}
