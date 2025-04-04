@@ -1672,7 +1672,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		Omega_Omegab_Num = 0;
 		if (IfLoadHY) {
 			KFP_PV.SetXYZ(VertexX, VertexY, VertexZ);
-			KFP_PV_P = KFParticle(KFP_PV);
+			KFP_PV_P = new KFParticle(KFP_PV);
 		}
 		for (int iKFParticle=0; iKFParticle < N_Entries; iKFParticle++){ 
 			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
