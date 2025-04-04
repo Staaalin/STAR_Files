@@ -54,6 +54,10 @@ class TProfile3D;
 class CentralityMaker;
 class StRefMultCorr;
 
+class KFPTrack;
+class KFPVertex;
+class KFParticle;
+
 class StKFParticleAnalysisMaker : public StMaker 
 {
 public:
