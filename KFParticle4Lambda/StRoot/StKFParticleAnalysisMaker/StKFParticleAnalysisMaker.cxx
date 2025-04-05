@@ -1818,10 +1818,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 					}
 				}
 				if (IfFill_BM) {
-					MPz = particle.GetPz();
-					MPt = pow(pow(particle.GetPx(),2) + pow(particle.GetPy(),2),0.5);
-					MEnergy = pow(MPt*MPt + MPz*MPz + LambdaMass*LambdaMass,0.5);
-					MRap    = 0.5*log((MEnergy+MPz)/(MEnergy-MPz));
 					Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 					Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 					// Test for reconstruct
@@ -1829,40 +1825,40 @@ Int_t StKFParticleAnalysisMaker::Make()
 					Particle_B = KFParticle(KFPtrack_B,Particle_B.GetPDG());
 					Particle_N2[1] = &Particle_B;
 					if      (particle.GetPDG() ==  LambdaPdg) {
-						H_ALLr_Lambda ->Fill(MRap,Particle_M.GetMass());
-						H_ALL_Lambda  ->Fill(MRap,particle.GetMass());
+						H_ALL_Lambda  ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Lambda ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
-						H_ALLp_Lambda ->Fill(MRap,Particle_M.GetMass());
+						H_ALLp_Lambda ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() == -LambdaPdg) {
-						H_ALLr_Lambdab->Fill(MRap,Particle_M.GetMass());
-						H_ALL_Lambdab ->Fill(MRap,particle.GetMass());
+						H_ALL_Lambdab ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Lambdab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
-						H_ALLp_Lambdab->Fill(MRap,Particle_M.GetMass());
+						H_ALLp_Lambdab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() ==  XiPdg) {
-						H_ALLr_Xi ->Fill(MRap,Particle_M.GetMass());
-						H_ALL_Xi  ->Fill(MRap,particle.GetMass());
+						H_ALL_Xi  ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Xi ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
-						H_ALLp_Xi ->Fill(MRap,Particle_M.GetMass());
+						H_ALLp_Xi ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() == -XiPdg) {
-						H_ALLr_Xib->Fill(MRap,Particle_M.GetMass());
-						H_ALL_Xib ->Fill(MRap,particle.GetMass());
+						H_ALL_Xib ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Xib->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
-						H_ALLp_Xib->Fill(MRap,Particle_M.GetMass());
+						H_ALLp_Xib->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() ==  OmegaPdg) {
-						H_ALLr_Omega ->Fill(MRap,Particle_M.GetMass());
-						H_ALL_Omega  ->Fill(MRap,particle.GetMass());
+						H_ALL_Omega  ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Omega ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
-						H_ALLp_Omega ->Fill(MRap,Particle_M.GetMass());
+						H_ALLp_Omega ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() == -OmegaPdg) {
-						H_ALLr_Omegab->Fill(MRap,Particle_M.GetMass());
-						H_ALL_Omegab ->Fill(MRap,particle.GetMass());
+						H_ALL_Omegab ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Omegab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
-						H_ALLp_Omegab->Fill(MRap,Particle_M.GetMass());
+						H_ALLp_Omegab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 				}
 
