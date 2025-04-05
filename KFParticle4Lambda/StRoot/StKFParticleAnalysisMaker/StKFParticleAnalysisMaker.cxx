@@ -1607,6 +1607,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		NumCharge++;
 	}
 	Nch = NumCharge;
+	cout<<"01/";
 
 	std::vector<int> DaughterParticle,MatherPartiecle;DaughterParticle.resize(0);MatherPartiecle.resize(0);
 	if (!(DataName == "pp_200_15")){
@@ -1668,12 +1669,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// 		}
 		// 	}
 		// }
+		cout<<"02/";
 		N_Entries = KFParticlePerformanceInterface->GetNReconstructedParticles();
 		Omega_Omegab_Num = 0;
 		if (IfLoadHY) {
 			KFP_PV.SetXYZ(VertexX, VertexY, VertexZ);
 			KFP_PV_P = new KFParticle(KFP_PV);
 		}
+		cout<<"03/";
 		for (int iKFParticle=0; iKFParticle < N_Entries; iKFParticle++){ 
 			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
@@ -1686,6 +1689,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (IfLoadHY){
 				IfFill_BM = true;
 			}
+			cout<<"04/";
 			if (IfQAMode){
 				// Fill track from KFP
 				if ((abs(particle.GetPDG()) == 2212) || (abs(particle.GetPDG()) == 211) || (abs(particle.GetPDG()) == 321)) { // Proton , Pion or Kaon
@@ -1775,6 +1779,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 				}
 			}
+			cout<<"05/";
 
 
 			if (
@@ -1785,20 +1790,16 @@ Int_t StKFParticleAnalysisMaker::Make()
 				(abs(particle.GetPDG()) != PhiPdg   ) && 
 				(abs(particle.GetPDG()) != XiRPdg   )
 			) {continue;}
+			cout<<"06/";
 
-			cout<<"0";
 			if (IfLoadHY) {
-				cout<<"1";
 				if (particle.NDaughters() == 2) {
-					cout<<"2";
 					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++) {
-						cout<<"3";
 						const int daughterId = particle.DaughterIds()[iDaughter];
 						// cout<<"daughterId = "<<daughterId<<endl;
 						const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 						if (daughter.GetMass() <= 0) {IfFill_BM = false;continue;}
 						if (iDaughter == 0) {
-							cout<<"4";
 							KFPtrack_A.SetPxPyPz(daughter.GetPx(), daughter.GetPy(), daughter.GetPz());
 							KFPtrack_A.SetXYZ(   daughter.GetX() , daughter.GetY() , daughter.GetZ() );
 							KFPtrack_A.SetID(-1);
@@ -1810,7 +1811,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 							Particle_A = KFParticle(KFPtrack_A,daughter.GetPDG());
 						}
 						if (iDaughter == 1) {
-							cout<<"5";
 							KFPtrack_B.SetPxPyPz(-daughter.GetPx(), -daughter.GetPy(), daughter.GetPz());
 							KFPtrack_B.SetXYZ(   daughter.GetX() , daughter.GetY() , daughter.GetZ() );
 							KFPtrack_B.SetID(-1);
@@ -1821,11 +1821,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 							KFPtrack_B.SetId (-1);
 							Particle_B = KFParticle(KFPtrack_B,daughter.GetPDG());
 						}
-						cout<<"6";
 					}
 				}
 				if (IfFill_BM) {
-					cout<<"7";
 					MPz = particle.GetPz();
 					MPt = pow(pow(particle.GetPx(),2) + pow(particle.GetPy(),2),0.5);
 					MEnergy = pow(MPt*MPt + MPz*MPz + LambdaMass*LambdaMass,0.5);
@@ -1833,43 +1831,30 @@ Int_t StKFParticleAnalysisMaker::Make()
 					Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 					Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 					if      (particle.GetPDG() ==  LambdaPdg) {
-						cout<<"8";
 						H_ALLr_Lambda ->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Lambda  ->Fill(MRap,particle.GetMass());
-						cout<<"9";
 					}
 					else if (particle.GetPDG() == -LambdaPdg) {
-						cout<<"8";
 						H_ALLr_Lambdab->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Lambdab ->Fill(MRap,particle.GetMass());
-						cout<<"9";
 					}
 					else if (particle.GetPDG() ==  XiPdg) {
-						cout<<"8";
 						H_ALLr_Xi ->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Xi  ->Fill(MRap,particle.GetMass());
-						cout<<"9";
 					}
 					else if (particle.GetPDG() == -XiPdg) {
-						cout<<"8";
 						H_ALLr_Xib->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Xib ->Fill(MRap,particle.GetMass());
-						cout<<"9";
 					}
 					else if (particle.GetPDG() ==  OmegaPdg) {
-						cout<<"8";
 						H_ALLr_Omega ->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Omega  ->Fill(MRap,particle.GetMass());
-						cout<<"9";
 					}
 					else if (particle.GetPDG() == -OmegaPdg) {
-						cout<<"8";
 						H_ALLr_Omegab->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Omegab ->Fill(MRap,particle.GetMass());
-						cout<<"9";
 					}
 				}
-				cout<<"a";
 
 
 				// if (particle.NDaughters() == 2) {
@@ -1929,7 +1914,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				// 	}
 				// }
 			}
-			cout<<"b"<<endl;
+			cout<<"07/";
 
 
 			// Check if wrong daughters
@@ -2020,6 +2005,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// 		break;
 			// 	}
 			// }
+			cout<<"08/";
 			if (IfQAMode){
 				for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 					if (particle.GetPDG() == PDGList[Itr]){
@@ -2085,6 +2071,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					}
 				}
 			}
+			cout<<"09/";
 			
 			// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 			// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
@@ -2165,6 +2152,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (CheckPass == true){
 				Recorded_KFP_ID.push_back(Temp);
 			}
+			cout<<"10/";
 			// if (CheckPass == true) { // cuts for Pions used to reconstruct K0S
 			// 	KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
 			// 	if ((NKFParticle.GetPDG() == 310)) {
@@ -2209,6 +2197,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			StLambdaDecayPair TmpLambdaDecayPair(p4Pair, p4Proton, ProtonTrackIndex, PionTrackIndex, (eLambda==0), dmass);
 			KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 		} // End loop over KFParticles
+		cout<<"11/";
 		for (int i=0;i<Recorded_KFP_ID.size();i++) {
 			for (int j=1;j<Recorded_KFP_ID[i].size();j++) {
 				const KFParticle particle = KFParticleInterface->GetParticles()[Recorded_KFP_ID[i][j]];
@@ -2241,8 +2230,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}// 自此，Recorded_KFP_ID[:][0]是KFP中的位置，其余为DST中的位置或者标识错误的-1
+		cout<<"12/";
 
 	}
+	cout<<"13/";
 	
 	for (int iKFParticle = 0;iKFParticle<Recorded_KFP_ID.size();iKFParticle++){
 		KFParticle particle = KFParticleInterface->GetParticles()[Recorded_KFP_ID[iKFParticle][0]];
@@ -2309,6 +2300,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		}
 	}
+	cout<<"14/";
 	if ( PDG.size() != Recorded_KFP_ID.size() ) {cout<<"Error: Different size of branch and Recorded_KFP_ID";return kStOK;}
 	SplitNum = Recorded_KFP_ID.size();
 
@@ -2677,6 +2669,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
+		cout<<"15/";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2725,6 +2718,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 
 	}
+	cout<<"16/";
 
 	for(int iRecorded_KFP=0;iRecorded_KFP<SplitNum;iRecorded_KFP++){
 		KFParticle particle = KFParticleInterface->GetParticles()[ Recorded_KFP_ID[iRecorded_KFP][0] ];
@@ -2793,6 +2787,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 	}
+	cout<<"17/";
 
 	Correlatted_ID_List_T.resize(0);
 	SE_Correlatted_ID_List_T.resize(0);
@@ -2907,6 +2902,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		ME_ParentEnd.emplace_back(Index_Sum-1);
 	}
+	cout<<"18/";
 	// cout<<"_____________________________________________"<<endl;
 	// cout<<"Recorded_KFP_ID              = {"<<endl;
 	// for (int i=0;i<Recorded_KFP_ID.size();i++) {
@@ -3083,6 +3079,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		// hadronTree->Fill();
 	}
+	cout<<"19/A"<<endl;
 	/////////////////////////////////////////////////////////
 	hEventNum -> Fill(5);
 	return kStOK;
