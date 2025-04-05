@@ -1607,7 +1607,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		NumCharge++;
 	}
 	Nch = NumCharge;
-	cout<<"01/";
 
 	std::vector<int> DaughterParticle,MatherPartiecle;DaughterParticle.resize(0);MatherPartiecle.resize(0);
 	if (!(DataName == "pp_200_15")){
@@ -1669,14 +1668,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// 		}
 		// 	}
 		// }
-		cout<<"02/";
 		N_Entries = KFParticlePerformanceInterface->GetNReconstructedParticles();
 		Omega_Omegab_Num = 0;
 		if (IfLoadHY) {
 			KFP_PV.SetXYZ(VertexX, VertexY, VertexZ);
 			KFP_PV_P = new KFParticle(KFP_PV);
 		}
-		cout<<"03/";
 		for (int iKFParticle=0; iKFParticle < N_Entries; iKFParticle++){ 
 			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
@@ -1689,7 +1686,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (IfLoadHY){
 				IfFill_BM = true;
 			}
-			cout<<"04/";
 			if (IfQAMode){
 				// Fill track from KFP
 				if ((abs(particle.GetPDG()) == 2212) || (abs(particle.GetPDG()) == 211) || (abs(particle.GetPDG()) == 321)) { // Proton , Pion or Kaon
@@ -1779,7 +1775,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 				}
 			}
-			cout<<"05/";
 
 
 			if (
@@ -1790,7 +1785,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				(abs(particle.GetPDG()) != PhiPdg   ) && 
 				(abs(particle.GetPDG()) != XiRPdg   )
 			) {continue;}
-			cout<<"06/";
 
 			if (IfLoadHY) {
 				if (particle.NDaughters() == 2) {
@@ -1914,7 +1908,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				// 	}
 				// }
 			}
-			cout<<"07/";
 
 
 			// Check if wrong daughters
@@ -2005,7 +1998,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			// 		break;
 			// 	}
 			// }
-			cout<<"08/";
 			if (IfQAMode){
 				for (int Itr = 0;Itr < PDG2NameSize;Itr++){
 					if (particle.GetPDG() == PDGList[Itr]){
@@ -2071,7 +2063,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 					}
 				}
 			}
-			cout<<"09/";
 			
 			// StPicoTrack* mTrackI = (StPicoTrack*)mPicoDst->track(iTrack);
 			// StPicoTrack* mTrackK = (StPicoTrack*)mPicoDst->track(kTrack);
@@ -2152,7 +2143,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			if (CheckPass == true){
 				Recorded_KFP_ID.push_back(Temp);
 			}
-			cout<<"10/";
 			// if (CheckPass == true) { // cuts for Pions used to reconstruct K0S
 			// 	KFParticle NKFParticle = KFParticleInterface->GetParticles()[Temp[0]];
 			// 	if ((NKFParticle.GetPDG() == 310)) {
@@ -2197,7 +2187,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			StLambdaDecayPair TmpLambdaDecayPair(p4Pair, p4Proton, ProtonTrackIndex, PionTrackIndex, (eLambda==0), dmass);
 			KFParticleLambdaDecayPair.push_back(TmpLambdaDecayPair);
 		} // End loop over KFParticles
-		cout<<"11/";
 		for (int i=0;i<Recorded_KFP_ID.size();i++) {
 			for (int j=1;j<Recorded_KFP_ID[i].size();j++) {
 				const KFParticle particle = KFParticleInterface->GetParticles()[Recorded_KFP_ID[i][j]];
@@ -2230,10 +2219,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}// 自此，Recorded_KFP_ID[:][0]是KFP中的位置，其余为DST中的位置或者标识错误的-1
-		cout<<"12/";
 
 	}
-	cout<<"13/";
 	
 	for (int iKFParticle = 0;iKFParticle<Recorded_KFP_ID.size();iKFParticle++){
 		KFParticle particle = KFParticleInterface->GetParticles()[Recorded_KFP_ID[iKFParticle][0]];
@@ -2300,7 +2287,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		}
 	}
-	cout<<"14/";
 	if ( PDG.size() != Recorded_KFP_ID.size() ) {cout<<"Error: Different size of branch and Recorded_KFP_ID";return kStOK;}
 	SplitNum = Recorded_KFP_ID.size();
 
@@ -2669,7 +2655,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
-		cout<<"15/";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2718,7 +2703,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 
 	}
-	cout<<"16/";
 
 	for(int iRecorded_KFP=0;iRecorded_KFP<SplitNum;iRecorded_KFP++){
 		KFParticle particle = KFParticleInterface->GetParticles()[ Recorded_KFP_ID[iRecorded_KFP][0] ];
@@ -2787,7 +2771,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 	}
-	cout<<"17/";
 
 	Correlatted_ID_List_T.resize(0);
 	SE_Correlatted_ID_List_T.resize(0);
@@ -2902,7 +2885,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		ME_ParentEnd.emplace_back(Index_Sum-1);
 	}
-	cout<<"18/";
+	cout<<"01/";
 	// cout<<"_____________________________________________"<<endl;
 	// cout<<"Recorded_KFP_ID              = {"<<endl;
 	// for (int i=0;i<Recorded_KFP_ID.size();i++) {
@@ -2928,6 +2911,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		H_Total_Pz->Fill(Total_Pz);
 		H_Total_Pxy->Fill(Total_Px,Total_Py);
 	}
+	cout<<"02/";
 
 // ======= KFParticle end ======= //
 
@@ -3025,12 +3009,17 @@ Int_t StKFParticleAnalysisMaker::Make()
 			break;
 		}
 	}
+	cout<<"03/";
 
 	if (PDG.size()>0){
+		cout<<"04/";
 		PDGMult = PDG.size(); // This is multiplicity of Recorded Particles
+		cout<<"05/";
 		if (IfRecordThisEventInTree){
+			cout<<"06/";
 			// cout<<"Found Hyperon"<<endl;
 			hadronTree->Fill();
+			cout<<"07/";
 
 			// 展示处理出来的Recorded_KFP_ID和他们关联的序号
 			// cout<<"Event: "<<evtID<<endl;
@@ -3079,7 +3068,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		// hadronTree->Fill();
 	}
-	cout<<"19/A"<<endl;
+	cout<<"08/A"<<endl;
 	/////////////////////////////////////////////////////////
 	hEventNum -> Fill(5);
 	return kStOK;
