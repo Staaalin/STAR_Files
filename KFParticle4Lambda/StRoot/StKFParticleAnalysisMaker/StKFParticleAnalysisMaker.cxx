@@ -76,8 +76,8 @@
 #define PhiPdgMassSigma    0.0031
 
 #define IfQAMode           false  // If Writing Hist of QA;
-#define IfTree             true // If Writing Tree;
-#define IfLoadHY           false  // If Writing Tree;
+#define IfTree             false // If Writing Tree;
+#define IfLoadHY           true  // If Writing Tree;
 
 #define TPC_R              0.6
 
