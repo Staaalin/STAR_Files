@@ -1786,7 +1786,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 				(abs(particle.GetPDG()) != XiRPdg   )
 			) {continue;}
 
+			cout<<"0";
 			if (IfLoadHY) {
+				cout<<"1";
 				if (particle.NDaughters() == 2) {
 					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++) {
 						const int daughterId = particle.DaughterIds()[iDaughter];
@@ -1817,6 +1819,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						}
 					}
 				}
+				cout<<"2";
 				if (IfFill_BM) {
 					MPz = particle.GetPz();
 					MPt = pow(pow(particle.GetPx(),2) + pow(particle.GetPy(),2),0.5);
@@ -1849,6 +1852,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						H_ALL_Omegab ->Fill(MRap,particle.GetMass());
 					}
 				}
+				cout<<"3";
 
 
 				// if (particle.NDaughters() == 2) {
@@ -1908,6 +1912,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				// 	}
 				// }
 			}
+			cout<<"4"<<endl;
 
 
 			// Check if wrong daughters
