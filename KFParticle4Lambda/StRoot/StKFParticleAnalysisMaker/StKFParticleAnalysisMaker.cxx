@@ -1824,29 +1824,45 @@ Int_t StKFParticleAnalysisMaker::Make()
 					MRap    = 0.5*log((MEnergy+MPz)/(MEnergy-MPz));
 					Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 					Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+					// Test for reconstruct
+					KFPtrack_B.SetPxPyPz(-KFPtrack_B.GetPx(), -KFPtrack_B.GetPy(), KFPtrack_B.GetPz());
+					Particle_B = KFParticle(KFPtrack_B,Particle_B.GetPDG());
+					Particle_N2[1] = &Particle_B;
 					if      (particle.GetPDG() ==  LambdaPdg) {
 						H_ALLr_Lambda ->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Lambda  ->Fill(MRap,particle.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Lambda ->Fill(MRap,Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() == -LambdaPdg) {
 						H_ALLr_Lambdab->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Lambdab ->Fill(MRap,particle.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Lambdab->Fill(MRap,Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() ==  XiPdg) {
 						H_ALLr_Xi ->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Xi  ->Fill(MRap,particle.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Xi ->Fill(MRap,Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() == -XiPdg) {
 						H_ALLr_Xib->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Xib ->Fill(MRap,particle.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Xib->Fill(MRap,Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() ==  OmegaPdg) {
 						H_ALLr_Omega ->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Omega  ->Fill(MRap,particle.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Omega ->Fill(MRap,Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() == -OmegaPdg) {
 						H_ALLr_Omegab->Fill(MRap,Particle_M.GetMass());
 						H_ALL_Omegab ->Fill(MRap,particle.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Omegab->Fill(MRap,Particle_M.GetMass());
 					}
 				}
 
