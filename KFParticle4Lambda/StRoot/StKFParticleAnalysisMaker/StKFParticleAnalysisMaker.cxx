@@ -2885,7 +2885,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		ME_ParentEnd.emplace_back(Index_Sum-1);
 	}
-	cout<<"01/";
 	// cout<<"_____________________________________________"<<endl;
 	// cout<<"Recorded_KFP_ID              = {"<<endl;
 	// for (int i=0;i<Recorded_KFP_ID.size();i++) {
@@ -2911,7 +2910,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		H_Total_Pz->Fill(Total_Pz);
 		H_Total_Pxy->Fill(Total_Px,Total_Py);
 	}
-	cout<<"02/";
 
 // ======= KFParticle end ======= //
 
@@ -3009,17 +3007,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 			break;
 		}
 	}
-	cout<<"03/";
 
-	if (PDG.size()>0){
-		cout<<"04/";
+	if ((PDG.size()>0) && IfTree){
 		PDGMult = PDG.size(); // This is multiplicity of Recorded Particles
-		cout<<"05/";
 		if (IfRecordThisEventInTree){
-			cout<<"06/";
 			// cout<<"Found Hyperon"<<endl;
 			hadronTree->Fill();
-			cout<<"07/";
 
 			// 展示处理出来的Recorded_KFP_ID和他们关联的序号
 			// cout<<"Event: "<<evtID<<endl;
@@ -3068,7 +3061,6 @@ Int_t StKFParticleAnalysisMaker::Make()
 		}
 		// hadronTree->Fill();
 	}
-	cout<<"08/A"<<endl;
 	/////////////////////////////////////////////////////////
 	hEventNum -> Fill(5);
 	return kStOK;
