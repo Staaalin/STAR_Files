@@ -1789,7 +1789,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 
-			if (particle.GetPDG() == 111) cout<<"Found"<<endl;
+
 			if (
 				(abs(particle.GetPDG()) != OmegaPdg ) && 
 				(abs(particle.GetPDG()) != XiPdg    ) && 
