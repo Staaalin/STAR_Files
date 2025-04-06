@@ -166,18 +166,24 @@ private:
 	TH2F *H_Total_Pxy;
 
 	bool  IfFill_BM;
+	TH2F* H_ALL_OR_Lambda  ;
+	TH2F* H_ALL_OR_Lambdab ;
 	TH2F* H_ALL_Lambda  ;
 	TH2F* H_ALL_Lambdab ;
 	TH2F* H_ALLr_Lambda ;
 	TH2F* H_ALLr_Lambdab;
 	TH2F* H_ALLp_Lambda ;
 	TH2F* H_ALLp_Lambdab;
+	TH2F* H_ALL_OR_Xi  ;
+	TH2F* H_ALL_OR_Xib ;
 	TH2F* H_ALL_Xi      ;
 	TH2F* H_ALL_Xib     ;
 	TH2F* H_ALLr_Xi     ;
 	TH2F* H_ALLr_Xib    ;
 	TH2F* H_ALLp_Xi     ;
 	TH2F* H_ALLp_Xib    ;
+	TH2F* H_ALL_OR_Omega  ;
+	TH2F* H_ALL_OR_Omegab ;
 	TH2F* H_ALL_Omega   ;
 	TH2F* H_ALL_Omegab  ;
 	TH2F* H_ALLr_Omega  ;

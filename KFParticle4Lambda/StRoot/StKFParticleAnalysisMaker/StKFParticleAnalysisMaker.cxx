@@ -234,13 +234,17 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 	if (IfLoadHY){
 		MSta = floor((LambdaPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((LambdaPdgMass)/0.0005 + 100)*0.0005;
-		H_ALL_Lambda   = new TH2F("H_ALL_Lambda" ,"Lambda_Distribution"    , 40,-2,2 , 400,MSta,MEnd);
-		H_ALL_Lambdab  = new TH2F("H_ALL_Lambdab","LambdaBar_Distribution" , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLr_Lambda  = new TH2F("H_ALLr_Lambda" ,"Lambda_Distribution"   , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLr_Lambdab = new TH2F("H_ALLr_Lambdab","LambdaBar_Distribution", 40,-2,2 , 400,MSta,MEnd);
-		H_ALLp_Lambda  = new TH2F("H_ALLp_Lambda" ,"Lambda_Distribution"   , 40,-2,2 , 400,MSta,MEnd);
-		H_ALLp_Lambdab = new TH2F("H_ALLp_Lambdab","LambdaBar_Distribution", 40,-2,2 , 400,MSta,MEnd);
+		H_ALL_OR_Lambda = new TH2F("H_ALL_OR_Lambda" ,"Lambda_Distribution"     , 200,MSta,MEnd , 200,MSta,MEnd);
+		H_ALL_OR_Lambdab= new TH2F("H_ALL_OR_Lambdab" ,"LambdaBar_Distribution" , 200,MSta,MEnd , 200,MSta,MEnd);
+		H_ALL_Lambda   = new TH2F("H_ALL_Lambda"    ,"Lambda_Distribution"    , 40,-2,2 , 400,MSta,MEnd);
+		H_ALL_Lambdab  = new TH2F("H_ALL_Lambdab"   ,"LambdaBar_Distribution" , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Lambda  = new TH2F("H_ALLr_Lambda"   ,"Lambda_Distribution"    , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLr_Lambdab = new TH2F("H_ALLr_Lambdab"  ,"LambdaBar_Distribution" , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Lambda  = new TH2F("H_ALLp_Lambda"   ,"Lambda_Distribution"    , 40,-2,2 , 400,MSta,MEnd);
+		H_ALLp_Lambdab = new TH2F("H_ALLp_Lambdab"  ,"LambdaBar_Distribution" , 40,-2,2 , 400,MSta,MEnd);
 		MSta = floor((XiPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((XiPdgMass)/0.0005 + 100)*0.0005;
+		H_ALL_OR_Xi    = new TH2F("H_ALL_OR_Xi"  ,"Xi_Distribution"        , 200,MSta,MEnd , 200,MSta,MEnd);
+		H_ALL_OR_Xib   = new TH2F("H_ALL_OR_Xib" ,"XiBar_Distribution"     , 200,MSta,MEnd , 200,MSta,MEnd);
 		H_ALL_Xi       = new TH2F("H_ALL_Xi"     ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
 		H_ALL_Xib      = new TH2F("H_ALL_Xib"    ,"XiBar_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
 		H_ALLr_Xi      = new TH2F("H_ALLr_Xi"    ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
@@ -248,6 +252,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_ALLp_Xi      = new TH2F("H_ALLp_Xi"    ,"Xi_Distribution"        , 40,-2,2 , 400,MSta,MEnd);
 		H_ALLp_Xib     = new TH2F("H_ALLp_Xib"   ,"XiBar_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
 		MSta = floor((OmegaPdgMass)/0.0005 - 100)*0.0005 , MEnd = floor((OmegaPdgMass)/0.0005 + 100)*0.0005;
+		H_ALL_OR_Omega = new TH2F("H_ALL_OR_Omega"  ,"Omega_Distribution"        , 200,MSta,MEnd , 200,MSta,MEnd);
+		H_ALL_OR_Omegab= new TH2F("H_ALL_OR_Omegab" ,"OmegaBar_Distribution"     , 200,MSta,MEnd , 200,MSta,MEnd);
 		H_ALL_Omega    = new TH2F("H_ALL_Omega"  ,"Omega_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
 		H_ALL_Omegab   = new TH2F("H_ALL_Omegab" ,"OmegaBar_Distribution"  , 40,-2,2 , 400,MSta,MEnd);
 		H_ALLr_Omega   = new TH2F("H_ALLr_Omega" ,"Omega_Distribution"     , 40,-2,2 , 400,MSta,MEnd);
@@ -1194,18 +1200,24 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 	}
 	if (IfLoadHY){
 		folder_LoadHY ->cd();
+		H_ALL_OR_Lambda ->Write();
+		H_ALL_OR_Lambdab->Write();
 		H_ALL_Lambda  ->Write();
 		H_ALL_Lambdab ->Write();
 		H_ALLr_Lambda ->Write();
 		H_ALLr_Lambdab->Write();
 		H_ALLp_Lambda ->Write();
 		H_ALLp_Lambdab->Write();
+		H_ALL_OR_Xi ->Write();
+		H_ALL_OR_Xib->Write();
 		H_ALL_Xi      ->Write();
 		H_ALL_Xib     ->Write();
 		H_ALLr_Xi     ->Write();
 		H_ALLr_Xib    ->Write();
 		H_ALLp_Xi     ->Write();
 		H_ALLp_Xib    ->Write();
+		H_ALL_OR_Omega ->Write();
+		H_ALL_OR_Omegab->Write();
 		H_ALL_Omega   ->Write();
 		H_ALL_Omegab  ->Write();
 		H_ALLr_Omega  ->Write();
@@ -1806,7 +1818,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						}
 						if (iDaughter == 1) {
 							KFPtrack_B.SetPxPyPz(-daughter.GetPx(), -daughter.GetPy(), daughter.GetPz());
-							KFPtrack_B.SetXYZ(   daughter.GetX() , daughter.GetY() , daughter.GetZ() );
+							KFPtrack_B.SetXYZ(   -daughter.GetX() , -daughter.GetY() , daughter.GetZ() );
 							KFPtrack_B.SetID(-1);
 							KFPtrack_B.SetCharge(daughter.GetQ()   );
 							KFPtrack_B.SetChi2(  daughter.GetChi2());
@@ -1822,41 +1834,48 @@ Int_t StKFParticleAnalysisMaker::Make()
 					Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 					// Test for reconstruct
 					KFPtrack_B.SetPxPyPz(-KFPtrack_B.GetPx(), -KFPtrack_B.GetPy(), KFPtrack_B.GetPz());
+					KFPtrack_B.SetXYZ(-KFPtrack_B.GetX(), -KFPtrack_B.GetY(), KFPtrack_B.GetZ());
 					Particle_B = KFParticle(KFPtrack_B,Particle_B.GetPDG());
 					Particle_N2[1] = &Particle_B;
 					if      (particle.GetPDG() ==  LambdaPdg) {
 						H_ALL_Lambda  ->Fill(particle.GetRapidity(),particle.GetMass());
 						H_ALLr_Lambda ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Lambda->Fill(particle.GetMass(),particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 						H_ALLp_Lambda ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() == -LambdaPdg) {
 						H_ALL_Lambdab ->Fill(particle.GetRapidity(),particle.GetMass());
 						H_ALLr_Lambdab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Lambdab->Fill(particle.GetMass(),particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 						H_ALLp_Lambdab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() ==  XiPdg) {
 						H_ALL_Xi  ->Fill(particle.GetRapidity(),particle.GetMass());
 						H_ALLr_Xi ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Xi->Fill(particle.GetMass(),particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 						H_ALLp_Xi ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() == -XiPdg) {
 						H_ALL_Xib ->Fill(particle.GetRapidity(),particle.GetMass());
 						H_ALLr_Xib->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Xib->Fill(particle.GetMass(),particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 						H_ALLp_Xib->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() ==  OmegaPdg) {
 						H_ALL_Omega  ->Fill(particle.GetRapidity(),particle.GetMass());
 						H_ALLr_Omega ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Omega->Fill(particle.GetMass(),particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 						H_ALLp_Omega ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 					else if (particle.GetPDG() == -OmegaPdg) {
 						H_ALL_Omegab ->Fill(particle.GetRapidity(),particle.GetMass());
 						H_ALLr_Omegab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Omegab->Fill(particle.GetMass(),particle_M.GetMass());
 						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 						H_ALLp_Omegab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
