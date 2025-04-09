@@ -56,18 +56,21 @@
 #define ProtonPdgMass      0.938272
 #define PionPdgMass        0.139570
 #define KaonPdgMass		   0.493677
+#define ElectronPdgMass    0.0005485799
 #define K0SPdgMass		   0.49794
 #define PhiPdgMass		   1.01926
 #define LambdaPdg          3122
 #define XiPdg              3312
 #define OmegaPdg           3334
 #define XiRPdg             1003314
+#define OmegaRPdg          1003334
 #define KaonPdg			   321
 #define ProtonPdg          2212
 #define K0SPdg			   310
 #define PhiPdg			   333
 #define Xi1530Pdg		   3324
 #define PionPdg            211
+#define ElectronPdg        11
 #define LambdaPdgMassSigma 0.0014
 #define XiPdgMassSigma     0.0018
 #define XiRPdgMassSigma    0.0025
@@ -76,8 +79,8 @@
 #define PhiPdgMassSigma    0.0031
 
 #define IfQAMode           false  // If Writing Hist of QA;
-#define IfTree             true // If Writing Tree;
-#define IfRecNewP          false // If Reconstruct New Particle;
+#define IfTree             false // If Writing Tree;
+#define IfRecNewP          true  // If Reconstruct New Particle;
 #define IfLoadHY           false // If Background Reconstruction;
 
 #define TPC_R              0.6
@@ -945,6 +948,19 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		}
 	}
 
+	if (IfRecNewP){
+		H_OmegaR_XiKPi_Mass      = new TH1F("H_OmegaR_XiKpi_Mass" ,"Mass of OmegaR -> Xi^- + K^- + Pi^+"      ,300,1.5,2.7);
+		H_OmegabR_XiKPi_Mass     = new TH1F("H_OmegabR_XiKpi_Mass","Mass of OmegabR -> Xi^+ + K^+ + Pi^-"     ,300,1.5,2.7);
+		H_OmegaR_XiK_Mass        = new TH1F("H_OmegaR_XiK_Mass"   ,"Mass of OmegaR -> Xi^- + K0S"             ,300,1.5,2.7); // Xi- + K0S
+		H_OmegabR_XiK_Mass       = new TH1F("H_OmegabR_XiK_Mass"  ,"Mass of OmegabR -> Xi^+ + K0S"            ,300,1.5,2.7); 
+		H_OmegaR_OmegaPiPi_Mass  = new TH1F("H_OmegabR_XiKpi_Mass","Mass of OmegaR -> Omega^- + Pi^+ + Pi^-"  ,300,1.5,2.7); // Omega- + pi+ + pi-
+		H_OmegabR_OmegaPiPi_Mass = new TH1F("H_OmegabR_XiKpi_Mass","Mass of OmegabR -> Omega^+ + Pi^+ + Pi^-" ,300,1.5,2.7); 
+		H_Omega0R_OmegaPi_Mass   = new TH1F("H_OmegabR_XiKpi_Mass","Mass of Omega0R -> Omega^- + pi^+"        ,300,1.5,2.7); // Omega- + pi+
+		H_Omega0bR_OmegaPi_Mass  = new TH1F("H_OmegabR_XiKpi_Mass","Mass of Omega0bR -> Omega^+ + pi^-"       ,300,1.5,2.7); 
+		H_Omega0R_XiK_Mass       = new TH1F("H_OmegabR_XiKpi_Mass","Mass of Omega0R -> Xi^- + K^+"            ,300,1.5,2.7); // Xi- + K+
+		H_Omega0bR_XiK_Mass      = new TH1F("H_OmegabR_XiKpi_Mass","Mass of Omega0bR -> Xi^+ + K^-"           ,300,1.5,2.7); 
+	}
+
 	if (IfTree){
 		buffer_size = 5000000;
 		hadronTree = new TTree("hadronTree", "Tree_STAR");
@@ -1789,6 +1805,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 
+			if (IfRecNewP) {
+				if (particle.GetPDG() ==  OmegaRPdg) {
+					H_OmegaR_XiKPi_Mass  -> Fill(particle.GetMass());
+				}
+				if (particle.GetPDG() == -OmegaRPdg) {
+					H_OmegabR_XiKPi_Mass -> Fill(particle.GetMass());
+				}
+			}
 
 			if (
 				(abs(particle.GetPDG()) != OmegaPdg ) && 
@@ -2134,7 +2158,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				while (Itr < TempT.size()) {
 					if ((abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != PionPdg) && 
 						(abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != ProtonPdg) && 
-						(abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != KaonPdg) )
+						(abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != KaonPdg)  && 
+						(abs((KFParticleInterface->GetParticles()[TempT[Itr]]).GetPDG()) != ElectronPdg) )
 					{
 						KFParticle daughter = KFParticleInterface->GetParticles()[TempT[Itr]];
 						for (int iDaughter=0; iDaughter < daughter.NDaughters(); iDaughter++){
@@ -2743,7 +2768,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			const int daughterId = particle.DaughterIds()[iDaughter];
 			// cout<<"daughterId = "<<daughterId<<endl;
 			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-			if ((abs(daughter.GetPDG()) == PionPdg) || (abs(daughter.GetPDG()) == KaonPdg) || (abs(daughter.GetPDG()) == ProtonPdg)){
+			if ((abs(daughter.GetPDG()) == PionPdg) || (abs(daughter.GetPDG()) == KaonPdg) || (abs(daughter.GetPDG()) == ProtonPdg) || (abs(daughter.GetPDG()) == ElectronPdg)){
 				const int globalTrackId = daughter.DaughterIds()[0];
 				Int_t iTrackStart = globalTrackId - 1;
 				if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
@@ -3095,6 +3120,66 @@ Int_t StKFParticleAnalysisMaker::Make()
 	}
 	/////////////////////////////////////////////////////////
 	hEventNum -> Fill(5);
+
+	if (IfRecNewP) {
+		KFParticleList.resize(0);
+		for (int iKFParticle=0; iKFParticle < N_Entries; iKFParticle++){ 
+			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+			IfPass = false;
+			if       (abs(particle.GetPDG()) == PionPdg  )                                                                       IfPass = true;
+			else if  (abs(particle.GetPDG()) == KaonPdg  )                                                                       IfPass = true;
+			else if  (abs(particle.GetPDG()) == ProtonPdg)                                                                       IfPass = true;
+			else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) < 4*LambdaPdgMassSigma)) IfPass = true;
+			else if ((abs(particle.GetPDG()) == XiPdg    ) && (fabs(particle.GetMass() - XiPdgMass    ) < 4*XiPdgMassSigma    )) IfPass = true;
+			else if ((abs(particle.GetPDG()) == OmegaPdg ) && (fabs(particle.GetMass() - OmegaPdgMass ) < 4*OmegaPdgMassSigma )) IfPass = true;
+			else if ((abs(particle.GetPDG()) == PhiPdg   ) && (fabs(particle.GetMass() - PhiPdgMass   ) < 4*PhiPdgMassSigma   )) IfPass = true;
+			else if ((abs(particle.GetPDG()) == K0SPdg   ) && (fabs(particle.GetMass() - K0SPdgMass   ) < 4*K0SPdgMassSigma   )) IfPass = true;
+
+			if (IfPass) {
+				std::vector<int> Temp; Temp.push_back(particle.GetPDG()); Temp.push_back(particle.GetPDG(iKFParticle));
+				KFParticleList.push_back(Temp);
+			}
+		}
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++) {
+			KFParticle particle = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
+			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+				const int daughterId = particle.DaughterIds()[iDaughter];
+				// cout<<"daughterId = "<<daughterId<<endl;
+				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+				if ((abs(daughter.GetPDG()) == PionPdg) || (abs(daughter.GetPDG()) == KaonPdg) || (abs(daughter.GetPDG()) == ProtonPdg) || (abs(daughter.GetPDG()) == ElectronPdg)){
+					const int globalTrackId = daughter.DaughterIds()[0];
+					Int_t iTrackStart = globalTrackId - 1;
+					if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+					for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+						StPicoTrack *track = mPicoDst->track(jTrack);
+						if (track->id() == globalTrackId){
+							KFParticleList[iKFParticle].push_back(jTrack);
+							break;
+						}
+					}
+				}else{
+					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
+						const int GdaughterId = daughter.DaughterIds()[jDaughter];
+						// cout<<"daughterId = "<<daughterId<<endl;
+						const KFParticle Gdaughter = KFParticleInterface->GetParticles()[GdaughterId];
+						if ((abs(Gdaughter.GetPDG()) == PionPdg) || (abs(Gdaughter.GetPDG()) == KaonPdg) || (abs(Gdaughter.GetPDG()) == ProtonPdg) || (abs(Gdaughter.GetPDG()) == ElectronPdg)){
+							const int globalTrackId = Gdaughter.DaughterIds()[0];
+							Int_t iTrackStart = globalTrackId - 1;
+							if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+							for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+								StPicoTrack *track = mPicoDst->track(jTrack);
+								if (track->id() == globalTrackId){
+									KFParticleList[iKFParticle].push_back(jTrack);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return kStOK;
 
 }

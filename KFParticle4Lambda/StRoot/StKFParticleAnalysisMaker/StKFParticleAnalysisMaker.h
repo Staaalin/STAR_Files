@@ -207,6 +207,24 @@ private:
 	KFParticle Particle_M,*Particle_N2[2],*KFP_PV_P,Particle_A,Particle_B;
 	KFPVertex  KFP_PV;
 
+	//       0          1             2         3         4
+	// { { PDGID , KFP Loc index , Track 1 , Track 2 , Track 3 , ... } ,
+	//   { PDGID , KFP Loc index , Track 1 , Track 2 , Track 3 , ... } ,
+	//   ...
+	// }
+	std::vector<std::vector<int> > KFParticleList; 
+	TH1F* H_OmegaR_XiKPi_Mass; // Reconstructed by KFP
+	TH1F* H_OmegabR_XiKPi_Mass;
+	TH1F* H_OmegaR_XiK_Mass; // Xi- + K0S
+	TH1F* H_OmegabR_XiK_Mass; 
+	TH1F* H_OmegaR_OmegaPiPi_Mass; // Omega- + pi+ + pi-
+	TH1F* H_OmegabR_OmegaPiPi_Mass; 
+	TH1F* H_Omega0R_OmegaPi_Mass; // Omega- + pi+
+	TH1F* H_Omega0bR_OmegaPi_Mass; 
+	TH1F* H_Omega0R_XiK_Mass; // Xi- + K+
+	TH1F* H_Omega0bR_XiK_Mass; 
+	bool IfPass;
+
 	TFile *fout;
 	TDirectory* folder_EventQA;
 	TDirectory* folder_PIDQA;

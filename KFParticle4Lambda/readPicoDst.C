@@ -69,8 +69,6 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	StKFParticleInterface::instance()->SetLCut(1.0);
 	StKFParticleInterface::instance()->SetLdLCut2D(3);
 	//Add decays to the reconstruction list
-	StKFParticleInterface::instance()->AddDecayToReconstructionList(  -11);    //e+
-	StKFParticleInterface::instance()->AddDecayToReconstructionList(   11);    //e-
 	StKFParticleInterface::instance()->AddDecayToReconstructionList(   22);    //gamma
 	StKFParticleInterface::instance()->AddDecayToReconstructionList(  111);    //pi0
 	StKFParticleInterface::instance()->AddDecayToReconstructionList(  310);
@@ -83,6 +81,8 @@ void readPicoDst(const Char_t *inputFile="test.list", int jobindex, int run=11, 
 	StKFParticleInterface::instance()->AddDecayToReconstructionList(-3334);
 	StKFParticleInterface::instance()->AddDecayToReconstructionList( 1003314);
 	StKFParticleInterface::instance()->AddDecayToReconstructionList(-1003314);
+	StKFParticleInterface::instance()->AddDecayToReconstructionList( 1003334);
+	StKFParticleInterface::instance()->AddDecayToReconstructionList(-1003334);
 
 	// StPicoDstMaker & chain
 	StPicoDstMaker* maker = (StPicoDstMaker *) StMaker::GetTopChain()->Maker("PicoDst");
