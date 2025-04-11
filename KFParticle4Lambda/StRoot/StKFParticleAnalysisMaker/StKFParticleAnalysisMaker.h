@@ -203,8 +203,8 @@ private:
 	float MEnergy;
 	float MRap  ;
 	float MRap_T;
-	KFPTrack   KFPtrack_A,KFPtrack_B;
-	KFParticle Particle_M,*Particle_N2[2],*KFP_PV_P,Particle_A,Particle_B;
+	KFPTrack   KFPtrack_A,KFPtrack_B,KFPtrack_C;
+	KFParticle Particle_M,*Particle_N2[2],*Particle_N3[3],*KFP_PV_P,Particle_A,Particle_B,Particle_C;
 	KFPVertex  KFP_PV;
 
 	//       0          1             2         3         4
@@ -230,6 +230,7 @@ private:
 	TDirectory* folder_PIDQA;
 	TDirectory* folder_ReconsQA;
 	TDirectory* folder_LoadHY;
+	TDirectory* folder_RecNewP;
 
 	#define PDG2NameSize  10 // APDGList.size()
 	#define PDG2NameSize2 6  // BPDGList.size()
