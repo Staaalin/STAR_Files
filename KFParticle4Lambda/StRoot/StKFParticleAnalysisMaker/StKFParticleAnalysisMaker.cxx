@@ -950,16 +950,16 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	}
 
 	if (IfRecNewP){
-		H_OmegaR_XiKPi_Mass      = new TH1F("H_OmegaR_XiKpi_Mass" ,"Mass of OmegaR -> Xi^- + K^- + Pi^+"      ,300,1.5,2.7);
-		H_OmegabR_XiKPi_Mass     = new TH1F("H_OmegabR_XiKpi_Mass","Mass of OmegabR -> Xi^+ + K^+ + Pi^-"     ,300,1.5,2.7);
-		H_OmegaR_XiK_Mass        = new TH1F("H_OmegaR_XiK_Mass"   ,"Mass of OmegaR -> Xi^- + K0S"             ,300,1.5,2.7); // Xi- + K0S
-		H_OmegabR_XiK_Mass       = new TH1F("H_OmegabR_XiK_Mass"  ,"Mass of OmegabR -> Xi^+ + K0S"            ,300,1.5,2.7); 
-		H_OmegaR_OmegaPiPi_Mass  = new TH1F("H_OmegabR_XiKpi_Mass","Mass of OmegaR -> Omega^- + Pi^+ + Pi^-"  ,300,1.5,2.7); // Omega- + pi+ + pi-
-		H_OmegabR_OmegaPiPi_Mass = new TH1F("H_OmegabR_XiKpi_Mass","Mass of OmegabR -> Omega^+ + Pi^+ + Pi^-" ,300,1.5,2.7); 
-		H_Omega0R_OmegaPi_Mass   = new TH1F("H_OmegabR_XiKpi_Mass","Mass of Omega0R -> Omega^- + pi^+"        ,300,1.5,2.7); // Omega- + pi+
-		H_Omega0bR_OmegaPi_Mass  = new TH1F("H_OmegabR_XiKpi_Mass","Mass of Omega0bR -> Omega^+ + pi^-"       ,300,1.5,2.7); 
-		H_Omega0R_XiK_Mass       = new TH1F("H_OmegabR_XiKpi_Mass","Mass of Omega0R -> Xi^- + K^+"            ,300,1.5,2.7); // Xi- + K+
-		H_Omega0bR_XiK_Mass      = new TH1F("H_OmegabR_XiKpi_Mass","Mass of Omega0bR -> Xi^+ + K^-"           ,300,1.5,2.7); 
+		H_OmegaR_XiKPi_Mass      = new TH1F("H_OmegaR_XiKPi_Mass"        ,"Mass of OmegaR -> Xi^- + K^- + Pi^+"      ,300,1.5,2.7);
+		H_OmegabR_XiKPi_Mass     = new TH1F("H_OmegabR_XiKPi_Mass"       ,"Mass of OmegabR -> Xi^+ + K^+ + Pi^-"     ,300,1.5,2.7);
+		H_OmegaR_XiK_Mass        = new TH1F("H_OmegaR_XiK_Mass"          ,"Mass of OmegaR -> Xi^- + K0S"             ,300,1.5,2.7); // Xi- + K0S
+		H_OmegabR_XiK_Mass       = new TH1F("H_OmegabR_XiK_Mass"         ,"Mass of OmegabR -> Xi^+ + K0S"            ,300,1.5,2.7); 
+		H_OmegaR_OmegaPiPi_Mass  = new TH1F("H_OmegaR_OmegaPiPi_Mass"    ,"Mass of OmegaR -> Omega^- + Pi^+ + Pi^-"  ,300,1.5,2.7); // Omega- + pi+ + pi-
+		H_OmegabR_OmegaPiPi_Mass = new TH1F("H_OmegabR_OmegaPiPi_Mass"   ,"Mass of OmegabR -> Omega^+ + Pi^+ + Pi^-" ,300,1.5,2.7); 
+		H_Omega0R_OmegaPi_Mass   = new TH1F("H_Omega0R_OmegaPi_Mass"     ,"Mass of Omega0R -> Omega^- + pi^+"        ,300,1.5,2.7); // Omega- + pi+
+		H_Omega0bR_OmegaPi_Mass  = new TH1F("H_Omega0bR_OmegaPi_Mass"    ,"Mass of Omega0bR -> Omega^+ + pi^-"       ,300,1.5,2.7); 
+		H_Omega0R_XiK_Mass       = new TH1F("H_Omega0R_XiK_Mass"         ,"Mass of Omega0R -> Xi^- + K^+"            ,300,1.5,2.7); // Xi- + K+
+		H_Omega0bR_XiK_Mass      = new TH1F("H_Omega0bR_XiK_Mass"        ,"Mass of Omega0bR -> Xi^+ + K^-"           ,300,1.5,2.7); 
 	}
 
 	if (IfTree){
