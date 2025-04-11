@@ -3154,7 +3154,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			else if ((abs(particle.GetPDG()) == K0SPdg   ) && (fabs(particle.GetMass() - K0SPdgMass   ) < 4*K0SPdgMassSigma   )) IfPass = true;
 
 			if (IfPass) {
-				std::vector<int> Temp; Temp.push_back(particle.GetPDG()); Temp.push_back(particle.GetPDG(iKFParticle));
+				std::vector<int> Temp; Temp.push_back(particle.GetPDG()); Temp.push_back(particle.GetPDG());
 				KFParticleList.push_back(Temp);
 			}
 		}
