@@ -3193,10 +3193,12 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}else{
 					cout<<"15/";
 					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
+						cout<<"16/";
 						const int GdaughterId = daughter.DaughterIds()[jDaughter];
+						cout<<"17/";
 						// cout<<"daughterId = "<<daughterId<<endl;
 						const KFParticle Gdaughter = KFParticleInterface->GetParticles()[GdaughterId];
-						cout<<"16/";
+						cout<<"18/";
 						if ((abs(Gdaughter.GetPDG()) == PionPdg) || (abs(Gdaughter.GetPDG()) == KaonPdg) || (abs(Gdaughter.GetPDG()) == ProtonPdg) || (abs(Gdaughter.GetPDG()) == ElectronPdg)){
 							const int globalTrackId = Gdaughter.DaughterIds()[0];
 							Int_t iTrackStart = globalTrackId - 1;
@@ -3210,11 +3212,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 							}
 						}
 					}
-					cout<<"17/";
+					cout<<"19/";
 				}
 			}
 		}
-		cout<<"18/";
+		cout<<"20/";
 		// Xi- + K0S
 		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
 			if (KFParticleList[iKFParticle][0] != XiPdg) continue;
