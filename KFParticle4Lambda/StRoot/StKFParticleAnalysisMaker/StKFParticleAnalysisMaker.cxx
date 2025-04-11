@@ -3140,14 +3140,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 	/////////////////////////////////////////////////////////
 	hEventNum -> Fill(5);
 
-	cout<<"1/";
 	if (IfRecNewP) {
 		KFParticleList.resize(0);
-		cout<<"2/";
 		for (int iKFParticle=0; iKFParticle < N_Entries; iKFParticle++){ 
-			cout<<"3/";
 			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
-			cout<<"4/";
 			IfPass = false;
 			if       (abs(particle.GetPDG()) == PionPdg  )                                                                       IfPass = true;
 			else if  (abs(particle.GetPDG()) == KaonPdg  )                                                                       IfPass = true;
@@ -3157,31 +3153,22 @@ Int_t StKFParticleAnalysisMaker::Make()
 			else if ((abs(particle.GetPDG()) == OmegaPdg ) && (fabs(particle.GetMass() - OmegaPdgMass ) < 4*OmegaPdgMassSigma )) IfPass = true;
 			else if ((abs(particle.GetPDG()) == PhiPdg   ) && (fabs(particle.GetMass() - PhiPdgMass   ) < 4*PhiPdgMassSigma   )) IfPass = true;
 			else if ((abs(particle.GetPDG()) == K0SPdg   ) && (fabs(particle.GetMass() - K0SPdgMass   ) < 4*K0SPdgMassSigma   )) IfPass = true;
-			cout<<"5/";
 
 			if (IfPass) {
 				std::vector<int> Temp; Temp.push_back(particle.GetPDG()); Temp.push_back(iKFParticle);
 				KFParticleList.push_back(Temp);
 			}
-			cout<<"6/";
 		}
 		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++) {
-			cout<<"7/";
 			KFParticle particle = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
-			cout<<"8/";
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-				cout<<"9/";
 				const int daughterId = particle.DaughterIds()[iDaughter];
-				cout<<"10/";
 				// cout<<"daughterId = "<<daughterId<<endl;
 				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-				cout<<"11/";
 				if ((abs(daughter.GetPDG()) == PionPdg) || (abs(daughter.GetPDG()) == KaonPdg) || (abs(daughter.GetPDG()) == ProtonPdg) || (abs(daughter.GetPDG()) == ElectronPdg)){
-					cout<<"12/";
 					const int globalTrackId = daughter.DaughterIds()[0];
 					Int_t iTrackStart = globalTrackId - 1;
 					if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-					cout<<"13/";
 					for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
 						StPicoTrack *track = mPicoDst->track(jTrack);
 						if (track->id() == globalTrackId){
@@ -3189,18 +3176,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 							break;
 						}
 					}
-					cout<<"14/";
 				}else{
-					cout<<"15/";
 					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
-						cout<<"16/";
 						const int GdaughterId = daughter.DaughterIds()[jDaughter];
-						cout<<"17/";
-						cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
-						cout<<"GdaughterId = "<<GdaughterId<<endl;
-						cout<<"KFParticleInterface->GetParticles().size() = "<<KFParticleInterface->GetParticles().size()<<endl;
+						if ((GdaughterId < 0) || (GdaughterId >= N_Entries)) continue;
 						const KFParticle Gdaughter = KFParticleInterface->GetParticles()[GdaughterId];
-						cout<<"18/";
 						if ((abs(Gdaughter.GetPDG()) == PionPdg) || (abs(Gdaughter.GetPDG()) == KaonPdg) || (abs(Gdaughter.GetPDG()) == ProtonPdg) || (abs(Gdaughter.GetPDG()) == ElectronPdg)){
 							const int globalTrackId = Gdaughter.DaughterIds()[0];
 							Int_t iTrackStart = globalTrackId - 1;
@@ -3214,11 +3194,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 							}
 						}
 					}
-					cout<<"19/";
 				}
 			}
 		}
-		cout<<"20/";
 		// Xi- + K0S
 		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
 			if (KFParticleList[iKFParticle][0] != XiPdg) continue;
