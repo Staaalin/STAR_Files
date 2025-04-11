@@ -3163,7 +3163,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			KFParticle particle = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
 			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 				const int daughterId = particle.DaughterIds()[iDaughter];
-				// cout<<"daughterId = "<<daughterId<<endl;
+				if ((daughterId < 0) || (daughterId >= N_Entries)) continue;
 				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 				if ((abs(daughter.GetPDG()) == PionPdg) || (abs(daughter.GetPDG()) == KaonPdg) || (abs(daughter.GetPDG()) == ProtonPdg) || (abs(daughter.GetPDG()) == ElectronPdg)){
 					const int globalTrackId = daughter.DaughterIds()[0];
