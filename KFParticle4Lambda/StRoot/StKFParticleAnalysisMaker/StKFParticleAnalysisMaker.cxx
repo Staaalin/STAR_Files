@@ -3196,7 +3196,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 						cout<<"16/";
 						const int GdaughterId = daughter.DaughterIds()[jDaughter];
 						cout<<"17/";
-						// cout<<"daughterId = "<<daughterId<<endl;
+						cout<<"daughter.GetPDG() = "<<daughter.GetPDG()<<endl;
 						cout<<"GdaughterId = "<<GdaughterId<<endl;
 						cout<<"KFParticleInterface->GetParticles().size() = "<<KFParticleInterface->GetParticles().size()<<endl;
 						const KFParticle Gdaughter = KFParticleInterface->GetParticles()[GdaughterId];
