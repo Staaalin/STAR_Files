@@ -3197,6 +3197,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 						const int GdaughterId = daughter.DaughterIds()[jDaughter];
 						cout<<"17/";
 						// cout<<"daughterId = "<<daughterId<<endl;
+						cout<<"GdaughterId = "<<GdaughterId<<endl;
+						cout<<"KFParticleInterface->GetParticles().size() = "<<KFParticleInterface->GetParticles().size()<<endl;
 						const KFParticle Gdaughter = KFParticleInterface->GetParticles()[GdaughterId];
 						cout<<"18/";
 						if ((abs(Gdaughter.GetPDG()) == PionPdg) || (abs(Gdaughter.GetPDG()) == KaonPdg) || (abs(Gdaughter.GetPDG()) == ProtonPdg) || (abs(Gdaughter.GetPDG()) == ElectronPdg)){
