@@ -950,16 +950,16 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 	}
 
 	if (IfRecNewP){
-		H_OmegaR_XiKPi_Mass      = new TH1F("H_OmegaR_XiKPi_Mass"        ,"Mass of OmegaR -> Xi^- + K^- + Pi^+"      ,300,1.5,2.7);
-		H_OmegabR_XiKPi_Mass     = new TH1F("H_OmegabR_XiKPi_Mass"       ,"Mass of OmegabR -> Xi^+ + K^+ + Pi^-"     ,300,1.5,2.7);
-		H_OmegaR_XiK_Mass        = new TH1F("H_OmegaR_XiK_Mass"          ,"Mass of OmegaR -> Xi^- + K0S"             ,300,1.5,2.7); // Xi- + K0S
-		H_OmegabR_XiK_Mass       = new TH1F("H_OmegabR_XiK_Mass"         ,"Mass of OmegabR -> Xi^+ + K0S"            ,300,1.5,2.7); 
-		H_OmegaR_OmegaPiPi_Mass  = new TH1F("H_OmegaR_OmegaPiPi_Mass"    ,"Mass of OmegaR -> Omega^- + Pi^+ + Pi^-"  ,300,1.5,2.7); // Omega- + pi+ + pi-
-		H_OmegabR_OmegaPiPi_Mass = new TH1F("H_OmegabR_OmegaPiPi_Mass"   ,"Mass of OmegabR -> Omega^+ + Pi^+ + Pi^-" ,300,1.5,2.7); 
-		H_Omega0R_OmegaPi_Mass   = new TH1F("H_Omega0R_OmegaPi_Mass"     ,"Mass of Omega0R -> Omega^- + pi^+"        ,300,1.5,2.7); // Omega- + pi+
-		H_Omega0bR_OmegaPi_Mass  = new TH1F("H_Omega0bR_OmegaPi_Mass"    ,"Mass of Omega0bR -> Omega^+ + pi^-"       ,300,1.5,2.7); 
-		H_Omega0R_XiK_Mass       = new TH1F("H_Omega0R_XiK_Mass"         ,"Mass of Omega0R -> Xi^- + K^+"            ,300,1.5,2.7); // Xi- + K+
-		H_Omega0bR_XiK_Mass      = new TH1F("H_Omega0bR_XiK_Mass"        ,"Mass of Omega0bR -> Xi^+ + K^-"           ,300,1.5,2.7); 
+		H_OmegaR_XiKPi_Mass      = new TH1F("H_OmegaR_XiKPi_Mass"        ,"Mass of OmegaR -> Xi^- + K^- + Pi^+"      ,500,1.2,3.2);
+		H_OmegabR_XiKPi_Mass     = new TH1F("H_OmegabR_XiKPi_Mass"       ,"Mass of OmegabR -> Xi^+ + K^+ + Pi^-"     ,500,1.2,3.2);
+		H_OmegaR_XiK_Mass        = new TH1F("H_OmegaR_XiK_Mass"          ,"Mass of OmegaR -> Xi^- + K0S"             ,500,1.2,3.2); // Xi- + K0S
+		H_OmegabR_XiK_Mass       = new TH1F("H_OmegabR_XiK_Mass"         ,"Mass of OmegabR -> Xi^+ + K0S"            ,500,1.2,3.2); 
+		H_OmegaR_OmegaPiPi_Mass  = new TH1F("H_OmegaR_OmegaPiPi_Mass"    ,"Mass of OmegaR -> Omega^- + Pi^+ + Pi^-"  ,500,1.2,3.2); // Omega- + pi+ + pi-
+		H_OmegabR_OmegaPiPi_Mass = new TH1F("H_OmegabR_OmegaPiPi_Mass"   ,"Mass of OmegabR -> Omega^+ + Pi^+ + Pi^-" ,500,1.2,3.2); 
+		H_Omega0R_OmegaPi_Mass   = new TH1F("H_Omega0R_OmegaPi_Mass"     ,"Mass of Omega0R -> Omega^- + pi^+"        ,500,1.2,3.2); // Omega- + pi+
+		H_Omega0bR_OmegaPi_Mass  = new TH1F("H_Omega0bR_OmegaPi_Mass"    ,"Mass of Omega0bR -> Omega^+ + pi^-"       ,500,1.2,3.2); 
+		H_Omega0R_XiK_Mass       = new TH1F("H_Omega0R_XiK_Mass"         ,"Mass of Omega0R -> Xi^- + K^+"            ,500,1.2,3.2); // Xi- + K+
+		H_Omega0bR_XiK_Mass      = new TH1F("H_Omega0bR_XiK_Mass"        ,"Mass of Omega0bR -> Xi^+ + K^-"           ,500,1.2,3.2); 
 	}
 
 	if (IfTree){
@@ -3215,8 +3215,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 				if (!IfPass) continue;
 				// Reconstruct
-				Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
-				Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
+				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 				H_OmegaR_XiK_Mass->Fill(Particle_M.GetMass());
@@ -3239,8 +3239,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 				if (!IfPass) continue;
 				// Reconstruct
-				Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
-				Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
+				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
 				H_OmegabR_XiK_Mass->Fill(Particle_M.GetMass());
@@ -3285,7 +3285,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					}
 					if (!IfPass) continue;
 					// Reconstruct
-					Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
+					Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 					Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
 					Particle_C = KFParticleInterface->GetParticles()[KFParticleList[kKFParticle][1]];
 					Particle_N3[0] = &Particle_A;Particle_N3[1] = &Particle_B;Particle_N3[2] = &Particle_C;
@@ -3332,7 +3332,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					}
 					if (!IfPass) continue;
 					// Reconstruct
-					Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
+					Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 					Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
 					Particle_C = KFParticleInterface->GetParticles()[KFParticleList[kKFParticle][1]];
 					Particle_N3[0] = &Particle_A;Particle_N3[1] = &Particle_B;Particle_N3[2] = &Particle_C;
@@ -3359,7 +3359,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 				if (!IfPass) continue;
 				// Reconstruct
-				Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 				Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
@@ -3383,7 +3383,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 				if (!IfPass) continue;
 				// Reconstruct
-				Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 				Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
@@ -3408,7 +3408,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 				if (!IfPass) continue;
 				// Reconstruct
-				Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 				Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
@@ -3432,7 +3432,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 				if (!IfPass) continue;
 				// Reconstruct
-				Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 				Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
@@ -3894,4 +3894,16 @@ float StKFParticleAnalysisMaker::GetPairMass(float p1x , float p1y , float p1z ,
     float bp2 = beta[0]*p2x + beta[1]*p2y + beta[2]*p2z;
 
     return gamma * (E1 + bp1 + E2 + bp2);
+}
+KFParticle StKFParticleAnalysisMaker::ChangeMass(KFParticle daughter){
+	KFPTrack   KFPtrack_A;
+	KFPtrack_A.SetPxPyPz(daughter.GetPx(), daughter.GetPy(), daughter.GetPz());
+	KFPtrack_A.SetXYZ(   daughter.GetX() , daughter.GetY() , daughter.GetZ() );
+	KFPtrack_A.SetID(-1);
+	KFPtrack_A.SetCharge(daughter.GetQ()   );
+	KFPtrack_A.SetChi2(  daughter.GetChi2());
+	KFPtrack_A.SetNDF(   daughter.GetNDF());
+	KFPtrack_A.SetCovarianceMatrix (daughter.CovarianceMatrix());
+	KFPtrack_A.SetId (-1);
+	return KFParticle(KFPtrack_A,daughter.GetPDG());
 }
