@@ -1716,6 +1716,20 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// 		}
 		// 	}
 		// }
+
+		// used as testing, please delate soon
+		if (true) {
+			KFParticle particle = KFParticleInterface->GetParticles()[0];
+			cout<<"Px = "<<particle.GetPx()<<" , Py = "<<particle.GetPy()<<" , Mass = "<<particle.GetMass()<<endl;
+			float params[6];
+			particle.Parameters(params);
+			float cov[21];
+			particle.CovarianceMatrix(cov);
+			KFPtrack_A.Create(params,cov,particle.GetQ(),1.0);
+			cout<<"Px = "<<KFPtrack_A.GetPx()<<" , Py = "<<KFPtrack_A.GetPy()<<" , Mass = "<<KFPtrack_A.GetMass()<<endl;
+			cout<<"______________________________________________"<<endl;
+		}
+
 		N_Entries = KFParticlePerformanceInterface->GetNReconstructedParticles();
 		Omega_Omegab_Num = 0;
 		if (IfLoadHY || IfRecNewP) {
@@ -3915,6 +3929,5 @@ KFParticle StKFParticleAnalysisMaker::ChangeMass(KFParticle daughter){
 	KFPtrack_A.SetChi2(  daughter.GetChi2());
 	KFPtrack_A.SetNDF(   daughter.GetNDF());
 	KFPtrack_A.SetCovarianceMatrix (daughter.CovarianceMatrix());
-	KFPtrack_A.SetId (-1);
 	return KFParticle(KFPtrack_A,daughter.GetPDG());
 }
