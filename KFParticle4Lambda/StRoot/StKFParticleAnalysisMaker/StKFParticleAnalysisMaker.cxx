@@ -1718,15 +1718,15 @@ Int_t StKFParticleAnalysisMaker::Make()
 		// }
 
 		// used as testing, please delate soon
-		if (true) {
-			KFParticle particle = KFParticleInterface->GetParticles()[0];
-			cout<<"Px = "<<particle.GetPx()<<" , Py = "<<particle.GetPy()<<" , Mass = "<<particle.GetMass()<<endl;
-			const float* params = particle.Parameters();
-			const float* cov    = particle.CovarianceMatrix();
-			Particle_A.Create(params,cov,particle.GetQ(),1.0);
-			cout<<"Px = "<<Particle_A.GetPx()<<" , Py = "<<Particle_A.GetPy()<<" , Mass = "<<Particle_A.GetMass()<<endl;
-			cout<<"______________________________________________"<<endl;
-		}
+		// if (true) {
+		// 	KFParticle particle = KFParticleInterface->GetParticles()[0];
+		// 	cout<<"Px = "<<particle.GetPx()<<" , Py = "<<particle.GetPy()<<" , Mass = "<<particle.GetMass()<<endl;
+		// 	const float* params = particle.Parameters();
+		// 	const float* cov    = particle.CovarianceMatrix();
+		// 	Particle_A.Create(params,cov,particle.GetQ(),1.0);
+		// 	cout<<"Px = "<<Particle_A.GetPx()<<" , Py = "<<Particle_A.GetPy()<<" , Mass = "<<Particle_A.GetMass()<<endl;
+		// 	cout<<"______________________________________________"<<endl;
+		// }
 
 		N_Entries = KFParticlePerformanceInterface->GetNReconstructedParticles();
 		Omega_Omegab_Num = 0;
@@ -3229,6 +3229,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				// Reconstruct
 				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
@@ -3254,6 +3255,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				// Reconstruct
 				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
@@ -3302,13 +3304,14 @@ Int_t StKFParticleAnalysisMaker::Make()
 					Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 					Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
 					Particle_C = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[kKFParticle][1]]);
+					if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0) || (Particle_C.GetMass() == 0)) continue;
 					Particle_N3[0] = &Particle_A;Particle_N3[1] = &Particle_B;Particle_N3[2] = &Particle_C;
 					// Particle_M.Construct(Particle_N3, 3, KFP_PV_P, 2.109);
 					Particle_M.Construct(Particle_N3, 3, KFP_PV_P);
 					H_OmegaR_OmegaPiPi_Mass->Fill(Particle_M.GetMass());
-					cout<<"Particle_A Mass = "<<Particle_A.GetMass()<<" , PDG = "<<Particle_A.GetPDG()<<endl;
-					cout<<"Particle_B Mass = "<<Particle_B.GetMass()<<" , PDG = "<<Particle_B.GetPDG()<<endl;
-					cout<<"Particle_C Mass = "<<Particle_C.GetMass()<<" , PDG = "<<Particle_C.GetPDG()<<endl;
+					// cout<<"Particle_A Mass = "<<Particle_A.GetMass()<<" , PDG = "<<Particle_A.GetPDG()<<endl;
+					// cout<<"Particle_B Mass = "<<Particle_B.GetMass()<<" , PDG = "<<Particle_B.GetPDG()<<endl;
+					// cout<<"Particle_C Mass = "<<Particle_C.GetMass()<<" , PDG = "<<Particle_C.GetPDG()<<endl;
 				}
 			}
 		}
@@ -3353,6 +3356,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 					Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
 					Particle_C = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[kKFParticle][1]]);
+					if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0) || (Particle_C.GetMass() == 0)) continue;
 					Particle_N3[0] = &Particle_A;Particle_N3[1] = &Particle_B;Particle_N3[2] = &Particle_C;
 					// Particle_M.Construct(Particle_N3, 3, KFP_PV_P, 2.109);
 					Particle_M.Construct(Particle_N3, 3, KFP_PV_P);
@@ -3380,6 +3384,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				// Reconstruct
 				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
@@ -3405,6 +3410,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				// Reconstruct
 				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
@@ -3431,6 +3437,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				// Reconstruct
 				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
@@ -3456,6 +3463,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				// Reconstruct
 				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
 				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
 				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
 				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
 				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
