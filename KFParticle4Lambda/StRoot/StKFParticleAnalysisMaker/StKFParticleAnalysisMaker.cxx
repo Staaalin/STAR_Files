@@ -3294,9 +3294,9 @@ Int_t StKFParticleAnalysisMaker::Make()
 					// Particle_M.Construct(Particle_N3, 3, KFP_PV_P, 2.109);
 					Particle_M.Construct(Particle_N3, 3, KFP_PV_P);
 					H_OmegaR_OmegaPiPi_Mass->Fill(Particle_M.GetMass());
-					// cout<<"Particle_A Mass = "<<Particle_A.GetMass()<<" , PDG = "<<Particle_A.GetPDG()<<endl;
-					// cout<<"Particle_B Mass = "<<Particle_B.GetMass()<<" , PDG = "<<Particle_B.GetPDG()<<endl;
-					// cout<<"Particle_C Mass = "<<Particle_C.GetMass()<<" , PDG = "<<Particle_C.GetPDG()<<endl;
+					cout<<"Particle_A Mass = "<<Particle_A.GetMass()<<" , PDG = "<<Particle_A.GetPDG()<<endl;
+					cout<<"Particle_B Mass = "<<Particle_B.GetMass()<<" , PDG = "<<Particle_B.GetPDG()<<endl;
+					cout<<"Particle_C Mass = "<<Particle_C.GetMass()<<" , PDG = "<<Particle_C.GetPDG()<<endl;
 				}
 			}
 		}
