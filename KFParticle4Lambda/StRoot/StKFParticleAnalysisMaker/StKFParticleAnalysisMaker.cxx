@@ -1723,8 +1723,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 			cout<<"Px = "<<particle.GetPx()<<" , Py = "<<particle.GetPy()<<" , Mass = "<<particle.GetMass()<<endl;
 			const float* params = particle.Parameters();
 			const float* cov    = particle.CovarianceMatrix();
-			KFPtrack_A.Create(params,cov,particle.GetQ(),1.0);
-			cout<<"Px = "<<KFPtrack_A.GetPx()<<" , Py = "<<KFPtrack_A.GetPy()<<" , Mass = "<<KFPtrack_A.GetMass()<<endl;
+			Particle_A.Create(params,cov,particle.GetQ(),1.0);
+			cout<<"Px = "<<Particle_A.GetPx()<<" , Py = "<<Particle_A.GetPy()<<" , Mass = "<<Particle_A.GetMass()<<endl;
 			cout<<"______________________________________________"<<endl;
 		}
 
