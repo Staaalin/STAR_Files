@@ -54,6 +54,7 @@ class TProfile3D;
 class CentralityMaker;
 class StRefMultCorr;
 
+class KFVertex;
 class KFPTrack;
 class KFPVertex;
 class KFParticle;
