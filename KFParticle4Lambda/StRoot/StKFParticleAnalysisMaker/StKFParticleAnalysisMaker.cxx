@@ -3547,10 +3547,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 				if (!IfPass) continue;
 				// Reconstruct
-				KF_PV = new KFVertex(KFP_PV);
+				KF_PV = KFVertex(KFP_PV);
 				Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
 				Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
-				Particle_M = new KFParticle(Particle_A, Particle_B);
+				Particle_M = KFParticle(Particle_A, Particle_B);
 				KF_PV.AddDaughter(Particle_M);
 				Particle_M.SetProductionVertex(KF_PV);
 				Particle_A.SetProductionVertex(Particle_M);
@@ -3575,10 +3575,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 				if (!IfPass) continue;
 				// Reconstruct
-				KF_PV = new KFVertex(KFP_PV);
+				KF_PV = KFVertex(KFP_PV);
 				Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
 				Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
-				Particle_M = new KFParticle(Particle_A, Particle_B);
+				Particle_M = KFParticle(Particle_A, Particle_B);
 				KF_PV.AddDaughter(Particle_M);
 				Particle_M.SetProductionVertex(KF_PV);
 				Particle_A.SetProductionVertex(Particle_M);
