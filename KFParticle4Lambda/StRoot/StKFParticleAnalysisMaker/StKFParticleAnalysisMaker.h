@@ -207,6 +207,7 @@ private:
 	KFPTrack   KFPtrack_A,KFPtrack_B,KFPtrack_C;
 	KFParticle Particle_M,*Particle_N2[2],*Particle_N3[3],*KFP_PV_P,Particle_A,Particle_B,Particle_C;
 	KFPVertex  KFP_PV;
+	KFVertex   KF_PV;
 
 	//       0          1             2         3         4
 	// { { PDGID , KFP Loc index , Track 1 , Track 2 , Track 3 , ... } ,
