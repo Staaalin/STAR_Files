@@ -9,6 +9,7 @@
 #include "StKFParticlePerformanceInterface.h"
 
 
+#include "StRoot/KFParticle/KFVertex.h"
 #include "StRoot/KFParticle/KFPTrack.h"
 #include "StRoot/KFParticle/KFPVertex.h"
 #include "StRoot/KFParticle/KFParticle.h"
