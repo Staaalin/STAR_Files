@@ -68,6 +68,7 @@ int NumCharge  ;
 TH2F *hTofMatch_vs_RefMult = new TH2F("hTofMatch_vs_RefMult","nbTofMatch_vs_RefMult",500,0,500,500,0,500);
 
 void CD(int File_Index , const Char_t *inFile = "test.list") {
+        cout<<"Start"<<endl;
         gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
 	gSystem->Load("StUtilities");
 	gSystem->Load("StRefMultCorr");
