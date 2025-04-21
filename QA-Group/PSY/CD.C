@@ -51,7 +51,7 @@ Bool_t readEvent;
 StPicoDst *dst;
 StPicoEvent *event;
 int Run	       ;
-float pV       ;
+TVector3 pV    ;
 float pVz      ;
 float pVx      ;
 float pVy      ;
@@ -92,9 +92,9 @@ void CD(int File_Index , const Char_t *inFile = "test.list") {
     		}
 
                 // Retrieve picoDst
-		dst = new picoReader->picoDst();
+		dst = picoReader->picoDst();
 		// Retrieve event information
-		event = new dst->event();
+		event = dst->event();
     		if( !event ) {
       			cout << "Something went wrong, Master! Event is hiding from me..." << endl;
       			break;
