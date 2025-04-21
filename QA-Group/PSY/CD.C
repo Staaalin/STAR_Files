@@ -122,6 +122,7 @@ void CD(int File_Index , const Char_t *inFile = "test.list") {
                 
                 
                 // Siyuan Ping: Reject Bad Run
+                // from Run Log assessment
                 if (Run == 19168001) continue;
                 if (Run == 19168002) continue;
                 if (Run == 19168003) continue;
@@ -155,7 +156,55 @@ void CD(int File_Index , const Char_t *inFile = "test.list") {
                 if (Run == 19156038) continue;
                 if (Run == 19156039) continue;
                 if (Run == 19156069) continue;
-
+                // from QA Rejected
+                if (Run == 19159043) continue;
+                if (Run == 19159044) continue;
+                if (Run == 19159046) continue;
+                if (Run == 19160032) continue;
+                if (Run == 19160033) continue;
+                if (Run == 19160034) continue;
+                if (Run == 19160035) continue;
+                if (Run == 19160036) continue;
+                if (Run == 19160037) continue;
+                if (Run == 19160038) continue;
+                if (Run == 19160039) continue;
+                if (Run == 19160040) continue;
+                if (Run == 19160041) continue;
+                if (Run == 19160042) continue;
+                if (Run == 19160043) continue;
+                if (Run == 19160044) continue;
+                if (Run == 19161001) continue;
+                if (Run == 19161020) continue;
+                if (Run == 19161021) continue;
+                if (Run == 19161022) continue;
+                if (Run == 19161023) continue;
+                if (Run == 19161024) continue;
+                if (Run == 19161025) continue;
+                if (Run == 19161026) continue;
+                if (Run == 19161027) continue;
+                if (Run == 19161028) continue;
+                if (Run == 19161029) continue;
+                if (Run == 19161030) continue;
+                if (Run == 19161034) continue;
+                if (Run == 19161035) continue;
+                if (Run == 19161036) continue;
+                if (Run == 19161037) continue;
+                if (Run == 19161038) continue;
+                if (Run == 19161042) continue;
+                if (Run == 19162033) continue;
+                if (Run == 19162034) continue;
+                if (Run == 19164001) continue;
+                if (Run == 19164022) continue;
+                if (Run == 19164023) continue;
+                if (Run == 19164024) continue;
+                if (Run == 19164025) continue;
+                if (Run == 19167050) continue;
+                if (Run == 19167051) continue;
+                if (Run == 19167052) continue;
+                if (Run == 19167053) continue;
+                if (Run == 19168041) continue;
+                if (Run == 19168042) continue;
+                
                 NumCharge = 0;
                 for (Int_t iTrack = 0; iTrack < NPTracks; iTrack++) {
                         StPicoTrack *track = dst->track(iTrack);
