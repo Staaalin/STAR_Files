@@ -68,6 +68,7 @@ int NumCharge  ;
 TH2F *hTofMatch_vs_RefMult = new TH2F("hTofMatch_vs_RefMult","nbTofMatch_vs_RefMult",500,0,500,500,0,500);
 
 void CD(int File_Index , const Char_t *inFile = "test.list") {
+        gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
         StPicoDstReader* picoReader = new StPicoDstReader(inFile);
         picoReader->Init();
         if( !picoReader->chain() ) { std::cout << "No chain has been found." << std::endl; }
