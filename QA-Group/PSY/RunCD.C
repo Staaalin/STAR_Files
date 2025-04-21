@@ -9,7 +9,7 @@ class StRefMultCorr;
 class CentralityMaker;
 
 //_________________
-void RunCD(int File_Index , const Char_t *inFile = "test.list") {
+void RunCD(const Char_t *inFile = "test.list") {
   // Next line is not needed if you are not running in a standalone mode
 //  gROOT->ProcessLine("#define _VANILLA_ROOT_");
   gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
@@ -18,9 +18,7 @@ void RunCD(int File_Index , const Char_t *inFile = "test.list") {
   // gSystem->Load("StRefMultCorr");
   TString str;
   str = ".x CD.C++(";
-  // str = ".x Gamma_QA_Simple.C++(";
-  str += File_Index;
-  str += ",\"";
+  str += "\"";
   str += inFile;
   str += "\")";
 //  cout<<str.Data()<<endl;
