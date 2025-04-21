@@ -65,11 +65,13 @@ float BBCco    ;
 float ZDCcoin  ;
 int NumCharge  ;
 
-TH2F *hTofMatch_vs_RefMult = new TH2F("hTofMatch_vs_RefMult","nbTofMatch_vs_RefMult",500,0,500,500,0,500);
-hTofMatch_vs_RefMult->GetXaxis()->SetTitle("nBTOFMatch");
-hTofMatch_vs_RefMult->GetYaxis()->SetTitle("RefMult");
 
 void CD(int File_Index , const Char_t *inFile = "test.list") {
+
+        TH2F *hTofMatch_vs_RefMult = new TH2F("hTofMatch_vs_RefMult","nbTofMatch_vs_RefMult",500,0,500,500,0,500);
+        hTofMatch_vs_RefMult->GetXaxis()->SetTitle("nBTOFMatch");
+        hTofMatch_vs_RefMult->GetYaxis()->SetTitle("RefMult");
+        
         cout<<"Start"<<endl;
         gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
         gSystem->AddIncludePath("-I$STAR/StRoot/StarClassLibrary");
