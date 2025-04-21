@@ -75,6 +75,7 @@ void CD(int File_Index , const Char_t *inFile = "test.list") {
 	gSystem->Load("StPicoDstMaker");
         StPicoDstReader* picoReader = new StPicoDstReader(inFile);
         picoReader->Init();
+        cout<<"Finish initting"<<endl;
         if( !picoReader->chain() ) { std::cout << "No chain has been found." << std::endl; }
         Int_t nentries = picoReader->chain()->GetEntries();
 
