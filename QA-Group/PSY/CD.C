@@ -66,7 +66,7 @@ float ZDCcoin  ;
 int NumCharge  ;
 
 
-void CD(int File_Index , const Char_t *inFile = "test.list") {
+void CD(const Char_t *inFile = "test.list") {
 
         TH2F *hTofMatch_vs_RefMult = new TH2F("hTofMatch_vs_RefMult","nbTofMatch_vs_RefMult",500,0,500,500,0,500);
         hTofMatch_vs_RefMult->GetXaxis()->SetTitle("nBTOFMatch");
@@ -204,7 +204,7 @@ void CD(int File_Index , const Char_t *inFile = "test.list") {
                 if (Run == 19167053) continue;
                 if (Run == 19168041) continue;
                 if (Run == 19168042) continue;
-                
+
                 NumCharge = 0;
                 for (Int_t iTrack = 0; iTrack < NPTracks; iTrack++) {
                         StPicoTrack *track = dst->track(iTrack);
