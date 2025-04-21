@@ -70,6 +70,7 @@ TH2F *hTofMatch_vs_RefMult = new TH2F("hTofMatch_vs_RefMult","nbTofMatch_vs_RefM
 void CD(int File_Index , const Char_t *inFile = "test.list") {
         cout<<"Start"<<endl;
         gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
+        gSystem->AddIncludePath("-I$STAR/StRoot/StarClassLibrary");
 	gSystem->Load("StUtilities");
 	gSystem->Load("StRefMultCorr");
 	gSystem->Load("StPicoEvent");
