@@ -41,6 +41,7 @@
         "pion_mod.C": "cpp",
         "HR.C": "cpp",
         "CD.C": "cpp",
-        "RunCD.C": "cpp"
+        "RunCD.C": "cpp",
+        "TRun.C": "cpp"
     }
 }

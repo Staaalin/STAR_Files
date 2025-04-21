@@ -66,6 +66,8 @@ float ZDCcoin  ;
 int NumCharge  ;
 
 TH2F *hTofMatch_vs_RefMult = new TH2F("hTofMatch_vs_RefMult","nbTofMatch_vs_RefMult",500,0,500,500,0,500);
+hTofMatch_vs_RefMult->GetXaxis()->SetTitle("nBTOFMatch");
+hTofMatch_vs_RefMult->GetYaxis()->SetTitle("RefMult");
 
 void CD(int File_Index , const Char_t *inFile = "test.list") {
         cout<<"Start"<<endl;
