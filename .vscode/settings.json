@@ -40,6 +40,7 @@
         "NR.C": "cpp",
         "pion_mod.C": "cpp",
         "HR.C": "cpp",
-        "CD.C": "cpp"
+        "CD.C": "cpp",
+        "RunCD.C": "cpp"
     }
 }
