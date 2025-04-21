@@ -31,16 +31,16 @@ using namespace std;
 #include "StRoot/StPicoEvent/StPicoDst.h"
 #include "StRoot/StPicoEvent/StPicoEvent.h"
 #include "StRoot/StPicoEvent/StPicoTrack.h"
-// #include "StRoot/StPicoEvent/StPicoBTofHit.h"
-// #include "StRoot/StPicoEvent/StPicoBTowHit.h"
-// #include "StRoot/StPicoEvent/StPicoEmcTrigger.h"
-// #include "StRoot/StPicoEvent/StPicoBTofPidTraits.h"
-// #include "StRoot/StPicoEvent/StPicoTrackCovMatrix.h"
-// #include "StRoot/StEpdUtil/StEpdEpFinder.h"
-// #include "StRoot/StRefMultCorr/StRefMultCorr.h"
-// #include "StRoot/StRefMultCorr/CentralityMaker.h"
-// #include "StRoot/StPicoEvent/StPicoEpdHit.h"
-// #include "StRoot/StEpdUtil//StEpdGeom.h"
+#include "StRoot/StPicoEvent/StPicoBTofHit.h"
+#include "StRoot/StPicoEvent/StPicoBTowHit.h"
+#include "StRoot/StPicoEvent/StPicoEmcTrigger.h"
+#include "StRoot/StPicoEvent/StPicoBTofPidTraits.h"
+#include "StRoot/StPicoEvent/StPicoTrackCovMatrix.h"
+#include "StRoot/StEpdUtil/StEpdEpFinder.h"
+#include "StRoot/StRefMultCorr/StRefMultCorr.h"
+#include "StRoot/StRefMultCorr/CentralityMaker.h"
+#include "StRoot/StPicoEvent/StPicoEpdHit.h"
+#include "StRoot/StEpdUtil//StEpdGeom.h"
 
 //class StRefMultCorr;
 //class CentralityMaker;
@@ -69,6 +69,10 @@ TH2F *hTofMatch_vs_RefMult = new TH2F("hTofMatch_vs_RefMult","nbTofMatch_vs_RefM
 
 void CD(int File_Index , const Char_t *inFile = "test.list") {
         gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
+	gSystem->Load("StUtilities");
+	gSystem->Load("StRefMultCorr");
+	gSystem->Load("StPicoEvent");
+	gSystem->Load("StPicoDstMaker");
         StPicoDstReader* picoReader = new StPicoDstReader(inFile);
         picoReader->Init();
         if( !picoReader->chain() ) { std::cout << "No chain has been found." << std::endl; }
