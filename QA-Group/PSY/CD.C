@@ -30,7 +30,7 @@ using namespace std;
 #include "StRoot/StPicoEvent/StPicoDstReader.h"
 #include "StRoot/StPicoEvent/StPicoDst.h"
 #include "StRoot/StPicoEvent/StPicoEvent.h"
-// #include "StRoot/StPicoEvent/StPicoTrack.h"
+#include "StRoot/StPicoEvent/StPicoTrack.h"
 // #include "StRoot/StPicoEvent/StPicoBTofHit.h"
 // #include "StRoot/StPicoEvent/StPicoBTowHit.h"
 // #include "StRoot/StPicoEvent/StPicoEmcTrigger.h"
