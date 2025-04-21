@@ -44,6 +44,7 @@ using namespace std;
 
 //class StRefMultCorr;
 //class CentralityMaker;
+class StPicoDstReader;
 
 const float PI = TMath::Pi();
 Bool_t readEvent;
