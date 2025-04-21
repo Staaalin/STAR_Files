@@ -14,8 +14,8 @@ void RunCD(int File_Index , const Char_t *inFile = "test.list") {
 //  gROOT->ProcessLine("#define _VANILLA_ROOT_");
   gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
   gSystem->Load("StPicoEvent");
-  gSystem->Load("StEpdUtil");
-  gSystem->Load("StRefMultCorr");
+  // gSystem->Load("StEpdUtil");
+  // gSystem->Load("StRefMultCorr");
   TString str;
   str = ".x CD.C++(";
   // str = ".x Gamma_QA_Simple.C++(";
