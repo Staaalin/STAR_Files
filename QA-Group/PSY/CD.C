@@ -72,6 +72,7 @@ void CD(int File_Index , const Char_t *inFile = "test.list") {
         gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
         gSystem->AddIncludePath("-I$STAR/StRoot/StarClassLibrary");
 	gSystem->Load("StUtilities");
+        gSystem->Load("StEpdUtil");
 	gSystem->Load("StRefMultCorr");
 	gSystem->Load("StPicoEvent");
 	gSystem->Load("StPicoDstMaker");
