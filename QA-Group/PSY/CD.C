@@ -68,9 +68,17 @@ int NumCharge  ;
 
 void CD(const Char_t *inFile = "test.list") {
 
-        TH2F *hTofMatch_vs_RefMult = new TH2F("hTofMatch_vs_RefMult","nbTofMatch_vs_RefMult",500,0,500,500,0,500);
-        hTofMatch_vs_RefMult->GetXaxis()->SetTitle("nBTOFMatch");
-        hTofMatch_vs_RefMult->GetYaxis()->SetTitle("RefMult");
+        TH2F *hTofMatch_vs_RefMult_Roop = new TH2F("hTofMatch_vs_RefMult_Roop","nbTofMatch_vs_RefMult(Calculated from loop)",250,0,250,500,0,500);
+        hTofMatch_vs_RefMult_Roop->GetXaxis()->SetTitle("nBTOFMatch");
+        hTofMatch_vs_RefMult_Roop->GetYaxis()->SetTitle("RefMult");
+
+        TH2F *hTofMatch_vs_RefMult_Ref = new TH2F("hTofMatch_vs_RefMult_Ref","nbTofMatch_vs_RefMult(Calculated from ->RefMult())",250,0,250,500,0,500);
+        hTofMatch_vs_RefMult_Ref->GetXaxis()->SetTitle("nBTOFMatch");
+        hTofMatch_vs_RefMult_Ref->GetYaxis()->SetTitle("RefMult");
+
+        TH2F *hTofMatch_vs_RefMult_Fxt = new TH2F("hTofMatch_vs_RefMult_Fxt","nbTofMatch_vs_RefMult(Calculated from ->FxtMult())",250,0,250,500,0,500);
+        hTofMatch_vs_RefMult_Fxt->GetXaxis()->SetTitle("nBTOFMatch");
+        hTofMatch_vs_RefMult_Fxt->GetYaxis()->SetTitle("RefMult");
 
         cout<<"Start"<<endl;
         gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
@@ -211,15 +219,21 @@ void CD(const Char_t *inFile = "test.list") {
                         if (! track)            continue;
                         if (! track->charge())  continue;
                         if (! track->isPrimary()) continue;
+                        if (track->gMom().Perp() < 0.06 || track->gMom().Perp() > 2.0) continue;
+                        if (fabs(track->gMom().Eta()) > 1.5) continue;
+                        if (fabs(track->gMom().Mag()) < 0.1) continue;
                         NumCharge++;
                 }
-                RefMult = NumCharge;
 
-                hTofMatch_vs_RefMult->Fill(Ntofmatch,RefMult);
+                hTofMatch_vs_RefMult_Roop->Fill(Ntofmatch,NumCharge);
+                hTofMatch_vs_RefMult_Ref ->Fill(Ntofmatch,RefMult);
+                hTofMatch_vs_RefMult_Fxt ->Fill(Ntofmatch,FxtMult);
         }
 
         TFile *outFile = new TFile("cen1.v2.root", "RECREATE");
-        hTofMatch_vs_RefMult->Write();
+        hTofMatch_vs_RefMult_Roop->Write();
+        hTofMatch_vs_RefMult_Ref ->Write();
+        hTofMatch_vs_RefMult_Fxt ->Write();
         outFile->Close();
 
 }
