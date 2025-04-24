@@ -78,9 +78,10 @@
 #define K0SPdgMassSigma    0.0043
 #define PhiPdgMassSigma    0.0031
 
-#define IfQAMode           false  // If Writing Hist of QA;
+#define IfQAMode           true   // If Writing Hist of QA;
+#define IfRecordeTOF       true   // If use eTOF 
 #define IfTree             false // If Writing Tree;
-#define IfRecNewP          true  // If Reconstruct New Particle;
+#define IfRecNewP          false // If Reconstruct New Particle;
 #define IfLoadHY           false // If Background Reconstruction;
 
 #define TPC_R              0.6
@@ -2551,7 +2552,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 			}
 		}
 		// Raw Data eTOF
-		if (!hasTOF && RawTOF){
+		if (IfRecordeTOF && !hasTOF && RawTOF){
 			int tofindex = track->eTofPidTraitsIndex();
 			// cout<<"tofindex = "<<tofindex<<endl;
 			float beta = -999.;
@@ -3152,7 +3153,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 	/////////////////////////////////////////////////////////
 	hEventNum -> Fill(5);
 
-	if (IfRecNewP) {
+	if (IfRecNewP && false) {
 		KFParticleList.resize(0);
 		for (int iKFParticle=0; iKFParticle < N_Entries; iKFParticle++){ 
 			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
@@ -3587,8 +3588,124 @@ Int_t StKFParticleAnalysisMaker::Make()
 				H_Omega0bR_OmegaPi_Mass->Fill(Particle_M.GetMass());
 			}
 		}
-		
-		
+	}
+
+	if (IfRecNewP) {
+		KFParticleList.resize(0);
+		for (int iKFParticle=0; iKFParticle < N_Entries; iKFParticle++){ 
+			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
+			IfPass = false;
+			if       (abs(particle.GetPDG()) == PionPdg  )                                                                       IfPass = true;
+			else if  (abs(particle.GetPDG()) == KaonPdg  )                                                                       IfPass = true;
+			else if  (abs(particle.GetPDG()) == ProtonPdg)                                                                       IfPass = true;
+			else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) < 4*LambdaPdgMassSigma)) IfPass = true;
+			else if ((abs(particle.GetPDG()) == XiPdg    ) && (fabs(particle.GetMass() - XiPdgMass    ) < 4*XiPdgMassSigma    )) IfPass = true;
+			else if ((abs(particle.GetPDG()) == OmegaPdg ) && (fabs(particle.GetMass() - OmegaPdgMass ) < 4*OmegaPdgMassSigma )) IfPass = true;
+			else if ((abs(particle.GetPDG()) == PhiPdg   ) && (fabs(particle.GetMass() - PhiPdgMass   ) < 4*PhiPdgMassSigma   )) IfPass = true;
+			else if ((abs(particle.GetPDG()) == K0SPdg   ) && (fabs(particle.GetMass() - K0SPdgMass   ) < 4*K0SPdgMassSigma   )) IfPass = true;
+
+			if (IfPass) {
+				std::vector<int> Temp; Temp.push_back(particle.GetPDG()); Temp.push_back(iKFParticle);
+				KFParticleList.push_back(Temp);
+			}
+		}
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++) {
+			KFParticle particle = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
+			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+				const int daughterId = particle.DaughterIds()[iDaughter];
+				if ((daughterId < 0) || (daughterId >= N_Entries)) continue;
+				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+				if ((abs(daughter.GetPDG()) == PionPdg) || (abs(daughter.GetPDG()) == KaonPdg) || (abs(daughter.GetPDG()) == ProtonPdg) || (abs(daughter.GetPDG()) == ElectronPdg)){
+					const int globalTrackId = daughter.DaughterIds()[0];
+					Int_t iTrackStart = globalTrackId - 1;
+					if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+					for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+						StPicoTrack *track = mPicoDst->track(jTrack);
+						if (track->id() == globalTrackId){
+							KFParticleList[iKFParticle].push_back(jTrack);
+							break;
+						}
+					}
+				}else{
+					for (int jDaughter=0; jDaughter < daughter.NDaughters(); jDaughter++){
+						const int GdaughterId = daughter.DaughterIds()[jDaughter];
+						if ((GdaughterId < 0) || (GdaughterId >= N_Entries)) continue;
+						const KFParticle Gdaughter = KFParticleInterface->GetParticles()[GdaughterId];
+						if ((abs(Gdaughter.GetPDG()) == PionPdg) || (abs(Gdaughter.GetPDG()) == KaonPdg) || (abs(Gdaughter.GetPDG()) == ProtonPdg) || (abs(Gdaughter.GetPDG()) == ElectronPdg)){
+							const int globalTrackId = Gdaughter.DaughterIds()[0];
+							Int_t iTrackStart = globalTrackId - 1;
+							if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+							for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+								StPicoTrack *track = mPicoDst->track(jTrack);
+								if (track->id() == globalTrackId){
+									KFParticleList[iKFParticle].push_back(jTrack);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		// Omega- + pi+
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
+			if (KFParticleList[iKFParticle][0] != OmegaPdg) continue;
+			for (int jKFParticle=0; jKFParticle < KFParticleList.size(); jKFParticle++){
+				if (iKFParticle == jKFParticle) continue;
+				if (KFParticleList[jKFParticle][0] != PionPdg) continue;
+				IfPass = true;
+				for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+					if (!IfPass) break;
+					for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+						if (KFParticleList[iKFParticle][i] == KFParticleList[jKFParticle][j]) {
+							IfPass = false;
+							break;
+						}
+					}
+				}
+				if (!IfPass) continue;
+				// Reconstruct
+				Particle_A.Create();
+
+				KF_PV = KFVertex(KFP_PV);
+				Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
+				Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
+				Particle_M = KFParticle(Particle_A, Particle_B);
+				KF_PV.AddDaughter(Particle_M);
+				Particle_M.SetProductionVertex(KF_PV);
+				Particle_A.SetProductionVertex(Particle_M);
+				Particle_B.SetProductionVertex(Particle_M);
+				H_Omega0R_OmegaPi_Mass->Fill(Particle_M.GetMass());
+			}
+		}
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
+			if (KFParticleList[iKFParticle][0] != -OmegaPdg) continue;
+			for (int jKFParticle=0; jKFParticle < KFParticleList.size(); jKFParticle++){
+				if (iKFParticle == jKFParticle) continue;
+				if (KFParticleList[jKFParticle][0] != -PionPdg) continue;
+				IfPass = true;
+				for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+					if (!IfPass) break;
+					for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+						if (KFParticleList[iKFParticle][i] == KFParticleList[jKFParticle][j]) {
+							IfPass = false;
+							break;
+						}
+					}
+				}
+				if (!IfPass) continue;
+				// Reconstruct
+				KF_PV = KFVertex(KFP_PV);
+				Particle_A = KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]];
+				Particle_B = KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]];
+				Particle_M = KFParticle(Particle_A, Particle_B);
+				KF_PV.AddDaughter(Particle_M);
+				Particle_M.SetProductionVertex(KF_PV);
+				Particle_A.SetProductionVertex(Particle_M);
+				Particle_B.SetProductionVertex(Particle_M);
+				H_Omega0bR_OmegaPi_Mass->Fill(Particle_M.GetMass());
+			}
+		}
 	}
 
 	return kStOK;
@@ -4055,4 +4172,173 @@ KFParticle StKFParticleAnalysisMaker::ChangeMass(KFParticle daughter){
 	KFPtrack_A.SetNDF(   daughter.GetNDF());
 	KFPtrack_A.SetCovarianceMatrix (daughter.CovarianceMatrix());
 	return KFParticle(KFPtrack_A,daughter.GetPDG());
+}
+std::tuple<KFParticle, bool> StKFParticleAnalysisMaker::buildMother(KFParticle vDaughters[], int daughterOrder[],
+																	bool isIntermediate, int intermediateNumber, int nTracks,
+																	bool constrainMass, float required_vertexID, PHCompositeNode* topNode) // Copy from Sphenix
+{
+	KFParticle mother;
+	KFParticle *inputTracks = new KFParticle[nTracks];
+
+	mother.SetConstructMethod(2);
+
+	bool daughterMassCheck = true;
+	int particlesWithPID[] = {211, 321, 2212};
+	float unique_vertexID = 0;
+
+	// Figure out if the decay has reco. tracks mixed with resonances
+	int num_tracks_used_by_intermediates = 0;
+	for (int i = 0; i < m_num_intermediate_states; ++i)
+	{
+		num_tracks_used_by_intermediates += m_num_tracks_from_intermediate[i];
+	}
+	int num_remaining_tracks = m_num_tracks - num_tracks_used_by_intermediates;
+
+	for (int i = 0; i < nTracks; ++i)
+	{
+		float daughterMass = 0;
+
+		if ((Int_t) vDaughters[i].GetQ() != 0)
+		{
+			// For charged particle, like p+/-, pi+/-, Sigma+/-, etc...
+			// different charged particle has different PDGID
+			// just to protect if they have different mass for different charge
+			// but in EvtGen, there is no C-violation...so this is just a protection
+			daughterMass = constrainMass ? getParticleMass((Int_t) vDaughters[i].GetQ() * daughterOrder[i]) : vDaughters[i].GetMass();
+		}
+		else if ((Int_t) vDaughters[i].GetQ() == 0)
+		{
+			// For neutral particle, like pi0, eta, J/psi, etc... who do not have an anti-particle with anti-PDGID
+			// and other neutral particle, like Lambda0/anti-Lambda0 ... who have an anti-particle with anti-PDGID
+			// avoid charge*PDGID=0 case and getting wrong mass
+			daughterMass = constrainMass ? getParticleMass(daughterOrder[i]) : vDaughters[i].GetMass();
+		}
+
+		if ((num_remaining_tracks > 0 && i >= m_num_intermediate_states) || isIntermediate)
+		{
+			if ((Int_t) vDaughters[i].GetQ() != 0)
+			{
+				daughterMass = getParticleMass((Int_t) vDaughters[i].GetQ() * daughterOrder[i]);
+			}
+			else if ((Int_t) vDaughters[i].GetQ() == 0)
+			{
+				daughterMass = getParticleMass(daughterOrder[i]);
+			}
+
+		}
+		inputTracks[i].Create(vDaughters[i].Parameters(),
+								vDaughters[i].CovarianceMatrix(),
+								(Int_t) vDaughters[i].GetQ(),
+								daughterMass);
+
+		//Run PID check
+		// if (m_use_PID)
+		// {
+		// 	int track_PDG_ID = (Int_t) vDaughters[i].GetQ()*daughterOrder[i];
+		// 	if (std::find(std::begin(particlesWithPID), std::end(particlesWithPID), std::abs(track_PDG_ID)) != std::end(particlesWithPID))
+		// 	{
+		// 		float calculated_dEdx_value = get_dEdx(topNode, vDaughters[i]);
+		// 		double expected_dEdx_value = get_dEdx_fitValue((Int_t) vDaughters[i].GetQ() * vDaughters[i].GetP(), track_PDG_ID);
+		// 		bool accept_dEdx = isInRange((1-m_dEdx_band_width)*expected_dEdx_value, calculated_dEdx_value, (1+m_dEdx_band_width)*expected_dEdx_value);
+		// 		if(!accept_dEdx)
+		// 		{
+		// 			delete [] inputTracks;
+		// 			return std::make_tuple(mother, false);
+		// 		}
+		// 	}
+		// }
+
+		mother.AddDaughter(inputTracks[i]);
+		unique_vertexID += (Int_t) vDaughters[i].GetQ() * getParticleMass(daughterOrder[i]);
+	}
+
+	if (isIntermediate)
+	{
+	mother.SetPDG(getParticleID(m_intermediate_name[intermediateNumber].c_str()));
+	}
+	if (!isIntermediate && !m_mother_name_Tools.empty())
+	{
+	mother.SetPDG(getParticleID(m_mother_name_Tools));
+	}
+
+	bool chargeCheck;
+	if (m_get_charge_conjugate)
+	{
+	chargeCheck = std::abs(unique_vertexID) == std::abs(required_vertexID) ? true : false;
+	}
+	else
+	{
+	chargeCheck = unique_vertexID == required_vertexID ? true : false;
+	}
+
+	for (int j = 0; j < nTracks; ++j)
+	{
+	if (m_extrapolateTracksToSV)
+	{
+	inputTracks[j].SetProductionVertex(mother);
+	}
+	if (!m_allowZeroMassTracks)
+	{
+	if (inputTracks[j].GetMass() == 0)
+	{
+	daughterMassCheck = false;
+	}
+	}
+	}
+
+
+	float calculated_mass, calculated_mass_err;
+	mother.GetMass(calculated_mass, calculated_mass_err);
+	float calculated_pt = mother.GetPt();
+
+	float min_mass = isIntermediate ? m_intermediate_mass_range[intermediateNumber].first : m_min_mass;
+	float max_mass = isIntermediate ? m_intermediate_mass_range[intermediateNumber].second : m_max_mass;
+	float min_pt = isIntermediate ? m_intermediate_min_pt[intermediateNumber] : m_mother_pt;
+
+	float max_vertex_volume = isIntermediate ? m_intermediate_vertex_volume[intermediateNumber] : m_mother_vertex_volume;
+
+	bool goodCandidate = false;
+
+	if (calculated_mass >= min_mass && calculated_mass <= max_mass &&
+	calculated_pt >= min_pt && daughterMassCheck && chargeCheck && calculateEllipsoidVolume(mother) <= max_vertex_volume)
+	{
+	goodCandidate = true;
+	}
+
+	if (goodCandidate && m_require_bunch_crossing_match)
+	{
+	std::vector<int> crossings;
+	for (int i = 0; i < nTracks; ++i)
+	{
+	SvtxTrack *thisTrack = toolSet.getTrack(vDaughters[i].Id(), m_dst_trackmap);
+	if (thisTrack)//This protects against intermediates which have no track but I need a way to assign the bunch crossing to an interemdiate as this was already checked when it was actually built
+	{
+	crossings.push_back(thisTrack->get_crossing());
+	}
+	}
+
+	removeDuplicates(crossings);
+
+	if (crossings.size() !=1)
+	{
+	goodCandidate = false;
+	}
+	}
+
+	// Check the requirements of an intermediate states against this mother and re-do goodCandidate
+	if (goodCandidate && m_has_intermediates && !isIntermediate)  // The decay has intermediate states and we are now looking at the mother
+	{
+	for (int k = 0; k < m_num_intermediate_states; ++k)
+	{
+	float intermediate_DIRA = eventDIRA(vDaughters[k], mother);
+	float intermediate_FDchi2 = flightDistanceChi2(vDaughters[k], mother);
+	if (intermediate_DIRA < m_intermediate_min_dira[k] ||
+	intermediate_FDchi2 < m_intermediate_min_fdchi2[k])
+	{
+	goodCandidate = false;
+	}
+	}
+	}
+	delete [] inputTracks;
+	return std::make_tuple(mother, goodCandidate);
 }
