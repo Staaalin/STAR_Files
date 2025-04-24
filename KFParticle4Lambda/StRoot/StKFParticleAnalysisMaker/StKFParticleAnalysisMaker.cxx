@@ -79,7 +79,7 @@
 #define PhiPdgMassSigma    0.0031
 
 #define IfQAMode           true   // If Writing Hist of QA;
-#define IfRecordeTOF       true   // If use eTOF 
+#define IfRecordeTOF       false  // If use eTOF 
 #define IfTree             false // If Writing Tree;
 #define IfRecNewP          false // If Reconstruct New Particle;
 #define IfLoadHY           false // If Background Reconstruction;
