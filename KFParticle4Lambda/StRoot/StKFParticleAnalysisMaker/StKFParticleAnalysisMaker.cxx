@@ -4173,172 +4173,172 @@ KFParticle StKFParticleAnalysisMaker::ChangeMass(KFParticle daughter){
 	KFPtrack_A.SetCovarianceMatrix (daughter.CovarianceMatrix());
 	return KFParticle(KFPtrack_A,daughter.GetPDG());
 }
-std::tuple<KFParticle, bool> StKFParticleAnalysisMaker::buildMother(KFParticle vDaughters[], int daughterOrder[],
-																	bool isIntermediate, int intermediateNumber, int nTracks,
-																	bool constrainMass, float required_vertexID, PHCompositeNode* topNode) // Copy from Sphenix
-{
-	KFParticle mother;
-	KFParticle *inputTracks = new KFParticle[nTracks];
+// std::tuple<KFParticle, bool> StKFParticleAnalysisMaker::buildMother(KFParticle vDaughters[], int daughterOrder[],
+// 																	bool isIntermediate, int intermediateNumber, int nTracks,
+// 																	bool constrainMass, float required_vertexID, PHCompositeNode* topNode) // Copy from Sphenix
+// {
+// 	KFParticle mother;
+// 	KFParticle *inputTracks = new KFParticle[nTracks];
 
-	mother.SetConstructMethod(2);
+// 	mother.SetConstructMethod(2);
 
-	bool daughterMassCheck = true;
-	int particlesWithPID[] = {211, 321, 2212};
-	float unique_vertexID = 0;
+// 	bool daughterMassCheck = true;
+// 	int particlesWithPID[] = {211, 321, 2212};
+// 	float unique_vertexID = 0;
 
-	// Figure out if the decay has reco. tracks mixed with resonances
-	int num_tracks_used_by_intermediates = 0;
-	for (int i = 0; i < m_num_intermediate_states; ++i)
-	{
-		num_tracks_used_by_intermediates += m_num_tracks_from_intermediate[i];
-	}
-	int num_remaining_tracks = m_num_tracks - num_tracks_used_by_intermediates;
+// 	// Figure out if the decay has reco. tracks mixed with resonances
+// 	int num_tracks_used_by_intermediates = 0;
+// 	for (int i = 0; i < m_num_intermediate_states; ++i)
+// 	{
+// 		num_tracks_used_by_intermediates += m_num_tracks_from_intermediate[i];
+// 	}
+// 	int num_remaining_tracks = m_num_tracks - num_tracks_used_by_intermediates;
 
-	for (int i = 0; i < nTracks; ++i)
-	{
-		float daughterMass = 0;
+// 	for (int i = 0; i < nTracks; ++i)
+// 	{
+// 		float daughterMass = 0;
 
-		if ((Int_t) vDaughters[i].GetQ() != 0)
-		{
-			// For charged particle, like p+/-, pi+/-, Sigma+/-, etc...
-			// different charged particle has different PDGID
-			// just to protect if they have different mass for different charge
-			// but in EvtGen, there is no C-violation...so this is just a protection
-			daughterMass = constrainMass ? getParticleMass((Int_t) vDaughters[i].GetQ() * daughterOrder[i]) : vDaughters[i].GetMass();
-		}
-		else if ((Int_t) vDaughters[i].GetQ() == 0)
-		{
-			// For neutral particle, like pi0, eta, J/psi, etc... who do not have an anti-particle with anti-PDGID
-			// and other neutral particle, like Lambda0/anti-Lambda0 ... who have an anti-particle with anti-PDGID
-			// avoid charge*PDGID=0 case and getting wrong mass
-			daughterMass = constrainMass ? getParticleMass(daughterOrder[i]) : vDaughters[i].GetMass();
-		}
+// 		if ((Int_t) vDaughters[i].GetQ() != 0)
+// 		{
+// 			// For charged particle, like p+/-, pi+/-, Sigma+/-, etc...
+// 			// different charged particle has different PDGID
+// 			// just to protect if they have different mass for different charge
+// 			// but in EvtGen, there is no C-violation...so this is just a protection
+// 			daughterMass = constrainMass ? getParticleMass((Int_t) vDaughters[i].GetQ() * daughterOrder[i]) : vDaughters[i].GetMass();
+// 		}
+// 		else if ((Int_t) vDaughters[i].GetQ() == 0)
+// 		{
+// 			// For neutral particle, like pi0, eta, J/psi, etc... who do not have an anti-particle with anti-PDGID
+// 			// and other neutral particle, like Lambda0/anti-Lambda0 ... who have an anti-particle with anti-PDGID
+// 			// avoid charge*PDGID=0 case and getting wrong mass
+// 			daughterMass = constrainMass ? getParticleMass(daughterOrder[i]) : vDaughters[i].GetMass();
+// 		}
 
-		if ((num_remaining_tracks > 0 && i >= m_num_intermediate_states) || isIntermediate)
-		{
-			if ((Int_t) vDaughters[i].GetQ() != 0)
-			{
-				daughterMass = getParticleMass((Int_t) vDaughters[i].GetQ() * daughterOrder[i]);
-			}
-			else if ((Int_t) vDaughters[i].GetQ() == 0)
-			{
-				daughterMass = getParticleMass(daughterOrder[i]);
-			}
+// 		if ((num_remaining_tracks > 0 && i >= m_num_intermediate_states) || isIntermediate)
+// 		{
+// 			if ((Int_t) vDaughters[i].GetQ() != 0)
+// 			{
+// 				daughterMass = getParticleMass((Int_t) vDaughters[i].GetQ() * daughterOrder[i]);
+// 			}
+// 			else if ((Int_t) vDaughters[i].GetQ() == 0)
+// 			{
+// 				daughterMass = getParticleMass(daughterOrder[i]);
+// 			}
 
-		}
-		inputTracks[i].Create(vDaughters[i].Parameters(),
-								vDaughters[i].CovarianceMatrix(),
-								(Int_t) vDaughters[i].GetQ(),
-								daughterMass);
+// 		}
+// 		inputTracks[i].Create(vDaughters[i].Parameters(),
+// 								vDaughters[i].CovarianceMatrix(),
+// 								(Int_t) vDaughters[i].GetQ(),
+// 								daughterMass);
 
-		//Run PID check
-		// if (m_use_PID)
-		// {
-		// 	int track_PDG_ID = (Int_t) vDaughters[i].GetQ()*daughterOrder[i];
-		// 	if (std::find(std::begin(particlesWithPID), std::end(particlesWithPID), std::abs(track_PDG_ID)) != std::end(particlesWithPID))
-		// 	{
-		// 		float calculated_dEdx_value = get_dEdx(topNode, vDaughters[i]);
-		// 		double expected_dEdx_value = get_dEdx_fitValue((Int_t) vDaughters[i].GetQ() * vDaughters[i].GetP(), track_PDG_ID);
-		// 		bool accept_dEdx = isInRange((1-m_dEdx_band_width)*expected_dEdx_value, calculated_dEdx_value, (1+m_dEdx_band_width)*expected_dEdx_value);
-		// 		if(!accept_dEdx)
-		// 		{
-		// 			delete [] inputTracks;
-		// 			return std::make_tuple(mother, false);
-		// 		}
-		// 	}
-		// }
+// 		//Run PID check
+// 		// if (m_use_PID)
+// 		// {
+// 		// 	int track_PDG_ID = (Int_t) vDaughters[i].GetQ()*daughterOrder[i];
+// 		// 	if (std::find(std::begin(particlesWithPID), std::end(particlesWithPID), std::abs(track_PDG_ID)) != std::end(particlesWithPID))
+// 		// 	{
+// 		// 		float calculated_dEdx_value = get_dEdx(topNode, vDaughters[i]);
+// 		// 		double expected_dEdx_value = get_dEdx_fitValue((Int_t) vDaughters[i].GetQ() * vDaughters[i].GetP(), track_PDG_ID);
+// 		// 		bool accept_dEdx = isInRange((1-m_dEdx_band_width)*expected_dEdx_value, calculated_dEdx_value, (1+m_dEdx_band_width)*expected_dEdx_value);
+// 		// 		if(!accept_dEdx)
+// 		// 		{
+// 		// 			delete [] inputTracks;
+// 		// 			return std::make_tuple(mother, false);
+// 		// 		}
+// 		// 	}
+// 		// }
 
-		mother.AddDaughter(inputTracks[i]);
-		unique_vertexID += (Int_t) vDaughters[i].GetQ() * getParticleMass(daughterOrder[i]);
-	}
+// 		mother.AddDaughter(inputTracks[i]);
+// 		unique_vertexID += (Int_t) vDaughters[i].GetQ() * getParticleMass(daughterOrder[i]);
+// 	}
 
-	if (isIntermediate)
-	{
-	mother.SetPDG(getParticleID(m_intermediate_name[intermediateNumber].c_str()));
-	}
-	if (!isIntermediate && !m_mother_name_Tools.empty())
-	{
-	mother.SetPDG(getParticleID(m_mother_name_Tools));
-	}
+// 	if (isIntermediate)
+// 	{
+// 	mother.SetPDG(getParticleID(m_intermediate_name[intermediateNumber].c_str()));
+// 	}
+// 	if (!isIntermediate && !m_mother_name_Tools.empty())
+// 	{
+// 	mother.SetPDG(getParticleID(m_mother_name_Tools));
+// 	}
 
-	bool chargeCheck;
-	if (m_get_charge_conjugate)
-	{
-	chargeCheck = std::abs(unique_vertexID) == std::abs(required_vertexID) ? true : false;
-	}
-	else
-	{
-	chargeCheck = unique_vertexID == required_vertexID ? true : false;
-	}
+// 	bool chargeCheck;
+// 	if (m_get_charge_conjugate)
+// 	{
+// 	chargeCheck = std::abs(unique_vertexID) == std::abs(required_vertexID) ? true : false;
+// 	}
+// 	else
+// 	{
+// 	chargeCheck = unique_vertexID == required_vertexID ? true : false;
+// 	}
 
-	for (int j = 0; j < nTracks; ++j)
-	{
-	if (m_extrapolateTracksToSV)
-	{
-	inputTracks[j].SetProductionVertex(mother);
-	}
-	if (!m_allowZeroMassTracks)
-	{
-	if (inputTracks[j].GetMass() == 0)
-	{
-	daughterMassCheck = false;
-	}
-	}
-	}
+// 	for (int j = 0; j < nTracks; ++j)
+// 	{
+// 	if (m_extrapolateTracksToSV)
+// 	{
+// 	inputTracks[j].SetProductionVertex(mother);
+// 	}
+// 	if (!m_allowZeroMassTracks)
+// 	{
+// 	if (inputTracks[j].GetMass() == 0)
+// 	{
+// 	daughterMassCheck = false;
+// 	}
+// 	}
+// 	}
 
 
-	float calculated_mass, calculated_mass_err;
-	mother.GetMass(calculated_mass, calculated_mass_err);
-	float calculated_pt = mother.GetPt();
+// 	float calculated_mass, calculated_mass_err;
+// 	mother.GetMass(calculated_mass, calculated_mass_err);
+// 	float calculated_pt = mother.GetPt();
 
-	float min_mass = isIntermediate ? m_intermediate_mass_range[intermediateNumber].first : m_min_mass;
-	float max_mass = isIntermediate ? m_intermediate_mass_range[intermediateNumber].second : m_max_mass;
-	float min_pt = isIntermediate ? m_intermediate_min_pt[intermediateNumber] : m_mother_pt;
+// 	float min_mass = isIntermediate ? m_intermediate_mass_range[intermediateNumber].first : m_min_mass;
+// 	float max_mass = isIntermediate ? m_intermediate_mass_range[intermediateNumber].second : m_max_mass;
+// 	float min_pt = isIntermediate ? m_intermediate_min_pt[intermediateNumber] : m_mother_pt;
 
-	float max_vertex_volume = isIntermediate ? m_intermediate_vertex_volume[intermediateNumber] : m_mother_vertex_volume;
+// 	float max_vertex_volume = isIntermediate ? m_intermediate_vertex_volume[intermediateNumber] : m_mother_vertex_volume;
 
-	bool goodCandidate = false;
+// 	bool goodCandidate = false;
 
-	if (calculated_mass >= min_mass && calculated_mass <= max_mass &&
-	calculated_pt >= min_pt && daughterMassCheck && chargeCheck && calculateEllipsoidVolume(mother) <= max_vertex_volume)
-	{
-	goodCandidate = true;
-	}
+// 	if (calculated_mass >= min_mass && calculated_mass <= max_mass &&
+// 	calculated_pt >= min_pt && daughterMassCheck && chargeCheck && calculateEllipsoidVolume(mother) <= max_vertex_volume)
+// 	{
+// 	goodCandidate = true;
+// 	}
 
-	if (goodCandidate && m_require_bunch_crossing_match)
-	{
-	std::vector<int> crossings;
-	for (int i = 0; i < nTracks; ++i)
-	{
-	SvtxTrack *thisTrack = toolSet.getTrack(vDaughters[i].Id(), m_dst_trackmap);
-	if (thisTrack)//This protects against intermediates which have no track but I need a way to assign the bunch crossing to an interemdiate as this was already checked when it was actually built
-	{
-	crossings.push_back(thisTrack->get_crossing());
-	}
-	}
+// 	if (goodCandidate && m_require_bunch_crossing_match)
+// 	{
+// 	std::vector<int> crossings;
+// 	for (int i = 0; i < nTracks; ++i)
+// 	{
+// 	SvtxTrack *thisTrack = toolSet.getTrack(vDaughters[i].Id(), m_dst_trackmap);
+// 	if (thisTrack)//This protects against intermediates which have no track but I need a way to assign the bunch crossing to an interemdiate as this was already checked when it was actually built
+// 	{
+// 	crossings.push_back(thisTrack->get_crossing());
+// 	}
+// 	}
 
-	removeDuplicates(crossings);
+// 	removeDuplicates(crossings);
 
-	if (crossings.size() !=1)
-	{
-	goodCandidate = false;
-	}
-	}
+// 	if (crossings.size() !=1)
+// 	{
+// 	goodCandidate = false;
+// 	}
+// 	}
 
-	// Check the requirements of an intermediate states against this mother and re-do goodCandidate
-	if (goodCandidate && m_has_intermediates && !isIntermediate)  // The decay has intermediate states and we are now looking at the mother
-	{
-	for (int k = 0; k < m_num_intermediate_states; ++k)
-	{
-	float intermediate_DIRA = eventDIRA(vDaughters[k], mother);
-	float intermediate_FDchi2 = flightDistanceChi2(vDaughters[k], mother);
-	if (intermediate_DIRA < m_intermediate_min_dira[k] ||
-	intermediate_FDchi2 < m_intermediate_min_fdchi2[k])
-	{
-	goodCandidate = false;
-	}
-	}
-	}
-	delete [] inputTracks;
-	return std::make_tuple(mother, goodCandidate);
-}
+// 	// Check the requirements of an intermediate states against this mother and re-do goodCandidate
+// 	if (goodCandidate && m_has_intermediates && !isIntermediate)  // The decay has intermediate states and we are now looking at the mother
+// 	{
+// 	for (int k = 0; k < m_num_intermediate_states; ++k)
+// 	{
+// 	float intermediate_DIRA = eventDIRA(vDaughters[k], mother);
+// 	float intermediate_FDchi2 = flightDistanceChi2(vDaughters[k], mother);
+// 	if (intermediate_DIRA < m_intermediate_min_dira[k] ||
+// 	intermediate_FDchi2 < m_intermediate_min_fdchi2[k])
+// 	{
+// 	goodCandidate = false;
+// 	}
+// 	}
+// 	}
+// 	delete [] inputTracks;
+// 	return std::make_tuple(mother, goodCandidate);
+// }
