@@ -129,7 +129,7 @@ void CD(const Char_t *inFile = "test.list") {
                 ZDCcoin   = event->ZDCx();
 
                 if (fabs(pVz-200.0)>2.0) continue;
-                if (PVx*PVx+PVy*PVy>4.0) continue;
+                if (pVx*pVx+pVy*pVy>4.0) continue;
                 
                 
                 // Siyuan Ping: Reject Bad Run
