@@ -127,6 +127,9 @@ void CD(const Char_t *inFile = "test.list") {
 		NPTracks  = dst->numberOfTracks();
 		BBCco     = event->BBCx();
                 ZDCcoin   = event->ZDCx();
+
+                if (fabs(pVz-200.0)>2.0) continue;
+                if (PVx*PVx+PVy*PVy>4.0) continue;
                 
                 
                 // Siyuan Ping: Reject Bad Run
