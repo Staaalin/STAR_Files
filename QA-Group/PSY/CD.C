@@ -65,6 +65,51 @@ float BBCco    ;
 float ZDCcoin  ;
 int NumCharge  ;
 
+bool IsGoodBBC(StPicoEvent *e) {
+        float BBC_sum_east = 0, BBC_sum_west = 0;
+        for(int j=0;j<16;j++) BBC_sum_east += e->bbcAdcEast(j);
+        for(int j=0;j<16;j++) BBC_sum_west += e->bbcAdcWest(j);
+        if(BBC_sum_east<150 || BBC_sum_west<150) return false;
+        int saturate = 0;
+        for(int j=0;j<16;j++) if(e->bbcAdcEast(j)>4500 || e->bbcAdcWest(j)>4500) {saturate = 1;break;}
+        if(saturate==1) return false;
+        hTally->Fill(10);
+
+        return true;
+}
+//////////////////////////////////////////////
+void MakeBBC_EP(StPicoEvent *ev) {
+        for(int j=0;j<6;j++) {
+                BBC1->Fill(j+1, ev->bbcAdcEast(j)/1000.);
+                BBC8->Fill(j+1, ev->bbcAdcWest(j)/1000.);
+        }
+        for(int j=0;j<10;j++) {
+                BBC2->Fill(j+1, ev->bbcAdcEast(j+6)/1000.);
+                BBC7->Fill(j+1, ev->bbcAdcWest(j+6)/1000.);
+        }
+        TVector2 mBe, mBw;
+        float mBe_x = 0, mBe_y = 0, mBw_x = 0, mBw_y = 0; 
+        for(int trk = 0; trk < 16; trk++) {
+                float sig_bbc = ev->bbcAdcEast(trk);
+                float phi_bbc = GetPhiInBBC(0, trk+1);
+                mBe_x += cos(nHar*phi_bbc)*sig_bbc*BBC_gain_east[trk];
+                mBe_y += sin(nHar*phi_bbc)*sig_bbc*BBC_gain_east[trk];
+        }
+        for(int trk = 0; trk < 16; trk++) {
+                float sig_bbc = ev->bbcAdcWest(trk);
+                float phi_bbc = GetPhiInBBC(1, trk+1);
+                mBw_x += cos(nHar*phi_bbc)*sig_bbc*BBC_gain_west[trk];
+                mBw_y += sin(nHar*phi_bbc)*sig_bbc*BBC_gain_west[trk];
+        }
+        if(mBe_x==0 || mBe_y==0 || mBw_x==0 || mBw_y==0) return;
+        mBe.Set(mBe_x, mBe_y); mBw.Set(mBw_x, mBw_y);
+        BBC_EP_east = mBe.Phi()/nHar;
+        BBC_EP_west = mBw.Phi()/nHar;
+        BBCe_Day3_cos2->Fill(Day3, cos(nHar*BBC_EP_east));
+        BBCe_Day3_sin2->Fill(Day3, sin(nHar*BBC_EP_east));
+        BBCw_Day3_cos2->Fill(Day3, cos(nHar*BBC_EP_west));
+        BBCw_Day3_sin2->Fill(Day3, sin(nHar*BBC_EP_west));
+}
 
 void CD(const Char_t *inFile = "test.list") {
 
