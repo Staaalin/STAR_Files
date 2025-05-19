@@ -79,6 +79,14 @@ void CD(const Char_t *inFile = "test.list") {
         hTofMatch_vs_RefMult_Fxt->GetXaxis()->SetTitle("nBTOFMatch");
         hTofMatch_vs_RefMult_Fxt->GetYaxis()->SetTitle("RefMult");
 
+        TH2F *hPVxy                    = new TH2F("hPVxy","Primary Vertex xy",100,-4,4,100,-4,4);
+        hPVxy->GetXaxis()->SetTitle("X [cm]");
+        hPVxy->GetYaxis()->SetTitle("Y [cm]");
+
+        TH1F *hPVz                     = new TH1F("hPVz","Primary Vertex z",100,190,210);
+        hPVz->GetXaxis()->SetTitle("X [cm]");
+        hPVz->GetYaxis()->SetTitle("Y [cm]");
+
         cout<<"Start"<<endl;
         gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
         gSystem->AddIncludePath("-I$STAR/StRoot/StarClassLibrary");
@@ -126,9 +134,6 @@ void CD(const Char_t *inFile = "test.list") {
 		NPTracks  = dst->numberOfTracks();
 		BBCco     = event->BBCx();
                 ZDCcoin   = event->ZDCx();
-
-                if (fabs(pVz-200.0)>2.0) continue;
-                if (pVx*pVx+pVy*pVy>4.0) continue;
                 
                 
                 // Siyuan Ping: Reject Bad Run
@@ -215,6 +220,12 @@ void CD(const Char_t *inFile = "test.list") {
                 if (Run == 19168041) continue;
                 if (Run == 19168042) continue;
 
+                hPVxy->Fill(pVx,pVy);
+                hPVz->Fill(pVz);
+
+                if (fabs(pVz-200.0)>2.0) continue;
+                if (pVx*pVx+pVy*pVy>4.0) continue;
+
                 NumCharge = 0;
                 for (Int_t iTrack = 0; iTrack < NPTracks; iTrack++) {
                         StPicoTrack *track = dst->track(iTrack);
@@ -236,6 +247,8 @@ void CD(const Char_t *inFile = "test.list") {
         hTofMatch_vs_RefMult_Roop->Write();
         hTofMatch_vs_RefMult_Ref ->Write();
         hTofMatch_vs_RefMult_Fxt ->Write();
+        hPVxy                    ->Write();
+        hPVz                     ->Write();
         outFile->Close();
 
 }
