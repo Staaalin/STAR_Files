@@ -87,6 +87,9 @@ void CD(const Char_t *inFile = "test.list") {
         hPVz->GetXaxis()->SetTitle("X [cm]");
         hPVz->GetYaxis()->SetTitle("Y [cm]");
 
+        TProfile *hEastZDCrate_vs_RefMult = TProfile("hEastZDCrate_vs_RefMult","hEastZDCrate_vs_RefMult",1000,0,100000,0,500);
+        TProfile *hEastBBCrate_vs_RefMult = TProfile("hEastBBCrate_vs_RefMult","hEastBBCrate_vs_RefMult",1000,0,100000,0,500);
+
         cout<<"Start"<<endl;
         gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
         gSystem->AddIncludePath("-I$STAR/StRoot/StarClassLibrary");
@@ -241,6 +244,9 @@ void CD(const Char_t *inFile = "test.list") {
                 hTofMatch_vs_RefMult_Roop->Fill(Ntofmatch,NumCharge);
                 hTofMatch_vs_RefMult_Ref ->Fill(Ntofmatch,RefMult);
                 hTofMatch_vs_RefMult_Fxt ->Fill(Ntofmatch,FxtMult);
+
+                hEastZDCrate_vs_RefMult  ->Fill(event->zdcEastRate(),NumCharge);
+                hEastBBCrate_vs_RefMult  ->Fill(event->bbcEastRate(),NumCharge);
         }
 
         TFile *outFile = new TFile("cen1.v2.root", "RECREATE");
@@ -249,6 +255,8 @@ void CD(const Char_t *inFile = "test.list") {
         hTofMatch_vs_RefMult_Fxt ->Write();
         hPVxy                    ->Write();
         hPVz                     ->Write();
+        hEastZDCrate_vs_RefMult  ->Write();
+        hEastBBCrate_vs_RefMult  ->Write();
         outFile->Close();
 
 }
