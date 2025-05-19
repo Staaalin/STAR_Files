@@ -87,8 +87,8 @@ void CD(const Char_t *inFile = "test.list") {
         hPVz->GetXaxis()->SetTitle("X [cm]");
         hPVz->GetYaxis()->SetTitle("Y [cm]");
 
-        TProfile *hEastZDCrate_vs_RefMult = TProfile("hEastZDCrate_vs_RefMult","hEastZDCrate_vs_RefMult",1000,0,100000,0,500);
-        TProfile *hEastBBCrate_vs_RefMult = TProfile("hEastBBCrate_vs_RefMult","hEastBBCrate_vs_RefMult",1000,0,100000,0,500);
+        TProfile *hEastZDCrate_vs_RefMult = new TProfile("hEastZDCrate_vs_RefMult","hEastZDCrate_vs_RefMult",1000,0,100000,0,500);
+        TProfile *hEastBBCrate_vs_RefMult = new TProfile("hEastBBCrate_vs_RefMult","hEastBBCrate_vs_RefMult",1000,0,100000,0,500);
 
         cout<<"Start"<<endl;
         gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
