@@ -223,8 +223,8 @@ void CD(const Char_t *inFile = "test.list") {
                 hPVxy->Fill(pVx,pVy);
                 hPVz->Fill(pVz);
 
-                if (fabs(pVz-200.0)>2.0) continue;
-                if (pVx*pVx+pVy*pVy>4.0) continue;
+                if (fabs(pVz-200.6)>2.0) continue;
+                if ((pVx-0.06)*(pVx-0.06)+(pVy+1.96)*(pVy+1.96)>4.0) continue;
 
                 NumCharge = 0;
                 for (Int_t iTrack = 0; iTrack < NPTracks; iTrack++) {
