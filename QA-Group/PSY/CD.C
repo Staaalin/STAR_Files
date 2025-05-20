@@ -247,6 +247,10 @@ void CD(const Char_t *inFile = "test.list") {
 
                 hEastZDCrate_vs_RefMult  ->Fill(event->zdcEastRate(),NumCharge);
                 hEastBBCrate_vs_RefMult  ->Fill(event->bbcEastRate(),NumCharge);
+
+                cout<<"#############################################"<<endl;
+                cout<<"event->zdcEastRate()"<<event->zdcEastRate()<<endl;
+                cout<<"event->bbcEastRate()"<<event->bbcEastRate()<<endl;
         }
 
         TFile *outFile = new TFile("cen1.v2.root", "RECREATE");
