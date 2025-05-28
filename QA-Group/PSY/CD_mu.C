@@ -65,7 +65,7 @@ float BBCco    ;
 float ZDCcoin  ;
 int NumCharge  ;
 
-void CD(const Char_t *inFile = "test.list") {
+void CD_mu(const Char_t *inFile = "test.list") {
 
         TH2F *hTofMatch_vs_RefMult_Roop = new TH2F("hTofMatch_vs_RefMult_Roop","nbTofMatch_vs_RefMult(Calculated from loop)",250,0,250,500,0,500);
         hTofMatch_vs_RefMult_Roop->GetXaxis()->SetTitle("nBTOFMatch");
