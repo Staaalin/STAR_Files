@@ -12,7 +12,7 @@ class CentralityMaker;
 void RunCD(const Char_t *inFile = "test.list") {
   // Next line is not needed if you are not running in a standalone mode
 //  gROOT->ProcessLine("#define _VANILLA_ROOT_");
-  gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
+  // gROOT->Macro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
   gSystem->Load("StPicoEvent");
   // gSystem->Load("StEpdUtil");
   // gSystem->Load("StRefMultCorr");
