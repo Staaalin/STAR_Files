@@ -111,7 +111,7 @@ while ($i <= $numFiles)
     echo ll >> $SubXml
     echo echo \"000000000000000000000000000000000000000\" >> $SubXml
     # echo root4star \-b \-q RunCD\.C$LeftBrackets$Quo$FILELIST$Quo$RightBrackets$StoreL$i$StoreR >> $SubXml
-    echo root \-b \-q CD\.C$LeftBrackets$Quo$FILELIST$Quo$RightBrackets$StoreL$i$StoreR >> $SubXml
+    echo root4star \-b \-q CD\.C$LeftBrackets$Quo$FILELIST$Quo$RightBrackets$StoreL$i$StoreR >> $SubXml
     echo ls  >> $SubXml
     echo mv $OutputName cen1_$i\.root >> $SubXml
     echo \</command\> >> $SubXml
