@@ -99,6 +99,7 @@ while ($i <= $numFiles)
     echo \<command\> >> $SubXml
     
     echo setenv NODEBUG yes   >> $SubXml
+    echo starver SL24c        >> $SubXml
     # echo starver SL20d        >> $SubXml
 
 
