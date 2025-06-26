@@ -42,6 +42,7 @@
         "HR.C": "cpp",
         "CD.C": "cpp",
         "RunCD.C": "cpp",
-        "TRun.C": "cpp"
+        "TRun.C": "cpp",
+        "MM.C": "cpp"
     }
 }
