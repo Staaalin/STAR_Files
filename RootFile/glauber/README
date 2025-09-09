@@ -1,0 +1,2 @@
+g++ -o read_mult read_mult.cpp `root-config --cflags --libs`
+./read_mult /user/File_ 1 15
