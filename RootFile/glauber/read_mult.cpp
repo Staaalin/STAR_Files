@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
         }
 
         // 设置分支地址
-        int mult = 0;
+        UInt_t mult = 0;
         tree->SetBranchAddress("mult", &mult);
 
         // 读取条目并填充直方图
