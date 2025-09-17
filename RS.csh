@@ -1,21 +1,32 @@
 #!/bin/csh
 
-# 1. 运行 condor_q 输出
+# 1. 保存 condor_q 输出
 condor_q > temp.csh
 
-# 2. 用 awk 处理 temp.csh
+# 2. 处理 temp.csh
 awk '{
-    # 如果这一行里有一个字段等于大写 R，则跳过
+    # 跳过表头等非 job 行
+    if ($1 !~ /^[0-9]+\./) next
+
+    # 如果这一行里有字段等于大写 I，则跳过
     for (i=1; i<=NF; i++) {
-        if ($i == "R") next
+        if ($i == "I") next
     }
 
-    # 否则正常处理
-    if ($1 ~ /^[0-9.]+$/ && $NF ~ /\.csh$/) {
-        jobid = $1
-        script = $NF
-        print "condor_rm " jobid
-        print "condor_submit " script " &"
+    # 查找第一个以 .csh 结尾的字段
+    for (i=1; i<=NF; i++) {
+        if ($i ~ /\.csh$/) {
+            jobid = $1
+            script = $i
+            # 把脚本后面所有参数拼起来
+            cmd = $i
+            for (j=i+1; j<=NF; j++) {
+                cmd = cmd " " $j
+            }
+            print "condor_rm " jobid
+            print "condor_submit " cmd " &"
+            break
+        }
     }
 }' temp.csh > resubmit_jobs.csh
 
