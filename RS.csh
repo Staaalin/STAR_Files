@@ -15,8 +15,8 @@ while read -r line; do
     if [[ "$line" =~ ^[0-9]+\.[0-9]+ ]] && [[ "$line" == *" I "* ]] && [[ "$line" == *".csh"* ]]; then
         # 提取 jobid
         jobid=$(echo "$line" | awk '{print $1}')
-        # 提取 csh 及后面参数
-        cmd=$(echo "$line" | cut -d' ' -f8-)
+        # 提取从第一个 .csh 开始的内容
+        cmd=$(echo "$line" | sed -E 's/.* ([^ ]+\.csh .*)/\1/')
 
         echo "condor_rm $jobid" >> "$outfile"
         echo "condor_submit $cmd &" >> "$outfile"
