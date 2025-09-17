@@ -1,44 +1,37 @@
 #!/bin/csh -f
-# resubmit.csh  -- 生成 resubmit_jobs.csh（不使用 awk，不触发 Event not found）
+# 禁用 history
+set history = 0
+unset savehist
 
 # 1) 获取 condor_q 输出
 rm temp.csh
 rm resubmit_jobs.csh
 condor_q > temp.csh
 
-# 2) 输出文件初始化
+# 2) 输出文件
 set outfile = resubmit_jobs.csh
 echo "#!/bin/csh -f" > $outfile
 echo "" >> $outfile
 
-# 3) 逐行读取并处理 temp.csh
-while ( 1 )
-    set line = "$<"
-    if ( $status != 0 ) then
-        break
-    endif
-
-    # 拆成字段数组
+# 3) 逐行读取
+foreach line ("`cat temp.csh`")
+    # 按空格切分
     set words = ( $line )
     if ( $#words == 0 ) continue
 
-    # 只处理第一字段是 jobid（数字.数字）的行
-    echo "$words[1]" | /bin/grep -E -q '^[0-9]+\.[0-9]+$'
-    if ( $status != 0 ) continue
+    # 第一列必须是 jobid 格式：数字.数字
+    if ("$words[1]" !~ [0-9]*"."[0-9]*) continue
 
-    # 如果任一字段是 I，则跳过
+    # 如果有字段等于 I，跳过
     set skip = 0
-    @ i = 1
-    while ( $i <= $#words )
-        if ( "$words[$i]" == "I" ) then
+    foreach w ( $words )
+        if ( "$w" == "I" ) then
             set skip = 1
-            break
         endif
-        @ i++
     end
     if ( $skip == 1 ) continue
 
-    # 找到第一个以 .csh 结尾的字段
+    # 找到第一个 .csh 脚本及后面的参数
     set idx = 0
     @ i = 1
     while ( $i <= $#words )
@@ -50,20 +43,16 @@ while ( 1 )
     end
     if ( $idx == 0 ) continue
 
-    # 拼接从 idx 到行尾的字段
-    set cmd = "$words[$idx]"
-    @ j = $idx + 1
+    set cmd = ""
+    @ j = $idx
     while ( $j <= $#words )
         set cmd = "$cmd $words[$j]"
         @ j++
     end
 
-    # 写入 resubmit_jobs.csh
     echo "condor_rm $words[1]" >> $outfile
-    echo "condor_submit $cmd &" >> $outfile
-end < temp.csh
+    echo "condor_submit$cmd &" >> $outfile
+end
 
-# 4) 可执行权限
 chmod +x $outfile
-
 echo "已生成 $outfile"
