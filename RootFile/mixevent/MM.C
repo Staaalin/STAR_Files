@@ -425,8 +425,8 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
             MotherMassSigma.push_back(-1);
             continue;
         }
-        MotherMass.push_back(massList(FeedDown[i]), DataName);
-        MotherMassSigma.push_back(massListSigma(FeedDown[i]), DataName);
+        MotherMass.push_back(massList(FeedDown[i], DataName));
+        MotherMassSigma.push_back(massListSigma(FeedDown[i], DataName));
     }
     cout<<"MotherMass = ";print(MotherMass);
     cout<<"MotherMassSigma = ";print(MotherMassSigma);
@@ -533,7 +533,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
         // 定Centrality
         CenIndex = -1;
         for (k=0;k<CentralityBinNum;k++){
-            NNch = CenCorr(PVz) * Nch;
+            NNch = CenCorr(PVz, DataName) * Nch;
             // if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
             if ((NchList.at(k) >= NNch) && (NNch > NchList.at(k+1))) {
                 CenIndex = k;
