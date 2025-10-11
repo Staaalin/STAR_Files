@@ -20,6 +20,14 @@ set A_PDG = "$<"
 echo "Please enter particle B PDG:"
 set B_PDG = "$<"
 
+echo "Please enter DataName:"
+echo "1: dAu_200_21"
+set DataNameIndex = "$<"
+if ($DataNameIndex == 1) then
+
+    set DataName = "dAu_200_21"
+
+endif
 
 echo "Please enter which location:"
 echo "SCHEME 1: /star/data01/pwg/svianping/output/output_*.root"
@@ -152,7 +160,8 @@ while ($i <= $numFiles)
     set RightBrackets = "\)"
     set Quo = '\"'
     # echo root4star \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
-    echo root \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG,0,$SLMEIndex,$CutIndex$RightBrackets >> $SubXml
+    # echo root \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG,0,$SLMEIndex,$CutIndex$RightBrackets >> $SubXml
+    echo root \-b MM\.C$LeftBrackets$Quo\$midname$Quo,$Quo\$DataName$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG,0,$SLMEIndex,$CutIndex$RightBrackets >> $SubXml
     # echo root4star \-b MixEventTest\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
@@ -188,7 +197,8 @@ while ($i <= $numFiles)
         @ k = $k + 1
     end
 
-    set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEvent.C"
+    # set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEvent.C"
+    set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MM.C"
     # set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEventTest.C"
     echo \<File\>file:$MixEventPWD\</File\> >> $SubXml
     set SourceFilePWD = "/star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh"
