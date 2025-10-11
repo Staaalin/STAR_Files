@@ -23,6 +23,7 @@ set B_PDG = "$<"
 echo "Please enter DataName:"
 echo "1: dAu_200_21"
 set DataNameIndex = "$<"
+set DataName = "undefined"
 if ($DataNameIndex == 1) then
 
     set DataName = "dAu_200_21"
