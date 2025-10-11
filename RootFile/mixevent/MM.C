@@ -63,7 +63,6 @@ float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float
 float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float p3x , float p3y , float p3z , float AMass , float BMass , float CMass);
 float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float p3x , float p3y , float p3z , float p4x , float p4y , float p4z , float AMass , float BMass , float CMass , float DMass);
 float CenCorr(float Vz, TString DataName);
-std::vector<int> GetDaughterPDGLit(int ID);
 
 // 定义粒子结构体
 struct Particle {
@@ -1107,48 +1106,6 @@ bool IfInVector(int Num , std::vector<int> V)
         }
     }
     return false;
-}
-
-std::vector<int> GetDaughterPDGLit(int ID)
-{
-    std::vector<int> V_T;V_T.clear();
-    switch (ID)
-    {
-        case 3334 :// Omega
-            V_T.push_back(-321);
-            V_T.push_back(3122);
-            return V_T;
-        case -3334 :// OmegaBar
-            V_T.push_back(321);
-            V_T.push_back(-3122);
-            return V_T;
-        case 1003314 :// XiR
-            V_T.push_back(-321);
-            V_T.push_back(3122);
-            return V_T;
-        case -1003314 :// XiRBar
-            V_T.push_back(321);
-            V_T.push_back(-3122);
-            return V_T;
-        case 3312 :// Xi
-            V_T.push_back(-211);
-            V_T.push_back(3122);
-            return V_T;
-        case -3312 :// XiBar
-            V_T.push_back(211);
-            V_T.push_back(-3122);
-            return V_T;
-        case 3122 :// Lambda
-            V_T.push_back(-211);
-            V_T.push_back(2212);
-            return V_T;
-        case -3122 :// LambdaBar
-            V_T.push_back(211);
-            V_T.push_back(-2212);
-            return V_T;
-        default :
-            return V_T;
-    }
 }
 
 Double_t massList(int PID, TString DataName)
