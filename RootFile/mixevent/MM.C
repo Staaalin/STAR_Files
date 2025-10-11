@@ -57,12 +57,12 @@ void print(std::vector<float> Temp);
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize, TString DataName);
 bool IfInVector(int Num , std::vector<int> V);
 std::vector<int> GetDaughterPDGLit(int ID);
-Double_t massList(int PID);
-Double_t massListSigma(int PID);
+Double_t massList(int PID, TString DataName);
+Double_t massListSigma(int PID, TString DataName);
 float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float AMass , float BMass);
 float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float p3x , float p3y , float p3z , float AMass , float BMass , float CMass);
 float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float p3x , float p3y , float p3z , float p4x , float p4y , float p4z , float AMass , float BMass , float CMass , float DMass);
-float CenCorr(float Vz);
+float CenCorr(float Vz, TString DataName);
 std::vector<int> GetDaughterPDGLit(int ID);
 
 // 定义粒子结构体
@@ -312,8 +312,8 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
     float APz  , BPz ;
     float APt  , BPt ;
     float ARap , BRap;
-    float BMass = massList(B_PDG)           , AMass = massList(A_PDG)          ;
-    float BMassSigma = massListSigma(B_PDG) , AMassSigma = massListSigma(A_PDG);
+    float BMass = massList(B_PDG, DataName)           , AMass = massList(A_PDG, DataName)          ;
+    float BMassSigma = massListSigma(B_PDG, DataName) , AMassSigma = massListSigma(A_PDG, DataName);
     std::vector<std::vector<int> > C_ParID;
 
     //                                    centrality    A_Rapidity   PrimaryVertex
@@ -426,8 +426,8 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
             MotherMassSigma.push_back(-1);
             continue;
         }
-        MotherMass.push_back(massList(FeedDown[i]));
-        MotherMassSigma.push_back(massListSigma(FeedDown[i]));
+        MotherMass.push_back(massList(FeedDown[i]), DataName);
+        MotherMassSigma.push_back(massListSigma(FeedDown[i]), DataName);
     }
     cout<<"MotherMass = ";print(MotherMass);
     cout<<"MotherMassSigma = ";print(MotherMassSigma);
@@ -952,6 +952,19 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize, TStri
             }
         }
     }
+    if (DataName == "dAu_200_21") {
+        // data from https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
+        int NchTable[21] = { 10000 , 55 , 47 , 42 , 38 , 35 , 32 , 29 , 26 , 24 , 21 , 19 , 17 , 15 , 13 , 11 , 9 , 7 , 6 , 4 ,  0};
+        int CenTable[21] = {     0 ,  5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 55 , 60 , 65 , 70 , 75 ,80 ,85 ,90 ,95 ,100};
+        for (int i=0;i<CentralityListSize;i++) {
+            for (int j=0;j<21;j++){
+                if (CenTable[j] == CentralityList[i]) {
+                    Result.push_back(NchTable[j]);
+                    break;
+                }
+            }
+        }
+    }
     return Result;
 }
 
@@ -1138,7 +1151,7 @@ std::vector<int> GetDaughterPDGLit(int ID)
     }
 }
 
-Double_t massList(int PID)
+Double_t massList(int PID, TString DataName)
 {
     Double_t Result;
     if (DataName == "dAu_200_21"){
@@ -1190,7 +1203,7 @@ Double_t massList(int PID)
     return Result;
 }
 
-Double_t massListSigma(int PID)
+Double_t massListSigma(int PID, TString DataName)
 {
     Double_t Result;
     if (DataName == "dAu_200_21"){
@@ -1274,7 +1287,7 @@ void print(Event Temp)
     return ;
 }
 
-float CenCorr(float Vz)
+float CenCorr(float Vz, TString DataName)
 {
     if (DataName == "dAu_200_21") {// data from https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
         if      (Vz < -50.0) {
