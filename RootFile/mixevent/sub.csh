@@ -149,6 +149,7 @@ while ($i <= $numFiles)
     echo echo \"000000000000000000000000000000000000000\" >> $SubXml
     echo set midname = \"$InputName\" >> $SubXml
     echo set outmidname = \"$OutputName\" >> $SubXml
+    echo set DataName = \"$DataName\" >> $SubXml
     set Jnum = 0
     @ Jnum = $FileStart + $i * $FilesPerJob
     echo set StartFileIndex = $Jnum >> $SubXml
