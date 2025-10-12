@@ -34,7 +34,7 @@ using namespace std;
 
 
 // 定义粒子结构体
-struct Particle {
+struct PsyParticle {
     float px;       // x方向动量
     float py;       // y方向动量
     float pz;       // z方向动量
@@ -46,13 +46,13 @@ struct Particle {
     int   TreeID;   // ID in one event
     std::vector<int>   ParentID; // Parent Particle ID in one event
     
-    Particle()
+    PsyParticle()
         : px(0), py(0), pz(0), mass(0),
           eta(0), y(0), pt(0),
           IsRecord(false), TreeID(0) {}
     
     // 构造函数
-    Particle(float _px, float _py, float _pz, float _mass, int _TreeID) 
+    PsyParticle(float _px, float _py, float _pz, float _mass, int _TreeID) 
         : px(_px), py(_py), pz(_pz), mass(_mass), TreeID(_TreeID) {
         // 计算赝快度、快度和横向动量
         pt = sqrt(px*px + py*py);
@@ -82,11 +82,11 @@ struct Particle {
 #pragma link off all classes;
 #pragma link off all functions;
 
-#pragma link C++ class Particle+;
-#pragma link C++ class std::vector<Particle>+;
+#pragma link C++ class PsyParticle+;
+#pragma link C++ class std::vector<PsyParticle>+;
 #endif
 // 这告诉 ROOT：
-// “只生成 Particle 和 std::vector<Particle> 的字典，
+// “只生成 PsyParticle 和 std::vector<PsyParticle> 的字典，
 // 不要去尝试生成任何 random_access_iterator 之类的模板。”
 
 
@@ -126,8 +126,8 @@ float CenCorr(float Vz, TString DataName);
 // 定义事件结构体
 struct Event {
     int eventID;                    // 事件ID
-    std::vector<Particle> A_particles;  // A类粒子 主粒子
-    std::vector<Particle> B_particles;  // B类粒子
+    std::vector<PsyParticle> A_particles;  // A类粒子 主粒子
+    std::vector<PsyParticle> B_particles;  // B类粒子
     
     Event() : eventID(-1) {}
     // 构造函数
@@ -340,8 +340,8 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
 
     //                                    centrality    A_Rapidity   PrimaryVertex
     std::vector<Event>    EventPool         [50]           [50]          [50];
-    std::vector<Particle> A_Array                          [50]              , B_Array;
-    std::vector<Particle> A_List                           [50]              , B_List ;
+    std::vector<PsyParticle> A_Array                       [50]              , B_Array;
+    std::vector<PsyParticle> A_List                        [50]              , B_List ;
     TH1F                 *H_Kstar           [50]           [50]          [50];
     TH1F                 *H_ALL_Kstar                      [50]     ;
     TH1F                 *H_Mix_Kstar       [50]           [50]          [50];
@@ -371,14 +371,14 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
     TH1F                 *H_ALL_Rap_B                      [50]     ;
     TH1F                 *H_Rap_K_B         [50]                         [50];
     TH1F                 *H_ALL_Rap_K_B                             ;
-    Particle              A(0,0,0,0,0), B(0,0,0,0,0), C(0,0,0,0,0), D(0,0,0,0,0);
+    PsyParticle           A(0,0,0,0,0), B(0,0,0,0,0), C(0,0,0,0,0), D(0,0,0,0,0);
     Event                 TempEvent(0);
 
     int kStarBinNum = 400;
     float kStarSta = 0 , kStarEnd = 8;
     
-    int dRapBinNum = 1000;
-    float dRapSta = -10 , dRapEnd = 10;
+    int dRapBinNum = 500;
+    float dRapSta = -5 , dRapEnd = 5;
     
     int SRapBinNum = 1000;
     float SRapSta = -10 , SRapEnd = 10;
@@ -406,7 +406,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                 H_Rap_K_A         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Rap_K_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("A dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
                 H_Rap_B           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Rap_B_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("B dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
                 if ((RapIndex == 0)) {
-                    H_Rap_K_B     [CenIndex]            [PVzIndex] = new TH1F(Form("H_Rap_K_B_%d "       ,CenIndex         ),Form("B dN/dy, [%d,%d]/100"                ,CentralityBin[CenIndex],CentralityBin[CenIndex+1]                                ),dRapBinNum,dRapSta,dRapEnd);
+                    H_Rap_K_B     [CenIndex]            [PVzIndex] = new TH1F(Form("H_Rap_K_B_%d_%d "       ,CenIndex         ),Form("B dN/dy, [%d,%d]/100, %f<PV_z<%f"                ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]                                ),dRapBinNum,dRapSta,dRapEnd);
                 }
             }
         }
@@ -598,7 +598,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                         }
                     }
 
-                    A = Particle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),AMass,i);
+                    A = PsyParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),AMass,i);
                     A.ParentID.clear();A.ParentID.push_back(i);
                     for (k=ParentSta->at(i);k<=ParentEnd->at(i);k++){
                         A.ParentID.push_back(ParentList->at(k));
@@ -646,7 +646,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                         }
                     }
 
-                    B = Particle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),BMass,i);
+                    B = PsyParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),BMass,i);
                     B.ParentID.clear();B.ParentID.push_back(i);
                     for (k=ParentSta->at(i);k<=ParentEnd->at(i);k++){
                         B.ParentID.push_back(ParentList->at(k));
@@ -854,27 +854,29 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
     TDirectory *Sep_ALL_B_Num    = folder_ALL_B_Num->mkdir("Sep");
     for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
         for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
-            Sep_kStar->cd();
-            H_Kstar                [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            H_Mix_Kstar            [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            H_Tra_Kstar            [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            Sep_dRap->cd();
-            H_dRap                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            H_Mix_dRap             [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            H_Tra_dRap             [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            Sep_dPt->cd();
-            H_dPt                  [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            H_Mix_dPt              [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            H_Tra_dPt              [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            Sep_A_Num->cd();
-            H_Rap_A                [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            Sep_B_Num->cd();
-            H_Rap_B                [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            Sep_ALL_A_Num->cd();
-            H_Rap_K_A              [CenIndex] [RapIndex] [PVzIndex] ->Write();
-            if(RapIndex==0){
-                Sep_ALL_B_Num->cd();
-                H_Rap_K_B          [CenIndex]            [PVzIndex] ->Write();
+            for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
+                Sep_kStar->cd();
+                H_Kstar                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_Kstar            [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Tra_Kstar            [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                Sep_dRap->cd();
+                H_dRap                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_dRap             [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Tra_dRap             [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                Sep_dPt->cd();
+                H_dPt                  [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_dPt              [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Tra_dPt              [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                Sep_A_Num->cd();
+                H_Rap_A                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                Sep_B_Num->cd();
+                H_Rap_B                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                Sep_ALL_A_Num->cd();
+                H_Rap_K_A              [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                if(RapIndex==0){
+                    Sep_ALL_B_Num->cd();
+                    H_Rap_K_B          [CenIndex]            [PVzIndex] ->Write();
+                }
             }
         }
         ALL_kStar->cd();
