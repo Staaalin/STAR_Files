@@ -867,10 +867,7 @@ int main(int argc, char** argv) {
     // 保存.root文件
     
     TString OutputFileName = OutMidName;
-    OutputFileName += A_PDG;
-    OutputFileName += "_";
-    OutputFileName += B_PDG;
-    OutputFileName += "_H_";
+    OutputFileName += "H_";
     OutputFileName += OutputFileIndex;
     OutputFileName += ".root";
     TFile *fileA = new TFile(OutputFileName, "RECREATE");
