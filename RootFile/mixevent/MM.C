@@ -72,6 +72,29 @@ struct ArmParticle {
     TLorentzVector lorentzVector() const {
         return TLorentzVector(px, py, pz, energy());
     }
+
+    ArmParticle(const ArmParticle& other)
+        : px(other.px), py(other.py), pz(other.pz),
+          mass(other.mass), eta(other.eta), y(other.y), pt(other.pt),
+          IsRecord(other.IsRecord), TreeID(other.TreeID),
+          ParentID(other.ParentID) {}
+
+    ArmParticle& operator=(const ArmParticle& other) {
+        if (this != &other) {
+            px = other.px;
+            py = other.py;
+            pz = other.pz;
+            mass = other.mass;
+            eta = other.eta;
+            y = other.y;
+            pt = other.pt;
+            IsRecord = other.IsRecord;
+            TreeID = other.TreeID;
+            ParentID = other.ParentID;
+        }
+        return *this;
+    }
+
 };
 
 // ROOT 5（特别是 ROOT 5.34.39）的字典机制有些老旧。
@@ -647,7 +670,6 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                     }
                     cout<<"K1";
 
-                    cout<<"mix_px->at(i),mix_py->at(i),mix_pz->at(i),BMass,i = "<<mix_px->at(i)<<" , "<<mix_py->at(i)<<" , "<<mix_pz->at(i)<<" , "<<BMass<<" , "<<i<<endl;;
                     B = ArmParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),BMass,i);
                     cout<<"K2";
                     B.ParentID.clear();B.ParentID.push_back(i);
