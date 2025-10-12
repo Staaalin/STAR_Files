@@ -32,6 +32,44 @@
 #include <stdio.h>
 using namespace std;
 
+
+// 定义粒子结构体
+struct Particle {
+    float px;       // x方向动量
+    float py;       // y方向动量
+    float pz;       // z方向动量
+    float mass;     // 质量
+    float eta;      // 赝快度
+    float y;        // 快度
+    float pt;       // 横向动量
+    bool  IsRecord; // 是否被记录
+    int   TreeID;   // ID in one event
+    std::vector<int>   ParentID; // Parent Particle ID in one event
+    
+    // 构造函数
+    Particle(float _px, float _py, float _pz, float _mass, int _TreeID) 
+        : px(_px), py(_py), pz(_pz), mass(_mass), TreeID(_TreeID) {
+        // 计算赝快度、快度和横向动量
+        pt = sqrt(px*px + py*py);
+        float p = sqrt(px*px + py*py + pz*pz);
+        float E = sqrt(p*p+mass*mass);
+        eta = -1.0*log(tan(0.5*(acos(pz/p))));
+        y = 0.5 * log((E + pz) / (E - pz));
+        IsRecord = false;
+        TreeID = 0;
+    }
+    
+    // 计算能量
+    float energy() const {
+        return sqrt(px*px + py*py + pz*pz + mass*mass);
+    }
+    
+    // 转换为四动量
+    TLorentzVector lorentzVector() const {
+        return TLorentzVector(px, py, pz, energy());
+    }
+};
+
 #if defined(__CINT__) || defined(__CLING__)
 #pragma link off all globals;
 #pragma link off all classes;
@@ -74,42 +112,6 @@ float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float
 float* GetPairMassAndKstar(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float p3x , float p3y , float p3z , float p4x , float p4y , float p4z , float AMass , float BMass , float CMass , float DMass);
 float CenCorr(float Vz, TString DataName);
 
-// 定义粒子结构体
-struct Particle {
-    float px;       // x方向动量
-    float py;       // y方向动量
-    float pz;       // z方向动量
-    float mass;     // 质量
-    float eta;      // 赝快度
-    float y;        // 快度
-    float pt;       // 横向动量
-    bool  IsRecord; // 是否被记录
-    int   TreeID;   // ID in one event
-    std::vector<int>   ParentID; // Parent Particle ID in one event
-    
-    // 构造函数
-    Particle(float _px, float _py, float _pz, float _mass, int _TreeID) 
-        : px(_px), py(_py), pz(_pz), mass(_mass), TreeID(_TreeID) {
-        // 计算赝快度、快度和横向动量
-        pt = sqrt(px*px + py*py);
-        float p = sqrt(px*px + py*py + pz*pz);
-        float E = sqrt(p*p+mass*mass);
-        eta = -1.0*log(tan(0.5*(acos(pz/p))));
-        y = 0.5 * log((E + pz) / (E - pz));
-        IsRecord = false;
-        TreeID = 0;
-    }
-    
-    // 计算能量
-    float energy() const {
-        return sqrt(px*px + py*py + pz*pz + mass*mass);
-    }
-    
-    // 转换为四动量
-    TLorentzVector lorentzVector() const {
-        return TLorentzVector(px, py, pz, energy());
-    }
-};
 
 // 定义事件结构体
 struct Event {
