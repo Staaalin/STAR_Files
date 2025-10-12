@@ -546,6 +546,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
             if (!((-25.0 <= PVz) && (PVz < 25.0))) continue;
         }
 
+        cout<<"1";
         C_ParID.clear();
         B_List.clear();
         TempEvent.eventID = EntriesID;
@@ -556,6 +557,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
             A_List [MatchedRap[i]].clear();
         }
         MatchedRap.clear();
+        cout<<"2";
         // 定Centrality
         CenIndex = -1;
         for (k=0;k<CentralityBinNum;k++){
@@ -577,6 +579,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
             }
         }
         if (PVzIndex == -1) continue;
+        cout<<"3";
         // 遍历粒子，筛选A、B、C、D
         for (i=0;i<PDGMult;i++){
             if (PDG->at(i) == A_PDG) {
@@ -682,6 +685,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                 }
             }
         }
+        cout<<"4";
         // 筛选A、B粒子
         for (Bid=0;Bid<B_List.size();Bid++) {
             IfRecord = true;
@@ -707,6 +711,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                 if (IfRecord) A_Array[MatchedRap[i]].push_back(A_List[MatchedRap[i]][Aid]);
             }
         }
+        cout<<"5";
         if (TempEvent.B_particles.size() >= HowMuchEventMixing+1) continue;
         // 确保同时记录到A、B、...粒子
         if (MatchedRap.size() == 0) continue;                                                        // 有A粒子
@@ -818,6 +823,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
             }
             MatchedRap.clear();
         }
+        cout<<"6";
     }
     // 保存.root文件
     
