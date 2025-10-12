@@ -318,6 +318,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
     //                                    centrality    A_Rapidity   PrimaryVertex
     std::vector<Event>    EventPool         [50]           [50]          [50];
     std::vector<Particle> A_Array                          [50]              , B_Array;
+    std::vector<Particle> A_List                           [50]              , B_List ;
     TH1F                 *H_Kstar           [50]           [50]          [50];
     TH1F                 *H_ALL_Kstar                      [50]     ;
     TH1F                 *H_Mix_Kstar       [50]           [50]          [50];
@@ -523,11 +524,13 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
         }
 
         C_ParID.clear();
+        B_List.clear();
         TempEvent.eventID = EntriesID;
         TempEvent.A_particles.clear();
         TempEvent.B_particles.clear();
         for (i=0;i<MatchedRap.size();i++) {
             A_Array[MatchedRap[i]].clear();
+            A_List [MatchedRap[i]].clear();
         }
         MatchedRap.clear();
         // 定Centrality
@@ -594,7 +597,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                         }
                     }
                     if (RapIndex == -1) continue;
-                    A_Array[RapIndex].push_back(A);
+                    A_List[RapIndex].push_back(A);
                     if (!IfInVector(RapIndex , MatchedRap)) MatchedRap.push_back(RapIndex);
                     H_Rap_K_A[CenIndex][RapIndex][PVzIndex]->Fill(A.y);
                     H_ALL_Rap_K_A      [RapIndex]          ->Fill(A.y);
@@ -634,7 +637,8 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                         }
                     }
                     if ((B.eta < EtaCut[0]) || (B.eta > EtaCut[1])) continue;
-                    TempEvent.B_particles.push_back(B);
+                    // TempEvent.B_particles.push_back(B);
+                    B_List.push_back(B);
                     H_Rap_K_B[CenIndex][PVzIndex]->Fill(B.y);
                     H_ALL_Rap_K_B                ->Fill(B.y);
                     continue;
@@ -655,45 +659,30 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                 }
             }
         }
-        // 如果A、B有血缘关系，保留A
-        for (size_t aid = 0; aid < TempEvent.A_particles.size(); ++aid) {
-            auto& At = TempEvent.A_particles[aid];
-            for (auto itB = TempEvent.B_particles.begin(); itB != TempEvent.B_particles.end(); /* no ++itB */) {
-                if (IfInVector(At.TreeID, itB->ParentID)) {
-                    itB = TempEvent.B_particles.erase(itB); // erase 会返回下一个有效迭代器
-                } else {
-                    ++itB;
+        // 筛选A、B粒子
+        for (Bid=0;Bid<B_List.size();Bid++) {
+            IfRecord = true;
+            // 如果A、B有血缘关系，保留A
+            for (i=0;i<MatchedRap.size();i++) {
+                for (Aid=0;Aid<A_List[MatchedRap[i]].size();Aid++) {
+                    if (IfInVector(B_List[Bid].TreeID , A_List[MatchedRap[i]][Aid].ParentID)) IfRecord = false;
                 }
             }
+            // 如果A、B与C有血缘关系，不记录A和B
+            for (Cid = 0;Cid < C_ParID.size();Cid++) {
+                if (IfInVector(B_List[Bid].TreeID , C_ParID.at(Cid))) IfRecord = false;
+            }
+            if (IfRecord) TempEvent.B_particles.push_back(B_List[Bid]);
         }
-        // 如果A、B与C有血缘关系，不记录A和B
-        for (auto it = TempEvent.A_particles.begin(); it != TempEvent.A_particles.end(); ) {
-            bool eraseFlag = false;
-            for (auto cid : C_ParID) {
-                if (IfInVector(it->TreeID, cid)) {
-                    eraseFlag = true;
-                    break;
+        for (i=0;i<MatchedRap.size();i++) {
+            for (Aid=0;Aid<A_List[MatchedRap[i]].size();Aid++) {
+                IfRecord = true;
+                // 如果A、B与C有血缘关系，不记录A和B
+                for (Cid = 0;Cid < C_ParID.size();Cid++) {
+                    if (IfInVector(B_List[Bid].TreeID , C_ParID.at(Cid))) IfRecord = false;
                 }
+                if (IfRecord) A_Array[MatchedRap[i]].push_back(A_List[MatchedRap[i]][Aid]);
             }
-        
-            if (eraseFlag)
-                it = TempEvent.A_particles.erase(it);  // erase() 返回下一个有效迭代器
-            else
-                ++it;
-        }
-        for (auto it = TempEvent.B_particles.begin(); it != TempEvent.B_particles.end(); ) {
-            bool eraseFlag = false;
-            for (auto cid : C_ParID) {
-                if (IfInVector(it->TreeID, cid)) {
-                    eraseFlag = true;
-                    break;
-                }
-            }
-        
-            if (eraseFlag)
-                it = TempEvent.B_particles.erase(it);  // erase() 返回下一个有效迭代器
-            else
-                ++it;
         }
         if (TempEvent.B_particles.size() >= HowMuchEventMixing+1) continue;
         // 确保同时记录到A、B、...粒子
