@@ -647,7 +647,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                     }
                     cout<<"K1";
 
-                    std::cout << "i = " << i << " / size = " << mix_px->size() << std::endl;
+                    cout<<"mix_px->at(i),mix_py->at(i),mix_pz->at(i),BMass,i = "<<mix_px->at(i)<<" , "<<mix_py->at(i)<<" , "<<mix_pz->at(i)<<" , "<<BMass<<" , "<<i<<endl;;
                     B = ArmParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),BMass,i);
                     cout<<"K2";
                     B.ParentID.clear();B.ParentID.push_back(i);
