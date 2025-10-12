@@ -129,6 +129,7 @@ struct Event {
     std::vector<Particle> A_particles;  // A类粒子 主粒子
     std::vector<Particle> B_particles;  // B类粒子
     
+    Event() : eventID(-1) {}
     // 构造函数
     Event(int _eventID) 
         : eventID(_eventID) {}
