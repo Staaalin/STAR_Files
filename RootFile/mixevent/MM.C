@@ -46,6 +46,11 @@ struct Particle {
     int   TreeID;   // ID in one event
     std::vector<int>   ParentID; // Parent Particle ID in one event
     
+    Particle()
+        : px(0), py(0), pz(0), mass(0),
+          eta(0), y(0), pt(0),
+          IsRecord(false), TreeID(0) {}
+    
     // 构造函数
     Particle(float _px, float _py, float _pz, float _mass, int _TreeID) 
         : px(_px), py(_py), pz(_pz), mass(_mass), TreeID(_TreeID) {
@@ -70,6 +75,8 @@ struct Particle {
     }
 };
 
+// ROOT 5（特别是 ROOT 5.34.39）的字典机制有些老旧。
+// 它会自动为 std::vector<T> 生成迭代器类型的字典（如 random_access_iterator<T,long>），但 C++11 之后这些类型模板已不再定义，因此报错。
 #if defined(__CINT__) || defined(__CLING__)
 #pragma link off all globals;
 #pragma link off all classes;
@@ -78,6 +85,9 @@ struct Particle {
 #pragma link C++ class Particle+;
 #pragma link C++ class std::vector<Particle>+;
 #endif
+// 这告诉 ROOT：
+// “只生成 Particle 和 std::vector<Particle> 的字典，
+// 不要去尝试生成任何 random_access_iterator 之类的模板。”
 
 
 #define Pi 3.1415926535898
