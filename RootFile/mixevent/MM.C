@@ -630,7 +630,6 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                     continue;
                 }
             }
-            cout<<"K3";
             else if (PDG->at(i) == B_PDG) {
                 if (fabs(InvariantMass->at(i) - BMass) <= MassSigmaWidth*BMassSigma) {
 
@@ -671,7 +670,6 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                     continue;
                 }
             }
-            cout<<"K4";
             else{
                 for (l = 0;l < FeedDownNum;l++) {
                     if ( abs(PDG->at(i)) == FeedDown[l] ) {
@@ -686,8 +684,9 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                     }
                 }
             }
+            cout<<"K3";
         }
-        cout<<"K5";
+        cout<<"K4";
         // 筛选A、B粒子
         for (Bid=0;Bid<B_List.size();Bid++) {
             IfRecord = true;
@@ -824,7 +823,6 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
             }
             MatchedRap.clear();
         }
-        cout<<"K6";
     }
     // 保存.root文件
     
