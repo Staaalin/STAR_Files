@@ -56,7 +56,7 @@ struct ArmParticle {
         : px(_px), py(_py), pz(_pz), mass(_mass), TreeID(_TreeID) {
         // 计算赝快度、快度和横向动量
         pt = sqrt(px*px + py*py);
-        float p = sqrt(px*px + py*py + pz*pz);
+        float p = sqrt(pt*pt + pz*pz);
         float E = sqrt(p*p+mass*mass);
         eta = -1.0*log(tan(0.5*(acos(pz/p))));
         y = 0.5 * log((E + pz) / (E - pz));
@@ -647,6 +647,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                     }
                     cout<<"K1";
 
+                    std::cout << "i = " << i << " / size = " << mix_px->size() << std::endl;
                     B = ArmParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),BMass,i);
                     cout<<"K2";
                     B.ParentID.clear();B.ParentID.push_back(i);
