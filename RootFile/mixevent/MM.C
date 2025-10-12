@@ -583,6 +583,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
         for (i=0;i<PDGMult;i++){
             cout<<"K2";
             if (PDG->at(i) == A_PDG) {
+                cout<<"K21";
                 if (fabs(InvariantMass->at(i) - AMass) <= MassSigmaWidth*AMassSigma) {
 
                     if (IfRemoveHighTPCsigma) {
@@ -631,6 +632,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                 }
             }
             else if (PDG->at(i) == B_PDG) {
+                cout<<"K22";
                 if (fabs(InvariantMass->at(i) - BMass) <= MassSigmaWidth*BMassSigma) {
 
                     if (IfRemoveHighTPCsigma) {
@@ -671,6 +673,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                 }
             }
             else{
+                cout<<"K23";
                 for (l = 0;l < FeedDownNum;l++) {
                     if ( abs(PDG->at(i)) == FeedDown[l] ) {
                         if ((fabs(InvariantMass->at(i) - MotherMass.at(l)) > 3*MotherMassSigma.at(l))) continue;
