@@ -61,7 +61,6 @@ struct ArmParticle {
         eta = -1.0*log(tan(0.5*(acos(pz/p))));
         y = 0.5 * log((E + pz) / (E - pz));
         IsRecord = false;
-        TreeID = 0;
     }
     
     // 计算能量
