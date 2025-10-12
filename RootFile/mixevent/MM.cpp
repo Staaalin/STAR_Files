@@ -690,18 +690,13 @@ int main(int argc, char** argv) {
                             if ( (0 > dcatopv->at(i)) || (dcatopv->at(i) > 0.5)) continue;
                         }
                     }
-                    cout<<"K1";
 
                     B = ArmParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),BMass,i);
-                    cout<<"K2";
                     B.ParentID.clear();B.ParentID.push_back(i);
-                    cout<<"K3";
                     for (k=ParentSta->at(i);k<=ParentEnd->at(i);k++){
                         B.ParentID.push_back(ParentList->at(k));
                     }
-                    cout<<"K4";
                     if (IfRemoveSpliteMerge) {
-                        cout<<"K5";
                         for (k=SE_ParentSta->at(i);k<=SE_ParentEnd->at(i);k++){
                             B.ParentID.push_back(SE_ParentList->at(k));
                         }
@@ -709,9 +704,7 @@ int main(int argc, char** argv) {
                             B.ParentID.push_back(ME_ParentList->at(k));
                         }
                     }
-                    cout<<"K5";
                     if ((B.eta < EtaCut[0]) || (B.eta > EtaCut[1])) continue;
-                    cout<<"K6";
                     // TempEvent.B_particles.push_back(B);
                     B_List.push_back(B);
                     H_Rap_K_B[CenIndex][PVzIndex]->Fill(B.y);
