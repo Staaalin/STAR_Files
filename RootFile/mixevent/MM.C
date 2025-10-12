@@ -578,12 +578,9 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
             }
         }
         if (PVzIndex == -1) continue;
-        cout<<"K1";
         // 遍历粒子，筛选A、B、C、D
         for (i=0;i<PDGMult;i++){
-            cout<<"K2";
             if (PDG->at(i) == A_PDG) {
-                cout<<"K21";
                 if (fabs(InvariantMass->at(i) - AMass) <= MassSigmaWidth*AMassSigma) {
 
                     if (IfRemoveHighTPCsigma) {
@@ -632,8 +629,9 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                 }
             }
             else if (PDG->at(i) == B_PDG) {
-                cout<<"K22";
+                cout<<"K1";
                 if (fabs(InvariantMass->at(i) - BMass) <= MassSigmaWidth*BMassSigma) {
+                    cout<<"K11";
 
                     if (IfRemoveHighTPCsigma) {
                         if (abs(B_PDG) == 321) {
@@ -650,6 +648,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                             if ( (0 > dcatopv->at(i)) || (dcatopv->at(i) > 0.5)) continue;
                         }
                     }
+                    cout<<"K12";
 
                     B = ArmParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),BMass,i);
                     B.ParentID.clear();B.ParentID.push_back(i);
@@ -665,15 +664,16 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                         }
                     }
                     if ((B.eta < EtaCut[0]) || (B.eta > EtaCut[1])) continue;
+                    cout<<"K13";
                     // TempEvent.B_particles.push_back(B);
                     B_List.push_back(B);
                     H_Rap_K_B[CenIndex][PVzIndex]->Fill(B.y);
                     H_ALL_Rap_K_B                ->Fill(B.y);
+                    cout<<"K14";
                     continue;
                 }
             }
             else{
-                cout<<"K23";
                 for (l = 0;l < FeedDownNum;l++) {
                     if ( abs(PDG->at(i)) == FeedDown[l] ) {
                         if ((fabs(InvariantMass->at(i) - MotherMass.at(l)) > 3*MotherMassSigma.at(l))) continue;
@@ -687,9 +687,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                     }
                 }
             }
-            cout<<"K3";
         }
-        cout<<"K4";
         // 筛选A、B粒子
         for (Bid=0;Bid<B_List.size();Bid++) {
             IfRecord = true;
