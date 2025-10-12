@@ -523,6 +523,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
         hadronTree->SetBranchAddress("ME_ParentEnd" ,&ME_ParentEnd ,&bME_ParentEnd    );
     }
 
+    cout<<"0";
     const Int_t nentries=hadronTree->GetEntries();
     cout << "file number: " << nentries << endl;
 
