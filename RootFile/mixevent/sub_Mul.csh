@@ -126,6 +126,8 @@ endif
 
 set MainDir=`pwd`
 
+set HC = "H_"
+set TC = "T_"
 
 set numFiles = 1
 @ numFiles = ( $FileEnd - $FileStart ) / $FilesPerJob
@@ -221,8 +223,6 @@ while ($i <= $numFiles)
     echo \</SandBox\> >> $SubXml
     echo \<stdout URL=\"file:/star/data01/pwg/svianping/MIX\_$A_PDG\_$B_PDG/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"$i.log\" toURL=\"file:$OutputURL\" /\> >> $SubXml
-    set HC = "H_"
-    set TC = "T_"
     echo \<output fromScratch=\"MIX_$A_PDG\_$B_PDG\_$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     echo \<output fromScratch=\"MIX_-$A_PDG\_$B_PDG\_$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     echo \<output fromScratch=\"MIX_$A_PDG\_-$B_PDG\_$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
