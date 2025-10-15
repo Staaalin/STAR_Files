@@ -393,6 +393,9 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
     TH1F                 *H_ALL_Rap_B                      [50]     ;
     TH1F                 *H_Rap_K_B         [50]                         [50];
     TH1F                 *H_ALL_Rap_K_B                             ;
+    // Used for test
+    TH2F                 *H_ALL_dRap_ARp                   [50]     ;
+    TH2F                 *H_ALL_Mix_dRap_ARp               [50]     ;
     ArmParticle           A(0,0,0,0,0), B(0,0,0,0,0), C(0,0,0,0,0), D(0,0,0,0,0);
     Event                 TempEvent(0);
 
@@ -447,6 +450,8 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
         H_ALL_Rap_A                      [RapIndex] = new TH1F(Form("H_ALL_Rap_A_%d"      ,         RapIndex),Form("A dN/dy, %f<A_y<%f"        ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
         H_ALL_Rap_K_A                    [RapIndex] = new TH1F(Form("H_ALL_Rap_K_A_%d"    ,         RapIndex),Form("A dN/dy, %f<A_y<%f"        ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
         H_ALL_Rap_B                      [RapIndex] = new TH1F(Form("H_ALL_Rap_B_%d"      ,         RapIndex),Form("B dN/dy, %f<A_y<%f"        ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+        H_ALL_dRap_ARp                   [RapIndex] = new TH2F(Form("H_ALL_dRap_ARp_%d"   ,         RapIndex),Form("dRap vs. ARap, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum/5,dRapSta,dRapEnd,dRapBinNum/5,dRapSta,dRapEnd);
+        H_ALL_Mix_dRap_ARp               [RapIndex] = new TH2F(Form("H_ALL_Mix_dRap_ARp_%d",        RapIndex),Form("dRap vs. ARap, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum/5,dRapSta,dRapEnd,dRapBinNum/5,dRapSta,dRapEnd);
         if (RapIndex == 0) {
             H_ALL_Rap_K_B                           = new TH1F(     "H_ALL_Rap_K_B"                          ,     "B dN/dy"                                                    ,dRapBinNum,dRapSta,dRapEnd);
         }
@@ -796,6 +801,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                                                 H_dPt            [CenIndex] [RapIndex] [PVzIndex] -> Fill(dpt);
                                                 H_ALL_dPt                   [RapIndex]            -> Fill(dpt);
                                                 H_ALL_Mass                  [RapIndex]            -> Fill(MassAndKstar[0]);
+                                                H_ALL_dRap_ARp              [RapIndex]            -> Fill(drap,ARap);
                                                 AccumSameNum++;
                                             }
                                             else {
@@ -806,6 +812,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
                                                 H_Mix_dPt        [CenIndex] [RapIndex] [PVzIndex] -> Fill(dpt);
                                                 H_ALL_Mix_dPt               [RapIndex]            -> Fill(dpt);
                                                 H_ALL_Mix_Mass              [RapIndex]            -> Fill(MassAndKstar[0]);
+                                                H_ALL_Mix_dRap_ARp          [RapIndex]            -> Fill(drap,ARap);
                                             }
                                             delete[] MassAndKstar;
                                             EventPool[CenIndex][RapIndex][PVzIndex][Aid].A_particles[j].IsRecord = true;
@@ -863,6 +870,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
     TDirectory *folder_dRap      = fileA->mkdir("dRap");
     TDirectory *folder_dPt       = fileA->mkdir("dPt");
     TDirectory *folder_Mass      = fileA->mkdir("Mass");
+    TDirectory *folder_dRap_ARp  = fileA->mkdir("dRap_ARp");
     TDirectory *folder_A_Num     = fileA->mkdir("A_Num");
     TDirectory *folder_B_Num     = fileA->mkdir("B_Num");
     TDirectory *folder_ALL_A_Num = fileA->mkdir("ALL_A_Num");
@@ -871,6 +879,7 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
     TDirectory *ALL_dRap         = folder_dRap ->mkdir("ALL");
     TDirectory *ALL_dPt          = folder_dPt  ->mkdir("ALL");
     TDirectory *ALL_Mass         = folder_Mass ->mkdir("ALL");
+    TDirectory *ALL_dRap_ARp     = folder_dRap_ARp->mkdir("ALL");
     TDirectory *ALL_A_Num        = folder_A_Num->mkdir("ALL");
     TDirectory *ALL_B_Num        = folder_B_Num->mkdir("ALL");
     TDirectory *ALL_ALL_A_Num    = folder_ALL_A_Num->mkdir("ALL");
@@ -925,6 +934,9 @@ void MM(TString MidName,TString DataName,int StartFileIndex,int EndFileIndex,int
         H_ALL_Mass                            [RapIndex] ->Write();
         H_ALL_Mix_Mass                        [RapIndex] ->Write();
         H_ALL_Tra_Mass                        [RapIndex] ->Write();
+        ALL_dRap_ARp->cd();     
+        H_ALL_dRap_ARp                        [RapIndex] ->Write();
+        H_ALL_Mix_dRap_ARp                    [RapIndex] ->Write();
         ALL_A_Num->cd();
         H_ALL_Rap_A                           [RapIndex] ->Write();
         ALL_B_Num->cd();
