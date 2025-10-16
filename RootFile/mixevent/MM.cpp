@@ -13,6 +13,7 @@
 #include "TChain.h"
 #include "TF1.h"
 #include "TH1.h"
+#include "TH2.h"
 #include "TStyle.h"
 #include "TCanvas.h"
 #include "TTree.h"
