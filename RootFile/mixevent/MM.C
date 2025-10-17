@@ -58,7 +58,7 @@ struct ArmParticle {
         pt = sqrt(px*px + py*py);
         float p = sqrt(pt*pt + pz*pz);
         float E = sqrt(p*p+mass*mass);
-        eta = -1.0*log(tan(0.5*(acos(pz/p))));
+        eta = 0.5 * log((p + pz) / (p - pz));
         y = 0.5 * log((E + pz) / (E - pz));
         IsRecord = false;
     }
