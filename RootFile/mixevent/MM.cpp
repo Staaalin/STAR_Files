@@ -419,6 +419,10 @@ int main(int argc, char** argv) {
     // Used for test
     TH2F                 *H_ALL_dRap_ARp                   [50]     ;
     TH2F                 *H_ALL_Mix_dRap_ARp               [50]     ;
+    TH2F                 *H_Rap_A_B         [50]           [50]          [50];
+    TH2F                 *H_ALL_Rap_A_B                    [50]     ;
+    TH2F                 *H_Mix_Rap_A_B     [50]           [50]          [50];
+    TH2F                 *H_ALL_Mix_Rap_A_B                [50]     ;
     ArmParticle           A(0,0,0,0,0), B(0,0,0,0,0), C(0,0,0,0,0), D(0,0,0,0,0);
     Event                 TempEvent(0);
 
@@ -453,6 +457,8 @@ int main(int argc, char** argv) {
                 H_Rap_A           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Rap_A_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("A dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
                 H_Rap_K_A         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Rap_K_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("A dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
                 H_Rap_B           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Rap_B_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("B dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+                H_Rap_A_B         [CenIndex] [RapIndex] [PVzIndex] = new TH2F(Form("H_Rap_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("A B dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum/10,dRapSta,dRapEnd,dRapBinNum/10,dRapSta,dRapEnd);
+                H_Mix_Rap_A_B     [CenIndex] [RapIndex] [PVzIndex] = new TH2F(Form("H_Mix_Rap_A_B_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex),Form("A B dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum/10,dRapSta,dRapEnd,dRapBinNum/10,dRapSta,dRapEnd);
                 if ((RapIndex == 0)) {
                     H_Rap_K_B     [CenIndex]            [PVzIndex] = new TH1F(Form("H_Rap_K_B_%d_%d "       ,CenIndex         ,PVzIndex),Form("B dN/dy, [%d,%d]/100, %f<PV_z<%f"                ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]                                ),dRapBinNum,dRapSta,dRapEnd);
                 }
@@ -818,6 +824,8 @@ int main(int argc, char** argv) {
                                                 H_ALL_dPt                   [RapIndex]            -> Fill(dpt);
                                                 H_ALL_Mass                  [RapIndex]            -> Fill(MassAndKstar[0]);
                                                 H_ALL_dRap_ARp              [RapIndex]            -> Fill(drap,ARap);
+                                                H_Rap_A_B        [CenIndex] [RapIndex] [PVzIndex] -> Fill(ARap,BRap);
+                                                H_ALL_Rap_A_B               [RapIndex]            -> Fill(ARap,BRap);
                                                 AccumSameNum++;
                                             }
                                             else {
@@ -829,6 +837,8 @@ int main(int argc, char** argv) {
                                                 H_ALL_Mix_dPt               [RapIndex]            -> Fill(dpt);
                                                 H_ALL_Mix_Mass              [RapIndex]            -> Fill(MassAndKstar[0]);
                                                 H_ALL_Mix_dRap_ARp          [RapIndex]            -> Fill(drap,ARap);
+                                                H_Mix_Rap_A_B    [CenIndex] [RapIndex] [PVzIndex] -> Fill(ARap,BRap);
+                                                H_ALL_Mix_Rap_A_B           [RapIndex]            -> Fill(ARap,BRap);
                                             }
                                             delete[] MassAndKstar;
                                             EventPool[CenIndex][RapIndex][PVzIndex][Aid].A_particles[j].IsRecord = true;
@@ -888,6 +898,7 @@ int main(int argc, char** argv) {
     TDirectory *folder_B_Num     = fileA->mkdir("B_Num");
     TDirectory *folder_ALL_A_Num = fileA->mkdir("ALL_A_Num");
     TDirectory *folder_ALL_B_Num = fileA->mkdir("ALL_B_Num");
+    TDirectory *folder_Rap_A_B   = fileA->mkdir("Rap_A_B");
     TDirectory *ALL_kStar        = folder_kStar->mkdir("ALL");
     TDirectory *ALL_dRap         = folder_dRap ->mkdir("ALL");
     TDirectory *ALL_dPt          = folder_dPt  ->mkdir("ALL");
@@ -897,6 +908,7 @@ int main(int argc, char** argv) {
     TDirectory *ALL_B_Num        = folder_B_Num->mkdir("ALL");
     TDirectory *ALL_ALL_A_Num    = folder_ALL_A_Num->mkdir("ALL");
     TDirectory *ALL_ALL_B_Num    = folder_ALL_B_Num->mkdir("ALL");
+    TDirectory *ALL_Rap_A_B      = folder_Rap_A_B->mkdir("ALL");
     TDirectory *Sep_kStar        = folder_kStar->mkdir("Sep");
     TDirectory *Sep_dRap         = folder_dRap ->mkdir("Sep");
     TDirectory *Sep_dPt          = folder_dPt  ->mkdir("Sep");
@@ -904,6 +916,7 @@ int main(int argc, char** argv) {
     TDirectory *Sep_B_Num        = folder_B_Num->mkdir("Sep");
     TDirectory *Sep_ALL_A_Num    = folder_ALL_A_Num->mkdir("Sep");
     TDirectory *Sep_ALL_B_Num    = folder_ALL_B_Num->mkdir("Sep");
+    TDirectory *Sep_Rap_A_B      = folder_Rap_A_B->mkdir("Sep");
     for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
         for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
             for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
@@ -925,6 +938,9 @@ int main(int argc, char** argv) {
                 H_Rap_B                [CenIndex] [RapIndex] [PVzIndex] ->Write();
                 Sep_ALL_A_Num->cd();
                 H_Rap_K_A              [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                Sep_Rap_A_B->cd();
+                H_Rap_A_B              [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_Rap_A_B          [CenIndex] [RapIndex] [PVzIndex] ->Write();
                 if(RapIndex==0){
                     Sep_ALL_B_Num->cd();
                     H_Rap_K_B          [CenIndex]            [PVzIndex] ->Write();
@@ -956,6 +972,9 @@ int main(int argc, char** argv) {
         H_ALL_Rap_B                           [RapIndex] ->Write();
         ALL_ALL_A_Num->cd();
         H_ALL_Rap_K_A                         [RapIndex] ->Write();
+        ALL_Rap_A_B->cd();
+        H_ALL_Rap_A_B                         [RapIndex] ->Write();
+        H_ALL_Mix_Rap_A_B                     [RapIndex] ->Write();
     }
     ALL_ALL_B_Num->cd();
     H_ALL_Rap_K_B->Write();
