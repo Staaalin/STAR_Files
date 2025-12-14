@@ -19,7 +19,7 @@ static const std::vector<TString> TriggerList::DataNameList = {
 static const std::vector<std::vector<int>> TriggerList::TriggerNameList = {
 
 	{// dAu_200_16
-		530003
+		530003,
 		// 530002,
 		// 530806,
 		530101,
