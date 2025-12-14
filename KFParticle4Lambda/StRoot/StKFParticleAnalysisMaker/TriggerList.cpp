@@ -25,7 +25,7 @@ static const std::vector<std::vector<int>> TriggerList::TriggerNameList = {
 		530101,
 		530102,
 		530201,
-		530202,
+		530202
 		// 530213,
 		// 530851,
 		// 530852,
