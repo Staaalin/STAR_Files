@@ -4,7 +4,7 @@
 
 # settings
 set CollisionType = dAu
-set nRun=21
+set nRun=16
 set mRun=Run${nRun}
 set mEnergy=200.0
 set ListDir=/star/u/svianping/STAR_Files/KFParticle4Lambda/datalist #TODO

@@ -41,8 +41,8 @@
 
 // #define DataName           "pAu_200_15"
 // #define DataName           "AuAu_27_18"
-// #define DataName           "dAu_200_16"
-#define DataName           "dAu_200_21"
+#define DataName           "dAu_200_16"
+// #define DataName           "dAu_200_21"
 // #define DataName           "dAu_62_16"
 // #define DataName           "dAu_39_16"
 // #define DataName           "dAu_20_16"
@@ -78,9 +78,9 @@
 #define K0SPdgMassSigma    0.0043
 #define PhiPdgMassSigma    0.0031
 
-#define IfQAMode           true   // If Writing Hist of QA;
+#define IfQAMode           false  // If Writing Hist of QA;
 #define IfRecordeTOF       false  // If use eTOF 
-#define IfTree             false // If Writing Tree;
+#define IfTree             true // If Writing Tree;
 #define IfRecNewP          false // If Reconstruct New Particle;
 #define IfLoadHY           false // If Background Reconstruction;
 
