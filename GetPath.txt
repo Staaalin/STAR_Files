@@ -1,0 +1,4 @@
+get_file_list.pl -keys 'path, filename' -cond "trgsetupname=production_dAu200_2021,production=P23id,library=SL23d,filetype=daq_reco_picoDst,filename~st_physics,storage!=hpss" -distinct -delim '/' -limit 0 | grep -v "home" | sort > dAu200_hpss_new.list
+
+# 如果输出为0，尝试：
+get_file_list.pl -keys 'path, filename' -cond "trgsetupname=production_dAu200_2021,production=P23id,library=SL23d,filetype=daq_reco_picoDst,filename~st_physics,storage!=hpss" -distinct -delim '/' -limit 0 > AuAu19.list

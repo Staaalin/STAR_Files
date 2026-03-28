@@ -41,13 +41,14 @@
 
 // #define DataName           "pAu_200_15"
 // #define DataName           "AuAu_27_18"
-#define DataName           "dAu_200_16"
+// #define DataName           "dAu_200_16"
 // #define DataName           "dAu_200_21"
 // #define DataName           "dAu_62_16"
 // #define DataName           "dAu_39_16"
 // #define DataName           "dAu_20_16"
 // #define DataName           "pp_200_15"
 // #define DataName           "OO_200_21"
+#define DataName           "AuAu_19_19"
 #define pi                 TMath::Pi()
 #define OmegaPdgMass	   1.67245
 #define XiRPdgMass	       1.67245 // 应当是1.8235，但在dAu@200GeV Run21中并没有重建出来
@@ -78,9 +79,9 @@
 #define K0SPdgMassSigma    0.0043
 #define PhiPdgMassSigma    0.0031
 
-#define IfQAMode           false  // If Writing Hist of QA;
+#define IfQAMode           true  // If Writing Hist of QA;
 #define IfRecordeTOF       false  // If use eTOF 
-#define IfTree             true // If Writing Tree;
+#define IfTree             false // If Writing Tree;
 #define IfRecNewP          false // If Reconstruct New Particle;
 #define IfLoadHY           false // If Background Reconstruction;
 
