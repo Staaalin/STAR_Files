@@ -9,7 +9,8 @@ set mRun=Run${nRun}
 set mEnergy=19.6
 set ListDir=/star/u/svianping/STAR_Files/KFParticle4Lambda/datalist #TODO
 set MainDir=/star/u/svianping/STAR_Files/KFParticle4Lambda #TODO
-set TempDir=/home/tmp/svianping #TODO
+# set TempDir=/home/tmp/svianping #For SL7
+set TempDir=/tmp/svianping #For a9
 # inputs
 # set JOBINDEX=$1
 # set FILELIST={$ListDir}/${mEnergy}GeV_${mRun}/$mEnergy.list.`printf "%.6d" ${JOBINDEX}`
