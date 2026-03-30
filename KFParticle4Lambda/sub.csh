@@ -18,6 +18,7 @@ set nFileTotal=all
 # print xml file
 echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
 echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${nFilePerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
+echo \<shell\>singularity exec \-e \-B /direct \-B /star \-B /afs \-B /gpfs \-B /sdcc/lustre02 /cvmfs/star\.sdcc\.bnl\.gov/containers/rhic_sl7\.sif\</shell\> >> $SubXml # For a9
 echo \<command\>$MainDir/run\.csh\</command\> >> $SubXml
 # echo \<stdout URL=\"file:$MainDir/log/script_\$JOBINDEX\.out\" /\> >> $SubXml
 echo \<stdout URL=\"file:/star/data01/pwg/svianping/log/script_\$JOBINDEX\.out\" /\> >> $SubXml # 似乎condor无法自动创建script文件了
@@ -36,4 +37,5 @@ echo \<output fromScratch=\"output_\$JOBINDEX\.root\" toURL=\"file:/star/data01/
 echo \<output fromScratch=\"KFParticleQA_\$JOBINDEX\.root\" toURL=\"file:/star/data01/pwg/svianping/output/\" /\> >> $SubXml
 echo \</job\> >> $SubXml
 
-star-submit $SubXml
+# star-submit $SubXml # For SL7
+star-submit-beta $SubXml # For a9
