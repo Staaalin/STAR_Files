@@ -17,8 +17,8 @@ mkdir -p $OutDir/log
 set FileListFile = "/tmp/hadd_filelist_$$.txt"
 
 # 提取路径和通配符
-set Dir = `dirname $Pattern`
-set Base = `basename $Pattern`
+set Dir = `dirname "$Pattern"`
+set Base = `basename "$Pattern"`
 
 find $Dir -maxdepth 1 -name "$Base" > $FileListFile
 
