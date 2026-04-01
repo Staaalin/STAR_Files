@@ -46,7 +46,7 @@ while ($Start <= $AllFiles)
     # command
     # =========================
     echo \<shell\>singularity exec \-e \-B /direct \-B /star \-B /afs \-B /gpfs \-B /sdcc/lustre02 /cvmfs/star\.sdcc\.bnl\.gov/containers/rhic_sl7\.sif\</shell\> >> $SubXml # For a9
-    echo '<command>' >> $SubXml
+    echo \<command\> >> $SubXml
     # echo 'source setDEV2.csh' >> $SubXml
 
     set FileList = ""
@@ -61,14 +61,14 @@ while ($Start <= $AllFiles)
     end
 
     # echo "hadd ${OutputDir}/hadd_${JobIndex}.root $FileList" >> $SubXml
-    echo "hadd ${OutputDir}/hadd_${JobIndex}.root *.root" >> $SubXml
-    echo '</command>' >> $SubXml
+    echo hadd hadd_${JobIndex}.root *.root >> $SubXml
+    echo \</command\> >> $SubXml
 
     # =========================
     # SandBox（关键补充）
     # =========================
-    echo '<SandBox installer="ZIP">' >> $SubXml
-    echo '<Package name=\"ZIP_File_${JobIndex}\">' >> $SubXml
+    echo \<SandBox installer="ZIP"\> >> $SubXml
+    echo \<Package name=\"ZIP_File_${JobIndex}\"\> >> $SubXml
 
     # --- input ROOT files ---
     @ i = $Start
@@ -83,16 +83,16 @@ while ($Start <= $AllFiles)
     # --- important: environment script ---
     # echo "<File>file:/star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh</File>" >> $SubXml
 
-    echo "</Package>" >> $SubXml
-    echo "</SandBox>" >> $SubXml
+    echo \</Package\> >> $SubXml
+    echo \</SandBox\> >> $SubXml
 
     # =========================
     # output + logs
     # =========================
-    echo "<stdout URL=\"file:${OutputDir}/hadd_${JobIndex}.log\" /\>" >> $SubXml
-    echo "<output fromScratch=\"hadd_${JobIndex}.root\" toURL=\"file:${OutputDir}/\" /\>" >> $SubXml
+    echo \<stdout URL=\"file:${OutputDir}/hadd_${JobIndex}.log\" /\> >> $SubXml
+    echo \<output fromScratch=\"hadd_${JobIndex}.root\" toURL=\"file:${OutputDir}/\" /\> >> $SubXml
 
-    echo "</job>" >> $SubXml
+    echo \</job\> >> $SubXml
 
     # =========================
     # submit
