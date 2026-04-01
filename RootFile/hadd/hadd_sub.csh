@@ -67,7 +67,7 @@ while ($Start <= $AllFiles)
     # =========================
     # SandBox（关键补充）
     # =========================
-    echo \<SandBox installer="ZIP"\> >> $SubXml
+    echo \<SandBox installer=\"ZIP\"\> >> $SubXml
     echo \<Package name=\"ZIP_File_${JobIndex}\"\> >> $SubXml
 
     # --- input ROOT files ---
