@@ -14,9 +14,15 @@ mkdir -p $OutDir
 mkdir -p $OutDir/log
 
 # 获取文件列表
-set FileList = (`ls $Pattern`)
-set TotalFiles = $#FileList
+set FileListFile = "/tmp/hadd_filelist_$$.txt"
 
+# 提取路径和通配符
+set Dir = `dirname $Pattern`
+set Base = `basename $Pattern`
+
+find $Dir -maxdepth 1 -name "$Base" > $FileListFile
+
+set TotalFiles = `wc -l < $FileListFile`
 echo "Total files: $TotalFiles"
 echo "Files per job: $FilesPerJob"
 
@@ -44,20 +50,23 @@ while ($i < $numJobs)
     set OutputFile = "hadd_$i.root"
 
     # 构建 hadd 命令
-    set cmd = "hadd $OutputFile *.root"
-
-    @ start = $i * $FilesPerJob
+    @ start = $i * $FilesPerJob + 1
     @ end = $start + $FilesPerJob - 1
 
-    if ($end >= $TotalFiles) then
-        @ end = $TotalFiles - 1
+    if ($end > $TotalFiles) then
+        set end = $TotalFiles
     endif
 
     @ j = $start
     while ($j <= $end)
-        set fname = $FileList[$j+1]
+
+        set fname = `sed -n "${j}p" $FileListFile`
         set base = `basename $fname`
+
         set cmd = "$cmd $base"
+
+        echo "<File>file:$fname</File>" >> $SubXml
+
         @ j++
     end
 
