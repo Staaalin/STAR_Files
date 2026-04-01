@@ -5,8 +5,12 @@ if ($#argv != 2) then
     exit
 endif
 
-set InputPrefix = $1
+# set InputPrefix = $1
+set InputPrefix = `echo $1 | sed 's/"//g'`
 set FilesPerJob = $2
+
+# DEBUG
+echo "ARG1=[$1]"
 
 # =========================
 # count files
