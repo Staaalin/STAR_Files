@@ -5,7 +5,7 @@ if ($#argv != 2) then
     exit
 endif
 
-set InputPrefix = "$1"
+set InputPrefix = $1
 set FilesPerJob = $2
 
 # =========================
