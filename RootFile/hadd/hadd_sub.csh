@@ -85,8 +85,8 @@ while ($Start <= $AllFiles)
     # =========================
     # output + logs
     # =========================
-    echo "<stdout URL=\"file:${OutputDir}/hadd_${JobIndex}.log\" />" >> $SubXml
-    echo "<output fromScratch=\"hadd_${JobIndex}.root\" toURL=\"file:${OutputDir}/\" />" >> $SubXml
+    echo "<stdout URL=\"file:${OutputDir}/hadd_${JobIndex}.log\" /\>" >> $SubXml
+    echo "<output fromScratch=\"hadd_${JobIndex}.root\" toURL=\"file:${OutputDir}/\" /\>" >> $SubXml
 
     echo "</job>" >> $SubXml
 
