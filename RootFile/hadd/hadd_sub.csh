@@ -14,7 +14,7 @@ set FilesPerJob = $2
 set AllFiles = `ls ${InputPrefix}*.root | wc -l`
 echo "Total files = $AllFiles"
 
-set OutputDir = "/star/data01/pwg/svianping/hadd/"
+set OutputDir = "/star/data01/pwg/svianping/hadd"
 mkdir -p $OutputDir
 cd $OutputDir
 
@@ -42,7 +42,8 @@ while ($Start <= $AllFiles)
     # command
     # =========================
     echo '<command>' >> $SubXml
-    echo 'source setDEV2.csh' >> $SubXml
+    echo \<shell\>singularity exec \-e \-B /direct \-B /star \-B /afs \-B /gpfs \-B /sdcc/lustre02 /cvmfs/star\.sdcc\.bnl\.gov/containers/rhic_sl7\.sif\</shell\> >> $SubXml # For a9
+    # echo 'source setDEV2.csh' >> $SubXml
 
     set FileList = ""
     @ i = $Start
@@ -62,7 +63,7 @@ while ($Start <= $AllFiles)
     # SandBox（关键补充）
     # =========================
     echo '<SandBox installer="ZIP">' >> $SubXml
-    echo "<Package name=\"ZIP_File_${JobIndex}\">" >> $SubXml
+    echo '<Package name=\"ZIP_File_${JobIndex}\">' >> $SubXml
 
     # --- input ROOT files ---
     @ i = $Start
