@@ -91,7 +91,7 @@ while ($Start <= $AllFiles)
     # =========================
     # submit
     # =========================
-    star-submit $SubXml
+    star-submit-beta $SubXml
 
     echo "Submitted job $JobIndex : [$Start - $End]"
 
