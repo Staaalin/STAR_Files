@@ -61,7 +61,7 @@ while ($Start <= $AllFiles)
     end
 
     # echo "hadd ${OutputDir}/hadd_${JobIndex}.root $FileList" >> $SubXml
-    echo hadd hadd_${JobIndex}.root *.root >> $SubXml
+    echo "hadd hadd_${JobIndex}.root *.root" >> $SubXml
     echo \</command\> >> $SubXml
 
     # =========================
