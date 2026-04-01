@@ -1,5 +1,7 @@
 #!/bin/csh
 
+# For example:  ./hadd_sub.csh /star/data01/pwg/svianping/output/output_8 500
+
 if ($#argv != 2) then
     echo "Usage: ./hadd_sub.csh <input_prefix> <files_per_job>"
     exit
