@@ -1,111 +1,103 @@
 #!/bin/csh
 
-if ($#argv < 2) then
-    echo "Usage: hadd_sub /path/to/files/*.root FilesPerJob"
-    exit 1
+if ($#argv != 2) then
+    echo "Usage: ./hadd_sub.csh <input_prefix> <files_per_job>"
+    exit
 endif
 
-set Pattern = $1
+set InputPrefix = "$1"
 set FilesPerJob = $2
 
-# 输出目录
-set OutDir = "/star/data01/pwg/svianping/hadd/"
-mkdir -p $OutDir
-mkdir -p $OutDir/log
+# =========================
+# count files
+# =========================
+set AllFiles = `ls ${InputPrefix}*.root | wc -l`
+echo "Total files = $AllFiles"
 
-# 获取文件列表
-set FileListFile = "/tmp/hadd_filelist_$$.txt"
+set OutputDir = "/star/data01/pwg/svianping/hadd/"
+mkdir -p $OutputDir
+cd $OutputDir
 
-# 提取路径和通配符
-set Dir = `dirname "$Pattern"`
-set Base = `basename "$Pattern"`
+@ Start = 1
+@ JobIndex = 1
 
-find $Dir -maxdepth 1 -name "$Base" > $FileListFile
+while ($Start <= $AllFiles)
 
-set TotalFiles = `wc -l < $FileListFile`
-echo "Total files: $TotalFiles"
-echo "Files per job: $FilesPerJob"
-
-@ numJobs = ( $TotalFiles + $FilesPerJob - 1 ) / $FilesPerJob
-
-echo "Total jobs: $numJobs"
-
-@ i = 0
-while ($i < $numJobs)
-
-    set SubXml = "$OutDir/sub_$i.xml"
-    if (-e $SubXml) rm $SubXml
-    touch $SubXml
-
-    # ---------- XML header ----------
-    echo '<?xml version="1.0" encoding="utf-8" ?>' >> $SubXml
-    echo '<job simulateSubmission="false" maxFilesPerProcess="'$FilesPerJob'" fileListSyntax="xrootd">' >> $SubXml
-
-    # ---------- command ----------
-    echo \<shell\>singularity exec \-e \-B /direct \-B /star \-B /afs \-B /gpfs \-B /sdcc/lustre02 /cvmfs/star\.sdcc\.bnl\.gov/containers/rhic_sl7\.sif\</shell\> >> $SubXml # For a9
-    echo '<command>' >> $SubXml
-
-    echo "echo START JOB $i" >> $SubXml
-
-    set OutputFile = "hadd_$i.root"
-
-    # 构建 hadd 命令
-    @ start = $i * $FilesPerJob + 1
-    @ end = $start + $FilesPerJob - 1
-
-    if ($end > $TotalFiles) then
-        set end = $TotalFiles
+    @ End = $Start + $FilesPerJob - 1
+    if ($End > $AllFiles) then
+        @ End = $AllFiles
     endif
 
-    @ j = $start
-    while ($j <= $end)
+    set SubXml = "hadd_${JobIndex}.xml"
+    rm -f $SubXml
+    touch $SubXml
 
-        set fname = `sed -n "${j}p" $FileListFile`
-        set base = `basename $fname`
+    # =========================
+    # XML header
+    # =========================
+    echo '<?xml version="1.0" encoding="utf-8" ?>' >> $SubXml
+    echo '<job simulateSubmission="false" fileListSyntax="xrootd">' >> $SubXml
 
-        set cmd = "$cmd $base"
+    # =========================
+    # command
+    # =========================
+    echo '<command>' >> $SubXml
+    echo 'source setDEV2.csh' >> $SubXml
 
-        echo "<File>file:$fname</File>" >> $SubXml
+    set FileList = ""
+    @ i = $Start
 
-        @ j++
+    while ($i <= $End)
+        set f = "${InputPrefix}${i}.root"
+        if (-e $f) then
+            set FileList = "$FileList $f"
+        endif
+        @ i++
     end
 
-    echo $cmd >> $SubXml
-    echo "ls" >> $SubXml
-
+    echo "hadd ${OutputDir}/hadd_${JobIndex}.root $FileList" >> $SubXml
     echo '</command>' >> $SubXml
 
-    # ---------- Resource ----------
-    echo '<ResourceUsage>' >> $SubXml
-    echo '<Priority>75</Priority>' >> $SubXml
-    echo '</ResourceUsage>' >> $SubXml
-
-    # ---------- Sandbox ----------
+    # =========================
+    # SandBox（关键补充）
+    # =========================
     echo '<SandBox installer="ZIP">' >> $SubXml
-    echo '<Package name="ZIP_File_'$i'">' >> $SubXml
+    echo "<Package name=\"ZIP_File_${JobIndex}\">" >> $SubXml
 
-    @ j = $start
-    while ($j <= $end)
-        set fname = $FileList[$j+1]
-        echo "<File>file:$fname</File>" >> $SubXml
-        @ j++
+    # --- input ROOT files ---
+    @ i = $Start
+    while ($i <= $End)
+        set f = "${InputPrefix}${i}.root"
+        if (-e $f) then
+            echo "<File>file:${f}</File>" >> $SubXml
+        endif
+        @ i++
     end
 
-    echo '</Package>' >> $SubXml
+    # --- important: environment script ---
+    # echo "<File>file:/star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh</File>" >> $SubXml
+
+    echo "</Package>" >> $SubXml
     echo '</SandBox>' >> $SubXml
 
-    # ---------- 输出 ----------
-    echo '<stdout URL="file:'$OutDir'/log/job_'$i'.out" />' >> $SubXml
-    echo '<output fromScratch="'$OutputFile'" toURL="file:'$OutDir'/" />' >> $SubXml
+    # =========================
+    # output + logs
+    # =========================
+    echo "<stdout URL=\"file:${OutputDir}/hadd_${JobIndex}.log\" />" >> $SubXml
+    echo "<output fromScratch=\"hadd_${JobIndex}.root\" toURL=\"file:${OutputDir}/\" />" >> $SubXml
 
     echo '</job>' >> $SubXml
 
-    # ---------- 提交 ----------
-    star-submit-beta $SubXml
+    # =========================
+    # submit
+    # =========================
+    star-submit $SubXml
 
-    echo "Submitted job $i / $numJobs"
+    echo "Submitted job $JobIndex : [$Start - $End]"
 
-    @ i++
+    @ Start = $End + 1
+    @ JobIndex++
+
 end
 
-echo "All jobs submitted."
+echo "Done."
