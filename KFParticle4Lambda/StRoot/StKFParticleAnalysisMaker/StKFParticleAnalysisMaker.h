@@ -207,7 +207,7 @@ private:
 	float MRap  ;
 	float MRap_T;
 	KFPTrack   KFPtrack_A,KFPtrack_B,KFPtrack_C;
-	KFParticle Particle_M,*Particle_N2[2],*Particle_N3[3],Particle_A,Particle_B,Particle_C;
+	KFParticle Particle_M,*Particle_N2[2],*Particle_N3[3],*KFP_PV_P,Particle_A,Particle_B,Particle_C;
 	KFPVertex  KFP_PV;
 	KFVertex   KF_PV;
 
