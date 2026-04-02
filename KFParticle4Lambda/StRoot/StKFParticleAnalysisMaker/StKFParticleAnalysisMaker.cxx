@@ -3215,6 +3215,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				}
 			}
 		}
+		const KFParticle* KFP_PV_P = new KFParticle(KFP_PV);
 		// Xi- + K0S
 		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
 			if (KFParticleList[iKFParticle][0] != XiPdg) continue;
