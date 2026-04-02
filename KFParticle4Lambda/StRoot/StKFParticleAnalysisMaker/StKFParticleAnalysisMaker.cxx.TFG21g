@@ -1736,6 +1736,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		N_Entries = KFParticlePerformanceInterface->GetNReconstructedParticles();
 		Omega_Omegab_Num = 0;
+		if (IfLoadHY || IfRecNewP) {
+			KFP_PV.SetXYZ(VertexX, VertexY, VertexZ);
+			KFP_PV_P = new KFParticle(KFP_PV);
+		}
 		for (int iKFParticle=0; iKFParticle < N_Entries; iKFParticle++){ 
 			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
@@ -1885,6 +1889,57 @@ Int_t StKFParticleAnalysisMaker::Make()
 							KFPtrack_B.SetId (-1);
 							Particle_B = KFParticle(KFPtrack_B,daughter.GetPDG());
 						}
+					}
+				}
+				if (IfFill_BM) {
+					Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
+					Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+					// Test for reconstruct
+					KFPtrack_B.SetPxPyPz(-KFPtrack_B.GetPx(), -KFPtrack_B.GetPy(), KFPtrack_B.GetPz());
+					KFPtrack_B.SetXYZ(-KFPtrack_B.GetX(), -KFPtrack_B.GetY(), KFPtrack_B.GetZ());
+					Particle_B = KFParticle(KFPtrack_B,Particle_B.GetPDG());
+					Particle_N2[1] = &Particle_B;
+					if      (particle.GetPDG() ==  LambdaPdg) {
+						H_ALL_Lambda  ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Lambda ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Lambda->Fill(particle.GetMass(),Particle_M.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Lambda ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+					}
+					else if (particle.GetPDG() == -LambdaPdg) {
+						H_ALL_Lambdab ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Lambdab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Lambdab->Fill(particle.GetMass(),Particle_M.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Lambdab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+					}
+					else if (particle.GetPDG() ==  XiPdg) {
+						H_ALL_Xi  ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Xi ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Xi->Fill(particle.GetMass(),Particle_M.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Xi ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+					}
+					else if (particle.GetPDG() == -XiPdg) {
+						H_ALL_Xib ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Xib->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Xib->Fill(particle.GetMass(),Particle_M.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Xib->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+					}
+					else if (particle.GetPDG() ==  OmegaPdg) {
+						H_ALL_Omega  ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Omega ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Omega->Fill(particle.GetMass(),Particle_M.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Omega ->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+					}
+					else if (particle.GetPDG() == -OmegaPdg) {
+						H_ALL_Omegab ->Fill(particle.GetRapidity(),particle.GetMass());
+						H_ALLr_Omegab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
+						H_ALL_OR_Omegab->Fill(particle.GetMass(),Particle_M.GetMass());
+						Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+						H_ALLp_Omegab->Fill(Particle_M.GetRapidity(),Particle_M.GetMass());
 					}
 				}
 
@@ -3158,6 +3213,268 @@ Int_t StKFParticleAnalysisMaker::Make()
 						}
 					}
 				}
+			}
+		}
+		// Xi- + K0S
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
+			if (KFParticleList[iKFParticle][0] != XiPdg) continue;
+			for (int jKFParticle=0; jKFParticle < KFParticleList.size(); jKFParticle++){
+				if (iKFParticle == jKFParticle) continue;
+				if (KFParticleList[jKFParticle][0] != K0SPdg) continue;
+				IfPass = true;
+				for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+					if (!IfPass) break;
+					for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+						if (KFParticleList[iKFParticle][i] == KFParticleList[jKFParticle][j]) {
+							IfPass = false;
+							break;
+						}
+					}
+				}
+				if (!IfPass) continue;
+				// Reconstruct
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
+				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
+				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
+				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
+				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+				if (Particle_M.GetChi2()/float(Particle_M.GetNDF()) < 2) H_OmegaR_XiK_Mass->Fill(Particle_M.GetMass());
+				
+			}
+		}
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
+			if (KFParticleList[iKFParticle][0] != -XiPdg) continue;
+			for (int jKFParticle=0; jKFParticle < KFParticleList.size(); jKFParticle++){
+				if (iKFParticle == jKFParticle) continue;
+				if (KFParticleList[jKFParticle][0] != K0SPdg) continue;
+				IfPass = true;
+				for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+					if (!IfPass) break;
+					for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+						if (KFParticleList[iKFParticle][i] == KFParticleList[jKFParticle][j]) {
+							IfPass = false;
+							break;
+						}
+					}
+				}
+				if (!IfPass) continue;
+				// Reconstruct
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
+				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
+				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
+				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
+				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+				if (Particle_M.GetChi2()/float(Particle_M.GetNDF()) < 2) H_OmegabR_XiK_Mass->Fill(Particle_M.GetMass());
+			}
+		}
+		// Omega- + pi+ + pi-
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
+			if (KFParticleList[iKFParticle][0] != OmegaPdg) continue;
+			for (int jKFParticle=0; jKFParticle < KFParticleList.size(); jKFParticle++){
+				if (iKFParticle == jKFParticle) continue;
+				if (KFParticleList[jKFParticle][0] != PionPdg) continue;
+				IfPass = true;
+				for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+					if (!IfPass) break;
+					for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+						if (KFParticleList[iKFParticle][i] == KFParticleList[jKFParticle][j]) {
+							IfPass = false;
+							break;
+						}
+					}
+				}
+				if (!IfPass) continue;
+				for (int kKFParticle=0; kKFParticle < KFParticleList.size(); kKFParticle++){
+					if (kKFParticle == jKFParticle) continue;
+					if (KFParticleList[kKFParticle][0] != -PionPdg) continue;
+					IfPass = true;
+					for (int k=2;k<KFParticleList[kKFParticle].size();k++) {
+						if (!IfPass) break;
+						for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+							if (KFParticleList[iKFParticle][i] == KFParticleList[kKFParticle][k]) {
+								IfPass = false;
+								break;
+							}
+						}
+						if (!IfPass) break;
+						for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+							if (KFParticleList[jKFParticle][j] == KFParticleList[kKFParticle][k]) {
+								IfPass = false;
+								break;
+							}
+						}
+					}
+					if (!IfPass) continue;
+					// Reconstruct
+					Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
+					Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+					Particle_C = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[kKFParticle][1]]);
+					if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0) || (Particle_C.GetMass() == 0)) continue;
+					Particle_N3[0] = &Particle_A;Particle_N3[1] = &Particle_B;Particle_N3[2] = &Particle_C;
+					// Particle_M.Construct(Particle_N3, 3, KFP_PV_P, 2.109);
+					Particle_M.Construct(Particle_N3, 3, KFP_PV_P);
+					if (Particle_M.GetChi2()/float(Particle_M.GetNDF()) < 2) H_OmegaR_OmegaPiPi_Mass->Fill(Particle_M.GetMass());
+					// cout<<"Particle_A Mass = "<<Particle_A.GetMass()<<" , PDG = "<<Particle_A.GetPDG()<<endl;
+					// cout<<"Particle_B Mass = "<<Particle_B.GetMass()<<" , PDG = "<<Particle_B.GetPDG()<<endl;
+					// cout<<"Particle_C Mass = "<<Particle_C.GetMass()<<" , PDG = "<<Particle_C.GetPDG()<<endl;
+				}
+			}
+		}
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
+			if (KFParticleList[iKFParticle][0] != -OmegaPdg) continue;
+			for (int jKFParticle=0; jKFParticle < KFParticleList.size(); jKFParticle++){
+				if (iKFParticle == jKFParticle) continue;
+				if (KFParticleList[jKFParticle][0] != PionPdg) continue;
+				IfPass = true;
+				for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+					if (!IfPass) break;
+					for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+						if (KFParticleList[iKFParticle][i] == KFParticleList[jKFParticle][j]) {
+							IfPass = false;
+							break;
+						}
+					}
+				}
+				if (!IfPass) continue;
+				for (int kKFParticle=0; kKFParticle < KFParticleList.size(); kKFParticle++){
+					if (kKFParticle == jKFParticle) continue;
+					if (KFParticleList[kKFParticle][0] != -PionPdg) continue;
+					IfPass = true;
+					for (int k=2;k<KFParticleList[kKFParticle].size();k++) {
+						if (!IfPass) break;
+						for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+							if (KFParticleList[iKFParticle][i] == KFParticleList[kKFParticle][k]) {
+								IfPass = false;
+								break;
+							}
+						}
+						if (!IfPass) break;
+						for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+							if (KFParticleList[jKFParticle][j] == KFParticleList[kKFParticle][k]) {
+								IfPass = false;
+								break;
+							}
+						}
+					}
+					if (!IfPass) continue;
+					// Reconstruct
+					Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
+					Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+					Particle_C = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[kKFParticle][1]]);
+					if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0) || (Particle_C.GetMass() == 0)) continue;
+					Particle_N3[0] = &Particle_A;Particle_N3[1] = &Particle_B;Particle_N3[2] = &Particle_C;
+					// Particle_M.Construct(Particle_N3, 3, KFP_PV_P, 2.109);
+					Particle_M.Construct(Particle_N3, 3, KFP_PV_P);
+					if (Particle_M.GetChi2()/float(Particle_M.GetNDF()) < 2) H_OmegabR_OmegaPiPi_Mass->Fill(Particle_M.GetMass());
+				}
+			}
+		}
+		// Omega- + pi+
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
+			if (KFParticleList[iKFParticle][0] != OmegaPdg) continue;
+			for (int jKFParticle=0; jKFParticle < KFParticleList.size(); jKFParticle++){
+				if (iKFParticle == jKFParticle) continue;
+				if (KFParticleList[jKFParticle][0] != PionPdg) continue;
+				IfPass = true;
+				for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+					if (!IfPass) break;
+					for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+						if (KFParticleList[iKFParticle][i] == KFParticleList[jKFParticle][j]) {
+							IfPass = false;
+							break;
+						}
+					}
+				}
+				if (!IfPass) continue;
+				// Reconstruct
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
+				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
+				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
+				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
+				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+				if (Particle_M.GetChi2()/float(Particle_M.GetNDF()) < 2) H_Omega0R_OmegaPi_Mass->Fill(Particle_M.GetMass());
+			}
+		}
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
+			if (KFParticleList[iKFParticle][0] != -OmegaPdg) continue;
+			for (int jKFParticle=0; jKFParticle < KFParticleList.size(); jKFParticle++){
+				if (iKFParticle == jKFParticle) continue;
+				if (KFParticleList[jKFParticle][0] != -PionPdg) continue;
+				IfPass = true;
+				for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+					if (!IfPass) break;
+					for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+						if (KFParticleList[iKFParticle][i] == KFParticleList[jKFParticle][j]) {
+							IfPass = false;
+							break;
+						}
+					}
+				}
+				if (!IfPass) continue;
+				// Reconstruct
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
+				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
+				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
+				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
+				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+				if (Particle_M.GetChi2()/float(Particle_M.GetNDF()) < 2) H_Omega0bR_OmegaPi_Mass->Fill(Particle_M.GetMass());
+			}
+		}
+		// Xi- + K+
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
+			if (KFParticleList[iKFParticle][0] != XiPdg) continue;
+			for (int jKFParticle=0; jKFParticle < KFParticleList.size(); jKFParticle++){
+				if (iKFParticle == jKFParticle) continue;
+				if (KFParticleList[jKFParticle][0] != KaonPdg) continue;
+				IfPass = true;
+				for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+					if (!IfPass) break;
+					for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+						if (KFParticleList[iKFParticle][i] == KFParticleList[jKFParticle][j]) {
+							IfPass = false;
+							break;
+						}
+					}
+				}
+				if (!IfPass) continue;
+				// Reconstruct
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
+				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
+				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
+				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
+				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+				if (Particle_M.GetChi2()/float(Particle_M.GetNDF()) < 2) H_Omega0R_XiK_Mass->Fill(Particle_M.GetMass());
+			}
+		}
+		for (int iKFParticle=0; iKFParticle < KFParticleList.size(); iKFParticle++){
+			if (KFParticleList[iKFParticle][0] != -XiPdg) continue;
+			for (int jKFParticle=0; jKFParticle < KFParticleList.size(); jKFParticle++){
+				if (iKFParticle == jKFParticle) continue;
+				if (KFParticleList[jKFParticle][0] != -KaonPdg) continue;
+				IfPass = true;
+				for (int i=2;i<KFParticleList[iKFParticle].size();i++) {
+					if (!IfPass) break;
+					for (int j=2;j<KFParticleList[jKFParticle].size();j++) {
+						if (KFParticleList[iKFParticle][i] == KFParticleList[jKFParticle][j]) {
+							IfPass = false;
+							break;
+						}
+					}
+				}
+				if (!IfPass) continue;
+				// Reconstruct
+				Particle_A = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[iKFParticle][1]]);
+				Particle_B = ChangeMass(KFParticleInterface->GetParticles()[KFParticleList[jKFParticle][1]]);
+				if ((Particle_A.GetMass() == 0) || (Particle_B.GetMass() == 0)) continue;
+				Particle_N2[0] = &Particle_A;Particle_N2[1] = &Particle_B;
+				// Particle_M.Construct(Particle_N2, 2, KFP_PV_P, 2.012);
+				Particle_M.Construct(Particle_N2, 2, KFP_PV_P);
+				if (Particle_M.GetChi2()/float(Particle_M.GetNDF()) < 2) H_Omega0bR_XiK_Mass->Fill(Particle_M.GetMass());
 			}
 		}
 	}
