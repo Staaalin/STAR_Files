@@ -79,9 +79,9 @@
 #define K0SPdgMassSigma    0.0043
 #define PhiPdgMassSigma    0.0031
 
-#define IfQAMode           true  // If Writing Hist of QA;
+#define IfQAMode           false  // If Writing Hist of QA;
 #define IfRecordeTOF       false  // If use eTOF 
-#define IfTree             false // If Writing Tree;
+#define IfTree             true // If Writing Tree;
 #define IfRecNewP          false // If Reconstruct New Particle;
 #define IfLoadHY           false // If Background Reconstruction;
 
@@ -984,7 +984,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 		// Used for PID QA
 		// hadronTree->Branch("dEdx"               ,&QA_dEdx              );
-		// hadronTree->Branch("m2"                 ,&QA_m2                );
+		hadronTree->Branch("m2"                 ,&QA_m2                );
 		hadronTree->Branch("dcatopv"            ,&QA_DCA_V0_PV         );
 		// hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton      );
 		// hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion        );
