@@ -1736,10 +1736,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 		N_Entries = KFParticlePerformanceInterface->GetNReconstructedParticles();
 		Omega_Omegab_Num = 0;
-		if (IfLoadHY || IfRecNewP) {
-			KFP_PV.SetXYZ(VertexX, VertexY, VertexZ);
-			KFP_PV_P = new KFParticle(KFP_PV);
-		}
+
+		KFP_PV.SetXYZ(VertexX, VertexY, VertexZ); // IfLoadHY || IfRecNewP
+		const KFParticle* KFP_PV_P = new KFParticle(KFP_PV);
+
 		for (int iKFParticle=0; iKFParticle < N_Entries; iKFParticle++){ 
 			KFParticle particle = KFParticleInterface->GetParticles()[iKFParticle];
 
@@ -1865,7 +1865,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++) {
 						const int daughterId = particle.DaughterIds()[iDaughter];
 						// cout<<"daughterId = "<<daughterId<<endl;
-						const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+						KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
 						if (daughter.GetMass() <= 0) {IfFill_BM = false;continue;}
 						if (iDaughter == 0) {
 							KFPtrack_A.SetPxPyPz(daughter.GetPx(), daughter.GetPy(), daughter.GetPz());
