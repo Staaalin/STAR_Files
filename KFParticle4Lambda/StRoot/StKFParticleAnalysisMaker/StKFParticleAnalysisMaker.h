@@ -93,7 +93,6 @@ private:
 	double getSL(Int_t padRow1To24Track1 ,Int_t padRow25To45Track1 ,ULong64_t IpadRow1 ,Int_t nhits1 , Int_t padRow1To24Track2 , Int_t padRow25To45Track2 ,ULong64_t IpadRow2 ,Int_t nhits2,bool IfITPC_T);
 	double getphistar(float phi1, float phi2, float Pt1, float Pt2, int q1, int q2,double Bz, double tpcR);
 	float GetPairMass(float p1x , float p1y , float p1z , float p2x , float p2y , float p2z , float AMass , float BMass);
-	KFParticle ChangeMass(KFParticle daughter);
 	bool InterfaceCantProcessEvent;
 	int ProtonTrackIndex, PionTrackIndex, KaonTrackIndex;
 	vector<int> trackMap;

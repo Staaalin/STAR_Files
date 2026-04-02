@@ -1856,96 +1856,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 				(abs(particle.GetPDG()) != XiRPdg   )
 			) {continue;}
 
-			if (IfLoadHY) {
-				if (particle.NDaughters() == 2) {
-					for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++) {
-						const int daughterId = particle.DaughterIds()[iDaughter];
-						// cout<<"daughterId = "<<daughterId<<endl;
-						const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-						if (daughter.GetMass() <= 0) {IfFill_BM = false;continue;}
-						if (iDaughter == 0) {
-							KFPtrack_A.SetPxPyPz(daughter.GetPx(), daughter.GetPy(), daughter.GetPz());
-							KFPtrack_A.SetXYZ(   daughter.GetX() , daughter.GetY() , daughter.GetZ() );
-							KFPtrack_A.SetID(-1);
-							KFPtrack_A.SetCharge(daughter.GetQ()   );
-							KFPtrack_A.SetChi2(  daughter.GetChi2());
-							KFPtrack_A.SetNDF(   daughter.GetNDF());
-							KFPtrack_A.SetCovarianceMatrix (daughter.CovarianceMatrix());
-							KFPtrack_A.SetId (-1);
-							Particle_A = KFParticle(KFPtrack_A,daughter.GetPDG());
-						}
-						if (iDaughter == 1) {
-							KFPtrack_B.SetPxPyPz(-daughter.GetPx(), -daughter.GetPy(), daughter.GetPz());
-							KFPtrack_B.SetXYZ(   -daughter.GetX() , -daughter.GetY() , daughter.GetZ() );
-							KFPtrack_B.SetID(-1);
-							KFPtrack_B.SetCharge(daughter.GetQ()   );
-							KFPtrack_B.SetChi2(  daughter.GetChi2());
-							KFPtrack_B.SetNDF(   daughter.GetNDF());
-							KFPtrack_B.SetCovarianceMatrix (daughter.CovarianceMatrix());
-							KFPtrack_B.SetId (-1);
-							Particle_B = KFParticle(KFPtrack_B,daughter.GetPDG());
-						}
-					}
-				}
-
-
-				// if (particle.NDaughters() == 2) {
-				// 	for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-				// 		const int daughterId = particle.DaughterIds()[iDaughter];
-				// 		// cout<<"daughterId = "<<daughterId<<endl;
-				// 		const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-				// 		if (daughter.GetMass() <= 0) {IfFill_BM = false;continue;}
-				// 		if (iDaughter == 0) {
-				// 			AMass = daughter.GetMass();
-				// 			APx   = daughter.GetPx();
-				// 			APy   = daughter.GetPx();
-				// 			APz   = daughter.GetPx();
-				// 		}
-				// 		if (iDaughter == 1) {
-				// 			BMass = daughter.GetMass();
-				// 			BPx   = daughter.GetPx();
-				// 			BPy   = daughter.GetPx();
-				// 			BPz   = daughter.GetPx();
-				// 		}
-				// 	}
-				// }
-				// if (IfFill_BM) {
-				// 	MPz = particle.GetPz();
-				// 	MPt = pow(pow(particle.GetPx(),2) + pow(particle.GetPy(),2),0.5);
-				// 	MEnergy = pow(MPt*MPt + MPz*MPz + LambdaMass*LambdaMass,0.5);
-				// 	MRap    = 0.5*log((MEnergy+MPz)/(MEnergy-MPz));
-				// 	if      (particle.GetPDG() ==  LambdaPdg) {
-				// 		H_ALLr_Lambda ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-				// 		H_ALLp_Lambda ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-				// 		H_ALL_Lambda  ->Fill(MRap,particle.GetMass());
-				// 	}
-				// 	else if (particle.GetPDG() == -LambdaPdg) {
-				// 		H_ALLr_Lambdab->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-				// 		H_ALLp_Lambdab->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-				// 		H_ALL_Lambdab ->Fill(MRap,particle.GetMass());
-				// 	}
-				// 	else if (particle.GetPDG() ==  XiPdg) {
-				// 		H_ALLr_Xi ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-				// 		H_ALLp_Xi ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-				// 		H_ALL_Xi  ->Fill(MRap,particle.GetMass());
-				// 	}
-				// 	else if (particle.GetPDG() == -XiPdg) {
-				// 		H_ALLr_Xib->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-				// 		H_ALLp_Xib->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-				// 		H_ALL_Xib ->Fill(MRap,particle.GetMass());
-				// 	}
-				// 	else if (particle.GetPDG() ==  OmegaPdg) {
-				// 		H_ALLr_Omega ->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-				// 		H_ALLp_Omega ->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-				// 		H_ALL_Omega  ->Fill(MRap,particle.GetMass());
-				// 	}
-				// 	else if (particle.GetPDG() == -OmegaPdg) {
-				// 		H_ALLr_Omegab->Fill(MRap,GetPairMass(APx , APy , APz , -BPx , -BPy , BPz , AMass , BMass));
-				// 		H_ALLp_Omegab->Fill(MRap,GetPairMass(APx , APy , APz ,  BPx ,  BPy , BPz , AMass , BMass));
-				// 		H_ALL_Omegab ->Fill(MRap,particle.GetMass());
-				// 	}
-				// }
-			}
+			
 
 
 			// Check if wrong daughters
@@ -3733,17 +3644,6 @@ float StKFParticleAnalysisMaker::GetPairMass(float p1x , float p1y , float p1z ,
     float bp2 = beta[0]*p2x + beta[1]*p2y + beta[2]*p2z;
 
     return gamma * (E1 + bp1 + E2 + bp2);
-}
-KFParticle StKFParticleAnalysisMaker::ChangeMass(KFParticle daughter){
-	KFPTrack   KFPtrack_A;
-	KFPtrack_A.SetPxPyPz(daughter.GetPx(), daughter.GetPy(), daughter.GetPz());
-	KFPtrack_A.SetXYZ(   daughter.GetX() , daughter.GetY() , daughter.GetZ() );
-	KFPtrack_A.SetID(-1);
-	KFPtrack_A.SetCharge(daughter.GetQ()   );
-	KFPtrack_A.SetChi2(  daughter.GetChi2());
-	KFPtrack_A.SetNDF(   daughter.GetNDF());
-	KFPtrack_A.SetCovarianceMatrix (daughter.CovarianceMatrix());
-	return KFParticle(KFPtrack_A,daughter.GetPDG());
 }
 // std::tuple<KFParticle, bool> StKFParticleAnalysisMaker::buildMother(KFParticle vDaughters[], int daughterOrder[],
 // 																	bool isIntermediate, int intermediateNumber, int nTracks,
