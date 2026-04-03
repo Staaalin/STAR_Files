@@ -27,10 +27,11 @@ mkdir -p $WorkDir
 cd $WorkDir
 cp -Lr $MainDir/setDEV2.csh .
 cp -Lr $MainDir/lMuDst.C .
-source setDEV2.csh
 cp -Lr $MainDir/readPicoDst.C .
 # cp -Lr $MainDir/.sl73_x8664_gcc485 .
-cp -Lr $MainDir/.al96_x8664_gcc11 .
+cp -Lr $MainDir/.sl73_x8664_gcc485_opt .
+# cp -Lr $MainDir/.al96_x8664_gcc11 .
+source setDEV2.csh
 
 set RootLog=$MainDir/root_${JOBINDEX}.log
 if(-e $RootLog) rm $RootLog
