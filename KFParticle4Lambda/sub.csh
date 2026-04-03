@@ -19,7 +19,10 @@ set nFileTotal=all
 echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
 echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${nFilePerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
 echo \<shell\>singularity exec \-e \-B /direct \-B /star \-B /afs \-B /gpfs \-B /sdcc/lustre02 /cvmfs/star\.sdcc\.bnl\.gov/containers/rhic_sl7\.sif\</shell\> >> $SubXml # For a9
-echo \<command\>$MainDir/run\.csh\</command\> >> $SubXml
+echo \<command\> >> $SubXml
+echo "source $MainDir/setDEV2.csh" >> $SubXml
+echo $MainDir/run\.csh >> $SubXml
+echo \</command\> >> $SubXml
 # echo \<stdout URL=\"file:$MainDir/log/script_\$JOBINDEX\.out\" /\> >> $SubXml
 echo \<stdout URL=\"file:/star/data01/pwg/svianping/log/script_\$JOBINDEX\.out\" /\> >> $SubXml # 似乎condor无法自动创建script文件了
 # echo \<input URL=\"catalog:star\.bnl\.gov\?production=P19ib,filetype=daq_reco_PicoDst,trgsetupname~27GeV_production_2018,runnumber\[\]19130060-19268002,sanity=1,tpx=1,storage!=hpss,filename~st_physics\" nFiles=\"$nFileTotal\" /\> >> $SubXml
