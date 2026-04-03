@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-static const std::vector<TString> TriggerList::DataNameList = {
+const std::vector<TString> TriggerList::DataNameList = {
 	"dAu_200_16",
 	"pAu_200_15",
 	"dAu_62_16",
@@ -18,7 +18,7 @@ static const std::vector<TString> TriggerList::DataNameList = {
 	"AuAu_19_19"
 };
 
-static const std::vector<std::vector<int>> TriggerList::TriggerNameList = {
+const std::vector<std::vector<int>> TriggerList::TriggerNameList = {
 
 	{// dAu_200_16
 		530003,
