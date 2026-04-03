@@ -18,10 +18,10 @@ set nFileTotal=all
 # print xml file
 echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
 echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${nFilePerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
-echo \<shell\>singularity exec \-e \-B /direct \-B /star \-B /afs \-B /gpfs \-B /sdcc/lustre02 /cvmfs/star\.sdcc\.bnl\.gov/containers/rhic_sl7\.sif\</shell\> >> $SubXml # For a9
+# echo \<shell\>singularity exec \-e \-B /direct \-B /star \-B /afs \-B /gpfs \-B /sdcc/lustre02 /cvmfs/star\.sdcc\.bnl\.gov/containers/rhic_sl7\.sif\</shell\> >> $SubXml # For a9
 echo \<command\> >> $SubXml
-echo "source $MainDir/setDEV2.csh" >> $SubXml
-echo $MainDir/run\.csh >> $SubXml
+echo singularity exec \-e \-B /direct \-B /star \-B /afs \-B /gpfs \-B /sdcc/lustre02 /cvmfs/star\.sdcc\.bnl\.gov/containers/rhic_sl7\.sif $MainDir/run\.csh >> $SubXml
+# echo $MainDir/run\.csh >> $SubXml
 echo \</command\> >> $SubXml
 # echo \<stdout URL=\"file:$MainDir/log/script_\$JOBINDEX\.out\" /\> >> $SubXml
 echo \<stdout URL=\"file:/star/data01/pwg/svianping/log/script_\$JOBINDEX\.out\" /\> >> $SubXml # 似乎condor无法自动创建script文件了
