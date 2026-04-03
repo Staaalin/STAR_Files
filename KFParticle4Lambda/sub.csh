@@ -34,7 +34,7 @@ echo \<stdout URL=\"file:/star/data01/pwg/svianping/log/script_\$JOBINDEX\.out\"
 echo \<input URL=\"catalog:star\.bnl\.gov\?production=P23id,filetype=daq_reco_PicoDst,trgsetupname~production_19GeV_2019,runnumber\[\]20056032-20093036,sanity=1,tpx=1,storage!=hpss,filename~st_physics\" nFiles=\"$nFileTotal\" /\> >> $SubXml
 echo \<output fromScratch=\"root_\$JOBINDEX\.log\" toURL=\"file:/star/data01/pwg/svianping/log/\" /\> >> $SubXml
 echo \<output fromScratch=\"output_\$JOBINDEX\.root\" toURL=\"file:/star/data01/pwg/svianping/output/\" /\> >> $SubXml
-echo \<output fromScratch=\"KFParticleQA_\$JOBINDEX\.root\" toURL=\"file:/star/data01/pwg/svianping/output/\" /\> >> $SubXml
+# echo \<output fromScratch=\"KFParticleQA_\$JOBINDEX\.root\" toURL=\"file:/star/data01/pwg/svianping/output/\" /\> >> $SubXml
 echo \</job\> >> $SubXml
 
 # star-submit $SubXml # For SL7
