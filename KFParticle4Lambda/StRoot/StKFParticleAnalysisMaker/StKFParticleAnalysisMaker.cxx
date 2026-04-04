@@ -970,12 +970,12 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		// hadronTree->Branch("buffer_size"       ,&buffer_size         ,"buffer_size/I"                       );
 		hadronTree->Branch("PDGMult"            ,&PDGMult             ,"PDGMult/I"                           );
 		hadronTree->Branch("refMult"            ,&CrefMult            ,"refMult/I"                           );
-		hadronTree->Branch("grefMult"           ,&CgrefMult           ,"grefMult/I"                          );
-		hadronTree->Branch("EventID"            ,&evtID               ,"EventID/I"                           );
+		// hadronTree->Branch("grefMult"           ,&CgrefMult           ,"grefMult/I"                          );
+		// hadronTree->Branch("EventID"            ,&evtID               ,"EventID/I"                           );
 		hadronTree->Branch("RunID"              ,&runID               ,"RunID/I"                             );
-		hadronTree->Branch("TriggerID"          ,&TriggerID           ,"TriggerID/I"                         );
+		// hadronTree->Branch("TriggerID"          ,&TriggerID           ,"TriggerID/I"                         );
 		hadronTree->Branch("PVz"                ,&TPVz                ,"PVz/F"                               );
-		hadronTree->Branch("Nch"                ,&Nch                 ,"Nch/I"                               );
+		// hadronTree->Branch("Nch"                ,&Nch                 ,"Nch/I"                               );
 		hadronTree->Branch("PDG"                ,&PDG                 );
 		hadronTree->Branch("mix_px"             ,&px                  );
 		hadronTree->Branch("mix_py"             ,&py                  );
@@ -984,13 +984,13 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 		// Used for PID QA
 		// hadronTree->Branch("dEdx"               ,&QA_dEdx              );
-		hadronTree->Branch("m2"                 ,&QA_m2                );
+		// hadronTree->Branch("m2"                 ,&QA_m2                );
 		hadronTree->Branch("dcatopv"            ,&QA_DCA_V0_PV         );
 		// hadronTree->Branch("nSigmaProton"       ,&QA_nSigmaProton      );
 		// hadronTree->Branch("nSigmaPion"         ,&QA_nSigmaPion        );
 		// hadronTree->Branch("nSigmaKaon"         ,&QA_nSigmaKaon        );
-		hadronTree->Branch("nHitsFit"           ,&QA_nHitsFit          );
-		hadronTree->Branch("nHitsMax"           ,&QA_nHitsMax          );
+		// hadronTree->Branch("nHitsFit"           ,&QA_nHitsFit          );
+		// hadronTree->Branch("nHitsMax"           ,&QA_nHitsMax          );
 		
 		// Used for Reconstruction QA
 		hadronTree->Branch("InvariantMass"      ,&InvariantMass        );
@@ -2558,7 +2558,7 @@ Int_t StKFParticleAnalysisMaker::Make()
 					QA_m2.emplace_back(m2);
 					QA_nHitsFit.emplace_back(track->nHitsFit());
 					QA_nHitsMax.emplace_back(track->nHitsMax());
-					InvariantMass.emplace_back(massList(NeedPDG[Ktr])); 
+					InvariantMass.emplace_back(m2); 
 					DaughtersID.emplace_back(  -1);
 					// Recording SL value
 					if (IfQAMode) {
