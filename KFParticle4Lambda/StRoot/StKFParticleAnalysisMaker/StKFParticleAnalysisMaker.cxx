@@ -2040,10 +2040,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 			vector<int> TempT;TempT.resize(0);TempT.push_back(iKFParticle);
 			if      ((abs(particle.GetPDG()) == PhiPdg)    && (fabs(particle.GetMass() - PhiPdgMass)    >  30*PhiPdgMassSigma))    {CheckPass = false;}
 			else if ((abs(particle.GetPDG()) == K0SPdg)    && (fabs(particle.GetMass() - K0SPdgMass)    >  30*K0SPdgMassSigma))    {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) > 100*LambdaPdgMassSigma)) {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     > 100*XiPdgMassSigma))     {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == XiRPdg)    && (fabs(particle.GetMass() - XiRPdgMass)    >  30*XiRPdgMassSigma))    {CheckPass = false;}
-			else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  > 100*OmegaPdgMassSigma))  {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == LambdaPdg) && (fabs(particle.GetMass() - LambdaPdgMass) >  25*LambdaPdgMassSigma)) {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == XiPdg)     && (fabs(particle.GetMass() - XiPdgMass)     >  20*XiPdgMassSigma))     {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == XiRPdg)    && (fabs(particle.GetMass() - XiRPdgMass)    >  25*XiRPdgMassSigma))    {CheckPass = false;}
+			else if ((abs(particle.GetPDG()) == OmegaPdg)  && (fabs(particle.GetMass() - OmegaPdgMass)  >  20*OmegaPdgMassSigma))  {CheckPass = false;}
 			if (CheckPass == true) {
 				for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
 					TempT.push_back(particle.DaughterIds()[iDaughter]);
