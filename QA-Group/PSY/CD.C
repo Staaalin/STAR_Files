@@ -79,6 +79,10 @@ void CD(const Char_t *inFile = "test.list") {
         hTofMatch_vs_RefMult_Fxt->GetXaxis()->SetTitle("nBTOFMatch");
         hTofMatch_vs_RefMult_Fxt->GetYaxis()->SetTitle("RefMult");
 
+        TH2F *hEta_vs_Phi = new TH2F("hEta_vs_Phi","Eta_vs_Phi",250,-1.75,1.75,250,-PI,PI);
+        hEta_vs_Phi->GetXaxis()->SetTitle("Eta");
+        hEta_vs_Phi->GetYaxis()->SetTitle("Phi");
+
         TH2F *hPVxy                    = new TH2F("hPVxy","Primary Vertex xy",100,-4,4,100,-4,4);
         hPVxy->GetXaxis()->SetTitle("X [cm]");
         hPVxy->GetYaxis()->SetTitle("Y [cm]");
@@ -238,6 +242,7 @@ void CD(const Char_t *inFile = "test.list") {
                         // if (track->gMom().Perp() < 0.06 || track->gMom().Perp() > 2.0) continue;
                         // if (fabs(track->gMom().Eta()) > 1.5) continue;
                         // if (fabs(track->gMom().Mag()) < 0.1) continue;
+                        hEta_vs_Phi->Fill(track->gMom().Eta(),track->gMom().Phi());
                         NumCharge++;
                 }
 
