@@ -171,7 +171,7 @@ while ($i <= $numFiles)
     # echo root \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG,0,$SLMEIndex,$CutIndex$RightBrackets >> $SubXml
     # echo root \-b MM\.C$LeftBrackets$Quo\$midname$Quo,$Quo\$DataName$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG,0,$SLMEIndex,$CutIndex$RightBrackets >> $SubXml
     # echo ./MM \"$InputName\" \"$DataName\" \$StartFileIndex \$EndFileIndex \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG 0 $SLMEIndex $CutIndex >> $SubXml
-    echo ./MM \"$FILELIST\" \"$DataName\" \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG 0 $SLMEIndex $CutIndex >> $SubXml
+    echo ./MM \"\$FILELIST\" \"$DataName\" \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG 0 $SLMEIndex $CutIndex >> $SubXml
     # echo root4star \-b MixEventTest\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
