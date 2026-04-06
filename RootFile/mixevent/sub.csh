@@ -144,6 +144,7 @@ while ($i <= $numFiles)
     # print xml file
     echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
     echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${FilesPerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
+    echo \<shell\>singularity exec \-e \-B /direct \-B /star \-B /afs \-B /gpfs \-B /sdcc/lustre02 /cvmfs/star\.sdcc\.bnl\.gov/containers/rhic_sl7\.sif\</shell\> >> $SubXml # For a9
 
     echo \<command\> >> $SubXml
     echo "source setDEV2.csh" >> $SubXml
@@ -225,7 +226,7 @@ while ($i <= $numFiles)
     echo \<output fromScratch=\"$OutputName$TC$i\.root\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     echo \</job\> >> $SubXml
 
-    star-submit $SubXml
+    star-submit-beta $SubXml
 
     echo "submitted"$i"/"$numFiles
     # rm -rf /star/u/svianping/STAR_Files/RootFile/sub/ZIP*
