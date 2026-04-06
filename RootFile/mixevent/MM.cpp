@@ -1026,7 +1026,7 @@ void MM(
     ALL_ALL_B_Num->cd();
     H_ALL_Rap_K_B->Write();
     fileA->Close();
-    return 0;
+    return;
 }
 
 int main(int argc, char** argv) {
