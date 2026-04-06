@@ -676,9 +676,10 @@ int main(int argc, char** argv) {
         // 定Centrality
         CenIndex = -1;
         for (k=0;k<CentralityBinNum;k++){
-            NNch = CenCorr(PVz, DataName) * Nch;
-            if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
-            // if ((NchList.at(k) >= NNch) && (NNch > NchList.at(k+1))) {
+            // NNch = CenCorr(PVz, DataName) * Nch;
+            NNch = CenCorr(PVz, DataName) * refMult;
+            // if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
+            if ((NchList.at(k) >= NNch) && (NNch > NchList.at(k+1))) {
                 CenIndex = k;
                 break;
             }
