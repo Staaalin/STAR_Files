@@ -187,8 +187,8 @@ int main(int argc, char** argv) {
 
     // 可选参数 CutID，默认值0
     int CutID              = 0;// 0: default ; 1: nHit ; 2: PVz ; 3: TPC_nSigma ; 4: DCA
-    if(argc > 11) {
-        CutID = atoi(argv[11]);
+    if(argc > 9) {
+        CutID = atoi(argv[9]);
     }
 
 
