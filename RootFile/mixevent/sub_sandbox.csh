@@ -22,16 +22,11 @@ set B_PDG = "$<"
 
 echo "Please enter DataName:"
 echo "1: dAu_200_21"
-echo "2: AuAu_19_19"
 set DataNameIndex = "$<"
 set DataName = "undefined"
 if ($DataNameIndex == 1) then
 
     set DataName = "dAu_200_21"
-
-else if ($DataNameIndex == 2) then
-
-    set DataName = "AuAu_19_19"
 
 endif
 
@@ -169,8 +164,7 @@ while ($i <= $numFiles)
     # echo root4star \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
     # echo root \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG,0,$SLMEIndex,$CutIndex$RightBrackets >> $SubXml
     # echo root \-b MM\.C$LeftBrackets$Quo\$midname$Quo,$Quo\$DataName$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG,0,$SLMEIndex,$CutIndex$RightBrackets >> $SubXml
-    # echo ./MM \"$InputName\" \"$DataName\" \$StartFileIndex \$EndFileIndex \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG 0 $SLMEIndex $CutIndex >> $SubXml
-    echo ./MM \"$InputName\" \"$DataName\" \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG 0 $SLMEIndex $CutIndex >> $SubXml
+    echo ./MM \"$InputName\" \"$DataName\" \$StartFileIndex \$EndFileIndex \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG 0 $SLMEIndex $CutIndex >> $SubXml
     # echo root4star \-b MixEventTest\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
@@ -188,6 +182,8 @@ while ($i <= $numFiles)
     echo \</ResourceUsage\> >> $SubXml
 
 
+    echo \<SandBox installer=\"ZIP\"\> >> $SubXml
+    echo \<Package name=\"ZIP\_File\_$i\"\> >> $SubXml
     # echo \<File\>file:/star/u/svianping/STAR\_Files/RootFile/HADDr\_xml\.C\</File\> >> $SubXml
     @ k = 0
     while ($k < $FilesPerJob)
@@ -198,15 +194,12 @@ while ($i <= $numFiles)
 
         set FileName = $ObvInputName$j".root"
         if (-e $FileName) then
-            # echo \<File\>file:$FileName\</File\> >> $SubXml
-            echo \<input URL=\"file:$FileName\" \/\> >> $SubXml
+            echo \<File\>file:$FileName\</File\> >> $SubXml
         endif
 
         @ k = $k + 1
     end
 
-    echo \<SandBox installer=\"ZIP\"\> >> $SubXml
-    echo \<Package name=\"ZIP\_File\_$i\"\> >> $SubXml
     # set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEvent.C"
     # set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MM.C"
     set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MM"

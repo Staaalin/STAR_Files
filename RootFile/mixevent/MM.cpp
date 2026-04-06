@@ -118,11 +118,12 @@ struct ArmParticle {
 
 // int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 55 , 60 , 65 , 70 , 75 , 80 , 85 , 90 , 95 , 100};// %
 int CentralityBin[] = {0 , 10 , 20 , 30 , 40 , 50 , 60 , 70 , 80 , 90 , 100};// %
-const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
-const float yBin[]  = {-1000.0 , 0.0 , 1000.0}; // B_y
-const float AyCut[] = {-1000.0   ,     1000.0}; // A_y
+// const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
+const float PVzBin[] = {-80.0 , -70.0 , -60.0 , -50.0 , -40.0 , -30.0 , -20.0 , -10.0 , 0.0 , 10.0 , 20.0 , 30.0 , 40.0 , 50.0 , 60.0}; // Primary Vertex Z (cm) Au+Au@19.6 GeV RUN 19 
+const float yBin[]  = {-10000.0 , 0.0 , 10000.0}; // B_y
+const float AyCut[] = {-10000.0   ,     10000.0}; // A_y
 int FeedDown[] = { 0 };
-const float EtaCut[] = {-1 , 1}; // EtaCut for both A and B
+const float EtaCut[] = {-1.5 , 1.5}; // EtaCut for both A and B
 const float MassSigmaWidth = 3.0;
 // int MultRemain = 1+197;// p+Au
 int MultRemain = 2+197;// d+Au
@@ -162,9 +163,9 @@ void print(Event Temp);
 
 int main(int argc, char** argv) {
     // 检查参数数量
-    if(argc < 11) {
+    if(argc < 9) {
         std::cerr << "Usage: " << argv[0] 
-                  << " MidName DataName StartFileIndex EndFileIndex OutputFileIndex OutMidName"
+                  << " MidName DataName OutputFileIndex OutMidName"
                   << " A_PDG B_PDG Mode SP_ME [CutID]" << std::endl;
         return 1;
     }
@@ -172,14 +173,12 @@ int main(int argc, char** argv) {
     // 解析必选参数
     TString MidName        = argv[1];
     TString DataName       = argv[2];
-    int StartFileIndex     = atoi(argv[3]);
-    int EndFileIndex       = atoi(argv[4]);
-    int OutputFileIndex    = atoi(argv[5]);
-    TString OutMidName     = argv[6];
-    int A_PDG              = atoi(argv[7]);
-    int B_PDG              = atoi(argv[8]);
-    int Mode               = atoi(argv[9]);
-    int SP_ME              = atoi(argv[10]);// Mode = 0: PDGMult 为vector长度 ; SP_Me : if turn on cut of Splite & Merge Effect ; Purity_MC : if turn on 
+    int OutputFileIndex    = atoi(argv[3]);
+    TString OutMidName     = argv[4];
+    int A_PDG              = atoi(argv[5]);
+    int B_PDG              = atoi(argv[6]);
+    int Mode               = atoi(argv[7]);
+    int SP_ME              = atoi(argv[8]);// Mode = 0: PDGMult 为vector长度 ; SP_Me : if turn on cut of Splite & Merge Effect ; Purity_MC : if turn on 
 
     // 可选参数 CutID，默认值0
     int CutID              = 0;// 0: default ; 1: nHit ; 2: PVz ; 3: TPC_nSigma ; 4: DCA
@@ -521,14 +520,49 @@ int main(int argc, char** argv) {
     if (CutID == 3) IfRemoveHighTPCsigma = true;
     if (CutID == 4) IfCutHighDCA = true;
 
+    // =========================
+    // 打开并逐行读取文件
+    // =========================
     TChain *hadronTree = new TChain(TreeName);
-    for(i=StartFileIndex;i <= EndFileIndex;i++){
-        TString filename = MidName;
-        filename+=i;
-        filename+=".root";
-        hadronTree->Add(filename);
-        // cout<<"Add "<<filename<<" Successfully"<<endl;
+    std::ifstream infile(MidName.Data());
+
+    if (!infile.is_open()) {
+        std::cerr << "Error: cannot open file " << MidName << std::endl;
+        return 1;
     }
+
+    std::string line;
+    int lineCount = 0;
+
+    while (std::getline(infile, line)) {
+        lineCount++;
+
+        // 跳过空行（可选）
+        if (line.empty()) continue;
+
+        // 跳过注释（可选，比如 # 开头）
+        if (line[0] == '#') continue;
+
+        // 处理每一行
+        std::cout << "Line " << lineCount << ": " << line << std::endl;
+
+        // 如果你需要转成 TString：
+        TString tline(line);
+
+        hadronTree->Add(line);
+    }
+
+    infile.close();
+
+    std::cout << "Total lines read: " << lineCount << std::endl;
+
+    // TChain *hadronTree = new TChain(TreeName);
+    // for(i=StartFileIndex;i <= EndFileIndex;i++){
+    //     TString filename = MidName;
+    //     filename+=i;
+    //     filename+=".root";
+    //     hadronTree->Add(filename);
+    // }
     Int_t PDGMult  ;
     Int_t refMult  ;
     Int_t grefMult ;
@@ -541,10 +575,10 @@ int main(int argc, char** argv) {
     hadronTree->SetBranchAddress("PDGMult"  ,&PDGMult  );
     // hadronTree->SetBranchAddress("refMult"  ,&refMult  );
     // hadronTree->SetBranchAddress("grefMult" ,&grefMult );
-    hadronTree->SetBranchAddress("EventID"  ,&EventID  );
+    // hadronTree->SetBranchAddress("EventID"  ,&EventID  );
     // hadronTree->SetBranchAddress("RunID"    ,&RunID    );
-    hadronTree->SetBranchAddress("TriggerID",&TriggerID);
-    hadronTree->SetBranchAddress("Nch"      ,&Nch      );
+    // hadronTree->SetBranchAddress("TriggerID",&TriggerID);
+    // hadronTree->SetBranchAddress("Nch"      ,&Nch      );
     hadronTree->SetBranchAddress("PVz"      ,&PVz      );
     
     hadronTree->SetBranchAddress("PDG"          ,&PDG          ,&bPDG          );
@@ -1370,6 +1404,95 @@ float CenCorr(float Vz, TString DataName)
         }
         else                {
             return 1.0;
+        }
+    }
+    if (DataName == "AuAu_19_19") {// data from https://drupal.star.bnl.gov/STAR/system/files/19p6GeVCentrality_v1.pdf
+        if      (Vz < -135.0) {
+            return 0.998171;
+        }
+        else if (Vz < -125.0) {
+            return 0.99364;
+        }
+        else if (Vz < -115.0) {
+            return 0.991578;
+        }
+        else if (Vz < -105.0) {
+            return 0.990252;
+        }
+        else if (Vz < -95.0) {
+            return 0.990494;
+        }
+        else if (Vz < -85.0) {
+            return 0.990065;
+        }
+        else if (Vz < -75.0) {
+            return 0.990332;
+        }
+        else if (Vz < -65.0) {
+            return 0.996478;
+        }
+        else if (Vz < -55.0) {
+            return 0.999687;
+        }
+        else if (Vz < -45.0) {
+            return 0.998645;
+        }
+        else if (Vz < -35.0) {
+            return 0.993835;
+        }
+        else if (Vz < -25.0) {
+            return 0.996273;
+        }
+        else if (Vz < -15.0) {
+            return 0.998307;
+        }
+        else if (Vz < -5.0) {
+            return 0.999295;
+        }
+        else if (Vz < 5.0) {
+            return 1.0;
+        }
+        else if (Vz < 15.0) {
+            return 1.00056;
+        }
+        else if (Vz < 25.0) {
+            return 1.00019;
+        }
+        else if (Vz < 35.0) {
+            return 0.999894;
+        }
+        else if (Vz < 45.0) {
+            return 0.998907;
+        }
+        else if (Vz < 55.0) {
+            return 1.00468;
+        }
+        else if (Vz < 65.0) {
+            return 1.0055;
+        }
+        else if (Vz < 75.0) {
+            return 1.00142;
+        }
+        else if (Vz < 85.0) {
+            return 0.996247;
+        }
+        else if (Vz < 95.0) {
+            return 0.995789;
+        }
+        else if (Vz < 105.0) {
+            return 0.996513;
+        }
+        else if (Vz < 115.0) {
+            return 0.996928;
+        }
+        else if (Vz < 125.0) {
+            return 0.998196;
+        }
+        else if (Vz < 135.0) {
+            return 1.00097;
+        }
+        else                {
+            return 1.00699;
         }
     }
     return 1.0;
