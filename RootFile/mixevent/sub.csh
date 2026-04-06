@@ -138,6 +138,7 @@ while ($i <= $numFiles)
 
     # set SubXml=sub.xml
     set SubXml="/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/sub.xml"
+    set RootList="/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/sub_$i.list"
     if(-e $SubXml) rm $SubXml
     touch $SubXml
 
@@ -146,6 +147,8 @@ while ($i <= $numFiles)
     echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${FilesPerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
     echo \<shell\>singularity exec \-e \-B /direct \-B /star \-B /afs \-B /gpfs \-B /sdcc/lustre02 /cvmfs/star\.sdcc\.bnl\.gov/containers/rhic_sl7\.sif\</shell\> >> $SubXml # For a9
 
+
+    echo \<input URL=\"filelist:$RootList\" \/\> >> $SubXml
     echo \<command\> >> $SubXml
     echo "source setDEV2.csh" >> $SubXml
     echo rm $i\.log >> $SubXml
@@ -200,7 +203,8 @@ while ($i <= $numFiles)
         set FileName = $ObvInputName$j".root"
         if (-e $FileName) then
             # echo \<File\>file:$FileName\</File\> >> $SubXml
-            echo \<input URL=\"file:$FileName\" \/\> >> $SubXml
+            echo file:$FileName >> $RootList
+            # echo \<input URL=\"file:$FileName\" \/\> >> $SubXml
         endif
 
         @ k = $k + 1
