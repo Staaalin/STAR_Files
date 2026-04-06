@@ -35,6 +35,9 @@
 #include <stdio.h>
 using namespace std;
 
+// 使用这个编译：
+// singularity exec -e --env DISPLAY=$DISPLAY -B /direct -B /gpfs -B /star -B /cvmfs -B /sdcc/lustre02 /cvmfs/star.sdcc.bnl.gov/containers/rhic_sl7.sif csh
+// g++ -O2 -std=c++11 MM.cpp -o MM `root-config --cflags --libs`
 
 // 定义粒子结构体
 struct ArmParticle {
