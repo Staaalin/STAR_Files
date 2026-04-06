@@ -28,6 +28,8 @@
 #include "TRandom3.h"
 #include "TString.h"
 // #endif
+#include <fstream>
+#include <string>
 #include <iostream>
 #include <map>
 #include <stdio.h>
@@ -548,8 +550,8 @@ int main(int argc, char** argv) {
 
         // 如果你需要转成 TString：
         TString tline(line);
+        hadronTree->Add(tline);
 
-        hadronTree->Add(line);
     }
 
     infile.close();
