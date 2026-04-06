@@ -550,7 +550,28 @@ int main(int argc, char** argv) {
 
         // 如果你需要转成 TString：
         TString tline(line);
-        hadronTree->Add(tline);
+        TFile *f = TFile::Open(line.c_str());
+
+        if (!f || f->IsZombie()) {
+            std::cerr << "Bad file: " << line << std::endl;
+            continue;
+        }
+        
+        // 检查 tree 是否存在
+        TTree *t = (TTree*)f->Get(TreeName);
+        
+        if (!t) {
+            std::cerr << "No tree " << TreeName << " in " << line << std::endl;
+            f->Close();
+            // delete f;
+            continue;
+        }
+        
+        // 只有通过检查才加入
+        hadronTree->Add(line.c_str());
+        
+        f->Close();
+        delete f;
 
     }
 
