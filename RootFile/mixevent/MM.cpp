@@ -166,31 +166,17 @@ struct Event {
 
 void print(Event Temp);
 
-int main(int argc, char** argv) {
-    // 检查参数数量
-    if(argc < 9) {
-        std::cerr << "Usage: " << argv[0] 
-                  << " MidName DataName OutputFileIndex OutMidName"
-                  << " A_PDG B_PDG Mode SP_ME [CutID]" << std::endl;
-        return 1;
-    }
-
-    // 解析必选参数
-    TString MidName        = argv[1];
-    TString DataName       = argv[2];
-    int OutputFileIndex    = atoi(argv[3]);
-    TString OutMidName     = argv[4];
-    int A_PDG              = atoi(argv[5]);
-    int B_PDG              = atoi(argv[6]);
-    int Mode               = atoi(argv[7]);
-    int SP_ME              = atoi(argv[8]);// Mode = 0: PDGMult 为vector长度 ; SP_Me : if turn on cut of Splite & Merge Effect ; Purity_MC : if turn on 
-
-    // 可选参数 CutID，默认值0
-    int CutID              = 0;// 0: default ; 1: nHit ; 2: PVz ; 3: TPC_nSigma ; 4: DCA
-    if(argc > 9) {
-        CutID = atoi(argv[9]);
-    }
-
+void MM(
+    TString MidName,
+    TString DataName,
+    int OutputFileIndex,
+    TString OutMidName,
+    int A_PDG,
+    int B_PDG,
+    int Mode,
+    int SP_ME,
+    int CutID = 0
+) {
 
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
 
@@ -1040,6 +1026,30 @@ int main(int argc, char** argv) {
     ALL_ALL_B_Num->cd();
     H_ALL_Rap_K_B->Write();
     fileA->Close();
+    return 0;
+}
+
+int main(int argc, char** argv) {
+    // 检查参数数量
+    if(argc < 9) {
+        std::cerr << "Usage: " << argv[0] 
+                  << " MidName DataName OutputFileIndex OutMidName"
+                  << " A_PDG B_PDG Mode SP_ME [CutID]" << std::endl;
+        return 1;
+    }
+
+    MM(
+        argv[1],
+        argv[2],
+        atoi(argv[3]),
+        argv[4],
+        atoi(argv[5]),
+        atoi(argv[6]),
+        atoi(argv[7]),
+        atoi(argv[8]),
+        (argc > 9 ? atoi(argv[9]) : 0)
+    );
+
     return 0;
 }
 
