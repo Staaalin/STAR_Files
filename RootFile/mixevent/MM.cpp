@@ -599,7 +599,7 @@ int main(int argc, char** argv) {
     float PVz      ;
 
     hadronTree->SetBranchAddress("PDGMult"  ,&PDGMult  );
-    // hadronTree->SetBranchAddress("refMult"  ,&refMult  );
+    hadronTree->SetBranchAddress("refMult"  ,&refMult  );
     // hadronTree->SetBranchAddress("grefMult" ,&grefMult );
     // hadronTree->SetBranchAddress("EventID"  ,&EventID  );
     // hadronTree->SetBranchAddress("RunID"    ,&RunID    );
@@ -677,8 +677,8 @@ int main(int argc, char** argv) {
         CenIndex = -1;
         for (k=0;k<CentralityBinNum;k++){
             NNch = CenCorr(PVz, DataName) * Nch;
-            // if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
-            if ((NchList.at(k) >= NNch) && (NNch > NchList.at(k+1))) {
+            if ((NchList.at(k) <= refMult) && (refMult < NchList.at(k+1))) {
+            // if ((NchList.at(k) >= NNch) && (NNch > NchList.at(k+1))) {
                 CenIndex = k;
                 break;
             }

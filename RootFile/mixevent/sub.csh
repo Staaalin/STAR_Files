@@ -146,8 +146,8 @@ while ($i <= $numFiles)
 
     # print xml file
     echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
-    echo \<job\> >> $SubXml
-    # echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${FilesPerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
+    # echo \<job\> >> $SubXml
+    echo \<job simulateSubmission =\"false\" maxFilesPerProcess =\"${FilesPerJob}\" fileListSyntax=\"xrootd\"\> >> $SubXml
     echo \<shell\>singularity exec \-e \-B /direct \-B /star \-B /afs \-B /gpfs \-B /sdcc/lustre02 /cvmfs/star\.sdcc\.bnl\.gov/containers/rhic_sl7\.sif\</shell\> >> $SubXml # For a9
 
 
