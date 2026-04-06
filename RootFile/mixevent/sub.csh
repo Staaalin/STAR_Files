@@ -141,6 +141,8 @@ while ($i <= $numFiles)
     set RootList="/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/sub_$i.list"
     if(-e $SubXml) rm $SubXml
     touch $SubXml
+    if(-e $RootList) rm $RootList
+    touch $RootList
 
     # print xml file
     echo \<\?xml version=\"1\.0\" encoding=\"utf-8\" \?\> >> $SubXml
