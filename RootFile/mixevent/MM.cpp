@@ -519,7 +519,7 @@ void MM(
 
     if (!infile.is_open()) {
         std::cerr << "Error: cannot open file " << MidName << std::endl;
-        return 1;
+        return;
     }
 
     std::string line;
