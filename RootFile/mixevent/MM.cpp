@@ -1331,6 +1331,52 @@ Double_t massList(int PID, TString DataName)
                 Result = 0;
         }
     }
+    if (DataName == "AuAu_19_19"){
+        switch (PID)
+        {
+            case 321 :
+                Result = 0.493677;
+                break;
+            case -321 :
+                Result = 0.493677;
+                break;
+            case 310 :
+                Result = 0.49794;
+                break;
+            case 211 :
+                Result = 0.13957;
+                break;
+            case -211 :
+                Result = 0.13957;
+                break;
+            case 1003314 :// XiRPdgMass
+                Result = 1.6725;
+                break;
+            case -1003314 :// XiRPdgMass
+                Result = 1.6727;
+                break;
+            case 3334 :// OmegaFitMass
+                Result = 1.6725;
+                break;
+            case -3334 :// OmegaBarFitMass
+                Result = 1.6727;
+                break;
+            case 3312 :// XiFitMass
+                Result = 1.3223;
+                break;
+            case -3312 :// XiBarFitMass
+                Result = 1.3223;
+                break;
+            case 3122 :// LambdaFitMass
+                Result = 1.1161;
+                break;
+            case -3122 :// LambdaBarFitMass
+                Result = 1.1161;
+                break;
+            default :
+                Result = 0;
+        }
+    }
     return Result;
 }
 
@@ -1369,6 +1415,37 @@ Double_t massListSigma(int PID, TString DataName)
         }
     }
     if (DataName == "dAu_62_16"){// tbd, used as dAu@200R21
+        switch (PID)
+        {
+            case 3334 :// OmegaFitMass
+                Result = 0.0029;
+                break;
+            case -3334 :// OmegaBarFitMass
+                Result = 0.0024;
+                break;
+            case 1003314 :// XiRPdgMass
+                Result = 0.0029;
+                break;
+            case -1003314 :// XiRPdgMass
+                Result = 0.0024;
+                break;
+            case 3312 :// XiFitMass
+                Result = 0.0024;
+                break;
+            case -3312 :// XiBarFitMass
+                Result = 0.0024;
+                break;
+            case 3122 :// LambdaFitMass
+                Result = 0.0020;
+                break;
+            case -3122 :// LambdaBarFitMass
+                Result = 0.0020;
+                break;
+            default :
+                Result = 100;
+        }
+    }
+    if (DataName == "AuAu_19_19"){
         switch (PID)
         {
             case 3334 :// OmegaFitMass
