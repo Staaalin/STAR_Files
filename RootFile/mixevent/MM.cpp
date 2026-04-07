@@ -1040,10 +1040,10 @@ int main(int argc, char** argv) {
     }
 
     MM(
-        argv[1],
-        argv[2],
+        TString(argv[1]),
+        TString(argv[2]),
         atoi(argv[3]),
-        argv[4],
+        TString(argv[4]),
         atoi(argv[5]),
         atoi(argv[6]),
         atoi(argv[7]),
