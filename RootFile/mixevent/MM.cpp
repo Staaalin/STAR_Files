@@ -143,7 +143,7 @@ const Int_t FeedDownNum = sizeof(FeedDown)/sizeof(FeedDown[0]);
 void print(std::vector<int> Temp);
 void print(std::vector<float> Temp);
 std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize, TString DataName);
-bool IfInVector(int Num , std::vector<int> V);
+bool IfInVector(int Num , const std::vector<int>& V);
 std::vector<int> GetDaughterPDGLit(int ID);
 Double_t massList(int PID, TString DataName);
 Double_t massListSigma(int PID, TString DataName);
@@ -375,46 +375,184 @@ void MM(
     float BMassSigma = massListSigma(B_PDG, DataName) , AMassSigma = massListSigma(A_PDG, DataName);
     std::vector<std::vector<int> > C_ParID;
 
-    //                                    centrality    A_Rapidity   PrimaryVertex
-    std::vector<Event>    EventPool         [50]           [50]          [50];
-    std::vector<ArmParticle> A_Array                       [50]              , B_Array;
-    std::vector<ArmParticle> A_List                        [50]              , B_List ;
-    TH1F                 *H_Kstar           [50]           [50]          [50];
-    TH1F                 *H_ALL_Kstar                      [50]     ;
-    TH1F                 *H_Mix_Kstar       [50]           [50]          [50];
-    TH1F                 *H_ALL_Mix_Kstar                  [50]     ;
-    TH1F                 *H_Tra_Kstar       [50]           [50]          [50];
-    TH1F                 *H_ALL_Tra_Kstar                  [50]     ;
-    TH1F                 *H_dRap            [50]           [50]          [50];
-    TH1F                 *H_ALL_dRap                       [50]     ;
-    TH1F                 *H_Mix_dRap        [50]           [50]          [50];
-    TH1F                 *H_ALL_Mix_dRap                   [50]     ;
-    TH1F                 *H_Tra_dRap        [50]           [50]          [50];
-    TH1F                 *H_ALL_Tra_dRap                   [50]     ;
-    TH1F                 *H_dPt             [50]           [50]          [50];
-    TH1F                 *H_ALL_dPt                        [50]     ;
-    TH1F                 *H_Mix_dPt         [50]           [50]          [50];
-    TH1F                 *H_ALL_Mix_dPt                    [50]     ;
-    TH1F                 *H_Tra_dPt         [50]           [50]          [50];
-    TH1F                 *H_ALL_Tra_dPt                    [50]     ;
-    TH1F                 *H_ALL_Mass                       [50]     ;
-    TH1F                 *H_ALL_Mix_Mass                   [50]     ;
-    TH1F                 *H_ALL_Tra_Mass                   [50]     ;
-    TH1F                 *H_Rap_A           [50]           [50]          [50];
-    TH1F                 *H_ALL_Rap_A                      [50]     ;
-    TH1F                 *H_Rap_K_A         [50]           [50]          [50];
-    TH1F                 *H_ALL_Rap_K_A                    [50]     ;
-    TH1F                 *H_Rap_B           [50]           [50]          [50];
-    TH1F                 *H_ALL_Rap_B                      [50]     ;
-    TH1F                 *H_Rap_K_B         [50]                         [50];
-    TH1F                 *H_ALL_Rap_K_B                             ;
-    // Used for test
-    TH2F                 *H_ALL_dRap_ARp                   [50]     ;
-    TH2F                 *H_ALL_Mix_dRap_ARp               [50]     ;
-    TH2F                 *H_Rap_A_B         [50]           [50]          [50];
-    TH2F                 *H_ALL_Rap_A_B                    [50]     ;
-    TH2F                 *H_Mix_Rap_A_B     [50]           [50]          [50];
-    TH2F                 *H_ALL_Mix_Rap_A_B                [50]     ;
+    // //                                    centrality    A_Rapidity   PrimaryVertex
+    // std::vector<Event>    EventPool         [50]           [50]          [50];
+    // std::vector<ArmParticle> A_Array                       [50]              , B_Array;
+    // std::vector<ArmParticle> A_List                        [50]              , B_List ;
+    // TH1F                 *H_Kstar           [50]           [50]          [50];
+    // TH1F                 *H_ALL_Kstar                      [50]     ;
+    // TH1F                 *H_Mix_Kstar       [50]           [50]          [50];
+    // TH1F                 *H_ALL_Mix_Kstar                  [50]     ;
+    // TH1F                 *H_Tra_Kstar       [50]           [50]          [50];
+    // TH1F                 *H_ALL_Tra_Kstar                  [50]     ;
+    // TH1F                 *H_dRap            [50]           [50]          [50];
+    // TH1F                 *H_ALL_dRap                       [50]     ;
+    // TH1F                 *H_Mix_dRap        [50]           [50]          [50];
+    // TH1F                 *H_ALL_Mix_dRap                   [50]     ;
+    // TH1F                 *H_Tra_dRap        [50]           [50]          [50];
+    // TH1F                 *H_ALL_Tra_dRap                   [50]     ;
+    // TH1F                 *H_dPt             [50]           [50]          [50];
+    // TH1F                 *H_ALL_dPt                        [50]     ;
+    // TH1F                 *H_Mix_dPt         [50]           [50]          [50];
+    // TH1F                 *H_ALL_Mix_dPt                    [50]     ;
+    // TH1F                 *H_Tra_dPt         [50]           [50]          [50];
+    // TH1F                 *H_ALL_Tra_dPt                    [50]     ;
+    // TH1F                 *H_ALL_Mass                       [50]     ;
+    // TH1F                 *H_ALL_Mix_Mass                   [50]     ;
+    // TH1F                 *H_ALL_Tra_Mass                   [50]     ;
+    // TH1F                 *H_Rap_A           [50]           [50]          [50];
+    // TH1F                 *H_ALL_Rap_A                      [50]     ;
+    // TH1F                 *H_Rap_K_A         [50]           [50]          [50];
+    // TH1F                 *H_ALL_Rap_K_A                    [50]     ;
+    // TH1F                 *H_Rap_B           [50]           [50]          [50];
+    // TH1F                 *H_ALL_Rap_B                      [50]     ;
+    // TH1F                 *H_Rap_K_B         [50]                         [50];
+    // TH1F                 *H_ALL_Rap_K_B                             ;
+    // // Used for test
+    // TH2F                 *H_ALL_dRap_ARp                   [50]     ;
+    // TH2F                 *H_ALL_Mix_dRap_ARp               [50]     ;
+    // TH2F                 *H_Rap_A_B         [50]           [50]          [50];
+    // TH2F                 *H_ALL_Rap_A_B                    [50]     ;
+    // TH2F                 *H_Mix_Rap_A_B     [50]           [50]          [50];
+    // TH2F                 *H_ALL_Mix_Rap_A_B                [50]     ;
+    std::vector<std::vector<std::vector<std::vector<Event>>>> EventPool;
+    std::vector<std::vector<ArmParticle>> A_Array(CentralityBinNum);
+    std::vector<ArmParticle> B_Array;
+    std::vector<std::vector<ArmParticle>> A_List(yBinNum);
+    std::vector<ArmParticle> B_List;
+    std::vector<std::vector<TH1F>>    *H_Rap_K_B;
+    std::vector<TH1F>                 *H_ALL_Kstar       ;
+    std::vector<TH1F>                 *H_ALL_Mix_Kstar   ;
+    std::vector<TH1F>                 *H_ALL_Tra_Kstar   ;
+    std::vector<TH1F>                 *H_ALL_dRap        ;
+    std::vector<TH1F>                 *H_ALL_Mix_dRap    ;
+    std::vector<TH1F>                 *H_ALL_Tra_dRap    ;
+    std::vector<TH1F>                 *H_ALL_dPt         ;
+    std::vector<TH1F>                 *H_ALL_Mix_dPt     ;
+    std::vector<TH1F>                 *H_ALL_Tra_dPt     ;
+    std::vector<TH1F>                 *H_ALL_Mass        ;
+    std::vector<TH1F>                 *H_ALL_Mix_Mass    ;
+    std::vector<TH1F>                 *H_ALL_Tra_Mass    ;
+    std::vector<TH1F>                 *H_ALL_Rap_A       ;
+    std::vector<TH1F>                 *H_ALL_Rap_K_A     ;
+    std::vector<TH1F>                 *H_ALL_Rap_B       ;
+    std::vector<TH2F>                 *H_ALL_dRap_ARp    ;
+    std::vector<TH2F>                 *H_ALL_Mix_dRap_ARp;
+    std::vector<TH2F>                 *H_ALL_Rap_A_B     ;
+    std::vector<TH2F>                 *H_ALL_Mix_Rap_A_B ;
+    std::vector<TH1F>                 *H_ALL_Rap_K_B     ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_Kstar      ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_Mix_Kstar  ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_Tra_Kstar  ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_dRap       ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_Mix_dRap   ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_Tra_dRap   ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_dPt        ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_Mix_dPt    ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_Tra_dPt    ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_Rap_A      ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_Rap_K_A    ;
+    std::vector<std::vector<std::vector<TH1F>>>                 *H_Rap_B      ;
+    std::vector<std::vector<std::vector<TH2F>>>                 *H_Rap_A_B    ;
+    std::vector<std::vector<std::vector<TH2F>>>                 *H_Mix_Rap_A_B;
+    H_ALL_Rap_K_B.resize(HowMuchEventMixing);
+    EventPool.resize(CentralityBinNum);
+    H_Rap_K_B.resize(CentralityBinNum);
+    H_ALL_Kstar       .resize(yBinNum);
+    H_ALL_Mix_Kstar   .resize(yBinNum);
+    H_ALL_Tra_Kstar   .resize(yBinNum);
+    H_ALL_dRap        .resize(yBinNum);
+    H_ALL_Mix_dRap    .resize(yBinNum);
+    H_ALL_Tra_dRap    .resize(yBinNum);
+    H_ALL_dPt         .resize(yBinNum);
+    H_ALL_Mix_dPt     .resize(yBinNum);
+    H_ALL_Tra_dPt     .resize(yBinNum);
+    H_ALL_Mass        .resize(yBinNum);
+    H_ALL_Mix_Mass    .resize(yBinNum);
+    H_ALL_Tra_Mass    .resize(yBinNum);
+    H_ALL_Rap_A       .resize(yBinNum);
+    H_ALL_Rap_K_A     .resize(yBinNum);
+    H_ALL_Rap_B       .resize(yBinNum);
+    H_ALL_dRap_ARp    .resize(yBinNum);
+    H_ALL_Mix_dRap_ARp.resize(yBinNum);
+    H_ALL_Rap_A_B     .resize(yBinNum);
+    H_ALL_Mix_Rap_A_B .resize(yBinNum);
+    H_Kstar      .resize(CentralityBinNum);
+    H_Mix_Kstar  .resize(CentralityBinNum);
+    H_Tra_Kstar  .resize(CentralityBinNum);
+    H_dRap       .resize(CentralityBinNum);
+    H_Mix_dRap   .resize(CentralityBinNum);
+    H_Tra_dRap   .resize(CentralityBinNum);
+    H_dPt        .resize(CentralityBinNum);
+    H_Mix_dPt    .resize(CentralityBinNum);
+    H_Tra_dPt    .resize(CentralityBinNum);
+    H_Rap_A      .resize(CentralityBinNum);
+    H_Rap_K_A    .resize(CentralityBinNum);
+    H_Rap_B      .resize(CentralityBinNum);
+    H_Rap_A_B    .resize(CentralityBinNum);
+    H_Mix_Rap_A_B.resize(CentralityBinNum);
+    for (i = 0; i < CentralityBinNum; i++) {
+        EventPool[i].resize(yBinNum);
+        H_Kstar      [i].resize(yBinNum);
+        H_Mix_Kstar  [i].resize(yBinNum);
+        H_Tra_Kstar  [i].resize(yBinNum);
+        H_dRap       [i].resize(yBinNum);
+        H_Mix_dRap   [i].resize(yBinNum);
+        H_Tra_dRap   [i].resize(yBinNum);
+        H_dPt        [i].resize(yBinNum);
+        H_Mix_dPt    [i].resize(yBinNum);
+        H_Tra_dPt    [i].resize(yBinNum);
+        H_Rap_A      [i].resize(yBinNum);
+        H_Rap_K_A    [i].resize(yBinNum);
+        H_Rap_B      [i].resize(yBinNum);
+        H_Rap_A_B    [i].resize(yBinNum);
+        H_Mix_Rap_A_B[i].resize(yBinNum);
+        for (j = 0; j < yBinNum; j++) {
+            EventPool[i][j].resize(PVzBinNum);
+            H_Kstar      [i][j].resize(PVzBinNum);
+            H_Mix_Kstar  [i][j].resize(PVzBinNum);
+            H_Tra_Kstar  [i][j].resize(PVzBinNum);
+            H_dRap       [i][j].resize(PVzBinNum);
+            H_Mix_dRap   [i][j].resize(PVzBinNum);
+            H_Tra_dRap   [i][j].resize(PVzBinNum);
+            H_dPt        [i][j].resize(PVzBinNum);
+            H_Mix_dPt    [i][j].resize(PVzBinNum);
+            H_Tra_dPt    [i][j].resize(PVzBinNum);
+            H_Rap_A      [i][j].resize(PVzBinNum);
+            H_Rap_K_A    [i][j].resize(PVzBinNum);
+            H_Rap_B      [i][j].resize(PVzBinNum);
+            H_Rap_A_B    [i][j].resize(PVzBinNum);
+            H_Mix_Rap_A_B[i][j].resize(PVzBinNum);
+            for (k = 0; k < PVzBinNum; k++) {
+                EventPool[i][j][k].resize(HowMuchEventMixing);
+                H_Kstar      [i][j][k].resize(HowMuchEventMixing);
+                H_Mix_Kstar  [i][j][k].resize(HowMuchEventMixing);
+                H_Tra_Kstar  [i][j][k].resize(HowMuchEventMixing);
+                H_dRap       [i][j][k].resize(HowMuchEventMixing);
+                H_Mix_dRap   [i][j][k].resize(HowMuchEventMixing);
+                H_Tra_dRap   [i][j][k].resize(HowMuchEventMixing);
+                H_dPt        [i][j][k].resize(HowMuchEventMixing);
+                H_Mix_dPt    [i][j][k].resize(HowMuchEventMixing);
+                H_Tra_dPt    [i][j][k].resize(HowMuchEventMixing);
+                H_Rap_A      [i][j][k].resize(HowMuchEventMixing);
+                H_Rap_K_A    [i][j][k].resize(HowMuchEventMixing);
+                H_Rap_B      [i][j][k].resize(HowMuchEventMixing);
+                H_Rap_A_B    [i][j][k].resize(HowMuchEventMixing);
+                H_Mix_Rap_A_B[i][j][k].resize(HowMuchEventMixing);
+            }
+        }
+        H_Rap_K_B[i].resize(PVzBinNum);
+        for (k = 0; k < PVzBinNum; k++) {
+            H_Rap_K_B[i][k].resize(HowMuchEventMixing);
+        }
+    }
+    for (j = 0; j < CentralityBinNum; j++) {
+        A_Array[j].resize(HowMuchEventMixing);
+    }
+    for (j = 0; j < yBinNum; j++) {
+        A_List[j].resize(HowMuchEventMixing);
+    }
+
     ArmParticle           A(0,0,0,0,0), B(0,0,0,0,0), C(0,0,0,0,0), D(0,0,0,0,0);
     Event                 TempEvent(0);
 
@@ -656,9 +794,9 @@ void MM(
         TempEvent.eventID = EntriesID;
         TempEvent.A_particles.clear();
         TempEvent.B_particles.clear();
-        for (i=0;i<MatchedRap.size();i++) {
-            A_Array[MatchedRap[i]].clear();
-            A_List [MatchedRap[i]].clear();
+        for (size_t st=0;st<MatchedRap.size();st++) {
+            A_Array[MatchedRap.at(st)].clear();
+            A_List [MatchedRap.at(st)].clear();
         }
         MatchedRap.clear();
         // 定Centrality
@@ -1272,7 +1410,7 @@ void print(std::vector<float> Temp)
     return ;
 }
 
-bool IfInVector(int Num , std::vector<int> V)
+bool IfInVector(int Num , const std::vector<int>& V)
 {
     for (int i=0;i<V.size();i++) {
         if (Num == V.at(i)){
