@@ -111,7 +111,7 @@ struct ArmParticle {
 #pragma link off all functions;
 
 #pragma link C++ class ArmParticle+;
-#pragma link C++ class std::vector<ArmParticle>+;
+// #pragma link C++ class std::vector<ArmParticle>+;
 #endif
 // 这告诉 ROOT：
 // “只生成 ArmParticle 和 std::vector<ArmParticle> 的字典，
