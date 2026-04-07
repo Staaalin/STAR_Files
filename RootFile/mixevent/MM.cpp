@@ -177,6 +177,7 @@ void MM(
     int SP_ME,
     int CutID = 0
 ) {
+    std::cout<<"Start MM.cpp"<<std::endl;
 
     #if ROOT_VERSION_CODE >= ROOT_VERSION(6,0,0) 
 
