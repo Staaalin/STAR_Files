@@ -122,7 +122,8 @@ struct ArmParticle {
 #define HowMuchEventMixing 10
 
 // int CentralityBin[] = {0 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 55 , 60 , 65 , 70 , 75 , 80 , 85 , 90 , 95 , 100};// %
-int CentralityBin[] = {0 , 10 , 20 , 30 , 40 , 50 , 60 , 70 , 80 , 90 , 100};// %
+// int CentralityBin[] = {0 , 10 , 20 , 30 , 40 , 50 , 60 , 70 , 80 , 90 , 100};// %
+int CentralityBin[] = {0 , 10 , 20 , 30 , 40 , 50 , 60 , 70 , 80};// %
 // const float PVzBin[] = {-45.0 , -35.0 , -25.0 , -15.0 , -5.0 , 5.0 , 15.0 , 25.0 , 35.0 , 45.0 , 55.0}; // Primary Vertex Z (cm) d+Au@200 GeV RUN 21 : -45 ~ 55 cm
 const float PVzBin[] = {-80.0 , -70.0 , -60.0 , -50.0 , -40.0 , -30.0 , -20.0 , -10.0 , 0.0 , 10.0 , 20.0 , 30.0 , 40.0 , 50.0 , 60.0}; // Primary Vertex Z (cm) Au+Au@19.6 GeV RUN 19 
 const float yBin[]  = {-10000.0 , 0.0 , 10000.0}; // B_y
@@ -1115,6 +1116,19 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize, TStri
         // data from https://drupal.star.bnl.gov/STAR/system/files/pwg5.pdf
         int NchTable[21] = { 10000 , 55 , 47 , 42 , 38 , 35 , 32 , 29 , 26 , 24 , 21 , 19 , 17 , 15 , 13 , 11 , 9 , 7 , 6 , 4 ,  0};
         int CenTable[21] = {     0 ,  5 , 10 , 15 , 20 , 25 , 30 , 35 , 40 , 45 , 50 , 55 , 60 , 65 , 70 , 75 ,80 ,85 ,90 ,95 ,100};
+        for (int i=0;i<CentralityListSize;i++) {
+            for (int j=0;j<21;j++){
+                if (CenTable[j] == CentralityList[i]) {
+                    Result.push_back(NchTable[j]);
+                    break;
+                }
+            }
+        }
+    }
+    if (DataName == "AuAu_19_19") {
+        // data from https://drupal.star.bnl.gov/STAR/system/files/19p6GeVCentrality_v1.pdf
+        int NchTable[21] = { 500 , 296 , 243 , 201 , 165 , 135 , 110 , 88 , 70 , 55 , 43 , 32 , 24 , 18 , 13 , 9 , 6};
+        int CenTable[21] = {   0 ,   5 ,  10 ,  15 ,  20 ,  25 ,  30 , 35 , 40 , 45 , 50 , 55 , 60 , 65 , 70 , 75 ,80};
         for (int i=0;i<CentralityListSize;i++) {
             for (int j=0;j<21;j++){
                 if (CenTable[j] == CentralityList[i]) {
