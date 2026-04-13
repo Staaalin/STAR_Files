@@ -186,7 +186,7 @@ while ($i <= $numFiles)
 
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
     echo \<Package name=\"ZIP\_File\_$i\"\> >> $SubXml
-    set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/Eff"
+    set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/QA/Eff"
     # set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEventTest.C"
     echo \<File\>file:$MixEventPWD\</File\> >> $SubXml
     set SourceFilePWD = "/star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh"
