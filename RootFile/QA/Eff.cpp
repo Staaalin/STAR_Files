@@ -498,8 +498,8 @@ void Eff(
                 if (PDG->at(i) == Recording_Particle[j]) {
                     if (fabs(InvariantMass->at(i) - Particle_Mass[j]) <= MassSigmaWidth*Particle_MassSigma[j]) {
                         A = ArmParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),Particle_Mass[j],i);
-                        H_pT_rap[j]->Fill(A.pt,A.y);
-                        H_pT_eta[j]->Fill(A.pt,A.eta);
+                        H_pT_rap[j]->Fill(A.y  ,A.pt);
+                        H_pT_eta[j]->Fill(A.eta,A.pt);
                     }
                     break;
                 }
