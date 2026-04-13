@@ -336,8 +336,8 @@ void Eff(
     H_pT_rap.resize(ParticleNum, nullptr);
     H_pT_eta.resize(ParticleNum, nullptr);
     for(int i=0;i<ParticleNum;i++){
-        H_pT_rap[i] = new TH2F(Form("H_pT_rap_%d"   , Recording_Particle[i]),Form("pT vs. rap, %d"  ,Recording_Particle[i]),dPtBinNum,dPtSta,dPtEnd,dRapBinNum,dRapSta,dRapEnd);
-        H_pT_eta[i] = new TH2F(Form("H_pT_eta_%d"   , Recording_Particle[i]),Form("pT vs. eta, %d"  ,Recording_Particle[i]),dPtBinNum,dPtSta,dPtEnd,detaBinNum,detaSta,detaEnd);
+        H_pT_rap[i] = new TH2F(Form("H_pT_rap_%d"   , Recording_Particle[i]),Form("pT vs. rap, %d"  ,Recording_Particle[i]),dRapBinNum,dRapSta,dRapEnd,dPtBinNum,dPtSta,dPtEnd);
+        H_pT_eta[i] = new TH2F(Form("H_pT_eta_%d"   , Recording_Particle[i]),Form("pT vs. eta, %d"  ,Recording_Particle[i]),detaBinNum,detaSta,detaEnd,dPtBinNum,dPtSta,dPtEnd);
     }
 
     cout<<"Histogram initialized!"<<endl;
@@ -497,8 +497,8 @@ void Eff(
                 if (PDG->at(i) == Recording_Particle[j]) {
                     if (fabs(InvariantMass->at(i) - Particle_Mass[j]) <= MassSigmaWidth*Particle_MassSigma[j]) {
                         A = ArmParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),Particle_Mass[j],i);
-                        H_pT_rap[i]->Fill(A.pt,A.y);
-                        H_pT_eta[i]->Fill(A.pt,A.eta);
+                        H_pT_rap[j]->Fill(A.pt,A.y);
+                        H_pT_eta[j]->Fill(A.pt,A.eta);
                     }
                     break;
                 }
