@@ -329,6 +329,7 @@ void Eff(
     float detaSta = -2 , detaEnd = 2;
 
     TString TreeName = "hadronTree";
+    const float MassSigmaWidth = 3.0;
 
     std::vector<TH2F*> H_pT_rap;
     std::vector<TH2F*> H_pT_eta;
