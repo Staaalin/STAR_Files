@@ -150,7 +150,7 @@ while ($i <= $numFiles)
     echo \</job\> >> $SubXml
 
     cp $SubXml /star/data01/pwg/svianping/CD/xml/sub$i.xml
-    star-submit $SubXml
+    star-submit-beta $SubXml
 
     echo "submitted"$i"/"$numFiles
 
