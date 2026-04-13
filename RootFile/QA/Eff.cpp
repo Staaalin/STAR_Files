@@ -301,7 +301,8 @@ void Eff(
         #endif
     #endif
 
-    const int Recording_Particle[] = {321 , -321 , 3122 , -3122 , 3312 , -3312 , 3334 , -3334};
+    const int   Recording_Particle[] = {321 , -321 ,     3122 ,     -3122 , 3312 , -3312 ,    3334 ,    -3334};
+    const char* Recording_PartName[] = {"K+", "K-" , "Lambda" , "Lambdab" , "Xi" , "Xib" , "Omega" , "Omegab"};
     const Int_t ParticleNum = sizeof(Recording_Particle)/sizeof(Recording_Particle[0]);
     std::vector<int> Particle_Mass , Particle_MassSigma;
     for (int i=0;i<ParticleNum;i++) {
@@ -515,7 +516,7 @@ void Eff(
     std::vector<TDirectory*> folder_Particle;
     folder_Particle.resize(ParticleNum,nullptr);
     for(int i=0;i<ParticleNum;i++) {
-        folder_Particle[i]     = fileA->mkdir(TString(Recording_Particle[i]));
+        folder_Particle[i]     = fileA->mkdir(Recording_PartName[i]);
         folder_Particle[i]->cd();
         H_pT_rap[i]->Write();
         H_pT_eta[i]->Write();
