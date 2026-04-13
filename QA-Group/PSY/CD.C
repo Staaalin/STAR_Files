@@ -79,7 +79,7 @@ void CD(const Char_t *inFile = "test.list") {
         hTofMatch_vs_RefMult_Fxt->GetXaxis()->SetTitle("nBTOFMatch");
         hTofMatch_vs_RefMult_Fxt->GetYaxis()->SetTitle("RefMult");
 
-        TH2F *hEta_vs_Phi = new TH2F("hEta_vs_Phi","Eta_vs_Phi",250,-1.75,1.75,250,-PI,PI);
+        TH2F *hEta_vs_Phi = new TH2F("hEta_vs_Phi","Eta_vs_Phi",250,-2,2,250,-PI,PI);
         hEta_vs_Phi->GetXaxis()->SetTitle("Eta");
         hEta_vs_Phi->GetYaxis()->SetTitle("Phi");
 
