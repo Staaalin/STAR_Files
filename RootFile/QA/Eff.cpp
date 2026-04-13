@@ -121,6 +121,11 @@ struct ArmParticle {
 #define Pi 3.1415926535898
 #define HowMuchEventMixing 10
 
+
+Double_t massListSigma(int PID, TString DataName);
+Double_t massList(int PID, TString DataName);
+
+
 void Eff(
     TString MidName,
     TString DataName,
@@ -322,10 +327,8 @@ void Eff(
     
     int detaBinNum = 200;
     float detaSta = -2 , detaEnd = 2;
-    
-    int MBinNum = 1000 , MBinPar = 100;
-    float MSta = floor((AMass + BMass)/0.0005-MBinPar)*0.0005 , MEnd = MSta + (MBinNum - MBinPar)*0.0005;
-    cout<<"Mass Region: [ "<<MSta<<" , "<<MEnd<<" ], BinNum = "<<MBinNum<<". "<<endl;
+
+    TString TreeName = "hadronTree";
 
     std::vector<TH2F*> H_pT_rap;
     std::vector<TH2F*> H_pT_eta;
@@ -430,7 +433,7 @@ void Eff(
     if(IfCutHighDCA) hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
     // hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
     // hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
-    if (IfRemoveHighTPCsigma && ((abs(A_PDG) == 321) || (abs(B_PDG) == 321))){
+    if (IfRemoveHighTPCsigma){
         hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
     }
     hadronTree->SetBranchAddress("InvariantMass",&InvariantMass,&bInvariantMass);
@@ -493,8 +496,8 @@ void Eff(
                 if (PDG->at(i) == Recording_Particle[j]) {
                     if (fabs(InvariantMass->at(i) - Particle_Mass[j]) <= MassSigmaWidth*Particle_MassSigma) {
                         A = ArmParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),Particle_Mass[j],i);
-                        H_pT_rap[i].Fill(A.pt,A.y);
-                        H_pT_eta[i].Fill(A.pt,A.eta);
+                        H_pT_rap[i]->Fill(A.pt,A.y);
+                        H_pT_eta[i]->Fill(A.pt,A.eta);
                     }
                     break;
                 }
