@@ -304,7 +304,7 @@ void Eff(
     const int   Recording_Particle[] = {321 , -321 ,     3122 ,     -3122 , 3312 , -3312 ,    3334 ,    -3334};
     const char* Recording_PartName[] = {"K+", "K-" , "Lambda" , "Lambdab" , "Xi" , "Xib" , "Omega" , "Omegab"};
     const Int_t ParticleNum = sizeof(Recording_Particle)/sizeof(Recording_Particle[0]);
-    std::vector<int> Particle_Mass , Particle_MassSigma;
+    std::vector<float> Particle_Mass , Particle_MassSigma;
     for (int i=0;i<ParticleNum;i++) {
         Particle_Mass.push_back(massList(Recording_Particle[i], DataName));
         Particle_MassSigma.push_back(massListSigma(Recording_Particle[i], DataName));
@@ -479,6 +479,7 @@ void Eff(
 
         // 遍历粒子，筛选A、B、C、D
         for (int i=0;i<PDGMult;i++){
+            if (InvariantMass->at(i) < 0) continue;
             if (IfRemoveHighTPCsigma) {
                 if (abs(PDG->at(i)) == 321) {
                     if (fabs(nSigmaKaon->at(i))>1) continue;
