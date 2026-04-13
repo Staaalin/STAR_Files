@@ -266,6 +266,7 @@ void CD(const Char_t *inFile = "test.list") {
         hPVz                     ->Write();
         hEastZDCrate_vs_RefMult  ->Write();
         hEastBBCrate_vs_RefMult  ->Write();
+        hEta_vs_Phi              ->Write();
         outFile->Close();
 
 }
