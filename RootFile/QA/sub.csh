@@ -211,5 +211,3 @@ while ($i <= $numFiles)
     # echo "Delate submit files"
     @ i = $i + 1
 end
-
-echo This is $A_PDG - $B_PDG Corralation
