@@ -80,8 +80,10 @@ void analysis(const Char_t *inputFile="./datalist/19.6GeV_Run19/test.list", int 
   //StKFParticleInterface::instance()->AddDecayToReconstructionList(  310);
   StKFParticleInterface::instance()->AddDecayToReconstructionList( 3122);
   StKFParticleInterface::instance()->AddDecayToReconstructionList(-3122);
-  // StKFParticleInterface::instance()->AddDecayToReconstructionList( 3312);
-  // StKFParticleInterface::instance()->AddDecayToReconstructionList(-3312);
+  StKFParticleInterface::instance()->AddDecayToReconstructionList( 3312);
+  StKFParticleInterface::instance()->AddDecayToReconstructionList(-3312);
+  StKFParticleInterface::instance()->AddDecayToReconstructionList( 3334);
+  StKFParticleInterface::instance()->AddDecayToReconstructionList(-3334);
   
   Long64_t nevent = N;
   if(isPico)

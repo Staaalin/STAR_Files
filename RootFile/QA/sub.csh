@@ -1,25 +1,5 @@
 #!/bin/csh
 
-# set InputName = 
-# set FilesPerJob = 400
-# set FileStart = 1
-# set FileEnd = 66389
-
-echo "Particle PDG List:"
-echo "+-2212    Proton"
-echo "+-321     Kaon"
-echo "+-211     Pion"
-echo "  310     K0S"
-echo "  333     Phi"
-echo "+-3122    Lambda"
-echo "+-3312    Xi"
-echo "+-3334    Omega"
-
-echo "Please enter particle A PDG:"
-set A_PDG = "$<"
-echo "Please enter particle B PDG:"
-set B_PDG = "$<"
-
 echo "Please enter DataName:"
 echo "1: dAu_200_21"
 echo "2: AuAu_19_19"
@@ -37,14 +17,12 @@ endif
 
 echo "Please enter which location:"
 echo "SCHEME 1: /star/data01/pwg/svianping/output/output_*.root"
-echo "SCHEME 2: /star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADD_T_*.root"
-echo "SCHEME 3: /star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADDrA_*.root"
 set InputNameIndex = "$<"
 
 
 if ($InputNameIndex == 1) then
 
-    set OutPutPath = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/"
+    set OutPutPath = "/star/data01/pwg/svianping/Eff/"
     cd /star/data01/pwg/svianping/output/
     set numFiles = `find . -maxdepth 1 -name "output_*.root" -type f | wc -l`
 
@@ -81,12 +59,6 @@ set FilesPerJob = "$<"
 echo "Set Start and End? 0:no , 1:yes"
 set Mode = "$<"
 
-
-echo "Recording Method? 0:normal , 1:yes"
-echo "0:Normal, without efficiency correction, normal TH*D"
-echo "1:With eta & pT effeciency correcction, dRap-Aets-ApT-Beta-BpT 5-D tree, similar as TH5D"
-set RecordingMethod = "$<"
-
 if ($Mode == 1) then
 
     echo "Please enter from which file:"
@@ -103,7 +75,6 @@ else if ($Mode == 0) then
 
 endif
 
-
 if ($InputNameIndex == 1) then
     set ObvInputName = "/star/data01/pwg/svianping/output/output_"
     set ObvOutputName = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADD_"
@@ -112,7 +83,7 @@ if ($InputNameIndex == 1) then
     set OutputURL = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/"
     rm -rf $OutPutPath
     mkdir $OutPutPath
-    mkdir /star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/log/
+    mkdir $OutPutPath/log/
 else if ($InputNameIndex == 2) then
     set ObvInputName = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADD_T_"
     set ObvOutputName = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADDr_"
@@ -143,8 +114,8 @@ set j = 0
 while ($i <= $numFiles)
 
     # set SubXml=sub.xml
-    set SubXml="/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/sub.xml"
-    set RootList="/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/sub_$i.list"
+    set SubXml="/star/data01/pwg/svianping/Eff/sub.xml"
+    set RootList="/star/data01/pwg/svianping/Eff/sub_$i.list"
     if(-e $SubXml) rm $SubXml
     touch $SubXml
     if(-e $RootList) rm $RootList
@@ -174,16 +145,10 @@ while ($i <= $numFiles)
     @ Jnum = $FileStart + ( $i + 1 ) * $FilesPerJob - 1
     echo set EndFileIndex = $Jnum >> $SubXml
     echo set OutputFileIndex = $i >> $SubXml
-    echo set A_PDG = $A_PDG >> $SubXml
-    echo set B_PDG = $B_PDG >> $SubXml
     set LeftBrackets = "\("
     set RightBrackets = "\)"
     set Quo = '\"'
-    # echo root4star \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
-    # echo root \-b MixEvent\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG,0,$SLMEIndex,$CutIndex$RightBrackets >> $SubXml
-    # echo root \-b MM\.C$LeftBrackets$Quo\$midname$Quo,$Quo\$DataName$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG,0,$SLMEIndex,$CutIndex$RightBrackets >> $SubXml
-    # echo ./MM \"$InputName\" \"$DataName\" \$StartFileIndex \$EndFileIndex \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG 0 $SLMEIndex $CutIndex >> $SubXml
-    echo ./MM \"\$FILELIST\" \"$DataName\" \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG 0 $SLMEIndex $RecordingMethod $CutIndex >> $SubXml
+    echo ./Eff \"\$FILELIST\" \"$DataName\" \$OutputFileIndex \"$OutputName\" $CutIndex >> $SubXml
     # echo root4star \-b MixEventTest\.C$LeftBrackets$Quo\$midname$Quo,\$StartFileIndex,\$EndFileIndex,\$OutputFileIndex,$Quo\$outmidname$Quo,\$A_PDG,\$B_PDG$RightBrackets >> $SubXml
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
@@ -221,9 +186,7 @@ while ($i <= $numFiles)
 
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
     echo \<Package name=\"ZIP\_File\_$i\"\> >> $SubXml
-    # set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEvent.C"
-    # set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MM.C"
-    set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MM"
+    set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/Eff"
     # set MixEventPWD = "/star/u/svianping/STAR_Files/RootFile/mixevent/MixEventTest.C"
     echo \<File\>file:$MixEventPWD\</File\> >> $SubXml
     set SourceFilePWD = "/star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh"
@@ -231,7 +194,7 @@ while ($i <= $numFiles)
 
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml
-    echo \<stdout URL=\"file:/star/data01/pwg/svianping/MIX\_$A_PDG\_$B_PDG/log/script\_$i\.out\" /\> >> $SubXml
+    echo \<stdout URL=\"file:/star/data01/pwg/svianping/Eff/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"$i.log\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     set HC = "H_"
     set TC = "T_"

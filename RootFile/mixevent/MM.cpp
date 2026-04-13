@@ -176,6 +176,7 @@ void MM(
     int B_PDG,
     int Mode,
     int SP_ME,
+    int RecordingMethod = 0,
     int CutID = 0
 ) {
     std::cout<<"Start MM.cpp"<<std::endl;
@@ -455,81 +456,96 @@ void MM(
     std::vector<std::vector<std::vector<TH1F*>>>                 H_Rap_B      ;
     std::vector<std::vector<std::vector<TH2F*>>>                 H_Rap_A_B    ;
     std::vector<std::vector<std::vector<TH2F*>>>                 H_Mix_Rap_A_B;
-    EventPool.resize(CentralityBinNum);
-    H_Rap_K_B.resize(CentralityBinNum);
-    H_ALL_Kstar       .resize(yBinNum, nullptr);
-    H_ALL_Mix_Kstar   .resize(yBinNum, nullptr);
-    H_ALL_Tra_Kstar   .resize(yBinNum, nullptr);
-    H_ALL_dRap        .resize(yBinNum, nullptr);
-    H_ALL_Mix_dRap    .resize(yBinNum, nullptr);
-    H_ALL_Tra_dRap    .resize(yBinNum, nullptr);
-    H_ALL_dPt         .resize(yBinNum, nullptr);
-    H_ALL_Mix_dPt     .resize(yBinNum, nullptr);
-    H_ALL_Tra_dPt     .resize(yBinNum, nullptr);
-    H_ALL_Mass        .resize(yBinNum, nullptr);
-    H_ALL_Mix_Mass    .resize(yBinNum, nullptr);
-    H_ALL_Tra_Mass    .resize(yBinNum, nullptr);
-    H_ALL_Rap_A       .resize(yBinNum, nullptr);
-    H_ALL_Rap_K_A     .resize(yBinNum, nullptr);
-    H_ALL_Rap_B       .resize(yBinNum, nullptr);
-    H_ALL_dRap_ARp    .resize(yBinNum, nullptr);
-    H_ALL_Mix_dRap_ARp.resize(yBinNum, nullptr);
-    H_ALL_Rap_A_B     .resize(yBinNum, nullptr);
-    H_ALL_Mix_Rap_A_B .resize(yBinNum, nullptr);
-    H_Kstar      .resize(CentralityBinNum);
-    H_Mix_Kstar  .resize(CentralityBinNum);
-    H_Tra_Kstar  .resize(CentralityBinNum);
-    H_dRap       .resize(CentralityBinNum);
-    H_Mix_dRap   .resize(CentralityBinNum);
-    H_Tra_dRap   .resize(CentralityBinNum);
-    H_dPt        .resize(CentralityBinNum);
-    H_Mix_dPt    .resize(CentralityBinNum);
-    H_Tra_dPt    .resize(CentralityBinNum);
-    H_Rap_A      .resize(CentralityBinNum);
-    H_Rap_K_A    .resize(CentralityBinNum);
-    H_Rap_B      .resize(CentralityBinNum);
-    H_Rap_A_B    .resize(CentralityBinNum);
-    H_Mix_Rap_A_B.resize(CentralityBinNum);
-    for (i = 0; i < CentralityBinNum; i++) {
-        EventPool[i].resize(yBinNum);
-        H_Kstar      [i].resize(yBinNum);
-        H_Mix_Kstar  [i].resize(yBinNum);
-        H_Tra_Kstar  [i].resize(yBinNum);
-        H_dRap       [i].resize(yBinNum);
-        H_Mix_dRap   [i].resize(yBinNum);
-        H_Tra_dRap   [i].resize(yBinNum);
-        H_dPt        [i].resize(yBinNum);
-        H_Mix_dPt    [i].resize(yBinNum);
-        H_Tra_dPt    [i].resize(yBinNum);
-        H_Rap_A      [i].resize(yBinNum);
-        H_Rap_K_A    [i].resize(yBinNum);
-        H_Rap_B      [i].resize(yBinNum);
-        H_Rap_A_B    [i].resize(yBinNum);
-        H_Mix_Rap_A_B[i].resize(yBinNum);
-        for (j = 0; j < yBinNum; j++) {
-            EventPool[i][j].resize(PVzBinNum);
-            H_Kstar      [i][j].resize(PVzBinNum, nullptr);
-            H_Mix_Kstar  [i][j].resize(PVzBinNum, nullptr);
-            H_Tra_Kstar  [i][j].resize(PVzBinNum, nullptr);
-            H_dRap       [i][j].resize(PVzBinNum, nullptr);
-            H_Mix_dRap   [i][j].resize(PVzBinNum, nullptr);
-            H_Tra_dRap   [i][j].resize(PVzBinNum, nullptr);
-            H_dPt        [i][j].resize(PVzBinNum, nullptr);
-            H_Mix_dPt    [i][j].resize(PVzBinNum, nullptr);
-            H_Tra_dPt    [i][j].resize(PVzBinNum, nullptr);
-            H_Rap_A      [i][j].resize(PVzBinNum, nullptr);
-            H_Rap_K_A    [i][j].resize(PVzBinNum, nullptr);
-            H_Rap_B      [i][j].resize(PVzBinNum, nullptr);
-            H_Rap_A_B    [i][j].resize(PVzBinNum, nullptr);
-            H_Mix_Rap_A_B[i][j].resize(PVzBinNum, nullptr);
+
+    // Storing tree
+    std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int>>>>>>     Cen_Ay_PVz_dRap_AetaApTId_BetaBpTId;
+
+    if (RecordingMethod == 0) {
+        EventPool.resize(CentralityBinNum);
+        H_Rap_K_B.resize(CentralityBinNum);
+        H_ALL_Kstar       .resize(yBinNum, nullptr);
+        H_ALL_Mix_Kstar   .resize(yBinNum, nullptr);
+        H_ALL_Tra_Kstar   .resize(yBinNum, nullptr);
+        H_ALL_dRap        .resize(yBinNum, nullptr);
+        H_ALL_Mix_dRap    .resize(yBinNum, nullptr);
+        H_ALL_Tra_dRap    .resize(yBinNum, nullptr);
+        H_ALL_dPt         .resize(yBinNum, nullptr);
+        H_ALL_Mix_dPt     .resize(yBinNum, nullptr);
+        H_ALL_Tra_dPt     .resize(yBinNum, nullptr);
+        H_ALL_Mass        .resize(yBinNum, nullptr);
+        H_ALL_Mix_Mass    .resize(yBinNum, nullptr);
+        H_ALL_Tra_Mass    .resize(yBinNum, nullptr);
+        H_ALL_Rap_A       .resize(yBinNum, nullptr);
+        H_ALL_Rap_K_A     .resize(yBinNum, nullptr);
+        H_ALL_Rap_B       .resize(yBinNum, nullptr);
+        H_ALL_dRap_ARp    .resize(yBinNum, nullptr);
+        H_ALL_Mix_dRap_ARp.resize(yBinNum, nullptr);
+        H_ALL_Rap_A_B     .resize(yBinNum, nullptr);
+        H_ALL_Mix_Rap_A_B .resize(yBinNum, nullptr);
+        H_Kstar      .resize(CentralityBinNum);
+        H_Mix_Kstar  .resize(CentralityBinNum);
+        H_Tra_Kstar  .resize(CentralityBinNum);
+        H_dRap       .resize(CentralityBinNum);
+        H_Mix_dRap   .resize(CentralityBinNum);
+        H_Tra_dRap   .resize(CentralityBinNum);
+        H_dPt        .resize(CentralityBinNum);
+        H_Mix_dPt    .resize(CentralityBinNum);
+        H_Tra_dPt    .resize(CentralityBinNum);
+        H_Rap_A      .resize(CentralityBinNum);
+        H_Rap_K_A    .resize(CentralityBinNum);
+        H_Rap_B      .resize(CentralityBinNum);
+        H_Rap_A_B    .resize(CentralityBinNum);
+        H_Mix_Rap_A_B.resize(CentralityBinNum);
+        for (i = 0; i < CentralityBinNum; i++) {
+            EventPool[i].resize(yBinNum);
+            H_Kstar      [i].resize(yBinNum);
+            H_Mix_Kstar  [i].resize(yBinNum);
+            H_Tra_Kstar  [i].resize(yBinNum);
+            H_dRap       [i].resize(yBinNum);
+            H_Mix_dRap   [i].resize(yBinNum);
+            H_Tra_dRap   [i].resize(yBinNum);
+            H_dPt        [i].resize(yBinNum);
+            H_Mix_dPt    [i].resize(yBinNum);
+            H_Tra_dPt    [i].resize(yBinNum);
+            H_Rap_A      [i].resize(yBinNum);
+            H_Rap_K_A    [i].resize(yBinNum);
+            H_Rap_B      [i].resize(yBinNum);
+            H_Rap_A_B    [i].resize(yBinNum);
+            H_Mix_Rap_A_B[i].resize(yBinNum);
+            for (j = 0; j < yBinNum; j++) {
+                EventPool[i][j].resize(PVzBinNum);
+                H_Kstar      [i][j].resize(PVzBinNum, nullptr);
+                H_Mix_Kstar  [i][j].resize(PVzBinNum, nullptr);
+                H_Tra_Kstar  [i][j].resize(PVzBinNum, nullptr);
+                H_dRap       [i][j].resize(PVzBinNum, nullptr);
+                H_Mix_dRap   [i][j].resize(PVzBinNum, nullptr);
+                H_Tra_dRap   [i][j].resize(PVzBinNum, nullptr);
+                H_dPt        [i][j].resize(PVzBinNum, nullptr);
+                H_Mix_dPt    [i][j].resize(PVzBinNum, nullptr);
+                H_Tra_dPt    [i][j].resize(PVzBinNum, nullptr);
+                H_Rap_A      [i][j].resize(PVzBinNum, nullptr);
+                H_Rap_K_A    [i][j].resize(PVzBinNum, nullptr);
+                H_Rap_B      [i][j].resize(PVzBinNum, nullptr);
+                H_Rap_A_B    [i][j].resize(PVzBinNum, nullptr);
+                H_Mix_Rap_A_B[i][j].resize(PVzBinNum, nullptr);
+            }
+            H_Rap_K_B[i].resize(PVzBinNum, nullptr);
         }
-        H_Rap_K_B[i].resize(PVzBinNum, nullptr);
     }
     for (j = 0; j < CentralityBinNum; j++) {
         A_Array[j].resize(HowMuchEventMixing);
     }
     for (j = 0; j < yBinNum; j++) {
         A_List[j].resize(HowMuchEventMixing);
+    }
+    if (RecordingMethod == 1) {
+        Cen_Ay_PVz_dRap_AetaApTId_BetaBpTId.resize(CentralityBinNum);
+        for (i = 0; i < CentralityBinNum; i++) {
+            Cen_Ay_PVz_dRap_AetaApTId_BetaBpTId[i].resize(yBinNum);
+            for (j = 0; j < yBinNum; j++) {
+                Cen_Ay_PVz_dRap_AetaApTId_BetaBpTId[i][j].resize(PVzBinNum);
+            }
+        }
     }
 
     ArmParticle           A(0,0,0,0,0), B(0,0,0,0,0), C(0,0,0,0,0), D(0,0,0,0,0);
@@ -551,49 +567,51 @@ void MM(
     float MSta = floor((AMass + BMass)/0.0005-MBinPar)*0.0005 , MEnd = MSta + (MBinNum - MBinPar)*0.0005;
     cout<<"Mass Region: [ "<<MSta<<" , "<<MEnd<<" ], BinNum = "<<MBinNum<<". "<<endl;
 
-    for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
-        for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
-            for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
-                H_Kstar           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Kstar_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("Kstar, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),kStarBinNum,kStarSta,kStarEnd);
-                H_Mix_Kstar       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Kstar_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Kstar, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),kStarBinNum,kStarSta,kStarEnd);
-                H_Tra_Kstar       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Tra_Kstar_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Tra Kstar, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),kStarBinNum,kStarSta,kStarEnd);
-                H_dRap            [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_dRap_%d_%d_%d"        ,CenIndex,RapIndex,PVzIndex),Form("dRap, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"        ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-                H_Mix_dRap        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_dRap_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("Mix dRap, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"    ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-                H_Tra_dRap        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Tra_dRap_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("Tra dRap, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"    ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-                H_dPt             [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_dPt_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("dPt, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"         ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dPtBinNum,dPtSta,dPtEnd);
-                H_Mix_dPt         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_dPt_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("Mix dPt, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dPtBinNum,dPtSta,dPtEnd);
-                H_Tra_dPt         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Tra_dPt_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("Tra dPt, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dPtBinNum,dPtSta,dPtEnd);
-                H_Rap_A           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Rap_A_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("A dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-                H_Rap_K_A         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Rap_K_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("A dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-                H_Rap_B           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Rap_B_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("B dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-                H_Rap_A_B         [CenIndex] [RapIndex] [PVzIndex] = new TH2F(Form("H_Rap_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("A B dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum/10,dRapSta,dRapEnd,dRapBinNum/10,dRapSta,dRapEnd);
-                H_Mix_Rap_A_B     [CenIndex] [RapIndex] [PVzIndex] = new TH2F(Form("H_Mix_Rap_A_B_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex),Form("A B dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum/10,dRapSta,dRapEnd,dRapBinNum/10,dRapSta,dRapEnd);
-                if ((RapIndex == 0)) {
-                    H_Rap_K_B     [CenIndex]            [PVzIndex] = new TH1F(Form("H_Rap_K_B_%d_%d "       ,CenIndex         ,PVzIndex),Form("B dN/dy, [%d,%d]/100, %f<PV_z<%f"                ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]                                ),dRapBinNum,dRapSta,dRapEnd);
+    if (RecordingMethod == 0) {
+        for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
+            for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
+                for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
+                    H_Kstar           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Kstar_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("Kstar, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),kStarBinNum,kStarSta,kStarEnd);
+                    H_Mix_Kstar       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Kstar_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Kstar, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),kStarBinNum,kStarSta,kStarEnd);
+                    H_Tra_Kstar       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Tra_Kstar_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Tra Kstar, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),kStarBinNum,kStarSta,kStarEnd);
+                    H_dRap            [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_dRap_%d_%d_%d"        ,CenIndex,RapIndex,PVzIndex),Form("dRap, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"        ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+                    H_Mix_dRap        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_dRap_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("Mix dRap, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"    ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+                    H_Tra_dRap        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Tra_dRap_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("Tra dRap, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"    ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+                    H_dPt             [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_dPt_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("dPt, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"         ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dPtBinNum,dPtSta,dPtEnd);
+                    H_Mix_dPt         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_dPt_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("Mix dPt, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dPtBinNum,dPtSta,dPtEnd);
+                    H_Tra_dPt         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Tra_dPt_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("Tra dPt, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dPtBinNum,dPtSta,dPtEnd);
+                    H_Rap_A           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Rap_A_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("A dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+                    H_Rap_K_A         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Rap_K_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("A dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+                    H_Rap_B           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Rap_B_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("B dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"     ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+                    H_Rap_A_B         [CenIndex] [RapIndex] [PVzIndex] = new TH2F(Form("H_Rap_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("A B dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum/10,dRapSta,dRapEnd,dRapBinNum/10,dRapSta,dRapEnd);
+                    H_Mix_Rap_A_B     [CenIndex] [RapIndex] [PVzIndex] = new TH2F(Form("H_Mix_Rap_A_B_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex),Form("A B dN/dy, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum/10,dRapSta,dRapEnd,dRapBinNum/10,dRapSta,dRapEnd);
+                    if ((RapIndex == 0)) {
+                        H_Rap_K_B     [CenIndex]            [PVzIndex] = new TH1F(Form("H_Rap_K_B_%d_%d "       ,CenIndex         ,PVzIndex),Form("B dN/dy, [%d,%d]/100, %f<PV_z<%f"                ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]                                ),dRapBinNum,dRapSta,dRapEnd);
+                    }
                 }
             }
-        }
-        H_ALL_Kstar                      [RapIndex] = new TH1F(Form("H_ALL_Kstar_%d"      ,         RapIndex),Form("ALL Kstar, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),kStarBinNum,kStarSta,kStarEnd);
-        H_ALL_Mix_Kstar                  [RapIndex] = new TH1F(Form("H_ALL_Mix_Kstar_%d"  ,         RapIndex),Form("ALL Mix_Kstar, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),kStarBinNum,kStarSta,kStarEnd);
-        H_ALL_Tra_Kstar                  [RapIndex] = new TH1F(Form("H_ALL_Tra_Kstar_%d"  ,         RapIndex),Form("ALL Tra_Kstar, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),kStarBinNum,kStarSta,kStarEnd);
-        H_ALL_dRap                       [RapIndex] = new TH1F(Form("H_ALL_dRap_%d"       ,         RapIndex),Form("ALL dRap, %f<A_y<%f"       ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-        H_ALL_Mix_dRap                   [RapIndex] = new TH1F(Form("H_ALL_Mix_dRap_%d"   ,         RapIndex),Form("ALL Mix_dRap, %f<A_y<%f"   ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-        H_ALL_Tra_dRap                   [RapIndex] = new TH1F(Form("H_ALL_Tra_dRap_%d"   ,         RapIndex),Form("ALL Tra_dRap, %f<A_y<%f"   ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-        H_ALL_dPt                        [RapIndex] = new TH1F(Form("H_ALL_dPt_%d"        ,         RapIndex),Form("ALL dPt, %f<A_y<%f"        ,yBin[RapIndex],yBin[RapIndex+1]),dPtBinNum,dPtSta,dPtEnd);
-        H_ALL_Mix_dPt                    [RapIndex] = new TH1F(Form("H_ALL_Mix_dPt_%d"    ,         RapIndex),Form("ALL Mix_dPt, %f<A_y<%f"    ,yBin[RapIndex],yBin[RapIndex+1]),dPtBinNum,dPtSta,dPtEnd);
-        H_ALL_Tra_dPt                    [RapIndex] = new TH1F(Form("H_ALL_Tra_dPt_%d"    ,         RapIndex),Form("ALL Tra_dPt, %f<A_y<%f"    ,yBin[RapIndex],yBin[RapIndex+1]),dPtBinNum,dPtSta,dPtEnd);
-        H_ALL_Mass                       [RapIndex] = new TH1F(Form("H_ALL_Mass_%d"       ,         RapIndex),Form("ALL Mass, %f<A_y<%f"       ,yBin[RapIndex],yBin[RapIndex+1]),MBinNum,MSta,MEnd);
-        H_ALL_Mix_Mass                   [RapIndex] = new TH1F(Form("H_ALL_Mix_Mass_%d"   ,         RapIndex),Form("ALL Mix_Mass, %f<A_y<%f"   ,yBin[RapIndex],yBin[RapIndex+1]),MBinNum,MSta,MEnd);
-        H_ALL_Tra_Mass                   [RapIndex] = new TH1F(Form("H_ALL_Tra_Mass_%d"   ,         RapIndex),Form("ALL Tra_Mass, %f<A_y<%f"   ,yBin[RapIndex],yBin[RapIndex+1]),MBinNum,MSta,MEnd);
-        H_ALL_Rap_A                      [RapIndex] = new TH1F(Form("H_ALL_Rap_A_%d"      ,         RapIndex),Form("A dN/dy, %f<A_y<%f"        ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-        H_ALL_Rap_K_A                    [RapIndex] = new TH1F(Form("H_ALL_Rap_K_A_%d"    ,         RapIndex),Form("A dN/dy, %f<A_y<%f"        ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-        H_ALL_Rap_B                      [RapIndex] = new TH1F(Form("H_ALL_Rap_B_%d"      ,         RapIndex),Form("B dN/dy, %f<A_y<%f"        ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-        H_ALL_dRap_ARp                   [RapIndex] = new TH2F(Form("H_ALL_dRap_ARp_%d"   ,         RapIndex),Form("dRap vs. ARap, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum/5,dRapSta,dRapEnd,dRapBinNum/5,dRapSta,dRapEnd);
-        H_ALL_Mix_dRap_ARp               [RapIndex] = new TH2F(Form("H_ALL_Mix_dRap_ARp_%d",        RapIndex),Form("dRap vs. ARap, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum/5,dRapSta,dRapEnd,dRapBinNum/5,dRapSta,dRapEnd);
-        H_ALL_Rap_A_B                    [RapIndex] = new TH2F(Form("H_ALL_Rap_A_B_%d"    ,         RapIndex),Form("ARap vs. BRap, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum/5,dRapSta,dRapEnd,dRapBinNum/5,dRapSta,dRapEnd);
-        H_ALL_Mix_Rap_A_B                [RapIndex] = new TH2F(Form("H_ALL_Mix_Rap_A_B_%d"    ,     RapIndex),Form("ARap vs. BRap, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum/5,dRapSta,dRapEnd,dRapBinNum/5,dRapSta,dRapEnd);
-        if (RapIndex == 0) {
-            H_ALL_Rap_K_B                           = new TH1F(     "H_ALL_Rap_K_B"                          ,     "B dN/dy"                                                    ,dRapBinNum,dRapSta,dRapEnd);
+            H_ALL_Kstar                      [RapIndex] = new TH1F(Form("H_ALL_Kstar_%d"      ,         RapIndex),Form("ALL Kstar, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),kStarBinNum,kStarSta,kStarEnd);
+            H_ALL_Mix_Kstar                  [RapIndex] = new TH1F(Form("H_ALL_Mix_Kstar_%d"  ,         RapIndex),Form("ALL Mix_Kstar, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),kStarBinNum,kStarSta,kStarEnd);
+            H_ALL_Tra_Kstar                  [RapIndex] = new TH1F(Form("H_ALL_Tra_Kstar_%d"  ,         RapIndex),Form("ALL Tra_Kstar, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),kStarBinNum,kStarSta,kStarEnd);
+            H_ALL_dRap                       [RapIndex] = new TH1F(Form("H_ALL_dRap_%d"       ,         RapIndex),Form("ALL dRap, %f<A_y<%f"       ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+            H_ALL_Mix_dRap                   [RapIndex] = new TH1F(Form("H_ALL_Mix_dRap_%d"   ,         RapIndex),Form("ALL Mix_dRap, %f<A_y<%f"   ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+            H_ALL_Tra_dRap                   [RapIndex] = new TH1F(Form("H_ALL_Tra_dRap_%d"   ,         RapIndex),Form("ALL Tra_dRap, %f<A_y<%f"   ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+            H_ALL_dPt                        [RapIndex] = new TH1F(Form("H_ALL_dPt_%d"        ,         RapIndex),Form("ALL dPt, %f<A_y<%f"        ,yBin[RapIndex],yBin[RapIndex+1]),dPtBinNum,dPtSta,dPtEnd);
+            H_ALL_Mix_dPt                    [RapIndex] = new TH1F(Form("H_ALL_Mix_dPt_%d"    ,         RapIndex),Form("ALL Mix_dPt, %f<A_y<%f"    ,yBin[RapIndex],yBin[RapIndex+1]),dPtBinNum,dPtSta,dPtEnd);
+            H_ALL_Tra_dPt                    [RapIndex] = new TH1F(Form("H_ALL_Tra_dPt_%d"    ,         RapIndex),Form("ALL Tra_dPt, %f<A_y<%f"    ,yBin[RapIndex],yBin[RapIndex+1]),dPtBinNum,dPtSta,dPtEnd);
+            H_ALL_Mass                       [RapIndex] = new TH1F(Form("H_ALL_Mass_%d"       ,         RapIndex),Form("ALL Mass, %f<A_y<%f"       ,yBin[RapIndex],yBin[RapIndex+1]),MBinNum,MSta,MEnd);
+            H_ALL_Mix_Mass                   [RapIndex] = new TH1F(Form("H_ALL_Mix_Mass_%d"   ,         RapIndex),Form("ALL Mix_Mass, %f<A_y<%f"   ,yBin[RapIndex],yBin[RapIndex+1]),MBinNum,MSta,MEnd);
+            H_ALL_Tra_Mass                   [RapIndex] = new TH1F(Form("H_ALL_Tra_Mass_%d"   ,         RapIndex),Form("ALL Tra_Mass, %f<A_y<%f"   ,yBin[RapIndex],yBin[RapIndex+1]),MBinNum,MSta,MEnd);
+            H_ALL_Rap_A                      [RapIndex] = new TH1F(Form("H_ALL_Rap_A_%d"      ,         RapIndex),Form("A dN/dy, %f<A_y<%f"        ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+            H_ALL_Rap_K_A                    [RapIndex] = new TH1F(Form("H_ALL_Rap_K_A_%d"    ,         RapIndex),Form("A dN/dy, %f<A_y<%f"        ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+            H_ALL_Rap_B                      [RapIndex] = new TH1F(Form("H_ALL_Rap_B_%d"      ,         RapIndex),Form("B dN/dy, %f<A_y<%f"        ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+            H_ALL_dRap_ARp                   [RapIndex] = new TH2F(Form("H_ALL_dRap_ARp_%d"   ,         RapIndex),Form("dRap vs. ARap, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum/5,dRapSta,dRapEnd,dRapBinNum/5,dRapSta,dRapEnd);
+            H_ALL_Mix_dRap_ARp               [RapIndex] = new TH2F(Form("H_ALL_Mix_dRap_ARp_%d",        RapIndex),Form("dRap vs. ARap, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum/5,dRapSta,dRapEnd,dRapBinNum/5,dRapSta,dRapEnd);
+            H_ALL_Rap_A_B                    [RapIndex] = new TH2F(Form("H_ALL_Rap_A_B_%d"    ,         RapIndex),Form("ARap vs. BRap, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum/5,dRapSta,dRapEnd,dRapBinNum/5,dRapSta,dRapEnd);
+            H_ALL_Mix_Rap_A_B                [RapIndex] = new TH2F(Form("H_ALL_Mix_Rap_A_B_%d"    ,     RapIndex),Form("ARap vs. BRap, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum/5,dRapSta,dRapEnd,dRapBinNum/5,dRapSta,dRapEnd);
+            if (RapIndex == 0) {
+                H_ALL_Rap_K_B                           = new TH1F(     "H_ALL_Rap_K_B"                          ,     "B dN/dy"                                                    ,dRapBinNum,dRapSta,dRapEnd);
+            }
         }
     }
     
@@ -1152,7 +1170,7 @@ void MM(
 
 int main(int argc, char** argv) {
     // 检查参数数量
-    if(argc < 9) {
+    if(argc < 10) {
         std::cerr << "Usage: " << argv[0] 
                   << " MidName DataName OutputFileIndex OutMidName"
                   << " A_PDG B_PDG Mode SP_ME [CutID]" << std::endl;
@@ -1168,7 +1186,8 @@ int main(int argc, char** argv) {
         atoi(argv[6]),
         atoi(argv[7]),
         atoi(argv[8]),
-        (argc > 9 ? atoi(argv[9]) : 0)
+        atoi(argv[9]),
+        (argc > 10 ? atoi(argv[10]) : 0)
     );
 
     return 0;
