@@ -77,10 +77,10 @@ endif
 
 if ($InputNameIndex == 1) then
     set ObvInputName = "/star/data01/pwg/svianping/output/output_"
-    set ObvOutputName = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/HADD_"
+    set ObvOutputName = "/star/data01/pwg/svianping/Eff/HADD_"
     set InputName = "output_"
     set OutputName = "HADD_"
-    set OutputURL = "/star/data01/pwg/svianping/MIX_"$A_PDG"_"$B_PDG"/"
+    set OutputURL = "/star/data01/pwg/svianping/Eff/"
     rm -rf $OutPutPath
     mkdir $OutPutPath
     mkdir $OutPutPath/log/
