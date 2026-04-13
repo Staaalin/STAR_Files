@@ -495,7 +495,7 @@ void Eff(
             }
             for(int j=0;j<ParticleNum;j++) {
                 if (PDG->at(i) == Recording_Particle[j]) {
-                    if (fabs(InvariantMass->at(i) - Particle_Mass[j]) <= MassSigmaWidth*Particle_MassSigma) {
+                    if (fabs(InvariantMass->at(i) - Particle_Mass[j]) <= MassSigmaWidth*Particle_MassSigma[j]) {
                         A = ArmParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),Particle_Mass[j],i);
                         H_pT_rap[i]->Fill(A.pt,A.y);
                         H_pT_eta[i]->Fill(A.pt,A.eta);
