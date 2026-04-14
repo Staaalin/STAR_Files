@@ -64,6 +64,7 @@ int NPTracks   ;
 float BBCco    ;
 float ZDCcoin  ;
 int NumCharge  ;
+int NumChargeEta;
 
 void CD(const Char_t *inFile = "test.list") {
 
@@ -78,6 +79,10 @@ void CD(const Char_t *inFile = "test.list") {
         TH2F *hTofMatch_vs_RefMult_Fxt = new TH2F("hTofMatch_vs_RefMult_Fxt","nbTofMatch_vs_RefMult(Calculated from ->FxtMult())",250,0,250,500,0,500);
         hTofMatch_vs_RefMult_Fxt->GetXaxis()->SetTitle("nBTOFMatch");
         hTofMatch_vs_RefMult_Fxt->GetYaxis()->SetTitle("RefMult");
+
+        TH2F *hTofMatch_vs_RefMult_eta = new TH2F("hTofMatch_vs_RefMult_eta","nbTofMatch_vs_RefMult(eta>-1.5)",250,0,250,500,0,500);
+        hTofMatch_vs_RefMult_eta->GetXaxis()->SetTitle("nBTOFMatch");
+        hTofMatch_vs_RefMult_eta->GetYaxis()->SetTitle("RefMult");
 
         TH2F *hEta_vs_Phi = new TH2F("hEta_vs_Phi","Eta_vs_Phi",500,-5,5,250,-PI,PI);
         hEta_vs_Phi->GetXaxis()->SetTitle("Eta");
@@ -234,6 +239,7 @@ void CD(const Char_t *inFile = "test.list") {
                 if ((pVx-0.06)*(pVx-0.06)+(pVy+1.96)*(pVy+1.96)>4.0) continue;
 
                 NumCharge = 0;
+                NumChargeEta = 0;
                 for (Int_t iTrack = 0; iTrack < NPTracks; iTrack++) {
                         StPicoTrack *track = dst->track(iTrack);
                         if (! track)            continue;
@@ -244,11 +250,14 @@ void CD(const Char_t *inFile = "test.list") {
                         // if (fabs(track->gMom().Mag()) < 0.1) continue;
                         hEta_vs_Phi->Fill(track->gMom().Eta(),track->gMom().Phi());
                         NumCharge++;
+                        if(track->gMom().Eta()<-1.5)continue;
+                        NumChargeEta++;
                 }
 
                 hTofMatch_vs_RefMult_Roop->Fill(Ntofmatch,NumCharge);
                 hTofMatch_vs_RefMult_Ref ->Fill(Ntofmatch,RefMult);
                 hTofMatch_vs_RefMult_Fxt ->Fill(Ntofmatch,FxtMult);
+                hTofMatch_vs_RefMult_eta ->Fill(Ntofmatch,NumChargeEta);
 
                 hEastZDCrate_vs_RefMult  ->Fill(event->zdcEastRate(),NumCharge);
                 hEastBBCrate_vs_RefMult  ->Fill(event->bbcEastRate(),NumCharge);
@@ -262,6 +271,7 @@ void CD(const Char_t *inFile = "test.list") {
         hTofMatch_vs_RefMult_Roop->Write();
         hTofMatch_vs_RefMult_Ref ->Write();
         hTofMatch_vs_RefMult_Fxt ->Write();
+        hTofMatch_vs_RefMult_eta ->Write();
         hPVxy                    ->Write();
         hPVz                     ->Write();
         hEastZDCrate_vs_RefMult  ->Write();
