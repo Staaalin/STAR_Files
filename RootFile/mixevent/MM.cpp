@@ -991,6 +991,8 @@ void MM(
                                             drap  = -ARap+BRap;
                                             dpt   = -APt +EventPool[CenIndex][RapIndex][PVzIndex][Bid].B_particles[k].pt;
 
+                                            if (ARap < 0) drap = -1.0*drap;
+
                                             // Test
                                             // p2.SetXYZM(EventPool[CenIndex][RapIndex][Bid].B_particles[k].px,EventPool[CenIndex][RapIndex][Bid].B_particles[k].py,EventPool[CenIndex][RapIndex][Bid].B_particles[k].pz,BMass);
                                             // p1.SetXYZM(APx,APy,APz,AMass);
