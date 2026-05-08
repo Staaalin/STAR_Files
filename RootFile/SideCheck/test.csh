@@ -22,6 +22,6 @@ set B_PDG = 3122
 ./Side \
 "FileList" \
 "dAu_200_21" \
-151 250 52 \
+151 \
 "/star/data01/pwg/svianping/HADD/HADD_" \
 211 2212 \-211 0 0
