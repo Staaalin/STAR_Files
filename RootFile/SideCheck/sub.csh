@@ -221,10 +221,7 @@ while ($i <= $numFiles)
 
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
     echo \<Package name=\"ZIP\_File\_$i\"\> >> $SubXml
-    # set SideEventPWD = "/star/u/svianping/STAR_Files/RootFile/Sideevent/SideEvent.C"
-    # set SideEventPWD = "/star/u/svianping/STAR_Files/RootFile/Sideevent/MM.C"
-    set SideEventPWD = "/star/u/svianping/STAR_Files/RootFile/Sideevent/Side"
-    # set SideEventPWD = "/star/u/svianping/STAR_Files/RootFile/Sideevent/SideEventTest.C"
+    set SideEventPWD = "/star/u/svianping/STAR_Files/RootFile/SideCheck/Side"
     echo \<File\>file:$SideEventPWD\</File\> >> $SubXml
     set SourceFilePWD = "/star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh"
     echo \<File\>file:$SourceFilePWD\</File\> >> $SubXml
