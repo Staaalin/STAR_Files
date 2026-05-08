@@ -135,6 +135,10 @@ class StKFParticleAnalysisMaker : public StMaker {
   TProfile *hChi2NDFPt_primVtx;
   TProfile *hLdLPt;
 
+  const int   Recording_Particle[] = {321 , -321 ,     3122 ,     -3122 , 3312 , -3312 ,    3334 ,    -3334};
+  const char* Recording_PartName[] = {"K+", "K-" , "Lambda" , "Lambdab" , "Xi" , "Xib" , "Omega" , "Omegab"};
+  const Int_t ParticleNum = sizeof(Recording_Particle)/sizeof(Recording_Particle[0]);
+
  public: 
   StKFParticleAnalysisMaker(const char *name="KFParticleAnalysis");
   virtual       ~StKFParticleAnalysisMaker();

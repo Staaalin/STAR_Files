@@ -303,7 +303,8 @@ private:
 	TH2F *H_Pt_m2;
 	TH2F *H_Pt_nSigmaKaon;
 	TH2F *H_Pt_nSigmaKaonTOF;
-	TH3F *H_m2_nSigmaKaon_Pt;
+	TH3F *H_m2_nSigmaKaon_Pt_PC;// positive track
+	TH3F *H_m2_nSigmaKaon_Pt_NC;// negative track
 	TH2F *H_m2_KSigma_S;
 	TH2F *H_m2_KSigma_L;
 	TH2F *H_All_nSigmaKaon_y;

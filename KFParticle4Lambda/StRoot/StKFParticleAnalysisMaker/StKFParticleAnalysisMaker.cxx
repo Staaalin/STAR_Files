@@ -468,10 +468,15 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		H_eta_trigger->GetXaxis()->SetTitle("eta");
 		H_eta_trigger->GetYaxis()->SetTitle("trigger");
 
-		H_m2_nSigmaKaon_Pt = new TH3F("H_m2_nSigmaKaon","m2 vs. nSigmaKaon vs. Pt",     400,-0.5,2 , 400,-10,10 , 18,0.2,2.0);
-		H_m2_nSigmaKaon_Pt->GetXaxis()->SetTitle("m2 [GeV^2]");
-		H_m2_nSigmaKaon_Pt->GetYaxis()->SetTitle("nSigmaKaon");
-		H_m2_nSigmaKaon_Pt->GetZaxis()->SetTitle("Pt [GeV]");
+		H_m2_nSigmaKaon_Pt_PC = new TH3F("H_m2_nSigmaKaon_PC","positive charge m2 vs. nSigmaKaon vs. Pt",     400,-0.5,2 , 200,-5,5 , 18,0.2,2.0);
+		H_m2_nSigmaKaon_Pt_PC->GetXaxis()->SetTitle("m2 [GeV^2]");
+		H_m2_nSigmaKaon_Pt_PC->GetYaxis()->SetTitle("nSigmaKaon");
+		H_m2_nSigmaKaon_Pt_PC->GetZaxis()->SetTitle("Pt [GeV]");
+
+		H_m2_nSigmaKaon_Pt_NC = new TH3F("H_m2_nSigmaKaon_PC","negative charge m2 vs. nSigmaKaon vs. Pt",     400,-0.5,2 , 200,-5,5 , 18,0.2,2.0);
+		H_m2_nSigmaKaon_Pt_NC->GetXaxis()->SetTitle("m2 [GeV^2]");
+		H_m2_nSigmaKaon_Pt_NC->GetYaxis()->SetTitle("nSigmaKaon");
+		H_m2_nSigmaKaon_Pt_NC->GetZaxis()->SetTitle("Pt [GeV]");
 
 		H_All_nSigmaKaon_y   = new TH2F("H_All_nSigmaKaon_y"  ,"nSigmaKaon vs. y for all tracks"  ,200,-2,2,200,0,6);
 		H_All_nSigmaKaon_eta = new TH2F("H_All_nSigmaKaon_eta","nSigmaKaon vs. eta for all tracks",200,-2,2,200,0,6);
@@ -1094,7 +1099,8 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		// H_Pt_m2->Write();
 		// H_Pt_nSigmaKaon->Write();
 		// H_Pt_nSigmaKaonTOF->Write();
-		H_m2_nSigmaKaon_Pt->Write();
+		H_m2_nSigmaKaon_Pt_PC->Write();
+		H_m2_nSigmaKaon_Pt_NC->Write();
 		TriggerList Trigger_List_Data(DataName);
 		std::vector<int> Trigger_List = Trigger_List_Data.GetTriggerList();
 		int TriggerListLength = Trigger_List.size();
@@ -2405,7 +2411,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				if (IfQAMode) {
 					H_Pt_m2->Fill(track->gMom().Mag(),m2);
 					H_Pt_nSigmaKaonTOF->Fill(track->gMom().Mag(),(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon());
-					H_m2_nSigmaKaon_Pt->Fill(m2,track->nSigmaKaon(),pt);
+					if (track->charge() > 0) H_m2_nSigmaKaon_Pt_PC->Fill(m2,track->nSigmaKaon(),pt);
+					if (track->charge() < 0) H_m2_nSigmaKaon_Pt_NC->Fill(m2,track->nSigmaKaon(),pt);
 					// cout<<"nsigmaTOF = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
 					if (fabs(1/beta-1)<0.03) {
 						hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
@@ -2436,7 +2443,8 @@ Int_t StKFParticleAnalysisMaker::Make()
 				if (IfQAMode) {
 					H_Pt_m2->Fill(track->gMom().Mag(),m2);
 					H_Pt_nSigmaKaonTOF->Fill(track->gMom().Mag(),(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon());
-					H_m2_nSigmaKaon_Pt->Fill(m2,track->nSigmaKaon(),pt);
+					if (track->charge() > 0) H_m2_nSigmaKaon_Pt_PC->Fill(m2,track->nSigmaKaon(),pt);
+					if (track->charge() < 0) H_m2_nSigmaKaon_Pt_NC->Fill(m2,track->nSigmaKaon(),pt);
 					// cout<<"nsigmaTOF = "<<(mPicoDst->btofPidTraits(tofindex))->nSigmaKaon()<<endl;
 					if (fabs(1/beta-1)<0.03) {
 						hdEdx_pQ_1cut->Fill(1.0*track->charge()*track->gMom().Mag(),track->dEdx());
