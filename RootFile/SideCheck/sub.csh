@@ -180,6 +180,7 @@ while ($i <= $numFiles)
     echo set OutputFileIndex = $i >> $SubXml
     echo set A_PDG = $A_PDG >> $SubXml
     echo set B_PDG = $B_PDG >> $SubXml
+    echo set C_PDG = $C_PDG >> $SubXml
     set LeftBrackets = "\("
     set RightBrackets = "\)"
     set Quo = '\"'
@@ -230,7 +231,7 @@ while ($i <= $numFiles)
 
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml
-    echo \<stdout URL=\"file:/star/data01/pwg/svianping/Side\_$A_PDG\_$B_PDG/log/script\_$i\.out\" /\> >> $SubXml
+    echo \<stdout URL=\"file:/star/data01/pwg/svianping/Side\_$A_PDG\_$B_PDG\_$C_PDG/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"$i.log\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     set HC = "H_"
     set TC = "T_"
