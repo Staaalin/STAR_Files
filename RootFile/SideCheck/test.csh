@@ -20,8 +20,8 @@ set B_PDG = 3122
 # root4star -b MixEventTest.C\(\"$midname\",$StartFileIndex,$EndFileIndex,$OutputFileIndex,\"$outname\",$A_PDG,$B_PDG,0\)
 
 ./Side \
-"/star/data01/pwg/svianping/output/output_" \
+"FileList" \
 "dAu_200_21" \
 151 250 52 \
 "/star/data01/pwg/svianping/HADD/HADD_" \
-221 2212 \-221 0 0
+211 2212 \-211 0 0
