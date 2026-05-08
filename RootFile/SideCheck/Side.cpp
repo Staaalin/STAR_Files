@@ -932,13 +932,13 @@ void Side(
                                                 // AC = GetSide(APx,APy,APz,CPx,CPy,CPz);
                                                 ABC = AB*GetSide(APx,APy,APz,CPx,CPy,CPz);
                                                 if (Aid == Bid) {
-                                                    H_Side          [CenIndex] [RapIndex] [PVzIndex] -> Fill(0,ABC);
-                                                    H_ALL_Side                 [RapIndex]            -> Fill(0,ABC);
+                                                    H_Side          [CenIndex] [RapIndex] [PVzIndex] -> Fill(0.0,ABC);
+                                                    H_ALL_Side                 [RapIndex]            -> Fill(0.0,ABC);
                                                     AccumSameNum++;
                                                 }
                                                 else {
-                                                    H_Mix_Side      [CenIndex] [RapIndex] [PVzIndex] -> Fill(0,ABC);
-                                                    H_ALL_Mix_Side             [RapIndex]            -> Fill(0,ABC);
+                                                    H_Mix_Side      [CenIndex] [RapIndex] [PVzIndex] -> Fill(0.0,ABC);
+                                                    H_ALL_Mix_Side             [RapIndex]            -> Fill(0.0,ABC);
                                                 }
                                             }
                                         }
