@@ -844,7 +844,7 @@ void Side(
             }
             // 如果C、B有血缘关系，不记录C
             if (IfRecord) {
-                for (Bid = 0;Bid < B_List[Bid].size();Bid++) {
+                for (Bid = 0;Bid < B_List.size();Bid++) {
                     if (IfInVector(C_List[Cid].TreeID , B_List[Bid].ParentID)) {IfRecord = false;break;}
                 }
             }
@@ -992,7 +992,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    MM(
+    Side(
         TString(argv[1]),
         TString(argv[2]),
         atoi(argv[3]),
