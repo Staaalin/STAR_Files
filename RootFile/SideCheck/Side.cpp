@@ -349,7 +349,7 @@ void Side(
     #endif
 
     bool IfRecord = true , IfRemoveFeedPair = false , IfRemoveSpliteMerge = false , IfRemoveLownHits = false , IfRemoveHighPVz = false , IfRemoveHighTPCsigma = false , IfCutHighDCA = false;
-    float Side, drap , dpt;
+    float drap , dpt;
     std::vector<float> Side_Store , drap_Store , dpt_Store , mass_Store;
     std::vector<int>   IfRecorded;
     bool Is2Body = true;
@@ -459,8 +459,8 @@ void Side(
     ArmParticle           A(0,0,0,0,0), B(0,0,0,0,0), C(0,0,0,0,0), D(0,0,0,0,0);
     Event                 TempEvent(0);
 
-    int SideBinNum = 400;
-    float SideSta = 0 , SideEnd = 8;
+    int SideBinNum = 1;
+    float SideSta = 0 , SideEnd = 1;
     
     int dRapBinNum = 500;
     float dRapSta = -5 , dRapEnd = 5;
@@ -932,13 +932,13 @@ void Side(
                                                 // AC = GetSide(APx,APy,APz,CPx,CPy,CPz);
                                                 ABC = AB*GetSide(APx,APy,APz,CPx,CPy,CPz);
                                                 if (Aid == Bid) {
-                                                    H_Side          [CenIndex] [RapIndex] [PVzIndex] -> Fill(Side,ABC);
-                                                    H_ALL_Side                 [RapIndex]            -> Fill(Side,ABC);
+                                                    H_Side          [CenIndex] [RapIndex] [PVzIndex] -> Fill(0,ABC);
+                                                    H_ALL_Side                 [RapIndex]            -> Fill(0,ABC);
                                                     AccumSameNum++;
                                                 }
                                                 else {
-                                                    H_Mix_Side      [CenIndex] [RapIndex] [PVzIndex] -> Fill(Side,ABC);
-                                                    H_ALL_Mix_Side             [RapIndex]            -> Fill(Side,ABC);
+                                                    H_Mix_Side      [CenIndex] [RapIndex] [PVzIndex] -> Fill(0,ABC);
+                                                    H_ALL_Mix_Side             [RapIndex]            -> Fill(0,ABC);
                                                 }
                                             }
                                         }
@@ -981,6 +981,7 @@ void Side(
         H_ALL_Mix_Side                       [RapIndex] ->Write();
     }
     fileA->Close();
+    cout<<"FINISH!"<<endl;
     return;
 }
 
