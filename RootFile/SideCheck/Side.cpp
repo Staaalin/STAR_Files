@@ -348,6 +348,13 @@ void Side(
         #endif
     #endif
 
+    // In case B_PDG == C_PDG
+    bool Check_B_C = false, NowSlotB = true, NowSlotC = true;
+    if (B_PDG == C_PDG) {
+        Check_B_C = true;
+        NowSlotC = false;
+    }
+
     bool IfRecord = true , IfRemoveFeedPair = false , IfRemoveSpliteMerge = false , IfRemoveLownHits = false , IfRemoveHighPVz = false , IfRemoveHighTPCsigma = false , IfCutHighDCA = false;
     float drap , dpt;
     std::vector<float> Side_Store , drap_Store , dpt_Store , mass_Store;
@@ -744,7 +751,7 @@ void Side(
                     continue;
                 }
             }
-            else if (PDG->at(i) == B_PDG) {
+            if ((PDG->at(i) == B_PDG) && NowSlotB) {
                 if (fabs(InvariantMass->at(i) - BMass) <= MassSigmaWidth*BMassSigma) {
 
                     if (IfRemoveHighTPCsigma) {
@@ -779,10 +786,11 @@ void Side(
                     if ((B.eta < EtaCut[0]) || (B.eta > EtaCut[1])) continue;
                     // TempEvent.B_particles.push_back(B);
                     B_List.push_back(B);
+                    if (Check_B_C) {NowSlotB = false;NowSlotC = true;}
                     continue;
                 }
             }
-            else if (PDG->at(i) == C_PDG) {
+            if ((PDG->at(i) == C_PDG) && NowSlotC) {
                 if (fabs(InvariantMass->at(i) - CMass) <= MassSigmaWidth*CMassSigma) {
 
                     if (IfRemoveHighTPCsigma) {
@@ -817,6 +825,7 @@ void Side(
                     if ((C.eta < EtaCut[0]) || (C.eta > EtaCut[1])) continue;
                     // TempEvent.B_particles.push_back(B);
                     C_List.push_back(C);
+                    if (Check_B_C) {NowSlotC = false;NowSlotB = true;}
                     continue;
                 }
             }
