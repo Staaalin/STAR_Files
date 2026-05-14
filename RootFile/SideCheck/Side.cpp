@@ -440,8 +440,9 @@ void Side(
     std::vector<ArmParticle> B_List;
     std::vector<ArmParticle> C_List;
     std::vector<TProfile*>                                           H_ALL_Side        ;
-    std::vector<TProfile*>                                           H_ALL_Mix_Side_ABC;
-    std::vector<TProfile*>                                           H_ALL_Mix_Side_ABC;
+    std::vector<TProfile*>                                           H_ALL_Mix_Side_AB ;
+    std::vector<TProfile*>                                           H_ALL_Mix_Side_AC ;
+    std::vector<TProfile*>                                           H_ALL_Mix_Side_BC ;
     std::vector<TProfile*>                                           H_ALL_Mix_Side_ABC;
     std::vector<std::vector<std::vector<TProfile*>>>                 H_Side            ;
     std::vector<std::vector<std::vector<TProfile*>>>                 H_Mix_Side_ABC    ;
@@ -450,16 +451,28 @@ void Side(
     if (RecordingMethod == 0) {
         EventPool.resize(CentralityBinNum);
         H_ALL_Side       .resize(yBinNum, nullptr);
+        H_ALL_Mix_Side_AB    .resize(yBinNum, nullptr);
+        H_ALL_Mix_Side_AC    .resize(yBinNum, nullptr);
+        H_ALL_Mix_Side_BC    .resize(yBinNum, nullptr);
         H_ALL_Mix_Side_ABC   .resize(yBinNum, nullptr);
         H_Side      .resize(CentralityBinNum);
+        H_Mix_Side_AB   .resize(CentralityBinNum);
+        H_Mix_Side_BC   .resize(CentralityBinNum);
+        H_Mix_Side_AC   .resize(CentralityBinNum);
         H_Mix_Side_ABC  .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
             H_Side      [i].resize(yBinNum);
+            H_Mix_Side_AB   [i].resize(yBinNum);
+            H_Mix_Side_BC   [i].resize(yBinNum);
+            H_Mix_Side_AC   [i].resize(yBinNum);
             H_Mix_Side_ABC  [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
                 H_Side      [i][j].resize(PVzBinNum, nullptr);
+                H_Mix_Side_AB   [i][j].resize(PVzBinNum, nullptr);
+                H_Mix_Side_AC   [i][j].resize(PVzBinNum, nullptr);
+                H_Mix_Side_BC   [i][j].resize(PVzBinNum, nullptr);
                 H_Mix_Side_ABC  [i][j].resize(PVzBinNum, nullptr);
             }
         }
@@ -495,11 +508,17 @@ void Side(
             for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
                 for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
                     H_Side           [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Side_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
-                    H_Mix_Side_ABC       [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Mix_Side_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+                    H_Mix_Side_AB    [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Mix_Side_AB_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+                    H_Mix_Side_AC    [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Mix_Side_AC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+                    H_Mix_Side_BC    [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Mix_Side_BC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+                    H_Mix_Side_ABC   [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Mix_Side_ABC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
                 }
             }
-            H_ALL_Side                      [RapIndex] = new TProfile(Form("H_ALL_Side_%d"      ,         RapIndex),Form("ALL Side, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
-            H_ALL_Mix_Side_ABC                  [RapIndex] = new TProfile(Form("H_ALL_Mix_Side_%d"  ,         RapIndex),Form("ALL Mix_Side, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+            H_ALL_Side              [RapIndex] = new TProfile(Form("H_ALL_Side_%d"      ,         RapIndex),Form("ALL Side, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+            H_ALL_Mix_Side_AB       [RapIndex] = new TProfile(Form("H_ALL_Mix_Side_AB_%d"  ,         RapIndex),Form("ALL Mix_Side, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+            H_ALL_Mix_Side_AC       [RapIndex] = new TProfile(Form("H_ALL_Mix_Side_AC_%d"  ,         RapIndex),Form("ALL Mix_Side, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+            H_ALL_Mix_Side_BC       [RapIndex] = new TProfile(Form("H_ALL_Mix_Side_BC_%d"  ,         RapIndex),Form("ALL Mix_Side, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+            H_ALL_Mix_Side_ABC      [RapIndex] = new TProfile(Form("H_ALL_Mix_Side_ABC_%d"  ,         RapIndex),Form("ALL Mix_Side, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
         }
     }
     
@@ -1065,12 +1084,18 @@ void Side(
             for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
                 Sep_Side->cd();
                 H_Side                [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Mix_Side_ABC            [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_Side_AB         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_Side_AC         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_Side_BC         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_Side_ABC        [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
         H_ALL_Side                           [RapIndex] ->Write();
-        H_ALL_Mix_Side_ABC                       [RapIndex] ->Write();
+        H_ALL_Mix_Side_AB                    [RapIndex] ->Write();
+        H_ALL_Mix_Side_AC                    [RapIndex] ->Write();
+        H_ALL_Mix_Side_BC                    [RapIndex] ->Write();
+        H_ALL_Mix_Side_ABC                   [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
