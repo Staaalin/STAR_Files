@@ -490,8 +490,8 @@ void Side(
     ArmParticle           A(0,0,0,0,0), B(0,0,0,0,0), C(0,0,0,0,0), D(0,0,0,0,0);
     Event                 TempEvent(0);
 
-    int SideBinNum = 1;
-    float SideSta = 0 , SideEnd = 1;
+    int SideBinNum = 2;
+    float SideSta = 0 , SideEnd = 2;
     
     int dRapBinNum = 500;
     float dRapSta = -5 , dRapEnd = 5;
@@ -515,6 +515,17 @@ void Side(
                     H_Mix_Side_AC    [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Mix_Side_AC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
                     H_Mix_Side_BC    [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Mix_Side_BC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
                     H_Mix_Side_ABC   [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Mix_Side_ABC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+
+                    H_Side           [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetBinLabel(1, "same/diff side");
+                    H_Side           [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetBinLabel(2, "fast/slow");
+                    H_Mix_Side_AB    [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetBinLabel(1, "same/diff side");
+                    H_Mix_Side_AB    [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetBinLabel(2, "fast/slow");
+                    H_Mix_Side_AC    [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetBinLabel(1, "same/diff side");
+                    H_Mix_Side_AC    [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetBinLabel(2, "fast/slow");
+                    H_Mix_Side_BC    [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetBinLabel(1, "same/diff side");
+                    H_Mix_Side_BC    [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetBinLabel(2, "fast/slow");
+                    H_Mix_Side_ABC   [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetBinLabel(1, "same/diff side");
+                    H_Mix_Side_ABC   [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetBinLabel(2, "fast/slow");
                 }
             }
             H_ALL_Side              [RapIndex] = new TProfile(Form("H_ALL_Side_%d"      ,         RapIndex),Form("ALL Side, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
@@ -522,6 +533,17 @@ void Side(
             H_ALL_Mix_Side_AC       [RapIndex] = new TProfile(Form("H_ALL_Mix_Side_AC_%d"  ,         RapIndex),Form("ALL Mix_Side, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
             H_ALL_Mix_Side_BC       [RapIndex] = new TProfile(Form("H_ALL_Mix_Side_BC_%d"  ,         RapIndex),Form("ALL Mix_Side, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
             H_ALL_Mix_Side_ABC      [RapIndex] = new TProfile(Form("H_ALL_Mix_Side_ABC_%d"  ,         RapIndex),Form("ALL Mix_Side, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+
+            H_ALL_Side              [RapIndex]->GetXaxis()->SetBinLabel(1, "same/diff side");
+            H_ALL_Side              [RapIndex]->GetXaxis()->SetBinLabel(2, "fast/slow");
+            H_ALL_Mix_Side_AB       [RapIndex]->GetXaxis()->SetBinLabel(1, "same/diff side");
+            H_ALL_Mix_Side_AB       [RapIndex]->GetXaxis()->SetBinLabel(2, "fast/slow");
+            H_ALL_Mix_Side_AC       [RapIndex]->GetXaxis()->SetBinLabel(1, "same/diff side");
+            H_ALL_Mix_Side_AC       [RapIndex]->GetXaxis()->SetBinLabel(2, "fast/slow");
+            H_ALL_Mix_Side_BC       [RapIndex]->GetXaxis()->SetBinLabel(1, "same/diff side");
+            H_ALL_Mix_Side_BC       [RapIndex]->GetXaxis()->SetBinLabel(2, "fast/slow");
+            H_ALL_Mix_Side_ABC      [RapIndex]->GetXaxis()->SetBinLabel(1, "same/diff side");
+            H_ALL_Mix_Side_ABC      [RapIndex]->GetXaxis()->SetBinLabel(2, "fast/slow");
         }
     }
     
@@ -1046,9 +1068,24 @@ void Side(
                                                         APx, APy, APz,
                                                         C.px, C.py, C.pz
                                                     );
-                        
-                                                hLocal->Fill(0.0, ABC);
-                                                hGlobal->Fill(0.0, ABC);
+                                                
+                                                if (ABC > 0) {
+                                                    hLocal->Fill(0.0, ABC);
+                                                    hGlobal->Fill(0.0, ABC);
+                                                }else{
+                                                    hLocal->Fill(0.0, 0);
+                                                    hGlobal->Fill(0.0, 0);
+                                                }
+
+                                                if (ABC > 0){
+                                                    if (AB < 0) {
+                                                        hLocal->Fill(1.0, 0);
+                                                        hGlobal->Fill(1.0, 0);
+                                                    }else{
+                                                        hLocal->Fill(1.0, 1);
+                                                        hGlobal->Fill(1.0, 1);
+                                                    }
+                                                }
                         
                                                 if (mixType == SAME) {
                                                     ++AccumSameNum;
