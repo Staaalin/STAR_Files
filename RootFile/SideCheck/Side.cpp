@@ -383,7 +383,13 @@ void Side(
     float CMass = massList(C_PDG, DataName)           , BMass = massList(B_PDG, DataName)           , AMass = massList(A_PDG, DataName)          ;
     float CMassSigma = massListSigma(C_PDG, DataName) , BMassSigma = massListSigma(B_PDG, DataName) , AMassSigma = massListSigma(A_PDG, DataName);
     std::vector<std::vector<int> > D_ParID;
-    bool IsSame;
+    enum MixType {
+        SAME,
+        MIX_AB,
+        MIX_AC,
+        MIX_BC,
+        MIX_ABC
+    };
     int  AB , AC , ABC;
 
     // //                                    centrality    A_Rapidity   PrimaryVertex
@@ -392,8 +398,8 @@ void Side(
     // std::vector<ArmParticle> A_List                        [50]              , B_List ;
     // TH1F                 *H_Side           [50]           [50]          [50];
     // TH1F                 *H_ALL_Side                      [50]     ;
-    // TH1F                 *H_Mix_Side       [50]           [50]          [50];
-    // TH1F                 *H_ALL_Mix_Side                  [50]     ;
+    // TH1F                 *H_Mix_Side_ABC       [50]           [50]          [50];
+    // TH1F                 *H_ALL_Mix_Side_ABC                  [50]     ;
     // TH1F                 *H_Tra_Side       [50]           [50]          [50];
     // TH1F                 *H_ALL_Tra_Side                  [50]     ;
     // TH1F                 *H_dRap            [50]           [50]          [50];
@@ -433,26 +439,28 @@ void Side(
     std::vector<std::vector<ArmParticle>> A_List(yBinNum);
     std::vector<ArmParticle> B_List;
     std::vector<ArmParticle> C_List;
-    std::vector<TProfile*>                                           H_ALL_Side       ;
-    std::vector<TProfile*>                                           H_ALL_Mix_Side   ;
-    std::vector<std::vector<std::vector<TProfile*>>>                 H_Side           ;
-    std::vector<std::vector<std::vector<TProfile*>>>                 H_Mix_Side       ;
+    std::vector<TProfile*>                                           H_ALL_Side        ;
+    std::vector<TProfile*>                                           H_ALL_Mix_Side_ABC;
+    std::vector<TProfile*>                                           H_ALL_Mix_Side_ABC;
+    std::vector<TProfile*>                                           H_ALL_Mix_Side_ABC;
+    std::vector<std::vector<std::vector<TProfile*>>>                 H_Side            ;
+    std::vector<std::vector<std::vector<TProfile*>>>                 H_Mix_Side_ABC    ;
 
 
     if (RecordingMethod == 0) {
         EventPool.resize(CentralityBinNum);
         H_ALL_Side       .resize(yBinNum, nullptr);
-        H_ALL_Mix_Side   .resize(yBinNum, nullptr);
+        H_ALL_Mix_Side_ABC   .resize(yBinNum, nullptr);
         H_Side      .resize(CentralityBinNum);
-        H_Mix_Side  .resize(CentralityBinNum);
+        H_Mix_Side_ABC  .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
             H_Side      [i].resize(yBinNum);
-            H_Mix_Side  [i].resize(yBinNum);
+            H_Mix_Side_ABC  [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
                 H_Side      [i][j].resize(PVzBinNum, nullptr);
-                H_Mix_Side  [i][j].resize(PVzBinNum, nullptr);
+                H_Mix_Side_ABC  [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
@@ -487,11 +495,11 @@ void Side(
             for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
                 for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
                     H_Side           [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Side_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
-                    H_Mix_Side       [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Mix_Side_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+                    H_Mix_Side_ABC       [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("H_Mix_Side_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
                 }
             }
             H_ALL_Side                      [RapIndex] = new TProfile(Form("H_ALL_Side_%d"      ,         RapIndex),Form("ALL Side, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
-            H_ALL_Mix_Side                  [RapIndex] = new TProfile(Form("H_ALL_Mix_Side_%d"  ,         RapIndex),Form("ALL Mix_Side, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
+            H_ALL_Mix_Side_ABC                  [RapIndex] = new TProfile(Form("H_ALL_Mix_Side_%d"  ,         RapIndex),Form("ALL Mix_Side, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,-2,2);
         }
     }
     
@@ -919,39 +927,114 @@ void Side(
                         //     cout<<"This is CenIndex = "<<CenIndex<<", RapIndex = "<<RapIndex<<endl;
                         //     print(EventPool[CenIndex][RapIndex][Aid]);
                         // }
-                        for (Aid=0;Aid<HowMuchEventMixing+1;Aid++) {
-                            for (Bid=0;Bid<HowMuchEventMixing+1;Bid++) {
-                                for (Cid=0;Cid<HowMuchEventMixing+1;Cid++) {
-                                    if      ((Aid == Bid) && (Aid == Cid)) IsSame = true;
-                                    else if ((Aid != Bid) && (Aid != Cid) && (Bid != Cid)) IsSame = false;
-                                    else continue;
-                                    for (j=0;j<EventPool[CenIndex][RapIndex][PVzIndex][Aid].A_particles.size();j++) {
-                                        APx  = EventPool[CenIndex][RapIndex][PVzIndex][Aid].A_particles[j].px;
-                                        APy  = EventPool[CenIndex][RapIndex][PVzIndex][Aid].A_particles[j].py;
-                                        APz  = EventPool[CenIndex][RapIndex][PVzIndex][Aid].A_particles[j].pz;
-                                        for (k=0;k<EventPool[CenIndex][RapIndex][PVzIndex][Bid].B_particles.size();k++) {
-                                            BPx  = EventPool[CenIndex][RapIndex][PVzIndex][Bid].B_particles[k].px;
-                                            BPy  = EventPool[CenIndex][RapIndex][PVzIndex][Bid].B_particles[k].py;
-                                            BPz  = EventPool[CenIndex][RapIndex][PVzIndex][Bid].B_particles[k].pz;
-                                            AB = GetSide(APx,APy,APz,BPx,BPy,BPz);
-                                            for (l=0;l<EventPool[CenIndex][RapIndex][PVzIndex][Cid].C_particles.size();l++) {
-                                                CPx  = EventPool[CenIndex][RapIndex][PVzIndex][Cid].C_particles[l].px;
-                                                CPy  = EventPool[CenIndex][RapIndex][PVzIndex][Cid].C_particles[l].py;
-                                                CPz  = EventPool[CenIndex][RapIndex][PVzIndex][Cid].C_particles[l].pz;
-                                                // AC = GetSide(APx,APy,APz,CPx,CPy,CPz);
-                                                ABC = AB*GetSide(APx,APy,APz,CPx,CPy,CPz);
-                                                if (Aid == Bid) {
-                                                    H_Side          [CenIndex] [RapIndex] [PVzIndex] -> Fill(0.0,ABC);
-                                                    H_ALL_Side                 [RapIndex]            -> Fill(0.0,ABC);
-                                                    AccumSameNum++;
-                                                }
-                                                else {
-                                                    H_Mix_Side      [CenIndex] [RapIndex] [PVzIndex] -> Fill(0.0,ABC);
-                                                    H_ALL_Mix_Side             [RapIndex]            -> Fill(0.0,ABC);
+                        for (int Aid = 0; Aid < HowMuchEventMixing + 1; ++Aid) {
+
+                            auto& eventA = EventPool[CenIndex][RapIndex][PVzIndex][Aid];
+                            const auto& A_particles = eventA.A_particles;
+                        
+                            for (int Bid = 0; Bid < HowMuchEventMixing + 1; ++Bid) {
+                        
+                                auto& eventB = EventPool[CenIndex][RapIndex][PVzIndex][Bid];
+                                const auto& B_particles = eventB.B_particles;
+                        
+                                for (int Cid = 0; Cid < HowMuchEventMixing + 1; ++Cid) {
+                        
+                                    auto& eventC = EventPool[CenIndex][RapIndex][PVzIndex][Cid];
+                                    const auto& C_particles = eventC.C_particles;
+                        
+                                    //==================================================
+                                    // Determine mixing type
+                                    //==================================================
+                        
+                                    MixType mixType;
+                        
+                                    if (Aid == Bid && Aid == Cid) {
+                                        mixType = SAME;
+                                    }
+                                    else if (Aid != Bid && Aid != Cid && Bid != Cid) {
+                                        mixType = MIX_ABC;
+                                    }
+                                    else if (Aid == Bid) {
+                                        mixType = MIX_AC;
+                                    }
+                                    else if (Aid == Cid) {
+                                        mixType = MIX_AB;
+                                    }
+                                    else {
+                                        mixType = MIX_BC;
+                                    }
+                        
+                                    //==================================================
+                                    // Select histogram pointers ONCE
+                                    //==================================================
+                        
+                                    TH1* hLocal = nullptr;
+                                    TH1* hGlobal = nullptr;
+                        
+                                    switch (mixType) {
+                        
+                                        case MIX_ABC:
+                                            hLocal  = H_Mix_Side_ABC[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal = H_ALL_Mix_Side_ABC[RapIndex];
+                                            break;
+                        
+                                        case MIX_AB:
+                                            hLocal  = H_Mix_Side_AB[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal = H_ALL_Mix_Side_AB[RapIndex];
+                                            break;
+                        
+                                        case MIX_AC:
+                                            hLocal  = H_Mix_Side_AC[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal = H_ALL_Mix_Side_AC[RapIndex];
+                                            break;
+                        
+                                        case MIX_BC:
+                                            hLocal  = H_Mix_Side_BC[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal = H_ALL_Mix_Side_BC[RapIndex];
+                                            break;
+                        
+                                        case SAME:
+                                            hLocal  = H_Side[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal = H_ALL_Side[RapIndex];
+                                            break;
+                                    }
+                        
+                                    //==================================================
+                                    // Triplet loop
+                                    //==================================================
+                        
+                                    for (const auto& A : A_particles) {
+                        
+                                        const float APx = A.px;
+                                        const float APy = A.py;
+                                        const float APz = A.pz;
+                        
+                                        for (const auto& B : B_particles) {
+                        
+                                            const int AB = GetSide(
+                                                APx, APy, APz,
+                                                B.px, B.py, B.pz
+                                            );
+                        
+                                            for (const auto& C : C_particles) {
+                        
+                                                const int ABC =
+                                                    AB *
+                                                    GetSide(
+                                                        APx, APy, APz,
+                                                        C.px, C.py, C.pz
+                                                    );
+                        
+                                                hLocal->Fill(0.0, ABC);
+                                                hGlobal->Fill(0.0, ABC);
+                        
+                                                if (mixType == SAME) {
+                                                    ++AccumSameNum;
                                                 }
                                             }
                                         }
                                     }
+                        
                                 }
                             }
                         }
@@ -982,12 +1065,12 @@ void Side(
             for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
                 Sep_Side->cd();
                 H_Side                [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Mix_Side            [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_Side_ABC            [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
         H_ALL_Side                           [RapIndex] ->Write();
-        H_ALL_Mix_Side                       [RapIndex] ->Write();
+        H_ALL_Mix_Side_ABC                       [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
