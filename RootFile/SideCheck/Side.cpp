@@ -445,6 +445,9 @@ void Side(
     std::vector<TProfile*>                                           H_ALL_Mix_Side_BC ;
     std::vector<TProfile*>                                           H_ALL_Mix_Side_ABC;
     std::vector<std::vector<std::vector<TProfile*>>>                 H_Side            ;
+    std::vector<std::vector<std::vector<TProfile*>>>                 H_Mix_Side_AB     ;
+    std::vector<std::vector<std::vector<TProfile*>>>                 H_Mix_Side_AC     ;
+    std::vector<std::vector<std::vector<TProfile*>>>                 H_Mix_Side_BC     ;
     std::vector<std::vector<std::vector<TProfile*>>>                 H_Mix_Side_ABC    ;
 
 
