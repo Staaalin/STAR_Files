@@ -1036,6 +1036,7 @@ void SideBoost(
                                             for (const auto& C : C_particles) {
                         
                                                 const float ABC = GetSide(A,B,C);
+                                                if (ABC < -9999) continue;
                                                 
                                                 hLocal->Fill(ABC);
                                                 hGlobal->Fill(ABC);
