@@ -441,11 +441,11 @@ void SideBoost(
     std::vector<std::vector<ArmParticle>> A_List(yBinNum);
     std::vector<ArmParticle> B_List;
     std::vector<ArmParticle> C_List;
-    std::vector<TProfile*>                                           H_ALL_Side        ;
-    std::vector<TProfile*>                                           H_ALL_Mix_Side_AB ;
-    std::vector<TProfile*>                                           H_ALL_Mix_Side_AC ;
-    std::vector<TProfile*>                                           H_ALL_Mix_Side_BC ;
-    std::vector<TProfile*>                                           H_ALL_Mix_Side_ABC;
+    std::vector<TH1F*>                                               H_ALL_Side        ;
+    std::vector<TH1F*>                                               H_ALL_Mix_Side_AB ;
+    std::vector<TH1F*>                                               H_ALL_Mix_Side_AC ;
+    std::vector<TH1F*>                                               H_ALL_Mix_Side_BC ;
+    std::vector<TH1F*>                                               H_ALL_Mix_Side_ABC;
     std::vector<std::vector<std::vector<TH1F*>>>                     H_Side            ;
     std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix_Side_AB     ;
     std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix_Side_AC     ;
@@ -1029,7 +1029,7 @@ void SideBoost(
                                     // Triplet loop
                                     //==================================================
                         
-                                    for (const auto& A : A_particles) {=
+                                    for (const auto& A : A_particles) {
                         
                                         for (const auto& B : B_particles) {
                         
