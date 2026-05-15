@@ -150,7 +150,7 @@ bool IfInVector(int Num , const std::vector<int>& V);
 std::vector<int> GetDaughterPDGLit(int ID);
 Double_t massList(int PID, TString DataName);
 Double_t massListSigma(int PID, TString DataName);
-inline float GetSide(const ArmParticle& A, const ArmParticle& B, const ArmParticle& C)
+inline float GetSide(const ArmParticle& A, const ArmParticle& B, const ArmParticle& C);
 float CenCorr(float Vz, TString DataName);
 
 
