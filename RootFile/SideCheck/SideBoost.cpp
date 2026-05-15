@@ -1223,7 +1223,7 @@ inline float GetSide(const ArmParticle& A,
     betaZ*betaZ;
 
     if (beta2 < 1e-12f || beta2 >= 1.0f)
-    return 0.0f;
+    return -9999.9;
 
     const float gamma =
     1.0f / std::sqrt(1.0f - beta2);
