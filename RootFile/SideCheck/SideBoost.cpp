@@ -150,7 +150,7 @@ bool IfInVector(int Num , const std::vector<int>& V);
 std::vector<int> GetDaughterPDGLit(int ID);
 Double_t massList(int PID, TString DataName);
 Double_t massListSigma(int PID, TString DataName);
-float GetSide(ArmParticle &A, ArmParticle &B, ArmParticle &C);
+inline float GetSide(const ArmParticle& A, const ArmParticle& B, const ArmParticle& C)
 float CenCorr(float Vz, TString DataName);
 
 
@@ -1207,29 +1207,76 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize, TStri
     return Result;
 }
 
-float GetSide(ArmParticle &A, ArmParticle &B, ArmParticle &C) {
-    float Tot_E = A.E+B.E+C.E;
-    float beta[3] = { -(A.px+B.px+C.px)/Tot_E , -(A.py+B.py+C.py)/Tot_E , -(A.pz+B.pz+C.pz)/Tot_E };
-    float beta2 = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
-    float gamma = 1.0 / std::sqrt(1.0 - beta2);
-    float gamma2 = (beta2 > 0) ? (gamma - 1.0) / beta2 : 0.0;
+inline float GetSide(const ArmParticle& A,
+                     const ArmParticle& B,
+                     const ArmParticle& C)
+{
+    const float Tot_E = A.E + B.E + C.E;
 
-    // float bpA = beta[0]*A.px + beta[1]*A.py + beta[2]*A.pz;
-    float bpB = beta[0]*B.px + beta[1]*B.py + beta[2]*B.pz;
-    float bpC = beta[0]*C.px + beta[1]*C.py + beta[2]*C.pz;
+    const float betaX = -(A.px + B.px + C.px) / Tot_E;
+    const float betaY = -(A.py + B.py + C.py) / Tot_E;
+    const float betaZ = -(A.pz + B.pz + C.pz) / Tot_E;
 
-    float New_BPx = B.px + gamma2 * bpB * beta[0] + gamma * beta[0] * B.E;
-    float New_BPy = B.py + gamma2 * bpB * beta[1] + gamma * beta[1] * B.E;
-    float New_BPx = B.pz + gamma2 * bpB * beta[2] + gamma * beta[2] * B.E;
+    const float beta2 =
+    betaX*betaX +
+    betaY*betaY +
+    betaZ*betaZ;
 
-    float New_CPx = C.px + gamma2 * bpC * beta[0] + gamma * beta[0] * C.E;
-    float New_CPy = C.py + gamma2 * bpC * beta[1] + gamma * beta[1] * C.E;
-    float New_CPx = C.pz + gamma2 * bpC * beta[2] + gamma * beta[2] * C.E;
+    if (beta2 < 1e-12f || beta2 >= 1.0f)
+    return 0.0f;
 
-    float betaAbs = pow(beta2,0.5);
-    float NormalizedBeta[3] = { -beta[0]/betaAbs , -beta[1]/betaAbs , -beta[2]/betaAbs };
+    const float gamma =
+    1.0f / std::sqrt(1.0f - beta2);
 
-    return (New_BPx*NormalizedBeta[0] + New_BPy*NormalizedBeta[1] + New_BPz*NormalizedBeta[2]) * (New_CPx*NormalizedBeta[0] + New_CPy*NormalizedBeta[1] + New_CPz*NormalizedBeta[2]);
+    const float gamma2 =
+    (gamma - 1.0f) / beta2;
+
+    const float bpB =
+    betaX*B.px +
+    betaY*B.py +
+    betaZ*B.pz;
+
+    const float bpC =
+    betaX*C.px +
+    betaY*C.py +
+    betaZ*C.pz;
+
+    const float New_BPx =
+    B.px + gamma2*bpB*betaX + gamma*betaX*B.E;
+
+    const float New_BPy =
+    B.py + gamma2*bpB*betaY + gamma*betaY*B.E;
+
+    const float New_BPz =
+    B.pz + gamma2*bpB*betaZ + gamma*betaZ*B.E;
+
+    const float New_CPx =
+    C.px + gamma2*bpC*betaX + gamma*betaX*C.E;
+
+    const float New_CPy =
+    C.py + gamma2*bpC*betaY + gamma*betaY*C.E;
+
+    const float New_CPz =
+    C.pz + gamma2*bpC*betaZ + gamma*betaZ*C.E;
+
+    const float invBeta =
+    1.0f / std::sqrt(beta2);
+
+    const float nx = -betaX * invBeta;
+    const float ny = -betaY * invBeta;
+    const float nz = -betaZ * invBeta;
+
+    const float projB =
+    New_BPx*nx +
+    New_BPy*ny +
+    New_BPz*nz;
+
+    const float projC =
+    New_CPx*nx +
+    New_CPy*ny +
+    New_CPz*nz;
+
+    return projB * projC;
 }
 
 void print(std::vector<int> Temp)
