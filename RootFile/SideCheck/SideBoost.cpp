@@ -150,7 +150,7 @@ bool IfInVector(int Num , const std::vector<int>& V);
 std::vector<int> GetDaughterPDGLit(int ID);
 Double_t massList(int PID, TString DataName);
 Double_t massListSigma(int PID, TString DataName);
-inline float GetSide(const ArmParticle& A, const ArmParticle& B, const ArmParticle& C);
+inline bool GetSide(const ArmParticle& A, const ArmParticle& B, const ArmParticle& C, float& P_B, float& P_C);
 float CenCorr(float Vz, TString DataName);
 
 
@@ -392,16 +392,16 @@ void SideBoost(
         MIX_BC,
         MIX_ABC
     };
-    int  AB , AC , ABC;
+    float  P_B , P_C , P_ABC;
 
     // //                                    centrality    A_Rapidity   PrimaryVertex
     // std::vector<Event>    EventPool         [50]           [50]          [50];
     // std::vector<ArmParticle> A_Array                       [50]              , B_Array;
     // std::vector<ArmParticle> A_List                        [50]              , B_List ;
-    // TH1F                 *H_Side           [50]           [50]          [50];
-    // TH1F                 *H_ALL_Side                      [50]     ;
-    // TH1F                 *H_Mix_Side_ABC       [50]           [50]          [50];
-    // TH1F                 *H_ALL_Mix_Side_ABC                  [50]     ;
+    // TH1F                 *H1D_Side           [50]           [50]          [50];
+    // TH1F                 *H1D_ALL_Side                      [50]     ;
+    // TH1F                 *H1D_Mix_Side_ABC       [50]           [50]          [50];
+    // TH1F                 *H1D_ALL_Mix_Side_ABC                  [50]     ;
     // TH1F                 *H_Tra_Side       [50]           [50]          [50];
     // TH1F                 *H_ALL_Tra_Side                  [50]     ;
     // TH1F                 *H_dRap            [50]           [50]          [50];
@@ -441,44 +441,75 @@ void SideBoost(
     std::vector<std::vector<ArmParticle>> A_List(yBinNum);
     std::vector<ArmParticle> B_List;
     std::vector<ArmParticle> C_List;
-    std::vector<TH1F*>                                               H_ALL_Side        ;
-    std::vector<TH1F*>                                               H_ALL_Mix_Side_AB ;
-    std::vector<TH1F*>                                               H_ALL_Mix_Side_AC ;
-    std::vector<TH1F*>                                               H_ALL_Mix_Side_BC ;
-    std::vector<TH1F*>                                               H_ALL_Mix_Side_ABC;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Side            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix_Side_AB     ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix_Side_AC     ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix_Side_BC     ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix_Side_ABC    ;
+    std::vector<TH1F*>                                               H1D_ALL_Side        ;
+    std::vector<TH1F*>                                               H1D_ALL_Mix_Side_AB ;
+    std::vector<TH1F*>                                               H1D_ALL_Mix_Side_AC ;
+    std::vector<TH1F*>                                               H1D_ALL_Mix_Side_BC ;
+    std::vector<TH1F*>                                               H1D_ALL_Mix_Side_ABC;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H1D_Side            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H1D_Mix_Side_AB     ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H1D_Mix_Side_AC     ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H1D_Mix_Side_BC     ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H1D_Mix_Side_ABC    ;
+    
+    std::vector<TH1F*>                                               H2D_ALL_Side        ;
+    std::vector<TH1F*>                                               H2D_ALL_Mix_Side_AB ;
+    std::vector<TH1F*>                                               H2D_ALL_Mix_Side_AC ;
+    std::vector<TH1F*>                                               H2D_ALL_Mix_Side_BC ;
+    std::vector<TH1F*>                                               H2D_ALL_Mix_Side_ABC;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H2D_Side            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H2D_Mix_Side_AB     ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H2D_Mix_Side_AC     ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H2D_Mix_Side_BC     ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H2D_Mix_Side_ABC    ;
 
 
     if (RecordingMethod == 0) {
         EventPool.resize(CentralityBinNum);
-        H_ALL_Side       .resize(yBinNum, nullptr);
-        H_ALL_Mix_Side_AB    .resize(yBinNum, nullptr);
-        H_ALL_Mix_Side_AC    .resize(yBinNum, nullptr);
-        H_ALL_Mix_Side_BC    .resize(yBinNum, nullptr);
-        H_ALL_Mix_Side_ABC   .resize(yBinNum, nullptr);
-        H_Side      .resize(CentralityBinNum);
-        H_Mix_Side_AB   .resize(CentralityBinNum);
-        H_Mix_Side_BC   .resize(CentralityBinNum);
-        H_Mix_Side_AC   .resize(CentralityBinNum);
-        H_Mix_Side_ABC  .resize(CentralityBinNum);
+        H1D_ALL_Side       .resize(yBinNum, nullptr);
+        H1D_ALL_Mix_Side_AB    .resize(yBinNum, nullptr);
+        H1D_ALL_Mix_Side_AC    .resize(yBinNum, nullptr);
+        H1D_ALL_Mix_Side_BC    .resize(yBinNum, nullptr);
+        H1D_ALL_Mix_Side_ABC   .resize(yBinNum, nullptr);
+        H1D_Side      .resize(CentralityBinNum);
+        H1D_Mix_Side_AB   .resize(CentralityBinNum);
+        H1D_Mix_Side_BC   .resize(CentralityBinNum);
+        H1D_Mix_Side_AC   .resize(CentralityBinNum);
+        H1D_Mix_Side_ABC  .resize(CentralityBinNum);
+        H2D_ALL_Side       .resize(yBinNum, nullptr);
+        H2D_ALL_Mix_Side_AB    .resize(yBinNum, nullptr);
+        H2D_ALL_Mix_Side_AC    .resize(yBinNum, nullptr);
+        H2D_ALL_Mix_Side_BC    .resize(yBinNum, nullptr);
+        H2D_ALL_Mix_Side_ABC   .resize(yBinNum, nullptr);
+        H2D_Side      .resize(CentralityBinNum);
+        H2D_Mix_Side_AB   .resize(CentralityBinNum);
+        H2D_Mix_Side_BC   .resize(CentralityBinNum);
+        H2D_Mix_Side_AC   .resize(CentralityBinNum);
+        H2D_Mix_Side_ABC  .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
-            H_Side      [i].resize(yBinNum);
-            H_Mix_Side_AB   [i].resize(yBinNum);
-            H_Mix_Side_BC   [i].resize(yBinNum);
-            H_Mix_Side_AC   [i].resize(yBinNum);
-            H_Mix_Side_ABC  [i].resize(yBinNum);
+            H1D_Side          [i].resize(yBinNum);
+            H1D_Mix_Side_AB   [i].resize(yBinNum);
+            H1D_Mix_Side_BC   [i].resize(yBinNum);
+            H1D_Mix_Side_AC   [i].resize(yBinNum);
+            H1D_Mix_Side_ABC  [i].resize(yBinNum);
+            H2D_Side          [i].resize(yBinNum);
+            H2D_Mix_Side_AB   [i].resize(yBinNum);
+            H2D_Mix_Side_BC   [i].resize(yBinNum);
+            H2D_Mix_Side_AC   [i].resize(yBinNum);
+            H2D_Mix_Side_ABC  [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
-                H_Side      [i][j].resize(PVzBinNum, nullptr);
-                H_Mix_Side_AB   [i][j].resize(PVzBinNum, nullptr);
-                H_Mix_Side_AC   [i][j].resize(PVzBinNum, nullptr);
-                H_Mix_Side_BC   [i][j].resize(PVzBinNum, nullptr);
-                H_Mix_Side_ABC  [i][j].resize(PVzBinNum, nullptr);
+                H1D_Side          [i][j].resize(PVzBinNum, nullptr);
+                H1D_Mix_Side_AB   [i][j].resize(PVzBinNum, nullptr);
+                H1D_Mix_Side_AC   [i][j].resize(PVzBinNum, nullptr);
+                H1D_Mix_Side_BC   [i][j].resize(PVzBinNum, nullptr);
+                H1D_Mix_Side_ABC  [i][j].resize(PVzBinNum, nullptr);
+                H2D_Side          [i][j].resize(PVzBinNum, nullptr);
+                H2D_Mix_Side_AB   [i][j].resize(PVzBinNum, nullptr);
+                H2D_Mix_Side_AC   [i][j].resize(PVzBinNum, nullptr);
+                H2D_Mix_Side_BC   [i][j].resize(PVzBinNum, nullptr);
+                H2D_Mix_Side_ABC  [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
@@ -512,19 +543,29 @@ void SideBoost(
         for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
             for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
                 for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
-                    H_Side           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Side_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Mix_Side_AB    [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Side_AB_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix Side, mix A&B, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Mix_Side_AC    [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Side_AC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix Side, mix A&C, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Mix_Side_BC    [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Side_BC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix Side, mix B&C, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Mix_Side_ABC   [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Side_ABC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, mix A&B&C, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H1D_Side           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Side_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H1D_Mix_Side_AB    [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Side_AB_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix Side, mix A&B, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H1D_Mix_Side_AC    [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Side_AC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix Side, mix A&C, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H1D_Mix_Side_BC    [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Side_BC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix Side, mix B&C, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H1D_Mix_Side_ABC   [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Side_ABC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, mix A&B&C, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H2D_Side           [CenIndex] [RapIndex] [PVzIndex] = new TH2F(Form("H2D_Side_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("Side, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+                    H2D_Mix_Side_AB    [CenIndex] [RapIndex] [PVzIndex] = new TH2F(Form("H2D_Mix_Side_AB_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix Side, mix A&B, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+                    H2D_Mix_Side_AC    [CenIndex] [RapIndex] [PVzIndex] = new TH2F(Form("H2D_Mix_Side_AC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix Side, mix A&C, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+                    H2D_Mix_Side_BC    [CenIndex] [RapIndex] [PVzIndex] = new TH2F(Form("H2D_Mix_Side_BC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix Side, mix B&C, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+                    H2D_Mix_Side_ABC   [CenIndex] [RapIndex] [PVzIndex] = new TH2F(Form("H2D_Mix_Side_ABC_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex),Form("Mix Side, mix A&B&C, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
 
                 }
             }
-            H_ALL_Side              [RapIndex] = new TH1F(Form("H_ALL_Side_%d"      ,         RapIndex),Form("ALL Side, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Mix_Side_AB       [RapIndex] = new TH1F(Form("H_ALL_Mix_Side_AB_%d"  ,         RapIndex), Form("ALL Mix Side, mix A&B,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Mix_Side_AC       [RapIndex] = new TH1F(Form("H_ALL_Mix_Side_AC_%d"  ,         RapIndex), Form("ALL Mix Side, mix A&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Mix_Side_BC       [RapIndex] = new TH1F(Form("H_ALL_Mix_Side_BC_%d"  ,         RapIndex), Form("ALL Mix Side, mix B&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Mix_Side_ABC      [RapIndex] = new TH1F(Form("H_ALL_Mix_Side_ABC_%d"  ,         RapIndex),Form("ALL Mix Side, mix A&B&C, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H1D_ALL_Side              [RapIndex] = new TH1F(Form("H_ALL_Side_%d"      ,         RapIndex),Form("ALL Side, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H1D_ALL_Mix_Side_AB       [RapIndex] = new TH1F(Form("H_ALL_Mix_Side_AB_%d"  ,         RapIndex), Form("ALL Mix Side, mix A&B,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H1D_ALL_Mix_Side_AC       [RapIndex] = new TH1F(Form("H_ALL_Mix_Side_AC_%d"  ,         RapIndex), Form("ALL Mix Side, mix A&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H1D_ALL_Mix_Side_BC       [RapIndex] = new TH1F(Form("H_ALL_Mix_Side_BC_%d"  ,         RapIndex), Form("ALL Mix Side, mix B&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H1D_ALL_Mix_Side_ABC      [RapIndex] = new TH1F(Form("H_ALL_Mix_Side_ABC_%d"  ,         RapIndex),Form("ALL Mix Side, mix A&B&C, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H2D_ALL_Side              [RapIndex] = new TH1F(Form("H2D_ALL_Side_%d"      ,         RapIndex),Form("ALL Side, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+            H2D_ALL_Mix_Side_AB       [RapIndex] = new TH1F(Form("H2D_ALL_Mix_Side_AB_%d"  ,         RapIndex), Form("ALL Mix Side, mix A&B,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+            H2D_ALL_Mix_Side_AC       [RapIndex] = new TH1F(Form("H2D_ALL_Mix_Side_AC_%d"  ,         RapIndex), Form("ALL Mix Side, mix A&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+            H2D_ALL_Mix_Side_BC       [RapIndex] = new TH1F(Form("H2D_ALL_Mix_Side_BC_%d"  ,         RapIndex), Form("ALL Mix Side, mix B&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+            H2D_ALL_Mix_Side_ABC      [RapIndex] = new TH1F(Form("H2D_ALL_Mix_Side_ABC_%d"  ,         RapIndex),Form("ALL Mix Side, mix A&B&C, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
 
         }
     }
@@ -996,32 +1037,44 @@ void SideBoost(
                         
                                     TH1* hLocal = nullptr;
                                     TH1* hGlobal = nullptr;
+                                    TH2* HLocal = nullptr;
+                                    TH2* HGlobal = nullptr;
                         
                                     switch (mixType) {
                         
                                         case MIX_ABC:
-                                            hLocal  = H_Mix_Side_ABC[CenIndex][RapIndex][PVzIndex];
-                                            hGlobal = H_ALL_Mix_Side_ABC[RapIndex];
+                                            hLocal  = H1D_Mix_Side_ABC[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal = H1D_ALL_Mix_Side_ABC[RapIndex];
+                                            HLocal  = H2D_Mix_Side_ABC[CenIndex][RapIndex][PVzIndex];
+                                            HGlobal = H2D_ALL_Mix_Side_ABC[RapIndex];
                                             break;
                         
                                         case MIX_AB:
-                                            hLocal  = H_Mix_Side_AB[CenIndex][RapIndex][PVzIndex];
-                                            hGlobal = H_ALL_Mix_Side_AB[RapIndex];
+                                            hLocal  = H1D_Mix_Side_AB[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal = H1D_ALL_Mix_Side_AB[RapIndex];
+                                            HLocal  = H2D_Mix_Side_AB[CenIndex][RapIndex][PVzIndex];
+                                            HGlobal = H2D_ALL_Mix_Side_AB[RapIndex];
                                             break;
                         
                                         case MIX_AC:
-                                            hLocal  = H_Mix_Side_AC[CenIndex][RapIndex][PVzIndex];
-                                            hGlobal = H_ALL_Mix_Side_AC[RapIndex];
+                                            hLocal  = H1D_Mix_Side_AC[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal = H1D_ALL_Mix_Side_AC[RapIndex];
+                                            HLocal  = H2D_Mix_Side_AC[CenIndex][RapIndex][PVzIndex];
+                                            HGlobal = H2D_ALL_Mix_Side_AC[RapIndex];
                                             break;
                         
                                         case MIX_BC:
-                                            hLocal  = H_Mix_Side_BC[CenIndex][RapIndex][PVzIndex];
-                                            hGlobal = H_ALL_Mix_Side_BC[RapIndex];
+                                            hLocal  = H1D_Mix_Side_BC[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal = H1D_ALL_Mix_Side_BC[RapIndex];
+                                            HLocal  = H2D_Mix_Side_BC[CenIndex][RapIndex][PVzIndex];
+                                            HGlobal = H2D_ALL_Mix_Side_BC[RapIndex];
                                             break;
                         
                                         case SAME:
-                                            hLocal  = H_Side[CenIndex][RapIndex][PVzIndex];
-                                            hGlobal = H_ALL_Side[RapIndex];
+                                            hLocal  = H1D_Side[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal = H1D_ALL_Side[RapIndex];
+                                            HLocal  = H2D_Side[CenIndex][RapIndex][PVzIndex];
+                                            HGlobal = H2D_ALL_Side[RapIndex];
                                             break;
                                     }
                         
@@ -1035,11 +1088,13 @@ void SideBoost(
                         
                                             for (const auto& C : C_particles) {
                         
-                                                const float ABC = GetSide(A,B,C);
-                                                if (ABC < -9999) continue;
-                                                
-                                                hLocal->Fill(ABC);
-                                                hGlobal->Fill(ABC);
+                                                if (GetSide(A,B,C , P_B , P_C)){
+                                                    P_ABC = P_B * P_C
+                                                    hLocal->Fill(P_ABC);
+                                                    hGlobal->Fill(P_ABC);
+                                                    HLocal->Fill(P_B , P_C);
+                                                    HGlobal->Fill(P_B , P_C);
+                                                };
                         
                                                 if (mixType == SAME) {
                                                     ++AccumSameNum;
@@ -1077,19 +1132,29 @@ void SideBoost(
         for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
             for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
                 Sep_Side->cd();
-                H_Side                [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Mix_Side_AB         [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Mix_Side_AC         [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Mix_Side_BC         [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Mix_Side_ABC        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H1D_Side                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H1D_Mix_Side_AB         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H1D_Mix_Side_AC         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H1D_Mix_Side_BC         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H1D_Mix_Side_ABC        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H2D_Side                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H2D_Mix_Side_AB         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H2D_Mix_Side_AC         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H2D_Mix_Side_BC         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H2D_Mix_Side_ABC        [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
-        H_ALL_Side                           [RapIndex] ->Write();
-        H_ALL_Mix_Side_AB                    [RapIndex] ->Write();
-        H_ALL_Mix_Side_AC                    [RapIndex] ->Write();
-        H_ALL_Mix_Side_BC                    [RapIndex] ->Write();
-        H_ALL_Mix_Side_ABC                   [RapIndex] ->Write();
+        H1D_ALL_Side                           [RapIndex] ->Write();
+        H1D_ALL_Mix_Side_AB                    [RapIndex] ->Write();
+        H1D_ALL_Mix_Side_AC                    [RapIndex] ->Write();
+        H1D_ALL_Mix_Side_BC                    [RapIndex] ->Write();
+        H1D_ALL_Mix_Side_ABC                   [RapIndex] ->Write();
+        H2D_ALL_Side                           [RapIndex] ->Write();
+        H2D_ALL_Mix_Side_AB                    [RapIndex] ->Write();
+        H2D_ALL_Mix_Side_AC                    [RapIndex] ->Write();
+        H2D_ALL_Mix_Side_BC                    [RapIndex] ->Write();
+        H2D_ALL_Mix_Side_ABC                   [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
@@ -1208,9 +1273,9 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize, TStri
     return Result;
 }
 
-inline float GetSide(const ArmParticle& A,
+inline bool GetSide(const ArmParticle& A,
                      const ArmParticle& B,
-                     const ArmParticle& C)
+                     const ArmParticle& C, float& P_B, float& P_C)
 {
     const float Tot_E = A.E + B.E + C.E;
 
@@ -1224,7 +1289,7 @@ inline float GetSide(const ArmParticle& A,
     betaZ*betaZ;
 
     if (beta2 < 1e-12f || beta2 >= 1.0f)
-    return -9999.9;
+    return false;
 
     const float gamma =
     1.0f / std::sqrt(1.0f - beta2);
@@ -1277,7 +1342,9 @@ inline float GetSide(const ArmParticle& A,
     New_CPy*ny +
     New_CPz*nz;
 
-    return projB * projC;
+    P_B = projB;
+    P_C = projC;
+    return true;
 }
 
 void print(std::vector<int> Temp)
