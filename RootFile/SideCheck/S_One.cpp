@@ -371,8 +371,8 @@ void S_One(
     float APz  , BPz  , CPz ;
     float APt  , BPt  , CPt ;
     float ARap , BRap , CRap;
-    float CMass = massList(C_PDG, DataName)           , BMass = massList(B_PDG, DataName)           , AMass = massList(A_PDG, DataName)          ;
-    float CMassSigma = massListSigma(C_PDG, DataName) , BMassSigma = massListSigma(B_PDG, DataName) , AMassSigma = massListSigma(A_PDG, DataName);
+    float BMass = massList(B_PDG, DataName)           , AMass = massList(A_PDG, DataName)          ;
+    float BMassSigma = massListSigma(B_PDG, DataName) , AMassSigma = massListSigma(A_PDG, DataName);
     std::vector<std::vector<int> > D_ParID;
     bool IsSame;
     float  P_B , P_A;
@@ -515,7 +515,6 @@ void S_One(
 
     for (i=0;i<FeedDownNum;i++) {
         if ( IfInVector(A_PDG , GetDaughterPDGLit(FeedDown[i])) && IfInVector(B_PDG , GetDaughterPDGLit(FeedDown[i])) ) IfRemoveFeedPair = true;
-        if ( IfInVector(A_PDG , GetDaughterPDGLit(FeedDown[i])) && IfInVector(C_PDG , GetDaughterPDGLit(FeedDown[i])) ) IfRemoveFeedPair = true;
     }
     
     if (SP_ME == 1) IfRemoveSpliteMerge = true;
@@ -616,7 +615,7 @@ void S_One(
     if(IfCutHighDCA) hadronTree->SetBranchAddress("dcatopv"      ,&dcatopv      ,&bdcatopv      );
     // hadronTree->SetBranchAddress("nSigmaProton" ,&nSigmaProton ,&bnSigmaProton );
     // hadronTree->SetBranchAddress("nSigmaPion"   ,&nSigmaPion   ,&bnSigmaPion   );
-    if (IfRemoveHighTPCsigma && ((abs(A_PDG) == 321) || (abs(B_PDG) == 321) || (abs(C_PDG) == 321))){
+    if (IfRemoveHighTPCsigma && ((abs(A_PDG) == 321) || (abs(B_PDG) == 321))){
         hadronTree->SetBranchAddress("nSigmaKaon"   ,&nSigmaKaon   ,&bnSigmaKaon   );
     }
     hadronTree->SetBranchAddress("InvariantMass",&InvariantMass,&bInvariantMass);
@@ -668,7 +667,6 @@ void S_One(
         TempEvent.eventID = EntriesID;
         TempEvent.A_particles.clear();
         TempEvent.B_particles.clear();
-        TempEvent.C_particles.clear();
         for (size_t st=0;st<MatchedRap.size();st++) {
             A_Array[MatchedRap.at(st)].clear();
             A_List [MatchedRap.at(st)].clear();
@@ -741,8 +739,6 @@ void S_One(
                     if (RapIndex == -1) continue;
                     A_List[RapIndex].push_back(A);
                     if (!IfInVector(RapIndex , MatchedRap)) MatchedRap.push_back(RapIndex);
-                    H_Rap_K_A[CenIndex][RapIndex][PVzIndex]->Fill(A.y);
-                    H_ALL_Rap_K_A      [RapIndex]          ->Fill(A.y);
                     continue;
                 }
             }
@@ -781,8 +777,6 @@ void S_One(
                     if ((B.eta < EtaCut[0]) || (B.eta > EtaCut[1])) continue;
                     // TempEvent.B_particles.push_back(B);
                     B_List.push_back(B);
-                    H_Rap_K_B[CenIndex][PVzIndex]->Fill(B.y);
-                    H_ALL_Rap_K_B                ->Fill(B.y);
                     continue;
                 }
             }
@@ -831,7 +825,6 @@ void S_One(
             }
         }
         // if (TempEvent.B_particles.size() >= HowMuchEventMixing+1) continue;
-        // if (TempEvent.C_particles.size() >= HowMuchEventMixing+1) continue;
         // 确保同时记录到A、B、...粒子
         if (MatchedRap.size() == 0) continue;                                                        // 有A粒子
         if (TempEvent.B_particles.size() == 0) continue;                                             // 有B粒子
@@ -875,12 +868,12 @@ void S_One(
                                         if (IsSame) {
                                             if (GetSide(A,B , P_B)){
                                                 H         [CenIndex][RapIndex][PVzIndex]->Fill(P_B);
-                                                H_All               [RapIndex]->Fill(P_B);
+                                                H_ALL               [RapIndex]->Fill(P_B);
                                             }
                                         }else{
                                             if (GetSide(A,B , P_B)){
                                                 H_Mix     [CenIndex][RapIndex][PVzIndex]->Fill(P_B);
-                                                H_All_mix           [RapIndex]->Fill(P_B);
+                                                H_ALL_mix           [RapIndex]->Fill(P_B);
                                             }
                                         }
                                         ++AccumSameNum;
