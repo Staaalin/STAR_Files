@@ -1089,7 +1089,7 @@ void SideBoost(
                                             for (const auto& C : C_particles) {
                         
                                                 if (GetSide(A,B,C , P_B , P_C)){
-                                                    P_ABC = P_B * P_C
+                                                    P_ABC = P_B * P_C;
                                                     hLocal->Fill(P_ABC);
                                                     hGlobal->Fill(P_ABC);
                                                     HLocal->Fill(P_B , P_C);
