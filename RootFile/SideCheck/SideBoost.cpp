@@ -452,16 +452,16 @@ void SideBoost(
     std::vector<std::vector<std::vector<TH1F*>>>                     H1D_Mix_Side_BC     ;
     std::vector<std::vector<std::vector<TH1F*>>>                     H1D_Mix_Side_ABC    ;
     
-    std::vector<TH1F*>                                               H2D_ALL_Side        ;
-    std::vector<TH1F*>                                               H2D_ALL_Mix_Side_AB ;
-    std::vector<TH1F*>                                               H2D_ALL_Mix_Side_AC ;
-    std::vector<TH1F*>                                               H2D_ALL_Mix_Side_BC ;
-    std::vector<TH1F*>                                               H2D_ALL_Mix_Side_ABC;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H2D_Side            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H2D_Mix_Side_AB     ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H2D_Mix_Side_AC     ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H2D_Mix_Side_BC     ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H2D_Mix_Side_ABC    ;
+    std::vector<TH2F*>                                               H2D_ALL_Side        ;
+    std::vector<TH2F*>                                               H2D_ALL_Mix_Side_AB ;
+    std::vector<TH2F*>                                               H2D_ALL_Mix_Side_AC ;
+    std::vector<TH2F*>                                               H2D_ALL_Mix_Side_BC ;
+    std::vector<TH2F*>                                               H2D_ALL_Mix_Side_ABC;
+    std::vector<std::vector<std::vector<TH2F*>>>                     H2D_Side            ;
+    std::vector<std::vector<std::vector<TH2F*>>>                     H2D_Mix_Side_AB     ;
+    std::vector<std::vector<std::vector<TH2F*>>>                     H2D_Mix_Side_AC     ;
+    std::vector<std::vector<std::vector<TH2F*>>>                     H2D_Mix_Side_BC     ;
+    std::vector<std::vector<std::vector<TH2F*>>>                     H2D_Mix_Side_ABC    ;
 
 
     if (RecordingMethod == 0) {
@@ -561,11 +561,11 @@ void SideBoost(
             H1D_ALL_Mix_Side_AC       [RapIndex] = new TH1F(Form("H_ALL_Mix_Side_AC_%d"  ,         RapIndex), Form("ALL Mix Side, mix A&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
             H1D_ALL_Mix_Side_BC       [RapIndex] = new TH1F(Form("H_ALL_Mix_Side_BC_%d"  ,         RapIndex), Form("ALL Mix Side, mix B&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
             H1D_ALL_Mix_Side_ABC      [RapIndex] = new TH1F(Form("H_ALL_Mix_Side_ABC_%d"  ,         RapIndex),Form("ALL Mix Side, mix A&B&C, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H2D_ALL_Side              [RapIndex] = new TH1F(Form("H2D_ALL_Side_%d"      ,         RapIndex),Form("ALL Side, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
-            H2D_ALL_Mix_Side_AB       [RapIndex] = new TH1F(Form("H2D_ALL_Mix_Side_AB_%d"  ,         RapIndex), Form("ALL Mix Side, mix A&B,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
-            H2D_ALL_Mix_Side_AC       [RapIndex] = new TH1F(Form("H2D_ALL_Mix_Side_AC_%d"  ,         RapIndex), Form("ALL Mix Side, mix A&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
-            H2D_ALL_Mix_Side_BC       [RapIndex] = new TH1F(Form("H2D_ALL_Mix_Side_BC_%d"  ,         RapIndex), Form("ALL Mix Side, mix B&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
-            H2D_ALL_Mix_Side_ABC      [RapIndex] = new TH1F(Form("H2D_ALL_Mix_Side_ABC_%d"  ,         RapIndex),Form("ALL Mix Side, mix A&B&C, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+            H2D_ALL_Side              [RapIndex] = new TH2F(Form("H2D_ALL_Side_%d"      ,         RapIndex),Form("ALL Side, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+            H2D_ALL_Mix_Side_AB       [RapIndex] = new TH2F(Form("H2D_ALL_Mix_Side_AB_%d"  ,         RapIndex), Form("ALL Mix Side, mix A&B,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+            H2D_ALL_Mix_Side_AC       [RapIndex] = new TH2F(Form("H2D_ALL_Mix_Side_AC_%d"  ,         RapIndex), Form("ALL Mix Side, mix A&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+            H2D_ALL_Mix_Side_BC       [RapIndex] = new TH2F(Form("H2D_ALL_Mix_Side_BC_%d"  ,         RapIndex), Form("ALL Mix Side, mix B&C,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
+            H2D_ALL_Mix_Side_ABC      [RapIndex] = new TH2F(Form("H2D_ALL_Mix_Side_ABC_%d"  ,         RapIndex),Form("ALL Mix Side, mix A&B&C, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd,SideBinNum,SideSta,SideEnd);
 
         }
     }
@@ -1094,7 +1094,7 @@ void SideBoost(
                                                     hGlobal->Fill(P_ABC);
                                                     HLocal->Fill(P_B , P_C);
                                                     HGlobal->Fill(P_B , P_C);
-                                                };
+                                                }
                         
                                                 if (mixType == SAME) {
                                                     ++AccumSameNum;
