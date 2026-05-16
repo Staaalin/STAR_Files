@@ -15,14 +15,14 @@ echo "+-3122    Lambda"
 echo "+-3312    Xi"
 echo "+-3334    Omega"
 
-echo Will calculate B \<- A \-\> C
+# echo Will calculate B \<- A \-\> C
 
 echo "Please enter particle A PDG:"
 set A_PDG = "$<"
 echo "Please enter particle B PDG:"
 set B_PDG = "$<"
-echo "Please enter particle C PDG:"
-set C_PDG = "$<"
+# echo "Please enter particle C PDG:"
+# set C_PDG = "$<"
 
 echo "Please enter DataName:"
 echo "1: dAu_200_21"
@@ -41,20 +41,24 @@ endif
 
 echo "Please enter which location:"
 echo "SCHEME 1: /star/data01/pwg/svianping/output/output_*.root"
-echo "SCHEME 2: /star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADD_T_*.root"
-echo "SCHEME 3: /star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADDrA_*.root"
+# echo "SCHEME 2: /star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADD_T_*.root"
+# echo "SCHEME 3: /star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADDrA_*.root"
+echo "SCHEME 2: /star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"/HADD_T_*.root"
+echo "SCHEME 3: /star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"/HADDrA_*.root"
 set InputNameIndex = "$<"
 
 
 if ($InputNameIndex == 1) then
 
-    set OutPutPath = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/"
+    # set OutPutPath = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/"
+    set OutPutPath = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"/"
     cd /star/data01/pwg/svianping/output/
     set numFiles = `find . -maxdepth 1 -name "output_*.root" -type f | wc -l`
 
 else if ($InputNameIndex == 2) then
 
-    set InPutPath = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/"
+    # set InPutPath = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/"
+    set InPutPath = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"/"
     cd $InPutPath
     set numFiles = `find . -maxdepth 1 -name "HADD_T_*.root" -type f | wc -l`
 
@@ -110,21 +114,24 @@ endif
 
 if ($InputNameIndex == 1) then
     set ObvInputName = "/star/data01/pwg/svianping/output/output_"
-    set ObvOutputName = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADD_"
+    # set ObvOutputName = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADD_"
+    set ObvOutputName = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"/HADD_"
     set InputName = "output_"
     set OutputName = "HADD_"
-    set OutputURL = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/"
+    # set OutputURL = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/"
+    set OutputURL = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"/"
     rm -rf $OutPutPath
     mkdir $OutPutPath
-    mkdir /star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/log/
+    # mkdir /star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/log/
+    mkdir /star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"/log/
 else if ($InputNameIndex == 2) then
-    set ObvInputName = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADD_T_"
-    set ObvOutputName = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADDr_"
+    # set ObvInputName = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADD_T_"
+    # set ObvOutputName = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADDr_"
     set InputName = "HADD_T_"
     set OutputName = "HADDr_"
-    set OutputURL = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/"
+    # set OutputURL = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/"
 else if ($InputNameIndex == 3) then
-    set ObvInputName = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADDrA_"
+    # set ObvInputName = "/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/HADDrA_"
     set ObvOutputName = "/star/u/svianping/STAR_Files/RootFile/HADDrB_"
     set InputName = "HADDrA_"
     set OutputName = "HADDrB_"
@@ -147,8 +154,10 @@ set j = 0
 while ($i <= $numFiles)
 
     # set SubXml=sub.xml
-    set SubXml="/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/sub.xml"
-    set RootList="/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/sub_$i.list"
+    # set SubXml="/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/sub.xml"
+    # set RootList="/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"_"$C_PDG"/sub_$i.list"
+    set SubXml="/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"/sub.xml"
+    set RootList="/star/data01/pwg/svianping/Side_"$A_PDG"_"$B_PDG"/sub_$i.list"
     if(-e $SubXml) rm $SubXml
     touch $SubXml
     if(-e $RootList) rm $RootList
@@ -180,11 +189,12 @@ while ($i <= $numFiles)
     echo set OutputFileIndex = $i >> $SubXml
     echo set A_PDG = $A_PDG >> $SubXml
     echo set B_PDG = $B_PDG >> $SubXml
-    echo set C_PDG = $C_PDG >> $SubXml
+    # echo set C_PDG = $C_PDG >> $SubXml
     set LeftBrackets = "\("
     set RightBrackets = "\)"
     set Quo = '\"'
-    echo ./SideBoost \"\$FILELIST\" \"$DataName\" \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG $C_PDG 0 $SLMEIndex $RecordingMethod $CutIndex >> $SubXml
+    # echo ./SideBoost \"\$FILELIST\" \"$DataName\" \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG $C_PDG 0 $SLMEIndex $RecordingMethod $CutIndex >> $SubXml
+    echo ./S_One \"\$FILELIST\" \"$DataName\" \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG 0 $SLMEIndex $RecordingMethod $CutIndex >> $SubXml
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
 
@@ -221,14 +231,16 @@ while ($i <= $numFiles)
 
     echo \<SandBox installer=\"ZIP\"\> >> $SubXml
     echo \<Package name=\"ZIP\_File\_$i\"\> >> $SubXml
-    set SideEventPWD = "/star/u/svianping/STAR_Files/RootFile/SideCheck/SideBoost"
+    # set SideEventPWD = "/star/u/svianping/STAR_Files/RootFile/SideCheck/SideBoost"
+    set SideEventPWD = "/star/u/svianping/STAR_Files/RootFile/SideCheck/S_One"
     echo \<File\>file:$SideEventPWD\</File\> >> $SubXml
     set SourceFilePWD = "/star/u/svianping/STAR_Files/KFParticle4Lambda/setDEV2.csh"
     echo \<File\>file:$SourceFilePWD\</File\> >> $SubXml
 
     echo \</Package\> >> $SubXml
     echo \</SandBox\> >> $SubXml
-    echo \<stdout URL=\"file:/star/data01/pwg/svianping/Side\_$A_PDG\_$B_PDG\_$C_PDG/log/script\_$i\.out\" /\> >> $SubXml
+    # echo \<stdout URL=\"file:/star/data01/pwg/svianping/Side\_$A_PDG\_$B_PDG\_$C_PDG/log/script\_$i\.out\" /\> >> $SubXml
+    echo \<stdout URL=\"file:/star/data01/pwg/svianping/Side\_$A_PDG\_$B_PDG/log/script\_$i\.out\" /\> >> $SubXml
     echo \<output fromScratch=\"$i.log\" toURL=\"file:$OutputURL\" /\> >> $SubXml
     set HC = "H_"
     set TC = "T_"
