@@ -788,7 +788,7 @@ void S_One(
                         for (k=ParentSta->at(i);k<=ParentEnd->at(i);k++){
                             Temp.push_back(ParentList->at(k));
                         }
-                        C_ParID.push_back(Temp);
+                        D_ParID.push_back(Temp);
                         // IfFoundOmega = true;
                         // cout<<"Found Omega"<<endl;
                     }
@@ -873,7 +873,7 @@ void S_One(
                                         }else{
                                             if (GetSide(A,B , P_B)){
                                                 H_Mix     [CenIndex][RapIndex][PVzIndex]->Fill(P_B);
-                                                H_ALL_mix           [RapIndex]->Fill(P_B);
+                                                H_ALL_Mix           [RapIndex]->Fill(P_B);
                                             }
                                         }
                                         ++AccumSameNum;
