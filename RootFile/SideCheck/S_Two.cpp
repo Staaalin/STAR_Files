@@ -151,7 +151,7 @@ inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
     float& P_B,
-    float& k,
+    float& kStar,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -909,15 +909,19 @@ void S_Two(
                                             if (GetSide(A,B , P_B,kStar, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H                [CenIndex][RapIndex][PVzIndex]->Fill(P_B);
                                                 H_ALL                      [RapIndex]->Fill(P_B);
-                                                HP_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(k);
-                                                HP_ALL_kStar               [RapIndex]->Fill(k);
+                                                if (P_B > 0){
+                                                    HP_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(kStar);
+                                                    HP_ALL_kStar               [RapIndex]->Fill(kStar);
+                                                }
                                             }
                                         }else{
                                             if (GetSide(A,B , P_B,kStar, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(P_B);
                                                 H_ALL_Mix                  [RapIndex]->Fill(P_B);
-                                                HP_Mix_kStar     [CenIndex][RapIndex][PVzIndex]->Fill(k);
-                                                HP_ALL_Mix_kStar           [RapIndex]->Fill(k);
+                                                if (P_B > 0){
+                                                    HN_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(kStar);
+                                                    HN_ALL_kStar               [RapIndex]->Fill(kStar);
+                                                }
                                             }
                                         }
                                         ++AccumSameNum;
@@ -1087,7 +1091,7 @@ inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
     float& P_B,
-    float& k,
+    float& kStar,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -1152,7 +1156,7 @@ inline bool GetSide(
     New_BPz*nz;
 
     P_B = projB;
-    k = std::sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz);
+    kStar = std::sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz);
     return true;
 }
 
