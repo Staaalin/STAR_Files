@@ -150,7 +150,8 @@ Double_t massListSigma(int PID, TString DataName);
 inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
-    float& phi,
+    float& cosPhiOut,
+    float& phiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -383,7 +384,7 @@ void S_Three(
     std::vector<std::vector<int> > D_ParID;
     bool IsSame;
     float  P_B , kStar;
-    float  phi;
+    float  phi , CosPhi;
 
     // //                                    centrality    A_Rapidity   PrimaryVertex
     // std::vector<Event>    EventPool         [50]           [50]          [50];
@@ -436,6 +437,10 @@ void S_Three(
     std::vector<TH1F*>                                               H_ALL_Mix           ;
     std::vector<std::vector<std::vector<TH1F*>>>                     H                   ;
     std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix               ;
+    std::vector<TH1F*>                                               H_ALL_Cos           ;
+    std::vector<TH1F*>                                               H_ALL_Mix_Cos       ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos               ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix_Cos           ;
 
 
     if (RecordingMethod == 0) {
@@ -444,14 +449,22 @@ void S_Three(
         H_ALL_Mix    .resize(yBinNum, nullptr);
         H      .resize(CentralityBinNum);
         H_Mix   .resize(CentralityBinNum);
+        H_ALL_Cos       .resize(yBinNum, nullptr);
+        H_ALL_Mix_Cos    .resize(yBinNum, nullptr);
+        H_Cos      .resize(CentralityBinNum);
+        H_Mix_Cos   .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
-            H       [i].resize(yBinNum);
-            H_Mix   [i].resize(yBinNum);
+            H           [i].resize(yBinNum);
+            H_Mix       [i].resize(yBinNum);
+            H_Cos       [i].resize(yBinNum);
+            H_Mix_Cos   [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
-                H                 [i][j].resize(PVzBinNum, nullptr);
-                H_Mix             [i][j].resize(PVzBinNum, nullptr);
+                H                     [i][j].resize(PVzBinNum, nullptr);
+                H_Mix                 [i][j].resize(PVzBinNum, nullptr);
+                H_Cos                 [i][j].resize(PVzBinNum, nullptr);
+                H_Mix_Cos             [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
@@ -466,7 +479,7 @@ void S_Three(
     Event                 TempEvent(0);
 
     int SideBinNum = 100;
-    float SideSta = 0 , SideEnd = 2*Pi;
+    float SideSta = 0 , SideEnd = Pi;
     
     int dRapBinNum = 500;
     float dRapSta = -5 , dRapEnd = 5;
@@ -485,13 +498,17 @@ void S_Three(
         for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
             for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
                 for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
-                    H               [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Mix           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H               [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_Mix           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_Cos           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Mix_Cos       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Cos_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
 
                 }
             }
             H_ALL                  [RapIndex] = new TH1F(Form("H_ALL_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
             H_ALL_Mix              [RapIndex] = new TH1F(Form("H_ALL_Mix_%d"  ,          RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_Cos              [RapIndex] = new TH1F(Form("H_ALL_Cos_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Mix_Cos          [RapIndex] = new TH1F(Form("H_ALL_Mix_Cos_%d"  ,      RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
 
         }
     }
@@ -874,14 +891,18 @@ void S_Three(
                                     for (const auto& B : B_particles) {
                                         
                                         if (IsSame) {
-                                            if (GetSide(A,B , phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            if (GetSide(A,B , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H                [CenIndex][RapIndex][PVzIndex]->Fill(phi);
                                                 H_ALL                      [RapIndex]->Fill(phi);
+                                                H_Cos            [CenIndex][RapIndex][PVzIndex]->Fill(CosPhi);
+                                                H_ALL_Cos                  [RapIndex]->Fill(CosPhi);
                                             }
                                         }else{
-                                            if (GetSide(A,B , phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            if (GetSide(A,B , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(phi);
                                                 H_ALL_Mix                  [RapIndex]->Fill(phi);
+                                                H_Mix_Cos        [CenIndex][RapIndex][PVzIndex]->Fill(CosPhi);
+                                                H_ALL_Mix_Cos              [RapIndex]->Fill(CosPhi);
                                             }
                                         }
                                         ++AccumSameNum;
@@ -917,11 +938,13 @@ void S_Three(
                 Sep_Side->cd();
                 H                    [CenIndex] [RapIndex] [PVzIndex] ->Write();
                 H_Mix                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_Cos            [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
-        H_ALL                               [RapIndex] ->Write();
-        H_ALL_Mix                           [RapIndex] ->Write();
+        H_ALL_Cos                               [RapIndex] ->Write();
+        H_ALL_Mix_Cos                           [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
@@ -1042,7 +1065,8 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize, TStri
 inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
-    float& phi,
+    float& cosPhiOut,
+    float& phiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -1052,22 +1076,22 @@ inline bool GetSide(
     // Total four momentum
     //--------------------------------------------------
 
-    const float Px = A.px + B.px;
-    const float Py = A.py + B.py;
-    const float Pz = A.pz + B.pz;
-    const float E  = A.E  + B.E;
+    const double Px = double(A.px) + double(B.px);
+    const double Py = double(A.py) + double(B.py);
+    const double Pz = double(A.pz) + double(B.pz);
+    const double E  = double(A.E ) + double(B.E );
 
     //--------------------------------------------------
     // Invariant mass
     //--------------------------------------------------
 
-    const float M2 =
+    const double M2 =
         E*E
       - Px*Px
       - Py*Py
       - Pz*Pz;
 
-    if (M2 <= 0.f)
+    if (M2 <= 0.0)
         return false;
 
     //--------------------------------------------------
@@ -1076,7 +1100,7 @@ inline bool GetSide(
 
     if (IfRemoveFeedPair) {
 
-        const float M = std::sqrt(M2);
+        const double M = std::sqrt(M2);
 
         for (size_t i = 0; i < MotherMass.size(); ++i) {
 
@@ -1092,94 +1116,112 @@ inline bool GetSide(
     // beta
     //--------------------------------------------------
 
-    const float invE = 1.f / E;
+    const double invE = 1.0 / E;
 
-    const float betaX = -Px * invE;
-    const float betaY = -Py * invE;
-    const float betaZ = -Pz * invE;
+    const double betaX = -Px * invE;
+    const double betaY = -Py * invE;
+    const double betaZ = -Pz * invE;
 
-    const float beta2 =
+    const double beta2 =
         betaX*betaX +
         betaY*betaY +
         betaZ*betaZ;
 
-    if (beta2 < 1e-12f || beta2 >= 1.f)
+    if (beta2 < 1e-20 || beta2 >= 1.0)
         return false;
+
+    const double betaAbs =
+        std::sqrt(beta2);
 
     //--------------------------------------------------
     // beta direction
     //--------------------------------------------------
 
-    const float betaAbs =
-        std::sqrt(beta2);
+    const double invBeta =
+        1.0 / betaAbs;
 
-    const float invBeta =
-        1.f / betaAbs;
-
-    const float nx = -betaX * invBeta;
-    const float ny = -betaY * invBeta;
-    const float nz = -betaZ * invBeta;
+    const double nx = -betaX * invBeta;
+    const double ny = -betaY * invBeta;
+    const double nz = -betaZ * invBeta;
 
     //--------------------------------------------------
     // longitudinal momentum
     //--------------------------------------------------
 
-    const float pPar =
-        B.px*nx +
-        B.py*ny +
-        B.pz*nz;
+    const double pPar =
+          double(B.px)*nx
+        + double(B.py)*ny
+        + double(B.pz)*nz;
 
     //--------------------------------------------------
-    // transverse momentum
+    // total momentum squared
     //--------------------------------------------------
 
-    const float p2 =
-        B.px*B.px +
-        B.py*B.py +
-        B.pz*B.pz;
-
-    const float pPerp2 =
-        p2 - pPar*pPar;
+    const double p2 =
+          double(B.px)*double(B.px)
+        + double(B.py)*double(B.py)
+        + double(B.pz)*double(B.pz);
 
     //--------------------------------------------------
-    // boost longitudinal component only
+    // transverse momentum squared
     //--------------------------------------------------
 
-    const float gamma =
-        1.f / std::sqrt(1.f - beta2);
-
-    const float pParStar =
-        gamma * (pPar - betaAbs * B.E);
+    const double pPerp2 =
+        std::max(0.0,
+                 p2 - pPar*pPar);
 
     //--------------------------------------------------
-    // CMS momentum magnitude
+    // gamma
     //--------------------------------------------------
 
-    const float pStar2 =
-        pPerp2 + pParStar*pParStar;
-
-    if (pStar2 <= 0.f)
-        return false;
-
-    const float invPStar =
-        1.f / std::sqrt(pStar2);
+    const double gamma =
+        1.0 / std::sqrt(1.0 - beta2);
 
     //--------------------------------------------------
-    // cos(phi)
+    // boosted longitudinal momentum
     //--------------------------------------------------
 
-    float cosPhi =
-        pParStar * invPStar;
+    const double pParStar =
+        gamma * (pPar - betaAbs * double(B.E));
 
     //--------------------------------------------------
-    // numerical protection
+    // numerically stable cos(phi)
+    //--------------------------------------------------
+
+    const double denom =
+        pParStar * pParStar;
+
+    double cosPhi;
+
+    if (denom <= 1e-30) {
+
+        cosPhi = 0.0;
+
+    } else {
+
+        const double ratio =
+            pPerp2 / denom;
+
+        cosPhi =
+            ((pParStar >= 0.0) ? 1.0 : -1.0)
+            /
+            std::sqrt(1.0 + ratio);
+    }
+
+    //--------------------------------------------------
+    // Clamp
     //--------------------------------------------------
 
     cosPhi =
-        std::max(-1.f,
-        std::min(1.f, cosPhi));
+        std::max(-1.0,
+        std::min( 1.0, cosPhi));
 
-    phi = std::acos(cosPhi);
+    //--------------------------------------------------
+    // output
+    //--------------------------------------------------
+
+    cosPhiOut = float(cosPhi);
+    phiOut    = float(std::acos(cosPhi));
 
     return true;
 }
