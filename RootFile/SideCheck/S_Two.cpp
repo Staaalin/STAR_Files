@@ -459,7 +459,7 @@ void S_Two(
         H_ALL       .resize(yBinNum, nullptr);
         H_ALL_Mix    .resize(yBinNum, nullptr);
         H      .resize(CentralityBinNum);
-        H_Mix_   .resize(CentralityBinNum);
+        H_Mix   .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
             HP_kStar       [i].resize(yBinNum);
