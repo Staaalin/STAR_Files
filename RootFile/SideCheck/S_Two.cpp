@@ -452,14 +452,30 @@ void S_Two(
         HP_ALL_Mix_kStar    .resize(yBinNum, nullptr);
         HP_kStar      .resize(CentralityBinNum);
         HP_Mix_kStar   .resize(CentralityBinNum);
+        HN_ALL_kStar       .resize(yBinNum, nullptr);
+        HN_ALL_Mix_kStar    .resize(yBinNum, nullptr);
+        HN_kStar      .resize(CentralityBinNum);
+        HN_Mix_kStar   .resize(CentralityBinNum);
+        H_ALL       .resize(yBinNum, nullptr);
+        H_ALL_Mix    .resize(yBinNum, nullptr);
+        H      .resize(CentralityBinNum);
+        H_Mix_   .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
             HP_kStar       [i].resize(yBinNum);
             HP_Mix_kStar   [i].resize(yBinNum);
+            HN_kStar       [i].resize(yBinNum);
+            HN_Mix_kStar   [i].resize(yBinNum);
+            H       [i].resize(yBinNum);
+            H_Mix   [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
                 HP_kStar          [i][j].resize(PVzBinNum, nullptr);
                 HP_Mix_kStar      [i][j].resize(PVzBinNum, nullptr);
+                HN_kStar          [i][j].resize(PVzBinNum, nullptr);
+                HN_Mix_kStar      [i][j].resize(PVzBinNum, nullptr);
+                H                 [i][j].resize(PVzBinNum, nullptr);
+                H_Mix             [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
