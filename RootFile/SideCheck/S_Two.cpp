@@ -912,6 +912,9 @@ void S_Two(
                                                 if (P_B > 0){
                                                     HP_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(kStar);
                                                     HP_ALL_kStar               [RapIndex]->Fill(kStar);
+                                                }else{
+                                                    HN_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(kStar);
+                                                    HN_ALL_kStar               [RapIndex]->Fill(kStar);
                                                 }
                                             }
                                         }else{
@@ -919,8 +922,11 @@ void S_Two(
                                                 H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(P_B);
                                                 H_ALL_Mix                  [RapIndex]->Fill(P_B);
                                                 if (P_B > 0){
-                                                    HN_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(kStar);
-                                                    HN_ALL_kStar               [RapIndex]->Fill(kStar);
+                                                    HP_Mix_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(kStar);
+                                                    HP_ALL_Mix_kStar               [RapIndex]->Fill(kStar);
+                                                }else{
+                                                    HN_Mix_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(kStar);
+                                                    HN_ALL_Mix_kStar               [RapIndex]->Fill(kStar);
                                                 }
                                             }
                                         }
