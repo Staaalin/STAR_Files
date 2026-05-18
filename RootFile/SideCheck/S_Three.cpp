@@ -38,7 +38,7 @@ using namespace std;
 
 // 使用这个编译：
 // singularity exec -e --env DISPLAY=$DISPLAY -B /direct -B /gpfs -B /star -B /cvmfs -B /sdcc/lustre02 /cvmfs/star.sdcc.bnl.gov/containers/rhic_sl7.sif csh
-// g++ -O2 -std=c++11 S_Two.cpp -o S_One `root-config --cflags --libs`
+// g++ -O2 -std=c++11 S_Three.cpp -o S_One `root-config --cflags --libs`
 
 // 定义粒子结构体
 struct ArmParticle {
@@ -943,6 +943,8 @@ void S_Three(
             }
         }
         ALL_Side->cd();
+        H_ALL                                   [RapIndex] ->Write();
+        H_ALL_Mix                               [RapIndex] ->Write();
         H_ALL_Cos                               [RapIndex] ->Write();
         H_ALL_Mix_Cos                           [RapIndex] ->Write();
     }
