@@ -32,7 +32,7 @@ echo \<stdout URL=\"file:/star/data01/pwg/svianping/log/script_\$JOBINDEX\.out\"
 # echo \<input URL=\"catalog:star\.bnl\.gov\?production=P16id,filetype=daq_reco_PicoDst,trgsetupname~production_pp200trans_2015,runnumber\[\]16064034-16093018,sanity=1,tpx=1,storage!=hpss,filename~st_physics\" nFiles=\"$nFileTotal\" /\> >> $SubXml
 # echo \<input URL=\"catalog:star\.bnl\.gov\?production=P23ic,filetype=daq_reco_PicoDst,trgsetupname~production_OO_200GeV_2021,runnumber\[\]22130029-22136010,sanity=1,tpx=1,storage!=hpss,filename~st_physics\" nFiles=\"$nFileTotal\" /\> >> $SubXml
 # echo \<input URL=\"catalog:star\.bnl\.gov\?production=P23id,filetype=daq_reco_PicoDst,trgsetupname~production_19GeV_2019,runnumber\[\]20056032-20093036,sanity=1,tpx=1,storage!=hpss,filename~st_physics\" nFiles=\"$nFileTotal\" /\> >> $SubXml
-echo \<input URL=\"filelist:/star/u/svianping/STAR_Files/KFParticle4Lambda/datalist/19.6GeV_Run19/19.6.list.Kplus_embed\" \/\> >> $SubXml
+echo \<input URL=\"filelist:/star/u/svianping/STAR_Files/KFParticle4Lambda/datalist/19.6GeV_Run19/Test.list\" \/\> >> $SubXml
 echo \<output fromScratch=\"output_\$JOBINDEX\.root\" toURL=\"file:/star/data01/pwg/svianping/output/\" /\> >> $SubXml
 # echo \<output fromScratch=\"KFParticleQA_\$JOBINDEX\.root\" toURL=\"file:/star/data01/pwg/svianping/output/\" /\> >> $SubXml
 echo \</job\> >> $SubXml

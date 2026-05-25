@@ -33,8 +33,10 @@
 *.consign
 
 KFParticle4Lambda/xml/*
+KFParticle4Lambda/datalist/*/Test.list
 
 *.log
+
 
 .sl73*
 

@@ -1029,6 +1029,8 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		for(int Itr = 0;Itr<PDG2NameSize + PDG2NameSize2;Itr++){
 			TString HistName1 = "Eff_eta_pT_Mass_";
 			TString HistName2 = "Eta vs. pT vs. Mass of ";
+			TString HistName3 = "Eff_y_pT_Mass_";
+			TString HistName4 = "y vs. pT vs. Mass of ";
 			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
 			if      (PDGList[Itr] ==     LambdaPdg) {MassBin = 100;MassMin=1.1010;MassMax=1.1315;}
 			else if (PDGList[Itr] ==    -LambdaPdg) {MassBin = 100;MassMin=1.1010;MassMax=1.1315;}
@@ -1051,7 +1053,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 			Eff_eta_pT_Mass[Itr]->GetXaxis()->SetTitle("eta");
 			Eff_eta_pT_Mass[Itr]->GetYaxis()->SetTitle("pT");
 			Eff_eta_pT_Mass[Itr]->GetZaxis()->SetTitle("Mass");
-			Eff_y_pT_Mass[Itr] = new TH3F(HistName1,HistName2 , 80 , -2.0 , 2.0 , 40 , 0 , 2 , MassBin , MassMin , MassMax);
+			Eff_y_pT_Mass[Itr] = new TH3F(HistName3,HistName4 , 80 , -2.0 , 2.0 , 40 , 0 , 2 , MassBin , MassMin , MassMax);
 			Eff_y_pT_Mass[Itr]->GetXaxis()->SetTitle("y");
 			Eff_y_pT_Mass[Itr]->GetYaxis()->SetTitle("pT");
 			Eff_y_pT_Mass[Itr]->GetZaxis()->SetTitle("Mass");
