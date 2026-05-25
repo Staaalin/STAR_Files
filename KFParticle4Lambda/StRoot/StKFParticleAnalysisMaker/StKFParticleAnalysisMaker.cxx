@@ -79,9 +79,10 @@
 #define K0SPdgMassSigma    0.0043
 #define PhiPdgMassSigma    0.0031
 
-#define IfQAMode           false  // If Writing Hist of QA;
-#define IfRecordeTOF       false  // If use eTOF 
-#define IfTree             true // If Writing Tree;
+#define IfQAMode           false // If Writing Hist of QA;
+#define IfEffCorr          true  // If Efficiency Correction
+#define IfRecordeTOF       false // If use eTOF 
+#define IfTree             false // If Writing Tree;
 #define IfRecNewP          false // If Reconstruct New Particle;
 #define IfLoadHY           false // If Background Reconstruction;
 
@@ -1022,6 +1023,41 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 
 	}
 
+	if (IfEffCorr) {
+		int MassBin = 100;
+		float MassMin = -1 , MassMax = -1;
+		for(int Itr = 0;Itr<PDG2NameSize + PDG2NameSize2;Itr++){
+			TString HistName1 = "Eff_eta_pT_Mass_";
+			TString HistName2 = "Eta vs. pT vs. Mass of ";
+			HistName1 += NameList[Itr];HistName2 += NameList[Itr];
+			if      (PDGList[Itr] ==     LambdaPdg) {MassBin = 100;MassMin=1.1010;MassMax=1.1315;}
+			else if (PDGList[Itr] ==    -LambdaPdg) {MassBin = 100;MassMin=1.1010;MassMax=1.1315;}
+			else if (PDGList[Itr] ==     XiPdg    ) {MassBin = 100;MassMin=1.3015;MassMax=1.3425;}
+			else if (PDGList[Itr] ==    -XiPdg    ) {MassBin = 100;MassMin=1.3015;MassMax=1.3425;}
+			else if (PDGList[Itr] ==     OmegaPdg ) {MassBin = 100;MassMin=1.6465;MassMax=1.7005;}
+			else if (PDGList[Itr] ==    -OmegaPdg ) {MassBin = 100;MassMin=1.6465;MassMax=1.7005;}
+			else if (PDGList[Itr] ==     PionPdg  ) {MassBin = 100;MassMin=-0.1;  MassMax=0.1;   }
+			else if (PDGList[Itr] ==    -PionPdg  ) {MassBin = 100;MassMin=-0.1;  MassMax=0.1;   }
+			else if (PDGList[Itr] ==     KaonPdg  ) {MassBin = 100;MassMin= 0.1;  MassMax=0.4;   }
+			else if (PDGList[Itr] ==    -KaonPdg  ) {MassBin = 100;MassMin= 0.1;  MassMax=0.4;   }
+			else if (PDGList[Itr] ==     ProtonPdg) {MassBin = 100;MassMin= 0.7;  MassMax=1.1;   }
+			else if (PDGList[Itr] ==    -ProtonPdg) {MassBin = 100;MassMin= 0.7;  MassMax=1.1;   }
+			else if (PDGList[Itr] ==     310      ) {MassBin = 100;MassMin=0.4290;MassMax=0.5715;}
+			else if (PDGList[Itr] ==     333      ) {MassBin = 100;MassMin=0.9995;MassMax=1.0465;}
+			else if (PDGList[Itr] ==     XiRPdg   ) {MassBin = 100;MassMin=1.7230;MassMax=1.9230;}
+			else if (PDGList[Itr] ==    -XiRPdg   ) {MassBin = 100;MassMin=1.7230;MassMax=1.9230;}
+			else continue;
+			Eff_eta_pT_Mass[Itr] = new TH3F(HistName1,HistName2 , 80 , -2.0 , 2.0 , 40 , 0 , 2 , MassBin , MassMin , MassMax);
+			Eff_eta_pT_Mass[Itr]->GetXaxis()->SetTitle("eta");
+			Eff_eta_pT_Mass[Itr]->GetYaxis()->SetTitle("pT");
+			Eff_eta_pT_Mass[Itr]->GetZaxis()->SetTitle("Mass");
+			Eff_y_pT_Mass[Itr] = new TH3F(HistName1,HistName2 , 80 , -2.0 , 2.0 , 40 , 0 , 2 , MassBin , MassMin , MassMax);
+			Eff_y_pT_Mass[Itr]->GetXaxis()->SetTitle("y");
+			Eff_y_pT_Mass[Itr]->GetYaxis()->SetTitle("pT");
+			Eff_y_pT_Mass[Itr]->GetZaxis()->SetTitle("Mass");
+		}
+	}
+
 
 	cout << "-----------------------------------------" << endl;
 	cout << "------- histograms & tree claimed -------" << endl;
@@ -1269,6 +1305,31 @@ void StKFParticleAnalysisMaker::WriteHistograms() {
 		H_Omega0bR_OmegaPi_Mass ->Write(); 
 		H_Omega0R_XiK_Mass      ->Write();
 		H_Omega0bR_XiK_Mass     ->Write(); 
+	}
+	if (IfEffCorr) {
+		for(int Itr = 0;Itr<PDG2NameSize + PDG2NameSize2;Itr++){
+			TString HistName1 = NameList[Itr];
+			if      (PDGList[Itr] ==     LambdaPdg) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==    -LambdaPdg) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==     XiPdg    ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==    -XiPdg    ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==     OmegaPdg ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==    -OmegaPdg ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==     PionPdg  ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==    -PionPdg  ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==     KaonPdg  ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==    -KaonPdg  ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==     ProtonPdg) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==    -ProtonPdg) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==     310      ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==     333      ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==     XiRPdg   ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else if (PDGList[Itr] ==    -XiRPdg   ) {Eff_Particle[Itr] = fout->mkdir(HistName1);}
+			else continue;
+			Eff_Particle[Itr]->cd();
+			Eff_eta_pT_Mass[Itr]->Write();
+			Eff_y_pT_Mass[Itr]->Write();
+		}
 	}
 	cout<<"T_T:"<<endl;
 	return;
@@ -2221,6 +2282,20 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_nHitsFit.emplace_back(-999);
 			QA_nHitsMax.emplace_back(-999);
 			DaughtersID.emplace_back(  -1);
+			if (IfEffCorr) {
+				for(int Itr = 0;Itr<PDG2NameSize + PDG2NameSize2;Itr++){
+					if (PDGList[Itr] == particle.GetPDG()) {
+						tEnergy = pow(
+							MomentumOfParticle_tb.X()*MomentumOfParticle_tb.X()
+							+MomentumOfParticle_tb.Y()*MomentumOfParticle_tb.Y()
+							+MomentumOfParticle_tb.Z()*MomentumOfParticle_tb.Z()
+							+pow(massList(PDGList[Itr]),2),0.5);
+						rap = 0.5*log((tEnergy+MomentumOfParticle_tb.Z())/(tEnergy-MomentumOfParticle_tb.Z()));
+						Eff_eta_pT_Mass[Itr]->Fill(MomentumOfParticle_tb.Eta(),MomentumOfParticle_tb.Pt(),particle.GetMass());
+						Eff_y_pT_Mass[Itr]  ->Fill(rap,MomentumOfParticle_tb.Pt(),particle.GetMass());
+					}
+				}
+			}
 		}
 		else if ((abs(particle.GetPDG()) == LambdaPdg) || (abs(particle.GetPDG()) == K0SPdg) || (abs(particle.GetPDG()) == PhiPdg))
 		{
@@ -2241,7 +2316,20 @@ Int_t StKFParticleAnalysisMaker::Make()
 			QA_nHitsFit.emplace_back(-999);
 			QA_nHitsMax.emplace_back(-999);
 			DaughtersID.emplace_back(  -1);
-
+			if (IfEffCorr) {
+				for(int Itr = 0;Itr<PDG2NameSize + PDG2NameSize2;Itr++){
+					if (PDGList[Itr] == particle.GetPDG()) {
+						tEnergy = pow(
+							particle.GetPx()*particle.GetPx()
+							+particle.GetPy()*particle.GetPy()
+							+particle.GetPz()*particle.GetPz()
+							+pow(massList(PDGList[Itr]),2),0.5);
+						rap = 0.5*log((tEnergy+particle.GetPz())/(tEnergy-particle.GetPz()));
+						Eff_eta_pT_Mass[Itr]->Fill(particle.GetEta(),particle.GetPt(),particle.GetMass());
+						Eff_y_pT_Mass[Itr]  ->Fill(rap,particle.GetPt(),particle.GetMass());
+					}
+				}
+			}
 		}
 	}
 	if ( PDG.size() != Recorded_KFP_ID.size() ) {cout<<"Error: Different size of branch and Recorded_KFP_ID";return kStOK;}
@@ -2608,6 +2696,10 @@ Int_t StKFParticleAnalysisMaker::Make()
 							if ( CNameList[Ntr] == "Pion"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaPion(),track->gMom().Perp());}
 							if ( CNameList[Ntr] == "Proton"){H_Pt_nSigma[Jtr][Ntr]->Fill(track->nSigmaProton(),track->gMom().Perp());}
 						}
+					}
+					if (IfEffCorr) {
+						Eff_eta_pT_Mass[Itr]->Fill(eta,pt,m2);
+						Eff_y_pT_Mass[Itr]  ->Fill(rap,pt,m2);
 					}
 					
 					break;
@@ -3524,6 +3616,9 @@ Double_t StKFParticleAnalysisMaker::massList(int PID)
 		case 310 :
 			Result = 0.49794;
 			break;
+		case 333 :
+			Result = 1.019455;
+			break;
 		case 211 :
 			Result = 0.13957;
 			break;
@@ -3535,6 +3630,9 @@ Double_t StKFParticleAnalysisMaker::massList(int PID)
 			break;
 		case 3122 :// LambdaFitMass
 			Result = 1.11568;
+			break;
+		case 1003314 :// XiRMass
+			Result = 1.823;
 			break;
 		default :
 			Result = 0;

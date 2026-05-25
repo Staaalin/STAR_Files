@@ -350,6 +350,9 @@ private:
 	TH2F *H_KFP_Pt_nSigma[PDG2NameSize2][PDG2NameSize3];
 	TH2F *H_KFP_Pt_m2[PDG2NameSize2];
 
+	TDirectory* Eff_Particle[PDG2NameSize + PDG2NameSize2];
+	TH3F *Eff_eta_pT_Mass[PDG2NameSize + PDG2NameSize2];
+	TH3F *Eff_y_pT_Mass[PDG2NameSize + PDG2NameSize2];
 
 	TH2F *hdEdx_pQ;
 	TH2F *hdEdx_pQ_1cut;
