@@ -38,8 +38,8 @@ while ($Start <= $AllFiles)
         @ End = $AllFiles
     endif
 
-    set SubXml = "hadd_${JobIndex}.xml"
-    set FileList = "FileList_${JobIndex}.list"
+    set SubXml = "hadd_${JOBID}.xml"
+    set FileList = "FileList_${JOBID}.list"
     rm -f $SubXml
     touch $SubXml
     rm -f $FileList
@@ -58,7 +58,7 @@ while ($Start <= $AllFiles)
     echo \<command\> >> $SubXml
     # echo 'source setDEV2.csh' >> $SubXml
 
-    echo 'hadd -f hadd_'${JobIndex}'.root @$FILELIST' >> $SubXml
+    echo 'hadd -f hadd_'${JOBID}'.root @$FILELIST' >> $SubXml
     echo \</command\> >> $SubXml
 
     # =========================
@@ -95,8 +95,8 @@ while ($Start <= $AllFiles)
     # output + logs
     # =========================
     echo \<input URL=\"filelist:$OutputDir/$FileList\" \/\> >> $SubXml
-    echo \<stdout URL=\"file:${OutputDir}/hadd_${JobIndex}.log\" /\> >> $SubXml
-    echo \<output fromScratch=\"hadd_${JobIndex}.root\" toURL=\"file:${OutputDir}/\" /\> >> $SubXml
+    echo \<stdout URL=\"file:${OutputDir}/hadd_${JOBID}.log\" /\> >> $SubXml
+    echo \<output fromScratch=\"hadd_${JOBID}.root\" toURL=\"file:${OutputDir}/\" /\> >> $SubXml
 
     echo \</job\> >> $SubXml
 
@@ -105,7 +105,7 @@ while ($Start <= $AllFiles)
     # =========================
     star-submit-beta $SubXml
 
-    echo "Submitted job $JobIndex : [$Start - $End]"
+    echo "Submitted job $JOBID : [$Start - $End]"
 
     @ Start = $End + 1
     @ JobIndex++
