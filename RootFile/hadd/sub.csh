@@ -58,7 +58,7 @@ while ($Start <= $AllFiles)
     echo \<command\> >> $SubXml
     # echo 'source setDEV2.csh' >> $SubXml
 
-    echo "hadd hadd_${JobIndex}.root @${FileList}" >> $SubXml
+    echo "hadd -f hadd_${JobIndex}.root @\$FILELIST" >> $SubXml
     echo \</command\> >> $SubXml
 
     # =========================
