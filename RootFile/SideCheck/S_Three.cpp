@@ -366,10 +366,9 @@ void S_Three(
     float NNch , Eta;
     TString TreeName = "hadronTree";
 
-    bool Check_B_C = false, NowSlotB = true, NowSlotC = true;
+    bool Check_B_C = false;
     if (B_PDG == C_PDG) {
         Check_B_C = true;
-        NowSlotC = false;
     }
 
     TVector3 BetaTemp;
@@ -757,6 +756,7 @@ void S_Three(
         TempEvent.eventID = EntriesID;
         TempEvent.A_particles.clear();
         TempEvent.B_particles.clear();
+        TempEvent.C_particles.clear();
         for (size_t st=0;st<MatchedRap.size();st++) {
             A_Array[MatchedRap.at(st)].clear();
             A_List [MatchedRap.at(st)].clear();
@@ -832,7 +832,7 @@ void S_Three(
                     continue;
                 }
             }
-            else if ((PDG->at(i) == B_PDG) && NowSlotB) {
+            else if ((PDG->at(i) == B_PDG)) {
                 if (fabs(InvariantMass->at(i) - BMass) <= MassSigmaWidth*BMassSigma) {
 
                     if (IfRemoveHighTPCsigma) {
@@ -867,11 +867,10 @@ void S_Three(
                     if ((B.eta < EtaCut[0]) || (B.eta > EtaCut[1])) continue;
                     // TempEvent.B_particles.push_back(B);
                     B_List.push_back(B);
-                    if (Check_B_C) {NowSlotB = false;NowSlotC = true;}
                     continue;
                 }
             }
-            else if ((PDG->at(i) == C_PDG) && NowSlotC) {
+            else if ((PDG->at(i) == C_PDG)) {
                 if (fabs(InvariantMass->at(i) - CMass) <= MassSigmaWidth*CMassSigma) {
 
                     if (IfRemoveHighTPCsigma) {
@@ -906,7 +905,6 @@ void S_Three(
                     if ((C.eta < EtaCut[0]) || (C.eta > EtaCut[1])) continue;
                     // TempEvent.B_particles.push_back(C);
                     C_List.push_back(C);
-                    if (Check_B_C) {NowSlotB = true;NowSlotC = false;}
                     continue;
                 }
             }
@@ -977,6 +975,11 @@ void S_Three(
                 if (IfRecord) A_Array[MatchedRap[i]].push_back(A_List[MatchedRap[i]][Aid]);
             }
         }
+
+        if (Check_B_C) {
+            for(Bid=0;Bid<TempEvent.B_particles.size();Bid++) TempEvent.C_particles.push_back(TempEvent.B_particles[Bid]);
+        }
+
         // if (TempEvent.B_particles.size() >= HowMuchEventMixing+1) continue;
         // 确保同时记录到A、B、...粒子
         if (MatchedRap.size() == 0) continue;                                                        // 有A粒子
@@ -1084,10 +1087,17 @@ void S_Three(
                                     }
 
                                     for (const auto& A : A_particles) {
+
+                                        for (j=0;j<B_particles.size();j++) {
+                                            const auto& B = B_particles[j];
                             
-                                        for (const auto& B : B_particles) {
-                            
-                                            for (const auto& C : C_particles) {
+                                            for (k=0;k<C_particles.size();k++) {
+
+                                                if (Check_B_C) {
+                                                    if (k <= j) continue;
+                                                    if (IfInVector(C_particles[k].TreeID , B.ParentID)) continue;
+                                                }
+                                                const auto& C = C_particles[k];
                                             
                                                 if (GetSide(A,B,C , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                     hLocal     ->Fill(phi);
@@ -1095,9 +1105,11 @@ void S_Three(
                                                     hGlobal    ->Fill(phi);
                                                     hGlobal_Cos->Fill(CosPhi);
                                                 }
-                                                ++AccumSameNum;
                                             }
                                         }
+                                    }
+                                    if (mixType == SAME) {
+                                        ++AccumSameNum;
                                     }
                                 }
                             }
