@@ -36,6 +36,7 @@
 #include <stdio.h>
 using namespace std;
 
+// 三体关联
 // 使用这个编译：
 // singularity exec -e --env DISPLAY=$DISPLAY -B /direct -B /gpfs -B /star -B /cvmfs -B /sdcc/lustre02 /cvmfs/star.sdcc.bnl.gov/containers/rhic_sl7.sif csh
 // g++ -O2 -std=c++11 S_Three.cpp -o S_One `root-config --cflags --libs`
@@ -150,6 +151,7 @@ Double_t massListSigma(int PID, TString DataName);
 inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
+    const ArmParticle& C,
     float& cosPhiOut,
     float& phiOut,
     bool IfRemoveFeedPair,
@@ -164,6 +166,7 @@ struct Event {
     int eventID;                    // 事件ID
     std::vector<ArmParticle> A_particles;  // A类粒子 主粒子
     std::vector<ArmParticle> B_particles;  // B类粒子
+    std::vector<ArmParticle> C_particles;  // C类粒子
     
     Event() : eventID(-1) {}
     // 构造函数
@@ -180,6 +183,7 @@ void S_Three(
     TString OutMidName,
     int A_PDG,
     int B_PDG,
+    int C_PDG,
     int Mode,
     int SP_ME,
     int RecordingMethod = 0,
@@ -362,6 +366,12 @@ void S_Three(
     float NNch , Eta;
     TString TreeName = "hadronTree";
 
+    bool Check_B_C = false, NowSlotB = true, NowSlotC = true;
+    if (B_PDG == C_PDG) {
+        Check_B_C = true;
+        NowSlotC = false;
+    }
+
     TVector3 BetaTemp;
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
     TLorentzVector p1 , p2 , p3;
@@ -385,6 +395,13 @@ void S_Three(
     bool IsSame;
     float  P_B , kStar;
     float  phi , CosPhi;
+    enum MixType {
+        SAME,
+        AB_C,
+        AC_B,
+        BC_A,
+        A_B_C
+    };
 
     // //                                    centrality    A_Rapidity   PrimaryVertex
     // std::vector<Event>    EventPool         [50]           [50]          [50];
@@ -433,38 +450,74 @@ void S_Three(
     std::vector<std::vector<ArmParticle>> A_List(yBinNum);
     std::vector<ArmParticle> B_List;
     std::vector<ArmParticle> C_List;
-    std::vector<TH1F*>                                               H_ALL               ;
-    std::vector<TH1F*>                                               H_ALL_Mix           ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H                   ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix               ;
-    std::vector<TH1F*>                                               H_ALL_Cos           ;
-    std::vector<TH1F*>                                               H_ALL_Mix_Cos       ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos               ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix_Cos           ;
+    std::vector<TH1F*>                                               H_ALL_ABC             ;
+    std::vector<TH1F*>                                               H_ALL_A_B_C           ;
+    std::vector<TH1F*>                                               H_ALL_AB_C            ;
+    std::vector<TH1F*>                                               H_ALL_AC_B            ;
+    std::vector<TH1F*>                                               H_ALL_BC_A            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_ABC                 ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_AB_C                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_AC_B                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_BC_A                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_A_B_C               ;
+    std::vector<TH1F*>                                               H_ALL_Cos_ABC         ;
+    std::vector<TH1F*>                                               H_ALL_Cos_AB_C        ;
+    std::vector<TH1F*>                                               H_ALL_Cos_AC_B        ;
+    std::vector<TH1F*>                                               H_ALL_Cos_BC_A        ;
+    std::vector<TH1F*>                                               H_ALL_Cos_A_B_C       ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_ABC             ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AB_C            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AC_B            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_BC_A            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_A_B_C           ;
 
 
     if (RecordingMethod == 0) {
         EventPool.resize(CentralityBinNum);
-        H_ALL       .resize(yBinNum, nullptr);
-        H_ALL_Mix    .resize(yBinNum, nullptr);
-        H      .resize(CentralityBinNum);
-        H_Mix   .resize(CentralityBinNum);
-        H_ALL_Cos       .resize(yBinNum, nullptr);
-        H_ALL_Mix_Cos    .resize(yBinNum, nullptr);
-        H_Cos      .resize(CentralityBinNum);
-        H_Mix_Cos   .resize(CentralityBinNum);
+        H_ALL_ABC       .resize(yBinNum, nullptr);
+        H_ALL_A_B_C    .resize(yBinNum, nullptr);
+        H_ALL_AB_C     .resize(yBinNum, nullptr);
+        H_ALL_AC_B     .resize(yBinNum, nullptr);
+        H_ALL_BC_A     .resize(yBinNum, nullptr);
+        H_ABC      .resize(CentralityBinNum);
+        H_AB_C      .resize(CentralityBinNum);
+        H_AC_B      .resize(CentralityBinNum);
+        H_BC_A      .resize(CentralityBinNum);
+        H_A_B_C   .resize(CentralityBinNum);
+        H_ALL_Cos_ABC       .resize(yBinNum, nullptr);
+        H_ALL_Cos_AB_C      .resize(yBinNum, nullptr);
+        H_ALL_Cos_AC_B      .resize(yBinNum, nullptr);
+        H_ALL_Cos_BC_A      .resize(yBinNum, nullptr);
+        H_ALL_Cos_A_B_C    .resize(yBinNum, nullptr);
+        H_Cos_ABC      .resize(CentralityBinNum);
+        H_Cos_AB_C     .resize(CentralityBinNum);
+        H_Cos_AC_B     .resize(CentralityBinNum);
+        H_Cos_BC_A     .resize(CentralityBinNum);
+        H_Cos_A_B_C   .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
-            H           [i].resize(yBinNum);
-            H_Mix       [i].resize(yBinNum);
-            H_Cos       [i].resize(yBinNum);
-            H_Mix_Cos   [i].resize(yBinNum);
+            H_ABC           [i].resize(yBinNum);
+            H_AB_C           [i].resize(yBinNum);
+            H_AC_B           [i].resize(yBinNum);
+            H_BC_A           [i].resize(yBinNum);
+            H_A_B_C       [i].resize(yBinNum);
+            H_Cos_ABC       [i].resize(yBinNum);
+            H_Cos_AB_C      [i].resize(yBinNum);
+            H_Cos_AC_B      [i].resize(yBinNum);
+            H_Cos_BC_A      [i].resize(yBinNum);
+            H_Cos_A_B_C   [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
-                H                     [i][j].resize(PVzBinNum, nullptr);
-                H_Mix                 [i][j].resize(PVzBinNum, nullptr);
-                H_Cos                 [i][j].resize(PVzBinNum, nullptr);
-                H_Mix_Cos             [i][j].resize(PVzBinNum, nullptr);
+                H_ABC                     [i][j].resize(PVzBinNum, nullptr);
+                H_AB_C                    [i][j].resize(PVzBinNum, nullptr);
+                H_AC_B                    [i][j].resize(PVzBinNum, nullptr);
+                H_BC_A                    [i][j].resize(PVzBinNum, nullptr);
+                H_A_B_C                 [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_ABC                 [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_AB_C                [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_AC_B                [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_BC_A                [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_A_B_C             [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
@@ -498,17 +551,29 @@ void S_Three(
         for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
             for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
                 for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
-                    H               [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Mix           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Cos           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Mix_Cos       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Cos_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_ABC           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_ABC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("ABC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_AB_C          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AB_C_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("AB in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_AC_B          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AC_B_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("AC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_BC_A          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_BC_A_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("BC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_A_B_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_A_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("ABC in different event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_Cos_ABC       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_ABC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("ABC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_AB_C      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AB_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("AB in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_AC_B      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AC_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("AC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_BC_A      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_BC_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("BC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_A_B_C     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_A_B_C_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("ABC in different event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
 
                 }
             }
-            H_ALL                  [RapIndex] = new TH1F(Form("H_ALL_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Mix              [RapIndex] = new TH1F(Form("H_ALL_Mix_%d"  ,          RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Cos              [RapIndex] = new TH1F(Form("H_ALL_Cos_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Mix_Cos          [RapIndex] = new TH1F(Form("H_ALL_Mix_Cos_%d"  ,      RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_ABC              [RapIndex] = new TH1F(Form("H_ALL_ABC_%d"      ,          RapIndex),Form("ALL ABC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_A_B_C            [RapIndex] = new TH1F(Form("H_ALL_A_B_C_%d"  ,          RapIndex), Form("ALL ABC in different event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_AB_C             [RapIndex] = new TH1F(Form("H_ALL_AB_C_%d"  ,           RapIndex), Form("ALL AB in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_AC_B             [RapIndex] = new TH1F(Form("H_ALL_AC_B_%d"  ,           RapIndex), Form("ALL AC in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_BC_A             [RapIndex] = new TH1F(Form("H_ALL_BC_A_%d"  ,           RapIndex), Form("ALL BC in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_Cos_ABC          [RapIndex] = new TH1F(Form("H_ALL_Cos_ABC_%d"      ,      RapIndex),Form("ALL ABC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_AB_C         [RapIndex] = new TH1F(Form("H_ALL_Cos_AB_C_%d"      ,     RapIndex),Form("AB in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_AC_B         [RapIndex] = new TH1F(Form("H_ALL_Cos_AC_B_%d"      ,     RapIndex),Form("AC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_BC_A         [RapIndex] = new TH1F(Form("H_ALL_Cos_BC_A_%d"      ,     RapIndex),Form("BC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_A_B_C        [RapIndex] = new TH1F(Form("H_ALL_Cos_A_B_C_%d"  ,      RapIndex), Form("ALL ABC in different event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
 
         }
     }
@@ -767,7 +832,7 @@ void S_Three(
                     continue;
                 }
             }
-            else if (PDG->at(i) == B_PDG) {
+            else if ((PDG->at(i) == B_PDG) && NowSlotB) {
                 if (fabs(InvariantMass->at(i) - BMass) <= MassSigmaWidth*BMassSigma) {
 
                     if (IfRemoveHighTPCsigma) {
@@ -802,6 +867,46 @@ void S_Three(
                     if ((B.eta < EtaCut[0]) || (B.eta > EtaCut[1])) continue;
                     // TempEvent.B_particles.push_back(B);
                     B_List.push_back(B);
+                    if (Check_B_C) {NowSlotB = false;NowSlotC = true;}
+                    continue;
+                }
+            }
+            else if ((PDG->at(i) == C_PDG) && NowSlotC) {
+                if (fabs(InvariantMass->at(i) - CMass) <= MassSigmaWidth*CMassSigma) {
+
+                    if (IfRemoveHighTPCsigma) {
+                        if (abs(C_PDG) == 321) {
+                            if (fabs(nSigmaKaon->at(i))>1) continue;
+                        }
+                    }
+                    if (IfRemoveLownHits) {
+                        if ((abs(C_PDG) == 321) || (abs(C_PDG) == 211) || (abs(C_PDG) == 2212)) {
+                            if (nHitsFit->at(i) < 20) continue;
+                        }
+                    }
+                    if (IfCutHighDCA) {
+                        if ((abs(C_PDG) == 321) || (abs(C_PDG) == 211) || (abs(C_PDG) == 2212)) {
+                            if ( (0 > dcatopv->at(i)) || (dcatopv->at(i) > 0.5)) continue;
+                        }
+                    }
+
+                    C = ArmParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),CMass,i);
+                    C.ParentID.clear();C.ParentID.push_back(i);
+                    for (k=ParentSta->at(i);k<=ParentEnd->at(i);k++){
+                        C.ParentID.push_back(ParentList->at(k));
+                    }
+                    if (IfRemoveSpliteMerge) {
+                        for (k=SE_ParentSta->at(i);k<=SE_ParentEnd->at(i);k++){
+                            C.ParentID.push_back(SE_ParentList->at(k));
+                        }
+                        for (k=ME_ParentSta->at(i);k<=ME_ParentEnd->at(i);k++){
+                            C.ParentID.push_back(ME_ParentList->at(k));
+                        }
+                    }
+                    if ((C.eta < EtaCut[0]) || (C.eta > EtaCut[1])) continue;
+                    // TempEvent.B_particles.push_back(C);
+                    C_List.push_back(C);
+                    if (Check_B_C) {NowSlotB = true;NowSlotC = false;}
                     continue;
                 }
             }
@@ -820,7 +925,30 @@ void S_Three(
                 }
             }
         }
-        // 筛选A、B、C粒子：优先级：D（母粒子） > A > B
+        // 筛选A、B、C粒子：优先级：D（母粒子） > A > B > C
+        // 筛选C粒子
+        for (Cid=0;Cid<C_List.size();Cid++) {
+            IfRecord = true;
+            // 如果C、D有血缘关系，不记录C
+            for (Did = 0;Did < D_ParID.size();Did++) {
+                if (IfInVector(C_List[Cid].TreeID , D_ParID.at(Did))) {IfRecord = false;break;}
+            }
+            // 如果C、B有血缘关系，不记录C
+            if (IfRecord) {
+                for (Bid = 0;Bid < B_List.size();Bid++) {
+                    if (IfInVector(C_List[Cid].TreeID , B_List[Bid].ParentID)) {IfRecord = false;break;}
+                }
+            }
+            // 如果C、A有血缘关系，不记录C
+            if (IfRecord) {
+                for (i=0;i<MatchedRap.size();i++) {
+                    for (Aid=0;Aid<A_List[MatchedRap[i]].size();Aid++) {
+                        if (IfInVector(C_List[Cid].TreeID , A_List[MatchedRap[i]][Aid].ParentID)) {IfRecord = false;break;}
+                    }
+                }
+            }
+            if (IfRecord) TempEvent.C_particles.push_back(C_List[Cid]);
+        }
         // 筛选B粒子
         for (Bid=0;Bid<B_List.size();Bid++) {
             IfRecord = true;
@@ -853,6 +981,7 @@ void S_Three(
         // 确保同时记录到A、B、...粒子
         if (MatchedRap.size() == 0) continue;                                                        // 有A粒子
         if (TempEvent.B_particles.size() == 0) continue;                                             // 有B粒子
+        if (TempEvent.C_particles.size() == 0) continue;                                             // 有C粒子
         if (true)
         {
             // 填进池子 & 计算
@@ -879,33 +1008,96 @@ void S_Three(
                         
                                 auto& eventB = EventPool[CenIndex][RapIndex][PVzIndex][Bid];
                                 const auto& B_particles = eventB.B_particles;
+                        
+                                for (int Cid = 0; Cid < HowMuchEventMixing + 1; ++Cid) {
+                        
+                                    auto& eventC = EventPool[CenIndex][RapIndex][PVzIndex][Cid];
+                                    const auto& C_particles = eventC.C_particles;
 
-                                if (Aid == Bid) {
-                                    IsSame = true;
-                                }else{
-                                    IsSame = false;
-                                }
+                                    //==================================================
+                                    // Determine mixing type
+                                    //==================================================
                         
-                                for (const auto& A : A_particles) {
+                                    MixType mixType;
                         
-                                    for (const auto& B : B_particles) {
-                                        
-                                        if (IsSame) {
-                                            if (GetSide(A,B , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                                H                [CenIndex][RapIndex][PVzIndex]->Fill(phi);
-                                                H_ALL                      [RapIndex]->Fill(phi);
-                                                H_Cos            [CenIndex][RapIndex][PVzIndex]->Fill(CosPhi);
-                                                H_ALL_Cos                  [RapIndex]->Fill(CosPhi);
-                                            }
-                                        }else{
-                                            if (GetSide(A,B , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                                H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(phi);
-                                                H_ALL_Mix                  [RapIndex]->Fill(phi);
-                                                H_Mix_Cos        [CenIndex][RapIndex][PVzIndex]->Fill(CosPhi);
-                                                H_ALL_Mix_Cos              [RapIndex]->Fill(CosPhi);
+                                    if (Aid != Bid && Aid != Cid && Bid != Cid) {
+                                        mixType = A_B_C;
+                                    }
+                                    else if ((Aid == Bid) && (Aid != Cid)) {
+                                        mixType = AB_C;
+                                    }
+                                    else if ((Aid != Bid) && (Aid == Cid)) {
+                                        mixType = AC_B;
+                                    }
+                                    else if ((Cid != Bid) && (Aid == Cid)) {
+                                        mixType = BC_A;
+                                    }
+                                    else{
+                                        mixType = SAME;
+                                    }
+                                                    
+                                    //==================================================
+                                    // Select histogram pointers ONCE
+                                    //==================================================
+                        
+                                    TH1* hLocal = nullptr;
+                                    TH1* hGlobal = nullptr;
+                                    TH1* hLocal_Cos = nullptr;
+                                    TH1* hGlobal_Cos = nullptr;
+                        
+                                    switch (mixType) {
+                        
+                                        case A_B_C:
+                                            hLocal      = H_A_B_C    [CenIndex][RapIndex][PVzIndex];
+                                            hLocal_Cos  = H_Cos_A_B_C[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal     = H_ALL_A_B_C          [RapIndex];
+                                            hGlobal_Cos = H_ALL_Cos_A_B_C      [RapIndex];
+                                            break;
+                        
+                                        case AB_C:
+                                            hLocal      = H_AB_C    [CenIndex][RapIndex][PVzIndex];
+                                            hLocal_Cos  = H_Cos_AB_C[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal     = H_ALL_AB_C          [RapIndex];
+                                            hGlobal_Cos = H_ALL_Cos_AB_C      [RapIndex];
+                                            break;
+                        
+                                        case AC_B:
+                                            hLocal      = H_AC_B    [CenIndex][RapIndex][PVzIndex];
+                                            hLocal_Cos  = H_Cos_AC_B[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal     = H_ALL_AC_B          [RapIndex];
+                                            hGlobal_Cos = H_ALL_Cos_AC_B      [RapIndex];
+                                            break;
+                        
+                                        case BC_A:
+                                            hLocal      = H_BC_A    [CenIndex][RapIndex][PVzIndex];
+                                            hLocal_Cos  = H_Cos_BC_A[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal     = H_ALL_BC_A          [RapIndex];
+                                            hGlobal_Cos = H_ALL_Cos_BC_A      [RapIndex];
+                                            break;
+                        
+                                        case SAME:
+                                            hLocal      = H_ABC    [CenIndex][RapIndex][PVzIndex];
+                                            hLocal_Cos  = H_Cos_ABC[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal     = H_ALL_ABC          [RapIndex];
+                                            hGlobal_Cos = H_ALL_Cos_ABC      [RapIndex];
+                                            break;
+                                    }
+
+                                    for (const auto& A : A_particles) {
+                            
+                                        for (const auto& B : B_particles) {
+                            
+                                            for (const auto& C : C_particles) {
+                                            
+                                                if (GetSide(A,B,C , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                                    hLocal     ->Fill(phi);
+                                                    hLocal_Cos ->Fill(CosPhi);
+                                                    hGlobal    ->Fill(phi);
+                                                    hGlobal_Cos->Fill(CosPhi);
+                                                }
+                                                ++AccumSameNum;
                                             }
                                         }
-                                        ++AccumSameNum;
                                     }
                                 }
                             }
@@ -936,17 +1128,29 @@ void S_Three(
         for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
             for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
                 Sep_Side->cd();
-                H                    [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Mix                [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Cos                [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Mix_Cos            [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_ABC                  [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_A_B_C                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_AB_C                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_AC_B                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_BC_A                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos_ABC              [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos_A_B_C            [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos_AB_C             [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos_BC_A             [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos_AC_B             [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
-        H_ALL                                   [RapIndex] ->Write();
-        H_ALL_Mix                               [RapIndex] ->Write();
-        H_ALL_Cos                               [RapIndex] ->Write();
-        H_ALL_Mix_Cos                           [RapIndex] ->Write();
+        H_ALL_ABC                                 [RapIndex] ->Write();
+        H_ALL_A_B_C                               [RapIndex] ->Write();
+        H_ALL_AB_C                                [RapIndex] ->Write();
+        H_ALL_AC_B                                [RapIndex] ->Write();
+        H_ALL_BC_A                                [RapIndex] ->Write();
+        H_ALL_Cos_ABC                             [RapIndex] ->Write();
+        H_ALL_Cos_A_B_C                           [RapIndex] ->Write();
+        H_ALL_Cos_AB_C                            [RapIndex] ->Write();
+        H_ALL_Cos_AC_B                            [RapIndex] ->Write();
+        H_ALL_Cos_BC_A                            [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
@@ -955,10 +1159,10 @@ void S_Three(
 
 int main(int argc, char** argv) {
     // 检查参数数量
-    if(argc < 10) {
+    if(argc < 11) {
         std::cerr << "Usage: " << argv[0] 
                   << " MidName DataName OutputFileIndex OutMidName"
-                  << " A_PDG B_PDG Mode SP_ME [CutID]" << std::endl;
+                  << " A_PDG B_PDG C_PDG Mode SP_ME [CutID]" << std::endl;
         return 1;
     }
 
@@ -972,7 +1176,8 @@ int main(int argc, char** argv) {
         atoi(argv[7]),
         atoi(argv[8]),
         atoi(argv[9]),
-        (argc > 10 ? atoi(argv[10]) : 0)
+        atoi(argv[10]),
+        (argc > 11 ? atoi(argv[11]) : 0)
     );
 
     return 0;
@@ -1067,6 +1272,7 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize, TStri
 inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
+    const ArmParticle& C,
     float& cosPhiOut,
     float& phiOut,
     bool IfRemoveFeedPair,
@@ -1078,10 +1284,10 @@ inline bool GetSide(
     // Total four momentum
     //--------------------------------------------------
 
-    const double Px = double(A.px) + double(B.px);
-    const double Py = double(A.py) + double(B.py);
-    const double Pz = double(A.pz) + double(B.pz);
-    const double E  = double(A.E ) + double(B.E );
+    const double Px = double(A.px) + double(B.px) + double(C.px);
+    const double Py = double(A.py) + double(B.py) + double(C.py);
+    const double Pz = double(A.pz) + double(B.pz) + double(C.pz);
+    const double E  = double(A.E ) + double(B.E ) + double(C.E );
 
     //--------------------------------------------------
     // Invariant mass
@@ -1151,18 +1357,18 @@ inline bool GetSide(
     //--------------------------------------------------
 
     const double pPar =
-          double(B.px)*nx
-        + double(B.py)*ny
-        + double(B.pz)*nz;
+          double(A.px)*nx
+        + double(A.py)*ny
+        + double(A.pz)*nz;
 
     //--------------------------------------------------
     // total momentum squared
     //--------------------------------------------------
 
     const double p2 =
-          double(B.px)*double(B.px)
-        + double(B.py)*double(B.py)
-        + double(B.pz)*double(B.pz);
+          double(A.px)*double(A.px)
+        + double(A.py)*double(A.py)
+        + double(A.pz)*double(A.pz);
 
     //--------------------------------------------------
     // transverse momentum squared
@@ -1184,7 +1390,7 @@ inline bool GetSide(
     //--------------------------------------------------
 
     const double pParStar =
-        gamma * (pPar - betaAbs * double(B.E));
+        gamma * (pPar - betaAbs * double(A.E));
 
     //--------------------------------------------------
     // numerically stable cos(phi)
@@ -1222,8 +1428,8 @@ inline bool GetSide(
     // output
     //--------------------------------------------------
 
-    cosPhiOut = float(cosPhi);
-    phiOut    = float(std::acos(cosPhi));
+    cosPhiOut = -float(cosPhi);
+    phiOut    = float(std::acos(-cosPhi));
 
     return true;
 }

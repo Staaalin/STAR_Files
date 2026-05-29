@@ -36,6 +36,7 @@
 #include <stdio.h>
 using namespace std;
 
+// 两体关联
 // 使用这个编译：
 // singularity exec -e --env DISPLAY=$DISPLAY -B /direct -B /gpfs -B /star -B /cvmfs -B /sdcc/lustre02 /cvmfs/star.sdcc.bnl.gov/containers/rhic_sl7.sif csh
 // g++ -O2 -std=c++11 S_Two.cpp -o S_One `root-config --cflags --libs`
@@ -150,8 +151,8 @@ Double_t massListSigma(int PID, TString DataName);
 inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
-    float& P_B,
-    float& kStar,
+    float& cosPhiOut,
+    float& phiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -384,6 +385,7 @@ void S_Two(
     std::vector<std::vector<int> > D_ParID;
     bool IsSame;
     float  P_B , kStar;
+    float  phi , CosPhi;
 
     // //                                    centrality    A_Rapidity   PrimaryVertex
     // std::vector<Event>    EventPool         [50]           [50]          [50];
@@ -436,46 +438,34 @@ void S_Two(
     std::vector<TH1F*>                                               H_ALL_Mix           ;
     std::vector<std::vector<std::vector<TH1F*>>>                     H                   ;
     std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix               ;
-    std::vector<TH1F*>                                               HP_ALL_kStar        ;
-    std::vector<TH1F*>                                               HP_ALL_Mix_kStar    ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     HP_kStar            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     HP_Mix_kStar        ;
-    std::vector<TH1F*>                                               HN_ALL_kStar        ;
-    std::vector<TH1F*>                                               HN_ALL_Mix_kStar    ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     HN_kStar            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     HN_Mix_kStar        ;
+    std::vector<TH1F*>                                               H_ALL_Cos           ;
+    std::vector<TH1F*>                                               H_ALL_Mix_Cos       ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos               ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix_Cos           ;
 
 
     if (RecordingMethod == 0) {
         EventPool.resize(CentralityBinNum);
-        HP_ALL_kStar       .resize(yBinNum, nullptr);
-        HP_ALL_Mix_kStar    .resize(yBinNum, nullptr);
-        HP_kStar      .resize(CentralityBinNum);
-        HP_Mix_kStar   .resize(CentralityBinNum);
-        HN_ALL_kStar       .resize(yBinNum, nullptr);
-        HN_ALL_Mix_kStar    .resize(yBinNum, nullptr);
-        HN_kStar      .resize(CentralityBinNum);
-        HN_Mix_kStar   .resize(CentralityBinNum);
         H_ALL       .resize(yBinNum, nullptr);
         H_ALL_Mix    .resize(yBinNum, nullptr);
         H      .resize(CentralityBinNum);
         H_Mix   .resize(CentralityBinNum);
+        H_ALL_Cos       .resize(yBinNum, nullptr);
+        H_ALL_Mix_Cos    .resize(yBinNum, nullptr);
+        H_Cos      .resize(CentralityBinNum);
+        H_Mix_Cos   .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
-            HP_kStar       [i].resize(yBinNum);
-            HP_Mix_kStar   [i].resize(yBinNum);
-            HN_kStar       [i].resize(yBinNum);
-            HN_Mix_kStar   [i].resize(yBinNum);
-            H       [i].resize(yBinNum);
-            H_Mix   [i].resize(yBinNum);
+            H           [i].resize(yBinNum);
+            H_Mix       [i].resize(yBinNum);
+            H_Cos       [i].resize(yBinNum);
+            H_Mix_Cos   [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
-                HP_kStar          [i][j].resize(PVzBinNum, nullptr);
-                HP_Mix_kStar      [i][j].resize(PVzBinNum, nullptr);
-                HN_kStar          [i][j].resize(PVzBinNum, nullptr);
-                HN_Mix_kStar      [i][j].resize(PVzBinNum, nullptr);
-                H                 [i][j].resize(PVzBinNum, nullptr);
-                H_Mix             [i][j].resize(PVzBinNum, nullptr);
+                H                     [i][j].resize(PVzBinNum, nullptr);
+                H_Mix                 [i][j].resize(PVzBinNum, nullptr);
+                H_Cos                 [i][j].resize(PVzBinNum, nullptr);
+                H_Mix_Cos             [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
@@ -489,8 +479,8 @@ void S_Two(
     ArmParticle           A(0,0,0,0,0), B(0,0,0,0,0), C(0,0,0,0,0), D(0,0,0,0,0);
     Event                 TempEvent(0);
 
-    int SideBinNum = 240;
-    float SideSta = -6 , SideEnd = 6;
+    int SideBinNum = 100;
+    float SideSta = 0 , SideEnd = Pi;
     
     int dRapBinNum = 500;
     float dRapSta = -5 , dRapEnd = 5;
@@ -509,21 +499,17 @@ void S_Two(
         for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
             for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
                 for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
-                    HP_kStar        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("HP_kStar_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,0,SideEnd);
-                    HP_Mix_kStar    [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("HP_Mix_kStar_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,0,SideEnd);
-                    HN_kStar        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("HN_kStar_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,0,SideEnd);
-                    HN_Mix_kStar    [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("HN_Mix_kStar_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,0,SideEnd);
-                    H               [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Mix           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H               [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_Mix           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_Cos           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Mix_Cos       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Cos_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
 
                 }
             }
-            HP_ALL_kStar           [RapIndex] = new TH1F(Form("HP_ALL_kStar_%d"      ,         RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,0,SideEnd);
-            HP_ALL_Mix_kStar       [RapIndex] = new TH1F(Form("HP_ALL_Mix_kStar_%d"  ,         RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,0,SideEnd);
-            HN_ALL_kStar           [RapIndex] = new TH1F(Form("HN_ALL_kStar_%d"      ,         RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,0,SideEnd);
-            HN_ALL_Mix_kStar       [RapIndex] = new TH1F(Form("HN_ALL_Mix_kStar_%d"  ,         RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,0,SideEnd);
             H_ALL                  [RapIndex] = new TH1F(Form("H_ALL_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
             H_ALL_Mix              [RapIndex] = new TH1F(Form("H_ALL_Mix_%d"  ,          RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_Cos              [RapIndex] = new TH1F(Form("H_ALL_Cos_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Mix_Cos          [RapIndex] = new TH1F(Form("H_ALL_Mix_Cos_%d"  ,      RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
 
         }
     }
@@ -906,28 +892,18 @@ void S_Two(
                                     for (const auto& B : B_particles) {
                                         
                                         if (IsSame) {
-                                            if (GetSide(A,B , P_B,kStar, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                                H                [CenIndex][RapIndex][PVzIndex]->Fill(P_B);
-                                                H_ALL                      [RapIndex]->Fill(P_B);
-                                                if (P_B > 0){
-                                                    HP_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(kStar);
-                                                    HP_ALL_kStar               [RapIndex]->Fill(kStar);
-                                                }else{
-                                                    HN_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(kStar);
-                                                    HN_ALL_kStar               [RapIndex]->Fill(kStar);
-                                                }
+                                            if (GetSide(A,B , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                                H                [CenIndex][RapIndex][PVzIndex]->Fill(phi);
+                                                H_ALL                      [RapIndex]->Fill(phi);
+                                                H_Cos            [CenIndex][RapIndex][PVzIndex]->Fill(CosPhi);
+                                                H_ALL_Cos                  [RapIndex]->Fill(CosPhi);
                                             }
                                         }else{
-                                            if (GetSide(A,B , P_B,kStar, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                                H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(P_B);
-                                                H_ALL_Mix                  [RapIndex]->Fill(P_B);
-                                                if (P_B > 0){
-                                                    HP_Mix_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(kStar);
-                                                    HP_ALL_Mix_kStar               [RapIndex]->Fill(kStar);
-                                                }else{
-                                                    HN_Mix_kStar         [CenIndex][RapIndex][PVzIndex]->Fill(kStar);
-                                                    HN_ALL_Mix_kStar               [RapIndex]->Fill(kStar);
-                                                }
+                                            if (GetSide(A,B , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                                H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(phi);
+                                                H_ALL_Mix                  [RapIndex]->Fill(phi);
+                                                H_Mix_Cos        [CenIndex][RapIndex][PVzIndex]->Fill(CosPhi);
+                                                H_ALL_Mix_Cos              [RapIndex]->Fill(CosPhi);
                                             }
                                         }
                                         ++AccumSameNum;
@@ -961,21 +937,17 @@ void S_Two(
         for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
             for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
                 Sep_Side->cd();
-                HP_kStar             [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                HP_Mix_kStar         [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                HN_kStar             [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                HN_Mix_kStar         [CenIndex] [RapIndex] [PVzIndex] ->Write();
                 H                    [CenIndex] [RapIndex] [PVzIndex] ->Write();
                 H_Mix                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_Cos            [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
-        HP_ALL_kStar                        [RapIndex] ->Write();
-        HP_ALL_Mix_kStar                    [RapIndex] ->Write();
-        HN_ALL_kStar                        [RapIndex] ->Write();
-        HN_ALL_Mix_kStar                    [RapIndex] ->Write();
-        H_ALL                               [RapIndex] ->Write();
-        H_ALL_Mix                           [RapIndex] ->Write();
+        H_ALL                                   [RapIndex] ->Write();
+        H_ALL_Mix                               [RapIndex] ->Write();
+        H_ALL_Cos                               [RapIndex] ->Write();
+        H_ALL_Mix_Cos                           [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
@@ -1096,73 +1068,164 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize, TStri
 inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
-    float& P_B,
-    float& kStar,
+    float& cosPhiOut,
+    float& phiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
     float MassSigmaWidth)
 {
-    const float Tot_E = A.E + B.E;
+    //--------------------------------------------------
+    // Total four momentum
+    //--------------------------------------------------
 
-    const float betaX = -(A.px + B.px) / Tot_E;
-    const float betaY = -(A.py + B.py) / Tot_E;
-    const float betaZ = -(A.pz + B.pz) / Tot_E;
+    const double Px = double(A.px) + double(B.px);
+    const double Py = double(A.py) + double(B.py);
+    const double Pz = double(A.pz) + double(B.pz);
+    const double E  = double(A.E ) + double(B.E );
 
-    const float beta2 =
-    betaX*betaX +
-    betaY*betaY +
-    betaZ*betaZ;
+    //--------------------------------------------------
+    // Invariant mass
+    //--------------------------------------------------
 
-    if (beta2 < 1e-12f || beta2 >= 1.0f)
-    return false;
+    const double M2 =
+        E*E
+      - Px*Px
+      - Py*Py
+      - Pz*Pz;
 
-    const float gamma =
-    1.0f / std::sqrt(1.0f - beta2);
+    if (M2 <= 0.0)
+        return false;
 
-    const float gamma2 =
-    (gamma - 1.0f) / beta2;
-
-    const float bpB =
-    betaX*B.px +
-    betaY*B.py +
-    betaZ*B.pz;
-    
+    //--------------------------------------------------
+    // Feed-down rejection
+    //--------------------------------------------------
 
     if (IfRemoveFeedPair) {
-        const float bpA =
-        betaX*A.px +
-        betaY*A.py +
-        betaZ*A.pz;
-        for(size_t i=0;i<MotherMass.size();i++){
-            const float InMass = (gamma * (Tot_E + bpA + bpB));
-            if(fabs(InMass - MotherMass[i]) < MassSigmaWidth*MotherMassSigma[i]) return false;
+
+        const double M = std::sqrt(M2);
+
+        for (size_t i = 0; i < MotherMass.size(); ++i) {
+
+            if (std::fabs(M - MotherMass[i])
+                < MassSigmaWidth * MotherMassSigma[i]) {
+
+                return false;
+            }
         }
     }
 
-    const float New_BPx =
-    B.px + gamma2*bpB*betaX + gamma*betaX*B.E;
+    //--------------------------------------------------
+    // beta
+    //--------------------------------------------------
 
-    const float New_BPy =
-    B.py + gamma2*bpB*betaY + gamma*betaY*B.E;
+    const double invE = 1.0 / E;
 
-    const float New_BPz =
-    B.pz + gamma2*bpB*betaZ + gamma*betaZ*B.E;
+    const double betaX = -Px * invE;
+    const double betaY = -Py * invE;
+    const double betaZ = -Pz * invE;
 
-    const float invBeta =
-    1.0f / std::sqrt(beta2);
+    const double beta2 =
+        betaX*betaX +
+        betaY*betaY +
+        betaZ*betaZ;
 
-    const float nx = -betaX * invBeta;
-    const float ny = -betaY * invBeta;
-    const float nz = -betaZ * invBeta;
+    if (beta2 < 1e-20 || beta2 >= 1.0)
+        return false;
 
-    const float projB =
-    New_BPx*nx +
-    New_BPy*ny +
-    New_BPz*nz;
+    const double betaAbs =
+        std::sqrt(beta2);
 
-    P_B = projB;
-    kStar = std::sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz);
+    //--------------------------------------------------
+    // beta direction
+    //--------------------------------------------------
+
+    const double invBeta =
+        1.0 / betaAbs;
+
+    const double nx = -betaX * invBeta;
+    const double ny = -betaY * invBeta;
+    const double nz = -betaZ * invBeta;
+
+    //--------------------------------------------------
+    // longitudinal momentum
+    //--------------------------------------------------
+
+    const double pPar =
+          double(B.px)*nx
+        + double(B.py)*ny
+        + double(B.pz)*nz;
+
+    //--------------------------------------------------
+    // total momentum squared
+    //--------------------------------------------------
+
+    const double p2 =
+          double(B.px)*double(B.px)
+        + double(B.py)*double(B.py)
+        + double(B.pz)*double(B.pz);
+
+    //--------------------------------------------------
+    // transverse momentum squared
+    //--------------------------------------------------
+
+    const double pPerp2 =
+        std::max(0.0,
+                 p2 - pPar*pPar);
+
+    //--------------------------------------------------
+    // gamma
+    //--------------------------------------------------
+
+    const double gamma =
+        1.0 / std::sqrt(1.0 - beta2);
+
+    //--------------------------------------------------
+    // boosted longitudinal momentum
+    //--------------------------------------------------
+
+    const double pParStar =
+        gamma * (pPar - betaAbs * double(B.E));
+
+    //--------------------------------------------------
+    // numerically stable cos(phi)
+    //--------------------------------------------------
+
+    const double denom =
+        pParStar * pParStar;
+
+    double cosPhi;
+
+    if (denom <= 1e-30) {
+
+        cosPhi = 0.0;
+
+    } else {
+
+        const double ratio =
+            pPerp2 / denom;
+
+        cosPhi =
+            ((pParStar >= 0.0) ? 1.0 : -1.0)
+            /
+            std::sqrt(1.0 + ratio);
+    }
+
+    //--------------------------------------------------
+    // Clamp
+    //--------------------------------------------------
+
+    cosPhi =
+        std::max(-1.0,
+        std::min( 1.0, cosPhi));
+
+    //--------------------------------------------------
+    // output
+    //--------------------------------------------------
+
+    cosPhiOut = float(cosPhi);
+    phiOut    = float(std::acos(cosPhi));
+
     return true;
 }
 
