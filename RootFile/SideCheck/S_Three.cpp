@@ -389,8 +389,8 @@ void S_Three(
     float APz  , BPz  , CPz ;
     float APt  , BPt  , CPt ;
     float ARap , BRap , CRap;
-    float BMass = massList(B_PDG, DataName)           , AMass = massList(A_PDG, DataName)          ;
-    float BMassSigma = massListSigma(B_PDG, DataName) , AMassSigma = massListSigma(A_PDG, DataName);
+    float BMass = massList(B_PDG, DataName)           , AMass = massList(A_PDG, DataName)           , CMass = massList(C_PDG, DataName)          ;
+    float BMassSigma = massListSigma(B_PDG, DataName) , AMassSigma = massListSigma(A_PDG, DataName) , CMassSigma = massListSigma(C_PDG, DataName);
     std::vector<std::vector<int> > D_ParID;
     bool IsSame;
     float  P_B , kStar;
