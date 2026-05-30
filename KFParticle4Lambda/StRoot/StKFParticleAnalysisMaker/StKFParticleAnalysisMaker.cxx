@@ -80,9 +80,9 @@
 #define PhiPdgMassSigma    0.0031
 
 #define IfQAMode           false // If Writing Hist of QA;
-#define IfEffCorr          true  // If Efficiency Correction
+#define IfEffCorr          false // If Efficiency Correction
 #define IfRecordeTOF       false // If use eTOF 
-#define IfTree             false // If Writing Tree;
+#define IfTree             true  // If Writing Tree;
 #define IfRecNewP          false // If Reconstruct New Particle;
 #define IfLoadHY           false // If Background Reconstruction;
 
