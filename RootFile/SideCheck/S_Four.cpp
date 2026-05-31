@@ -39,7 +39,7 @@ using namespace std;
 // 三体关联
 // 使用这个编译：
 // singularity exec -e --env DISPLAY=$DISPLAY -B /direct -B /gpfs -B /star -B /cvmfs -B /sdcc/lustre02 /cvmfs/star.sdcc.bnl.gov/containers/rhic_sl7.sif csh
-// g++ -O2 -std=c++11 S_Three.cpp -o S_One `root-config --cflags --libs`
+// g++ -O2 -std=c++11 S_Four.cpp -o S_One `root-config --cflags --libs`
 
 // 定义粒子结构体
 struct ArmParticle {
@@ -176,7 +176,7 @@ struct Event {
 
 void print(Event Temp);
 
-void S_Three(
+void S_Four(
     TString MidName,
     TString DataName,
     int OutputFileIndex,
@@ -1172,14 +1172,14 @@ void S_Three(
 
 int main(int argc, char** argv) {
     // 检查参数数量
-    if(argc < 11) {
+    if(argc < 12) {
         std::cerr << "Usage: " << argv[0] 
                   << " MidName DataName OutputFileIndex OutMidName"
-                  << " A_PDG B_PDG C_PDG Mode SP_ME [CutID]" << std::endl;
+                  << " A_PDG B_PDG C_PDG D_PDG Mode SP_ME [CutID]" << std::endl;
         return 1;
     }
 
-    S_Three(
+    S_Four(
         TString(argv[1]),
         TString(argv[2]),
         atoi(argv[3]),
@@ -1190,7 +1190,8 @@ int main(int argc, char** argv) {
         atoi(argv[8]),
         atoi(argv[9]),
         atoi(argv[10]),
-        (argc > 11 ? atoi(argv[11]) : 0)
+        atoi(argv[11]),
+        (argc > 12 ? atoi(argv[12]) : 0)
     );
 
     return 0;
@@ -1286,163 +1287,63 @@ inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
     const ArmParticle& C,
-    float& cosPhiOut,
-    float& phiOut,
+    const ArmParticle& D,
+    double& BthetaOut,
+    double& CthetaOut,
+    double& DthetaOut,
+    double& cosPhiOut,
+    double& phiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
     float MassSigmaWidth)
 {
-    //--------------------------------------------------
-    // Total four momentum
-    //--------------------------------------------------
+    const double AE = A.E;
+    const double BE = B.E;
+    const double CE = C.E;
+    const double DE = D.E;
+    const double TotE = AE + BE + CE + DE;
+    double p[4] = {A.px+B.px+C.px+D.px , A.py+B.py+C.py+D.py , A.pz+B.pz+C.pz+D.pz , 0.0};
+    p[3] = sqrt(p[0]*p[0] + p[1]*p[1] + p[2]*p[2]);
+    const double n[3] = {p[0]/p[3] , p[1]/p[3] , p[2]/p[3]};
+    double beta[4] = { -(p[0])/TotE , -(p[1])/TotE , -(p[2])/TotE , 0.0};
+    beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
 
-    const double Px = double(A.px) + double(B.px) + double(C.px);
-    const double Py = double(A.py) + double(B.py) + double(C.py);
-    const double Pz = double(A.pz) + double(B.pz) + double(C.pz);
-    const double E  = double(A.E ) + double(B.E ) + double(C.E );
+    const double gamma  = 1.0/(sqrt(1-beta[3]));
+    const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
 
-    //--------------------------------------------------
-    // Invariant mass
-    //--------------------------------------------------
+    const double bpA = beta[0]*A.px + beta[1]*A.py + beta[2]*A.pz;
 
-    const double M2 =
-        E*E
-      - Px*Px
-      - Py*Py
-      - Pz*Pz;
+    const double New_APx = A.px + gamma2*beta[0]*bpA + gamma*beta[0]*AE;
+    const double New_APy = A.py + gamma2*beta[1]*bpA + gamma*beta[1]*AE;
+    const double New_APz = A.pz + gamma2*beta[2]*bpA + gamma*beta[2]*AE;
 
-    if (M2 <= 0.0)
-        return false;
+    cosPhiOut = - (New_APx*(n[0])+New_APy*(n[1])+New_APz*(n[2])) / (sqrt(New_APx*New_APx+New_APy*New_APy+New_APz*New_APz));
+    phiOut    = std::acos(cosPhiOut);
 
-    //--------------------------------------------------
-    // Feed-down rejection
-    //--------------------------------------------------
+    // Three body figure
 
-    if (IfRemoveFeedPair) {
+    const double bpB = beta[0]*B.px + beta[1]*B.py + beta[2]*B.pz;
+    const double bpC = beta[0]*C.px + beta[1]*C.py + beta[2]*C.pz;
+    const double bpD = beta[0]*D.px + beta[1]*D.py + beta[2]*D.pz;
 
-        const double M = std::sqrt(M2);
+    const double New_BPx = B.px + gamma2*beta[0]*bpB + gamma*beta[0]*BE;
+    const double New_BPy = B.py + gamma2*beta[1]*bpB + gamma*beta[1]*BE;
+    const double New_BPz = B.pz + gamma2*beta[2]*bpB + gamma*beta[2]*BE;
+    const double New_CPx = C.px + gamma2*beta[0]*bpC + gamma*beta[0]*CE;
+    const double New_CPy = C.py + gamma2*beta[1]*bpC + gamma*beta[1]*CE;
+    const double New_CPz = C.pz + gamma2*beta[2]*bpC + gamma*beta[2]*CE;
+    const double New_DPx = D.px + gamma2*beta[0]*bpD + gamma*beta[0]*DE;
+    const double New_DPy = D.py + gamma2*beta[1]*bpD + gamma*beta[1]*DE;
+    const double New_DPz = D.pz + gamma2*beta[2]*bpD + gamma*beta[2]*DE;
 
-        for (size_t i = 0; i < MotherMass.size(); ++i) {
+    const double Bn = New_BPx*n[0] + New_BPy*n[1] + New_BPz*n[2];
+    const double Cn = New_CPx*n[0] + New_CPy*n[1] + New_CPz*n[2];
+    const double Dn = New_DPx*n[0] + New_DPy*n[1] + New_DPz*n[2];
 
-            if (std::fabs(M - MotherMass[i])
-                < MassSigmaWidth * MotherMassSigma[i]) {
-
-                return false;
-            }
-        }
-    }
-
-    //--------------------------------------------------
-    // beta
-    //--------------------------------------------------
-
-    const double invE = 1.0 / E;
-
-    const double betaX = -Px * invE;
-    const double betaY = -Py * invE;
-    const double betaZ = -Pz * invE;
-
-    const double beta2 =
-        betaX*betaX +
-        betaY*betaY +
-        betaZ*betaZ;
-
-    if (beta2 < 1e-20 || beta2 >= 1.0)
-        return false;
-
-    const double betaAbs =
-        std::sqrt(beta2);
-
-    //--------------------------------------------------
-    // beta direction
-    //--------------------------------------------------
-
-    const double invBeta =
-        1.0 / betaAbs;
-
-    const double nx = -betaX * invBeta;
-    const double ny = -betaY * invBeta;
-    const double nz = -betaZ * invBeta;
-
-    //--------------------------------------------------
-    // longitudinal momentum
-    //--------------------------------------------------
-
-    const double pPar =
-          double(A.px)*nx
-        + double(A.py)*ny
-        + double(A.pz)*nz;
-
-    //--------------------------------------------------
-    // total momentum squared
-    //--------------------------------------------------
-
-    const double p2 =
-          double(A.px)*double(A.px)
-        + double(A.py)*double(A.py)
-        + double(A.pz)*double(A.pz);
-
-    //--------------------------------------------------
-    // transverse momentum squared
-    //--------------------------------------------------
-
-    const double pPerp2 =
-        std::max(0.0,
-                 p2 - pPar*pPar);
-
-    //--------------------------------------------------
-    // gamma
-    //--------------------------------------------------
-
-    const double gamma =
-        1.0 / std::sqrt(1.0 - beta2);
-
-    //--------------------------------------------------
-    // boosted longitudinal momentum
-    //--------------------------------------------------
-
-    const double pParStar =
-        gamma * (pPar - betaAbs * double(A.E));
-
-    //--------------------------------------------------
-    // numerically stable cos(phi)
-    //--------------------------------------------------
-
-    const double denom =
-        pParStar * pParStar;
-
-    double cosPhi;
-
-    if (denom <= 1e-30) {
-
-        cosPhi = 0.0;
-
-    } else {
-
-        const double ratio =
-            pPerp2 / denom;
-
-        cosPhi =
-            ((pParStar >= 0.0) ? 1.0 : -1.0)
-            /
-            std::sqrt(1.0 + ratio);
-    }
-
-    //--------------------------------------------------
-    // Clamp
-    //--------------------------------------------------
-
-    cosPhi =
-        std::max(-1.0,
-        std::min( 1.0, cosPhi));
-
-    //--------------------------------------------------
-    // output
-    //--------------------------------------------------
-
-    cosPhiOut = -float(cosPhi);
-    phiOut    = float(std::acos(-cosPhi));
+    double VB[3] = {New_BPx-Bn*n[0] , New_BPy-Bn*n[1] , New_BPz-Bn*n[2]};
+    double VC[3] = {New_CPx-Cn*n[0] , New_CPy-Cn*n[1] , New_CPz-Cn*n[2]};
+    double VD[3] = {New_DPx-Dn*n[0] , New_DPy-Dn*n[1] , New_DPz-Dn*n[2]};
 
     return true;
 }

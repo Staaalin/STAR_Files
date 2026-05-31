@@ -52,8 +52,8 @@ struct ArmParticle {
     float pt;       // 横向动量
     bool  IsRecord; // 是否被记录
     int   TreeID;   // ID in one event
-    float p;        // 三动量绝对值
-    float E;        // 能量
+    double p;        // 三动量绝对值
+    double E;        // 能量
     std::vector<int>   ParentID; // Parent Particle ID in one event
     
     ArmParticle()
@@ -152,7 +152,7 @@ inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
     const ArmParticle& C,
-    float& cosPhiOut,
+    double& cosPhiOut,
     float& phiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
@@ -1282,167 +1282,37 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize, TStri
     return Result;
 }
 
+
 inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
     const ArmParticle& C,
-    float& cosPhiOut,
-    float& phiOut,
+    double& cosPhiOut,
+    double& phiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
     float MassSigmaWidth)
 {
-    //--------------------------------------------------
-    // Total four momentum
-    //--------------------------------------------------
+    const double AE = A.E;
+    const double BE = B.E;
+    const double CE = C.E;
+    const double TotE = AE + BE + CE;
+    const double p[3] = {A.px+B.px+C.px , A.py+B.py+C.py , A.pz+B.pz+C.pz};
+    double beta[4] = { -(p[0])/TotE , -(p[1])/TotE , -(p[2])/TotE , 0.0};
+    beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
 
-    const double Px = double(A.px) + double(B.px) + double(C.px);
-    const double Py = double(A.py) + double(B.py) + double(C.py);
-    const double Pz = double(A.pz) + double(B.pz) + double(C.pz);
-    const double E  = double(A.E ) + double(B.E ) + double(C.E );
+    const double gamma  = 1.0/(sqrt(1-beta[3]));
+    const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
 
-    //--------------------------------------------------
-    // Invariant mass
-    //--------------------------------------------------
+    const double bpA = beta[0]*A.px + beta[1]*A.py + beta[2]*A.pz;
 
-    const double M2 =
-        E*E
-      - Px*Px
-      - Py*Py
-      - Pz*Pz;
+    const double New_APx = A.px + gamma2*beta[0]*bpA + gamma*beta[0]*AE;
+    const double New_APy = A.py + gamma2*beta[1]*bpA + gamma*beta[1]*AE;
+    const double New_APz = A.pz + gamma2*beta[2]*bpA + gamma*beta[2]*AE;
 
-    if (M2 <= 0.0)
-        return false;
-
-    //--------------------------------------------------
-    // Feed-down rejection
-    //--------------------------------------------------
-
-    if (IfRemoveFeedPair) {
-
-        const double M = std::sqrt(M2);
-
-        for (size_t i = 0; i < MotherMass.size(); ++i) {
-
-            if (std::fabs(M - MotherMass[i])
-                < MassSigmaWidth * MotherMassSigma[i]) {
-
-                return false;
-            }
-        }
-    }
-
-    //--------------------------------------------------
-    // beta
-    //--------------------------------------------------
-
-    const double invE = 1.0 / E;
-
-    const double betaX = -Px * invE;
-    const double betaY = -Py * invE;
-    const double betaZ = -Pz * invE;
-
-    const double beta2 =
-        betaX*betaX +
-        betaY*betaY +
-        betaZ*betaZ;
-
-    if (beta2 < 1e-20 || beta2 >= 1.0)
-        return false;
-
-    const double betaAbs =
-        std::sqrt(beta2);
-
-    //--------------------------------------------------
-    // beta direction
-    //--------------------------------------------------
-
-    const double invBeta =
-        1.0 / betaAbs;
-
-    const double nx = -betaX * invBeta;
-    const double ny = -betaY * invBeta;
-    const double nz = -betaZ * invBeta;
-
-    //--------------------------------------------------
-    // longitudinal momentum
-    //--------------------------------------------------
-
-    const double pPar =
-          double(A.px)*nx
-        + double(A.py)*ny
-        + double(A.pz)*nz;
-
-    //--------------------------------------------------
-    // total momentum squared
-    //--------------------------------------------------
-
-    const double p2 =
-          double(A.px)*double(A.px)
-        + double(A.py)*double(A.py)
-        + double(A.pz)*double(A.pz);
-
-    //--------------------------------------------------
-    // transverse momentum squared
-    //--------------------------------------------------
-
-    const double pPerp2 =
-        std::max(0.0,
-                 p2 - pPar*pPar);
-
-    //--------------------------------------------------
-    // gamma
-    //--------------------------------------------------
-
-    const double gamma =
-        1.0 / std::sqrt(1.0 - beta2);
-
-    //--------------------------------------------------
-    // boosted longitudinal momentum
-    //--------------------------------------------------
-
-    const double pParStar =
-        gamma * (pPar - betaAbs * double(A.E));
-
-    //--------------------------------------------------
-    // numerically stable cos(phi)
-    //--------------------------------------------------
-
-    const double denom =
-        pParStar * pParStar;
-
-    double cosPhi;
-
-    if (denom <= 1e-30) {
-
-        cosPhi = 0.0;
-
-    } else {
-
-        const double ratio =
-            pPerp2 / denom;
-
-        cosPhi =
-            ((pParStar >= 0.0) ? 1.0 : -1.0)
-            /
-            std::sqrt(1.0 + ratio);
-    }
-
-    //--------------------------------------------------
-    // Clamp
-    //--------------------------------------------------
-
-    cosPhi =
-        std::max(-1.0,
-        std::min( 1.0, cosPhi));
-
-    //--------------------------------------------------
-    // output
-    //--------------------------------------------------
-
-    cosPhiOut = -float(cosPhi);
-    phiOut    = float(std::acos(-cosPhi));
+    cosPhiOut = - (New_APx*(p[0])+New_APy*(p[1])+New_APz*(p[2])) / (sqrt(New_APx*New_APx+New_APy*New_APy+New_APz*New_APz)*sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]));
+    phiOut    = std::acos(cosPhiOut);
 
     return true;
 }
