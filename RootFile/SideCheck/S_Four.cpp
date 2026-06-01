@@ -1321,7 +1321,9 @@ inline bool GetSide(
     cosPhiOut = - (New_APx*(n[0])+New_APy*(n[1])+New_APz*(n[2])) / (sqrt(New_APx*New_APx+New_APy*New_APy+New_APz*New_APz));
     phiOut    = std::acos(cosPhiOut);
 
+    //////////////////////////////////
     // Three body figure
+    //////////////////////////////////
 
     const double bpB = beta[0]*B.px + beta[1]*B.py + beta[2]*B.pz;
     const double bpC = beta[0]*C.px + beta[1]*C.py + beta[2]*C.pz;
@@ -1341,9 +1343,16 @@ inline bool GetSide(
     const double Cn = New_CPx*n[0] + New_CPy*n[1] + New_CPz*n[2];
     const double Dn = New_DPx*n[0] + New_DPy*n[1] + New_DPz*n[2];
 
-    double VB[3] = {New_BPx-Bn*n[0] , New_BPy-Bn*n[1] , New_BPz-Bn*n[2]};
-    double VC[3] = {New_CPx-Cn*n[0] , New_CPy-Cn*n[1] , New_CPz-Cn*n[2]};
-    double VD[3] = {New_DPx-Dn*n[0] , New_DPy-Dn*n[1] , New_DPz-Dn*n[2]};
+    const double VB[3] = {New_BPx-Bn*n[0] , New_BPy-Bn*n[1] , New_BPz-Bn*n[2]};
+    const double VC[3] = {New_CPx-Cn*n[0] , New_CPy-Cn*n[1] , New_CPz-Cn*n[2]};
+    const double VD[3] = {New_DPx-Dn*n[0] , New_DPy-Dn*n[1] , New_DPz-Dn*n[2]};
+
+    double v[3] = {-n[1],n[0],0};
+    const double Rv = sqrt(n[0]*n[0] + n[1]*n[1]);
+    v[0] = v[0]/Rv;v[1] = v[1]/Rv;
+
+    const double CosN = n[2];
+    const double SinN = n[2];
 
     return true;
 }
