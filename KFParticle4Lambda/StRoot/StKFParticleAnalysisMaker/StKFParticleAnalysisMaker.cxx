@@ -85,6 +85,7 @@
 #define IfTree             true  // If Writing Tree;
 #define IfRecNewP          false // If Reconstruct New Particle;
 #define IfLoadHY           false // If Background Reconstruction;
+#define IfResDau           false // If restore daughter particles;
 
 #define TPC_R              0.6
 
@@ -978,7 +979,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("refMult"            ,&CrefMult            ,"refMult/I"                           );
 		// hadronTree->Branch("grefMult"           ,&CgrefMult           ,"grefMult/I"                          );
 		// hadronTree->Branch("EventID"            ,&evtID               ,"EventID/I"                           );
-		hadronTree->Branch("RunID"              ,&runID               ,"RunID/I"                             );
+		// hadronTree->Branch("RunID"              ,&runID               ,"RunID/I"                             );
 		// hadronTree->Branch("TriggerID"          ,&TriggerID           ,"TriggerID/I"                         );
 		hadronTree->Branch("PVz"                ,&TPVz                ,"PVz/F"                               );
 		// hadronTree->Branch("Nch"                ,&Nch                 ,"Nch/I"                               );
@@ -1019,7 +1020,7 @@ void StKFParticleAnalysisMaker::DeclareHistograms() {
 		hadronTree->Branch("ME_ParentEnd"       ,&ME_ParentEnd         );
 
 		// Store daughters
-		hadronTree->Branch("DaughtersID"        ,&DaughtersID          ); // -1 ~ 2,147,483,647   3 max daughters
+		// hadronTree->Branch("DaughtersID"        ,&DaughtersID          ); // -1 ~ 2,147,483,647   3 max daughters （配合IfResDau使用）
 
 	}
 
@@ -1463,9 +1464,11 @@ Int_t StKFParticleAnalysisMaker::Make()
 	//     pass event  
 	/////////////////////////////////////////////////////////
 	// Only those events reconstruct particles A and B simultaneously will be recorded.
-	int Recorded_A_PDG[] = { LambdaPdg , XiPdg , OmegaPdg , XiRPdg , ProtonPdg};
+	// int Recorded_A_PDG[] = { LambdaPdg , XiPdg , OmegaPdg , XiRPdg , ProtonPdg};
+	int Recorded_A_PDG[] = { LambdaPdg , XiPdg , OmegaPdg};
 	int Recorded_A_PDG_Size = sizeof(Recorded_A_PDG)/sizeof(Recorded_A_PDG[0]);
-	int Recorded_B_PDG[] = { KaonPdg , K0SPdg , PionPdg};
+	// int Recorded_B_PDG[] = { KaonPdg , K0SPdg , PionPdg};
+	int Recorded_B_PDG[] = { KaonPdg , K0SPdg};
 	int Recorded_B_PDG_Size = sizeof(Recorded_B_PDG)/sizeof(Recorded_B_PDG[0]);
 	bool IfRecorded_A_Matched = false;
 	bool IfRecorded_B_Matched = false;
@@ -2757,70 +2760,72 @@ Int_t StKFParticleAnalysisMaker::Make()
 
 	}
 
-	for(int iRecorded_KFP=0;iRecorded_KFP<SplitNum;iRecorded_KFP++){
-		KFParticle particle = KFParticleInterface->GetParticles()[ Recorded_KFP_ID[iRecorded_KFP][0] ];
-		if ( particle.NDaughters() != 2) continue; // 目前来看，所有重建的粒子应当都是两体衰变，如要变更，请仔细修改整个循环
-		for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
-			const int daughterId = particle.DaughterIds()[iDaughter];
-			// cout<<"daughterId = "<<daughterId<<endl;
-			const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
-			if ((abs(daughter.GetPDG()) == PionPdg) || (abs(daughter.GetPDG()) == KaonPdg) || (abs(daughter.GetPDG()) == ProtonPdg) || (abs(daughter.GetPDG()) == ElectronPdg)){
-				const int globalTrackId = daughter.DaughterIds()[0];
-				Int_t iTrackStart = globalTrackId - 1;
-				if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
-				for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
-					StPicoTrack *track = mPicoDst->track(jTrack);
-					if (track->id() == globalTrackId){
-						// int TrackPDG = TrackID(track , Vertex3D , magnet , false);
-						if (DaughtersID.at(iRecorded_KFP) == -1) {DaughtersID.at(iRecorded_KFP)  = Recorded_KFP_ID.size();     }
-						else                                     {DaughtersID.at(iRecorded_KFP) += Recorded_KFP_ID.size()*1000;}
-						std::vector<int> Temp;Temp.resize(0);
-						Temp.push_back(daughter.GetPDG());Temp.push_back(jTrack);
-						Recorded_KFP_ID.push_back(Temp);
-						QA_Chi2.emplace_back(-999);
-						QA_Decay_Length.emplace_back(-999);
-						PDG.emplace_back(daughter.GetPDG());
-						px.emplace_back(track->gMom().X());
-						py.emplace_back(track->gMom().Y());
-						pz.emplace_back(track->gMom().Z());
-						QA_eta.emplace_back(track->gMom().Eta());
-						QA_dEdx.emplace_back(track->dEdx());
-						QA_nSigmaProton.emplace_back(track->nSigmaProton());
-						QA_nSigmaPion.emplace_back(track->nSigmaPion());
-						QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
-						QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
-						QA_m2.emplace_back(-1);
-						QA_nHitsFit.emplace_back(track->nHitsFit());
-						QA_nHitsMax.emplace_back(track->nHitsMax());
-						InvariantMass.emplace_back(-1); // 只由KFP鉴别的，质量赋值为-1
-						DaughtersID.emplace_back(  -1);
-						break;
+	if (IfResDau) {
+		for(int iRecorded_KFP=0;iRecorded_KFP<SplitNum;iRecorded_KFP++){
+			KFParticle particle = KFParticleInterface->GetParticles()[ Recorded_KFP_ID[iRecorded_KFP][0] ];
+			if ( particle.NDaughters() != 2) continue; // 目前来看，所有重建的粒子应当都是两体衰变，如要变更，请仔细修改整个循环
+			for (int iDaughter=0; iDaughter < particle.NDaughters(); iDaughter++){
+				const int daughterId = particle.DaughterIds()[iDaughter];
+				// cout<<"daughterId = "<<daughterId<<endl;
+				const KFParticle daughter = KFParticleInterface->GetParticles()[daughterId];
+				if ((abs(daughter.GetPDG()) == PionPdg) || (abs(daughter.GetPDG()) == KaonPdg) || (abs(daughter.GetPDG()) == ProtonPdg) || (abs(daughter.GetPDG()) == ElectronPdg)){
+					const int globalTrackId = daughter.DaughterIds()[0];
+					Int_t iTrackStart = globalTrackId - 1;
+					if (globalTrackId >= nTracks) {iTrackStart = nTracks - 1;}
+					for (Int_t jTrack = iTrackStart;jTrack >= 0;jTrack--){
+						StPicoTrack *track = mPicoDst->track(jTrack);
+						if (track->id() == globalTrackId){
+							// int TrackPDG = TrackID(track , Vertex3D , magnet , false);
+							if (DaughtersID.at(iRecorded_KFP) == -1) {DaughtersID.at(iRecorded_KFP)  = Recorded_KFP_ID.size();     }
+							else                                     {DaughtersID.at(iRecorded_KFP) += Recorded_KFP_ID.size()*1000;}
+							std::vector<int> Temp;Temp.resize(0);
+							Temp.push_back(daughter.GetPDG());Temp.push_back(jTrack);
+							Recorded_KFP_ID.push_back(Temp);
+							QA_Chi2.emplace_back(-999);
+							QA_Decay_Length.emplace_back(-999);
+							PDG.emplace_back(daughter.GetPDG());
+							px.emplace_back(track->gMom().X());
+							py.emplace_back(track->gMom().Y());
+							pz.emplace_back(track->gMom().Z());
+							QA_eta.emplace_back(track->gMom().Eta());
+							QA_dEdx.emplace_back(track->dEdx());
+							QA_nSigmaProton.emplace_back(track->nSigmaProton());
+							QA_nSigmaPion.emplace_back(track->nSigmaPion());
+							QA_nSigmaKaon.emplace_back(track->nSigmaKaon());
+							QA_DCA_V0_PV.emplace_back(track->gDCA(Vertex3D).Mag());
+							QA_m2.emplace_back(-1);
+							QA_nHitsFit.emplace_back(track->nHitsFit());
+							QA_nHitsMax.emplace_back(track->nHitsMax());
+							InvariantMass.emplace_back(-1); // 只由KFP鉴别的，质量赋值为-1
+							DaughtersID.emplace_back(  -1);
+							break;
+						}
 					}
 				}
-			}
-			else{
-				if (DaughtersID.at(iRecorded_KFP) == -1) {DaughtersID.at(iRecorded_KFP)  = Recorded_KFP_ID.size();     }
-				else                                     {DaughtersID.at(iRecorded_KFP) += Recorded_KFP_ID.size()*1000;}
-				std::vector<int> Temp;Temp.resize(0);
-				Temp.push_back(daughter.GetPDG());Temp.push_back(-1);
-				Recorded_KFP_ID.push_back(Temp);
-				PDG.emplace_back(daughter.GetPDG());
-				px.emplace_back(daughter.GetPx());
-				py.emplace_back(daughter.GetPy());
-				pz.emplace_back(daughter.GetPz());
-				QA_eta.emplace_back(daughter.GetEta());
-				InvariantMass.emplace_back(-1);
-				QA_Chi2.emplace_back(daughter.GetChi2());
-				QA_Decay_Length.emplace_back(-1);
-				QA_DCA_V0_PV.emplace_back(-1);
-				QA_dEdx.emplace_back(-999);
-				QA_nSigmaProton.emplace_back(-999);
-				QA_nSigmaPion.emplace_back(-999);
-				QA_nSigmaKaon.emplace_back(-999);
-				QA_m2.emplace_back(-999);
-				QA_nHitsFit.emplace_back(-999);
-				QA_nHitsMax.emplace_back(-999);
-				DaughtersID.emplace_back(  -1);
+				else{
+					if (DaughtersID.at(iRecorded_KFP) == -1) {DaughtersID.at(iRecorded_KFP)  = Recorded_KFP_ID.size();     }
+					else                                     {DaughtersID.at(iRecorded_KFP) += Recorded_KFP_ID.size()*1000;}
+					std::vector<int> Temp;Temp.resize(0);
+					Temp.push_back(daughter.GetPDG());Temp.push_back(-1);
+					Recorded_KFP_ID.push_back(Temp);
+					PDG.emplace_back(daughter.GetPDG());
+					px.emplace_back(daughter.GetPx());
+					py.emplace_back(daughter.GetPy());
+					pz.emplace_back(daughter.GetPz());
+					QA_eta.emplace_back(daughter.GetEta());
+					InvariantMass.emplace_back(-1);
+					QA_Chi2.emplace_back(daughter.GetChi2());
+					QA_Decay_Length.emplace_back(-1);
+					QA_DCA_V0_PV.emplace_back(-1);
+					QA_dEdx.emplace_back(-999);
+					QA_nSigmaProton.emplace_back(-999);
+					QA_nSigmaPion.emplace_back(-999);
+					QA_nSigmaKaon.emplace_back(-999);
+					QA_m2.emplace_back(-999);
+					QA_nHitsFit.emplace_back(-999);
+					QA_nHitsMax.emplace_back(-999);
+					DaughtersID.emplace_back(  -1);
+				}
 			}
 		}
 	}
