@@ -34,12 +34,26 @@
 #include <iostream>
 #include <map>
 #include <stdio.h>
+#include <array>
+#include <cmath>
 using namespace std;
 
 // 三体关联
 // 使用这个编译：
 // singularity exec -e --env DISPLAY=$DISPLAY -B /direct -B /gpfs -B /star -B /cvmfs -B /sdcc/lustre02 /cvmfs/star.sdcc.bnl.gov/containers/rhic_sl7.sif csh
 // g++ -O2 -std=c++11 S_Four.cpp -o S_One `root-config --cflags --libs`
+
+using Vec3 = std::array<double, 3>;
+using Vec2 = std::array<double, 2>;
+
+double dot(const Vec3& a, const Vec3& b);
+
+Vec3 cross(const Vec3& a, const Vec3& b);
+
+Vec3 normalize(const Vec3& v);
+
+// 辅助函数：计算最优旋转后的投影坐标
+bool computeRotatedProjections(const Vec3& b, const Vec3& c, const Vec3& d, const Vec3& n, double &ThetaB, double &ThetaC, double &ThetaD);
 
 // 定义粒子结构体
 struct ArmParticle {
@@ -152,8 +166,12 @@ inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
     const ArmParticle& C,
-    float& cosPhiOut,
-    float& phiOut,
+    const ArmParticle& D,
+    double& BthetaOut,
+    double& CthetaOut,
+    double& DthetaOut,
+    double& cosPhiOut,
+    double& phiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -167,6 +185,7 @@ struct Event {
     std::vector<ArmParticle> A_particles;  // A类粒子 主粒子
     std::vector<ArmParticle> B_particles;  // B类粒子
     std::vector<ArmParticle> C_particles;  // C类粒子
+    std::vector<ArmParticle> D_particles;  // D类粒子
     
     Event() : eventID(-1) {}
     // 构造函数
@@ -184,6 +203,7 @@ void S_Four(
     int A_PDG,
     int B_PDG,
     int C_PDG,
+    int D_PDG,
     int Mode,
     int SP_ME,
     int RecordingMethod = 0,
@@ -366,9 +386,9 @@ void S_Four(
     float NNch , Eta;
     TString TreeName = "hadronTree";
 
-    bool Check_B_C = false;
-    if (B_PDG == C_PDG) {
-        Check_B_C = true;
+    bool Check_C_D = false;
+    if (D_PDG == C_PDG) {
+        Check_C_D = true;
     }
 
     TVector3 BetaTemp;
@@ -382,24 +402,39 @@ void S_Four(
     int i , j , k , l , m , n;
     int RapIndex , CenIndex , PVzIndex;
     std::vector<int> MatchedRap;
-    int Aid , Bid , Cid , Did;
-    float APx  , BPx  , CPx ;
-    float APy  , BPy  , CPy ;
-    float APz  , BPz  , CPz ;
-    float APt  , BPt  , CPt ;
-    float ARap , BRap , CRap;
-    float BMass = massList(B_PDG, DataName)           , AMass = massList(A_PDG, DataName)           , CMass = massList(C_PDG, DataName)          ;
-    float BMassSigma = massListSigma(B_PDG, DataName) , AMassSigma = massListSigma(A_PDG, DataName) , CMassSigma = massListSigma(C_PDG, DataName);
-    std::vector<std::vector<int> > D_ParID;
+    int Aid , Bid , Cid , Did , Mid;
+    float APx  , BPx  , CPx  , DPx ;
+    float APy  , BPy  , CPy  , DPy ;
+    float APz  , BPz  , CPz  , DPz ;
+    float APt  , BPt  , CPt  , DPt ;
+    float ARap , BRap , CRap , DRap;
+    double ATheta , BTheta , CTheta , DTheta;
+    float BMass = massList(B_PDG, DataName)           , AMass = massList(A_PDG, DataName)           , CMass = massList(C_PDG, DataName)           , DMass = massList(D_PDG, DataName)          ;
+    float BMassSigma = massListSigma(B_PDG, DataName) , AMassSigma = massListSigma(A_PDG, DataName) , CMassSigma = massListSigma(C_PDG, DataName) , DMassSigma = massListSigma(D_PDG, DataName);
+    std::vector<std::vector<int> > Mother_ParID;
     bool IsSame;
     float  P_B , kStar;
     float  phi , CosPhi;
     enum MixType {
-        SAME,
-        AB_C,
-        AC_B,
-        BC_A,
-        A_B_C
+        SAME,       // ABCD
+    
+        ABC_D,      // ABC|D
+        ABD_C,      // ABD|C
+        ACD_B,      // ACD|B
+        BCD_A,      // BCD|A
+    
+        AB_CD,      // AB|CD
+        AC_BD,      // AC|BD
+        AD_BC,      // AD|BC
+    
+        AB_C_D,     // AB|C|D
+        AC_B_D,     // AC|B|D
+        AD_B_C,     // AD|B|C
+        BC_A_D,     // BC|A|D
+        BD_A_C,     // BD|A|C
+        CD_A_B,     // CD|A|B
+    
+        A_B_C_D     // A|B|C|D
     };
 
     // //                                    centrality    A_Rapidity   PrimaryVertex
@@ -449,74 +484,198 @@ void S_Four(
     std::vector<std::vector<ArmParticle>> A_List(yBinNum);
     std::vector<ArmParticle> B_List;
     std::vector<ArmParticle> C_List;
-    std::vector<TH1F*>                                               H_ALL_ABC             ;
-    std::vector<TH1F*>                                               H_ALL_A_B_C           ;
-    std::vector<TH1F*>                                               H_ALL_AB_C            ;
-    std::vector<TH1F*>                                               H_ALL_AC_B            ;
-    std::vector<TH1F*>                                               H_ALL_BC_A            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_ABC                 ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_AB_C                ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_AC_B                ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_BC_A                ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_A_B_C               ;
-    std::vector<TH1F*>                                               H_ALL_Cos_ABC         ;
-    std::vector<TH1F*>                                               H_ALL_Cos_AB_C        ;
-    std::vector<TH1F*>                                               H_ALL_Cos_AC_B        ;
-    std::vector<TH1F*>                                               H_ALL_Cos_BC_A        ;
-    std::vector<TH1F*>                                               H_ALL_Cos_A_B_C       ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_ABC             ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AB_C            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AC_B            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_BC_A            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_A_B_C           ;
+    std::vector<ArmParticle> D_List;
+    std::vector<TH1F*>                                               H_ALL_ABCD             ;
+    std::vector<TH1F*>                                               H_ALL_A_B_C_D          ;
+    std::vector<TH1F*>                                               H_ALL_AB_CD            ;
+    std::vector<TH1F*>                                               H_ALL_AC_BD            ;
+    std::vector<TH1F*>                                               H_ALL_AD_BC            ;
+    std::vector<TH1F*>                                               H_ALL_ABC_D            ;
+    std::vector<TH1F*>                                               H_ALL_ABD_C            ;
+    std::vector<TH1F*>                                               H_ALL_ACD_B            ;
+    std::vector<TH1F*>                                               H_ALL_BCD_A            ;
+    std::vector<TH1F*>                                               H_ALL_AB_C_D           ;
+    std::vector<TH1F*>                                               H_ALL_AC_B_D           ;
+    std::vector<TH1F*>                                               H_ALL_AD_B_C           ;
+    std::vector<TH1F*>                                               H_ALL_BC_A_D           ;
+    std::vector<TH1F*>                                               H_ALL_BD_A_C           ;
+    std::vector<TH1F*>                                               H_ALL_CD_A_B           ;
+
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_ABCD                 ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_AB_CD                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_AC_BD                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_AD_BC                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_A_B_C_D              ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_ABC_D           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_ABD_C           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_ACD_B           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_BCD_A           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_AB_C_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_AC_B_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_AD_B_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_BC_A_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_BD_A_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_CD_A_B          ;
+
+    std::vector<TH1F*>                                               H_ALL_Cos_ABCD         ;
+    std::vector<TH1F*>                                               H_ALL_Cos_AB_CD        ;
+    std::vector<TH1F*>                                               H_ALL_Cos_AC_BD        ;
+    std::vector<TH1F*>                                               H_ALL_Cos_AD_BC        ;
+    std::vector<TH1F*>                                               H_ALL_Cos_A_B_C_D      ;
+    std::vector<TH1F*>                                               H_ALL_Cos_ABC_D           ;
+    std::vector<TH1F*>                                               H_ALL_Cos_ABD_C           ;
+    std::vector<TH1F*>                                               H_ALL_Cos_ACD_B           ;
+    std::vector<TH1F*>                                               H_ALL_Cos_BCD_A           ;
+    std::vector<TH1F*>                                               H_ALL_Cos_AB_C_D          ;
+    std::vector<TH1F*>                                               H_ALL_Cos_AC_B_D          ;
+    std::vector<TH1F*>                                               H_ALL_Cos_AD_B_C          ;
+    std::vector<TH1F*>                                               H_ALL_Cos_BC_A_D          ;
+    std::vector<TH1F*>                                               H_ALL_Cos_BD_A_C          ;
+    std::vector<TH1F*>                                               H_ALL_Cos_CD_A_B          ;
+
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_ABCD             ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AB_CD            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AC_BD            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AD_BC            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_A_B_C_D          ;
+                                                                            ABC_D           ;
+                                                                            ABD_C           ;
+                                                                            ACD_B           ;
+                                                                            BCD_A           ;
+                                                                            AB_C_D          ;
+                                                                            AC_B_D          ;
+                                                                            AD_B_C          ;
+                                                                            BC_A_D          ;
+                                                                            BD_A_C          ;
+                                                                            CD_A_B          ;
 
 
     if (RecordingMethod == 0) {
         EventPool.resize(CentralityBinNum);
-        H_ALL_ABC       .resize(yBinNum, nullptr);
-        H_ALL_A_B_C    .resize(yBinNum, nullptr);
-        H_ALL_AB_C     .resize(yBinNum, nullptr);
-        H_ALL_AC_B     .resize(yBinNum, nullptr);
-        H_ALL_BC_A     .resize(yBinNum, nullptr);
-        H_ABC      .resize(CentralityBinNum);
-        H_AB_C      .resize(CentralityBinNum);
-        H_AC_B      .resize(CentralityBinNum);
-        H_BC_A      .resize(CentralityBinNum);
-        H_A_B_C   .resize(CentralityBinNum);
-        H_ALL_Cos_ABC       .resize(yBinNum, nullptr);
-        H_ALL_Cos_AB_C      .resize(yBinNum, nullptr);
-        H_ALL_Cos_AC_B      .resize(yBinNum, nullptr);
-        H_ALL_Cos_BC_A      .resize(yBinNum, nullptr);
-        H_ALL_Cos_A_B_C    .resize(yBinNum, nullptr);
-        H_Cos_ABC      .resize(CentralityBinNum);
-        H_Cos_AB_C     .resize(CentralityBinNum);
-        H_Cos_AC_B     .resize(CentralityBinNum);
-        H_Cos_BC_A     .resize(CentralityBinNum);
-        H_Cos_A_B_C   .resize(CentralityBinNum);
+        H_ALL_ABCD       .resize(yBinNum, nullptr);
+        H_ALL_A_B_C_D    .resize(yBinNum, nullptr);
+        H_ALL_AB_CD     .resize(yBinNum, nullptr);
+        H_ALL_AC_BD     .resize(yBinNum, nullptr);
+        H_ALL_AD_BC     .resize(yBinNum, nullptr);
+        H_ALL_ABC_D     .resize(yBinNum, nullptr);
+        H_ALL_ABD_C     .resize(yBinNum, nullptr);
+        H_ALL_ACD_B     .resize(yBinNum, nullptr);
+        H_ALL_BCD_A     .resize(yBinNum, nullptr);
+        H_ALL_AB_C_D    .resize(yBinNum, nullptr);
+        H_ALL_AC_B_D    .resize(yBinNum, nullptr);
+        H_ALL_AD_B_C    .resize(yBinNum, nullptr);
+        H_ALL_BC_A_D    .resize(yBinNum, nullptr);
+        H_ALL_BD_A_C    .resize(yBinNum, nullptr);
+        H_ALL_CD_A_B    .resize(yBinNum, nullptr);
+        H_ABCD      .resize(CentralityBinNum);
+        H_AB_CD      .resize(CentralityBinNum);
+        H_AC_BD      .resize(CentralityBinNum);
+        H_AD_BC      .resize(CentralityBinNum);
+        H_A_B_C_D   .resize(CentralityBinNum);
+        H_ABC_D     .resize(CentralityBinNum);
+        H_ABD_C     .resize(CentralityBinNum);
+        H_ACD_B     .resize(CentralityBinNum);
+        H_BCD_A     .resize(CentralityBinNum);
+        H_AB_C_D    .resize(CentralityBinNum);
+        H_AC_B_D    .resize(CentralityBinNum);
+        H_AD_B_C    .resize(CentralityBinNum);
+        H_BC_A_D    .resize(CentralityBinNum);
+        H_BD_A_C    .resize(CentralityBinNum);
+        H_CD_A_B    .resize(CentralityBinNum);
+        H_ALL_Cos_ABCD       .resize(yBinNum, nullptr);
+        H_ALL_Cos_AB_CD      .resize(yBinNum, nullptr);
+        H_ALL_Cos_AC_BD      .resize(yBinNum, nullptr);
+        H_ALL_Cos_AD_BC      .resize(yBinNum, nullptr);
+        H_ALL_Cos_A_B_C_D    .resize(yBinNum, nullptr);
+        H_ALL_Cos_ABC_D      .resize(yBinNum, nullptr);
+        H_ALL_Cos_ABD_C      .resize(yBinNum, nullptr);
+        H_ALL_Cos_ACD_B      .resize(yBinNum, nullptr);
+        H_ALL_Cos_BCD_A      .resize(yBinNum, nullptr);
+        H_ALL_Cos_AB_C_D     .resize(yBinNum, nullptr);
+        H_ALL_Cos_AC_B_D     .resize(yBinNum, nullptr);
+        H_ALL_Cos_AD_B_C     .resize(yBinNum, nullptr);
+        H_ALL_Cos_BC_A_D     .resize(yBinNum, nullptr);
+        H_ALL_Cos_BD_A_C     .resize(yBinNum, nullptr);
+        H_ALL_Cos_CD_A_B     .resize(yBinNum, nullptr);
+        H_Cos_ABCD      .resize(CentralityBinNum);
+        H_Cos_AB_CD     .resize(CentralityBinNum);
+        H_Cos_AC_BD     .resize(CentralityBinNum);
+        H_Cos_AD_BC     .resize(CentralityBinNum);
+        H_Cos_A_B_C_D   .resize(CentralityBinNum);
+        H_Cos_ABC_D     .resize(CentralityBinNum);
+        H_Cos_ABD_C     .resize(CentralityBinNum);
+        H_Cos_ACD_B     .resize(CentralityBinNum);
+        H_Cos_BCD_A     .resize(CentralityBinNum);
+        H_Cos_AB_C_D    .resize(CentralityBinNum);
+        H_Cos_AC_B_D    .resize(CentralityBinNum);
+        H_Cos_AD_B_C    .resize(CentralityBinNum);
+        H_Cos_BC_A_D    .resize(CentralityBinNum);
+        H_Cos_BD_A_C    .resize(CentralityBinNum);
+        H_Cos_CD_A_B    .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
-            H_ABC           [i].resize(yBinNum);
-            H_AB_C           [i].resize(yBinNum);
-            H_AC_B           [i].resize(yBinNum);
-            H_BC_A           [i].resize(yBinNum);
-            H_A_B_C       [i].resize(yBinNum);
-            H_Cos_ABC       [i].resize(yBinNum);
-            H_Cos_AB_C      [i].resize(yBinNum);
-            H_Cos_AC_B      [i].resize(yBinNum);
-            H_Cos_BC_A      [i].resize(yBinNum);
-            H_Cos_A_B_C   [i].resize(yBinNum);
+            H_ABCD           [i].resize(yBinNum);
+            H_AB_CD           [i].resize(yBinNum);
+            H_AC_BD           [i].resize(yBinNum);
+            H_AD_BC           [i].resize(yBinNum);
+            H_A_B_C_D       [i].resize(yBinNum);
+            H_ABC_D           [i].resize(yBinNum);
+            H_ABD_C           [i].resize(yBinNum);
+            H_ACD_B           [i].resize(yBinNum);
+            H_BCD_A           [i].resize(yBinNum);
+            H_AB_C_D          [i].resize(yBinNum);
+            H_AC_B_D          [i].resize(yBinNum);
+            H_AD_B_C          [i].resize(yBinNum);
+            H_BC_A_D          [i].resize(yBinNum);
+            H_BD_A_C          [i].resize(yBinNum);
+            H_CD_A_B          [i].resize(yBinNum);
+            H_Cos_ABCD       [i].resize(yBinNum);
+            H_Cos_AB_CD      [i].resize(yBinNum);
+            H_Cos_AC_BD      [i].resize(yBinNum);
+            H_Cos_AD_BC      [i].resize(yBinNum);
+            H_Cos_A_B_C_D   [i].resize(yBinNum);
+            H_Cos_ABC_D      [i].resize(yBinNum);
+            H_Cos_ABD_C      [i].resize(yBinNum);
+            H_Cos_ACD_B      [i].resize(yBinNum);
+            H_Cos_BCD_A      [i].resize(yBinNum);
+            H_Cos_AB_C_D     [i].resize(yBinNum);
+            H_Cos_AC_B_D     [i].resize(yBinNum);
+            H_Cos_AD_B_C     [i].resize(yBinNum);
+            H_Cos_BC_A_D     [i].resize(yBinNum);
+            H_Cos_BD_A_C     [i].resize(yBinNum);
+            H_Cos_CD_A_B     [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
-                H_ABC                     [i][j].resize(PVzBinNum, nullptr);
-                H_AB_C                    [i][j].resize(PVzBinNum, nullptr);
-                H_AC_B                    [i][j].resize(PVzBinNum, nullptr);
-                H_BC_A                    [i][j].resize(PVzBinNum, nullptr);
-                H_A_B_C                 [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_ABC                 [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_AB_C                [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_AC_B                [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_BC_A                [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_A_B_C             [i][j].resize(PVzBinNum, nullptr);
+                H_ABCD                     [i][j].resize(PVzBinNum, nullptr);
+                H_AB_CD                    [i][j].resize(PVzBinNum, nullptr);
+                H_AC_BD                    [i][j].resize(PVzBinNum, nullptr);
+                H_AD_BC                    [i][j].resize(PVzBinNum, nullptr);
+                H_A_B_C_D                 [i][j].resize(PVzBinNum, nullptr);
+                H_ABC_D                    [i][j].resize(PVzBinNum, nullptr);
+                H_ABD_C                    [i][j].resize(PVzBinNum, nullptr);
+                H_ACD_B                    [i][j].resize(PVzBinNum, nullptr);
+                H_BCD_A                    [i][j].resize(PVzBinNum, nullptr);
+                H_AB_C_D                   [i][j].resize(PVzBinNum, nullptr);
+                H_AC_B_D                   [i][j].resize(PVzBinNum, nullptr);
+                H_AD_B_C                   [i][j].resize(PVzBinNum, nullptr);
+                H_BC_A_D                   [i][j].resize(PVzBinNum, nullptr);
+                H_BD_A_C                   [i][j].resize(PVzBinNum, nullptr);
+                H_CD_A_B                   [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_ABCD                 [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_AB_CD                [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_AC_BD                [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_AD_BC                [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_A_B_C_D             [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_ABC_D                [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_ABD_C                [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_ACD_B                [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_BCD_A                [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_AB_C_D               [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_AC_B_D               [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_AD_B_C               [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_BC_A_D               [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_BD_A_C               [i][j].resize(PVzBinNum, nullptr);
+                H_Cos_CD_A_B               [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
@@ -550,30 +709,68 @@ void S_Four(
         for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
             for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
                 for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
-                    H_ABC           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_ABC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("ABC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_AB_C          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AB_C_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("AB in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_AC_B          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AC_B_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("AC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_BC_A          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_BC_A_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("BC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_A_B_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_A_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("ABC in different event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Cos_ABC       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_ABC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("ABC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_AB_C      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AB_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("AB in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_AC_B      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AC_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("AC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_BC_A      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_BC_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("BC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_A_B_C     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_A_B_C_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("ABC in different event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-
+                    H_ABCD           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_ABCD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_AB_CD          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AB_CD_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_AC_BD          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AC_BD_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_AD_BC          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AD_BC_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_A_B_C_D        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_A_B_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_ABC_D          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_ABC_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_ABD_C          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_ABD_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_ACD_B          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_ACD_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_BCD_A          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_BCD_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_AB_C_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AB_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_AC_B_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AC_B_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_AD_B_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AD_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_BC_A_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_BC_A_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_BD_A_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_BD_A_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_CD_A_B         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_CD_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_Cos_ABCD       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_ABCD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_AB_CD      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AB_CD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_AC_BD      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AC_BD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_AD_BC      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AD_BC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_A_B_C_D    [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_A_B_C_D_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_ABC_D      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_ABC_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_ABD_C      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_ABD_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_ACD_B      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_ACD_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_BCD_A      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_BCD_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_AB_C_D     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AB_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_AC_B_D     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AC_B_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_AD_B_C     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AD_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_BC_A_D     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_BC_A_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_BD_A_C     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_BD_A_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_CD_A_B     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_CD_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
                 }
             }
-            H_ALL_ABC              [RapIndex] = new TH1F(Form("H_ALL_ABC_%d"      ,          RapIndex),Form("ALL ABC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_A_B_C            [RapIndex] = new TH1F(Form("H_ALL_A_B_C_%d"  ,          RapIndex), Form("ALL ABC in different event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_AB_C             [RapIndex] = new TH1F(Form("H_ALL_AB_C_%d"  ,           RapIndex), Form("ALL AB in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_AC_B             [RapIndex] = new TH1F(Form("H_ALL_AC_B_%d"  ,           RapIndex), Form("ALL AC in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_BC_A             [RapIndex] = new TH1F(Form("H_ALL_BC_A_%d"  ,           RapIndex), Form("ALL BC in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Cos_ABC          [RapIndex] = new TH1F(Form("H_ALL_Cos_ABC_%d"      ,      RapIndex),Form("ALL ABC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_AB_C         [RapIndex] = new TH1F(Form("H_ALL_Cos_AB_C_%d"      ,     RapIndex),Form("AB in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_AC_B         [RapIndex] = new TH1F(Form("H_ALL_Cos_AC_B_%d"      ,     RapIndex),Form("AC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_BC_A         [RapIndex] = new TH1F(Form("H_ALL_Cos_BC_A_%d"      ,     RapIndex),Form("BC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_A_B_C        [RapIndex] = new TH1F(Form("H_ALL_Cos_A_B_C_%d"  ,      RapIndex), Form("ALL ABC in different event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-
+            H_ALL_ABCD               [RapIndex] = new TH1F(Form("H_ALL_ABCD_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_A_B_C_D            [RapIndex] = new TH1F(Form("H_ALL_A_B_C_D_%d"  ,          RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_AB_CD              [RapIndex] = new TH1F(Form("H_ALL_AB_CD_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_AC_BD              [RapIndex] = new TH1F(Form("H_ALL_AC_BD_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_AD_BC              [RapIndex] = new TH1F(Form("H_ALL_AD_BC_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_ABC_D              [RapIndex] = new TH1F(Form("H_ALL_ABC_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_ABD_C              [RapIndex] = new TH1F(Form("H_ALL_ABD_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_ACD_B              [RapIndex] = new TH1F(Form("H_ALL_ACD_B_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_BCD_A              [RapIndex] = new TH1F(Form("H_ALL_BCD_A_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_AB_C_D             [RapIndex] = new TH1F(Form("H_ALL_AB_C_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_AC_B_D             [RapIndex] = new TH1F(Form("H_ALL_AC_B_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_AD_B_C             [RapIndex] = new TH1F(Form("H_ALL_AD_B_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_BC_A_D             [RapIndex] = new TH1F(Form("H_ALL_BC_A_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_BD_A_C             [RapIndex] = new TH1F(Form("H_ALL_BD_A_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_CD_A_B             [RapIndex] = new TH1F(Form("H_ALL_CD_A_B_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_Cos_ABCD           [RapIndex] = new TH1F(Form("H_ALL_Cos_ABCD_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_AB_CD          [RapIndex] = new TH1F(Form("H_ALL_Cos_AB_CD_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_AC_BD          [RapIndex] = new TH1F(Form("H_ALL_Cos_AC_BD_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_AD_BC          [RapIndex] = new TH1F(Form("H_ALL_Cos_AD_BC_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_A_B_C_D        [RapIndex] = new TH1F(Form("H_ALL_Cos_A_B_C_D_%d"  ,      RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_ABC_D          [RapIndex] = new TH1F(Form("H_ALL_Cos_ABC_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_ABD_C          [RapIndex] = new TH1F(Form("H_ALL_Cos_ABD_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_ACD_B          [RapIndex] = new TH1F(Form("H_ALL_Cos_ACD_B_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_BCD_A          [RapIndex] = new TH1F(Form("H_ALL_Cos_BCD_A_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_AB_C_D         [RapIndex] = new TH1F(Form("H_ALL_Cos_AB_C_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_AC_B_D         [RapIndex] = new TH1F(Form("H_ALL_Cos_AC_B_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_AD_B_C         [RapIndex] = new TH1F(Form("H_ALL_Cos_AD_B_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_BC_A_D         [RapIndex] = new TH1F(Form("H_ALL_Cos_BC_A_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_BD_A_C         [RapIndex] = new TH1F(Form("H_ALL_Cos_BD_A_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_CD_A_B         [RapIndex] = new TH1F(Form("H_ALL_Cos_CD_A_B_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
         }
     }
     
@@ -750,13 +947,14 @@ void S_Four(
         }
 
 
-        D_ParID.clear();
+        Mother_ParID.clear();
         B_List.clear();
         C_List.clear();
         TempEvent.eventID = EntriesID;
         TempEvent.A_particles.clear();
         TempEvent.B_particles.clear();
         TempEvent.C_particles.clear();
+        TempEvent.D_particles.clear();
         for (size_t st=0;st<MatchedRap.size();st++) {
             A_Array[MatchedRap.at(st)].clear();
             A_List [MatchedRap.at(st)].clear();
@@ -908,6 +1106,44 @@ void S_Four(
                     continue;
                 }
             }
+            else if ((PDG->at(i) == D_PDG)) {
+                if (fabs(InvariantMass->at(i) - DMass) <= MassSigmaWidth*DMassSigma) {
+
+                    if (IfRemoveHighTPCsigma) {
+                        if (abs(D_PDG) == 321) {
+                            if (fabs(nSigmaKaon->at(i))>1) continue;
+                        }
+                    }
+                    if (IfRemoveLownHits) {
+                        if ((abs(D_PDG) == 321) || (abs(D_PDG) == 211) || (abs(D_PDG) == 2212)) {
+                            if (nHitsFit->at(i) < 20) continue;
+                        }
+                    }
+                    if (IfCutHighDCA) {
+                        if ((abs(D_PDG) == 321) || (abs(D_PDG) == 211) || (abs(D_PDG) == 2212)) {
+                            if ( (0 > dcatopv->at(i)) || (dcatopv->at(i) > 0.5)) continue;
+                        }
+                    }
+
+                    D = ArmParticle(mix_px->at(i),mix_py->at(i),mix_pz->at(i),DMass,i);
+                    D.ParentID.clear();D.ParentID.push_back(i);
+                    for (k=ParentSta->at(i);k<=ParentEnd->at(i);k++){
+                        D.ParentID.push_back(ParentList->at(k));
+                    }
+                    if (IfRemoveSpliteMerge) {
+                        for (k=SE_ParentSta->at(i);k<=SE_ParentEnd->at(i);k++){
+                            D.ParentID.push_back(SE_ParentList->at(k));
+                        }
+                        for (k=ME_ParentSta->at(i);k<=ME_ParentEnd->at(i);k++){
+                            D.ParentID.push_back(ME_ParentList->at(k));
+                        }
+                    }
+                    if ((D.eta < EtaCut[0]) || (D.eta > EtaCut[1])) continue;
+                    // TempEvent.B_particles.push_back(C);
+                    D_List.push_back(D);
+                    continue;
+                }
+            }
             else{
                 for (l = 0;l < FeedDownNum;l++) {
                     if ( abs(PDG->at(i)) == FeedDown[l] ) {
@@ -916,20 +1152,49 @@ void S_Four(
                         for (k=ParentSta->at(i);k<=ParentEnd->at(i);k++){
                             Temp.push_back(ParentList->at(k));
                         }
-                        D_ParID.push_back(Temp);
+                        Mother_ParID.push_back(Temp);
                         // IfFoundOmega = true;
                         // cout<<"Found Omega"<<endl;
                     }
                 }
             }
         }
-        // 筛选A、B、C粒子：优先级：D（母粒子） > A > B > C
+        // 筛选A、B、C、D粒子：优先级：M（母粒子） > A > B > C > D
+        // 筛选D粒子
+        for (Did=0;Did<D_List.size();Did++) {
+            IfRecord = true;
+            // 如果D、M有血缘关系，不记录D
+            for (Mid = 0;Mid < Mother_ParID.size();Mid++) {
+                if (IfInVector(D_List[Did].TreeID , Mother_ParID.at(Mid))) {IfRecord = false;break;}
+            }
+            // 如果D、C有血缘关系，不记录D
+            if (IfRecord) {
+                for (Cid = 0;Cid < C_List.size();Cid++) {
+                    if (IfInVector(D_List[Did].TreeID , C_List[Cid].ParentID)) {IfRecord = false;break;}
+                }
+            }
+            // 如果D、B有血缘关系，不记录D
+            if (IfRecord) {
+                for (Bid = 0;Bid < B_List.size();Bid++) {
+                    if (IfInVector(D_List[Did].TreeID , B_List[Bid].ParentID)) {IfRecord = false;break;}
+                }
+            }
+            // 如果D、A有血缘关系，不记录D
+            if (IfRecord) {
+                for (i=0;i<MatchedRap.size();i++) {
+                    for (Aid=0;Aid<A_List[MatchedRap[i]].size();Aid++) {
+                        if (IfInVector(D_List[Did].TreeID , A_List[MatchedRap[i]][Aid].ParentID)) {IfRecord = false;break;}
+                    }
+                }
+            }
+            if (IfRecord) TempEvent.D_particles.push_back(D_List[Did]);
+        }
         // 筛选C粒子
         for (Cid=0;Cid<C_List.size();Cid++) {
             IfRecord = true;
             // 如果C、D有血缘关系，不记录C
-            for (Did = 0;Did < D_ParID.size();Did++) {
-                if (IfInVector(C_List[Cid].TreeID , D_ParID.at(Did))) {IfRecord = false;break;}
+            for (Did = 0;Did < Mother_ParID.size();Did++) {
+                if (IfInVector(C_List[Cid].TreeID , Mother_ParID.at(Did))) {IfRecord = false;break;}
             }
             // 如果C、B有血缘关系，不记录C
             if (IfRecord) {
@@ -951,8 +1216,8 @@ void S_Four(
         for (Bid=0;Bid<B_List.size();Bid++) {
             IfRecord = true;
             // 如果B、D有血缘关系，不记录B
-            for (Did = 0;Did < D_ParID.size();Did++) {
-                if (IfInVector(B_List[Bid].TreeID , D_ParID.at(Did))) {IfRecord = false;break;}
+            for (Did = 0;Did < Mother_ParID.size();Did++) {
+                if (IfInVector(B_List[Bid].TreeID , Mother_ParID.at(Did))) {IfRecord = false;break;}
             }
             // 如果B、A有血缘关系，不记录B
             if (IfRecord) {
@@ -969,15 +1234,15 @@ void S_Four(
             for (Aid=0;Aid<A_List[MatchedRap[i]].size();Aid++) {
                 IfRecord = true;
                 // 如果A、D有血缘关系，不记录A
-                for (Did = 0;Did < D_ParID.size();Did++) {
-                    if (IfInVector(A_List[MatchedRap[i]][Aid].TreeID , D_ParID.at(Did))) {IfRecord = false;break;}
+                for (Did = 0;Did < Mother_ParID.size();Did++) {
+                    if (IfInVector(A_List[MatchedRap[i]][Aid].TreeID , Mother_ParID.at(Did))) {IfRecord = false;break;}
                 }
                 if (IfRecord) A_Array[MatchedRap[i]].push_back(A_List[MatchedRap[i]][Aid]);
             }
         }
 
-        if (Check_B_C) {
-            for(Bid=0;Bid<TempEvent.B_particles.size();Bid++) TempEvent.C_particles.push_back(TempEvent.B_particles[Bid]);
+        if (Check_C_D) {
+            for(Cid=0;Cid<TempEvent.C_particles.size();Cid++) TempEvent.D_particles.push_back(TempEvent.C_particles[Cid]);
         }
 
         // if (TempEvent.B_particles.size() >= HowMuchEventMixing+1) continue;
@@ -985,6 +1250,7 @@ void S_Four(
         if (MatchedRap.size() == 0) continue;                                                        // 有A粒子
         if (TempEvent.B_particles.size() == 0) continue;                                             // 有B粒子
         if (TempEvent.C_particles.size() == 0) continue;                                             // 有C粒子
+        if (TempEvent.D_particles.size() == 0) continue;                                             // 有C粒子
         if (true)
         {
             // 填进池子 & 计算
@@ -1013,104 +1279,152 @@ void S_Four(
                                 const auto& B_particles = eventB.B_particles;
                         
                                 for (int Cid = 0; Cid < HowMuchEventMixing + 1; ++Cid) {
-                                    if ((Check_B_C) && (Cid < Bid)) continue;
                         
                                     auto& eventC = EventPool[CenIndex][RapIndex][PVzIndex][Cid];
                                     const auto& C_particles = eventC.C_particles;
 
-                                    //==================================================
-                                    // Determine mixing type
-                                    //==================================================
-                        
-                                    MixType mixType;
-                        
-                                    if (Aid != Bid && Aid != Cid && Bid != Cid) {
-                                        mixType = A_B_C;
-                                    }
-                                    else if ((Aid == Bid) && (Aid != Cid)) {
-                                        mixType = AB_C;
-                                    }
-                                    else if ((Aid != Bid) && (Aid == Cid)) {
-                                        mixType = AC_B;
-                                    }
-                                    else if ((Cid == Bid) && (Aid != Cid)) {
-                                        mixType = BC_A;
-                                    }
-                                    else{
-                                        mixType = SAME;
-                                    }
-                                                    
-                                    //==================================================
-                                    // Select histogram pointers ONCE
-                                    //==================================================
-                        
-                                    TH1* hLocal = nullptr;
-                                    TH1* hGlobal = nullptr;
-                                    TH1* hLocal_Cos = nullptr;
-                                    TH1* hGlobal_Cos = nullptr;
-                        
-                                    switch (mixType) {
-                        
-                                        case A_B_C:
-                                            hLocal      = H_A_B_C    [CenIndex][RapIndex][PVzIndex];
-                                            hLocal_Cos  = H_Cos_A_B_C[CenIndex][RapIndex][PVzIndex];
-                                            hGlobal     = H_ALL_A_B_C          [RapIndex];
-                                            hGlobal_Cos = H_ALL_Cos_A_B_C      [RapIndex];
-                                            break;
-                        
-                                        case AB_C:
-                                            hLocal      = H_AB_C    [CenIndex][RapIndex][PVzIndex];
-                                            hLocal_Cos  = H_Cos_AB_C[CenIndex][RapIndex][PVzIndex];
-                                            hGlobal     = H_ALL_AB_C          [RapIndex];
-                                            hGlobal_Cos = H_ALL_Cos_AB_C      [RapIndex];
-                                            break;
-                        
-                                        case AC_B:
-                                            hLocal      = H_AC_B    [CenIndex][RapIndex][PVzIndex];
-                                            hLocal_Cos  = H_Cos_AC_B[CenIndex][RapIndex][PVzIndex];
-                                            hGlobal     = H_ALL_AC_B          [RapIndex];
-                                            hGlobal_Cos = H_ALL_Cos_AC_B      [RapIndex];
-                                            break;
-                        
-                                        case BC_A:
-                                            hLocal      = H_BC_A    [CenIndex][RapIndex][PVzIndex];
-                                            hLocal_Cos  = H_Cos_BC_A[CenIndex][RapIndex][PVzIndex];
-                                            hGlobal     = H_ALL_BC_A          [RapIndex];
-                                            hGlobal_Cos = H_ALL_Cos_BC_A      [RapIndex];
-                                            break;
-                        
-                                        case SAME:
-                                            hLocal      = H_ABC    [CenIndex][RapIndex][PVzIndex];
-                                            hLocal_Cos  = H_Cos_ABC[CenIndex][RapIndex][PVzIndex];
-                                            hGlobal     = H_ALL_ABC          [RapIndex];
-                                            hGlobal_Cos = H_ALL_Cos_ABC      [RapIndex];
-                                            break;
-                                    }
-
-                                    for (const auto& A : A_particles) {
-
-                                        for (j=0;j<B_particles.size();j++) {
-                                            const auto& B = B_particles[j];
+                                    for (int Did = 0; Did < HowMuchEventMixing + 1; ++Did) {
+                                        if ((Check_C_D) && (Did < Cid)) continue;
+                                        //==================================================
+                                        // Determine mixing type
+                                        //==================================================
                             
-                                            for (k=0;k<C_particles.size();k++) {
+                                        MixType mixType;
 
-                                                if ((Check_B_C) && (mixType = SAME)) {
-                                                    if (k <= j) continue;
-                                                    if (IfInVector(C_particles[k].TreeID , B.ParentID)) continue;
-                                                }
-                                                const auto& C = C_particles[k];
-                                            
-                                                if (GetSide(A,B,C , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                                    hLocal     ->Fill(phi);
-                                                    hLocal_Cos ->Fill(CosPhi);
-                                                    hGlobal    ->Fill(phi);
-                                                    hGlobal_Cos->Fill(CosPhi);
+                                        if (Aid == Bid) {
+                                        
+                                            if (Bid == Cid) {
+                                        
+                                                if (Cid == Did)
+                                                    mixType = SAME;          // ABCD
+                                                else
+                                                    mixType = ABC_D;         // ABC|D
+                                        
+                                            } else {
+                                        
+                                                if (Cid == Did)
+                                                    mixType = AB_CD;         // AB|CD
+                                                else if (Aid == Did)
+                                                    mixType = ABD_C;         // ABD|C
+                                                else
+                                                    mixType = AB_C_D;        // AB|C|D
+                                            }
+                                        
+                                        }
+                                        else if (Aid == Cid) {
+                                        
+                                            if (Cid == Did)
+                                                mixType = ACD_B;             // ACD|B
+                                            else if (Bid == Did)
+                                                mixType = AC_BD;             // AC|BD
+                                            else
+                                                mixType = AC_B_D;            // AC|B|D
+                                        
+                                        }
+                                        else if (Aid == Did) {
+                                        
+                                            if (Bid == Cid)
+                                                mixType = AD_BC;             // AD|BC
+                                            else
+                                                mixType = AD_B_C;            // AD|B|C
+                                        
+                                        }
+                                        else if (Bid == Cid) {
+                                        
+                                            if (Cid == Did)
+                                                mixType = BCD_A;             // BCD|A
+                                            else
+                                                mixType = BC_A_D;            // BC|A|D
+                                        
+                                        }
+                                        else if (Bid == Did) {
+                                        
+                                            mixType = BD_A_C;                // BD|A|C
+                                        
+                                        }
+                                        else if (Cid == Did) {
+                                        
+                                            mixType = CD_A_B;                // CD|A|B
+                                        
+                                        }
+                                        else {
+                                        
+                                            mixType = A_B_C_D;               // A|B|C|D
+                                        
+                                        }
+                                                        
+                                        //==================================================
+                                        // Select histogram pointers ONCE
+                                        //==================================================
+                            
+                                        TH1* hLocal = nullptr;
+                                        TH1* hGlobal = nullptr;
+                                        TH1* hLocal_Cos = nullptr;
+                                        TH1* hGlobal_Cos = nullptr;
+                            
+                                        switch (mixType) {
+                            
+                                            case A_B_C:
+                                                hLocal      = H_A_B_C_D    [CenIndex][RapIndex][PVzIndex];
+                                                hLocal_Cos  = H_Cos_A_B_C_D[CenIndex][RapIndex][PVzIndex];
+                                                hGlobal     = H_ALL_A_B_C_D          [RapIndex];
+                                                hGlobal_Cos = H_ALL_Cos_A_B_C_D      [RapIndex];
+                                                break;
+                            
+                                            case AB_C:
+                                                hLocal      = H_AB_CD    [CenIndex][RapIndex][PVzIndex];
+                                                hLocal_Cos  = H_Cos_AB_CD[CenIndex][RapIndex][PVzIndex];
+                                                hGlobal     = H_ALL_AB_CD          [RapIndex];
+                                                hGlobal_Cos = H_ALL_Cos_AB_CD      [RapIndex];
+                                                break;
+                            
+                                            case AC_B:
+                                                hLocal      = H_AC_BD    [CenIndex][RapIndex][PVzIndex];
+                                                hLocal_Cos  = H_Cos_AC_BD[CenIndex][RapIndex][PVzIndex];
+                                                hGlobal     = H_ALL_AC_BD          [RapIndex];
+                                                hGlobal_Cos = H_ALL_Cos_AC_BD      [RapIndex];
+                                                break;
+                            
+                                            case BC_A:
+                                                hLocal      = H_AD_BC    [CenIndex][RapIndex][PVzIndex];
+                                                hLocal_Cos  = H_Cos_AD_BC[CenIndex][RapIndex][PVzIndex];
+                                                hGlobal     = H_ALL_AD_BC          [RapIndex];
+                                                hGlobal_Cos = H_ALL_Cos_AD_BC      [RapIndex];
+                                                break;
+                            
+                                            case SAME:
+                                                hLocal      = H_ABCD    [CenIndex][RapIndex][PVzIndex];
+                                                hLocal_Cos  = H_Cos_ABCD[CenIndex][RapIndex][PVzIndex];
+                                                hGlobal     = H_ALL_ABCD          [RapIndex];
+                                                hGlobal_Cos = H_ALL_Cos_ABCD      [RapIndex];
+                                                break;
+                                        }
+
+                                        for (const auto& A : A_particles) {
+
+                                            for (j=0;j<B_particles.size();j++) {
+                                                const auto& B = B_particles[j];
+                                
+                                                for (k=0;k<C_particles.size();k++) {
+
+                                                    if ((Check_C_D) && (mixType = SAME)) {
+                                                        if (k <= j) continue;
+                                                        if (IfInVector(C_particles[k].TreeID , B.ParentID)) continue;
+                                                    }
+                                                    const auto& C = C_particles[k];
+                                                
+                                                    if (GetSide(A,B,C,D,BTheta , CTheta , DTheta, CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                                        hLocal     ->Fill(phi);
+                                                        hLocal_Cos ->Fill(CosPhi);
+                                                        hGlobal    ->Fill(phi);
+                                                        hGlobal_Cos->Fill(CosPhi);
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                    if (mixType == SAME) {
-                                        ++AccumSameNum;
+                                        if (mixType == SAME) {
+                                            ++AccumSameNum;
+                                        }
                                     }
                                 }
                             }
@@ -1141,29 +1455,29 @@ void S_Four(
         for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
             for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
                 Sep_Side->cd();
-                H_ABC                  [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_A_B_C                [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_AB_C                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_AC_B                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_BC_A                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Cos_ABC              [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Cos_A_B_C            [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Cos_AB_C             [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Cos_BC_A             [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Cos_AC_B             [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_ABCD                  [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_A_B_C_D                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_AB_CD                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_AC_BD                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_AD_BC                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos_ABCD              [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos_A_B_C_D            [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos_AB_CD             [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos_AD_BC             [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos_AC_BD             [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
-        H_ALL_ABC                                 [RapIndex] ->Write();
-        H_ALL_A_B_C                               [RapIndex] ->Write();
-        H_ALL_AB_C                                [RapIndex] ->Write();
-        H_ALL_AC_B                                [RapIndex] ->Write();
-        H_ALL_BC_A                                [RapIndex] ->Write();
-        H_ALL_Cos_ABC                             [RapIndex] ->Write();
-        H_ALL_Cos_A_B_C                           [RapIndex] ->Write();
-        H_ALL_Cos_AB_C                            [RapIndex] ->Write();
-        H_ALL_Cos_AC_B                            [RapIndex] ->Write();
-        H_ALL_Cos_BC_A                            [RapIndex] ->Write();
+        H_ALL_ABCD                                 [RapIndex] ->Write();
+        H_ALL_A_B_C_D                               [RapIndex] ->Write();
+        H_ALL_AB_CD                                [RapIndex] ->Write();
+        H_ALL_AC_BD                                [RapIndex] ->Write();
+        H_ALL_AD_BC                                [RapIndex] ->Write();
+        H_ALL_Cos_ABCD                             [RapIndex] ->Write();
+        H_ALL_Cos_A_B_C_D                           [RapIndex] ->Write();
+        H_ALL_Cos_AB_CD                            [RapIndex] ->Write();
+        H_ALL_Cos_AC_BD                            [RapIndex] ->Write();
+        H_ALL_Cos_AD_BC                            [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
@@ -1339,22 +1653,21 @@ inline bool GetSide(
     const double New_DPy = D.py + gamma2*beta[1]*bpD + gamma*beta[1]*DE;
     const double New_DPz = D.pz + gamma2*beta[2]*bpD + gamma*beta[2]*DE;
 
-    const double Bn = New_BPx*n[0] + New_BPy*n[1] + New_BPz*n[2];
-    const double Cn = New_CPx*n[0] + New_CPy*n[1] + New_CPz*n[2];
-    const double Dn = New_DPx*n[0] + New_DPy*n[1] + New_DPz*n[2];
-
-    const double VB[3] = {New_BPx-Bn*n[0] , New_BPy-Bn*n[1] , New_BPz-Bn*n[2]};
-    const double VC[3] = {New_CPx-Cn*n[0] , New_CPy-Cn*n[1] , New_CPz-Cn*n[2]};
-    const double VD[3] = {New_DPx-Dn*n[0] , New_DPy-Dn*n[1] , New_DPz-Dn*n[2]};
-
     double v[3] = {-n[1],n[0],0};
     const double Rv = sqrt(n[0]*n[0] + n[1]*n[1]);
     v[0] = v[0]/Rv;v[1] = v[1]/Rv;
 
-    const double CosN = n[2];
-    const double SinN = n[2];
+    const Vec3 NewB = {New_BPx,New_BPy,New_BPz};
+    const Vec3 NewC = {New_CPx,New_CPy,New_CPz};
+    const Vec3 NewD = {New_DPx,New_DPy,New_DPz};
+    const Vec3 N    = {n[0]   ,n[1]   ,n[2]   };
 
-    return true;
+    if(computeRotatedProjections(NewB, NewC, NewD, N, BthetaOut, CthetaOut, DthetaOut)){
+        return true;
+    }else{
+        return false;
+    }
+
 }
 
 void print(std::vector<int> Temp)
@@ -1775,4 +2088,101 @@ std::vector<int> GetDaughterPDGLit(int ID)
         default :
             return V_T;
     }
+}
+
+
+double dot(const Vec3& a, const Vec3& b) {
+    return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+}
+
+Vec3 cross(const Vec3& a, const Vec3& b) {
+    return { a[1]*b[2] - a[2]*b[1],
+             a[2]*b[0] - a[0]*b[2],
+             a[0]*b[1] - a[1]*b[0] };
+}
+
+Vec3 normalize(const Vec3& v) {
+    double len = std::sqrt(dot(v, v));
+    if (len < 1e-12) return {0,0,0};
+    return { v[0]/len, v[1]/len, v[2]/len };
+}
+
+// 返回 ThetaB, ThetaC, ThetaD (弧度)
+bool computeRotatedProjections(const Vec3& b, const Vec3& c, const Vec3& d, const Vec3& n, double &ThetaB, double &ThetaC, double &ThetaD) {
+    // 1. 投影到平面 P
+    auto project = [&n](const Vec3& v) -> Vec3 {
+        double proj_n = dot(v, n);
+        return { v[0] - proj_n * n[0],
+                 v[1] - proj_n * n[1],
+                 v[2] - proj_n * n[2] };
+    };
+    Vec3 proj_b = project(b);
+    Vec3 proj_c = project(c);
+    Vec3 proj_d = project(d);
+
+    // 2. 在平面 P 上建立正交基 (u, v)
+    Vec3 a = {1, 0, 0};
+    if (std::fabs(dot(n, a)) > 0.9999) {
+        a = {0, 1, 0};
+    }
+    Vec3 u = normalize(cross(n, a));
+    Vec3 v = cross(n, u);   // 已在平面内，且与 u 正交
+
+    // 3. 将投影向量转换到二维坐标 (x, y)
+    auto to2D = [&](const Vec3& p) -> Vec2 {
+        return { dot(p, u), dot(p, v) };
+    };
+    Vec2 vb0 = to2D(proj_b);
+    Vec2 vc0 = to2D(proj_c);
+    Vec2 vd0 = to2D(proj_d);
+
+    // 4. 三个固定方向单位向量
+    const double sqrt3 = std::sqrt(3.0);
+    Vec2 uB = {0.0, 1.0};
+    Vec2 uC = {-sqrt3/2.0, -0.5};
+    Vec2 uD = { sqrt3/2.0, -0.5};
+
+    // 5. 计算每个点的 Ai, Bi
+    auto computeAB = [](const Vec2& v0, const Vec2& u) -> std::pair<double, double> {
+        double A = u[0]*v0[0] + u[1]*v0[1];
+        double B = -u[0]*v0[1] + u[1]*v0[0];
+        return {A, B};
+    };
+    auto [Ab, Bb] = computeAB(vb0, uB);
+    auto [Ac, Bc] = computeAB(vc0, uC);
+    auto [Ad, Bd] = computeAB(vd0, uD);
+
+    // 6. 计算总和
+    double sum_A2_minus_B2 = (Ab*Ab - Bb*Bb) + (Ac*Ac - Bc*Bc) + (Ad*Ad - Bd*Bd);
+    double sum_AB = Ab*Bb + Ac*Bc + Ad*Bd;
+
+    // 7. 最优旋转角度 θ
+    double theta = 0.0;
+    double C1 = 0.5 * sum_A2_minus_B2;
+    double C2 = sum_AB;
+    if (std::fabs(C1) > 1e-12 || std::fabs(C2) > 1e-12) {
+        theta = 0.5 * std::atan2(C2, C1);
+    }
+
+    // 8. 旋转所有点
+    double cos_t = std::cos(theta);
+    double sin_t = std::sin(theta);
+    auto rotate = [cos_t, sin_t](const Vec2& v) -> Vec2 {
+        return { v[0]*cos_t - v[1]*sin_t,
+                 v[0]*sin_t + v[1]*cos_t };
+    };
+    Vec2 vb_rot = rotate(vb0);
+    Vec2 vc_rot = rotate(vc0);
+    Vec2 vd_rot = rotate(vd0);
+
+    // 9. 计算每个向量相对于 uB (0,1) 的夹角
+    auto angleFromUB = [](const Vec2& vec) -> double {
+        // uB 方向为 (0,1)，夹角 = atan2(x, y)
+        return std::atan2(vec[0], vec[1]);
+    };
+    ThetaB = angleFromUB(vb_rot);
+    ThetaC = angleFromUB(vc_rot);
+    ThetaD = angleFromUB(vd_rot);
+
+    return true;
 }

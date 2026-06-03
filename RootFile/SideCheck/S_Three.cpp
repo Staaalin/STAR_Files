@@ -153,7 +153,7 @@ inline bool GetSide(
     const ArmParticle& B,
     const ArmParticle& C,
     double& cosPhiOut,
-    float& phiOut,
+    double& phiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -393,7 +393,7 @@ void S_Three(
     std::vector<std::vector<int> > D_ParID;
     bool IsSame;
     float  P_B , kStar;
-    float  phi , CosPhi;
+    double  phi , CosPhi;
     enum MixType {
         SAME,
         AB_C,
@@ -406,35 +406,35 @@ void S_Three(
     // std::vector<Event>    EventPool         [50]           [50]          [50];
     // std::vector<ArmParticle> A_Array                       [50]              , B_Array;
     // std::vector<ArmParticle> A_List                        [50]              , B_List ;
-    // TH1F                 *H1D_Side           [50]           [50]          [50];
-    // TH1F                 *H1D_ALL_Side                      [50]     ;
-    // TH1F                 *H1D_Mix_Side_ABC       [50]           [50]          [50];
-    // TH1F                 *H1D_ALL_Mix_Side_ABC                  [50]     ;
-    // TH1F                 *H_Tra_Side       [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_Side                  [50]     ;
-    // TH1F                 *H_dRap            [50]           [50]          [50];
-    // TH1F                 *H_ALL_dRap                       [50]     ;
-    // TH1F                 *H_Mix_dRap        [50]           [50]          [50];
-    // TH1F                 *H_ALL_Mix_dRap                   [50]     ;
-    // TH1F                 *H_Tra_dRap        [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_dRap                   [50]     ;
-    // TH1F                 *H_dPt             [50]           [50]          [50];
-    // TH1F                 *H_ALL_dPt                        [50]     ;
-    // TH1F                 *H_Mix_dPt         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Mix_dPt                    [50]     ;
-    // TH1F                 *H_Tra_dPt         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_dPt                    [50]     ;
-    // TH1F                 *H_ALL_Mass                       [50]     ;
-    // TH1F                 *H_ALL_Mix_Mass                   [50]     ;
-    // TH1F                 *H_ALL_Tra_Mass                   [50]     ;
-    // TH1F                 *H_Rap_A           [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_A                      [50]     ;
-    // TH1F                 *H_Rap_K_A         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_K_A                    [50]     ;
-    // TH1F                 *H_Rap_B           [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_B                      [50]     ;
-    // TH1F                 *H_Rap_K_B         [50]                         [50];
-    // TH1F                 *H_ALL_Rap_K_B                             ;
+    // TH1D                 *H1D_Side           [50]           [50]          [50];
+    // TH1D                 *H1D_ALL_Side                      [50]     ;
+    // TH1D                 *H1D_Mix_Side_ABC       [50]           [50]          [50];
+    // TH1D                 *H1D_ALL_Mix_Side_ABC                  [50]     ;
+    // TH1D                 *H_Tra_Side       [50]           [50]          [50];
+    // TH1D                 *H_ALL_Tra_Side                  [50]     ;
+    // TH1D                 *H_dRap            [50]           [50]          [50];
+    // TH1D                 *H_ALL_dRap                       [50]     ;
+    // TH1D                 *H_Mix_dRap        [50]           [50]          [50];
+    // TH1D                 *H_ALL_Mix_dRap                   [50]     ;
+    // TH1D                 *H_Tra_dRap        [50]           [50]          [50];
+    // TH1D                 *H_ALL_Tra_dRap                   [50]     ;
+    // TH1D                 *H_dPt             [50]           [50]          [50];
+    // TH1D                 *H_ALL_dPt                        [50]     ;
+    // TH1D                 *H_Mix_dPt         [50]           [50]          [50];
+    // TH1D                 *H_ALL_Mix_dPt                    [50]     ;
+    // TH1D                 *H_Tra_dPt         [50]           [50]          [50];
+    // TH1D                 *H_ALL_Tra_dPt                    [50]     ;
+    // TH1D                 *H_ALL_Mass                       [50]     ;
+    // TH1D                 *H_ALL_Mix_Mass                   [50]     ;
+    // TH1D                 *H_ALL_Tra_Mass                   [50]     ;
+    // TH1D                 *H_Rap_A           [50]           [50]          [50];
+    // TH1D                 *H_ALL_Rap_A                      [50]     ;
+    // TH1D                 *H_Rap_K_A         [50]           [50]          [50];
+    // TH1D                 *H_ALL_Rap_K_A                    [50]     ;
+    // TH1D                 *H_Rap_B           [50]           [50]          [50];
+    // TH1D                 *H_ALL_Rap_B                      [50]     ;
+    // TH1D                 *H_Rap_K_B         [50]                         [50];
+    // TH1D                 *H_ALL_Rap_K_B                             ;
     // // Used for test
     // TH2F                 *H_ALL_dRap_ARp                   [50]     ;
     // TH2F                 *H_ALL_Mix_dRap_ARp               [50]     ;
@@ -449,26 +449,26 @@ void S_Three(
     std::vector<std::vector<ArmParticle>> A_List(yBinNum);
     std::vector<ArmParticle> B_List;
     std::vector<ArmParticle> C_List;
-    std::vector<TH1F*>                                               H_ALL_ABC             ;
-    std::vector<TH1F*>                                               H_ALL_A_B_C           ;
-    std::vector<TH1F*>                                               H_ALL_AB_C            ;
-    std::vector<TH1F*>                                               H_ALL_AC_B            ;
-    std::vector<TH1F*>                                               H_ALL_BC_A            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_ABC                 ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_AB_C                ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_AC_B                ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_BC_A                ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_A_B_C               ;
-    std::vector<TH1F*>                                               H_ALL_Cos_ABC         ;
-    std::vector<TH1F*>                                               H_ALL_Cos_AB_C        ;
-    std::vector<TH1F*>                                               H_ALL_Cos_AC_B        ;
-    std::vector<TH1F*>                                               H_ALL_Cos_BC_A        ;
-    std::vector<TH1F*>                                               H_ALL_Cos_A_B_C       ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_ABC             ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AB_C            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AC_B            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_BC_A            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_A_B_C           ;
+    std::vector<TH1D*>                                               H_ALL_ABC             ;
+    std::vector<TH1D*>                                               H_ALL_A_B_C           ;
+    std::vector<TH1D*>                                               H_ALL_AB_C            ;
+    std::vector<TH1D*>                                               H_ALL_AC_B            ;
+    std::vector<TH1D*>                                               H_ALL_BC_A            ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_ABC                 ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_AB_C                ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_AC_B                ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_BC_A                ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_A_B_C               ;
+    std::vector<TH1D*>                                               H_ALL_Cos_ABC         ;
+    std::vector<TH1D*>                                               H_ALL_Cos_AB_C        ;
+    std::vector<TH1D*>                                               H_ALL_Cos_AC_B        ;
+    std::vector<TH1D*>                                               H_ALL_Cos_BC_A        ;
+    std::vector<TH1D*>                                               H_ALL_Cos_A_B_C       ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos_ABC             ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos_AB_C            ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos_AC_B            ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos_BC_A            ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos_A_B_C           ;
 
 
     if (RecordingMethod == 0) {
@@ -550,29 +550,29 @@ void S_Three(
         for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
             for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
                 for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
-                    H_ABC           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_ABC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("ABC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_AB_C          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AB_C_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("AB in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_AC_B          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AC_B_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("AC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_BC_A          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_BC_A_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("BC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_A_B_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_A_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("ABC in different event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Cos_ABC       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_ABC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("ABC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_AB_C      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AB_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("AB in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_AC_B      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AC_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("AC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_BC_A      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_BC_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("BC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_A_B_C     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_A_B_C_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("ABC in different event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_ABC           [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_ABC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("ABC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_AB_C          [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_AB_C_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("AB in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_AC_B          [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_AC_B_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("AC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_BC_A          [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_BC_A_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("BC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_A_B_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_A_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("ABC in different event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_Cos_ABC       [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Cos_ABC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("ABC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_AB_C      [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Cos_AB_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("AB in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_AC_B      [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Cos_AC_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("AC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_BC_A      [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Cos_BC_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("BC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Cos_A_B_C     [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Cos_A_B_C_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("ABC in different event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
 
                 }
             }
-            H_ALL_ABC              [RapIndex] = new TH1F(Form("H_ALL_ABC_%d"      ,          RapIndex),Form("ALL ABC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_A_B_C            [RapIndex] = new TH1F(Form("H_ALL_A_B_C_%d"  ,          RapIndex), Form("ALL ABC in different event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_AB_C             [RapIndex] = new TH1F(Form("H_ALL_AB_C_%d"  ,           RapIndex), Form("ALL AB in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_AC_B             [RapIndex] = new TH1F(Form("H_ALL_AC_B_%d"  ,           RapIndex), Form("ALL AC in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_BC_A             [RapIndex] = new TH1F(Form("H_ALL_BC_A_%d"  ,           RapIndex), Form("ALL BC in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Cos_ABC          [RapIndex] = new TH1F(Form("H_ALL_Cos_ABC_%d"      ,      RapIndex),Form("ALL ABC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_AB_C         [RapIndex] = new TH1F(Form("H_ALL_Cos_AB_C_%d"      ,     RapIndex),Form("AB in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_AC_B         [RapIndex] = new TH1F(Form("H_ALL_Cos_AC_B_%d"      ,     RapIndex),Form("AC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_BC_A         [RapIndex] = new TH1F(Form("H_ALL_Cos_BC_A_%d"      ,     RapIndex),Form("BC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_A_B_C        [RapIndex] = new TH1F(Form("H_ALL_Cos_A_B_C_%d"  ,      RapIndex), Form("ALL ABC in different event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_ABC              [RapIndex] = new TH1D(Form("H_ALL_ABC_%d"      ,          RapIndex),Form("ALL ABC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_A_B_C            [RapIndex] = new TH1D(Form("H_ALL_A_B_C_%d"  ,          RapIndex), Form("ALL ABC in different event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_AB_C             [RapIndex] = new TH1D(Form("H_ALL_AB_C_%d"  ,           RapIndex), Form("ALL AB in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_AC_B             [RapIndex] = new TH1D(Form("H_ALL_AC_B_%d"  ,           RapIndex), Form("ALL AC in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_BC_A             [RapIndex] = new TH1D(Form("H_ALL_BC_A_%d"  ,           RapIndex), Form("ALL BC in same event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_Cos_ABC          [RapIndex] = new TH1D(Form("H_ALL_Cos_ABC_%d"      ,      RapIndex),Form("ALL ABC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_AB_C         [RapIndex] = new TH1D(Form("H_ALL_Cos_AB_C_%d"      ,     RapIndex),Form("AB in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_AC_B         [RapIndex] = new TH1D(Form("H_ALL_Cos_AC_B_%d"      ,     RapIndex),Form("AC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_BC_A         [RapIndex] = new TH1D(Form("H_ALL_Cos_BC_A_%d"      ,     RapIndex),Form("BC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Cos_A_B_C        [RapIndex] = new TH1D(Form("H_ALL_Cos_A_B_C_%d"  ,      RapIndex), Form("ALL ABC in different event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
 
         }
     }
