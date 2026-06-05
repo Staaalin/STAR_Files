@@ -406,6 +406,7 @@ void S_Two(
     bool IsSame;
     float  P_B , kStar;
     float  phi , CosPhi;
+    double d_phi , d_CosPhi;
 
     // //                                    centrality    A_Rapidity   PrimaryVertex
     // std::vector<Event>    EventPool         [50]           [50]          [50];
@@ -931,18 +932,18 @@ void S_Two(
                                     for (const auto& B : B_particles) {
                                         
                                         if (IsSame) {
-                                            if (GetSide(A,B , H_P_tot, H_beta, CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                                H                [CenIndex][RapIndex][PVzIndex]->Fill(phi);
-                                                H_ALL                      [RapIndex]->Fill(phi);
-                                                H_Cos            [CenIndex][RapIndex][PVzIndex]->Fill(CosPhi);
-                                                H_ALL_Cos                  [RapIndex]->Fill(CosPhi);
+                                            if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                                H                [CenIndex][RapIndex][PVzIndex]->Fill(d_phi);
+                                                H_ALL                      [RapIndex]->Fill(d_phi);
+                                                H_Cos            [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
+                                                H_ALL_Cos                  [RapIndex]->Fill(d_CosPhi);
                                             }
                                         }else{
-                                            if (GetSide(A,B , H_P_tot, H_beta, CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                                H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(phi);
-                                                H_ALL_Mix                  [RapIndex]->Fill(phi);
-                                                H_Mix_Cos        [CenIndex][RapIndex][PVzIndex]->Fill(CosPhi);
-                                                H_ALL_Mix_Cos              [RapIndex]->Fill(CosPhi);
+                                            if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                                H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(d_phi);
+                                                H_ALL_Mix                  [RapIndex]->Fill(d_phi);
+                                                H_Mix_Cos        [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
+                                                H_ALL_Mix_Cos              [RapIndex]->Fill(d_CosPhi);
                                             }
                                         }
                                         ++AccumSameNum;
@@ -972,7 +973,7 @@ void S_Two(
     TDirectory *folder_Side     = fileA->mkdir("Side");
     TDirectory *ALL_Side        = folder_Side->mkdir("ALL");
     TDirectory *Sep_Side        = folder_Side->mkdir("Sep");
-    fileA.cd();
+    fileA->cd();
     H_P_tot->Write();
     H_beta ->Write();
     for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
