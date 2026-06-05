@@ -24,6 +24,11 @@ set B_PDG = "$<"
 # echo "Please enter particle C PDG:"
 # set C_PDG = "$<"
 
+echo "Sideband A? 0:No, 1: Yes"
+set If_SideBand_A = "$<"
+echo "Sideband B? 0:No, 1: Yes"
+set If_SideBand_B = "$<"
+
 echo "Please enter DataName:"
 echo "1: dAu_200_21"
 echo "2: AuAu_19_19"
@@ -194,7 +199,7 @@ while ($i <= $numFiles)
     set RightBrackets = "\)"
     set Quo = '\"'
     # echo ./SideBoost \"\$FILELIST\" \"$DataName\" \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG $C_PDG 0 $SLMEIndex $RecordingMethod $CutIndex >> $SubXml
-    echo ./S_One \"\$FILELIST\" \"$DataName\" \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG 0 $SLMEIndex $RecordingMethod $CutIndex >> $SubXml
+    echo ./S_One \"\$FILELIST\" \"$DataName\" \$OutputFileIndex \"$OutputName\" $A_PDG $B_PDG $If_SideBand_A $If_SideBand_B 0 $SLMEIndex $RecordingMethod $CutIndex >> $SubXml
     echo ls  >> $SubXml
     echo \</command\> >> $SubXml
 

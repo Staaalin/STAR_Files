@@ -135,6 +135,8 @@ const float AyCut[] = {-10000.0 , 10000.0}; // A_y
 int FeedDown[] = { 0 };
 const float EtaCut[] = {-1.5 , 1.5}; // EtaCut for both A and B
 const float MassSigmaWidth = 3.0;
+const float Sideband_MassSigmaSta   = 4.0;
+const float Sideband_MassSigmaEnd   = 10.0;
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
@@ -157,6 +159,17 @@ inline bool GetSide(
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
     float MassSigmaWidth);
+inline bool GetSide(
+        const ArmParticle& A,
+        const ArmParticle& B,
+        TH1F& H_P_tot,
+        TH1F& H_beta ,
+        double& cosPhiOut,
+        double& phiOut,
+        bool IfRemoveFeedPair,
+        const std::vector<float>& MotherMass,
+        const std::vector<float>& MotherMassSigma,
+        float MassSigmaWidth);
 float CenCorr(float Vz, TString DataName);
 
 
@@ -181,6 +194,8 @@ void S_Two(
     TString OutMidName,
     int A_PDG,
     int B_PDG,
+    int If_SideBand_A,
+    int If_SideBand_B,
     int Mode,
     int SP_ME,
     int RecordingMethod = 0,
@@ -363,6 +378,11 @@ void S_Two(
     float NNch , Eta;
     TString TreeName = "hadronTree";
 
+    bool Is_SideBand_A = true;
+    bool Is_SideBand_B = true;
+    if (If_SideBand_A == 0) Is_SideBand_A = false;
+    if (If_SideBand_B == 0) Is_SideBand_B = false;
+
     TVector3 BetaTemp;
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
     TLorentzVector p1 , p2 , p3;
@@ -442,6 +462,13 @@ void S_Two(
     std::vector<TH1F*>                                               H_ALL_Mix_Cos       ;
     std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos               ;
     std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix_Cos           ;
+    std::vector<TH1F*>                                               H_dRap_ALL          ;
+    std::vector<TH1F*>                                               H_dRap_ALL_Mix      ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_dRap              ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     H_dRap_Mix          ;
+    
+    TH1F* H_P_tot = new TH1F("H_P_tot","H_P_tot",200,0,10);
+    TH1F* H_beta  = new TH1F("H_beta" ,"H_beta" ,200,0,1);
 
 
     if (RecordingMethod == 0) {
@@ -454,18 +481,26 @@ void S_Two(
         H_ALL_Mix_Cos    .resize(yBinNum, nullptr);
         H_Cos      .resize(CentralityBinNum);
         H_Mix_Cos   .resize(CentralityBinNum);
+        H_dRap_ALL       .resize(yBinNum, nullptr);
+        H_dRap_ALL_Mix    .resize(yBinNum, nullptr);
+        H_dRap      .resize(CentralityBinNum);
+        H_dRap_Mix   .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
             H           [i].resize(yBinNum);
             H_Mix       [i].resize(yBinNum);
             H_Cos       [i].resize(yBinNum);
             H_Mix_Cos   [i].resize(yBinNum);
+            H_dRap      [i].resize(yBinNum);
+            H_dRap_Mix  [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
                 H                     [i][j].resize(PVzBinNum, nullptr);
                 H_Mix                 [i][j].resize(PVzBinNum, nullptr);
                 H_Cos                 [i][j].resize(PVzBinNum, nullptr);
                 H_Mix_Cos             [i][j].resize(PVzBinNum, nullptr);
+                H_dRap                [i][j].resize(PVzBinNum, nullptr);
+                H_dRap_Mix            [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
@@ -723,7 +758,9 @@ void S_Two(
         // 遍历粒子，筛选A、B、C、D
         for (i=0;i<PDGMult;i++){
             if (PDG->at(i) == A_PDG) {
-                if (fabs(InvariantMass->at(i) - AMass) <= MassSigmaWidth*AMassSigma) {
+                if ((!Is_SideBand_A && (fabs(InvariantMass->at(i) - AMass) <= MassSigmaWidth*AMassSigma)) || 
+                    ( Is_SideBand_A && ((fabs(InvariantMass->at(i) - AMass) >= Sideband_MassSigmaSta*AMassSigma) && (fabs(InvariantMass->at(i) - AMass) <= Sideband_MassSigmaEnd*AMassSigma))))
+                {
 
                     if (IfRemoveHighTPCsigma) {
                         if (abs(A_PDG) == 321) {
@@ -769,7 +806,9 @@ void S_Two(
                 }
             }
             else if (PDG->at(i) == B_PDG) {
-                if (fabs(InvariantMass->at(i) - BMass) <= MassSigmaWidth*BMassSigma) {
+                if ((!Is_SideBand_B && (fabs(InvariantMass->at(i) - BMass) <= MassSigmaWidth*BMassSigma)) || 
+                    ( Is_SideBand_B && ((fabs(InvariantMass->at(i) - BMass) >= Sideband_MassSigmaSta*BMassSigma) && (fabs(InvariantMass->at(i) - BMass) <= Sideband_MassSigmaEnd*BMassSigma))))
+                {
 
                     if (IfRemoveHighTPCsigma) {
                         if (abs(B_PDG) == 321) {
@@ -892,14 +931,14 @@ void S_Two(
                                     for (const auto& B : B_particles) {
                                         
                                         if (IsSame) {
-                                            if (GetSide(A,B , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            if (GetSide(A,B , H_P_tot, H_beta, CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H                [CenIndex][RapIndex][PVzIndex]->Fill(phi);
                                                 H_ALL                      [RapIndex]->Fill(phi);
                                                 H_Cos            [CenIndex][RapIndex][PVzIndex]->Fill(CosPhi);
                                                 H_ALL_Cos                  [RapIndex]->Fill(CosPhi);
                                             }
                                         }else{
-                                            if (GetSide(A,B , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            if (GetSide(A,B , H_P_tot, H_beta, CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(phi);
                                                 H_ALL_Mix                  [RapIndex]->Fill(phi);
                                                 H_Mix_Cos        [CenIndex][RapIndex][PVzIndex]->Fill(CosPhi);
@@ -933,6 +972,9 @@ void S_Two(
     TDirectory *folder_Side     = fileA->mkdir("Side");
     TDirectory *ALL_Side        = folder_Side->mkdir("ALL");
     TDirectory *Sep_Side        = folder_Side->mkdir("Sep");
+    fileA.cd();
+    H_P_tot->Write();
+    H_beta ->Write();
     for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
         for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
             for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
@@ -956,10 +998,10 @@ void S_Two(
 
 int main(int argc, char** argv) {
     // 检查参数数量
-    if(argc < 10) {
+    if(argc < 12) {
         std::cerr << "Usage: " << argv[0] 
                   << " MidName DataName OutputFileIndex OutMidName"
-                  << " A_PDG B_PDG Mode SP_ME [CutID]" << std::endl;
+                  << " A_PDG B_PDG If_SideBand_A If_SideBand_B Mode SP_ME [CutID]" << std::endl;
         return 1;
     }
 
@@ -973,7 +1015,9 @@ int main(int argc, char** argv) {
         atoi(argv[7]),
         atoi(argv[8]),
         atoi(argv[9]),
-        (argc > 10 ? atoi(argv[10]) : 0)
+        atoi(argv[10]),
+        atoi(argv[11]),
+        (argc > 12 ? atoi(argv[12]) : 0)
     );
 
     return 0;
@@ -1225,6 +1269,44 @@ inline bool GetSide(
 
     cosPhiOut = float(cosPhi);
     phiOut    = float(std::acos(cosPhi));
+
+    return true;
+}
+
+inline bool GetSide(
+    const ArmParticle& A,
+    const ArmParticle& B,
+    TH1F& H_P_tot,
+    TH1F& H_beta,
+    double& cosPhiOut,
+    double& phiOut,
+    bool IfRemoveFeedPair,
+    const std::vector<float>& MotherMass,
+    const std::vector<float>& MotherMassSigma,
+    float MassSigmaWidth) 
+{
+    const double AE = A.E;
+    const double BE = B.E;
+    const double TotE = AE + BE;
+    const double p[3] = {A.px+B.px , A.py+B.py , A.pz+B.pz};
+    double beta[4] = { -(p[0])/TotE , -(p[1])/TotE , -(p[2])/TotE , 0.0};
+    beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+
+    double P_tot = sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]);
+    H_P_tot.Fill(P_tot);
+    H_beta.Fill(sqrt(beta[3]));
+
+    const double gamma  = 1.0/(sqrt(1-beta[3]));
+    const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
+
+    const double bpA = beta[0]*A.px + beta[1]*A.py + beta[2]*A.pz;
+
+    const double New_APx = A.px + gamma2*beta[0]*bpA + gamma*beta[0]*AE;
+    const double New_APy = A.py + gamma2*beta[1]*bpA + gamma*beta[1]*AE;
+    const double New_APz = A.pz + gamma2*beta[2]*bpA + gamma*beta[2]*AE;
+
+    cosPhiOut = (New_APx*(p[0])+New_APy*(p[1])+New_APz*(p[2])) / (sqrt(New_APx*New_APx+New_APy*New_APy+New_APz*New_APz)*P_tot);
+    phiOut    = std::acos(cosPhiOut);
 
     return true;
 }
