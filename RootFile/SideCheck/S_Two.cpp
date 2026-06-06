@@ -1293,7 +1293,27 @@ inline bool GetSide(
     const double Px = double(A.px) + double(B.px);
     const double Py = double(A.py) + double(B.py);
     const double Pz = double(A.pz) + double(B.pz);
-    const double E  = double(A.E ) + double(B.E );
+
+    //----------------------------------------------------------------------
+    // Recompute single-particle energies in DOUBLE precision from the raw
+    // px,py,pz,mass — do NOT use the stored float A.E / B.E.  For highly
+    // relativistic particles (p >> m) the float E loses m² in the mantissa
+    // and rounds to E ≈ p, which makes P_tot / E_tot ≥ 1 (unphysical).
+    //----------------------------------------------------------------------
+
+    const double EA =
+        std::sqrt( double(A.px)*double(A.px)
+                 + double(A.py)*double(A.py)
+                 + double(A.pz)*double(A.pz)
+                 + double(A.mass)*double(A.mass) );
+
+    const double EB =
+        std::sqrt( double(B.px)*double(B.px)
+                 + double(B.py)*double(B.py)
+                 + double(B.pz)*double(B.pz)
+                 + double(B.mass)*double(B.mass) );
+
+    const double E = EA + EB;
 
     //--------------------------------------------------
     // Invariant mass (mass-based, avoids E² - P² cancellation)
@@ -1303,7 +1323,7 @@ inline bool GetSide(
     const double M2 =
           double(A.mass) * double(A.mass)
         + double(B.mass) * double(B.mass)
-        + 2.0 * ( double(A.E) * double(B.E)
+        + 2.0 * ( EA * EB
                 - double(A.px) * double(B.px)
                 - double(A.py) * double(B.py)
                 - double(A.pz) * double(B.pz) );
@@ -1335,8 +1355,7 @@ inline bool GetSide(
 
     const double P_tot = std::sqrt(Px*Px + Py*Py + Pz*Pz);
 
-    const double invE   = 1.0 / E;
-    const double beta   = P_tot * invE;          // |β| = |p|/E
+    const double beta = P_tot / E;             // |β| = |P_tot| / E_tot
 
     H_P_tot.Fill(P_tot);
     H_beta .Fill(beta );
@@ -1382,7 +1401,7 @@ inline bool GetSide(
     //--------------------------------------------------
 
     const double pParStar =
-        gamma * (pPar - beta * double(B.E));
+        gamma * (pPar - beta * EB);
 
     //--------------------------------------------------
     // Numerically stable  cos(θ*) = sign(p'∥) / √(1 + p'⊥²/p'∥²)
