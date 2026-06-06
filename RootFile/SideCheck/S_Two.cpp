@@ -469,7 +469,7 @@ void S_Two(
     std::vector<std::vector<std::vector<TH1F*>>>                     H_dRap_Mix          ;
     
     TH1F* H_P_tot = new TH1F("H_P_tot","H_P_tot",200,0,10);
-    TH1F* H_beta  = new TH1F("H_beta" ,"H_beta" ,200,0,1);
+    TH1F* H_beta  = new TH1F("H_beta" ,"H_beta" ,500,0,2);
 
 
     if (RecordingMethod == 0) {
@@ -1284,30 +1284,135 @@ inline bool GetSide(
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
-    float MassSigmaWidth) 
+    float MassSigmaWidth)
 {
-    const double AE = A.E;
-    const double BE = B.E;
-    const double TotE = AE + BE;
-    const double p[3] = {A.px+B.px , A.py+B.py , A.pz+B.pz};
-    double beta[4] = { -(p[0])/TotE , -(p[1])/TotE , -(p[2])/TotE , 0.0};
-    beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+    //--------------------------------------------------
+    // Total four momentum (promoted to double)
+    //--------------------------------------------------
 
-    double P_tot = sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]);
+    const double Px = double(A.px) + double(B.px);
+    const double Py = double(A.py) + double(B.py);
+    const double Pz = double(A.pz) + double(B.pz);
+    const double E  = double(A.E ) + double(B.E );
+
+    //--------------------------------------------------
+    // Invariant mass (mass-based, avoids E² - P² cancellation)
+    //   M² = m₁² + m₂² + 2(E₁E₂ - p₁·p₂)
+    //--------------------------------------------------
+
+    const double M2 =
+          double(A.mass) * double(A.mass)
+        + double(B.mass) * double(B.mass)
+        + 2.0 * ( double(A.E) * double(B.E)
+                - double(A.px) * double(B.px)
+                - double(A.py) * double(B.py)
+                - double(A.pz) * double(B.pz) );
+
+    if (M2 <= 0.0)
+        return false;
+
+    const double M = std::sqrt(M2);
+
+    //--------------------------------------------------
+    // Feed-down rejection (was missing from original)
+    //--------------------------------------------------
+
+    if (IfRemoveFeedPair) {
+
+        for (size_t i = 0; i < MotherMass.size(); ++i) {
+
+            if (std::fabs(M - MotherMass[i])
+                < MassSigmaWidth * MotherMassSigma[i]) {
+
+                return false;
+            }
+        }
+    }
+
+    //--------------------------------------------------
+    // Total momentum magnitude & beta
+    //--------------------------------------------------
+
+    const double P_tot = std::sqrt(Px*Px + Py*Py + Pz*Pz);
+
+    const double invE   = 1.0 / E;
+    const double beta   = P_tot * invE;          // |β| = |p|/E
+
     H_P_tot.Fill(P_tot);
-    H_beta.Fill(sqrt(beta[3]));
+    H_beta .Fill(beta );
 
-    const double gamma  = 1.0/(sqrt(1-beta[3]));
-    const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
+    if (beta < 1e-20 || beta >= 1.0)
+        return false;
 
-    const double bpA = beta[0]*A.px + beta[1]*A.py + beta[2]*A.pz;
+    //--------------------------------------------------
+    // Boost direction unit vector  n̂ = +P̂_tot
+    //--------------------------------------------------
 
-    const double New_APx = A.px + gamma2*beta[0]*bpA + gamma*beta[0]*AE;
-    const double New_APy = A.py + gamma2*beta[1]*bpA + gamma*beta[1]*AE;
-    const double New_APz = A.pz + gamma2*beta[2]*bpA + gamma*beta[2]*AE;
+    const double invP = 1.0 / P_tot;
+    const double nx = Px * invP;
+    const double ny = Py * invP;
+    const double nz = Pz * invP;
 
-    cosPhiOut = (New_APx*(p[0])+New_APy*(p[1])+New_APz*(p[2])) / (sqrt(New_APx*New_APx+New_APy*New_APy+New_APz*New_APz)*P_tot);
-    phiOut    = std::acos(cosPhiOut);
+    //--------------------------------------------------
+    // Decompose B momentum: parallel + perpendicular
+    //--------------------------------------------------
+
+    const double pPar =
+          double(B.px) * nx
+        + double(B.py) * ny
+        + double(B.pz) * nz;
+
+    const double p2 =
+          double(B.px) * double(B.px)
+        + double(B.py) * double(B.py)
+        + double(B.pz) * double(B.pz);
+
+    const double pPerp2 =
+        std::max(0.0, p2 - pPar * pPar);
+
+    //--------------------------------------------------
+    // gamma (via invariant mass: γ = E/M — avoids 1-β² cancellation)
+    //--------------------------------------------------
+
+    const double gamma = E / M;
+
+    //--------------------------------------------------
+    // Boosted parallel momentum:  p'∥ = γ (p∥ - β E_B)
+    // Perpendicular component is Lorentz invariant: p'⊥ = p⊥
+    //--------------------------------------------------
+
+    const double pParStar =
+        gamma * (pPar - beta * double(B.E));
+
+    //--------------------------------------------------
+    // Numerically stable  cos(θ*) = sign(p'∥) / √(1 + p'⊥²/p'∥²)
+    //--------------------------------------------------
+
+    double cosPhi;
+    const double denom = pParStar * pParStar;
+
+    if (denom <= 1e-30) {
+
+        cosPhi = 0.0;
+
+    } else {
+
+        const double ratio = pPerp2 / denom;
+
+        cosPhi =
+            ((pParStar >= 0.0) ? 1.0 : -1.0)
+            /
+            std::sqrt(1.0 + ratio);
+    }
+
+    //--------------------------------------------------
+    // Clamp to [-1, 1] (floating-point edge cases)
+    //--------------------------------------------------
+
+    cosPhi = std::max(-1.0, std::min(1.0, cosPhi));
+
+    cosPhiOut = cosPhi;
+    phiOut    = std::acos(cosPhi);
 
     return true;
 }
