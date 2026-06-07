@@ -1296,6 +1296,30 @@ inline bool GetSide(
     H_P_tot.Fill(sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]));
     H_beta .Fill(sqrt(beta[3]) );
 
+    if (sqrt(beta[3]) > 1) {
+        cout<<"#########################################"<<endl;
+        cout<<"APx   = "<<A.px<<endl;
+        cout<<"APy   = "<<A.py<<endl;
+        cout<<"APz   = "<<A.pz<<endl;
+        cout<<"AMass = "<<A.mass<<endl;
+        cout<<"BPx   = "<<B.px<<endl;
+        cout<<"BPy   = "<<B.py<<endl;
+        cout<<"BPz   = "<<B.pz<<endl;
+        cout<<"BMass = "<<B.mass<<endl;
+        cout<<"AE    = "<<AE<<endl;
+        cout<<"BE    = "<<BE<<endl;
+        cout<<"TotE=AE  + BE  = "<<TotE<<endl;
+        cout<<"Px = APx + BPx = "<<p[0]<<endl;
+        cout<<"Py = APy + BPy = "<<p[1]<<endl;
+        cout<<"Pz = APz + BPz = "<<p[2]<<endl;
+        cout<<"P_tot          = "<<sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2])<<endl;
+        cout<<"beta[0]        = "<<beta[0]<<endl;
+        cout<<"beta[1]        = "<<beta[1]<<endl;
+        cout<<"beta[2]        = "<<beta[2]<<endl;
+        cout<<"beta = P_tot/E = "<<sqrt(beta[3])<<endl;
+        cout<<"#########################################"<<endl;
+    }
+
     const double gamma  = 1.0/(sqrt(1-beta[3]));
     const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
 
