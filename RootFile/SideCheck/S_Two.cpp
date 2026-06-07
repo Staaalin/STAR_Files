@@ -1360,6 +1360,27 @@ inline bool GetSide(
     H_P_tot.Fill(P_tot);
     H_beta .Fill(beta );
 
+    if (beta > 1) {
+        cout<<"#########################################"<<endl;
+        cout<<"APx   = "<<A.px<<endl;
+        cout<<"APy   = "<<A.py<<endl;
+        cout<<"APz   = "<<A.pz<<endl;
+        cout<<"AMass = "<<A.mass<<endl;
+        cout<<"BPx   = "<<B.px<<endl;
+        cout<<"BPy   = "<<B.py<<endl;
+        cout<<"BPz   = "<<B.pz<<endl;
+        cout<<"BMass = "<<B.mass<<endl;
+        cout<<"AE    = "<<EA<<endl;
+        cout<<"BE    = "<<EB<<endl;
+        cout<<"E  = AE  + BE  = "<<E<<endl;
+        cout<<"Px = APx + BPx = "<<Px<<endl;
+        cout<<"Py = APy + BPy = "<<Py<<endl;
+        cout<<"Pz = APz + BPz = "<<Pz<<endl;
+        cout<<"P_tot          = "<<P_tot<<endl;
+        cout<<"beta = P_tot/E = "<<beta<<endl;
+        cout<<"#########################################"<<endl;
+    }
+
     if (beta < 1e-20 || beta >= 1.0)
         return false;
 
