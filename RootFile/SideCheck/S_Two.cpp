@@ -170,6 +170,17 @@ inline bool GetSide(
         const std::vector<float>& MotherMass,
         const std::vector<float>& MotherMassSigma,
         float MassSigmaWidth);
+inline bool GetAngle(
+    const ArmParticle& A,
+    const ArmParticle& B,
+    TH1F& H_P_tot,
+    TH1F& H_beta,
+    double& cosPhiOut,
+    double& phiOut,
+    bool IfRemoveFeedPair,
+    const std::vector<float>& MotherMass,
+    const std::vector<float>& MotherMassSigma,
+    float MassSigmaWidth);
 float CenCorr(float Vz, TString DataName);
 
 
@@ -932,14 +943,16 @@ void S_Two(
                                     for (const auto& B : B_particles) {
                                         
                                         if (IsSame) {
-                                            if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            // if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            if (GetAngle(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H                [CenIndex][RapIndex][PVzIndex]->Fill(d_phi);
                                                 H_ALL                      [RapIndex]->Fill(d_phi);
                                                 H_Cos            [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
                                                 H_ALL_Cos                  [RapIndex]->Fill(d_CosPhi);
                                             }
                                         }else{
-                                            if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            // if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            if (GetAngle(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(d_phi);
                                                 H_ALL_Mix                  [RapIndex]->Fill(d_phi);
                                                 H_Mix_Cos        [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
