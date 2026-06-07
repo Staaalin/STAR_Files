@@ -1286,176 +1286,201 @@ inline bool GetSide(
     const std::vector<float>& MotherMassSigma,
     float MassSigmaWidth)
 {
-    //--------------------------------------------------
-    // Total four momentum (promoted to double)
-    //--------------------------------------------------
+    const double AE = A.E;
+    const double BE = B.E;
+    const double TotE = AE + BE;
+    const double p[3] = {A.px+B.px , A.py+B.py , A.pz+B.pz};
+    double beta[4] = { -(p[0])/TotE , -(p[1])/TotE , -(p[2])/TotE , 0.0};
+    beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
 
-    const double Px = double(A.px) + double(B.px);
-    const double Py = double(A.py) + double(B.py);
-    const double Pz = double(A.pz) + double(B.pz);
+    H_P_tot.Fill(sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]));
+    H_beta .Fill(sqrt(beta[3]) );
 
-    //----------------------------------------------------------------------
-    // Recompute single-particle energies in DOUBLE precision from the raw
-    // px,py,pz,mass — do NOT use the stored float A.E / B.E.  For highly
-    // relativistic particles (p >> m) the float E loses m² in the mantissa
-    // and rounds to E ≈ p, which makes P_tot / E_tot ≥ 1 (unphysical).
-    //----------------------------------------------------------------------
+    const double gamma  = 1.0/(sqrt(1-beta[3]));
+    const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
 
-    const double EA =
-        std::sqrt( double(A.px)*double(A.px)
-                 + double(A.py)*double(A.py)
-                 + double(A.pz)*double(A.pz)
-                 + double(A.mass)*double(A.mass) );
+    const double bpB = beta[0]*B.px + beta[1]*B.py + beta[2]*B.pz;
 
-    const double EB =
-        std::sqrt( double(B.px)*double(B.px)
-                 + double(B.py)*double(B.py)
-                 + double(B.pz)*double(B.pz)
-                 + double(B.mass)*double(B.mass) );
+    const double New_BPx = B.px + gamma2*beta[0]*bpB + gamma*beta[0]*BE;
+    const double New_BPy = B.py + gamma2*beta[1]*bpB + gamma*beta[1]*BE;
+    const double New_BPz = B.pz + gamma2*beta[2]*bpB + gamma*beta[2]*BE;
 
-    const double E = EA + EB;
-
-    //--------------------------------------------------
-    // Invariant mass (mass-based, avoids E² - P² cancellation)
-    //   M² = m₁² + m₂² + 2(E₁E₂ - p₁·p₂)
-    //--------------------------------------------------
-
-    const double M2 =
-          double(A.mass) * double(A.mass)
-        + double(B.mass) * double(B.mass)
-        + 2.0 * ( EA * EB
-                - double(A.px) * double(B.px)
-                - double(A.py) * double(B.py)
-                - double(A.pz) * double(B.pz) );
-
-    if (M2 <= 0.0)
-        return false;
-
-    const double M = std::sqrt(M2);
-
-    //--------------------------------------------------
-    // Feed-down rejection (was missing from original)
-    //--------------------------------------------------
-
-    if (IfRemoveFeedPair) {
-
-        for (size_t i = 0; i < MotherMass.size(); ++i) {
-
-            if (std::fabs(M - MotherMass[i])
-                < MassSigmaWidth * MotherMassSigma[i]) {
-
-                return false;
-            }
-        }
-    }
-
-    //--------------------------------------------------
-    // Total momentum magnitude & beta
-    //--------------------------------------------------
-
-    const double P_tot = std::sqrt(Px*Px + Py*Py + Pz*Pz);
-
-    const double beta = P_tot / E;             // |β| = |P_tot| / E_tot
-
-    H_P_tot.Fill(P_tot);
-    H_beta .Fill(beta );
-
-    // if (beta > 1) {
-    //     cout<<"#########################################"<<endl;
-    //     cout<<"APx   = "<<A.px<<endl;
-    //     cout<<"APy   = "<<A.py<<endl;
-    //     cout<<"APz   = "<<A.pz<<endl;
-    //     cout<<"AMass = "<<A.mass<<endl;
-    //     cout<<"BPx   = "<<B.px<<endl;
-    //     cout<<"BPy   = "<<B.py<<endl;
-    //     cout<<"BPz   = "<<B.pz<<endl;
-    //     cout<<"BMass = "<<B.mass<<endl;
-    //     cout<<"AE    = "<<EA<<endl;
-    //     cout<<"BE    = "<<EB<<endl;
-    //     cout<<"E  = AE  + BE  = "<<E<<endl;
-    //     cout<<"Px = APx + BPx = "<<Px<<endl;
-    //     cout<<"Py = APy + BPy = "<<Py<<endl;
-    //     cout<<"Pz = APz + BPz = "<<Pz<<endl;
-    //     cout<<"P_tot          = "<<P_tot<<endl;
-    //     cout<<"beta = P_tot/E = "<<beta<<endl;
-    //     cout<<"#########################################"<<endl;
-    // }
-
-    if (beta < 1e-20 || beta >= 1.0)
-        return false;
-
-    //--------------------------------------------------
-    // Boost direction unit vector  n̂ = +P̂_tot
-    //--------------------------------------------------
-
-    const double invP = 1.0 / P_tot;
-    const double nx = Px * invP;
-    const double ny = Py * invP;
-    const double nz = Pz * invP;
-
-    //--------------------------------------------------
-    // Decompose B momentum: parallel + perpendicular
-    //--------------------------------------------------
-
-    const double pPar =
-          double(B.px) * nx
-        + double(B.py) * ny
-        + double(B.pz) * nz;
-
-    const double p2 =
-          double(B.px) * double(B.px)
-        + double(B.py) * double(B.py)
-        + double(B.pz) * double(B.pz);
-
-    const double pPerp2 =
-        std::max(0.0, p2 - pPar * pPar);
-
-    //--------------------------------------------------
-    // gamma (via invariant mass: γ = E/M — avoids 1-β² cancellation)
-    //--------------------------------------------------
-
-    const double gamma = E / M;
-
-    //--------------------------------------------------
-    // Boosted parallel momentum:  p'∥ = γ (p∥ - β E_B)
-    // Perpendicular component is Lorentz invariant: p'⊥ = p⊥
-    //--------------------------------------------------
-
-    const double pParStar =
-        gamma * (pPar - beta * EB);
-
-    //--------------------------------------------------
-    // Numerically stable  cos(θ*) = sign(p'∥) / √(1 + p'⊥²/p'∥²)
-    //--------------------------------------------------
-
-    double cosPhi;
-    const double denom = pParStar * pParStar;
-
-    if (denom <= 1e-30) {
-
-        cosPhi = 0.0;
-
-    } else {
-
-        const double ratio = pPerp2 / denom;
-
-        cosPhi =
-            ((pParStar >= 0.0) ? 1.0 : -1.0)
-            /
-            std::sqrt(1.0 + ratio);
-    }
-
-    //--------------------------------------------------
-    // Clamp to [-1, 1] (floating-point edge cases)
-    //--------------------------------------------------
-
-    cosPhi = std::max(-1.0, std::min(1.0, cosPhi));
-
-    cosPhiOut = cosPhi;
-    phiOut    = std::acos(cosPhi);
+    cosPhiOut = - (New_BPx*(p[0])+New_BPy*(p[1])+New_BPz*(p[2])) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]));
+    phiOut    = std::acos(cosPhiOut);
 
     return true;
 }
+// {
+//     //--------------------------------------------------
+//     // Total four momentum (promoted to double)
+//     //--------------------------------------------------
+
+//     const double Px = double(A.px) + double(B.px);
+//     const double Py = double(A.py) + double(B.py);
+//     const double Pz = double(A.pz) + double(B.pz);
+
+//     //----------------------------------------------------------------------
+//     // Recompute single-particle energies in DOUBLE precision from the raw
+//     // px,py,pz,mass — do NOT use the stored float A.E / B.E.  For highly
+//     // relativistic particles (p >> m) the float E loses m² in the mantissa
+//     // and rounds to E ≈ p, which makes P_tot / E_tot ≥ 1 (unphysical).
+//     //----------------------------------------------------------------------
+
+//     const double EA =
+//         std::sqrt( double(A.px)*double(A.px)
+//                  + double(A.py)*double(A.py)
+//                  + double(A.pz)*double(A.pz)
+//                  + double(A.mass)*double(A.mass) );
+
+//     const double EB =
+//         std::sqrt( double(B.px)*double(B.px)
+//                  + double(B.py)*double(B.py)
+//                  + double(B.pz)*double(B.pz)
+//                  + double(B.mass)*double(B.mass) );
+
+//     const double E = EA + EB;
+
+//     //--------------------------------------------------
+//     // Invariant mass (mass-based, avoids E² - P² cancellation)
+//     //   M² = m₁² + m₂² + 2(E₁E₂ - p₁·p₂)
+//     //--------------------------------------------------
+
+//     const double M2 =
+//           double(A.mass) * double(A.mass)
+//         + double(B.mass) * double(B.mass)
+//         + 2.0 * ( EA * EB
+//                 - double(A.px) * double(B.px)
+//                 - double(A.py) * double(B.py)
+//                 - double(A.pz) * double(B.pz) );
+
+//     if (M2 <= 0.0)
+//         return false;
+
+//     const double M = std::sqrt(M2);
+
+//     //--------------------------------------------------
+//     // Feed-down rejection (was missing from original)
+//     //--------------------------------------------------
+
+//     if (IfRemoveFeedPair) {
+
+//         for (size_t i = 0; i < MotherMass.size(); ++i) {
+
+//             if (std::fabs(M - MotherMass[i])
+//                 < MassSigmaWidth * MotherMassSigma[i]) {
+
+//                 return false;
+//             }
+//         }
+//     }
+
+//     //--------------------------------------------------
+//     // Total momentum magnitude & beta
+//     //--------------------------------------------------
+
+//     const double P_tot = std::sqrt(Px*Px + Py*Py + Pz*Pz);
+
+//     const double beta = P_tot / E;             // |β| = |P_tot| / E_tot
+
+//     H_P_tot.Fill(P_tot);
+//     H_beta .Fill(beta );
+
+//     // if (beta > 1) {
+//     //     cout<<"#########################################"<<endl;
+//     //     cout<<"APx   = "<<A.px<<endl;
+//     //     cout<<"APy   = "<<A.py<<endl;
+//     //     cout<<"APz   = "<<A.pz<<endl;
+//     //     cout<<"AMass = "<<A.mass<<endl;
+//     //     cout<<"BPx   = "<<B.px<<endl;
+//     //     cout<<"BPy   = "<<B.py<<endl;
+//     //     cout<<"BPz   = "<<B.pz<<endl;
+//     //     cout<<"BMass = "<<B.mass<<endl;
+//     //     cout<<"AE    = "<<EA<<endl;
+//     //     cout<<"BE    = "<<EB<<endl;
+//     //     cout<<"E  = AE  + BE  = "<<E<<endl;
+//     //     cout<<"Px = APx + BPx = "<<Px<<endl;
+//     //     cout<<"Py = APy + BPy = "<<Py<<endl;
+//     //     cout<<"Pz = APz + BPz = "<<Pz<<endl;
+//     //     cout<<"P_tot          = "<<P_tot<<endl;
+//     //     cout<<"beta = P_tot/E = "<<beta<<endl;
+//     //     cout<<"#########################################"<<endl;
+//     // }
+
+//     if (beta < 1e-20 || beta >= 1.0)
+//         return false;
+
+//     //--------------------------------------------------
+//     // Boost direction unit vector  n̂ = +P̂_tot
+//     //--------------------------------------------------
+
+//     const double invP = 1.0 / P_tot;
+//     const double nx = Px * invP;
+//     const double ny = Py * invP;
+//     const double nz = Pz * invP;
+
+//     //--------------------------------------------------
+//     // Decompose B momentum: parallel + perpendicular
+//     //--------------------------------------------------
+
+//     const double pPar =
+//           double(B.px) * nx
+//         + double(B.py) * ny
+//         + double(B.pz) * nz;
+
+//     const double p2 =
+//           double(B.px) * double(B.px)
+//         + double(B.py) * double(B.py)
+//         + double(B.pz) * double(B.pz);
+
+//     const double pPerp2 =
+//         std::max(0.0, p2 - pPar * pPar);
+
+//     //--------------------------------------------------
+//     // gamma (via invariant mass: γ = E/M — avoids 1-β² cancellation)
+//     //--------------------------------------------------
+
+//     const double gamma = E / M;
+
+//     //--------------------------------------------------
+//     // Boosted parallel momentum:  p'∥ = γ (p∥ - β E_B)
+//     // Perpendicular component is Lorentz invariant: p'⊥ = p⊥
+//     //--------------------------------------------------
+
+//     const double pParStar =
+//         gamma * (pPar - beta * EB);
+
+//     //--------------------------------------------------
+//     // Numerically stable  cos(θ*) = sign(p'∥) / √(1 + p'⊥²/p'∥²)
+//     //--------------------------------------------------
+
+//     double cosPhi;
+//     const double denom = pParStar * pParStar;
+
+//     if (denom <= 1e-30) {
+
+//         cosPhi = 0.0;
+
+//     } else {
+
+//         const double ratio = pPerp2 / denom;
+
+//         cosPhi =
+//             ((pParStar >= 0.0) ? 1.0 : -1.0)
+//             /
+//             std::sqrt(1.0 + ratio);
+//     }
+
+//     //--------------------------------------------------
+//     // Clamp to [-1, 1] (floating-point edge cases)
+//     //--------------------------------------------------
+
+//     cosPhi = std::max(-1.0, std::min(1.0, cosPhi));
+
+//     cosPhiOut = cosPhi;
+//     phiOut    = std::acos(cosPhi);
+
+//     return true;
+// }
 
 void print(std::vector<int> Temp)
 {
