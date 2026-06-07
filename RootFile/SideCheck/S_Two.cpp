@@ -1293,32 +1293,34 @@ inline bool GetSide(
     double beta[4] = { -(p[0])/TotE , -(p[1])/TotE , -(p[2])/TotE , 0.0};
     beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
 
-    H_P_tot.Fill(sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]));
+    double P_tot = sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]);
+
+    H_P_tot.Fill(P_tot);
     H_beta .Fill(sqrt(beta[3]) );
 
-    if (sqrt(beta[3]) > 1) {
-        cout<<"#########################################"<<endl;
-        cout<<"APx   = "<<A.px<<endl;
-        cout<<"APy   = "<<A.py<<endl;
-        cout<<"APz   = "<<A.pz<<endl;
-        cout<<"AMass = "<<A.mass<<endl;
-        cout<<"BPx   = "<<B.px<<endl;
-        cout<<"BPy   = "<<B.py<<endl;
-        cout<<"BPz   = "<<B.pz<<endl;
-        cout<<"BMass = "<<B.mass<<endl;
-        cout<<"AE    = "<<AE<<endl;
-        cout<<"BE    = "<<BE<<endl;
-        cout<<"TotE=AE  + BE  = "<<TotE<<endl;
-        cout<<"Px = APx + BPx = "<<p[0]<<endl;
-        cout<<"Py = APy + BPy = "<<p[1]<<endl;
-        cout<<"Pz = APz + BPz = "<<p[2]<<endl;
-        cout<<"P_tot          = "<<sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2])<<endl;
-        cout<<"beta[0]        = "<<beta[0]<<endl;
-        cout<<"beta[1]        = "<<beta[1]<<endl;
-        cout<<"beta[2]        = "<<beta[2]<<endl;
-        cout<<"beta = P_tot/E = "<<sqrt(beta[3])<<endl;
-        cout<<"#########################################"<<endl;
-    }
+    // if (sqrt(beta[3]) > 1) {
+    //     cout<<"#########################################"<<endl;
+    //     cout<<"APx   = "<<A.px<<endl;
+    //     cout<<"APy   = "<<A.py<<endl;
+    //     cout<<"APz   = "<<A.pz<<endl;
+    //     cout<<"AMass = "<<A.mass<<endl;
+    //     cout<<"BPx   = "<<B.px<<endl;
+    //     cout<<"BPy   = "<<B.py<<endl;
+    //     cout<<"BPz   = "<<B.pz<<endl;
+    //     cout<<"BMass = "<<B.mass<<endl;
+    //     cout<<"AE    = "<<AE<<endl;
+    //     cout<<"BE    = "<<BE<<endl;
+    //     cout<<"TotE=AE  + BE  = "<<TotE<<endl;
+    //     cout<<"Px = APx + BPx = "<<p[0]<<endl;
+    //     cout<<"Py = APy + BPy = "<<p[1]<<endl;
+    //     cout<<"Pz = APz + BPz = "<<p[2]<<endl;
+    //     cout<<"P_tot          = "<<sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2])<<endl;
+    //     cout<<"beta[0]        = "<<beta[0]<<endl;
+    //     cout<<"beta[1]        = "<<beta[1]<<endl;
+    //     cout<<"beta[2]        = "<<beta[2]<<endl;
+    //     cout<<"beta = P_tot/E = "<<sqrt(beta[3])<<endl;
+    //     cout<<"#########################################"<<endl;
+    // }
 
     const double gamma  = 1.0/(sqrt(1-beta[3]));
     const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
@@ -1329,7 +1331,7 @@ inline bool GetSide(
     const double New_BPy = B.py + gamma2*beta[1]*bpB + gamma*beta[1]*BE;
     const double New_BPz = B.pz + gamma2*beta[2]*bpB + gamma*beta[2]*BE;
 
-    cosPhiOut = - (New_BPx*(p[0])+New_BPy*(p[1])+New_BPz*(p[2])) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]));
+    cosPhiOut = (New_BPx*(p[0])+New_BPy*(p[1])+New_BPz*(p[2])) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*P_tot);
     phiOut    = std::acos(cosPhiOut);
 
     return true;
@@ -1505,6 +1507,66 @@ inline bool GetSide(
 
 //     return true;
 // }
+
+
+inline bool GetAngle(
+    const ArmParticle& A,
+    const ArmParticle& B,
+    TH1F& H_P_tot,
+    TH1F& H_beta,
+    double& cosPhiOut,
+    double& phiOut,
+    bool IfRemoveFeedPair,
+    const std::vector<float>& MotherMass,
+    const std::vector<float>& MotherMassSigma,
+    float MassSigmaWidth)
+{
+    const double AE = A.E;
+    const double BE = B.E;
+    double beta[4] = { -(A.px)/A.E , -(A.py)/A.E , -(A.pz)/A.E , 0.0};
+    beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+
+    H_P_tot.Fill(A.p);
+    H_beta .Fill(sqrt(beta[3]) );
+
+    // if (sqrt(beta[3]) > 1) {
+    //     cout<<"#########################################"<<endl;
+    //     cout<<"APx   = "<<A.px<<endl;
+    //     cout<<"APy   = "<<A.py<<endl;
+    //     cout<<"APz   = "<<A.pz<<endl;
+    //     cout<<"AMass = "<<A.mass<<endl;
+    //     cout<<"BPx   = "<<B.px<<endl;
+    //     cout<<"BPy   = "<<B.py<<endl;
+    //     cout<<"BPz   = "<<B.pz<<endl;
+    //     cout<<"BMass = "<<B.mass<<endl;
+    //     cout<<"AE    = "<<AE<<endl;
+    //     cout<<"BE    = "<<BE<<endl;
+    //     cout<<"TotE=AE  + BE  = "<<TotE<<endl;
+    //     cout<<"Px = APx + BPx = "<<p[0]<<endl;
+    //     cout<<"Py = APy + BPy = "<<p[1]<<endl;
+    //     cout<<"Pz = APz + BPz = "<<p[2]<<endl;
+    //     cout<<"P_tot          = "<<sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2])<<endl;
+    //     cout<<"beta[0]        = "<<beta[0]<<endl;
+    //     cout<<"beta[1]        = "<<beta[1]<<endl;
+    //     cout<<"beta[2]        = "<<beta[2]<<endl;
+    //     cout<<"beta = P_tot/E = "<<sqrt(beta[3])<<endl;
+    //     cout<<"#########################################"<<endl;
+    // }
+
+    const double gamma  = 1.0/(sqrt(1-beta[3]));
+    const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
+
+    const double bpB = beta[0]*B.px + beta[1]*B.py + beta[2]*B.pz;
+
+    const double New_BPx = B.px + gamma2*beta[0]*bpB + gamma*beta[0]*BE;
+    const double New_BPy = B.py + gamma2*beta[1]*bpB + gamma*beta[1]*BE;
+    const double New_BPz = B.pz + gamma2*beta[2]*bpB + gamma*beta[2]*BE;
+
+    cosPhiOut = (New_BPx*(A.px)+New_BPy*(A.py)+New_BPz*(A.pz)) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*A.p);
+    phiOut    = std::acos(cosPhiOut);
+
+    return true;
+}
 
 void print(std::vector<int> Temp)
 {
