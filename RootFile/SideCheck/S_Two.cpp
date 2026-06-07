@@ -89,21 +89,21 @@ struct ArmParticle {
           IsRecord(other.IsRecord), TreeID(other.TreeID),
           ParentID(other.ParentID) {}
 
-    ArmParticle& operator=(const ArmParticle& other) {
-        if (this != &other) {
-            px = other.px;
-            py = other.py;
-            pz = other.pz;
-            mass = other.mass;
-            eta = other.eta;
-            y = other.y;
-            pt = other.pt;
-            IsRecord = other.IsRecord;
-            TreeID = other.TreeID;
-            ParentID = other.ParentID;
-        }
-        return *this;
-    }
+    // ArmParticle& operator=(const ArmParticle& other) {
+    //     if (this != &other) {
+    //         px = other.px;
+    //         py = other.py;
+    //         pz = other.pz;
+    //         mass = other.mass;
+    //         eta = other.eta;
+    //         y = other.y;
+    //         pt = other.pt;
+    //         IsRecord = other.IsRecord;
+    //         TreeID = other.TreeID;
+    //         ParentID = other.ParentID;
+    //     }
+    //     return *this;
+    // }
 
 };
 
