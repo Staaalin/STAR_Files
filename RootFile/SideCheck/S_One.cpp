@@ -36,23 +36,24 @@
 #include <stdio.h>
 using namespace std;
 
+// 两体关联
 // 使用这个编译：
 // singularity exec -e --env DISPLAY=$DISPLAY -B /direct -B /gpfs -B /star -B /cvmfs -B /sdcc/lustre02 /cvmfs/star.sdcc.bnl.gov/containers/rhic_sl7.sif csh
 // g++ -O2 -std=c++11 S_One.cpp -o S_One `root-config --cflags --libs`
 
 // 定义粒子结构体
 struct ArmParticle {
-    float px;       // x方向动量
-    float py;       // y方向动量
-    float pz;       // z方向动量
-    float mass;     // 质量
-    float eta;      // 赝快度
-    float y;        // 快度
-    float pt;       // 横向动量
-    bool  IsRecord; // 是否被记录
-    int   TreeID;   // ID in one event
-    float p;        // 三动量绝对值
-    float E;        // 能量
+    double  px;       // x方向动量
+    double  py;       // y方向动量
+    double  pz;       // z方向动量
+    double  mass;     // 质量
+    double  eta;      // 赝快度
+    double  y;        // 快度
+    double  pt;       // 横向动量
+    bool    IsRecord; // 是否被记录
+    int     TreeID;   // ID in one event
+    double  p;        // 三动量绝对值
+    double  E;        // 能量
     std::vector<int>   ParentID; // Parent Particle ID in one event
     
     ArmParticle()
@@ -61,7 +62,7 @@ struct ArmParticle {
           IsRecord(false), TreeID(0) {}
     
     // 构造函数
-    ArmParticle(float _px, float _py, float _pz, float _mass, int _TreeID) 
+    ArmParticle(double _px, double _py, double _pz, double _mass, int _TreeID) 
         : px(_px), py(_py), pz(_pz), mass(_mass), TreeID(_TreeID) {
         // 计算赝快度、快度和横向动量
         pt = sqrt(px*px + py*py);
@@ -82,27 +83,27 @@ struct ArmParticle {
         return TLorentzVector(px, py, pz, energy());
     }
 
-    ArmParticle(const ArmParticle& other)
-        : px(other.px), py(other.py), pz(other.pz),
-          mass(other.mass), eta(other.eta), y(other.y), pt(other.pt),
-          IsRecord(other.IsRecord), TreeID(other.TreeID),
-          ParentID(other.ParentID) {}
+    // ArmParticle(const ArmParticle& other)
+    //     : px(other.px), py(other.py), pz(other.pz),
+    //       mass(other.mass), eta(other.eta), y(other.y), pt(other.pt),
+    //       IsRecord(other.IsRecord), TreeID(other.TreeID),
+    //       ParentID(other.ParentID) {}
 
-    ArmParticle& operator=(const ArmParticle& other) {
-        if (this != &other) {
-            px = other.px;
-            py = other.py;
-            pz = other.pz;
-            mass = other.mass;
-            eta = other.eta;
-            y = other.y;
-            pt = other.pt;
-            IsRecord = other.IsRecord;
-            TreeID = other.TreeID;
-            ParentID = other.ParentID;
-        }
-        return *this;
-    }
+    // ArmParticle& operator=(const ArmParticle& other) {
+    //     if (this != &other) {
+    //         px = other.px;
+    //         py = other.py;
+    //         pz = other.pz;
+    //         mass = other.mass;
+    //         eta = other.eta;
+    //         y = other.y;
+    //         pt = other.pt;
+    //         IsRecord = other.IsRecord;
+    //         TreeID = other.TreeID;
+    //         ParentID = other.ParentID;
+    //     }
+    //     return *this;
+    // }
 
 };
 
@@ -134,6 +135,8 @@ const float AyCut[] = {-10000.0 , 10000.0}; // A_y
 int FeedDown[] = { 0 };
 const float EtaCut[] = {-1.5 , 1.5}; // EtaCut for both A and B
 const float MassSigmaWidth = 3.0;
+const float Sideband_MassSigmaSta   = 4.0;
+const float Sideband_MassSigmaEnd   = 10.0;
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
@@ -147,7 +150,37 @@ bool IfInVector(int Num , const std::vector<int>& V);
 std::vector<int> GetDaughterPDGLit(int ID);
 Double_t massList(int PID, TString DataName);
 Double_t massListSigma(int PID, TString DataName);
-inline bool GetSide(const ArmParticle& A, const ArmParticle& B, float& P_B);
+inline bool GetSide(
+    const ArmParticle& A,
+    const ArmParticle& B,
+    float& cosPhiOut,
+    float& phiOut,
+    bool IfRemoveFeedPair,
+    const std::vector<float>& MotherMass,
+    const std::vector<float>& MotherMassSigma,
+    float MassSigmaWidth);
+inline bool GetSide(
+        const ArmParticle& A,
+        const ArmParticle& B,
+        TH1D& H_P_tot,
+        TH1D& H_beta ,
+        double& cosPhiOut,
+        double& phiOut,
+        bool IfRemoveFeedPair,
+        const std::vector<float>& MotherMass,
+        const std::vector<float>& MotherMassSigma,
+        float MassSigmaWidth);
+inline bool GetAngle(
+    const ArmParticle& A,
+    const ArmParticle& B,
+    TH1D& H_P_tot,
+    TH1D& H_beta,
+    double& cosPhiOut,
+    double& phiOut,
+    bool IfRemoveFeedPair,
+    const std::vector<float>& MotherMass,
+    const std::vector<float>& MotherMassSigma,
+    float MassSigmaWidth);
 float CenCorr(float Vz, TString DataName);
 
 
@@ -172,6 +205,8 @@ void S_One(
     TString OutMidName,
     int A_PDG,
     int B_PDG,
+    int If_SideBand_A,
+    int If_SideBand_B,
     int Mode,
     int SP_ME,
     int RecordingMethod = 0,
@@ -354,6 +389,11 @@ void S_One(
     float NNch , Eta;
     TString TreeName = "hadronTree";
 
+    bool Is_SideBand_A = true;
+    bool Is_SideBand_B = true;
+    if (If_SideBand_A == 0) Is_SideBand_A = false;
+    if (If_SideBand_B == 0) Is_SideBand_B = false;
+
     TVector3 BetaTemp;
     // ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>> p1 , p2 , p3 , p4 , p5;
     TLorentzVector p1 , p2 , p3;
@@ -375,41 +415,44 @@ void S_One(
     float BMassSigma = massListSigma(B_PDG, DataName) , AMassSigma = massListSigma(A_PDG, DataName);
     std::vector<std::vector<int> > D_ParID;
     bool IsSame;
-    float  P_B , P_A;
+    float  P_B , kStar;
+    float  phi , CosPhi;
+    double d_phi , d_CosPhi;
+    double dRap;
 
     // //                                    centrality    A_Rapidity   PrimaryVertex
     // std::vector<Event>    EventPool         [50]           [50]          [50];
     // std::vector<ArmParticle> A_Array                       [50]              , B_Array;
     // std::vector<ArmParticle> A_List                        [50]              , B_List ;
-    // TH1F                 *H1D_Side           [50]           [50]          [50];
-    // TH1F                 *H1D_ALL_Side                      [50]     ;
-    // TH1F                 *H1D_Mix_Side_ABC       [50]           [50]          [50];
-    // TH1F                 *H1D_ALL_Mix_Side_ABC                  [50]     ;
-    // TH1F                 *H_Tra_Side       [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_Side                  [50]     ;
-    // TH1F                 *H_dRap            [50]           [50]          [50];
-    // TH1F                 *H_ALL_dRap                       [50]     ;
-    // TH1F                 *H_Mix_dRap        [50]           [50]          [50];
-    // TH1F                 *H_ALL_Mix_dRap                   [50]     ;
-    // TH1F                 *H_Tra_dRap        [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_dRap                   [50]     ;
-    // TH1F                 *H_dPt             [50]           [50]          [50];
-    // TH1F                 *H_ALL_dPt                        [50]     ;
-    // TH1F                 *H_Mix_dPt         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Mix_dPt                    [50]     ;
-    // TH1F                 *H_Tra_dPt         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_dPt                    [50]     ;
-    // TH1F                 *H_ALL_Mass                       [50]     ;
-    // TH1F                 *H_ALL_Mix_Mass                   [50]     ;
-    // TH1F                 *H_ALL_Tra_Mass                   [50]     ;
-    // TH1F                 *H_Rap_A           [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_A                      [50]     ;
-    // TH1F                 *H_Rap_K_A         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_K_A                    [50]     ;
-    // TH1F                 *H_Rap_B           [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_B                      [50]     ;
-    // TH1F                 *H_Rap_K_B         [50]                         [50];
-    // TH1F                 *H_ALL_Rap_K_B                             ;
+    // TH1D                 *H1D_Side           [50]           [50]          [50];
+    // TH1D                 *H1D_ALL_Side                      [50]     ;
+    // TH1D                 *H1D_Mix_Side_ABC       [50]           [50]          [50];
+    // TH1D                 *H1D_ALL_Mix_Side_ABC                  [50]     ;
+    // TH1D                 *H_Tra_Side       [50]           [50]          [50];
+    // TH1D                 *H_ALL_Tra_Side                  [50]     ;
+    // TH1D                 *H_dRap            [50]           [50]          [50];
+    // TH1D                 *H_ALL_dRap                       [50]     ;
+    // TH1D                 *H_Mix_dRap        [50]           [50]          [50];
+    // TH1D                 *H_ALL_Mix_dRap                   [50]     ;
+    // TH1D                 *H_Tra_dRap        [50]           [50]          [50];
+    // TH1D                 *H_ALL_Tra_dRap                   [50]     ;
+    // TH1D                 *H_dPt             [50]           [50]          [50];
+    // TH1D                 *H_ALL_dPt                        [50]     ;
+    // TH1D                 *H_Mix_dPt         [50]           [50]          [50];
+    // TH1D                 *H_ALL_Mix_dPt                    [50]     ;
+    // TH1D                 *H_Tra_dPt         [50]           [50]          [50];
+    // TH1D                 *H_ALL_Tra_dPt                    [50]     ;
+    // TH1D                 *H_ALL_Mass                       [50]     ;
+    // TH1D                 *H_ALL_Mix_Mass                   [50]     ;
+    // TH1D                 *H_ALL_Tra_Mass                   [50]     ;
+    // TH1D                 *H_Rap_A           [50]           [50]          [50];
+    // TH1D                 *H_ALL_Rap_A                      [50]     ;
+    // TH1D                 *H_Rap_K_A         [50]           [50]          [50];
+    // TH1D                 *H_ALL_Rap_K_A                    [50]     ;
+    // TH1D                 *H_Rap_B           [50]           [50]          [50];
+    // TH1D                 *H_ALL_Rap_B                      [50]     ;
+    // TH1D                 *H_Rap_K_B         [50]                         [50];
+    // TH1D                 *H_ALL_Rap_K_B                             ;
     // // Used for test
     // TH2F                 *H_ALL_dRap_ARp                   [50]     ;
     // TH2F                 *H_ALL_Mix_dRap_ARp               [50]     ;
@@ -424,10 +467,23 @@ void S_One(
     std::vector<std::vector<ArmParticle>> A_List(yBinNum);
     std::vector<ArmParticle> B_List;
     std::vector<ArmParticle> C_List;
-    std::vector<TH1F*>                                               H_ALL        ;
-    std::vector<TH1F*>                                               H_ALL_Mix    ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix        ;
+    std::vector<TH1D*>                                               H_ALL               ;
+    std::vector<TH1D*>                                               H_ALL_Mix           ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H                   ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_Mix               ;
+    std::vector<TH1D*>                                               H_ALL_Cos           ;
+    std::vector<TH1D*>                                               H_ALL_Mix_Cos       ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos               ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_Mix_Cos           ;
+    std::vector<TH1D*>                                               H_dRap_ALL          ;
+    std::vector<TH1D*>                                               H_dRap_ALL_Mix      ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_dRap              ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_dRap_Mix          ;
+    
+    TH1D* H_P_tot     = new TH1D("H_P_tot","H_P_tot",200,0,10);
+    TH1D* H_beta      = new TH1D("H_beta" ,"H_beta" ,500,0,2);
+    TH1D* H_Mix_P_tot = new TH1D("H_Mix_P_tot","H_Mix_P_tot",200,0,10);
+    TH1D* H_Mix_beta  = new TH1D("H_Mix_beta" ,"H_Mix_beta" ,500,0,2);
 
 
     if (RecordingMethod == 0) {
@@ -436,14 +492,30 @@ void S_One(
         H_ALL_Mix    .resize(yBinNum, nullptr);
         H      .resize(CentralityBinNum);
         H_Mix   .resize(CentralityBinNum);
+        H_ALL_Cos       .resize(yBinNum, nullptr);
+        H_ALL_Mix_Cos    .resize(yBinNum, nullptr);
+        H_Cos      .resize(CentralityBinNum);
+        H_Mix_Cos   .resize(CentralityBinNum);
+        H_dRap_ALL       .resize(yBinNum, nullptr);
+        H_dRap_ALL_Mix    .resize(yBinNum, nullptr);
+        H_dRap      .resize(CentralityBinNum);
+        H_dRap_Mix   .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
-            H       [i].resize(yBinNum);
-            H_Mix   [i].resize(yBinNum);
+            H           [i].resize(yBinNum);
+            H_Mix       [i].resize(yBinNum);
+            H_Cos       [i].resize(yBinNum);
+            H_Mix_Cos   [i].resize(yBinNum);
+            H_dRap      [i].resize(yBinNum);
+            H_dRap_Mix  [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
-                H          [i][j].resize(PVzBinNum, nullptr);
-                H_Mix      [i][j].resize(PVzBinNum, nullptr);
+                H                     [i][j].resize(PVzBinNum, nullptr);
+                H_Mix                 [i][j].resize(PVzBinNum, nullptr);
+                H_Cos                 [i][j].resize(PVzBinNum, nullptr);
+                H_Mix_Cos             [i][j].resize(PVzBinNum, nullptr);
+                H_dRap                [i][j].resize(PVzBinNum, nullptr);
+                H_dRap_Mix            [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
@@ -457,8 +529,8 @@ void S_One(
     ArmParticle           A(0,0,0,0,0), B(0,0,0,0,0), C(0,0,0,0,0), D(0,0,0,0,0);
     Event                 TempEvent(0);
 
-    int SideBinNum = 240;
-    float SideSta = -6 , SideEnd = 6;
+    int SideBinNum = 100;
+    float SideSta = 0 , SideEnd = Pi;
     
     int dRapBinNum = 500;
     float dRapSta = -5 , dRapEnd = 5;
@@ -477,13 +549,21 @@ void S_One(
         for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
             for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
                 for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
-                    H        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_%d_%d_%d"       ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Mix    [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_%d_%d_%d"   ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H               [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_Mix           [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Mix_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_Cos           [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Cos_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Mix_Cos       [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Mix_Cos_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_dRap          [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_dRap_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+                    H_dRap_Mix      [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_dRap_Mix_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
 
                 }
             }
-            H_ALL           [RapIndex] = new TH1F(Form("H_ALL_%d"      ,         RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Mix       [RapIndex] = new TH1F(Form("H_ALL_Mix_%d"  ,         RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL                  [RapIndex] = new TH1D(Form("H_ALL_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_Mix              [RapIndex] = new TH1D(Form("H_ALL_Mix_%d"  ,          RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_Cos              [RapIndex] = new TH1D(Form("H_ALL_Cos_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Mix_Cos          [RapIndex] = new TH1D(Form("H_ALL_Mix_Cos_%d"  ,      RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_dRap_ALL             [RapIndex] = new TH1D(Form("H_dRap_ALL_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+            H_dRap_ALL_Mix         [RapIndex] = new TH1D(Form("H_dRap_ALL_Mix_%d"  ,     RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
 
         }
     }
@@ -697,7 +777,9 @@ void S_One(
         // 遍历粒子，筛选A、B、C、D
         for (i=0;i<PDGMult;i++){
             if (PDG->at(i) == A_PDG) {
-                if (fabs(InvariantMass->at(i) - AMass) <= MassSigmaWidth*AMassSigma) {
+                if ((!Is_SideBand_A && (fabs(InvariantMass->at(i) - AMass) <= MassSigmaWidth*AMassSigma)) || 
+                    ( Is_SideBand_A && ((fabs(InvariantMass->at(i) - AMass) >= Sideband_MassSigmaSta*AMassSigma) && (fabs(InvariantMass->at(i) - AMass) <= Sideband_MassSigmaEnd*AMassSigma))))
+                {
 
                     if (IfRemoveHighTPCsigma) {
                         if (abs(A_PDG) == 321) {
@@ -743,7 +825,9 @@ void S_One(
                 }
             }
             else if (PDG->at(i) == B_PDG) {
-                if (fabs(InvariantMass->at(i) - BMass) <= MassSigmaWidth*BMassSigma) {
+                if ((!Is_SideBand_B && (fabs(InvariantMass->at(i) - BMass) <= MassSigmaWidth*BMassSigma)) || 
+                    ( Is_SideBand_B && ((fabs(InvariantMass->at(i) - BMass) >= Sideband_MassSigmaSta*BMassSigma) && (fabs(InvariantMass->at(i) - BMass) <= Sideband_MassSigmaEnd*BMassSigma))))
+                {
 
                     if (IfRemoveHighTPCsigma) {
                         if (abs(B_PDG) == 321) {
@@ -866,14 +950,26 @@ void S_One(
                                     for (const auto& B : B_particles) {
                                         
                                         if (IsSame) {
-                                            if (GetSide(A,B , P_B)){
-                                                H         [CenIndex][RapIndex][PVzIndex]->Fill(P_B);
-                                                H_ALL               [RapIndex]->Fill(P_B);
+                                            if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            // if (GetAngle(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                                H                [CenIndex][RapIndex][PVzIndex]->Fill(d_phi);
+                                                H_ALL                      [RapIndex]->Fill(d_phi);
+                                                H_Cos            [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
+                                                H_ALL_Cos                  [RapIndex]->Fill(d_CosPhi);
+                                                dRap = (A.y > 0.0) ? (B.y - A.y) : (A.y - B.y);
+                                                H_dRap_ALL                 [RapIndex]->Fill(dRap);
+                                                H_dRap           [CenIndex][RapIndex][PVzIndex]->Fill(dRap);
                                             }
                                         }else{
-                                            if (GetSide(A,B , P_B)){
-                                                H_Mix     [CenIndex][RapIndex][PVzIndex]->Fill(P_B);
-                                                H_ALL_Mix           [RapIndex]->Fill(P_B);
+                                            if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            // if (GetAngle(A,B , *H_Mix_P_tot, *H_Mix_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                                H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(d_phi);
+                                                H_ALL_Mix                  [RapIndex]->Fill(d_phi);
+                                                H_Mix_Cos        [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
+                                                H_ALL_Mix_Cos              [RapIndex]->Fill(d_CosPhi);
+                                                dRap = (A.y > 0.0) ? (B.y - A.y) : (A.y - B.y);
+                                                H_dRap_ALL_Mix             [RapIndex]->Fill(dRap);
+                                                H_dRap_Mix       [CenIndex][RapIndex][PVzIndex]->Fill(dRap);
                                             }
                                         }
                                         ++AccumSameNum;
@@ -903,17 +999,35 @@ void S_One(
     TDirectory *folder_Side     = fileA->mkdir("Side");
     TDirectory *ALL_Side        = folder_Side->mkdir("ALL");
     TDirectory *Sep_Side        = folder_Side->mkdir("Sep");
+    TDirectory *folder_dRap     = fileA->mkdir("dRap");
+    TDirectory *ALL_dRap        = folder_dRap->mkdir("ALL");
+    TDirectory *Sep_dRap        = folder_dRap->mkdir("Sep");
+    fileA->cd();
+    H_P_tot->Write();
+    H_beta ->Write();
+    H_Mix_P_tot->Write();
+    H_Mix_beta ->Write();
     for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
         for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
             for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
                 Sep_Side->cd();
-                H             [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Mix         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H                    [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Cos                [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_Mix_Cos            [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                Sep_dRap->cd();
+                H_dRap               [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_dRap_Mix           [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
-        H_ALL                        [RapIndex] ->Write();
-        H_ALL_Mix                    [RapIndex] ->Write();
+        H_ALL                                   [RapIndex] ->Write();
+        H_ALL_Mix                               [RapIndex] ->Write();
+        H_ALL_Cos                               [RapIndex] ->Write();
+        H_ALL_Mix_Cos                           [RapIndex] ->Write();
+        ALL_dRap->cd();
+        H_dRap_ALL                              [RapIndex] ->Write();
+        H_dRap_ALL_Mix                          [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
@@ -922,10 +1036,10 @@ void S_One(
 
 int main(int argc, char** argv) {
     // 检查参数数量
-    if(argc < 10) {
+    if(argc < 12) {
         std::cerr << "Usage: " << argv[0] 
                   << " MidName DataName OutputFileIndex OutMidName"
-                  << " A_PDG B_PDG Mode SP_ME [CutID]" << std::endl;
+                  << " A_PDG B_PDG If_SideBand_A If_SideBand_B Mode SP_ME [CutID]" << std::endl;
         return 1;
     }
 
@@ -939,7 +1053,9 @@ int main(int argc, char** argv) {
         atoi(argv[7]),
         atoi(argv[8]),
         atoi(argv[9]),
-        (argc > 10 ? atoi(argv[10]) : 0)
+        atoi(argv[10]),
+        atoi(argv[11]),
+        (argc > 12 ? atoi(argv[12]) : 0)
     );
 
     return 0;
@@ -1031,56 +1147,461 @@ std::vector<int> GetNchList(int CentralityList[] , int CentralityListSize, TStri
     return Result;
 }
 
-inline bool GetSide(const ArmParticle& A,
-                    const ArmParticle& B, float& P_B)
+inline bool GetSide(
+    const ArmParticle& A,
+    const ArmParticle& B,
+    float& cosPhiOut,
+    float& phiOut,
+    bool IfRemoveFeedPair,
+    const std::vector<float>& MotherMass,
+    const std::vector<float>& MotherMassSigma,
+    float MassSigmaWidth)
 {
-    const float Tot_E = A.E + B.E;
+    //--------------------------------------------------
+    // Total four momentum
+    //--------------------------------------------------
 
-    const float betaX = -(A.px + B.px) / Tot_E;
-    const float betaY = -(A.py + B.py) / Tot_E;
-    const float betaZ = -(A.pz + B.pz) / Tot_E;
+    const double Px = double(A.px) + double(B.px);
+    const double Py = double(A.py) + double(B.py);
+    const double Pz = double(A.pz) + double(B.pz);
+    const double E  = double(A.E ) + double(B.E );
 
-    const float beta2 =
-    betaX*betaX +
-    betaY*betaY +
-    betaZ*betaZ;
+    //--------------------------------------------------
+    // Invariant mass
+    //--------------------------------------------------
 
-    if (beta2 < 1e-12f || beta2 >= 1.0f)
-    return false;
+    const double M2 =
+        E*E
+      - Px*Px
+      - Py*Py
+      - Pz*Pz;
 
-    const float gamma =
-    1.0f / std::sqrt(1.0f - beta2);
+    if (M2 <= 0.0)
+        return false;
 
-    const float gamma2 =
-    (gamma - 1.0f) / beta2;
+    //--------------------------------------------------
+    // Feed-down rejection
+    //--------------------------------------------------
 
-    const float bpB =
-    betaX*B.px +
-    betaY*B.py +
-    betaZ*B.pz;
+    if (IfRemoveFeedPair) {
 
-    const float New_BPx =
-    B.px + gamma2*bpB*betaX + gamma*betaX*B.E;
+        const double M = std::sqrt(M2);
 
-    const float New_BPy =
-    B.py + gamma2*bpB*betaY + gamma*betaY*B.E;
+        for (size_t i = 0; i < MotherMass.size(); ++i) {
 
-    const float New_BPz =
-    B.pz + gamma2*bpB*betaZ + gamma*betaZ*B.E;
+            if (std::fabs(M - MotherMass[i])
+                < MassSigmaWidth * MotherMassSigma[i]) {
 
-    const float invBeta =
-    1.0f / std::sqrt(beta2);
+                return false;
+            }
+        }
+    }
 
-    const float nx = -betaX * invBeta;
-    const float ny = -betaY * invBeta;
-    const float nz = -betaZ * invBeta;
+    //--------------------------------------------------
+    // beta
+    //--------------------------------------------------
 
-    const float projB =
-    New_BPx*nx +
-    New_BPy*ny +
-    New_BPz*nz;
+    const double invE = 1.0 / E;
 
-    P_B = projB;
+    const double betaX = -Px * invE;
+    const double betaY = -Py * invE;
+    const double betaZ = -Pz * invE;
+
+    const double beta2 =
+        betaX*betaX +
+        betaY*betaY +
+        betaZ*betaZ;
+
+    if (beta2 < 1e-20 || beta2 >= 1.0)
+        return false;
+
+    const double betaAbs =
+        std::sqrt(beta2);
+
+    //--------------------------------------------------
+    // beta direction
+    //--------------------------------------------------
+
+    const double invBeta =
+        1.0 / betaAbs;
+
+    const double nx = -betaX * invBeta;
+    const double ny = -betaY * invBeta;
+    const double nz = -betaZ * invBeta;
+
+    //--------------------------------------------------
+    // longitudinal momentum
+    //--------------------------------------------------
+
+    const double pPar =
+          double(B.px)*nx
+        + double(B.py)*ny
+        + double(B.pz)*nz;
+
+    //--------------------------------------------------
+    // total momentum squared
+    //--------------------------------------------------
+
+    const double p2 =
+          double(B.px)*double(B.px)
+        + double(B.py)*double(B.py)
+        + double(B.pz)*double(B.pz);
+
+    //--------------------------------------------------
+    // transverse momentum squared
+    //--------------------------------------------------
+
+    const double pPerp2 =
+        std::max(0.0,
+                 p2 - pPar*pPar);
+
+    //--------------------------------------------------
+    // gamma
+    //--------------------------------------------------
+
+    const double gamma =
+        1.0 / std::sqrt(1.0 - beta2);
+
+    //--------------------------------------------------
+    // boosted longitudinal momentum
+    //--------------------------------------------------
+
+    const double pParStar =
+        gamma * (pPar - betaAbs * double(B.E));
+
+    //--------------------------------------------------
+    // numerically stable cos(phi)
+    //--------------------------------------------------
+
+    const double denom =
+        pParStar * pParStar;
+
+    double cosPhi;
+
+    if (denom <= 1e-30) {
+
+        cosPhi = 0.0;
+
+    } else {
+
+        const double ratio =
+            pPerp2 / denom;
+
+        cosPhi =
+            ((pParStar >= 0.0) ? 1.0 : -1.0)
+            /
+            std::sqrt(1.0 + ratio);
+    }
+
+    //--------------------------------------------------
+    // Clamp
+    //--------------------------------------------------
+
+    cosPhi =
+        std::max(-1.0,
+        std::min( 1.0, cosPhi));
+
+    //--------------------------------------------------
+    // output
+    //--------------------------------------------------
+
+    cosPhiOut = float(cosPhi);
+    phiOut    = float(std::acos(cosPhi));
+
+    return true;
+}
+
+inline bool GetSide(
+    const ArmParticle& A,
+    const ArmParticle& B,
+    TH1D& H_P_tot,
+    TH1D& H_beta,
+    double& cosPhiOut,
+    double& phiOut,
+    bool IfRemoveFeedPair,
+    const std::vector<float>& MotherMass,
+    const std::vector<float>& MotherMassSigma,
+    float MassSigmaWidth)
+{
+    const double AE = A.E;
+    const double BE = B.E;
+    const double TotE = AE + BE;
+    const double p[3] = {A.px+B.px , A.py+B.py , A.pz+B.pz};
+    double beta[4] = { -(p[0])/TotE , -(p[1])/TotE , -(p[2])/TotE , 0.0};
+    beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+
+    double P_tot = sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]);
+
+    H_P_tot.Fill(P_tot);
+    H_beta .Fill(sqrt(beta[3]) );
+
+    // if (sqrt(beta[3]) > 1) {
+    //     cout<<"#########################################"<<endl;
+    //     cout<<"APx   = "<<A.px<<endl;
+    //     cout<<"APy   = "<<A.py<<endl;
+    //     cout<<"APz   = "<<A.pz<<endl;
+    //     cout<<"AMass = "<<A.mass<<endl;
+    //     cout<<"BPx   = "<<B.px<<endl;
+    //     cout<<"BPy   = "<<B.py<<endl;
+    //     cout<<"BPz   = "<<B.pz<<endl;
+    //     cout<<"BMass = "<<B.mass<<endl;
+    //     cout<<"AE    = "<<AE<<endl;
+    //     cout<<"BE    = "<<BE<<endl;
+    //     cout<<"TotE=AE  + BE  = "<<TotE<<endl;
+    //     cout<<"Px = APx + BPx = "<<p[0]<<endl;
+    //     cout<<"Py = APy + BPy = "<<p[1]<<endl;
+    //     cout<<"Pz = APz + BPz = "<<p[2]<<endl;
+    //     cout<<"P_tot          = "<<sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2])<<endl;
+    //     cout<<"beta[0]        = "<<beta[0]<<endl;
+    //     cout<<"beta[1]        = "<<beta[1]<<endl;
+    //     cout<<"beta[2]        = "<<beta[2]<<endl;
+    //     cout<<"beta = P_tot/E = "<<sqrt(beta[3])<<endl;
+    //     cout<<"#########################################"<<endl;
+    // }
+
+    const double gamma  = 1.0/(sqrt(1-beta[3]));
+    const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
+
+    const double bpB = beta[0]*B.px + beta[1]*B.py + beta[2]*B.pz;
+
+    const double New_BPx = B.px + gamma2*beta[0]*bpB + gamma*beta[0]*BE;
+    const double New_BPy = B.py + gamma2*beta[1]*bpB + gamma*beta[1]*BE;
+    const double New_BPz = B.pz + gamma2*beta[2]*bpB + gamma*beta[2]*BE;
+
+    cosPhiOut = (New_BPx*(p[0])+New_BPy*(p[1])+New_BPz*(p[2])) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*P_tot);
+    phiOut    = std::acos(cosPhiOut);
+
+    return true;
+}
+// {
+//     //--------------------------------------------------
+//     // Total four momentum (promoted to double)
+//     //--------------------------------------------------
+
+//     const double Px = double(A.px) + double(B.px);
+//     const double Py = double(A.py) + double(B.py);
+//     const double Pz = double(A.pz) + double(B.pz);
+
+//     //----------------------------------------------------------------------
+//     // Recompute single-particle energies in DOUBLE precision from the raw
+//     // px,py,pz,mass — do NOT use the stored float A.E / B.E.  For highly
+//     // relativistic particles (p >> m) the float E loses m² in the mantissa
+//     // and rounds to E ≈ p, which makes P_tot / E_tot ≥ 1 (unphysical).
+//     //----------------------------------------------------------------------
+
+//     const double EA =
+//         std::sqrt( double(A.px)*double(A.px)
+//                  + double(A.py)*double(A.py)
+//                  + double(A.pz)*double(A.pz)
+//                  + double(A.mass)*double(A.mass) );
+
+//     const double EB =
+//         std::sqrt( double(B.px)*double(B.px)
+//                  + double(B.py)*double(B.py)
+//                  + double(B.pz)*double(B.pz)
+//                  + double(B.mass)*double(B.mass) );
+
+//     const double E = EA + EB;
+
+//     //--------------------------------------------------
+//     // Invariant mass (mass-based, avoids E² - P² cancellation)
+//     //   M² = m₁² + m₂² + 2(E₁E₂ - p₁·p₂)
+//     //--------------------------------------------------
+
+//     const double M2 =
+//           double(A.mass) * double(A.mass)
+//         + double(B.mass) * double(B.mass)
+//         + 2.0 * ( EA * EB
+//                 - double(A.px) * double(B.px)
+//                 - double(A.py) * double(B.py)
+//                 - double(A.pz) * double(B.pz) );
+
+//     if (M2 <= 0.0)
+//         return false;
+
+//     const double M = std::sqrt(M2);
+
+//     //--------------------------------------------------
+//     // Feed-down rejection (was missing from original)
+//     //--------------------------------------------------
+
+//     if (IfRemoveFeedPair) {
+
+//         for (size_t i = 0; i < MotherMass.size(); ++i) {
+
+//             if (std::fabs(M - MotherMass[i])
+//                 < MassSigmaWidth * MotherMassSigma[i]) {
+
+//                 return false;
+//             }
+//         }
+//     }
+
+//     //--------------------------------------------------
+//     // Total momentum magnitude & beta
+//     //--------------------------------------------------
+
+//     const double P_tot = std::sqrt(Px*Px + Py*Py + Pz*Pz);
+
+//     const double beta = P_tot / E;             // |β| = |P_tot| / E_tot
+
+//     H_P_tot.Fill(P_tot);
+//     H_beta .Fill(beta );
+
+//     // if (beta > 1) {
+//     //     cout<<"#########################################"<<endl;
+//     //     cout<<"APx   = "<<A.px<<endl;
+//     //     cout<<"APy   = "<<A.py<<endl;
+//     //     cout<<"APz   = "<<A.pz<<endl;
+//     //     cout<<"AMass = "<<A.mass<<endl;
+//     //     cout<<"BPx   = "<<B.px<<endl;
+//     //     cout<<"BPy   = "<<B.py<<endl;
+//     //     cout<<"BPz   = "<<B.pz<<endl;
+//     //     cout<<"BMass = "<<B.mass<<endl;
+//     //     cout<<"AE    = "<<EA<<endl;
+//     //     cout<<"BE    = "<<EB<<endl;
+//     //     cout<<"E  = AE  + BE  = "<<E<<endl;
+//     //     cout<<"Px = APx + BPx = "<<Px<<endl;
+//     //     cout<<"Py = APy + BPy = "<<Py<<endl;
+//     //     cout<<"Pz = APz + BPz = "<<Pz<<endl;
+//     //     cout<<"P_tot          = "<<P_tot<<endl;
+//     //     cout<<"beta = P_tot/E = "<<beta<<endl;
+//     //     cout<<"#########################################"<<endl;
+//     // }
+
+//     if (beta < 1e-20 || beta >= 1.0)
+//         return false;
+
+//     //--------------------------------------------------
+//     // Boost direction unit vector  n̂ = +P̂_tot
+//     //--------------------------------------------------
+
+//     const double invP = 1.0 / P_tot;
+//     const double nx = Px * invP;
+//     const double ny = Py * invP;
+//     const double nz = Pz * invP;
+
+//     //--------------------------------------------------
+//     // Decompose B momentum: parallel + perpendicular
+//     //--------------------------------------------------
+
+//     const double pPar =
+//           double(B.px) * nx
+//         + double(B.py) * ny
+//         + double(B.pz) * nz;
+
+//     const double p2 =
+//           double(B.px) * double(B.px)
+//         + double(B.py) * double(B.py)
+//         + double(B.pz) * double(B.pz);
+
+//     const double pPerp2 =
+//         std::max(0.0, p2 - pPar * pPar);
+
+//     //--------------------------------------------------
+//     // gamma (via invariant mass: γ = E/M — avoids 1-β² cancellation)
+//     //--------------------------------------------------
+
+//     const double gamma = E / M;
+
+//     //--------------------------------------------------
+//     // Boosted parallel momentum:  p'∥ = γ (p∥ - β E_B)
+//     // Perpendicular component is Lorentz invariant: p'⊥ = p⊥
+//     //--------------------------------------------------
+
+//     const double pParStar =
+//         gamma * (pPar - beta * EB);
+
+//     //--------------------------------------------------
+//     // Numerically stable  cos(θ*) = sign(p'∥) / √(1 + p'⊥²/p'∥²)
+//     //--------------------------------------------------
+
+//     double cosPhi;
+//     const double denom = pParStar * pParStar;
+
+//     if (denom <= 1e-30) {
+
+//         cosPhi = 0.0;
+
+//     } else {
+
+//         const double ratio = pPerp2 / denom;
+
+//         cosPhi =
+//             ((pParStar >= 0.0) ? 1.0 : -1.0)
+//             /
+//             std::sqrt(1.0 + ratio);
+//     }
+
+//     //--------------------------------------------------
+//     // Clamp to [-1, 1] (floating-point edge cases)
+//     //--------------------------------------------------
+
+//     cosPhi = std::max(-1.0, std::min(1.0, cosPhi));
+
+//     cosPhiOut = cosPhi;
+//     phiOut    = std::acos(cosPhi);
+
+//     return true;
+// }
+
+
+inline bool GetAngle(
+    const ArmParticle& A,
+    const ArmParticle& B,
+    TH1D& H_P_tot,
+    TH1D& H_beta,
+    double& cosPhiOut,
+    double& phiOut,
+    bool IfRemoveFeedPair,
+    const std::vector<float>& MotherMass,
+    const std::vector<float>& MotherMassSigma,
+    float MassSigmaWidth)
+{
+    double beta[4] = { -A.px/A.E , -A.py/A.E , -A.pz/A.E , 0.0};
+    beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+
+    H_P_tot.Fill(A.p);
+    H_beta .Fill(sqrt(beta[3]) );
+
+    // if (sqrt(beta[3]) > 1) {
+    //     cout<<"#########################################"<<endl;
+    //     cout<<"APx   = "<<A.px<<endl;
+    //     cout<<"APy   = "<<A.py<<endl;
+    //     cout<<"APz   = "<<A.pz<<endl;
+    //     cout<<"AMass = "<<A.mass<<endl;
+    //     cout<<"BPx   = "<<B.px<<endl;
+    //     cout<<"BPy   = "<<B.py<<endl;
+    //     cout<<"BPz   = "<<B.pz<<endl;
+    //     cout<<"BMass = "<<B.mass<<endl;
+    //     cout<<"AE    = "<<AE<<endl;
+    //     cout<<"BE    = "<<BE<<endl;
+    //     cout<<"TotE=AE  + BE  = "<<TotE<<endl;
+    //     cout<<"Px = APx + BPx = "<<p[0]<<endl;
+    //     cout<<"Py = APy + BPy = "<<p[1]<<endl;
+    //     cout<<"Pz = APz + BPz = "<<p[2]<<endl;
+    //     cout<<"P_tot          = "<<sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2])<<endl;
+    //     cout<<"beta[0]        = "<<beta[0]<<endl;
+    //     cout<<"beta[1]        = "<<beta[1]<<endl;
+    //     cout<<"beta[2]        = "<<beta[2]<<endl;
+    //     cout<<"beta = P_tot/E = "<<sqrt(beta[3])<<endl;
+    //     cout<<"#########################################"<<endl;
+    // }
+
+    const double gamma  = 1.0/(sqrt(1-beta[3]));
+    const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
+
+    const double bpB = beta[0]*B.px + beta[1]*B.py + beta[2]*B.pz;
+
+    const double New_BPx = B.px + gamma2*beta[0]*bpB + gamma*beta[0]*B.E;
+    const double New_BPy = B.py + gamma2*beta[1]*bpB + gamma*beta[1]*B.E;
+    const double New_BPz = B.pz + gamma2*beta[2]*bpB + gamma*beta[2]*B.E;
+
+    cosPhiOut = (New_BPx*A.px+New_BPy*A.py+New_BPz*A.pz) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*A.p);
+    phiOut    = std::acos(cosPhiOut);
+    if (cosPhiOut<-1.0) {cosPhiOut = -1.0;phiOut = Pi ;}
+    if (cosPhiOut> 1.0) {cosPhiOut =  1.0;phiOut = 0.0;}
+
     return true;
 }
 
