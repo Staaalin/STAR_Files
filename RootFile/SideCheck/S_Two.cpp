@@ -1579,8 +1579,8 @@ inline bool GetAngle(
 
     cosPhiOut = (New_BPx*A.px+New_BPy*A.py+New_BPz*A.pz) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*A.p);
     phiOut    = std::acos(cosPhiOut);
-    if (cosPhiOut<-1.0) {cosPhiOut = -1.0;phiOut = Pi}
-    if (cosPhiOut> 1.0) {cosPhiOut =  1.0;phiOut = 0}
+    if (cosPhiOut<-1.0) {cosPhiOut = -1.0;phiOut = Pi ;}
+    if (cosPhiOut> 1.0) {cosPhiOut =  1.0;phiOut = 0.0;}
 
     return true;
 }
