@@ -418,6 +418,7 @@ void S_Two(
     float  P_B , kStar;
     float  phi , CosPhi;
     double d_phi , d_CosPhi;
+    double dRap;
 
     // //                                    centrality    A_Rapidity   PrimaryVertex
     // std::vector<Event>    EventPool         [50]           [50]          [50];
@@ -552,6 +553,8 @@ void S_Two(
                     H_Mix           [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Mix_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
                     H_Cos           [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Cos_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
                     H_Mix_Cos       [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Mix_Cos_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_dRap          [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_dRap_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+                    H_dRap_Mix      [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_dRap_Mix_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
 
                 }
             }
@@ -559,6 +562,8 @@ void S_Two(
             H_ALL_Mix              [RapIndex] = new TH1D(Form("H_ALL_Mix_%d"  ,          RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
             H_ALL_Cos              [RapIndex] = new TH1D(Form("H_ALL_Cos_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
             H_ALL_Mix_Cos          [RapIndex] = new TH1D(Form("H_ALL_Mix_Cos_%d"  ,      RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_dRap_ALL             [RapIndex] = new TH1D(Form("H_dRap_ALL_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
+            H_dRap_ALL_Mix         [RapIndex] = new TH1D(Form("H_dRap_ALL_Mix_%d"  ,     RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
 
         }
     }
@@ -951,6 +956,9 @@ void S_Two(
                                                 H_ALL                      [RapIndex]->Fill(d_phi);
                                                 H_Cos            [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
                                                 H_ALL_Cos                  [RapIndex]->Fill(d_CosPhi);
+                                                dRap = (A.y > 0.0) ? (B.y - A.y) : (A.y - B.y);
+                                                H_dRap_ALL                 [RapIndex]->Fill(dRap);
+                                                H_dRap           [CenIndex][RapIndex][PVzIndex]->Fill(dRap);
                                             }
                                         }else{
                                             // if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
@@ -959,6 +967,9 @@ void S_Two(
                                                 H_ALL_Mix                  [RapIndex]->Fill(d_phi);
                                                 H_Mix_Cos        [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
                                                 H_ALL_Mix_Cos              [RapIndex]->Fill(d_CosPhi);
+                                                dRap = (A.y > 0.0) ? (B.y - A.y) : (A.y - B.y);
+                                                H_dRap_ALL_Mix             [RapIndex]->Fill(dRap);
+                                                H_dRap_Mix       [CenIndex][RapIndex][PVzIndex]->Fill(dRap);
                                             }
                                         }
                                         ++AccumSameNum;
@@ -988,6 +999,9 @@ void S_Two(
     TDirectory *folder_Side     = fileA->mkdir("Side");
     TDirectory *ALL_Side        = folder_Side->mkdir("ALL");
     TDirectory *Sep_Side        = folder_Side->mkdir("Sep");
+    TDirectory *folder_dRap     = fileA->mkdir("dRap");
+    TDirectory *ALL_dRap        = folder_dRap->mkdir("ALL");
+    TDirectory *Sep_dRap        = folder_dRap->mkdir("Sep");
     fileA->cd();
     H_P_tot->Write();
     H_beta ->Write();
@@ -1001,6 +1015,9 @@ void S_Two(
                 H_Mix                [CenIndex] [RapIndex] [PVzIndex] ->Write();
                 H_Cos                [CenIndex] [RapIndex] [PVzIndex] ->Write();
                 H_Mix_Cos            [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                Sep_dRap->cd();
+                H_dRap               [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_dRap_Mix           [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
@@ -1008,6 +1025,9 @@ void S_Two(
         H_ALL_Mix                               [RapIndex] ->Write();
         H_ALL_Cos                               [RapIndex] ->Write();
         H_ALL_Mix_Cos                           [RapIndex] ->Write();
+        ALL_dRap->cd();
+        H_dRap_ALL                              [RapIndex] ->Write();
+        H_dRap_ALL_Mix                          [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
