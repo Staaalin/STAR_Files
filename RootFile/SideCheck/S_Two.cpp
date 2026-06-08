@@ -162,8 +162,8 @@ inline bool GetSide(
 inline bool GetSide(
         const ArmParticle& A,
         const ArmParticle& B,
-        TH1F& H_P_tot,
-        TH1F& H_beta ,
+        TH1D& H_P_tot,
+        TH1D& H_beta ,
         double& cosPhiOut,
         double& phiOut,
         bool IfRemoveFeedPair,
@@ -173,8 +173,8 @@ inline bool GetSide(
 inline bool GetAngle(
     const ArmParticle& A,
     const ArmParticle& B,
-    TH1F& H_P_tot,
-    TH1F& H_beta,
+    TH1D& H_P_tot,
+    TH1D& H_beta,
     double& cosPhiOut,
     double& phiOut,
     bool IfRemoveFeedPair,
@@ -423,35 +423,35 @@ void S_Two(
     // std::vector<Event>    EventPool         [50]           [50]          [50];
     // std::vector<ArmParticle> A_Array                       [50]              , B_Array;
     // std::vector<ArmParticle> A_List                        [50]              , B_List ;
-    // TH1F                 *H1D_Side           [50]           [50]          [50];
-    // TH1F                 *H1D_ALL_Side                      [50]     ;
-    // TH1F                 *H1D_Mix_Side_ABC       [50]           [50]          [50];
-    // TH1F                 *H1D_ALL_Mix_Side_ABC                  [50]     ;
-    // TH1F                 *H_Tra_Side       [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_Side                  [50]     ;
-    // TH1F                 *H_dRap            [50]           [50]          [50];
-    // TH1F                 *H_ALL_dRap                       [50]     ;
-    // TH1F                 *H_Mix_dRap        [50]           [50]          [50];
-    // TH1F                 *H_ALL_Mix_dRap                   [50]     ;
-    // TH1F                 *H_Tra_dRap        [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_dRap                   [50]     ;
-    // TH1F                 *H_dPt             [50]           [50]          [50];
-    // TH1F                 *H_ALL_dPt                        [50]     ;
-    // TH1F                 *H_Mix_dPt         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Mix_dPt                    [50]     ;
-    // TH1F                 *H_Tra_dPt         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_dPt                    [50]     ;
-    // TH1F                 *H_ALL_Mass                       [50]     ;
-    // TH1F                 *H_ALL_Mix_Mass                   [50]     ;
-    // TH1F                 *H_ALL_Tra_Mass                   [50]     ;
-    // TH1F                 *H_Rap_A           [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_A                      [50]     ;
-    // TH1F                 *H_Rap_K_A         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_K_A                    [50]     ;
-    // TH1F                 *H_Rap_B           [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_B                      [50]     ;
-    // TH1F                 *H_Rap_K_B         [50]                         [50];
-    // TH1F                 *H_ALL_Rap_K_B                             ;
+    // TH1D                 *H1D_Side           [50]           [50]          [50];
+    // TH1D                 *H1D_ALL_Side                      [50]     ;
+    // TH1D                 *H1D_Mix_Side_ABC       [50]           [50]          [50];
+    // TH1D                 *H1D_ALL_Mix_Side_ABC                  [50]     ;
+    // TH1D                 *H_Tra_Side       [50]           [50]          [50];
+    // TH1D                 *H_ALL_Tra_Side                  [50]     ;
+    // TH1D                 *H_dRap            [50]           [50]          [50];
+    // TH1D                 *H_ALL_dRap                       [50]     ;
+    // TH1D                 *H_Mix_dRap        [50]           [50]          [50];
+    // TH1D                 *H_ALL_Mix_dRap                   [50]     ;
+    // TH1D                 *H_Tra_dRap        [50]           [50]          [50];
+    // TH1D                 *H_ALL_Tra_dRap                   [50]     ;
+    // TH1D                 *H_dPt             [50]           [50]          [50];
+    // TH1D                 *H_ALL_dPt                        [50]     ;
+    // TH1D                 *H_Mix_dPt         [50]           [50]          [50];
+    // TH1D                 *H_ALL_Mix_dPt                    [50]     ;
+    // TH1D                 *H_Tra_dPt         [50]           [50]          [50];
+    // TH1D                 *H_ALL_Tra_dPt                    [50]     ;
+    // TH1D                 *H_ALL_Mass                       [50]     ;
+    // TH1D                 *H_ALL_Mix_Mass                   [50]     ;
+    // TH1D                 *H_ALL_Tra_Mass                   [50]     ;
+    // TH1D                 *H_Rap_A           [50]           [50]          [50];
+    // TH1D                 *H_ALL_Rap_A                      [50]     ;
+    // TH1D                 *H_Rap_K_A         [50]           [50]          [50];
+    // TH1D                 *H_ALL_Rap_K_A                    [50]     ;
+    // TH1D                 *H_Rap_B           [50]           [50]          [50];
+    // TH1D                 *H_ALL_Rap_B                      [50]     ;
+    // TH1D                 *H_Rap_K_B         [50]                         [50];
+    // TH1D                 *H_ALL_Rap_K_B                             ;
     // // Used for test
     // TH2F                 *H_ALL_dRap_ARp                   [50]     ;
     // TH2F                 *H_ALL_Mix_dRap_ARp               [50]     ;
@@ -466,23 +466,23 @@ void S_Two(
     std::vector<std::vector<ArmParticle>> A_List(yBinNum);
     std::vector<ArmParticle> B_List;
     std::vector<ArmParticle> C_List;
-    std::vector<TH1F*>                                               H_ALL               ;
-    std::vector<TH1F*>                                               H_ALL_Mix           ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H                   ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix               ;
-    std::vector<TH1F*>                                               H_ALL_Cos           ;
-    std::vector<TH1F*>                                               H_ALL_Mix_Cos       ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos               ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Mix_Cos           ;
-    std::vector<TH1F*>                                               H_dRap_ALL          ;
-    std::vector<TH1F*>                                               H_dRap_ALL_Mix      ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_dRap              ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_dRap_Mix          ;
+    std::vector<TH1D*>                                               H_ALL               ;
+    std::vector<TH1D*>                                               H_ALL_Mix           ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H                   ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_Mix               ;
+    std::vector<TH1D*>                                               H_ALL_Cos           ;
+    std::vector<TH1D*>                                               H_ALL_Mix_Cos       ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos               ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_Mix_Cos           ;
+    std::vector<TH1D*>                                               H_dRap_ALL          ;
+    std::vector<TH1D*>                                               H_dRap_ALL_Mix      ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_dRap              ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_dRap_Mix          ;
     
-    TH1F* H_P_tot     = new TH1F("H_P_tot","H_P_tot",200,0,10);
-    TH1F* H_beta      = new TH1F("H_beta" ,"H_beta" ,500,0,2);
-    TH1F* H_Mix_P_tot = new TH1F("H_Mix_P_tot","H_Mix_P_tot",200,0,10);
-    TH1F* H_Mix_beta  = new TH1F("H_Mix_beta" ,"H_Mix_beta" ,500,0,2);
+    TH1D* H_P_tot     = new TH1D("H_P_tot","H_P_tot",200,0,10);
+    TH1D* H_beta      = new TH1D("H_beta" ,"H_beta" ,500,0,2);
+    TH1D* H_Mix_P_tot = new TH1D("H_Mix_P_tot","H_Mix_P_tot",200,0,10);
+    TH1D* H_Mix_beta  = new TH1D("H_Mix_beta" ,"H_Mix_beta" ,500,0,2);
 
 
     if (RecordingMethod == 0) {
@@ -548,17 +548,17 @@ void S_Two(
         for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
             for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
                 for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
-                    H               [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Mix           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Cos           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Mix_Cos       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Mix_Cos_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H               [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_Mix           [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Mix_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_Cos           [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Cos_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_Mix_Cos       [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Mix_Cos_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
 
                 }
             }
-            H_ALL                  [RapIndex] = new TH1F(Form("H_ALL_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Mix              [RapIndex] = new TH1F(Form("H_ALL_Mix_%d"  ,          RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Cos              [RapIndex] = new TH1F(Form("H_ALL_Cos_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Mix_Cos          [RapIndex] = new TH1F(Form("H_ALL_Mix_Cos_%d"  ,      RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL                  [RapIndex] = new TH1D(Form("H_ALL_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_Mix              [RapIndex] = new TH1D(Form("H_ALL_Mix_%d"  ,          RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_Cos              [RapIndex] = new TH1D(Form("H_ALL_Cos_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_Mix_Cos          [RapIndex] = new TH1D(Form("H_ALL_Mix_Cos_%d"  ,      RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
 
         }
     }
@@ -1294,8 +1294,8 @@ inline bool GetSide(
 inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
-    TH1F& H_P_tot,
-    TH1F& H_beta,
+    TH1D& H_P_tot,
+    TH1D& H_beta,
     double& cosPhiOut,
     double& phiOut,
     bool IfRemoveFeedPair,
@@ -1529,8 +1529,8 @@ inline bool GetSide(
 inline bool GetAngle(
     const ArmParticle& A,
     const ArmParticle& B,
-    TH1F& H_P_tot,
-    TH1F& H_beta,
+    TH1D& H_P_tot,
+    TH1D& H_beta,
     double& cosPhiOut,
     double& phiOut,
     bool IfRemoveFeedPair,
@@ -1579,6 +1579,8 @@ inline bool GetAngle(
 
     cosPhiOut = (New_BPx*A.px+New_BPy*A.py+New_BPz*A.pz) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*A.p);
     phiOut    = std::acos(cosPhiOut);
+    if (cosPhiOut<-1.0) {cosPhiOut = -1.0;phiOut = Pi}
+    if (cosPhiOut> 1.0) {cosPhiOut =  1.0;phiOut = 0}
 
     return true;
 }
