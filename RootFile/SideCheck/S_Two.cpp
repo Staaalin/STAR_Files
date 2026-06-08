@@ -43,17 +43,17 @@ using namespace std;
 
 // 定义粒子结构体
 struct ArmParticle {
-    float px;       // x方向动量
-    float py;       // y方向动量
-    float pz;       // z方向动量
-    float mass;     // 质量
-    float eta;      // 赝快度
-    float y;        // 快度
-    float pt;       // 横向动量
-    bool  IsRecord; // 是否被记录
-    int   TreeID;   // ID in one event
-    float p;        // 三动量绝对值
-    float E;        // 能量
+    float   px;       // x方向动量
+    float   py;       // y方向动量
+    float   pz;       // z方向动量
+    float   mass;     // 质量
+    double  eta;      // 赝快度
+    double  y;        // 快度
+    double  pt;       // 横向动量
+    bool    IsRecord; // 是否被记录
+    int     TreeID;   // ID in one event
+    double  p;        // 三动量绝对值
+    double  E;        // 能量
     std::vector<int>   ParentID; // Parent Particle ID in one event
     
     ArmParticle()
@@ -65,11 +65,11 @@ struct ArmParticle {
     ArmParticle(float _px, float _py, float _pz, float _mass, int _TreeID) 
         : px(_px), py(_py), pz(_pz), mass(_mass), TreeID(_TreeID) {
         // 计算赝快度、快度和横向动量
-        pt = sqrt(px*px + py*py);
-        p = sqrt(pt*pt + pz*pz);
-        E = sqrt(p*p+mass*mass);
-        eta = -1.0*log(tan(0.5*(acos(pz/p))));
-        y = 0.5 * log((E + pz) / (E - pz));
+        pt = sqrt(double(px)*double(px) + double(py)*double(py));
+        p = sqrt(pt*pt + double(pz)*double(pz));
+        E = sqrt(p*p+double(mass)*double(mass));
+        eta = -1.0*log(tan(0.5*(acos(double(pz)/p))));
+        y = 0.5 * log((E + double(pz)) / (E - double(pz)));
         IsRecord = false;
     }
     
@@ -1534,9 +1534,7 @@ inline bool GetAngle(
     const std::vector<float>& MotherMassSigma,
     float MassSigmaWidth)
 {
-    const double AE = A.E;
-    const double BE = B.E;
-    double beta[4] = { -(A.px)/A.E , -(A.py)/A.E , -(A.pz)/A.E , 0.0};
+    double beta[4] = { -double(A.px)/A.E , -double(A.py)/A.E , -double(A.pz)/A.E , 0.0};
     beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
 
     H_P_tot.Fill(A.p);
@@ -1569,13 +1567,13 @@ inline bool GetAngle(
     const double gamma  = 1.0/(sqrt(1-beta[3]));
     const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
 
-    const double bpB = beta[0]*B.px + beta[1]*B.py + beta[2]*B.pz;
+    const double bpB = beta[0]*double(B.px) + beta[1]*double(B.py) + beta[2]*double(B.pz);
 
-    const double New_BPx = B.px + gamma2*beta[0]*bpB + gamma*beta[0]*BE;
-    const double New_BPy = B.py + gamma2*beta[1]*bpB + gamma*beta[1]*BE;
-    const double New_BPz = B.pz + gamma2*beta[2]*bpB + gamma*beta[2]*BE;
+    const double New_BPx = double(B.px) + gamma2*beta[0]*bpB + gamma*beta[0]*B.E;
+    const double New_BPy = double(B.py) + gamma2*beta[1]*bpB + gamma*beta[1]*B.E;
+    const double New_BPz = double(B.pz) + gamma2*beta[2]*bpB + gamma*beta[2]*B.E;
 
-    cosPhiOut = (New_BPx*(A.px)+New_BPy*(A.py)+New_BPz*(A.pz)) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*A.p);
+    cosPhiOut = (New_BPx*double(A.px)+New_BPy*double(A.py)+New_BPz*double(A.pz)) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*A.p);
     phiOut    = std::acos(cosPhiOut);
 
     return true;
