@@ -1122,6 +1122,9 @@ void S_Three(
     TDirectory *folder_Side     = fileA->mkdir("Side");
     TDirectory *ALL_Side        = folder_Side->mkdir("ALL");
     TDirectory *Sep_Side        = folder_Side->mkdir("Sep");
+    fileA->cd();
+    H_P_tot->Write();
+    H_beta ->Write();
     for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
         for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
             for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
