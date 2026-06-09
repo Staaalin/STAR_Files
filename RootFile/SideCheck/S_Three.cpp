@@ -43,17 +43,17 @@ using namespace std;
 
 // 定义粒子结构体
 struct ArmParticle {
-    float px;       // x方向动量
-    float py;       // y方向动量
-    float pz;       // z方向动量
-    float mass;     // 质量
-    float eta;      // 赝快度
-    float y;        // 快度
-    float pt;       // 横向动量
-    bool  IsRecord; // 是否被记录
-    int   TreeID;   // ID in one event
-    double p;        // 三动量绝对值
-    double E;        // 能量
+    float   px;       // x方向动量
+    float   py;       // y方向动量
+    float   pz;       // z方向动量
+    float   mass;     // 质量
+    float   eta;      // 赝快度
+    float   y;        // 快度
+    double  pt;       // 横向动量
+    bool    IsRecord; // 是否被记录
+    int     TreeID;   // ID in one event
+    double  p;        // 三动量绝对值
+    double  E;        // 能量
     std::vector<int>   ParentID; // Parent Particle ID in one event
     
     ArmParticle()
@@ -78,32 +78,6 @@ struct ArmParticle {
         return sqrt(px*px + py*py + pz*pz + mass*mass);
     }
     
-    // 转换为四动量
-    TLorentzVector lorentzVector() const {
-        return TLorentzVector(px, py, pz, energy());
-    }
-
-    ArmParticle(const ArmParticle& other)
-        : px(other.px), py(other.py), pz(other.pz),
-          mass(other.mass), eta(other.eta), y(other.y), pt(other.pt),
-          IsRecord(other.IsRecord), TreeID(other.TreeID),
-          ParentID(other.ParentID) {}
-
-    ArmParticle& operator=(const ArmParticle& other) {
-        if (this != &other) {
-            px = other.px;
-            py = other.py;
-            pz = other.pz;
-            mass = other.mass;
-            eta = other.eta;
-            y = other.y;
-            pt = other.pt;
-            IsRecord = other.IsRecord;
-            TreeID = other.TreeID;
-            ParentID = other.ParentID;
-        }
-        return *this;
-    }
 
 };
 
@@ -152,8 +126,12 @@ inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
     const ArmParticle& C,
-    double& cosPhiOut,
-    double& phiOut,
+    TH1D& H_P_tot,
+    TH1D& H_beta,
+    double& B_cosPhiOut,
+    double& B_phiOut,
+    double& C_cosPhiOut,
+    double& C_phiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -393,7 +371,8 @@ void S_Three(
     std::vector<std::vector<int> > D_ParID;
     bool IsSame;
     float  P_B , kStar;
-    double  phi , CosPhi;
+    double  B_phi , B_CosPhi;
+    double  C_phi , C_CosPhi;
     enum MixType {
         SAME,
         AB_C,
@@ -469,6 +448,8 @@ void S_Three(
     std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos_AC_B            ;
     std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos_BC_A            ;
     std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos_A_B_C           ;
+    TH1D* H_P_tot     = new TH1D("H_P_tot","H_P_tot",200,0,10);
+    TH1D* H_beta      = new TH1D("H_beta" ,"H_beta" ,500,0,2);
 
 
     if (RecordingMethod == 0) {
@@ -1100,11 +1081,15 @@ void S_Three(
                                                 }
                                                 const auto& C = C_particles[k];
                                             
-                                                if (GetSide(A,B,C , CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                                    hLocal     ->Fill(phi);
-                                                    hLocal_Cos ->Fill(CosPhi);
-                                                    hGlobal    ->Fill(phi);
-                                                    hGlobal_Cos->Fill(CosPhi);
+                                                if (GetSide(A,B,C , *H_P_tot, *H_beta , B_CosPhi,B_phi , C_CosPhi,C_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                                    hLocal     ->Fill(B_phi);
+                                                    hLocal_Cos ->Fill(B_CosPhi);
+                                                    hGlobal    ->Fill(B_phi);
+                                                    hGlobal_Cos->Fill(B_CosPhi);
+                                                    hLocal     ->Fill(C_phi);
+                                                    hLocal_Cos ->Fill(C_CosPhi);
+                                                    hGlobal    ->Fill(C_phi);
+                                                    hGlobal_Cos->Fill(C_CosPhi);
                                                 }
                                             }
                                         }
@@ -1287,32 +1272,48 @@ inline bool GetSide(
     const ArmParticle& A,
     const ArmParticle& B,
     const ArmParticle& C,
-    double& cosPhiOut,
-    double& phiOut,
+    TH1D& H_P_tot,
+    TH1D& H_beta,
+    double& B_cosPhiOut,
+    double& B_phiOut,
+    double& C_cosPhiOut,
+    double& C_phiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
     float MassSigmaWidth)
 {
-    const double AE = A.E;
-    const double BE = B.E;
-    const double CE = C.E;
-    const double TotE = AE + BE + CE;
+    const double TotE = A.E + B.E + C.E;
     const double p[3] = {A.px+B.px+C.px , A.py+B.py+C.py , A.pz+B.pz+C.pz};
+    const double P_tot = sqrt(p[0]*p[0] + p[1]*p[1] + p[2]*p[2]);
     double beta[4] = { -(p[0])/TotE , -(p[1])/TotE , -(p[2])/TotE , 0.0};
     beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+    
+    H_P_tot.Fill(P_tot);
+    H_beta .Fill(sqrt(beta[3]) );
 
     const double gamma  = 1.0/(sqrt(1-beta[3]));
     const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
 
-    const double bpA = beta[0]*A.px + beta[1]*A.py + beta[2]*A.pz;
+    // Calculate B
+    const double bpB = beta[0]*B.px + beta[1]*B.py + beta[2]*B.pz;
 
-    const double New_APx = A.px + gamma2*beta[0]*bpA + gamma*beta[0]*AE;
-    const double New_APy = A.py + gamma2*beta[1]*bpA + gamma*beta[1]*AE;
-    const double New_APz = A.pz + gamma2*beta[2]*bpA + gamma*beta[2]*AE;
+    const double New_BPx = B.px + gamma2*beta[0]*bpB + gamma*beta[0]*B.E;
+    const double New_BPy = B.py + gamma2*beta[1]*bpB + gamma*beta[1]*B.E;
+    const double New_BPz = B.pz + gamma2*beta[2]*bpB + gamma*beta[2]*B.E;
 
-    cosPhiOut = - (New_APx*(p[0])+New_APy*(p[1])+New_APz*(p[2])) / (sqrt(New_APx*New_APx+New_APy*New_APy+New_APz*New_APz)*sqrt(p[0]*p[0]+p[1]*p[1]+p[2]*p[2]));
-    phiOut    = std::acos(cosPhiOut);
+    B_cosPhiOut = (New_BPx*(p[0])+New_BPy*(p[1])+New_BPz*(p[2])) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*P_tot);
+    B_phiOut    = std::acos(B_cosPhiOut);
+
+    // Calculate B
+    const double bpC = beta[0]*C.px + beta[1]*C.py + beta[2]*C.pz;
+
+    const double New_CPx = C.px + gamma2*beta[0]*bpC + gamma*beta[0]*C.E;
+    const double New_CPy = C.py + gamma2*beta[1]*bpC + gamma*beta[1]*C.E;
+    const double New_CPz = C.pz + gamma2*beta[2]*bpC + gamma*beta[2]*C.E;
+
+    C_cosPhiOut = (New_CPx*(p[0])+New_CPy*(p[1])+New_CPz*(p[2])) / (sqrt(New_CPx*New_CPx+New_CPy*New_CPy+New_CPz*New_CPz)*P_tot);
+    C_phiOut    = std::acos(C_cosPhiOut);
 
     return true;
 }
