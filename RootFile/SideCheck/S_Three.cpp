@@ -994,7 +994,6 @@ void S_Three(
                                 const auto& B_particles = eventB.B_particles;
                         
                                 for (int Cid = 0; Cid < HowMuchEventMixing + 1; ++Cid) {
-                                    if ((Check_B_C) && (Cid < Bid)) continue;
                         
                                     auto& eventC = EventPool[CenIndex][RapIndex][PVzIndex][Cid];
                                     const auto& C_particles = eventC.C_particles;
@@ -1076,8 +1075,8 @@ void S_Three(
                                             for (k=0;k<C_particles.size();k++) {
 
                                                 if ((Check_B_C) && ((mixType = SAME)||(mixType = BC_A))) {
-                                                    if (k <= j) continue;
-                                                    // if (IfInVector(C_particles[k].TreeID , B.ParentID)) continue;
+                                                    if (k == j) continue;
+                                                    if (IfInVector(C_particles[k].TreeID , B.ParentID)) continue;
                                                 }
                                                 const auto& C = C_particles[k];
                                             
