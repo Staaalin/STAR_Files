@@ -1005,7 +1005,7 @@ void S_Three(
                         
                                     MixType mixType;
                         
-                                    if (Aid != Bid && Aid != Cid && Bid != Cid) {
+                                    if ((Aid != Bid) && (Aid != Cid) && (Bid != Cid)) {
                                         mixType = A_B_C;
                                     }
                                     else if ((Aid == Bid) && (Aid != Cid)) {
@@ -1077,7 +1077,7 @@ void S_Three(
 
                                                 if ((Check_B_C) && ((mixType = SAME)||(mixType = BC_A))) {
                                                     if (k <= j) continue;
-                                                    if (IfInVector(C_particles[k].TreeID , B.ParentID)) continue;
+                                                    // if (IfInVector(C_particles[k].TreeID , B.ParentID)) continue;
                                                 }
                                                 const auto& C = C_particles[k];
                                             
