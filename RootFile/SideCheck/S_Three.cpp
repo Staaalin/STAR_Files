@@ -1075,7 +1075,7 @@ void S_Three(
                             
                                             for (k=0;k<C_particles.size();k++) {
 
-                                                if ((Check_B_C) && (mixType = SAME)) {
+                                                if ((Check_B_C) && ((mixType = SAME)||(mixType = BC_A))) {
                                                     if (k <= j) continue;
                                                     if (IfInVector(C_particles[k].TreeID , B.ParentID)) continue;
                                                 }
