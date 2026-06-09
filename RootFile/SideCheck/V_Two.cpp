@@ -39,7 +39,7 @@ using namespace std;
 // 两体关联
 // 使用这个编译：
 // singularity exec -e --env DISPLAY=$DISPLAY -B /direct -B /gpfs -B /star -B /cvmfs -B /sdcc/lustre02 /cvmfs/star.sdcc.bnl.gov/containers/rhic_sl7.sif csh
-// g++ -O2 -std=c++11 S_One.cpp -o S_One `root-config --cflags --libs`
+// g++ -O2 -std=c++11 V_Two.cpp -o S_One `root-config --cflags --libs`
 
 // 定义粒子结构体
 struct ArmParticle {
@@ -198,7 +198,7 @@ struct Event {
 
 void print(Event Temp);
 
-void S_One(
+void V_Two(
     TString MidName,
     TString DataName,
     int OutputFileIndex,
@@ -950,8 +950,8 @@ void S_One(
                                     for (const auto& B : B_particles) {
                                         
                                         if (IsSame) {
-                                            if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                            // if (GetAngle(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            // if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            if (GetAngle(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H                [CenIndex][RapIndex][PVzIndex]->Fill(d_phi);
                                                 H_ALL                      [RapIndex]->Fill(d_phi);
                                                 H_Cos            [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
@@ -961,8 +961,8 @@ void S_One(
                                                 H_dRap           [CenIndex][RapIndex][PVzIndex]->Fill(dRap);
                                             }
                                         }else{
-                                            if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                            // if (GetAngle(A,B , *H_Mix_P_tot, *H_Mix_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            // if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            if (GetAngle(A,B , *H_Mix_P_tot, *H_Mix_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(d_phi);
                                                 H_ALL_Mix                  [RapIndex]->Fill(d_phi);
                                                 H_Mix_Cos        [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
@@ -1043,7 +1043,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    S_One(
+    V_Two(
         TString(argv[1]),
         TString(argv[2]),
         atoi(argv[3]),

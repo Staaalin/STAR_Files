@@ -43,12 +43,12 @@ using namespace std;
 
 // 定义粒子结构体
 struct ArmParticle {
-    double  px;       // x方向动量
-    double  py;       // y方向动量
-    double  pz;       // z方向动量
-    double  mass;     // 质量
-    double  eta;      // 赝快度
-    double  y;        // 快度
+    float   px;       // x方向动量
+    float   py;       // y方向动量
+    float   pz;       // z方向动量
+    float   mass;     // 质量
+    float   eta;      // 赝快度
+    float   y;        // 快度
     double  pt;       // 横向动量
     bool    IsRecord; // 是否被记录
     int     TreeID;   // ID in one event
@@ -950,8 +950,8 @@ void S_Two(
                                     for (const auto& B : B_particles) {
                                         
                                         if (IsSame) {
-                                            // if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                            if (GetAngle(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            // if (GetAngle(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H                [CenIndex][RapIndex][PVzIndex]->Fill(d_phi);
                                                 H_ALL                      [RapIndex]->Fill(d_phi);
                                                 H_Cos            [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
@@ -961,8 +961,8 @@ void S_Two(
                                                 H_dRap           [CenIndex][RapIndex][PVzIndex]->Fill(dRap);
                                             }
                                         }else{
-                                            // if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                            if (GetAngle(A,B , *H_Mix_P_tot, *H_Mix_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            if (GetSide(A,B , *H_P_tot, *H_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                            // if (GetAngle(A,B , *H_Mix_P_tot, *H_Mix_beta, d_CosPhi,d_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                 H_Mix            [CenIndex][RapIndex][PVzIndex]->Fill(d_phi);
                                                 H_ALL_Mix                  [RapIndex]->Fill(d_phi);
                                                 H_Mix_Cos        [CenIndex][RapIndex][PVzIndex]->Fill(d_CosPhi);
