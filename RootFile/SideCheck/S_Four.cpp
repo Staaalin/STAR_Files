@@ -1908,6 +1908,7 @@ void S_Four(
                                     const auto& C_particles = eventC.C_particles;
 
                                     for (int Did = 0; Did < HowMuchEventMixing + 1; ++Did) {
+                                        const auto& D_particles = eventD.D_particles;
                                         //==================================================
                                         // Determine mixing type
                                         //==================================================
@@ -2305,7 +2306,7 @@ void S_Four(
     TDirectory *ALL_Side        = folder_Side->mkdir("ALL");
     TDirectory *Sep_Side        = folder_Side->mkdir("Sep");
     fileA->cd();
-    B_P_tot->Write();
+    H_P_tot->Write();
     H_beta ->Write();
     for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
         for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
@@ -2642,11 +2643,11 @@ inline bool GetSide(
     const double TotE = AE + BE + CE + DE;
     double p[4] = {A.px+B.px+C.px+D.px , A.py+B.py+C.py+D.py , A.pz+B.pz+C.pz+D.pz , 0.0};
     p[3] = sqrt(p[0]*p[0] + p[1]*p[1] + p[2]*p[2]);
-    H_P_tot->Fill(p[3]);
+    H_P_tot.Fill(p[3]);
     const double n[3] = {p[0]/p[3] , p[1]/p[3] , p[2]/p[3]};
     double beta[4] = { -(p[0])/TotE , -(p[1])/TotE , -(p[2])/TotE , 0.0};
     beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
-    H_beta->Fill(sqrt(beta[3]));
+    H_beta.Fill(sqrt(beta[3]));
 
     const double gamma  = 1.0/(sqrt(1-beta[3]));
     const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
@@ -3171,9 +3172,17 @@ bool computeRotatedProjections(const Vec3& b, const Vec3& c, const Vec3& d, cons
         double B = -u[0]*v0[1] + u[1]*v0[0];
         return {A, B};
     };
-    auto [Ab, Bb] = computeAB(vb0, uB);
-    auto [Ac, Bc] = computeAB(vc0, uC);
-    auto [Ad, Bd] = computeAB(vd0, uD);
+    std::pair<double,double> tmpB = computeAB(vb0, uB);
+    double Ab = tmpB.first;
+    double Bb = tmpB.second;
+    
+    std::pair<double,double> tmpC = computeAB(vc0, uC);
+    double Ac = tmpC.first;
+    double Bc = tmpC.second;
+    
+    std::pair<double,double> tmpD = computeAB(vd0, uD);
+    double Ad = tmpD.first;
+    double Bd = tmpD.second;
 
     // 6. 计算总和
     double sum_A2_minus_B2 = (Ab*Ab - Bb*Bb) + (Ac*Ac - Bc*Bc) + (Ad*Ad - Bd*Bd);
