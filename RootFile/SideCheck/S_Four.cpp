@@ -38,7 +38,7 @@
 #include <cmath>
 using namespace std;
 
-// 三体关联
+// 四体关联
 // 使用这个编译：
 // singularity exec -e --env DISPLAY=$DISPLAY -B /direct -B /gpfs -B /star -B /cvmfs -B /sdcc/lustre02 /cvmfs/star.sdcc.bnl.gov/containers/rhic_sl7.sif csh
 // g++ -O2 -std=c++11 S_Four.cpp -o S_One `root-config --cflags --libs`
@@ -57,17 +57,17 @@ bool computeRotatedProjections(const Vec3& b, const Vec3& c, const Vec3& d, cons
 
 // 定义粒子结构体
 struct ArmParticle {
-    float px;       // x方向动量
-    float py;       // y方向动量
-    float pz;       // z方向动量
-    float mass;     // 质量
-    float eta;      // 赝快度
-    float y;        // 快度
-    float pt;       // 横向动量
-    bool  IsRecord; // 是否被记录
-    int   TreeID;   // ID in one event
-    float p;        // 三动量绝对值
-    float E;        // 能量
+    float   px;       // x方向动量
+    float   py;       // y方向动量
+    float   pz;       // z方向动量
+    float   mass;     // 质量
+    float   eta;      // 赝快度
+    float   y;        // 快度
+    double  pt;       // 横向动量
+    bool    IsRecord; // 是否被记录
+    int     TreeID;   // ID in one event
+    double  p;        // 三动量绝对值
+    double  E;        // 能量
     std::vector<int>   ParentID; // Parent Particle ID in one event
     
     ArmParticle()
@@ -97,27 +97,6 @@ struct ArmParticle {
         return TLorentzVector(px, py, pz, energy());
     }
 
-    ArmParticle(const ArmParticle& other)
-        : px(other.px), py(other.py), pz(other.pz),
-          mass(other.mass), eta(other.eta), y(other.y), pt(other.pt),
-          IsRecord(other.IsRecord), TreeID(other.TreeID),
-          ParentID(other.ParentID) {}
-
-    ArmParticle& operator=(const ArmParticle& other) {
-        if (this != &other) {
-            px = other.px;
-            py = other.py;
-            pz = other.pz;
-            mass = other.mass;
-            eta = other.eta;
-            y = other.y;
-            pt = other.pt;
-            IsRecord = other.IsRecord;
-            TreeID = other.TreeID;
-            ParentID = other.ParentID;
-        }
-        return *this;
-    }
 
 };
 
@@ -167,11 +146,14 @@ inline bool GetSide(
     const ArmParticle& B,
     const ArmParticle& C,
     const ArmParticle& D,
+    TH1D& H_P_tot,
+    TH1D& H_beta,
     double& BthetaOut,
     double& CthetaOut,
     double& DthetaOut,
-    double& cosPhiOut,
-    double& phiOut,
+    double& BphiOut,
+    double& CphiOut,
+    double& DphiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -413,8 +395,10 @@ void S_Four(
     float BMassSigma = massListSigma(B_PDG, DataName) , AMassSigma = massListSigma(A_PDG, DataName) , CMassSigma = massListSigma(C_PDG, DataName) , DMassSigma = massListSigma(D_PDG, DataName);
     std::vector<std::vector<int> > Mother_ParID;
     bool IsSame;
-    float  P_B , kStar;
-    float  phi , CosPhi;
+    float   P_B , kStar;
+    double  Bphi , Btheta;
+    double  Cphi , Ctheta;
+    double  Dphi , Dtheta;
     enum MixType {
         SAME,       // ABCD
     
@@ -437,46 +421,6 @@ void S_Four(
         A_B_C_D     // A|B|C|D
     };
 
-    // //                                    centrality    A_Rapidity   PrimaryVertex
-    // std::vector<Event>    EventPool         [50]           [50]          [50];
-    // std::vector<ArmParticle> A_Array                       [50]              , B_Array;
-    // std::vector<ArmParticle> A_List                        [50]              , B_List ;
-    // TH1F                 *H1D_Side           [50]           [50]          [50];
-    // TH1F                 *H1D_ALL_Side                      [50]     ;
-    // TH1F                 *H1D_Mix_Side_ABC       [50]           [50]          [50];
-    // TH1F                 *H1D_ALL_Mix_Side_ABC                  [50]     ;
-    // TH1F                 *H_Tra_Side       [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_Side                  [50]     ;
-    // TH1F                 *H_dRap            [50]           [50]          [50];
-    // TH1F                 *H_ALL_dRap                       [50]     ;
-    // TH1F                 *H_Mix_dRap        [50]           [50]          [50];
-    // TH1F                 *H_ALL_Mix_dRap                   [50]     ;
-    // TH1F                 *H_Tra_dRap        [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_dRap                   [50]     ;
-    // TH1F                 *H_dPt             [50]           [50]          [50];
-    // TH1F                 *H_ALL_dPt                        [50]     ;
-    // TH1F                 *H_Mix_dPt         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Mix_dPt                    [50]     ;
-    // TH1F                 *H_Tra_dPt         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Tra_dPt                    [50]     ;
-    // TH1F                 *H_ALL_Mass                       [50]     ;
-    // TH1F                 *H_ALL_Mix_Mass                   [50]     ;
-    // TH1F                 *H_ALL_Tra_Mass                   [50]     ;
-    // TH1F                 *H_Rap_A           [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_A                      [50]     ;
-    // TH1F                 *H_Rap_K_A         [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_K_A                    [50]     ;
-    // TH1F                 *H_Rap_B           [50]           [50]          [50];
-    // TH1F                 *H_ALL_Rap_B                      [50]     ;
-    // TH1F                 *H_Rap_K_B         [50]                         [50];
-    // TH1F                 *H_ALL_Rap_K_B                             ;
-    // // Used for test
-    // TH2F                 *H_ALL_dRap_ARp                   [50]     ;
-    // TH2F                 *H_ALL_Mix_dRap_ARp               [50]     ;
-    // TH2F                 *H_Rap_A_B         [50]           [50]          [50];
-    // TH2F                 *H_ALL_Rap_A_B                    [50]     ;
-    // TH2F                 *H_Mix_Rap_A_B     [50]           [50]          [50];
-    // TH2F                 *H_ALL_Mix_Rap_A_B                [50]     ;
     std::vector<std::vector<std::vector<std::vector<Event>>>> EventPool;
     std::vector<std::vector<ArmParticle>> A_Array(CentralityBinNum);
     std::vector<ArmParticle> B_Array;
@@ -485,197 +429,573 @@ void S_Four(
     std::vector<ArmParticle> B_List;
     std::vector<ArmParticle> C_List;
     std::vector<ArmParticle> D_List;
-    std::vector<TH1F*>                                               H_ALL_ABCD             ;
-    std::vector<TH1F*>                                               H_ALL_A_B_C_D          ;
-    std::vector<TH1F*>                                               H_ALL_AB_CD            ;
-    std::vector<TH1F*>                                               H_ALL_AC_BD            ;
-    std::vector<TH1F*>                                               H_ALL_AD_BC            ;
-    std::vector<TH1F*>                                               H_ALL_ABC_D            ;
-    std::vector<TH1F*>                                               H_ALL_ABD_C            ;
-    std::vector<TH1F*>                                               H_ALL_ACD_B            ;
-    std::vector<TH1F*>                                               H_ALL_BCD_A            ;
-    std::vector<TH1F*>                                               H_ALL_AB_C_D           ;
-    std::vector<TH1F*>                                               H_ALL_AC_B_D           ;
-    std::vector<TH1F*>                                               H_ALL_AD_B_C           ;
-    std::vector<TH1F*>                                               H_ALL_BC_A_D           ;
-    std::vector<TH1F*>                                               H_ALL_BD_A_C           ;
-    std::vector<TH1F*>                                               H_ALL_CD_A_B           ;
+    std::vector<TH1F*>                                               B_ALL_phi_ABCD             ;
+    std::vector<TH1F*>                                               B_ALL_phi_A_B_C_D          ;
+    std::vector<TH1F*>                                               B_ALL_phi_AB_CD            ;
+    std::vector<TH1F*>                                               B_ALL_phi_AC_BD            ;
+    std::vector<TH1F*>                                               B_ALL_phi_AD_BC            ;
+    std::vector<TH1F*>                                               B_ALL_phi_ABC_D            ;
+    std::vector<TH1F*>                                               B_ALL_phi_ABD_C            ;
+    std::vector<TH1F*>                                               B_ALL_phi_ACD_B            ;
+    std::vector<TH1F*>                                               B_ALL_phi_BCD_A            ;
+    std::vector<TH1F*>                                               B_ALL_phi_AB_C_D           ;
+    std::vector<TH1F*>                                               B_ALL_phi_AC_B_D           ;
+    std::vector<TH1F*>                                               B_ALL_phi_AD_B_C           ;
+    std::vector<TH1F*>                                               B_ALL_phi_BC_A_D           ;
+    std::vector<TH1F*>                                               B_ALL_phi_BD_A_C           ;
+    std::vector<TH1F*>                                               B_ALL_phi_CD_A_B           ;
+    
+    std::vector<TH1F*>                                               C_ALL_phi_ABCD             ;
+    std::vector<TH1F*>                                               C_ALL_phi_A_B_C_D          ;
+    std::vector<TH1F*>                                               C_ALL_phi_AB_CD            ;
+    std::vector<TH1F*>                                               C_ALL_phi_AC_BD            ;
+    std::vector<TH1F*>                                               C_ALL_phi_AD_BC            ;
+    std::vector<TH1F*>                                               C_ALL_phi_ABC_D            ;
+    std::vector<TH1F*>                                               C_ALL_phi_ABD_C            ;
+    std::vector<TH1F*>                                               C_ALL_phi_ACD_B            ;
+    std::vector<TH1F*>                                               C_ALL_phi_BCD_A            ;
+    std::vector<TH1F*>                                               C_ALL_phi_AB_C_D           ;
+    std::vector<TH1F*>                                               C_ALL_phi_AC_B_D           ;
+    std::vector<TH1F*>                                               C_ALL_phi_AD_B_C           ;
+    std::vector<TH1F*>                                               C_ALL_phi_BC_A_D           ;
+    std::vector<TH1F*>                                               C_ALL_phi_BD_A_C           ;
+    std::vector<TH1F*>                                               C_ALL_phi_CD_A_B           ;
+    
+    std::vector<TH1F*>                                               D_ALL_phi_ABCD             ;
+    std::vector<TH1F*>                                               D_ALL_phi_A_B_C_D          ;
+    std::vector<TH1F*>                                               D_ALL_phi_AB_CD            ;
+    std::vector<TH1F*>                                               D_ALL_phi_AC_BD            ;
+    std::vector<TH1F*>                                               D_ALL_phi_AD_BC            ;
+    std::vector<TH1F*>                                               D_ALL_phi_ABC_D            ;
+    std::vector<TH1F*>                                               D_ALL_phi_ABD_C            ;
+    std::vector<TH1F*>                                               D_ALL_phi_ACD_B            ;
+    std::vector<TH1F*>                                               D_ALL_phi_BCD_A            ;
+    std::vector<TH1F*>                                               D_ALL_phi_AB_C_D           ;
+    std::vector<TH1F*>                                               D_ALL_phi_AC_B_D           ;
+    std::vector<TH1F*>                                               D_ALL_phi_AD_B_C           ;
+    std::vector<TH1F*>                                               D_ALL_phi_BC_A_D           ;
+    std::vector<TH1F*>                                               D_ALL_phi_BD_A_C           ;
+    std::vector<TH1F*>                                               D_ALL_phi_CD_A_B           ;
 
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_ABCD                 ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_AB_CD                ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_AC_BD                ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_AD_BC                ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_A_B_C_D              ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_ABC_D           ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_ABD_C           ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_ACD_B           ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_BCD_A           ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_AB_C_D          ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_AC_B_D          ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_AD_B_C          ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_BC_A_D          ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_BD_A_C          ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_CD_A_B          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_ABCD                 ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_AB_CD                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_AC_BD                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_AD_BC                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_A_B_C_D              ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_ABC_D           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_ABD_C           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_ACD_B           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_BCD_A           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_AB_C_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_AC_B_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_AD_B_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_BC_A_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_BD_A_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_phi_CD_A_B          ;
 
-    std::vector<TH1F*>                                               H_ALL_Cos_ABCD         ;
-    std::vector<TH1F*>                                               H_ALL_Cos_AB_CD        ;
-    std::vector<TH1F*>                                               H_ALL_Cos_AC_BD        ;
-    std::vector<TH1F*>                                               H_ALL_Cos_AD_BC        ;
-    std::vector<TH1F*>                                               H_ALL_Cos_A_B_C_D      ;
-    std::vector<TH1F*>                                               H_ALL_Cos_ABC_D           ;
-    std::vector<TH1F*>                                               H_ALL_Cos_ABD_C           ;
-    std::vector<TH1F*>                                               H_ALL_Cos_ACD_B           ;
-    std::vector<TH1F*>                                               H_ALL_Cos_BCD_A           ;
-    std::vector<TH1F*>                                               H_ALL_Cos_AB_C_D          ;
-    std::vector<TH1F*>                                               H_ALL_Cos_AC_B_D          ;
-    std::vector<TH1F*>                                               H_ALL_Cos_AD_B_C          ;
-    std::vector<TH1F*>                                               H_ALL_Cos_BC_A_D          ;
-    std::vector<TH1F*>                                               H_ALL_Cos_BD_A_C          ;
-    std::vector<TH1F*>                                               H_ALL_Cos_CD_A_B          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_ABCD                 ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_AB_CD                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_AC_BD                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_AD_BC                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_A_B_C_D              ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_ABC_D           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_ABD_C           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_ACD_B           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_BCD_A           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_AB_C_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_AC_B_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_AD_B_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_BC_A_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_BD_A_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_phi_CD_A_B          ;
 
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_ABCD             ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AB_CD            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AC_BD            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_AD_BC            ;
-    std::vector<std::vector<std::vector<TH1F*>>>                     H_Cos_A_B_C_D          ;
-                                                                            ABC_D           ;
-                                                                            ABD_C           ;
-                                                                            ACD_B           ;
-                                                                            BCD_A           ;
-                                                                            AB_C_D          ;
-                                                                            AC_B_D          ;
-                                                                            AD_B_C          ;
-                                                                            BC_A_D          ;
-                                                                            BD_A_C          ;
-                                                                            CD_A_B          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_ABCD                 ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_AB_CD                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_AC_BD                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_AD_BC                ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_A_B_C_D              ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_ABC_D           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_ABD_C           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_ACD_B           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_BCD_A           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_AB_C_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_AC_B_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_AD_B_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_BC_A_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_BD_A_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_phi_CD_A_B          ;
 
+    std::vector<TH1F*>                                               B_ALL_theta_ABCD         ;
+    std::vector<TH1F*>                                               B_ALL_theta_AB_CD        ;
+    std::vector<TH1F*>                                               B_ALL_theta_AC_BD        ;
+    std::vector<TH1F*>                                               B_ALL_theta_AD_BC        ;
+    std::vector<TH1F*>                                               B_ALL_theta_A_B_C_D      ;
+    std::vector<TH1F*>                                               B_ALL_theta_ABC_D           ;
+    std::vector<TH1F*>                                               B_ALL_theta_ABD_C           ;
+    std::vector<TH1F*>                                               B_ALL_theta_ACD_B           ;
+    std::vector<TH1F*>                                               B_ALL_theta_BCD_A           ;
+    std::vector<TH1F*>                                               B_ALL_theta_AB_C_D          ;
+    std::vector<TH1F*>                                               B_ALL_theta_AC_B_D          ;
+    std::vector<TH1F*>                                               B_ALL_theta_AD_B_C          ;
+    std::vector<TH1F*>                                               B_ALL_theta_BC_A_D          ;
+    std::vector<TH1F*>                                               B_ALL_theta_BD_A_C          ;
+    std::vector<TH1F*>                                               B_ALL_theta_CD_A_B          ;
+
+    std::vector<TH1F*>                                               C_ALL_theta_ABCD         ;
+    std::vector<TH1F*>                                               C_ALL_theta_AB_CD        ;
+    std::vector<TH1F*>                                               C_ALL_theta_AC_BD        ;
+    std::vector<TH1F*>                                               C_ALL_theta_AD_BC        ;
+    std::vector<TH1F*>                                               C_ALL_theta_A_B_C_D      ;
+    std::vector<TH1F*>                                               C_ALL_theta_ABC_D           ;
+    std::vector<TH1F*>                                               C_ALL_theta_ABD_C           ;
+    std::vector<TH1F*>                                               C_ALL_theta_ACD_B           ;
+    std::vector<TH1F*>                                               C_ALL_theta_BCD_A           ;
+    std::vector<TH1F*>                                               C_ALL_theta_AB_C_D          ;
+    std::vector<TH1F*>                                               C_ALL_theta_AC_B_D          ;
+    std::vector<TH1F*>                                               C_ALL_theta_AD_B_C          ;
+    std::vector<TH1F*>                                               C_ALL_theta_BC_A_D          ;
+    std::vector<TH1F*>                                               C_ALL_theta_BD_A_C          ;
+    std::vector<TH1F*>                                               C_ALL_theta_CD_A_B          ;
+
+    std::vector<TH1F*>                                               D_ALL_theta_ABCD         ;
+    std::vector<TH1F*>                                               D_ALL_theta_AB_CD        ;
+    std::vector<TH1F*>                                               D_ALL_theta_AC_BD        ;
+    std::vector<TH1F*>                                               D_ALL_theta_AD_BC        ;
+    std::vector<TH1F*>                                               D_ALL_theta_A_B_C_D      ;
+    std::vector<TH1F*>                                               D_ALL_theta_ABC_D           ;
+    std::vector<TH1F*>                                               D_ALL_theta_ABD_C           ;
+    std::vector<TH1F*>                                               D_ALL_theta_ACD_B           ;
+    std::vector<TH1F*>                                               D_ALL_theta_BCD_A           ;
+    std::vector<TH1F*>                                               D_ALL_theta_AB_C_D          ;
+    std::vector<TH1F*>                                               D_ALL_theta_AC_B_D          ;
+    std::vector<TH1F*>                                               D_ALL_theta_AD_B_C          ;
+    std::vector<TH1F*>                                               D_ALL_theta_BC_A_D          ;
+    std::vector<TH1F*>                                               D_ALL_theta_BD_A_C          ;
+    std::vector<TH1F*>                                               D_ALL_theta_CD_A_B          ;
+
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_ABCD             ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_AB_CD            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_AC_BD            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_AD_BC            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_A_B_C_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_ABC_D           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_ABD_C           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_ACD_B           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_BCD_A           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_AB_C_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_AC_B_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_AD_B_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_BC_A_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_BD_A_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     B_theta_CD_A_B          ;
+
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_ABCD             ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_AB_CD            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_AC_BD            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_AD_BC            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_A_B_C_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_ABC_D           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_ABD_C           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_ACD_B           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_BCD_A           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_AB_C_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_AC_B_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_AD_B_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_BC_A_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_BD_A_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     C_theta_CD_A_B          ;
+
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_ABCD             ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_AB_CD            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_AC_BD            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_AD_BC            ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_A_B_C_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_ABC_D           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_ABD_C           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_ACD_B           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_BCD_A           ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_AB_C_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_AC_B_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_AD_B_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_BC_A_D          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_BD_A_C          ;
+    std::vector<std::vector<std::vector<TH1F*>>>                     D_theta_CD_A_B          ;
+
+    TH1D* H_P_tot     = new TH1D("H_P_tot","H_P_tot",200,0,10);
+    TH1D* H_beta      = new TH1D("H_beta" ,"H_beta" ,500,0,2);
 
     if (RecordingMethod == 0) {
         EventPool.resize(CentralityBinNum);
-        H_ALL_ABCD       .resize(yBinNum, nullptr);
-        H_ALL_A_B_C_D    .resize(yBinNum, nullptr);
-        H_ALL_AB_CD     .resize(yBinNum, nullptr);
-        H_ALL_AC_BD     .resize(yBinNum, nullptr);
-        H_ALL_AD_BC     .resize(yBinNum, nullptr);
-        H_ALL_ABC_D     .resize(yBinNum, nullptr);
-        H_ALL_ABD_C     .resize(yBinNum, nullptr);
-        H_ALL_ACD_B     .resize(yBinNum, nullptr);
-        H_ALL_BCD_A     .resize(yBinNum, nullptr);
-        H_ALL_AB_C_D    .resize(yBinNum, nullptr);
-        H_ALL_AC_B_D    .resize(yBinNum, nullptr);
-        H_ALL_AD_B_C    .resize(yBinNum, nullptr);
-        H_ALL_BC_A_D    .resize(yBinNum, nullptr);
-        H_ALL_BD_A_C    .resize(yBinNum, nullptr);
-        H_ALL_CD_A_B    .resize(yBinNum, nullptr);
-        H_ABCD      .resize(CentralityBinNum);
-        H_AB_CD      .resize(CentralityBinNum);
-        H_AC_BD      .resize(CentralityBinNum);
-        H_AD_BC      .resize(CentralityBinNum);
-        H_A_B_C_D   .resize(CentralityBinNum);
-        H_ABC_D     .resize(CentralityBinNum);
-        H_ABD_C     .resize(CentralityBinNum);
-        H_ACD_B     .resize(CentralityBinNum);
-        H_BCD_A     .resize(CentralityBinNum);
-        H_AB_C_D    .resize(CentralityBinNum);
-        H_AC_B_D    .resize(CentralityBinNum);
-        H_AD_B_C    .resize(CentralityBinNum);
-        H_BC_A_D    .resize(CentralityBinNum);
-        H_BD_A_C    .resize(CentralityBinNum);
-        H_CD_A_B    .resize(CentralityBinNum);
-        H_ALL_Cos_ABCD       .resize(yBinNum, nullptr);
-        H_ALL_Cos_AB_CD      .resize(yBinNum, nullptr);
-        H_ALL_Cos_AC_BD      .resize(yBinNum, nullptr);
-        H_ALL_Cos_AD_BC      .resize(yBinNum, nullptr);
-        H_ALL_Cos_A_B_C_D    .resize(yBinNum, nullptr);
-        H_ALL_Cos_ABC_D      .resize(yBinNum, nullptr);
-        H_ALL_Cos_ABD_C      .resize(yBinNum, nullptr);
-        H_ALL_Cos_ACD_B      .resize(yBinNum, nullptr);
-        H_ALL_Cos_BCD_A      .resize(yBinNum, nullptr);
-        H_ALL_Cos_AB_C_D     .resize(yBinNum, nullptr);
-        H_ALL_Cos_AC_B_D     .resize(yBinNum, nullptr);
-        H_ALL_Cos_AD_B_C     .resize(yBinNum, nullptr);
-        H_ALL_Cos_BC_A_D     .resize(yBinNum, nullptr);
-        H_ALL_Cos_BD_A_C     .resize(yBinNum, nullptr);
-        H_ALL_Cos_CD_A_B     .resize(yBinNum, nullptr);
-        H_Cos_ABCD      .resize(CentralityBinNum);
-        H_Cos_AB_CD     .resize(CentralityBinNum);
-        H_Cos_AC_BD     .resize(CentralityBinNum);
-        H_Cos_AD_BC     .resize(CentralityBinNum);
-        H_Cos_A_B_C_D   .resize(CentralityBinNum);
-        H_Cos_ABC_D     .resize(CentralityBinNum);
-        H_Cos_ABD_C     .resize(CentralityBinNum);
-        H_Cos_ACD_B     .resize(CentralityBinNum);
-        H_Cos_BCD_A     .resize(CentralityBinNum);
-        H_Cos_AB_C_D    .resize(CentralityBinNum);
-        H_Cos_AC_B_D    .resize(CentralityBinNum);
-        H_Cos_AD_B_C    .resize(CentralityBinNum);
-        H_Cos_BC_A_D    .resize(CentralityBinNum);
-        H_Cos_BD_A_C    .resize(CentralityBinNum);
-        H_Cos_CD_A_B    .resize(CentralityBinNum);
+        B_ALL_phi_ABCD       .resize(yBinNum, nullptr);
+        B_ALL_phi_A_B_C_D    .resize(yBinNum, nullptr);
+        B_ALL_phi_AB_CD     .resize(yBinNum, nullptr);
+        B_ALL_phi_AC_BD     .resize(yBinNum, nullptr);
+        B_ALL_phi_AD_BC     .resize(yBinNum, nullptr);
+        B_ALL_phi_ABC_D     .resize(yBinNum, nullptr);
+        B_ALL_phi_ABD_C     .resize(yBinNum, nullptr);
+        B_ALL_phi_ACD_B     .resize(yBinNum, nullptr);
+        B_ALL_phi_BCD_A     .resize(yBinNum, nullptr);
+        B_ALL_phi_AB_C_D    .resize(yBinNum, nullptr);
+        B_ALL_phi_AC_B_D    .resize(yBinNum, nullptr);
+        B_ALL_phi_AD_B_C    .resize(yBinNum, nullptr);
+        B_ALL_phi_BC_A_D    .resize(yBinNum, nullptr);
+        B_ALL_phi_BD_A_C    .resize(yBinNum, nullptr);
+        B_ALL_phi_CD_A_B    .resize(yBinNum, nullptr);
+        B_phi_ABCD      .resize(CentralityBinNum);
+        B_phi_AB_CD      .resize(CentralityBinNum);
+        B_phi_AC_BD      .resize(CentralityBinNum);
+        B_phi_AD_BC      .resize(CentralityBinNum);
+        B_phi_A_B_C_D   .resize(CentralityBinNum);
+        B_phi_ABC_D     .resize(CentralityBinNum);
+        B_phi_ABD_C     .resize(CentralityBinNum);
+        B_phi_ACD_B     .resize(CentralityBinNum);
+        B_phi_BCD_A     .resize(CentralityBinNum);
+        B_phi_AB_C_D    .resize(CentralityBinNum);
+        B_phi_AC_B_D    .resize(CentralityBinNum);
+        B_phi_AD_B_C    .resize(CentralityBinNum);
+        B_phi_BC_A_D    .resize(CentralityBinNum);
+        B_phi_BD_A_C    .resize(CentralityBinNum);
+        B_phi_CD_A_B    .resize(CentralityBinNum);
+        B_ALL_theta_ABCD       .resize(yBinNum, nullptr);
+        B_ALL_theta_AB_CD      .resize(yBinNum, nullptr);
+        B_ALL_theta_AC_BD      .resize(yBinNum, nullptr);
+        B_ALL_theta_AD_BC      .resize(yBinNum, nullptr);
+        B_ALL_theta_A_B_C_D    .resize(yBinNum, nullptr);
+        B_ALL_theta_ABC_D      .resize(yBinNum, nullptr);
+        B_ALL_theta_ABD_C      .resize(yBinNum, nullptr);
+        B_ALL_theta_ACD_B      .resize(yBinNum, nullptr);
+        B_ALL_theta_BCD_A      .resize(yBinNum, nullptr);
+        B_ALL_theta_AB_C_D     .resize(yBinNum, nullptr);
+        B_ALL_theta_AC_B_D     .resize(yBinNum, nullptr);
+        B_ALL_theta_AD_B_C     .resize(yBinNum, nullptr);
+        B_ALL_theta_BC_A_D     .resize(yBinNum, nullptr);
+        B_ALL_theta_BD_A_C     .resize(yBinNum, nullptr);
+        B_ALL_theta_CD_A_B     .resize(yBinNum, nullptr);
+        B_theta_ABCD      .resize(CentralityBinNum);
+        B_theta_AB_CD     .resize(CentralityBinNum);
+        B_theta_AC_BD     .resize(CentralityBinNum);
+        B_theta_AD_BC     .resize(CentralityBinNum);
+        B_theta_A_B_C_D   .resize(CentralityBinNum);
+        B_theta_ABC_D     .resize(CentralityBinNum);
+        B_theta_ABD_C     .resize(CentralityBinNum);
+        B_theta_ACD_B     .resize(CentralityBinNum);
+        B_theta_BCD_A     .resize(CentralityBinNum);
+        B_theta_AB_C_D    .resize(CentralityBinNum);
+        B_theta_AC_B_D    .resize(CentralityBinNum);
+        B_theta_AD_B_C    .resize(CentralityBinNum);
+        B_theta_BC_A_D    .resize(CentralityBinNum);
+        B_theta_BD_A_C    .resize(CentralityBinNum);
+        B_theta_CD_A_B    .resize(CentralityBinNum);
+        
+        C_ALL_phi_ABCD       .resize(yBinNum, nullptr);
+        C_ALL_phi_A_B_C_D    .resize(yBinNum, nullptr);
+        C_ALL_phi_AB_CD     .resize(yBinNum, nullptr);
+        C_ALL_phi_AC_BD     .resize(yBinNum, nullptr);
+        C_ALL_phi_AD_BC     .resize(yBinNum, nullptr);
+        C_ALL_phi_ABC_D     .resize(yBinNum, nullptr);
+        C_ALL_phi_ABD_C     .resize(yBinNum, nullptr);
+        C_ALL_phi_ACD_B     .resize(yBinNum, nullptr);
+        C_ALL_phi_BCD_A     .resize(yBinNum, nullptr);
+        C_ALL_phi_AB_C_D    .resize(yBinNum, nullptr);
+        C_ALL_phi_AC_B_D    .resize(yBinNum, nullptr);
+        C_ALL_phi_AD_B_C    .resize(yBinNum, nullptr);
+        C_ALL_phi_BC_A_D    .resize(yBinNum, nullptr);
+        C_ALL_phi_BD_A_C    .resize(yBinNum, nullptr);
+        C_ALL_phi_CD_A_B    .resize(yBinNum, nullptr);
+        C_phi_ABCD      .resize(CentralityBinNum);
+        C_phi_AB_CD      .resize(CentralityBinNum);
+        C_phi_AC_BD      .resize(CentralityBinNum);
+        C_phi_AD_BC      .resize(CentralityBinNum);
+        C_phi_A_B_C_D   .resize(CentralityBinNum);
+        C_phi_ABC_D     .resize(CentralityBinNum);
+        C_phi_ABD_C     .resize(CentralityBinNum);
+        C_phi_ACD_B     .resize(CentralityBinNum);
+        C_phi_BCD_A     .resize(CentralityBinNum);
+        C_phi_AB_C_D    .resize(CentralityBinNum);
+        C_phi_AC_B_D    .resize(CentralityBinNum);
+        C_phi_AD_B_C    .resize(CentralityBinNum);
+        C_phi_BC_A_D    .resize(CentralityBinNum);
+        C_phi_BD_A_C    .resize(CentralityBinNum);
+        C_phi_CD_A_B    .resize(CentralityBinNum);
+        C_ALL_theta_ABCD       .resize(yBinNum, nullptr);
+        C_ALL_theta_AB_CD      .resize(yBinNum, nullptr);
+        C_ALL_theta_AC_BD      .resize(yBinNum, nullptr);
+        C_ALL_theta_AD_BC      .resize(yBinNum, nullptr);
+        C_ALL_theta_A_B_C_D    .resize(yBinNum, nullptr);
+        C_ALL_theta_ABC_D      .resize(yBinNum, nullptr);
+        C_ALL_theta_ABD_C      .resize(yBinNum, nullptr);
+        C_ALL_theta_ACD_B      .resize(yBinNum, nullptr);
+        C_ALL_theta_BCD_A      .resize(yBinNum, nullptr);
+        C_ALL_theta_AB_C_D     .resize(yBinNum, nullptr);
+        C_ALL_theta_AC_B_D     .resize(yBinNum, nullptr);
+        C_ALL_theta_AD_B_C     .resize(yBinNum, nullptr);
+        C_ALL_theta_BC_A_D     .resize(yBinNum, nullptr);
+        C_ALL_theta_BD_A_C     .resize(yBinNum, nullptr);
+        C_ALL_theta_CD_A_B     .resize(yBinNum, nullptr);
+        C_theta_ABCD      .resize(CentralityBinNum);
+        C_theta_AB_CD     .resize(CentralityBinNum);
+        C_theta_AC_BD     .resize(CentralityBinNum);
+        C_theta_AD_BC     .resize(CentralityBinNum);
+        C_theta_A_B_C_D   .resize(CentralityBinNum);
+        C_theta_ABC_D     .resize(CentralityBinNum);
+        C_theta_ABD_C     .resize(CentralityBinNum);
+        C_theta_ACD_B     .resize(CentralityBinNum);
+        C_theta_BCD_A     .resize(CentralityBinNum);
+        C_theta_AB_C_D    .resize(CentralityBinNum);
+        C_theta_AC_B_D    .resize(CentralityBinNum);
+        C_theta_AD_B_C    .resize(CentralityBinNum);
+        C_theta_BC_A_D    .resize(CentralityBinNum);
+        C_theta_BD_A_C    .resize(CentralityBinNum);
+        C_theta_CD_A_B    .resize(CentralityBinNum);
+        
+        D_ALL_phi_ABCD       .resize(yBinNum, nullptr);
+        D_ALL_phi_A_B_C_D    .resize(yBinNum, nullptr);
+        D_ALL_phi_AB_CD     .resize(yBinNum, nullptr);
+        D_ALL_phi_AC_BD     .resize(yBinNum, nullptr);
+        D_ALL_phi_AD_BC     .resize(yBinNum, nullptr);
+        D_ALL_phi_ABC_D     .resize(yBinNum, nullptr);
+        D_ALL_phi_ABD_C     .resize(yBinNum, nullptr);
+        D_ALL_phi_ACD_B     .resize(yBinNum, nullptr);
+        D_ALL_phi_BCD_A     .resize(yBinNum, nullptr);
+        D_ALL_phi_AB_C_D    .resize(yBinNum, nullptr);
+        D_ALL_phi_AC_B_D    .resize(yBinNum, nullptr);
+        D_ALL_phi_AD_B_C    .resize(yBinNum, nullptr);
+        D_ALL_phi_BC_A_D    .resize(yBinNum, nullptr);
+        D_ALL_phi_BD_A_C    .resize(yBinNum, nullptr);
+        D_ALL_phi_CD_A_B    .resize(yBinNum, nullptr);
+        D_phi_ABCD      .resize(CentralityBinNum);
+        D_phi_AB_CD      .resize(CentralityBinNum);
+        D_phi_AC_BD      .resize(CentralityBinNum);
+        D_phi_AD_BC      .resize(CentralityBinNum);
+        D_phi_A_B_C_D   .resize(CentralityBinNum);
+        D_phi_ABC_D     .resize(CentralityBinNum);
+        D_phi_ABD_C     .resize(CentralityBinNum);
+        D_phi_ACD_B     .resize(CentralityBinNum);
+        D_phi_BCD_A     .resize(CentralityBinNum);
+        D_phi_AB_C_D    .resize(CentralityBinNum);
+        D_phi_AC_B_D    .resize(CentralityBinNum);
+        D_phi_AD_B_C    .resize(CentralityBinNum);
+        D_phi_BC_A_D    .resize(CentralityBinNum);
+        D_phi_BD_A_C    .resize(CentralityBinNum);
+        D_phi_CD_A_B    .resize(CentralityBinNum);
+        D_ALL_theta_ABCD       .resize(yBinNum, nullptr);
+        D_ALL_theta_AB_CD      .resize(yBinNum, nullptr);
+        D_ALL_theta_AC_BD      .resize(yBinNum, nullptr);
+        D_ALL_theta_AD_BC      .resize(yBinNum, nullptr);
+        D_ALL_theta_A_B_C_D    .resize(yBinNum, nullptr);
+        D_ALL_theta_ABC_D      .resize(yBinNum, nullptr);
+        D_ALL_theta_ABD_C      .resize(yBinNum, nullptr);
+        D_ALL_theta_ACD_B      .resize(yBinNum, nullptr);
+        D_ALL_theta_BCD_A      .resize(yBinNum, nullptr);
+        D_ALL_theta_AB_C_D     .resize(yBinNum, nullptr);
+        D_ALL_theta_AC_B_D     .resize(yBinNum, nullptr);
+        D_ALL_theta_AD_B_C     .resize(yBinNum, nullptr);
+        D_ALL_theta_BC_A_D     .resize(yBinNum, nullptr);
+        D_ALL_theta_BD_A_C     .resize(yBinNum, nullptr);
+        D_ALL_theta_CD_A_B     .resize(yBinNum, nullptr);
+        D_theta_ABCD      .resize(CentralityBinNum);
+        D_theta_AB_CD     .resize(CentralityBinNum);
+        D_theta_AC_BD     .resize(CentralityBinNum);
+        D_theta_AD_BC     .resize(CentralityBinNum);
+        D_theta_A_B_C_D   .resize(CentralityBinNum);
+        D_theta_ABC_D     .resize(CentralityBinNum);
+        D_theta_ABD_C     .resize(CentralityBinNum);
+        D_theta_ACD_B     .resize(CentralityBinNum);
+        D_theta_BCD_A     .resize(CentralityBinNum);
+        D_theta_AB_C_D    .resize(CentralityBinNum);
+        D_theta_AC_B_D    .resize(CentralityBinNum);
+        D_theta_AD_B_C    .resize(CentralityBinNum);
+        D_theta_BC_A_D    .resize(CentralityBinNum);
+        D_theta_BD_A_C    .resize(CentralityBinNum);
+        D_theta_CD_A_B    .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
-            H_ABCD           [i].resize(yBinNum);
-            H_AB_CD           [i].resize(yBinNum);
-            H_AC_BD           [i].resize(yBinNum);
-            H_AD_BC           [i].resize(yBinNum);
-            H_A_B_C_D       [i].resize(yBinNum);
-            H_ABC_D           [i].resize(yBinNum);
-            H_ABD_C           [i].resize(yBinNum);
-            H_ACD_B           [i].resize(yBinNum);
-            H_BCD_A           [i].resize(yBinNum);
-            H_AB_C_D          [i].resize(yBinNum);
-            H_AC_B_D          [i].resize(yBinNum);
-            H_AD_B_C          [i].resize(yBinNum);
-            H_BC_A_D          [i].resize(yBinNum);
-            H_BD_A_C          [i].resize(yBinNum);
-            H_CD_A_B          [i].resize(yBinNum);
-            H_Cos_ABCD       [i].resize(yBinNum);
-            H_Cos_AB_CD      [i].resize(yBinNum);
-            H_Cos_AC_BD      [i].resize(yBinNum);
-            H_Cos_AD_BC      [i].resize(yBinNum);
-            H_Cos_A_B_C_D   [i].resize(yBinNum);
-            H_Cos_ABC_D      [i].resize(yBinNum);
-            H_Cos_ABD_C      [i].resize(yBinNum);
-            H_Cos_ACD_B      [i].resize(yBinNum);
-            H_Cos_BCD_A      [i].resize(yBinNum);
-            H_Cos_AB_C_D     [i].resize(yBinNum);
-            H_Cos_AC_B_D     [i].resize(yBinNum);
-            H_Cos_AD_B_C     [i].resize(yBinNum);
-            H_Cos_BC_A_D     [i].resize(yBinNum);
-            H_Cos_BD_A_C     [i].resize(yBinNum);
-            H_Cos_CD_A_B     [i].resize(yBinNum);
+            B_phi_ABCD           [i].resize(yBinNum);
+            B_phi_AB_CD           [i].resize(yBinNum);
+            B_phi_AC_BD           [i].resize(yBinNum);
+            B_phi_AD_BC           [i].resize(yBinNum);
+            B_phi_A_B_C_D       [i].resize(yBinNum);
+            B_phi_ABC_D           [i].resize(yBinNum);
+            B_phi_ABD_C           [i].resize(yBinNum);
+            B_phi_ACD_B           [i].resize(yBinNum);
+            B_phi_BCD_A           [i].resize(yBinNum);
+            B_phi_AB_C_D          [i].resize(yBinNum);
+            B_phi_AC_B_D          [i].resize(yBinNum);
+            B_phi_AD_B_C          [i].resize(yBinNum);
+            B_phi_BC_A_D          [i].resize(yBinNum);
+            B_phi_BD_A_C          [i].resize(yBinNum);
+            B_phi_CD_A_B          [i].resize(yBinNum);
+            B_theta_ABCD       [i].resize(yBinNum);
+            B_theta_AB_CD      [i].resize(yBinNum);
+            B_theta_AC_BD      [i].resize(yBinNum);
+            B_theta_AD_BC      [i].resize(yBinNum);
+            B_theta_A_B_C_D   [i].resize(yBinNum);
+            B_theta_ABC_D      [i].resize(yBinNum);
+            B_theta_ABD_C      [i].resize(yBinNum);
+            B_theta_ACD_B      [i].resize(yBinNum);
+            B_theta_BCD_A      [i].resize(yBinNum);
+            B_theta_AB_C_D     [i].resize(yBinNum);
+            B_theta_AC_B_D     [i].resize(yBinNum);
+            B_theta_AD_B_C     [i].resize(yBinNum);
+            B_theta_BC_A_D     [i].resize(yBinNum);
+            B_theta_BD_A_C     [i].resize(yBinNum);
+            B_theta_CD_A_B     [i].resize(yBinNum);
+            
+            C_phi_ABCD           [i].resize(yBinNum);
+            C_phi_AB_CD           [i].resize(yBinNum);
+            C_phi_AC_BD           [i].resize(yBinNum);
+            C_phi_AD_BC           [i].resize(yBinNum);
+            C_phi_A_B_C_D       [i].resize(yBinNum);
+            C_phi_ABC_D           [i].resize(yBinNum);
+            C_phi_ABD_C           [i].resize(yBinNum);
+            C_phi_ACD_B           [i].resize(yBinNum);
+            C_phi_BCD_A           [i].resize(yBinNum);
+            C_phi_AB_C_D          [i].resize(yBinNum);
+            C_phi_AC_B_D          [i].resize(yBinNum);
+            C_phi_AD_B_C          [i].resize(yBinNum);
+            C_phi_BC_A_D          [i].resize(yBinNum);
+            C_phi_BD_A_C          [i].resize(yBinNum);
+            C_phi_CD_A_B          [i].resize(yBinNum);
+            C_theta_ABCD       [i].resize(yBinNum);
+            C_theta_AB_CD      [i].resize(yBinNum);
+            C_theta_AC_BD      [i].resize(yBinNum);
+            C_theta_AD_BC      [i].resize(yBinNum);
+            C_theta_A_B_C_D   [i].resize(yBinNum);
+            C_theta_ABC_D      [i].resize(yBinNum);
+            C_theta_ABD_C      [i].resize(yBinNum);
+            C_theta_ACD_B      [i].resize(yBinNum);
+            C_theta_BCD_A      [i].resize(yBinNum);
+            C_theta_AB_C_D     [i].resize(yBinNum);
+            C_theta_AC_B_D     [i].resize(yBinNum);
+            C_theta_AD_B_C     [i].resize(yBinNum);
+            C_theta_BC_A_D     [i].resize(yBinNum);
+            C_theta_BD_A_C     [i].resize(yBinNum);
+            C_theta_CD_A_B     [i].resize(yBinNum);
+            
+            D_phi_ABCD           [i].resize(yBinNum);
+            D_phi_AB_CD           [i].resize(yBinNum);
+            D_phi_AC_BD           [i].resize(yBinNum);
+            D_phi_AD_BC           [i].resize(yBinNum);
+            D_phi_A_B_C_D       [i].resize(yBinNum);
+            D_phi_ABC_D           [i].resize(yBinNum);
+            D_phi_ABD_C           [i].resize(yBinNum);
+            D_phi_ACD_B           [i].resize(yBinNum);
+            D_phi_BCD_A           [i].resize(yBinNum);
+            D_phi_AB_C_D          [i].resize(yBinNum);
+            D_phi_AC_B_D          [i].resize(yBinNum);
+            D_phi_AD_B_C          [i].resize(yBinNum);
+            D_phi_BC_A_D          [i].resize(yBinNum);
+            D_phi_BD_A_C          [i].resize(yBinNum);
+            D_phi_CD_A_B          [i].resize(yBinNum);
+            D_theta_ABCD       [i].resize(yBinNum);
+            D_theta_AB_CD      [i].resize(yBinNum);
+            D_theta_AC_BD      [i].resize(yBinNum);
+            D_theta_AD_BC      [i].resize(yBinNum);
+            D_theta_A_B_C_D   [i].resize(yBinNum);
+            D_theta_ABC_D      [i].resize(yBinNum);
+            D_theta_ABD_C      [i].resize(yBinNum);
+            D_theta_ACD_B      [i].resize(yBinNum);
+            D_theta_BCD_A      [i].resize(yBinNum);
+            D_theta_AB_C_D     [i].resize(yBinNum);
+            D_theta_AC_B_D     [i].resize(yBinNum);
+            D_theta_AD_B_C     [i].resize(yBinNum);
+            D_theta_BC_A_D     [i].resize(yBinNum);
+            D_theta_BD_A_C     [i].resize(yBinNum);
+            D_theta_CD_A_B     [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
-                H_ABCD                     [i][j].resize(PVzBinNum, nullptr);
-                H_AB_CD                    [i][j].resize(PVzBinNum, nullptr);
-                H_AC_BD                    [i][j].resize(PVzBinNum, nullptr);
-                H_AD_BC                    [i][j].resize(PVzBinNum, nullptr);
-                H_A_B_C_D                 [i][j].resize(PVzBinNum, nullptr);
-                H_ABC_D                    [i][j].resize(PVzBinNum, nullptr);
-                H_ABD_C                    [i][j].resize(PVzBinNum, nullptr);
-                H_ACD_B                    [i][j].resize(PVzBinNum, nullptr);
-                H_BCD_A                    [i][j].resize(PVzBinNum, nullptr);
-                H_AB_C_D                   [i][j].resize(PVzBinNum, nullptr);
-                H_AC_B_D                   [i][j].resize(PVzBinNum, nullptr);
-                H_AD_B_C                   [i][j].resize(PVzBinNum, nullptr);
-                H_BC_A_D                   [i][j].resize(PVzBinNum, nullptr);
-                H_BD_A_C                   [i][j].resize(PVzBinNum, nullptr);
-                H_CD_A_B                   [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_ABCD                 [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_AB_CD                [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_AC_BD                [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_AD_BC                [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_A_B_C_D             [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_ABC_D                [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_ABD_C                [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_ACD_B                [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_BCD_A                [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_AB_C_D               [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_AC_B_D               [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_AD_B_C               [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_BC_A_D               [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_BD_A_C               [i][j].resize(PVzBinNum, nullptr);
-                H_Cos_CD_A_B               [i][j].resize(PVzBinNum, nullptr);
+                B_phi_ABCD                     [i][j].resize(PVzBinNum, nullptr);
+                B_phi_AB_CD                    [i][j].resize(PVzBinNum, nullptr);
+                B_phi_AC_BD                    [i][j].resize(PVzBinNum, nullptr);
+                B_phi_AD_BC                    [i][j].resize(PVzBinNum, nullptr);
+                B_phi_A_B_C_D                  [i][j].resize(PVzBinNum, nullptr);
+                B_phi_ABC_D                    [i][j].resize(PVzBinNum, nullptr);
+                B_phi_ABD_C                    [i][j].resize(PVzBinNum, nullptr);
+                B_phi_ACD_B                    [i][j].resize(PVzBinNum, nullptr);
+                B_phi_BCD_A                    [i][j].resize(PVzBinNum, nullptr);
+                B_phi_AB_C_D                   [i][j].resize(PVzBinNum, nullptr);
+                B_phi_AC_B_D                   [i][j].resize(PVzBinNum, nullptr);
+                B_phi_AD_B_C                   [i][j].resize(PVzBinNum, nullptr);
+                B_phi_BC_A_D                   [i][j].resize(PVzBinNum, nullptr);
+                B_phi_BD_A_C                   [i][j].resize(PVzBinNum, nullptr);
+                B_phi_CD_A_B                   [i][j].resize(PVzBinNum, nullptr);
+                B_theta_ABCD                   [i][j].resize(PVzBinNum, nullptr);
+                B_theta_AB_CD                  [i][j].resize(PVzBinNum, nullptr);
+                B_theta_AC_BD                  [i][j].resize(PVzBinNum, nullptr);
+                B_theta_AD_BC                  [i][j].resize(PVzBinNum, nullptr);
+                B_theta_A_B_C_D                [i][j].resize(PVzBinNum, nullptr);
+                B_theta_ABC_D                  [i][j].resize(PVzBinNum, nullptr);
+                B_theta_ABD_C                  [i][j].resize(PVzBinNum, nullptr);
+                B_theta_ACD_B                  [i][j].resize(PVzBinNum, nullptr);
+                B_theta_BCD_A                  [i][j].resize(PVzBinNum, nullptr);
+                B_theta_AB_C_D                 [i][j].resize(PVzBinNum, nullptr);
+                B_theta_AC_B_D                 [i][j].resize(PVzBinNum, nullptr);
+                B_theta_AD_B_C                 [i][j].resize(PVzBinNum, nullptr);
+                B_theta_BC_A_D                 [i][j].resize(PVzBinNum, nullptr);
+                B_theta_BD_A_C                 [i][j].resize(PVzBinNum, nullptr);
+                B_theta_CD_A_B                 [i][j].resize(PVzBinNum, nullptr);
+                
+                C_phi_ABCD                     [i][j].resize(PVzBinNum, nullptr);
+                C_phi_AB_CD                    [i][j].resize(PVzBinNum, nullptr);
+                C_phi_AC_BD                    [i][j].resize(PVzBinNum, nullptr);
+                C_phi_AD_BC                    [i][j].resize(PVzBinNum, nullptr);
+                C_phi_A_B_C_D                  [i][j].resize(PVzBinNum, nullptr);
+                C_phi_ABC_D                    [i][j].resize(PVzBinNum, nullptr);
+                C_phi_ABD_C                    [i][j].resize(PVzBinNum, nullptr);
+                C_phi_ACD_B                    [i][j].resize(PVzBinNum, nullptr);
+                C_phi_BCD_A                    [i][j].resize(PVzBinNum, nullptr);
+                C_phi_AB_C_D                   [i][j].resize(PVzBinNum, nullptr);
+                C_phi_AC_B_D                   [i][j].resize(PVzBinNum, nullptr);
+                C_phi_AD_B_C                   [i][j].resize(PVzBinNum, nullptr);
+                C_phi_BC_A_D                   [i][j].resize(PVzBinNum, nullptr);
+                C_phi_BD_A_C                   [i][j].resize(PVzBinNum, nullptr);
+                C_phi_CD_A_B                   [i][j].resize(PVzBinNum, nullptr);
+                C_theta_ABCD                   [i][j].resize(PVzBinNum, nullptr);
+                C_theta_AB_CD                  [i][j].resize(PVzBinNum, nullptr);
+                C_theta_AC_BD                  [i][j].resize(PVzBinNum, nullptr);
+                C_theta_AD_BC                  [i][j].resize(PVzBinNum, nullptr);
+                C_theta_A_B_C_D                [i][j].resize(PVzBinNum, nullptr);
+                C_theta_ABC_D                  [i][j].resize(PVzBinNum, nullptr);
+                C_theta_ABD_C                  [i][j].resize(PVzBinNum, nullptr);
+                C_theta_ACD_B                  [i][j].resize(PVzBinNum, nullptr);
+                C_theta_BCD_A                  [i][j].resize(PVzBinNum, nullptr);
+                C_theta_AB_C_D                 [i][j].resize(PVzBinNum, nullptr);
+                C_theta_AC_B_D                 [i][j].resize(PVzBinNum, nullptr);
+                C_theta_AD_B_C                 [i][j].resize(PVzBinNum, nullptr);
+                C_theta_BC_A_D                 [i][j].resize(PVzBinNum, nullptr);
+                C_theta_BD_A_C                 [i][j].resize(PVzBinNum, nullptr);
+                C_theta_CD_A_B                 [i][j].resize(PVzBinNum, nullptr);
+                
+                D_phi_ABCD                     [i][j].resize(PVzBinNum, nullptr);
+                D_phi_AB_CD                    [i][j].resize(PVzBinNum, nullptr);
+                D_phi_AC_BD                    [i][j].resize(PVzBinNum, nullptr);
+                D_phi_AD_BC                    [i][j].resize(PVzBinNum, nullptr);
+                D_phi_A_B_C_D                  [i][j].resize(PVzBinNum, nullptr);
+                D_phi_ABC_D                    [i][j].resize(PVzBinNum, nullptr);
+                D_phi_ABD_C                    [i][j].resize(PVzBinNum, nullptr);
+                D_phi_ACD_B                    [i][j].resize(PVzBinNum, nullptr);
+                D_phi_BCD_A                    [i][j].resize(PVzBinNum, nullptr);
+                D_phi_AB_C_D                   [i][j].resize(PVzBinNum, nullptr);
+                D_phi_AC_B_D                   [i][j].resize(PVzBinNum, nullptr);
+                D_phi_AD_B_C                   [i][j].resize(PVzBinNum, nullptr);
+                D_phi_BC_A_D                   [i][j].resize(PVzBinNum, nullptr);
+                D_phi_BD_A_C                   [i][j].resize(PVzBinNum, nullptr);
+                D_phi_CD_A_B                   [i][j].resize(PVzBinNum, nullptr);
+                D_theta_ABCD                   [i][j].resize(PVzBinNum, nullptr);
+                D_theta_AB_CD                  [i][j].resize(PVzBinNum, nullptr);
+                D_theta_AC_BD                  [i][j].resize(PVzBinNum, nullptr);
+                D_theta_AD_BC                  [i][j].resize(PVzBinNum, nullptr);
+                D_theta_A_B_C_D                [i][j].resize(PVzBinNum, nullptr);
+                D_theta_ABC_D                  [i][j].resize(PVzBinNum, nullptr);
+                D_theta_ABD_C                  [i][j].resize(PVzBinNum, nullptr);
+                D_theta_ACD_B                  [i][j].resize(PVzBinNum, nullptr);
+                D_theta_BCD_A                  [i][j].resize(PVzBinNum, nullptr);
+                D_theta_AB_C_D                 [i][j].resize(PVzBinNum, nullptr);
+                D_theta_AC_B_D                 [i][j].resize(PVzBinNum, nullptr);
+                D_theta_AD_B_C                 [i][j].resize(PVzBinNum, nullptr);
+                D_theta_BC_A_D                 [i][j].resize(PVzBinNum, nullptr);
+                D_theta_BD_A_C                 [i][j].resize(PVzBinNum, nullptr);
+                D_theta_CD_A_B                 [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
@@ -709,68 +1029,372 @@ void S_Four(
         for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
             for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
                 for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
-                    H_ABCD           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_ABCD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_AB_CD          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AB_CD_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_AC_BD          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AC_BD_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_AD_BC          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AD_BC_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_A_B_C_D        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_A_B_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_ABC_D          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_ABC_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_ABD_C          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_ABD_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_ACD_B          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_ACD_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_BCD_A          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_BCD_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_AB_C_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AB_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_AC_B_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AC_B_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_AD_B_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_AD_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_BC_A_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_BC_A_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_BD_A_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_BD_A_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_CD_A_B         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_CD_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
-                    H_Cos_ABCD       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_ABCD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_AB_CD      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AB_CD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_AC_BD      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AC_BD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_AD_BC      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AD_BC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_A_B_C_D    [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_A_B_C_D_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_ABC_D      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_ABC_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_ABD_C      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_ABD_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_ACD_B      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_ACD_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_BCD_A      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_BCD_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_AB_C_D     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AB_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_AC_B_D     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AC_B_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_AD_B_C     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_AD_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_BC_A_D     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_BC_A_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_BD_A_C     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_BD_A_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
-                    H_Cos_CD_A_B     [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("H_Cos_CD_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_phi_ABCD           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_ABCD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_AB_CD          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_AB_CD_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_AC_BD          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_AC_BD_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_AD_BC          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_AD_BC_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_A_B_C_D        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_A_B_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_ABC_D          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_ABC_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_ABD_C          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_ABD_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_ACD_B          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_ACD_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_BCD_A          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_BCD_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_AB_C_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_AB_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_AC_B_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_AC_B_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_AD_B_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_AD_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_BC_A_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_BC_A_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_BD_A_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_BD_A_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_phi_CD_A_B         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_phi_CD_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    B_theta_ABCD         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_ABCD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_AB_CD        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_AB_CD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_AC_BD        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_AC_BD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_AD_BC        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_AD_BC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_A_B_C_D      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_A_B_C_D_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_ABC_D        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_ABC_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_ABD_C        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_ABD_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_ACD_B        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_ACD_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_BCD_A        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_BCD_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_AB_C_D       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_AB_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_AC_B_D       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_AC_B_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_AD_B_C       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_AD_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_BC_A_D       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_BC_A_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_BD_A_C       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_BD_A_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_theta_CD_A_B       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("B_theta_CD_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    B_phi_ABCD           [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_AB_CD          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_AC_BD          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_AD_BC          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_A_B_C_D        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_ABC_D          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_ABD_C          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_ACD_B          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_BCD_A          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_AB_C_D         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_AC_B_D         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_AD_B_C         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_BC_A_D         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_BD_A_C         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_phi_CD_A_B         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B phi");
+                    B_theta_ABCD         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_AB_CD        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_AC_BD        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_AD_BC        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_A_B_C_D      [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_ABC_D        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_ABD_C        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_ACD_B        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_BCD_A        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_AB_C_D       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_AC_B_D       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_AD_B_C       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_BC_A_D       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_BD_A_C       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+                    B_theta_CD_A_B       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("B theta");
+
+                    C_phi_ABCD           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_ABCD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_AB_CD          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_AB_CD_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_AC_BD          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_AC_BD_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_AD_BC          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_AD_BC_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_A_B_C_D        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_A_B_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_ABC_D          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_ABC_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_ABD_C          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_ABD_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_ACD_B          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_ACD_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_BCD_A          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_BCD_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_AB_C_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_AB_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_AC_B_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_AC_B_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_AD_B_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_AD_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_BC_A_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_BC_A_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_BD_A_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_BD_A_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_phi_CD_A_B         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_phi_CD_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    C_theta_ABCD         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_ABCD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_AB_CD        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_AB_CD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_AC_BD        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_AC_BD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_AD_BC        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_AD_BC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_A_B_C_D      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_A_B_C_D_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_ABC_D        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_ABC_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_ABD_C        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_ABD_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_ACD_B        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_ACD_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_BCD_A        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_BCD_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_AB_C_D       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_AB_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_AC_B_D       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_AC_B_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_AD_B_C       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_AD_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_BC_A_D       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_BC_A_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_BD_A_C       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_BD_A_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_theta_CD_A_B       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("C_theta_CD_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    C_phi_ABCD           [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_AB_CD          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_AC_BD          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_AD_BC          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_A_B_C_D        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_ABC_D          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_ABD_C          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_ACD_B          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_BCD_A          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_AB_C_D         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_AC_B_D         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_AD_B_C         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_BC_A_D         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_BD_A_C         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_phi_CD_A_B         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C phi");
+                    C_theta_ABCD         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_AB_CD        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_AC_BD        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_AD_BC        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_A_B_C_D      [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_ABC_D        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_ABD_C        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_ACD_B        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_BCD_A        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_AB_C_D       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_AC_B_D       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_AD_B_C       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_BC_A_D       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_BD_A_C       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+                    C_theta_CD_A_B       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("C theta");
+
+                    D_phi_ABCD           [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_ABCD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_AB_CD          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_AB_CD_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_AC_BD          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_AC_BD_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_AD_BC          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_AD_BC_%d_%d_%d"    ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_A_B_C_D        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_A_B_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_ABC_D          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_ABC_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_ABD_C          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_ABD_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_ACD_B          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_ACD_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_BCD_A          [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_BCD_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_AB_C_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_AB_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_AC_B_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_AC_B_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_AD_B_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_AD_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_BC_A_D         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_BC_A_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_BD_A_C         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_BD_A_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_phi_CD_A_B         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_phi_CD_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    D_theta_ABCD         [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_ABCD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_AB_CD        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_AB_CD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_AC_BD        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_AC_BD_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_AD_BC        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_AD_BC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_A_B_C_D      [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_A_B_C_D_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_ABC_D        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_ABC_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_ABD_C        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_ABD_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_ACD_B        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_ACD_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_BCD_A        [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_BCD_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_AB_C_D       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_AB_C_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_AC_B_D       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_AC_B_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_AD_B_C       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_AD_B_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_BC_A_D       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_BC_A_D_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_BD_A_C       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_BD_A_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_theta_CD_A_B       [CenIndex] [RapIndex] [PVzIndex] = new TH1F(Form("D_theta_CD_A_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    D_phi_ABCD           [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_AB_CD          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_AC_BD          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_AD_BC          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_A_B_C_D        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_ABC_D          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_ABD_C          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_ACD_B          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_BCD_A          [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_AB_C_D         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_AC_B_D         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_AD_B_C         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_BC_A_D         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_BD_A_C         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_phi_CD_A_B         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D phi");
+                    D_theta_ABCD         [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_AB_CD        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_AC_BD        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_AD_BC        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_A_B_C_D      [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_ABC_D        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_ABD_C        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_ACD_B        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_BCD_A        [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_AB_C_D       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_AC_B_D       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_AD_B_C       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_BC_A_D       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_BD_A_C       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
+                    D_theta_CD_A_B       [CenIndex] [RapIndex] [PVzIndex]->GetXaxis()->SetTitle("D theta");
                 }
             }
-            H_ALL_ABCD               [RapIndex] = new TH1F(Form("H_ALL_ABCD_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_A_B_C_D            [RapIndex] = new TH1F(Form("H_ALL_A_B_C_D_%d"  ,          RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_AB_CD              [RapIndex] = new TH1F(Form("H_ALL_AB_CD_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_AC_BD              [RapIndex] = new TH1F(Form("H_ALL_AC_BD_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_AD_BC              [RapIndex] = new TH1F(Form("H_ALL_AD_BC_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_ABC_D              [RapIndex] = new TH1F(Form("H_ALL_ABC_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_ABD_C              [RapIndex] = new TH1F(Form("H_ALL_ABD_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_ACD_B              [RapIndex] = new TH1F(Form("H_ALL_ACD_B_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_BCD_A              [RapIndex] = new TH1F(Form("H_ALL_BCD_A_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_AB_C_D             [RapIndex] = new TH1F(Form("H_ALL_AB_C_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_AC_B_D             [RapIndex] = new TH1F(Form("H_ALL_AC_B_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_AD_B_C             [RapIndex] = new TH1F(Form("H_ALL_AD_B_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_BC_A_D             [RapIndex] = new TH1F(Form("H_ALL_BC_A_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_BD_A_C             [RapIndex] = new TH1F(Form("H_ALL_BD_A_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_CD_A_B             [RapIndex] = new TH1F(Form("H_ALL_CD_A_B_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
-            H_ALL_Cos_ABCD           [RapIndex] = new TH1F(Form("H_ALL_Cos_ABCD_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_AB_CD          [RapIndex] = new TH1F(Form("H_ALL_Cos_AB_CD_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_AC_BD          [RapIndex] = new TH1F(Form("H_ALL_Cos_AC_BD_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_AD_BC          [RapIndex] = new TH1F(Form("H_ALL_Cos_AD_BC_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_A_B_C_D        [RapIndex] = new TH1F(Form("H_ALL_Cos_A_B_C_D_%d"  ,      RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_ABC_D          [RapIndex] = new TH1F(Form("H_ALL_Cos_ABC_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_ABD_C          [RapIndex] = new TH1F(Form("H_ALL_Cos_ABD_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_ACD_B          [RapIndex] = new TH1F(Form("H_ALL_Cos_ACD_B_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_BCD_A          [RapIndex] = new TH1F(Form("H_ALL_Cos_BCD_A_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_AB_C_D         [RapIndex] = new TH1F(Form("H_ALL_Cos_AB_C_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_AC_B_D         [RapIndex] = new TH1F(Form("H_ALL_Cos_AC_B_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_AD_B_C         [RapIndex] = new TH1F(Form("H_ALL_Cos_AD_B_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_BC_A_D         [RapIndex] = new TH1F(Form("H_ALL_Cos_BC_A_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_BD_A_C         [RapIndex] = new TH1F(Form("H_ALL_Cos_BD_A_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
-            H_ALL_Cos_CD_A_B         [RapIndex] = new TH1F(Form("H_ALL_Cos_CD_A_B_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_phi_ABCD               [RapIndex] = new TH1F(Form("B_ALL_phi_ABCD_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_A_B_C_D            [RapIndex] = new TH1F(Form("B_ALL_phi_A_B_C_D_%d"  ,          RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_AB_CD              [RapIndex] = new TH1F(Form("B_ALL_phi_AB_CD_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_AC_BD              [RapIndex] = new TH1F(Form("B_ALL_phi_AC_BD_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_AD_BC              [RapIndex] = new TH1F(Form("B_ALL_phi_AD_BC_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_ABC_D              [RapIndex] = new TH1F(Form("B_ALL_phi_ABC_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_ABD_C              [RapIndex] = new TH1F(Form("B_ALL_phi_ABD_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_ACD_B              [RapIndex] = new TH1F(Form("B_ALL_phi_ACD_B_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_BCD_A              [RapIndex] = new TH1F(Form("B_ALL_phi_BCD_A_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_AB_C_D             [RapIndex] = new TH1F(Form("B_ALL_phi_AB_C_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_AC_B_D             [RapIndex] = new TH1F(Form("B_ALL_phi_AC_B_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_AD_B_C             [RapIndex] = new TH1F(Form("B_ALL_phi_AD_B_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_BC_A_D             [RapIndex] = new TH1F(Form("B_ALL_phi_BC_A_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_BD_A_C             [RapIndex] = new TH1F(Form("B_ALL_phi_BD_A_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_phi_CD_A_B             [RapIndex] = new TH1F(Form("B_ALL_phi_CD_A_B_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            B_ALL_theta_ABCD             [RapIndex] = new TH1F(Form("B_ALL_theta_ABCD_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_AB_CD            [RapIndex] = new TH1F(Form("B_ALL_theta_AB_CD_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_AC_BD            [RapIndex] = new TH1F(Form("B_ALL_theta_AC_BD_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_AD_BC            [RapIndex] = new TH1F(Form("B_ALL_theta_AD_BC_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_A_B_C_D          [RapIndex] = new TH1F(Form("B_ALL_theta_A_B_C_D_%d"  ,      RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_ABC_D            [RapIndex] = new TH1F(Form("B_ALL_theta_ABC_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_ABD_C            [RapIndex] = new TH1F(Form("B_ALL_theta_ABD_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_ACD_B            [RapIndex] = new TH1F(Form("B_ALL_theta_ACD_B_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_BCD_A            [RapIndex] = new TH1F(Form("B_ALL_theta_BCD_A_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_AB_C_D           [RapIndex] = new TH1F(Form("B_ALL_theta_AB_C_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_AC_B_D           [RapIndex] = new TH1F(Form("B_ALL_theta_AC_B_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_AD_B_C           [RapIndex] = new TH1F(Form("B_ALL_theta_AD_B_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_BC_A_D           [RapIndex] = new TH1F(Form("B_ALL_theta_BC_A_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_BD_A_C           [RapIndex] = new TH1F(Form("B_ALL_theta_BD_A_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_theta_CD_A_B           [RapIndex] = new TH1F(Form("B_ALL_theta_CD_A_B_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            B_ALL_phi_ABCD               [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_A_B_C_D            [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_AB_CD              [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_AC_BD              [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_AD_BC              [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_ABC_D              [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_ABD_C              [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_ACD_B              [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_BCD_A              [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_AB_C_D             [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_AC_B_D             [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_AD_B_C             [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_BC_A_D             [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_BD_A_C             [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_phi_CD_A_B             [RapIndex]->GetXaxis()->SetTitle("B phi");
+            B_ALL_theta_ABCD             [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_AB_CD            [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_AC_BD            [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_AD_BC            [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_A_B_C_D          [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_ABC_D            [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_ABD_C            [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_ACD_B            [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_BCD_A            [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_AB_C_D           [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_AC_B_D           [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_AD_B_C           [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_BC_A_D           [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_BD_A_C           [RapIndex]->GetXaxis()->SetTitle("B theta");
+            B_ALL_theta_CD_A_B           [RapIndex]->GetXaxis()->SetTitle("B theta");
+
+            C_ALL_phi_ABCD               [RapIndex] = new TH1F(Form("C_ALL_phi_ABCD_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_A_B_C_D            [RapIndex] = new TH1F(Form("C_ALL_phi_A_B_C_D_%d"  ,          RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_AB_CD              [RapIndex] = new TH1F(Form("C_ALL_phi_AB_CD_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_AC_BD              [RapIndex] = new TH1F(Form("C_ALL_phi_AC_BD_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_AD_BC              [RapIndex] = new TH1F(Form("C_ALL_phi_AD_BC_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_ABC_D              [RapIndex] = new TH1F(Form("C_ALL_phi_ABC_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_ABD_C              [RapIndex] = new TH1F(Form("C_ALL_phi_ABD_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_ACD_B              [RapIndex] = new TH1F(Form("C_ALL_phi_ACD_B_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_BCD_A              [RapIndex] = new TH1F(Form("C_ALL_phi_BCD_A_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_AB_C_D             [RapIndex] = new TH1F(Form("C_ALL_phi_AB_C_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_AC_B_D             [RapIndex] = new TH1F(Form("C_ALL_phi_AC_B_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_AD_B_C             [RapIndex] = new TH1F(Form("C_ALL_phi_AD_B_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_BC_A_D             [RapIndex] = new TH1F(Form("C_ALL_phi_BC_A_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_BD_A_C             [RapIndex] = new TH1F(Form("C_ALL_phi_BD_A_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_phi_CD_A_B             [RapIndex] = new TH1F(Form("C_ALL_phi_CD_A_B_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            C_ALL_theta_ABCD             [RapIndex] = new TH1F(Form("C_ALL_theta_ABCD_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_AB_CD            [RapIndex] = new TH1F(Form("C_ALL_theta_AB_CD_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_AC_BD            [RapIndex] = new TH1F(Form("C_ALL_theta_AC_BD_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_AD_BC            [RapIndex] = new TH1F(Form("C_ALL_theta_AD_BC_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_A_B_C_D          [RapIndex] = new TH1F(Form("C_ALL_theta_A_B_C_D_%d"  ,      RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_ABC_D            [RapIndex] = new TH1F(Form("C_ALL_theta_ABC_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_ABD_C            [RapIndex] = new TH1F(Form("C_ALL_theta_ABD_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_ACD_B            [RapIndex] = new TH1F(Form("C_ALL_theta_ACD_B_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_BCD_A            [RapIndex] = new TH1F(Form("C_ALL_theta_BCD_A_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_AB_C_D           [RapIndex] = new TH1F(Form("C_ALL_theta_AB_C_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_AC_B_D           [RapIndex] = new TH1F(Form("C_ALL_theta_AC_B_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_AD_B_C           [RapIndex] = new TH1F(Form("C_ALL_theta_AD_B_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_BC_A_D           [RapIndex] = new TH1F(Form("C_ALL_theta_BC_A_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_BD_A_C           [RapIndex] = new TH1F(Form("C_ALL_theta_BD_A_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_theta_CD_A_B           [RapIndex] = new TH1F(Form("C_ALL_theta_CD_A_B_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            C_ALL_phi_ABCD               [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_A_B_C_D            [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_AB_CD              [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_AC_BD              [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_AD_BC              [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_ABC_D              [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_ABD_C              [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_ACD_B              [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_BCD_A              [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_AB_C_D             [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_AC_B_D             [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_AD_B_C             [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_BC_A_D             [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_BD_A_C             [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_phi_CD_A_B             [RapIndex]->GetXaxis()->SetTitle("C phi");
+            C_ALL_theta_ABCD             [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_AB_CD            [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_AC_BD            [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_AD_BC            [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_A_B_C_D          [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_ABC_D            [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_ABD_C            [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_ACD_B            [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_BCD_A            [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_AB_C_D           [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_AC_B_D           [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_AD_B_C           [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_BC_A_D           [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_BD_A_C           [RapIndex]->GetXaxis()->SetTitle("C theta");
+            C_ALL_theta_CD_A_B           [RapIndex]->GetXaxis()->SetTitle("C theta");
+            
+            D_ALL_phi_ABCD               [RapIndex] = new TH1F(Form("C_ALL_phi_ABCD_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_A_B_C_D            [RapIndex] = new TH1F(Form("C_ALL_phi_A_B_C_D_%d"  ,          RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_AB_CD              [RapIndex] = new TH1F(Form("C_ALL_phi_AB_CD_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_AC_BD              [RapIndex] = new TH1F(Form("C_ALL_phi_AC_BD_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_AD_BC              [RapIndex] = new TH1F(Form("C_ALL_phi_AD_BC_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_ABC_D              [RapIndex] = new TH1F(Form("C_ALL_phi_ABC_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_ABD_C              [RapIndex] = new TH1F(Form("C_ALL_phi_ABD_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_ACD_B              [RapIndex] = new TH1F(Form("C_ALL_phi_ACD_B_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_BCD_A              [RapIndex] = new TH1F(Form("C_ALL_phi_BCD_A_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_AB_C_D             [RapIndex] = new TH1F(Form("C_ALL_phi_AB_C_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_AC_B_D             [RapIndex] = new TH1F(Form("C_ALL_phi_AC_B_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_AD_B_C             [RapIndex] = new TH1F(Form("C_ALL_phi_AD_B_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_BC_A_D             [RapIndex] = new TH1F(Form("C_ALL_phi_BC_A_D_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_BD_A_C             [RapIndex] = new TH1F(Form("C_ALL_phi_BD_A_C_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_phi_CD_A_B             [RapIndex] = new TH1F(Form("C_ALL_phi_CD_A_B_%d"  ,           RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            D_ALL_theta_ABCD             [RapIndex] = new TH1F(Form("C_ALL_theta_ABCD_%d"      ,      RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_AB_CD            [RapIndex] = new TH1F(Form("C_ALL_theta_AB_CD_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_AC_BD            [RapIndex] = new TH1F(Form("C_ALL_theta_AC_BD_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_AD_BC            [RapIndex] = new TH1F(Form("C_ALL_theta_AD_BC_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_A_B_C_D          [RapIndex] = new TH1F(Form("C_ALL_theta_A_B_C_D_%d"  ,      RapIndex), Form("ALL %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_ABC_D            [RapIndex] = new TH1F(Form("C_ALL_theta_ABC_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_ABD_C            [RapIndex] = new TH1F(Form("C_ALL_theta_ABD_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_ACD_B            [RapIndex] = new TH1F(Form("C_ALL_theta_ACD_B_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_BCD_A            [RapIndex] = new TH1F(Form("C_ALL_theta_BCD_A_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_AB_C_D           [RapIndex] = new TH1F(Form("C_ALL_theta_AB_C_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_AC_B_D           [RapIndex] = new TH1F(Form("C_ALL_theta_AC_B_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_AD_B_C           [RapIndex] = new TH1F(Form("C_ALL_theta_AD_B_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_BC_A_D           [RapIndex] = new TH1F(Form("C_ALL_theta_BC_A_D_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_BD_A_C           [RapIndex] = new TH1F(Form("C_ALL_theta_BD_A_C_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_theta_CD_A_B           [RapIndex] = new TH1F(Form("C_ALL_theta_CD_A_B_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            D_ALL_phi_ABCD               [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_A_B_C_D            [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_AB_CD              [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_AC_BD              [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_AD_BC              [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_ABC_D              [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_ABD_C              [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_ACD_B              [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_BCD_A              [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_AB_C_D             [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_AC_B_D             [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_AD_B_C             [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_BC_A_D             [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_BD_A_C             [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_phi_CD_A_B             [RapIndex]->GetXaxis()->SetTitle("D phi");
+            D_ALL_theta_ABCD             [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_AB_CD            [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_AC_BD            [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_AD_BC            [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_A_B_C_D          [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_ABC_D            [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_ABD_C            [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_ACD_B            [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_BCD_A            [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_AB_C_D           [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_AC_B_D           [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_AD_B_C           [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_BC_A_D           [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_BD_A_C           [RapIndex]->GetXaxis()->SetTitle("D theta");
+            D_ALL_theta_CD_A_B           [RapIndex]->GetXaxis()->SetTitle("D theta");
         }
     }
     
@@ -1284,7 +1908,6 @@ void S_Four(
                                     const auto& C_particles = eventC.C_particles;
 
                                     for (int Did = 0; Did < HowMuchEventMixing + 1; ++Did) {
-                                        if ((Check_C_D) && (Did < Cid)) continue;
                                         //==================================================
                                         // Determine mixing type
                                         //==================================================
@@ -1357,46 +1980,246 @@ void S_Four(
                                         // Select histogram pointers ONCE
                                         //==================================================
                             
-                                        TH1* hLocal = nullptr;
-                                        TH1* hGlobal = nullptr;
-                                        TH1* hLocal_Cos = nullptr;
-                                        TH1* hGlobal_Cos = nullptr;
+                                        TH1* B_phiLocal = nullptr;
+                                        TH1* B_phiGlobal = nullptr;
+                                        TH1* B_thetaLocal = nullptr;
+                                        TH1* B_thetaGlobal = nullptr;
+                                        TH1* C_phiLocal = nullptr;
+                                        TH1* C_phiGlobal = nullptr;
+                                        TH1* C_thetaLocal = nullptr;
+                                        TH1* C_thetaGlobal = nullptr;
+                                        TH1* D_phiLocal = nullptr;
+                                        TH1* D_phiGlobal = nullptr;
+                                        TH1* D_thetaLocal = nullptr;
+                                        TH1* D_thetaGlobal = nullptr;
                             
                                         switch (mixType) {
                             
-                                            case A_B_C:
-                                                hLocal      = H_A_B_C_D    [CenIndex][RapIndex][PVzIndex];
-                                                hLocal_Cos  = H_Cos_A_B_C_D[CenIndex][RapIndex][PVzIndex];
-                                                hGlobal     = H_ALL_A_B_C_D          [RapIndex];
-                                                hGlobal_Cos = H_ALL_Cos_A_B_C_D      [RapIndex];
+                                            case A_B_C_D:
+                                                B_phiLocal      = B_phi_A_B_C_D    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_A_B_C_D  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_A_B_C_D          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_A_B_C_D        [RapIndex];
+                                                C_phiLocal      = C_phi_A_B_C_D    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_A_B_C_D  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_A_B_C_D          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_A_B_C_D        [RapIndex];
+                                                D_phiLocal      = D_phi_A_B_C_D    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_A_B_C_D  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_A_B_C_D          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_A_B_C_D        [RapIndex];
                                                 break;
                             
-                                            case AB_C:
-                                                hLocal      = H_AB_CD    [CenIndex][RapIndex][PVzIndex];
-                                                hLocal_Cos  = H_Cos_AB_CD[CenIndex][RapIndex][PVzIndex];
-                                                hGlobal     = H_ALL_AB_CD          [RapIndex];
-                                                hGlobal_Cos = H_ALL_Cos_AB_CD      [RapIndex];
+                                            case AB_CD:
+                                                B_phiLocal      = B_phi_AB_CD    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_AB_CD  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_AB_CD          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_AB_CD        [RapIndex];
+                                                C_phiLocal      = C_phi_AB_CD    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_AB_CD  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_AB_CD          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_AB_CD        [RapIndex];
+                                                D_phiLocal      = D_phi_AB_CD    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_AB_CD  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_AB_CD          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_AB_CD        [RapIndex];
                                                 break;
                             
-                                            case AC_B:
-                                                hLocal      = H_AC_BD    [CenIndex][RapIndex][PVzIndex];
-                                                hLocal_Cos  = H_Cos_AC_BD[CenIndex][RapIndex][PVzIndex];
-                                                hGlobal     = H_ALL_AC_BD          [RapIndex];
-                                                hGlobal_Cos = H_ALL_Cos_AC_BD      [RapIndex];
+                                            case AC_BD:
+                                                B_phiLocal      = B_phi_AC_BD    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_AC_BD  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_AC_BD          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_AC_BD        [RapIndex];
+                                                C_phiLocal      = C_phi_AC_BD    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_AC_BD  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_AC_BD          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_AC_BD        [RapIndex];
+                                                D_phiLocal      = D_phi_AC_BD    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_AC_BD  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_AC_BD          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_AC_BD        [RapIndex];
                                                 break;
                             
-                                            case BC_A:
-                                                hLocal      = H_AD_BC    [CenIndex][RapIndex][PVzIndex];
-                                                hLocal_Cos  = H_Cos_AD_BC[CenIndex][RapIndex][PVzIndex];
-                                                hGlobal     = H_ALL_AD_BC          [RapIndex];
-                                                hGlobal_Cos = H_ALL_Cos_AD_BC      [RapIndex];
+                                            case AD_BC:
+                                                B_phiLocal      = B_phi_AD_BC    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_AD_BC  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_AD_BC          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_AD_BC        [RapIndex];
+                                                C_phiLocal      = C_phi_AD_BC    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_AD_BC  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_AD_BC          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_AD_BC        [RapIndex];
+                                                D_phiLocal      = D_phi_AD_BC    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_AD_BC  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_AD_BC          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_AD_BC        [RapIndex];
                                                 break;
                             
+                                            case ABC_D:
+                                                B_phiLocal      = B_phi_ABC_D    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_ABC_D  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_ABC_D          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_ABC_D        [RapIndex];
+                                                C_phiLocal      = C_phi_ABC_D    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_ABC_D  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_ABC_D          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_ABC_D        [RapIndex];
+                                                D_phiLocal      = D_phi_ABC_D    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_ABC_D  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_ABC_D          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_ABC_D        [RapIndex];
+                                                break;
+                            
+                                            case ABD_C:
+                                                B_phiLocal      = B_phi_ABD_C    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_ABD_C  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_ABD_C          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_ABD_C        [RapIndex];
+                                                C_phiLocal      = C_phi_ABD_C    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_ABD_C  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_ABD_C          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_ABD_C        [RapIndex];
+                                                D_phiLocal      = D_phi_ABD_C    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_ABD_C  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_ABD_C          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_ABD_C        [RapIndex];
+                                                break;
+                            
+                                            case ACD_B:
+                                                B_phiLocal      = B_phi_ACD_B    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_ACD_B  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_ACD_B          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_ACD_B        [RapIndex];
+                                                C_phiLocal      = C_phi_ACD_B    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_ACD_B  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_ACD_B          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_ACD_B        [RapIndex];
+                                                D_phiLocal      = D_phi_ACD_B    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_ACD_B  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_ACD_B          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_ACD_B        [RapIndex];
+                                                break;
+                            
+                                            case BCD_A:
+                                                B_phiLocal      = B_phi_BCD_A    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_BCD_A  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_BCD_A          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_BCD_A        [RapIndex];
+                                                C_phiLocal      = C_phi_BCD_A    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_BCD_A  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_BCD_A          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_BCD_A        [RapIndex];
+                                                D_phiLocal      = D_phi_BCD_A    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_BCD_A  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_BCD_A          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_BCD_A        [RapIndex];
+                                                break;
+
+                            
+                                            case AB_C_D:
+                                                B_phiLocal      = B_phi_AB_C_D    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_AB_C_D  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_AB_C_D          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_AB_C_D        [RapIndex];
+                                                C_phiLocal      = C_phi_AB_C_D    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_AB_C_D  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_AB_C_D          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_AB_C_D        [RapIndex];
+                                                D_phiLocal      = D_phi_AB_C_D    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_AB_C_D  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_AB_C_D          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_AB_C_D        [RapIndex];
+                                                break;
+
+                            
+                                            case AC_B_D:
+                                                B_phiLocal      = B_phi_AC_B_D    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_AC_B_D  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_AC_B_D          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_AC_B_D        [RapIndex];
+                                                C_phiLocal      = C_phi_AC_B_D    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_AC_B_D  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_AC_B_D          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_AC_B_D        [RapIndex];
+                                                D_phiLocal      = D_phi_AC_B_D    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_AC_B_D  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_AC_B_D          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_AC_B_D        [RapIndex];
+                                                break;
+                            
+                                            case AD_B_C:
+                                                B_phiLocal      = B_phi_AD_B_C    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_AD_B_C  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_AD_B_C          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_AD_B_C        [RapIndex];
+                                                C_phiLocal      = C_phi_AD_B_C    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_AD_B_C  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_AD_B_C          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_AD_B_C        [RapIndex];
+                                                D_phiLocal      = D_phi_AD_B_C    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_AD_B_C  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_AD_B_C          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_AD_B_C        [RapIndex];
+                                                break;
+                            
+                                            case BC_A_D:
+                                                B_phiLocal      = B_phi_BC_A_D    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_BC_A_D  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_BC_A_D          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_BC_A_D        [RapIndex];
+                                                C_phiLocal      = C_phi_BC_A_D    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_BC_A_D  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_BC_A_D          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_BC_A_D        [RapIndex];
+                                                D_phiLocal      = D_phi_BC_A_D    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_BC_A_D  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_BC_A_D          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_BC_A_D        [RapIndex];
+                                                break;
+                            
+                                            case BD_A_C:
+                                                B_phiLocal      = B_phi_BD_A_C    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_BD_A_C  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_BD_A_C          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_BD_A_C        [RapIndex];
+                                                C_phiLocal      = C_phi_BD_A_C    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_BD_A_C  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_BD_A_C          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_BD_A_C        [RapIndex];
+                                                D_phiLocal      = D_phi_BD_A_C    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_BD_A_C  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_BD_A_C          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_BD_A_C        [RapIndex];
+                                                break;
+                            
+                                            case CD_A_B:
+                                                B_phiLocal      = B_phi_CD_A_B    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_CD_A_B  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_CD_A_B          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_CD_A_B        [RapIndex];
+                                                C_phiLocal      = C_phi_CD_A_B    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_CD_A_B  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_CD_A_B          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_CD_A_B        [RapIndex];
+                                                D_phiLocal      = D_phi_CD_A_B    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_CD_A_B  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_CD_A_B          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_CD_A_B        [RapIndex];
+                                                break;
+
                                             case SAME:
-                                                hLocal      = H_ABCD    [CenIndex][RapIndex][PVzIndex];
-                                                hLocal_Cos  = H_Cos_ABCD[CenIndex][RapIndex][PVzIndex];
-                                                hGlobal     = H_ALL_ABCD          [RapIndex];
-                                                hGlobal_Cos = H_ALL_Cos_ABCD      [RapIndex];
+                                                B_phiLocal      = B_phi_ABCD    [CenIndex][RapIndex][PVzIndex];
+                                                B_thetaLocal    = B_theta_ABCD  [CenIndex][RapIndex][PVzIndex];
+                                                B_phiGlobal     = B_ALL_phi_ABCD          [RapIndex];
+                                                B_thetaGlobal   = B_ALL_theta_ABCD        [RapIndex];
+                                                C_phiLocal      = C_phi_ABCD    [CenIndex][RapIndex][PVzIndex];
+                                                C_thetaLocal    = C_theta_ABCD  [CenIndex][RapIndex][PVzIndex];
+                                                C_phiGlobal     = C_ALL_phi_ABCD          [RapIndex];
+                                                C_thetaGlobal   = C_ALL_theta_ABCD        [RapIndex];
+                                                D_phiLocal      = D_phi_ABCD    [CenIndex][RapIndex][PVzIndex];
+                                                D_thetaLocal    = D_theta_ABCD  [CenIndex][RapIndex][PVzIndex];
+                                                D_phiGlobal     = D_ALL_phi_ABCD          [RapIndex];
+                                                D_thetaGlobal   = D_ALL_theta_ABCD        [RapIndex];
                                                 break;
                                         }
 
@@ -1407,17 +2230,47 @@ void S_Four(
                                 
                                                 for (k=0;k<C_particles.size();k++) {
 
-                                                    if ((Check_C_D) && (mixType = SAME)) {
-                                                        if (k <= j) continue;
-                                                        if (IfInVector(C_particles[k].TreeID , B.ParentID)) continue;
-                                                    }
                                                     const auto& C = C_particles[k];
+
+                                                    for (l=0;l<D_particles.size();l++) {
+
+                                                        if ((Check_C_D) && (Cid == Did)) {
+                                                            if (k == l) continue;
+                                                            if (IfInVector(C_particles[k].TreeID , D.ParentID)) continue;
+                                                        }
+                                                        const auto& D = D_particles[k];
                                                 
-                                                    if (GetSide(A,B,C,D,BTheta , CTheta , DTheta, CosPhi,phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
-                                                        hLocal     ->Fill(phi);
-                                                        hLocal_Cos ->Fill(CosPhi);
-                                                        hGlobal    ->Fill(phi);
-                                                        hGlobal_Cos->Fill(CosPhi);
+                                                        if (GetSide(
+                                                            A,
+                                                            B,
+                                                            C,
+                                                            D,
+                                                            *H_P_tot,
+                                                            *H_beta,
+                                                            Btheta,
+                                                            Ctheta,
+                                                            Dtheta,
+                                                            Bphi,
+                                                            Cphi,
+                                                            Dphi,
+                                                            IfRemoveFeedPair,
+                                                            MotherMass,
+                                                            MotherMassSigma,
+                                                            MassSigmaWidth))
+                                                        {
+                                                            B_phiLocal     ->Fill(Bphi);
+                                                            B_thetaLocal   ->Fill(Btheta);
+                                                            B_phiGlobal    ->Fill(Bphi);
+                                                            B_thetaGlobal  ->Fill(Btheta);
+                                                            C_phiLocal     ->Fill(Cphi);
+                                                            C_thetaLocal   ->Fill(Ctheta);
+                                                            C_phiGlobal    ->Fill(Cphi);
+                                                            C_thetaGlobal  ->Fill(Ctheta);
+                                                            D_phiLocal     ->Fill(Dphi);
+                                                            D_thetaLocal   ->Fill(Dtheta);
+                                                            D_phiGlobal    ->Fill(Dphi);
+                                                            D_thetaGlobal  ->Fill(Dtheta);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -1444,40 +2297,207 @@ void S_Four(
     // 保存.root文件
     
     TString OutputFileName = OutMidName;
-    OutputFileName += "H_";
+    OutputFileName += "_H_";
     OutputFileName += OutputFileIndex;
     OutputFileName += ".root";
     TFile *fileA = new TFile(OutputFileName, "RECREATE");
     TDirectory *folder_Side     = fileA->mkdir("Side");
     TDirectory *ALL_Side        = folder_Side->mkdir("ALL");
     TDirectory *Sep_Side        = folder_Side->mkdir("Sep");
+    fileA->cd();
+    B_P_tot->Write();
+    H_beta ->Write();
     for (RapIndex=0;RapIndex<yBinNum;RapIndex++) {
         for (CenIndex=0;CenIndex<CentralityBinNum;CenIndex++) {
             for (PVzIndex=0;PVzIndex<PVzBinNum;PVzIndex++) {
                 Sep_Side->cd();
-                H_ABCD                  [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_A_B_C_D                [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_AB_CD                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_AC_BD                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_AD_BC                 [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Cos_ABCD              [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Cos_A_B_C_D            [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Cos_AB_CD             [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Cos_AD_BC             [CenIndex] [RapIndex] [PVzIndex] ->Write();
-                H_Cos_AC_BD             [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_ABCD           [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_AB_CD          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_AC_BD          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_AD_BC          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_A_B_C_D        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_ABC_D          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_ABD_C          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_ACD_B          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_BCD_A          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_AB_C_D         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_AC_B_D         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_AD_B_C         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_BC_A_D         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_BD_A_C         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_phi_CD_A_B         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_ABCD         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_AB_CD        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_AC_BD        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_AD_BC        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_A_B_C_D      [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_ABC_D        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_ABD_C        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_ACD_B        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_BCD_A        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_AB_C_D       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_AC_B_D       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_AD_B_C       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_BC_A_D       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_BD_A_C       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                B_theta_CD_A_B       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                
+                C_phi_ABCD           [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_AB_CD          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_AC_BD          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_AD_BC          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_A_B_C_D        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_ABC_D          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_ABD_C          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_ACD_B          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_BCD_A          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_AB_C_D         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_AC_B_D         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_AD_B_C         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_BC_A_D         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_BD_A_C         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_phi_CD_A_B         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_ABCD         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_AB_CD        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_AC_BD        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_AD_BC        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_A_B_C_D      [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_ABC_D        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_ABD_C        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_ACD_B        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_BCD_A        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_AB_C_D       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_AC_B_D       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_AD_B_C       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_BC_A_D       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_BD_A_C       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                C_theta_CD_A_B       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                
+                D_phi_ABCD           [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_AB_CD          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_AC_BD          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_AD_BC          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_A_B_C_D        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_ABC_D          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_ABD_C          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_ACD_B          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_BCD_A          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_AB_C_D         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_AC_B_D         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_AD_B_C         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_BC_A_D         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_BD_A_C         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_phi_CD_A_B         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_ABCD         [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_AB_CD        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_AC_BD        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_AD_BC        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_A_B_C_D      [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_ABC_D        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_ABD_C        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_ACD_B        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_BCD_A        [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_AB_C_D       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_AC_B_D       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_AD_B_C       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_BC_A_D       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_BD_A_C       [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                D_theta_CD_A_B       [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
-        H_ALL_ABCD                                 [RapIndex] ->Write();
-        H_ALL_A_B_C_D                               [RapIndex] ->Write();
-        H_ALL_AB_CD                                [RapIndex] ->Write();
-        H_ALL_AC_BD                                [RapIndex] ->Write();
-        H_ALL_AD_BC                                [RapIndex] ->Write();
-        H_ALL_Cos_ABCD                             [RapIndex] ->Write();
-        H_ALL_Cos_A_B_C_D                           [RapIndex] ->Write();
-        H_ALL_Cos_AB_CD                            [RapIndex] ->Write();
-        H_ALL_Cos_AC_BD                            [RapIndex] ->Write();
-        H_ALL_Cos_AD_BC                            [RapIndex] ->Write();
+        B_ALL_phi_ABCD               [RapIndex] ->Write();
+        B_ALL_phi_A_B_C_D            [RapIndex] ->Write();
+        B_ALL_phi_AB_CD              [RapIndex] ->Write();
+        B_ALL_phi_AC_BD              [RapIndex] ->Write();
+        B_ALL_phi_AD_BC              [RapIndex] ->Write();
+        B_ALL_phi_ABC_D              [RapIndex] ->Write();
+        B_ALL_phi_ABD_C              [RapIndex] ->Write();
+        B_ALL_phi_ACD_B              [RapIndex] ->Write();
+        B_ALL_phi_BCD_A              [RapIndex] ->Write();
+        B_ALL_phi_AB_C_D             [RapIndex] ->Write();
+        B_ALL_phi_AC_B_D             [RapIndex] ->Write();
+        B_ALL_phi_AD_B_C             [RapIndex] ->Write();
+        B_ALL_phi_BC_A_D             [RapIndex] ->Write();
+        B_ALL_phi_BD_A_C             [RapIndex] ->Write();
+        B_ALL_phi_CD_A_B             [RapIndex] ->Write();
+        B_ALL_theta_ABCD             [RapIndex] ->Write();
+        B_ALL_theta_AB_CD            [RapIndex] ->Write();
+        B_ALL_theta_AC_BD            [RapIndex] ->Write();
+        B_ALL_theta_AD_BC            [RapIndex] ->Write();
+        B_ALL_theta_A_B_C_D          [RapIndex] ->Write();
+        B_ALL_theta_ABC_D            [RapIndex] ->Write();
+        B_ALL_theta_ABD_C            [RapIndex] ->Write();
+        B_ALL_theta_ACD_B            [RapIndex] ->Write();
+        B_ALL_theta_BCD_A            [RapIndex] ->Write();
+        B_ALL_theta_AB_C_D           [RapIndex] ->Write();
+        B_ALL_theta_AC_B_D           [RapIndex] ->Write();
+        B_ALL_theta_AD_B_C           [RapIndex] ->Write();
+        B_ALL_theta_BC_A_D           [RapIndex] ->Write();
+        B_ALL_theta_BD_A_C           [RapIndex] ->Write();
+        B_ALL_theta_CD_A_B           [RapIndex] ->Write();
+        
+        C_ALL_phi_ABCD               [RapIndex] ->Write();
+        C_ALL_phi_A_B_C_D            [RapIndex] ->Write();
+        C_ALL_phi_AB_CD              [RapIndex] ->Write();
+        C_ALL_phi_AC_BD              [RapIndex] ->Write();
+        C_ALL_phi_AD_BC              [RapIndex] ->Write();
+        C_ALL_phi_ABC_D              [RapIndex] ->Write();
+        C_ALL_phi_ABD_C              [RapIndex] ->Write();
+        C_ALL_phi_ACD_B              [RapIndex] ->Write();
+        C_ALL_phi_BCD_A              [RapIndex] ->Write();
+        C_ALL_phi_AB_C_D             [RapIndex] ->Write();
+        C_ALL_phi_AC_B_D             [RapIndex] ->Write();
+        C_ALL_phi_AD_B_C             [RapIndex] ->Write();
+        C_ALL_phi_BC_A_D             [RapIndex] ->Write();
+        C_ALL_phi_BD_A_C             [RapIndex] ->Write();
+        C_ALL_phi_CD_A_B             [RapIndex] ->Write();
+        C_ALL_theta_ABCD             [RapIndex] ->Write();
+        C_ALL_theta_AB_CD            [RapIndex] ->Write();
+        C_ALL_theta_AC_BD            [RapIndex] ->Write();
+        C_ALL_theta_AD_BC            [RapIndex] ->Write();
+        C_ALL_theta_A_B_C_D          [RapIndex] ->Write();
+        C_ALL_theta_ABC_D            [RapIndex] ->Write();
+        C_ALL_theta_ABD_C            [RapIndex] ->Write();
+        C_ALL_theta_ACD_B            [RapIndex] ->Write();
+        C_ALL_theta_BCD_A            [RapIndex] ->Write();
+        C_ALL_theta_AB_C_D           [RapIndex] ->Write();
+        C_ALL_theta_AC_B_D           [RapIndex] ->Write();
+        C_ALL_theta_AD_B_C           [RapIndex] ->Write();
+        C_ALL_theta_BC_A_D           [RapIndex] ->Write();
+        C_ALL_theta_BD_A_C           [RapIndex] ->Write();
+        C_ALL_theta_CD_A_B           [RapIndex] ->Write();
+        
+        D_ALL_phi_ABCD               [RapIndex] ->Write();
+        D_ALL_phi_A_B_C_D            [RapIndex] ->Write();
+        D_ALL_phi_AB_CD              [RapIndex] ->Write();
+        D_ALL_phi_AC_BD              [RapIndex] ->Write();
+        D_ALL_phi_AD_BC              [RapIndex] ->Write();
+        D_ALL_phi_ABC_D              [RapIndex] ->Write();
+        D_ALL_phi_ABD_C              [RapIndex] ->Write();
+        D_ALL_phi_ACD_B              [RapIndex] ->Write();
+        D_ALL_phi_BCD_A              [RapIndex] ->Write();
+        D_ALL_phi_AB_C_D             [RapIndex] ->Write();
+        D_ALL_phi_AC_B_D             [RapIndex] ->Write();
+        D_ALL_phi_AD_B_C             [RapIndex] ->Write();
+        D_ALL_phi_BC_A_D             [RapIndex] ->Write();
+        D_ALL_phi_BD_A_C             [RapIndex] ->Write();
+        D_ALL_phi_CD_A_B             [RapIndex] ->Write();
+        D_ALL_theta_ABCD             [RapIndex] ->Write();
+        D_ALL_theta_AB_CD            [RapIndex] ->Write();
+        D_ALL_theta_AC_BD            [RapIndex] ->Write();
+        D_ALL_theta_AD_BC            [RapIndex] ->Write();
+        D_ALL_theta_A_B_C_D          [RapIndex] ->Write();
+        D_ALL_theta_ABC_D            [RapIndex] ->Write();
+        D_ALL_theta_ABD_C            [RapIndex] ->Write();
+        D_ALL_theta_ACD_B            [RapIndex] ->Write();
+        D_ALL_theta_BCD_A            [RapIndex] ->Write();
+        D_ALL_theta_AB_C_D           [RapIndex] ->Write();
+        D_ALL_theta_AC_B_D           [RapIndex] ->Write();
+        D_ALL_theta_AD_B_C           [RapIndex] ->Write();
+        D_ALL_theta_BC_A_D           [RapIndex] ->Write();
+        D_ALL_theta_BD_A_C           [RapIndex] ->Write();
+        D_ALL_theta_CD_A_B           [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
@@ -1602,11 +2622,14 @@ inline bool GetSide(
     const ArmParticle& B,
     const ArmParticle& C,
     const ArmParticle& D,
+    TH1D& H_P_tot,
+    TH1D& H_beta,
     double& BthetaOut,
     double& CthetaOut,
     double& DthetaOut,
-    double& cosPhiOut,
-    double& phiOut,
+    double& BphiOut,
+    double& CphiOut,
+    double& DphiOut,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -1619,21 +2642,14 @@ inline bool GetSide(
     const double TotE = AE + BE + CE + DE;
     double p[4] = {A.px+B.px+C.px+D.px , A.py+B.py+C.py+D.py , A.pz+B.pz+C.pz+D.pz , 0.0};
     p[3] = sqrt(p[0]*p[0] + p[1]*p[1] + p[2]*p[2]);
+    H_P_tot->Fill(p[3]);
     const double n[3] = {p[0]/p[3] , p[1]/p[3] , p[2]/p[3]};
     double beta[4] = { -(p[0])/TotE , -(p[1])/TotE , -(p[2])/TotE , 0.0};
     beta[3] = beta[0]*beta[0] + beta[1]*beta[1] + beta[2]*beta[2];
+    H_beta->Fill(sqrt(beta[3]));
 
     const double gamma  = 1.0/(sqrt(1-beta[3]));
     const double gamma2 = 1.0/(sqrt(1-beta[3])*(1+sqrt(1-beta[3])));
-
-    const double bpA = beta[0]*A.px + beta[1]*A.py + beta[2]*A.pz;
-
-    const double New_APx = A.px + gamma2*beta[0]*bpA + gamma*beta[0]*AE;
-    const double New_APy = A.py + gamma2*beta[1]*bpA + gamma*beta[1]*AE;
-    const double New_APz = A.pz + gamma2*beta[2]*bpA + gamma*beta[2]*AE;
-
-    cosPhiOut = - (New_APx*(n[0])+New_APy*(n[1])+New_APz*(n[2])) / (sqrt(New_APx*New_APx+New_APy*New_APy+New_APz*New_APz));
-    phiOut    = std::acos(cosPhiOut);
 
     //////////////////////////////////
     // Three body figure
@@ -1652,6 +2668,13 @@ inline bool GetSide(
     const double New_DPx = D.px + gamma2*beta[0]*bpD + gamma*beta[0]*DE;
     const double New_DPy = D.py + gamma2*beta[1]*bpD + gamma*beta[1]*DE;
     const double New_DPz = D.pz + gamma2*beta[2]*bpD + gamma*beta[2]*DE;
+
+    double cosPhiOut = (New_BPx*(n[0])+New_BPy*(n[1])+New_BPz*(n[2])) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz));
+    BphiOut = std::acos(cosPhiOut);
+    cosPhiOut = (New_CPx*(n[0])+New_CPy*(n[1])+New_CPz*(n[2])) / (sqrt(New_CPx*New_CPx+New_CPy*New_CPy+New_CPz*New_CPz));
+    CphiOut = std::acos(cosPhiOut);
+    cosPhiOut = (New_DPx*(n[0])+New_DPy*(n[1])+New_DPz*(n[2])) / (sqrt(New_DPx*New_DPx+New_DPy*New_DPy+New_DPz*New_DPz));
+    DphiOut = std::acos(cosPhiOut);
 
     double v[3] = {-n[1],n[0],0};
     const double Rv = sqrt(n[0]*n[0] + n[1]*n[1]);
