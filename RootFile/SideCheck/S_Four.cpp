@@ -1908,6 +1908,7 @@ void S_Four(
                                     const auto& C_particles = eventC.C_particles;
 
                                     for (int Did = 0; Did < HowMuchEventMixing + 1; ++Did) {
+                                        auto& eventD = EventPool[CenIndex][RapIndex][PVzIndex][Did];
                                         const auto& D_particles = eventD.D_particles;
                                         //==================================================
                                         // Determine mixing type
