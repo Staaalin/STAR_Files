@@ -135,8 +135,8 @@ const float AyCut[] = {-10000.0 , 10000.0}; // A_y
 int FeedDown[] = { 0 };
 const float EtaCut[] = {-1.5 , 1.5}; // EtaCut for both A and B
 const float MassSigmaWidth = 3.0;
-const float Sideband_MassSigmaSta   = 4.0;
-const float Sideband_MassSigmaEnd   = 10.0;
+const float Sideband_MassSigmaSta   = 5.0;
+const float Sideband_MassSigmaEnd   = 8.0;
 
 const Int_t CentralityBinNum = sizeof(CentralityBin)/sizeof(CentralityBin[0]) - 1; // -1
 const Int_t PVzBinNum = sizeof(PVzBin)/sizeof(PVzBin[0]) - 1; // -1
