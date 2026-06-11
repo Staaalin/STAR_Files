@@ -2299,7 +2299,7 @@ void S_Four(
     // 保存.root文件
     
     TString OutputFileName = OutMidName;
-    OutputFileName += "_H_";
+    OutputFileName += "H_";
     OutputFileName += OutputFileIndex;
     OutputFileName += ".root";
     TFile *fileA = new TFile(OutputFileName, "RECREATE");
