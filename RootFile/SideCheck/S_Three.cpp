@@ -132,6 +132,7 @@ inline bool GetSide(
     double& B_phiOut,
     double& C_cosPhiOut,
     double& C_phiOut,
+    double& BC_theta,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -373,6 +374,7 @@ void S_Three(
     float  P_B , kStar;
     double  B_phi , B_CosPhi;
     double  C_phi , C_CosPhi;
+    double BC_theta;
     enum MixType {
         SAME,
         AB_C,
@@ -448,6 +450,16 @@ void S_Three(
     std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos_AC_B            ;
     std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos_BC_A            ;
     std::vector<std::vector<std::vector<TH1D*>>>                     H_Cos_A_B_C           ;
+    std::vector<TH1D*>                                               H_ALL_theta_ABC         ;
+    std::vector<TH1D*>                                               H_ALL_theta_AB_C        ;
+    std::vector<TH1D*>                                               H_ALL_theta_AC_B        ;
+    std::vector<TH1D*>                                               H_ALL_theta_BC_A        ;
+    std::vector<TH1D*>                                               H_ALL_theta_A_B_C       ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_theta_ABC             ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_theta_AB_C            ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_theta_AC_B            ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_theta_BC_A            ;
+    std::vector<std::vector<std::vector<TH1D*>>>                     H_theta_A_B_C           ;
     TH1D* H_P_tot     = new TH1D("H_P_tot","H_P_tot",200,0,10);
     TH1D* H_beta      = new TH1D("H_beta" ,"H_beta" ,500,0,2);
 
@@ -474,6 +486,16 @@ void S_Three(
         H_Cos_AC_B     .resize(CentralityBinNum);
         H_Cos_BC_A     .resize(CentralityBinNum);
         H_Cos_A_B_C   .resize(CentralityBinNum);
+        H_ALL_theta_ABC       .resize(yBinNum, nullptr);
+        H_ALL_theta_AB_C      .resize(yBinNum, nullptr);
+        H_ALL_theta_AC_B      .resize(yBinNum, nullptr);
+        H_ALL_theta_BC_A      .resize(yBinNum, nullptr);
+        H_ALL_theta_A_B_C    .resize(yBinNum, nullptr);
+        H_theta_ABC      .resize(CentralityBinNum);
+        H_theta_AB_C     .resize(CentralityBinNum);
+        H_theta_AC_B     .resize(CentralityBinNum);
+        H_theta_BC_A     .resize(CentralityBinNum);
+        H_theta_A_B_C   .resize(CentralityBinNum);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
             H_ABC           [i].resize(yBinNum);
@@ -486,6 +508,11 @@ void S_Three(
             H_Cos_AC_B      [i].resize(yBinNum);
             H_Cos_BC_A      [i].resize(yBinNum);
             H_Cos_A_B_C   [i].resize(yBinNum);
+            H_theta_ABC       [i].resize(yBinNum);
+            H_theta_AB_C      [i].resize(yBinNum);
+            H_theta_AC_B      [i].resize(yBinNum);
+            H_theta_BC_A      [i].resize(yBinNum);
+            H_theta_A_B_C   [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
                 H_ABC                     [i][j].resize(PVzBinNum, nullptr);
@@ -498,6 +525,11 @@ void S_Three(
                 H_Cos_AC_B                [i][j].resize(PVzBinNum, nullptr);
                 H_Cos_BC_A                [i][j].resize(PVzBinNum, nullptr);
                 H_Cos_A_B_C             [i][j].resize(PVzBinNum, nullptr);
+                H_theta_ABC                 [i][j].resize(PVzBinNum, nullptr);
+                H_theta_AB_C                [i][j].resize(PVzBinNum, nullptr);
+                H_theta_AC_B                [i][j].resize(PVzBinNum, nullptr);
+                H_theta_BC_A                [i][j].resize(PVzBinNum, nullptr);
+                H_theta_A_B_C             [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
@@ -541,6 +573,11 @@ void S_Three(
                     H_Cos_AC_B      [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Cos_AC_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("AC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
                     H_Cos_BC_A      [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Cos_BC_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("BC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
                     H_Cos_A_B_C     [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Cos_A_B_C_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("ABC in different event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
+                    H_theta_ABC     [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_theta_ABC_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("ABC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_theta_AB_C    [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_theta_AB_C_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("AB in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_theta_AC_B    [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_theta_AC_B_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("AC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_theta_BC_A    [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_theta_BC_A_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex),Form("BC in same event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
+                    H_theta_A_B_C   [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_theta_A_B_C_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("ABC in different event, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,SideSta,SideEnd);
 
                 }
             }
@@ -554,6 +591,11 @@ void S_Three(
             H_ALL_Cos_AC_B         [RapIndex] = new TH1D(Form("H_ALL_Cos_AC_B_%d"      ,     RapIndex),Form("AC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
             H_ALL_Cos_BC_A         [RapIndex] = new TH1D(Form("H_ALL_Cos_BC_A_%d"      ,     RapIndex),Form("BC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
             H_ALL_Cos_A_B_C        [RapIndex] = new TH1D(Form("H_ALL_Cos_A_B_C_%d"  ,      RapIndex), Form("ALL ABC in different event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
+            H_ALL_theta_ABC        [RapIndex] = new TH1D(Form("H_ALL_theta_ABC_%d"      ,      RapIndex),Form("ALL ABC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_theta_AB_C       [RapIndex] = new TH1D(Form("H_ALL_theta_AB_C_%d"      ,     RapIndex),Form("AB in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_theta_AC_B       [RapIndex] = new TH1D(Form("H_ALL_theta_AC_B_%d"      ,     RapIndex),Form("AC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_theta_BC_A       [RapIndex] = new TH1D(Form("H_ALL_theta_BC_A_%d"      ,     RapIndex),Form("BC in same event, %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
+            H_ALL_theta_A_B_C      [RapIndex] = new TH1D(Form("H_ALL_theta_A_B_C_%d"  ,      RapIndex), Form("ALL ABC in different event, %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
 
         }
     }
@@ -1028,42 +1070,54 @@ void S_Three(
                                     TH1* hGlobal = nullptr;
                                     TH1* hLocal_Cos = nullptr;
                                     TH1* hGlobal_Cos = nullptr;
+                                    TH1* hLocal_theta = nullptr;
+                                    TH1* hGlobal_theta = nullptr;
                         
                                     switch (mixType) {
                         
                                         case A_B_C:
-                                            hLocal      = H_A_B_C    [CenIndex][RapIndex][PVzIndex];
-                                            hLocal_Cos  = H_Cos_A_B_C[CenIndex][RapIndex][PVzIndex];
-                                            hGlobal     = H_ALL_A_B_C          [RapIndex];
-                                            hGlobal_Cos = H_ALL_Cos_A_B_C      [RapIndex];
+                                            hLocal            = H_A_B_C      [CenIndex][RapIndex][PVzIndex];
+                                            hLocal_Cos        = H_Cos_A_B_C  [CenIndex][RapIndex][PVzIndex];
+                                            hLocal_theta      = H_theta_A_B_C[CenIndex][RapIndex][PVzIndex];
+                                            hGlobal           = H_ALL_A_B_C            [RapIndex];
+                                            hGlobal_Cos       = H_ALL_Cos_A_B_C        [RapIndex];
+                                            hGlobal_theta     = H_ALL_theta_A_B_C      [RapIndex];
                                             break;
                         
                                         case AB_C:
                                             hLocal      = H_AB_C    [CenIndex][RapIndex][PVzIndex];
                                             hLocal_Cos  = H_Cos_AB_C[CenIndex][RapIndex][PVzIndex];
+                                            hLocal_theta= H_theta_AB_C[CenIndex][RapIndex][PVzIndex];
                                             hGlobal     = H_ALL_AB_C          [RapIndex];
                                             hGlobal_Cos = H_ALL_Cos_AB_C      [RapIndex];
+                                            hGlobal_theta = H_ALL_theta_AB_C      [RapIndex];
                                             break;
                         
                                         case AC_B:
                                             hLocal      = H_AC_B    [CenIndex][RapIndex][PVzIndex];
                                             hLocal_Cos  = H_Cos_AC_B[CenIndex][RapIndex][PVzIndex];
+                                            hLocal_theta= H_theta_AC_B[CenIndex][RapIndex][PVzIndex];
                                             hGlobal     = H_ALL_AC_B          [RapIndex];
                                             hGlobal_Cos = H_ALL_Cos_AC_B      [RapIndex];
+                                            hGlobal_theta = H_ALL_theta_AC_B      [RapIndex];
                                             break;
                         
                                         case BC_A:
                                             hLocal      = H_BC_A    [CenIndex][RapIndex][PVzIndex];
                                             hLocal_Cos  = H_Cos_BC_A[CenIndex][RapIndex][PVzIndex];
+                                            hLocal_theta= H_theta_BC_A[CenIndex][RapIndex][PVzIndex];
                                             hGlobal     = H_ALL_BC_A          [RapIndex];
                                             hGlobal_Cos = H_ALL_Cos_BC_A      [RapIndex];
+                                            hGlobal_theta = H_ALL_theta_BC_A      [RapIndex];
                                             break;
                         
                                         case SAME:
                                             hLocal      = H_ABC    [CenIndex][RapIndex][PVzIndex];
                                             hLocal_Cos  = H_Cos_ABC[CenIndex][RapIndex][PVzIndex];
+                                            hLocal_theta= H_theta_ABC[CenIndex][RapIndex][PVzIndex];
                                             hGlobal     = H_ALL_ABC          [RapIndex];
                                             hGlobal_Cos = H_ALL_Cos_ABC      [RapIndex];
+                                            hGlobal_theta= H_ALL_theta_ABC      [RapIndex];
                                             break;
                                     }
 
@@ -1080,7 +1134,7 @@ void S_Three(
                                                 }
                                                 const auto& C = C_particles[k];
                                             
-                                                if (GetSide(A,B,C , *H_P_tot, *H_beta , B_CosPhi,B_phi , C_CosPhi,C_phi, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
+                                                if (GetSide(A,B,C , *H_P_tot, *H_beta , B_CosPhi,B_phi , C_CosPhi,C_phi,BC_theta, IfRemoveFeedPair, MotherMass, MotherMassSigma, MassSigmaWidth)){
                                                     hLocal     ->Fill(B_phi);
                                                     hLocal_Cos ->Fill(B_CosPhi);
                                                     hGlobal    ->Fill(B_phi);
@@ -1089,6 +1143,8 @@ void S_Three(
                                                     hLocal_Cos ->Fill(C_CosPhi);
                                                     hGlobal    ->Fill(C_phi);
                                                     hGlobal_Cos->Fill(C_CosPhi);
+                                                    hLocal_theta ->Fill(BC_theta);
+                                                    hGlobal_theta->Fill(BC_theta);
                                                 }
                                             }
                                         }
@@ -1138,6 +1194,11 @@ void S_Three(
                 H_Cos_AB_C             [CenIndex] [RapIndex] [PVzIndex] ->Write();
                 H_Cos_BC_A             [CenIndex] [RapIndex] [PVzIndex] ->Write();
                 H_Cos_AC_B             [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_theta_ABC            [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_theta_A_B_C          [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_theta_AB_C           [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_theta_BC_A           [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                H_theta_AC_B           [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
@@ -1151,6 +1212,11 @@ void S_Three(
         H_ALL_Cos_AB_C                            [RapIndex] ->Write();
         H_ALL_Cos_AC_B                            [RapIndex] ->Write();
         H_ALL_Cos_BC_A                            [RapIndex] ->Write();
+        H_ALL_theta_ABC                           [RapIndex] ->Write();
+        H_ALL_theta_A_B_C                         [RapIndex] ->Write();
+        H_ALL_theta_AB_C                          [RapIndex] ->Write();
+        H_ALL_theta_AC_B                          [RapIndex] ->Write();
+        H_ALL_theta_BC_A                          [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
@@ -1280,6 +1346,7 @@ inline bool GetSide(
     double& B_phiOut,
     double& C_cosPhiOut,
     double& C_phiOut,
+    double& BC_theta,
     bool IfRemoveFeedPair,
     const std::vector<float>& MotherMass,
     const std::vector<float>& MotherMassSigma,
@@ -1307,7 +1374,7 @@ inline bool GetSide(
     B_cosPhiOut = (New_BPx*(p[0])+New_BPy*(p[1])+New_BPz*(p[2])) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*P_tot);
     B_phiOut    = std::acos(B_cosPhiOut);
 
-    // Calculate B
+    // Calculate C
     const double bpC = beta[0]*C.px + beta[1]*C.py + beta[2]*C.pz;
 
     const double New_CPx = C.px + gamma2*beta[0]*bpC + gamma*beta[0]*C.E;
@@ -1316,6 +1383,20 @@ inline bool GetSide(
 
     C_cosPhiOut = (New_CPx*(p[0])+New_CPy*(p[1])+New_CPz*(p[2])) / (sqrt(New_CPx*New_CPx+New_CPy*New_CPy+New_CPz*New_CPz)*P_tot);
     C_phiOut    = std::acos(C_cosPhiOut);
+
+    // Calculate B & C theta
+
+    const double Cross_BN_x = New_BPy*p[2] - New_BPz*p[1];
+    const double Cross_BN_y = New_BPz*p[0] - New_BPx*p[2];
+    const double Cross_BN_z = New_BPx*p[1] - New_BPy*p[0];
+
+    const double Cross_CN_x = New_CPy*p[2] - New_CPz*p[1];
+    const double Cross_CN_y = New_CPz*p[0] - New_CPx*p[2];
+    const double Cross_CN_z = New_CPx*p[1] - New_CPy*p[0];
+
+    const double cos_Cross_BC = (Cross_BN_x*Cross_CN_x + Cross_BN_y*Cross_CN_y + Cross_BN_z*Cross_CN_z)
+                                /(sqrt(Cross_BN_x*Cross_BN_x+Cross_BN_y*Cross_BN_y+Cross_BN_z*Cross_BN_z)*sqrt(Cross_CN_x*Cross_CN_x+Cross_CN_y*Cross_CN_y+Cross_CN_z*Cross_CN_z));
+    BC_theta    = std::acos(cos_Cross_BC);
 
     return true;
 }
