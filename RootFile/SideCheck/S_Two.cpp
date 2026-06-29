@@ -481,7 +481,7 @@ void S_Two(
     std::vector<std::vector<std::vector<TH1D*>>>                     H_dRap              ;
     std::vector<std::vector<std::vector<TH1D*>>>                     H_dRap_Mix          ;
 
-    std::vector<std::vector<TProfile*>> B_A_Num_Ratio;
+    std::vector<std::vector<std::vector<TProfile*>>> B_A_Num_Ratio;
     std::vector<TProfile*> B_A_Num_Ratio_ALL;
     std::vector<TH2D*> B_A_Num_2D;
     
