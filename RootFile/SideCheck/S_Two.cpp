@@ -482,8 +482,8 @@ void S_Two(
     std::vector<std::vector<std::vector<TH1D*>>>                     H_dRap_Mix          ;
 
     std::vector<std::vector<TProfile*>> B_A_Num_Ratio;
-    TProfile* B_A_Num_Ratio_ALL;
-    TH2D B_A_Num_2D;
+    std::vector<TProfile*> B_A_Num_Ratio_ALL;
+    std::vector<TH2D*> B_A_Num_2D;
     
     TH1D* H_P_tot     = new TH1D("H_P_tot","H_P_tot",200,0,10);
     TH1D* H_beta      = new TH1D("H_beta" ,"H_beta" ,500,0,2);
