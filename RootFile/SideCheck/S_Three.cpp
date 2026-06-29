@@ -1371,7 +1371,8 @@ inline bool GetSide(
     const double New_BPy = B.py + gamma2*beta[1]*bpB + gamma*beta[1]*B.E;
     const double New_BPz = B.pz + gamma2*beta[2]*bpB + gamma*beta[2]*B.E;
 
-    B_cosPhiOut = (New_BPx*(p[0])+New_BPy*(p[1])+New_BPz*(p[2])) / (sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz)*P_tot);
+    const double New_BPtot = sqrt(New_BPx*New_BPx+New_BPy*New_BPy+New_BPz*New_BPz);
+    B_cosPhiOut = (New_BPx*(p[0])+New_BPy*(p[1])+New_BPz*(p[2])) / (New_BPtot*P_tot);
     B_phiOut    = std::acos(B_cosPhiOut);
 
     // Calculate C
@@ -1381,21 +1382,27 @@ inline bool GetSide(
     const double New_CPy = C.py + gamma2*beta[1]*bpC + gamma*beta[1]*C.E;
     const double New_CPz = C.pz + gamma2*beta[2]*bpC + gamma*beta[2]*C.E;
 
-    C_cosPhiOut = (New_CPx*(p[0])+New_CPy*(p[1])+New_CPz*(p[2])) / (sqrt(New_CPx*New_CPx+New_CPy*New_CPy+New_CPz*New_CPz)*P_tot);
+    const double New_CPtot = sqrt(New_CPx*New_CPx+New_CPy*New_CPy+New_CPz*New_CPz);
+    C_cosPhiOut = (New_CPx*(p[0])+New_CPy*(p[1])+New_CPz*(p[2])) / (New_CPtot*P_tot);
     C_phiOut    = std::acos(C_cosPhiOut);
 
     // Calculate B & C theta
 
-    const double Cross_BN_x = New_BPy*p[2] - New_BPz*p[1];
-    const double Cross_BN_y = New_BPz*p[0] - New_BPx*p[2];
-    const double Cross_BN_z = New_BPx*p[1] - New_BPy*p[0];
+    // const double Cross_BN_x = New_BPy*p[2] - New_BPz*p[1];
+    // const double Cross_BN_y = New_BPz*p[0] - New_BPx*p[2];
+    // const double Cross_BN_z = New_BPx*p[1] - New_BPy*p[0];
 
-    const double Cross_CN_x = New_CPy*p[2] - New_CPz*p[1];
-    const double Cross_CN_y = New_CPz*p[0] - New_CPx*p[2];
-    const double Cross_CN_z = New_CPx*p[1] - New_CPy*p[0];
+    // const double Cross_CN_x = New_CPy*p[2] - New_CPz*p[1];
+    // const double Cross_CN_y = New_CPz*p[0] - New_CPx*p[2];
+    // const double Cross_CN_z = New_CPx*p[1] - New_CPy*p[0];
 
-    const double cos_Cross_BC = (Cross_BN_x*Cross_CN_x + Cross_BN_y*Cross_CN_y + Cross_BN_z*Cross_CN_z)
-                                /(sqrt(Cross_BN_x*Cross_BN_x+Cross_BN_y*Cross_BN_y+Cross_BN_z*Cross_BN_z)*sqrt(Cross_CN_x*Cross_CN_x+Cross_CN_y*Cross_CN_y+Cross_CN_z*Cross_CN_z));
+    // const double cos_Cross_BC = (Cross_BN_x*Cross_CN_x + Cross_BN_y*Cross_CN_y + Cross_BN_z*Cross_CN_z)
+    //                             /(sqrt(Cross_BN_x*Cross_BN_x+Cross_BN_y*Cross_BN_y+Cross_BN_z*Cross_BN_z)*sqrt(Cross_CN_x*Cross_CN_x+Cross_CN_y*Cross_CN_y+Cross_CN_z*Cross_CN_z));
+    // BC_theta    = std::acos(cos_Cross_BC);
+
+    // Calculate B & C theta
+
+    const double cos_Cross_BC = (New_BPx*New_CPx + New_BPy*New_CPy + New_BPz*New_CPz)/(New_BPtot*New_CPtot);
     BC_theta    = std::acos(cos_Cross_BC);
 
     return true;
