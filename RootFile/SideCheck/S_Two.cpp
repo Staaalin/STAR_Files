@@ -565,7 +565,7 @@ void S_Two(
                     H_Mix_Cos       [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Mix_Cos_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
                     H_dRap          [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_dRap_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
                     H_dRap_Mix      [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_dRap_Mix_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-                    B_A_Num_Ratio   [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("B_A_Num_Ratio_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("B Num average vs. A Num, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),20,0,20,0,20);
+                    B_A_Num_Ratio   [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("B_A_Num_Ratio_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("B Num average vs. A Num, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),100,1,101,1,100);
                     
                 }
             }
@@ -575,8 +575,8 @@ void S_Two(
             H_ALL_Mix_Cos          [RapIndex] = new TH1D(Form("H_ALL_Mix_Cos_%d"  ,      RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
             H_dRap_ALL             [RapIndex] = new TH1D(Form("H_dRap_ALL_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
             H_dRap_ALL_Mix         [RapIndex] = new TH1D(Form("H_dRap_ALL_Mix_%d"  ,     RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-            B_A_Num_Ratio_ALL      [RapIndex] = new TProfile(Form("B_A_Num_Ratio_ALL_%d"  ,     RapIndex), Form("B Num average vs. A Num,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),20,0,20,0,20);
-            B_A_Num_2D             [RapIndex] = new TH2D(Form("B_A_Num_2D_%d"  ,     RapIndex), Form("B Num vs. A Num,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),20,0,20,20,0,20);
+            B_A_Num_Ratio_ALL      [RapIndex] = new TProfile(Form("B_A_Num_Ratio_ALL_%d"  ,     RapIndex), Form("B Num average vs. A Num,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),100,1,101,1,100);
+            B_A_Num_2D             [RapIndex] = new TH2D(Form("B_A_Num_2D_%d"  ,     RapIndex), Form("B Num vs. A Num,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),100,1,101,100,1,101);
             
         }
     }
