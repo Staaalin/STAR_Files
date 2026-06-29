@@ -14,6 +14,7 @@
 #include "TF1.h"
 #include "TH1.h"
 #include "TH2.h"
+#include "TProfile.h"
 #include "TStyle.h"
 #include "TCanvas.h"
 #include "TTree.h"
@@ -479,6 +480,10 @@ void S_Two(
     std::vector<TH1D*>                                               H_dRap_ALL_Mix      ;
     std::vector<std::vector<std::vector<TH1D*>>>                     H_dRap              ;
     std::vector<std::vector<std::vector<TH1D*>>>                     H_dRap_Mix          ;
+
+    std::vector<std::vector<TProfile*>> B_A_Num_Ratio;
+    TProfile* B_A_Num_Ratio_ALL;
+    TH2D B_A_Num_2D;
     
     TH1D* H_P_tot     = new TH1D("H_P_tot","H_P_tot",200,0,10);
     TH1D* H_beta      = new TH1D("H_beta" ,"H_beta" ,500,0,2);
@@ -500,14 +505,18 @@ void S_Two(
         H_dRap_ALL_Mix    .resize(yBinNum, nullptr);
         H_dRap      .resize(CentralityBinNum);
         H_dRap_Mix   .resize(CentralityBinNum);
+        B_A_Num_Ratio      .resize(CentralityBinNum);
+        B_A_Num_Ratio_ALL       .resize(yBinNum, nullptr);
+        B_A_Num_2D       .resize(yBinNum, nullptr);
         for (i = 0; i < CentralityBinNum; i++) {
             EventPool[i].resize(yBinNum);
-            H           [i].resize(yBinNum);
-            H_Mix       [i].resize(yBinNum);
-            H_Cos       [i].resize(yBinNum);
-            H_Mix_Cos   [i].resize(yBinNum);
-            H_dRap      [i].resize(yBinNum);
-            H_dRap_Mix  [i].resize(yBinNum);
+            H              [i].resize(yBinNum);
+            H_Mix          [i].resize(yBinNum);
+            H_Cos          [i].resize(yBinNum);
+            H_Mix_Cos      [i].resize(yBinNum);
+            H_dRap         [i].resize(yBinNum);
+            H_dRap_Mix     [i].resize(yBinNum);
+            B_A_Num_Ratio  [i].resize(yBinNum);
             for (j = 0; j < yBinNum; j++) {
                 EventPool[i][j].resize(PVzBinNum);
                 H                     [i][j].resize(PVzBinNum, nullptr);
@@ -516,6 +525,7 @@ void S_Two(
                 H_Mix_Cos             [i][j].resize(PVzBinNum, nullptr);
                 H_dRap                [i][j].resize(PVzBinNum, nullptr);
                 H_dRap_Mix            [i][j].resize(PVzBinNum, nullptr);
+                B_A_Num_Ratio         [i][j].resize(PVzBinNum, nullptr);
             }
         }
     }
@@ -555,7 +565,8 @@ void S_Two(
                     H_Mix_Cos       [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_Mix_Cos_%d_%d_%d" ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),SideBinNum,-1,1);
                     H_dRap          [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_dRap_%d_%d_%d"         ,CenIndex,RapIndex,PVzIndex),Form("[%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"       ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
                     H_dRap_Mix      [CenIndex] [RapIndex] [PVzIndex] = new TH1D(Form("H_dRap_Mix_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("Mix, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-
+                    B_A_Num_Ratio   [CenIndex] [RapIndex] [PVzIndex] = new TProfile(Form("B_A_Num_Ratio_%d_%d_%d"     ,CenIndex,RapIndex,PVzIndex), Form("B Num average vs. A Num, [%d,%d]/100, %f<A_y<%f, %f<PV_z<%f"   ,CentralityBin[CenIndex],CentralityBin[CenIndex+1],yBin[RapIndex],yBin[RapIndex+1],PVzBin[PVzIndex],PVzBin[PVzIndex+1]),20,0,20,0,20);
+                    
                 }
             }
             H_ALL                  [RapIndex] = new TH1D(Form("H_ALL_%d"      ,          RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,SideSta,SideEnd);
@@ -564,7 +575,9 @@ void S_Two(
             H_ALL_Mix_Cos          [RapIndex] = new TH1D(Form("H_ALL_Mix_Cos_%d"  ,      RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),SideBinNum,-1,1);
             H_dRap_ALL             [RapIndex] = new TH1D(Form("H_dRap_ALL_%d"      ,     RapIndex),Form("ALL %f<A_y<%f"      ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
             H_dRap_ALL_Mix         [RapIndex] = new TH1D(Form("H_dRap_ALL_Mix_%d"  ,     RapIndex), Form("ALL Mix,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),dRapBinNum,dRapSta,dRapEnd);
-
+            B_A_Num_Ratio_ALL      [RapIndex] = new TProfile(Form("B_A_Num_Ratio_ALL_%d"  ,     RapIndex), Form("B Num average vs. A Num,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),20,0,20,0,20);
+            B_A_Num_2D             [RapIndex] = new TH2D(Form("B_A_Num_2D_%d"  ,     RapIndex), Form("B Num vs. A Num,  %f<A_y<%f"  ,yBin[RapIndex],yBin[RapIndex+1]),20,0,20,20,0,20);
+            
         }
     }
     
@@ -944,6 +957,12 @@ void S_Two(
                                 }else{
                                     IsSame = false;
                                 }
+
+                                if (IsSame) {
+                                    B_A_Num_Ratio      [CenIndex][RapIndex][PVzIndex]->Fill(A_particles.size(),B_particles.size());
+                                    B_A_Num_Ratio_ALL            [RapIndex]          ->Fill(A_particles.size(),B_particles.size());
+                                    B_A_Num_2D                   [RapIndex]          ->Fill(A_particles.size(),B_particles.size());
+                                }
                         
                                 for (const auto& A : A_particles) {
                         
@@ -1002,6 +1021,9 @@ void S_Two(
     TDirectory *folder_dRap     = fileA->mkdir("dRap");
     TDirectory *ALL_dRap        = folder_dRap->mkdir("ALL");
     TDirectory *Sep_dRap        = folder_dRap->mkdir("Sep");
+    TDirectory *folder_BAR     = fileA->mkdir("B_A_Num");
+    TDirectory *ALL_BAR        = folder_BAR->mkdir("ALL");
+    TDirectory *Sep_BAR        = folder_BAR->mkdir("Sep");
     fileA->cd();
     H_P_tot->Write();
     H_beta ->Write();
@@ -1018,6 +1040,8 @@ void S_Two(
                 Sep_dRap->cd();
                 H_dRap               [CenIndex] [RapIndex] [PVzIndex] ->Write();
                 H_dRap_Mix           [CenIndex] [RapIndex] [PVzIndex] ->Write();
+                Sep_BAR->cd();
+                B_A_Num_Ratio        [CenIndex] [RapIndex] [PVzIndex] ->Write();
             }
         }
         ALL_Side->cd();
@@ -1028,6 +1052,9 @@ void S_Two(
         ALL_dRap->cd();
         H_dRap_ALL                              [RapIndex] ->Write();
         H_dRap_ALL_Mix                          [RapIndex] ->Write();
+        ALL_BAR->cd();
+        B_A_Num_Ratio_ALL                       [RapIndex] ->Write();
+        B_A_Num_2D                              [RapIndex] ->Write();
     }
     fileA->Close();
     cout<<"FINISH!"<<endl;
