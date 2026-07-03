@@ -900,14 +900,14 @@ void S_Two(
             for (Did = 0;Did < D_ParID.size();Did++) {
                 if (IfInVector(B_List[Bid].TreeID , D_ParID.at(Did))) {IfRecord = false;break;}
             }
-            // 如果B、A有血缘关系，不记录B
-            if (IfRecord) {
-                for (i=0;i<MatchedRap.size();i++) {
-                    for (Aid=0;Aid<A_List[MatchedRap[i]].size();Aid++) {
-                        if (IfInVector(B_List[Bid].TreeID , A_List[MatchedRap[i]][Aid].ParentID)) {IfRecord = false;break;}
-                    }
-                }
-            }
+            // // 如果B、A有血缘关系，不记录B
+            // if (IfRecord) {
+            //     for (i=0;i<MatchedRap.size();i++) {
+            //         for (Aid=0;Aid<A_List[MatchedRap[i]].size();Aid++) {
+            //             if (IfInVector(B_List[Bid].TreeID , A_List[MatchedRap[i]][Aid].ParentID)) {IfRecord = false;break;}
+            //         }
+            //     }
+            // }
             if (IfRecord) TempEvent.B_particles.push_back(B_List[Bid]);
         }
         // 筛选A粒子
@@ -919,6 +919,14 @@ void S_Two(
                     if (IfInVector(A_List[MatchedRap[i]][Aid].TreeID , D_ParID.at(Did))) {IfRecord = false;break;}
                 }
                 if (IfRecord) A_Array[MatchedRap[i]].push_back(A_List[MatchedRap[i]][Aid]);
+            }
+            // 如果B、A有血缘关系，不记录A
+            if (IfRecord) {
+                for (Aid=0;Aid<A_List[MatchedRap[i]].size();Aid++) {
+                    for (Bid=0;Bid<B_List.size();Bid++) {
+                        if (IfInVector(B_List[Bid].TreeID , A_List[MatchedRap[i]][Aid].ParentID)) {IfRecord = false;break;}
+                    }
+                }
             }
         }
         // if (TempEvent.B_particles.size() >= HowMuchEventMixing+1) continue;
